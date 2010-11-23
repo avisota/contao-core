@@ -642,7 +642,7 @@ class Avisota extends BackendModule
 				GROUP BY
 					`domain`")
 				->limit($intCount)
-				->execute($objNewsletter->pid, $strToken);
+				->execute($intId, $strToken);
 	
 			echo '<div style="font-family:Verdana, sans-serif; font-size:11px; line-height:16px; margin-bottom:12px;">';
 	
@@ -830,7 +830,14 @@ class Avisota extends BackendModule
 		// Deactivate invalid addresses
 		try
 		{
-			$objEmail->sendTo($arrRecipient['email']);
+			if ($GLOBALS['TL_CONFIG']['avisota_developer_mode'])
+			{
+				$objEmail->sendTo($GLOBALS['TL_CONFIG']['avisota_developer_email']);
+			}
+			else
+			{
+				$objEmail->sendTo($arrRecipient['email']);
+			}
 		}
 		catch (Swift_RfcComplianceException $e)
 		{
