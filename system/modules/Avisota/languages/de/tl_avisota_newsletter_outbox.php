@@ -33,7 +33,7 @@
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['newsletter'] = 'Newsletter';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['count']      = 'Empfänger (ausstehend)';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['count']      = 'Empfänger (ausstehend / total / fehlgeschlagen)';
 
 
 /**
@@ -46,7 +46,7 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['headline']           = 'New
  * Reference
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['empty']    = 'Es sind keine Aufträge im Postausgang.';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['rejected'] = '%s ungültige E-Mail-Adresse(n) wurde(n) deaktiviert (siehe System-Log).';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['rejected'] = 'Die E-Mail-Adresse %s wurde deaktiviert.';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['error']    = 'In diesem Verteiler sind keine aktiven Abonnenten vorhanden.';
 
 

@@ -154,6 +154,7 @@ CREATE TABLE `tl_avisota_newsletter_outbox` (
   `email` varchar(255) NOT NULL default '',
   `send` int(10) unsigned NOT NULL default '0',
   `source` varchar(255) NOT NULL default '',
+  `failed` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

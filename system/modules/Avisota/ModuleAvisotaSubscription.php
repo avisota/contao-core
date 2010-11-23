@@ -337,9 +337,9 @@ class ModuleAvisotaSubscription extends Module
 	protected function unsubscribe()
 	{
 		$this->findData($strEmail, $arrListIds, 'only');
-		if ($strEmail)
+		if ($strEmail && count($arrListIds))
 		{
-			$this->remove_subscription($arrListIds);
+			$this->remove_subscription($strEmail, $arrListIds);
 		}
 	}
 	
@@ -365,13 +365,19 @@ class ModuleAvisotaSubscription extends Module
 			
 			if ($objRecipientList->next() && in_array($objRecipientList->id, $arrListIds))
 			{
-				$this->remove_subscription(array($objRecipientList->id));
+				$this->remove_subscription($strEmail, array($objRecipientList->id));
 			}
 		}
 	}
 	
 	
-	protected function remove_subscription($arrListIds)
+	/**
+	 * Remove subscription from given lists.
+	 * 
+	 * @param string $strEmail
+	 * @param array $arrListIds
+	 */
+	protected function remove_subscription($strEmail, $arrListIds)
 	{
 		if (!count($arrListIds))
 		{
@@ -379,7 +385,7 @@ class ModuleAvisotaSubscription extends Module
 			$this->redirect($this->Environment->request);
 		}
 		
-		$this->Database->prepare("
+		$objStmt = $this->Database->prepare("
 				DELETE FROM
 					`tl_avisota_recipient`
 				WHERE
@@ -387,9 +393,9 @@ class ModuleAvisotaSubscription extends Module
 					AND `pid` IN (" . implode(',', $arrListIds) . ")")
 			->execute($strEmail);
 		
-		$strUrl = $this->Environment->request;
+		$strUrl = $this->DomainLink->generateDomainLink($GLOBALS['objPage'], '', $this->Environment->request, true);
 		
-		$arrList = $this->DomainLink->generateDomainLink($GLOBALS['objPage']->row(), '', $this->getListNames($arrListIds), true);
+		$arrList = $this->getListNames($arrListIds);
 		
 		$objPlain = new FrontendTemplate($this->avisota_template_unsubscribe_mail_plain);
 		$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota']['unsubscribe']['mail']['plain'], implode(', ', $arrList), $strUrl);
@@ -462,11 +468,7 @@ class ModuleAvisotaSubscription extends Module
 						`id` IN (" . implode(',', deserialize($this->avisota_lists)) . ")
 					ORDER BY
 						`title`");
-			while ($objLists->next())
-			{
-				$arrLists[$objLists->id] = $objLists->title;
-			}
-			$this->Template->lists = $arrLists;
+			$this->Template->lists = $objLists->fetchAllAssoc();
 		}
 		
 		$this->Template->formId = 'avisota_subscription_' . $this->id;

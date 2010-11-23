@@ -21,7 +21,7 @@
 	<label><?php echo $GLOBALS['TL_LANG']['avisota']['subscription']['lists'] ?></label>
 	<ul>
 	<?php foreach ($this->lists as $list): ?>
-		<li><input type="checkbox" name="list" value="<?php echo specialchars($list['id']) ?>" /> <?php echo $list['title'] ?></li>
+		<li><input type="checkbox" name="list[]" value="<?php echo specialchars($list['id']) ?>" /> <?php echo $list['title'] ?></li>
 	<?php endforeach; ?>
 	</ul>
 </div>

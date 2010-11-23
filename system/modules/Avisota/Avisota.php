@@ -551,29 +551,22 @@ class Avisota extends BackendModule
 						`tl_avisota_newsletter_outbox`
 					WHERE
 							`pid`=?
-						AND `token`=?")
+						AND `token`=?
+						AND `send`=0")
 				->execute($intId, $strToken);
 	
 			// Return if there are no recipients
 			if ($objTotal->total < 1)
 			{
-				$this->Session->set('tl_newsletter_send', null);
-				$_SESSION['TL_ERROR'][] = $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['error'];
+				$_SESSION['TL_CONFIRM'][] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirm'];
 	
 				$this->redirect($referer);
 			}
-	
-			$intTotal = $objTotal->total;
 	
 			// Set timeout and count
 			$intTimeout = 1;
 			$intCount = 10;
 		
-			if (!$_SESSION['REJECTED_RECIPIENTS'])
-			{
-				$_SESSION['REJECTED_RECIPIENTS'] = array();
-			}
-
 			// Overwrite the SMTP configuration
 			if ($objCategory->useSMTP)
 			{
@@ -687,8 +680,31 @@ class Avisota extends BackendModule
 					
 					// Send
 					$objEmail = $this->generateEmailObject($objNewsletter, $objCategory, $arrAttachments);
-					$this->sendNewsletter($objEmail, $objNewsletter, $objCategory, $plain[$personalized], $html[$personalized], $arrRecipient, $personalized);
+					if (!$this->sendNewsletter($objEmail, $objNewsletter, $objCategory, $plain[$personalized], $html[$personalized], $arrRecipient, $personalized))
+					{
+						$_SESSION['TL_ERROR'][] = sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['rejected'], $objRecipients->email);
 						
+						$this->Database->prepare("
+								UPDATE
+									`tl_avisota_newsletter_outbox`
+								SET
+									`failed`='1'
+								WHERE
+									`id`=?")
+							->execute($objRecipients->outbox);
+						
+						$this->Database->prepare("
+								UPDATE
+									`tl_avisota_recipient`
+								SET
+									`confirmed`=''
+								WHERE
+									`email`=?")
+							->execute($objRecipients->email);
+						
+						$this->log('Recipient address "' . $objRecipients->email . '" was rejected and has been deactivated', 'Avisota outbox()', TL_ERROR);
+					}
+					
 					$this->Database->prepare("
 							UPDATE
 								`tl_avisota_newsletter_outbox`
@@ -705,25 +721,9 @@ class Avisota extends BackendModule
 			echo '<div style="margin-top:12px;">';
 	
 			// Redirect back home
-			if ($intCount >= $intTotal)
+			if ($objRecipients->numRows == 0)
 			{
-				// Deactivate rejected addresses
-				if (!empty($_SESSION['REJECTED_RECIPIENTS']))
-				{
-					$intRejected = count($_SESSION['REJECTED_RECIPIENTS']);
-					$_SESSION['TL_INFO'][] = sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['rejected'], $intRejected);
-					$intTotal -= $intRejected;
-					
-					foreach ($_SESSION['REJECTED_RECIPIENTS'] as $strRecipient)
-					{
-						$this->Database->prepare("UPDATE tl_avisota_recipient SET confirmed='' WHERE email=?")
-									   ->execute($strRecipient);
-	
-						$this->log('Recipient address "' . $strRecipient . '" was rejected and has been deactivated', 'Avisota outbox()', TL_ERROR);
-					}
-				}
-	
-				$_SESSION['TL_CONFIRM'][] = sprintf($GLOBALS['TL_LANG']['tl_newsletter']['confirm'], $intTotal);
+				$_SESSION['TL_CONFIRM'][] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirm'];
 	
 				echo '<script type="text/javascript">setTimeout(\'window.location="' . $this->Environment->base . $referer . '"\', 1000);</script>';
 				echo '<a href="' . $this->Environment->base . $referer . '">Please click here to proceed if you are not using JavaScript</a>';
@@ -752,6 +752,7 @@ class Avisota extends BackendModule
 						n.`subject` as `newsletter`,
 						COUNT(o.`email`) as `recipients`,
 						(SELECT COUNT(*) FROM `tl_avisota_newsletter_outbox` o2 WHERE o.`token`=o2.`token` AND o2.`send`=0) as `outstanding`,
+						(SELECT COUNT(*) FROM `tl_avisota_newsletter_outbox` o2 WHERE o.`token`=o2.`token` AND o2.`failed`='1') as `failed`,
 						o.`token`
 					FROM
 						`tl_avisota_newsletter_outbox` o
@@ -824,6 +825,8 @@ class Avisota extends BackendModule
 		$objEmail->html = $this->replaceInsertTags($html);
 		$objEmail->imageDir = TL_ROOT . '/';
 		
+		$blnFailed = false;
+		
 		// Deactivate invalid addresses
 		try
 		{
@@ -831,16 +834,18 @@ class Avisota extends BackendModule
 		}
 		catch (Swift_RfcComplianceException $e)
 		{
-			$_SESSION['REJECTED_RECIPIENTS'][] = $arrRecipient['email'];
+			$blnFailed = true;
 		}
 
 		// Rejected recipients
 		if (count($objEmail->failures))
 		{
-			$_SESSION['REJECTED_RECIPIENTS'][] = $arrRecipient['email'];
+			$blnFailed = true;
 		}
 		
 		self::$arrCurrentRecipient = null;
+		
+		return !$blnFailed;
 	}
 	
 	
