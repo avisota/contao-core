@@ -5,13 +5,31 @@
 	padding: 2px 0 3px 20px;
 }
 
+table.outbox {
+	border-collapse: collapse;
+}
+
+table.outbox th,
 table.outbox td {
-	padding: .25em .5em;
+	padding: .5em;
 	vertical-align: middle;
+	text-align: left;
+}
+table.outbox th {
+	vertical-align: bottom;
+}
+table.outbox td {
+	border-width: 1px 0;
+	border-style: solid;
+	border-color: #999;
 }
 
 table.outbox td img {
 	vertical-align: middle;
+}
+
+table.outbox tr:nth-child(odd) td {
+	background-color: #eee;
 }
 
 table.outbox tr.row_highlight td {

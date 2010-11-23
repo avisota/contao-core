@@ -150,6 +150,7 @@ CREATE TABLE `tl_avisota_newsletter_content` (
 CREATE TABLE `tl_avisota_newsletter_outbox` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `pid` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
   `token` varchar(32) NOT NULL default '',
   `email` varchar(255) NOT NULL default '',
   `send` int(10) unsigned NOT NULL default '0',
