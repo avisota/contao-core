@@ -146,7 +146,7 @@ class ModuleAvisotaSubscription extends Module
 	 */
 	protected function generateSubscribeUrl($arrTokens)
 	{
-		return $this->DomainLink->absolutizeUrl($this->generateFrontendUrl($GLOBALS['objPage']->row()) . '?subscribetoken[]=' . implode('&subscribetoken[]=', $arrTokens), $GLOBALS['objPage']->row());
+		return $this->DomainLink->absolutizeUrl($this->generateFrontendUrl($GLOBALS['objPage']->row()) . '?subscribetoken[]=' . implode('&subscribetoken[]=', $arrTokens), $GLOBALS['objPage']);
 	}
 	
 	
