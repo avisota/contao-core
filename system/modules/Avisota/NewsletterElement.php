@@ -138,6 +138,75 @@ abstract class NewsletterElement extends Frontend
 
 	
 	/**
+	 * Add an image to a template
+	 * @param object
+	 * @param array
+	 * @param integer
+	 * @param string
+	 */
+	protected function addImageToTemplate($objTemplate, $arrItem, $intMaxWidth=false, $strLightboxId=false)
+	{
+		$size = deserialize($arrItem['size']);
+		$imgSize = getimagesize(TL_ROOT . '/' . $arrItem['singleSRC']);
+
+		if (!$intMaxWidth)
+		{
+			$intMaxWidth = ($this->Input->get('table') == 'tl_avisota_newsletter_content' ? 320 : $GLOBALS['TL_CONFIG']['maxImageWidth']);
+		}
+
+		// Store original dimensions
+		$objTemplate->width = $imgSize[0];
+		$objTemplate->height = $imgSize[1];
+
+		// Adjust image size
+		if ($intMaxWidth > 0 && ($size[0] > $intMaxWidth || (!$size[0] && !$size[1] && $imgSize[0] > $intMaxWidth)))
+		{
+			$arrMargin = deserialize($arrItem['imagemargin']);
+
+			// Subtract margins
+			if (is_array($arrMargin) && $arrMargin['unit'] == 'px')
+			{
+				$intMaxWidth = $intMaxWidth - $arrMargin['left'] - $arrMargin['right'];
+			}
+
+			// See #2268 (thanks to Thyon)
+			$ratio = ($size[0] && $size[1]) ? $size[1] / $size[0] : $imgSize[1] / $imgSize[0];
+
+			$size[0] = $intMaxWidth;
+			$size[1] = floor($intMaxWidth * $ratio);
+		}
+
+		$src = $this->getImage($this->urlEncode($arrItem['singleSRC']), $size[0], $size[1], $size[2]);
+
+		// Image dimensions
+		if (($imgSize = @getimagesize(TL_ROOT . '/' . $src)) !== false)
+		{
+			$objTemplate->arrSize = $imgSize;
+			$objTemplate->imgSize = ' ' . $imgSize[3];
+		}
+
+		// Float image
+		if (in_array($arrItem['floating'], array('left', 'right')))
+		{
+			$objTemplate->floatClass = ' float_' . $arrItem['floating'];
+		}
+
+		// Image link
+		if (strlen($arrItem['imageUrl']))
+		{
+			$objTemplate->href = $this->extendURL($arrItem['imageUrl']);
+			$objTemplate->attributes = $arrItem['fullsize'] ? LINK_NEW_WINDOW : '';
+		}
+
+		$objTemplate->src = $this->extendURL($src);
+		$objTemplate->alt = specialchars($arrItem['alt']);
+		$objTemplate->margin = $this->generateMargin(deserialize($arrItem['imagemargin']), 'padding');
+		$objTemplate->caption = $arrItem['caption'];
+		$objTemplate->addImage = true;
+	}
+	
+	
+	/**
 	 * Parse the html template
 	 * @return string
 	 */
