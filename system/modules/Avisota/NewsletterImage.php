@@ -23,14 +23,72 @@
  * PHP version 5
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    BetterLetter
+ * @package    Avisota
  * @license    http://opensource.org/licenses/lgpl-3.0.html
  */
 
 
 /**
- * Back end modules
+ * Class NewsletterImage
+ *
+ * 
+ * @copyright  InfinitySoft 2010
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    Avisota
  */
-$GLOBALS['TL_LANG']['MOD']['BetterLetter'] = 'Newsletter';
+class NewsletterImage extends NewsletterElement
+{
+
+	/**
+	 * HTML Template
+	 * @var string
+	 */
+	protected $strTemplateHTML = 'nle_image_html';
+
+	/**
+	 * Plain text Template
+	 * @var string
+	 */
+	protected $strTemplatePlain = 'nle_image_plain';
+	
+	
+	/**
+	 * Parse the html template
+	 * @return string
+	 */
+	public function generateHTML()
+	{
+		if (!strlen($this->singleSRC) || !is_file(TL_ROOT . '/' . $this->singleSRC))
+		{
+			return '';
+		}
+		
+		return parent::generateHTML();
+	}
+	
+	
+	/**
+	 * Parse the plain text template
+	 * @return string
+	 */
+	public function generatePlain()
+	{
+		if (!strlen($this->singleSRC) || !is_file(TL_ROOT . '/' . $this->singleSRC))
+		{
+			return '';
+		}
+		
+		return parent::generatePlain();
+	}
+	
+	
+	/**
+	 * Compile the current element
+	 */
+	protected function compile($mode)
+	{
+		$this->addImageToTemplate($this->Template, $this->arrData);
+	}
+}
 
 ?>

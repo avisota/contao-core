@@ -23,14 +23,16 @@
  * PHP version 5
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    BetterLetter
+ * @package    Avisota
  * @license    http://opensource.org/licenses/lgpl-3.0.html
  */
 
 
 /**
- * Content elements
+ * Back end modules
  */
-$GLOBALS['TL_BLE']['text'] = 'BetterLetterElementText';
+$GLOBALS['TL_LANG']['MOD']['avisota']    = 'Newslettersystem';
+$GLOBALS['TL_LANG']['MOD']['avisota_recipients'] = array('Abonnenten', 'Newsletter Abonnenten verwalten.');
+$GLOBALS['TL_LANG']['MOD']['avisota_newsletter'] = array('Newsletter', 'Newsletter verwalten und versenden.');
 
 ?>
