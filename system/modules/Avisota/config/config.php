@@ -74,6 +74,12 @@ $GLOBALS['BE_MOD'] = array_merge(
 
 
 /**
+ * Front end modules
+ */
+$GLOBALS['FE_MOD']['avisota']['avisota_subscription'] = 'ModuleAvisotaSubscription';
+
+
+/**
  * Newsletter elements
  */
 $GLOBALS['TL_NLE'] = array_merge_recursive(
