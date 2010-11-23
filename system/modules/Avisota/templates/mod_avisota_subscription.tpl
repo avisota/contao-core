@@ -30,7 +30,7 @@
 
 <div class="widget widget-text">
 	<label for="ctrl_email"><?php echo $GLOBALS['TL_LANG']['avisota']['subscription']['email'] ?></label>
-	<input type="text" class="text" name="email" id="ctrl_email" value="<?php echo $this->Input->post('email') ?>" />
+	<input type="text" class="text" name="email" id="ctrl_email" value="<?php echo ($this->Input->post('email') ? $this->Input->post('email') : $this->Input->get('email')); ?>" />
 </div>
 
 <div class="submit_container">
