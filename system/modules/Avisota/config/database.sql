@@ -15,6 +15,7 @@ CREATE TABLE `tl_avisota_recipient_list` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `tstamp` int(10) unsigned NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
+  `alias` varbinary(128) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -152,3 +153,16 @@ CREATE TABLE `tl_avisota_newsletter_outbox` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
+
+-- 
+-- Table `tl_module`
+-- 
+
+CREATE TABLE `tl_module` (
+  `avisota_show_lists` char(1) NOT NULL default '',
+  `avisota_lists` blob NULL,
+  `avisota_template_subscribe_mail_plain` varchar(64) NOT NULL default '',
+  `avisota_template_subscribe_mail_html` varchar(64) NOT NULL default '',
+  `avisota_template_unsubscribe_mail_plain` varchar(64) NOT NULL default '',
+  `avisota_template_unsubscribe_mail_html` varchar(64) NOT NULL default '',
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

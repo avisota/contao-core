@@ -33,6 +33,7 @@
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_avisota_recipient_list']['title'] = array('Titel', 'Hier können Sie den Titel des Verteilers angeben.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['alias'] = array('Alias', 'Der Alias ist eine eindeutige Referenz, die anstelle der numerischen Id aufgerufen werden kann.');
 
 
 /**
