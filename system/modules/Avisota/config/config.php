@@ -25,6 +25,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @filesource
  */
 
 
@@ -33,6 +34,7 @@
  */
 define('NL_HTML', 'html');
 define('NL_PLAIN', 'plain');
+
 
 /**
  * Back end modules
@@ -46,7 +48,7 @@ $GLOBALS['BE_MOD'] = array_merge(
 		(
 			'avisota_recipients' => array
 			(
-				'tables'     => array('tl_avisota_list', 'tl_avisota_recipient'),
+				'tables'     => array('tl_avisota_recipient_list', 'tl_avisota_recipient'),
 				'import'     => array('Avisota', 'importRecipients'),
 				'icon'       => 'system/modules/Avisota/html/recipients.png',
 				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
@@ -58,16 +60,22 @@ $GLOBALS['BE_MOD'] = array_merge(
 				'send'       => array('Avisota', 'send'),
 				'icon'       => 'system/modules/Avisota/html/newsletter.png',
 				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+			),
+			'avisota_outbox' => array
+			(
+				'callback'   => 'Avisota',
+				'icon'       => 'system/modules/Avisota/html/outbox.png',
+				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 			)
 		)
 	),
 	array_slice($GLOBALS['BE_MOD'], $i)
 );
 
+
 /**
  * Newsletter elements
  */
-
 $GLOBALS['TL_NLE'] = array_merge_recursive(
 	array
 	(

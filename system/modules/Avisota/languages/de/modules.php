@@ -25,6 +25,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @filesource
  */
 
 
@@ -34,5 +35,6 @@
 $GLOBALS['TL_LANG']['MOD']['avisota']    = 'Newslettersystem';
 $GLOBALS['TL_LANG']['MOD']['avisota_recipients'] = array('Abonnenten', 'Newsletter Abonnenten verwalten.');
 $GLOBALS['TL_LANG']['MOD']['avisota_newsletter'] = array('Newsletter', 'Newsletter verwalten und versenden.');
+$GLOBALS['TL_LANG']['MOD']['avisota_outbox']     = array('Postausgang', 'Postausgang einsehen und Newsletter versenden.');
 
 ?>

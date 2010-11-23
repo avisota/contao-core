@@ -25,13 +25,14 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @filesource
  */
 
 
 /**
- * Table tl_avisota_list
+ * Table tl_avisota_recipient_list
  */
-$GLOBALS['TL_DCA']['tl_avisota_list'] = array
+$GLOBALS['TL_DCA']['tl_avisota_recipient_list'] = array
 (
 
 	// Config
@@ -72,34 +73,35 @@ $GLOBALS['TL_DCA']['tl_avisota_list'] = array
 		(
 			'edit' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_list']['edit'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['edit'],
 				'href'                => 'table=tl_avisota_recipient',
-				'icon'                => 'edit.gif'
+				'icon'                => 'edit.gif',
+				'attributes'          => 'class="contextmenu"'
 			),
 			'editheader' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_list']['editheader'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['editheader'],
 				'href'                => 'act=edit',
 				'icon'                => 'header.gif',
 				'attributes'          => 'class="edit-header"'
 			),
 			'copy' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_list']['copy'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['copy'],
 				'href'                => 'act=paste&amp;mode=copy',
 				'icon'                => 'copy.gif',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			),
 			'delete' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_list']['delete'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
 				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 			),
 			'show' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_list']['show'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['show'],
 				'href'                => 'act=show',
 				'icon'                => 'show.gif'
 			)
@@ -117,7 +119,7 @@ $GLOBALS['TL_DCA']['tl_avisota_list'] = array
 	(
 		'title' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_list']['title'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['title'],
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',

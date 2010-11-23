@@ -10,12 +10,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation, either
  * version 3 of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program. If not, please visit the Free
  * Software Foundation website at <http://www.gnu.org/licenses/>.
@@ -30,58 +30,25 @@
 
 
 /**
- * Class NewsletterList
- *
- * 
- * @copyright  InfinitySoft 2010
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Avisota
+ * Fields
  */
-class NewsletterList extends NewsletterElement
-{
+$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['title'] = array('Titel', 'Hier können Sie den Titel des Verteilers angeben.');
 
-	/**
-	 * HTML Template
-	 * @var string
-	 */
-	protected $strTemplateHTML = 'nle_list_html';
 
-	/**
-	 * Plain text Template
-	 * @var string
-	 */
-	protected $strTemplatePlain = 'nle_list_plain';
-	
+/**
+ * Legends
+ */
+$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['list_legend'] = 'Verteiler';
 
-	/**
-	 * Compile the current element
-	 */
-	protected function compile($mode)
-	{
-		$arrItems = array();
-		$items = deserialize($this->listitems);
 
-		if ($mode == NL_HTML)
-		{
-			$limit = count($items) - 1;
-		
-			for ($i=0; $i<count($items); $i++)
-			{
-				$arrItems[] = array
-				(
-					'class' => (($i == 0) ? 'first' : (($i == $limit) ? 'last' : '')),
-					'content' => $items[$i]
-				);
-			}
-	
-			$this->Template->items = $arrItems;
-			$this->Template->tag = ($this->listtype == 'ordered') ? 'ol' : 'ul';
-		}
-		else
-		{
-			$this->Template->items = $items;
-		}
-	}
-}
+/**
+ * Buttons
+ */
+$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['new']         = array('Neuer Verteiler', 'Einen neuen Verteiler erstellen');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['show']        = array('Verteilerdetails', 'Details der Verteilers ID %s anzeigen');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['copy']        = array('Verteiler duplizieren', 'Verteiler ID %s duplizieren');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['delete']      = array('Verteiler löschen', 'Verteiler ID %s löschen');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['edit']        = array('Verteiler bearbeiten', 'Verteiler ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['editheader']  = array('Verteilereinstellungen bearbeiten', 'Einstellungen der Verteilers ID %s bearbeiten');
 
 ?>

@@ -25,6 +25,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @filesource
  */
 
 
