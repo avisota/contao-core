@@ -178,7 +178,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'textarea',
-			'eval'                    => array('mandatory'=>true, 'rte'=>'tinyMCE', 'helpwizard'=>true),
+			'eval'                    => array('mandatory'=>true, 'rte'=>'tinyNews', 'helpwizard'=>true),
 			'explanation'             => 'insertTags'
 		),
 		'definePlain' => array
