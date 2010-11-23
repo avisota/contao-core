@@ -98,7 +98,7 @@ class ModuleAvisotaSubscription extends Module
 			}
 		}
 		
-		if ($this->avisota_show_lists)
+		if ($this->avisota_show_lists && $varExistingSubscription != 'only')
 		{
 			$arrList = $this->Input->post('list');
 			
@@ -115,8 +115,7 @@ class ModuleAvisotaSubscription extends Module
 						`tl_avisota_recipient_list`
 					WHERE
 						`id` IN (" . implode(',', $arrPlaceholder) . ")
-						" . ($varExistingSubscription == 'ignore' && count($arrSubscriptions) ? " AND `id` NOT IN (" . implode(',', $arrSubscriptions) . ")" : '')
-						  . ($varExistingSubscription == 'only' && count($arrSubscriptions) ? " AND `id` IN (" . implode(',', $arrSubscriptions) . ")" : ''))
+						" . ($varExistingSubscription == 'ignore' && count($arrSubscriptions) ? " AND `id` NOT IN (" . implode(',', $arrSubscriptions) . ")" : ''))
 				->execute($arrList);
 			$arrListIds = array();
 			while ($objList->next())
@@ -393,7 +392,7 @@ class ModuleAvisotaSubscription extends Module
 					AND `pid` IN (" . implode(',', $arrListIds) . ")")
 			->execute($strEmail);
 		
-		$strUrl = $this->DomainLink->generateDomainLink($GLOBALS['objPage'], '', $this->Environment->request, true);
+		$strUrl = $this->DomainLink->generateDomainLink($GLOBALS['objPage'], '', preg_replace('#&?unsubscribetoken=\w+#', '', $this->Environment->request), true);
 		
 		$arrList = $this->getListNames($arrListIds);
 		
@@ -407,7 +406,7 @@ class ModuleAvisotaSubscription extends Module
 		$this->sendMail('unsubscribe', $objPlain->parse(), $objHtml->parse(), $strEmail);
 		$_SESSION['avisota_subscription'][] = sprintf($GLOBALS['TL_LANG']['avisota']['unsubscribe']['mail']['confirm'], $strEmail);
 		
-		$this->redirect($this->Environment->request);
+		$this->redirect(preg_replace('#&?unsubscribetoken=\w+#', '', $this->Environment->request));
 	}
 	
 	
