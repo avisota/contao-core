@@ -60,7 +60,7 @@ class NewsletterText extends NewsletterElement
 	public function replaceImage($arrMatch)
 	{
 		// insert alt or title text
-		return sprintf('[%s]', $this->extendURL($arrMatch[1]));
+		return sprintf('%s<%s>', $arrMatch[3] ? $arrMatch[3] . ': ' : $arrMatch[2] ? $arrMatch[2] . ': ' : '', $this->extendURL($arrMatch[1]));
 	}
 	
 	
@@ -71,7 +71,7 @@ class NewsletterText extends NewsletterElement
 	public function replaceLink($arrMatch)
 	{
 		// insert title text
-		return sprintf('%s [%s]', $arrMatch[3], $this->extendURL($arrMatch[1]));
+		return sprintf('%s%s <%s>', $arrMatch[3], $arrMatch[2] ? ' (' . $arrMatch[2] . ')' : '', $this->extendURL($arrMatch[1]));
 	}
 	
 	/**
