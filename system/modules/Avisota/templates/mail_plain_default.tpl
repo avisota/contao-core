@@ -4,4 +4,4 @@
 <?php echo $this->body; ?>
 
 --------------------------------------------------------------------------------
-{{recipient::unsubscribe}}
+{{newsletter::unsubscribe::plain}}

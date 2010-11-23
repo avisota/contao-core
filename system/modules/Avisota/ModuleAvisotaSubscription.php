@@ -43,7 +43,7 @@ class ModuleAvisotaSubscription extends Module
 	 * Template
 	 * @var string
 	 */
-	protected $strTemplate = 'ce_avisota_subscription';
+	protected $strTemplate = 'mod_avisota_subscription';
 	
 	
 	/**
@@ -67,9 +67,14 @@ class ModuleAvisotaSubscription extends Module
 	 * @param string $strEmail
 	 * @param array $arrListIds
 	 */
-	protected function findData($strMode, &$strEmail, &$arrListIds, $blnIgnoreSubsription)
+	protected function findData(&$strEmail, &$arrListIds, $varExistingSubscription = false)
 	{
 		$strEmail = $this->Input->post('email');
+		
+		if (!$strEmail)
+		{
+			$strEmail = $this->Input->get('email');
+		}
 		
 		if (FE_USER_LOGGED_IN && !$strEmail)
 		{
@@ -77,7 +82,7 @@ class ModuleAvisotaSubscription extends Module
 		}
 		
 		$arrSubscriptions = array();
-		if ($blnIgnoreSubsription)
+		if ($varExistingSubscription)
 		{
 			$objSubscription = $this->Database->prepare("
 						SELECT
@@ -109,8 +114,9 @@ class ModuleAvisotaSubscription extends Module
 					FROM
 						`tl_avisota_recipient_list`
 					WHERE
-						`alias` IN (" . implode(',', $arrPlaceholder) . ")
-						" . ($blnIgnoreSubsription && count($arrSubscriptions) ? " AND `id` NOT IN (" . implode(',', $arrSubscriptions) . ")" : ''))
+						`id` IN (" . implode(',', $arrPlaceholder) . ")
+						" . ($varExistingSubscription == 'ignore' && count($arrSubscriptions) ? " AND `id` NOT IN (" . implode(',', $arrSubscriptions) . ")" : '')
+						  . ($varExistingSubscription == 'only' && count($arrSubscriptions) ? " AND `id` IN (" . implode(',', $arrSubscriptions) . ")" : ''))
 				->execute($arrList);
 			$arrListIds = array();
 			while ($objList->next())
@@ -121,9 +127,13 @@ class ModuleAvisotaSubscription extends Module
 		else
 		{
 			$arrListIds = deserialize($this->avisota_lists);
-			if ($blnIgnoreSubsription && count($arrSubscriptions))
+			if ($varExistingSubscription == 'ignore' && count($arrSubscriptions))
 			{
 				$arrListIds = array_diff($arrListIds, $arrSubscriptions);
+			}
+			if ($varExistingSubscription == 'only')
+			{
+				$arrListIds = array_intersect($arrListIds, $arrSubscriptions);
 			}
 		}
 	}
@@ -133,6 +143,7 @@ class ModuleAvisotaSubscription extends Module
 	 * Generate the subscription confirm url for all tokens.
 	 * 
 	 * @param array $arrTokens
+	 * @return string
 	 */
 	protected function generateSubscribeUrl($arrTokens)
 	{
@@ -140,6 +151,12 @@ class ModuleAvisotaSubscription extends Module
 	}
 	
 	
+	/**
+	 * Convert id list to name list.
+	 * 
+	 * @param array $arrListIds
+	 * @return array
+	 */
 	protected function getListNames($arrListIds)
 	{
 		$arrList = array();
@@ -156,7 +173,7 @@ class ModuleAvisotaSubscription extends Module
 					FROM
 						`tl_avisota_recipient_list`
 					WHERE
-						`alias` IN (" . implode(',', $arrPlaceholder) . ")
+						`id` IN (" . implode(',', $arrPlaceholder) . ")
 					ORDER BY
 						`title`")
 				->execute($arrListIds);
@@ -221,23 +238,21 @@ class ModuleAvisotaSubscription extends Module
 	/**
 	 * Handle subscribe
 	 */
-	public function subscribe()
+	protected function subscribe()
 	{
-		$this->findData('subscribe', $strEmail, $arrListIds, true);
-		if ($strEmail && count($arrListIds))
+		$this->findData($strEmail, $arrListIds, 'ignore');
+		if ($strEmail)
 		{
 			if (!count($arrListIds))
 			{
-				$_SESSION['avisota_subscription'][] = $GLOBALS['TL_LANG']['avisota']['subscription']['no_new'];
+				$_SESSION['avisota_subscription'][] = $GLOBALS['TL_LANG']['avisota']['subscription']['empty'];
 				$this->redirect($this->Environment->request);
 			}
 			
 			$time = time();
-			$arrTitles = array();
 			$arrTokens = array();
 			foreach ($arrListIds as $intId)
 			{
-				$arrTitles[] = $arrListIds[$intId];
 				$strToken = md5($time . $arrListIds[$intId] . $intId. $strEmail);
 				$arrTokens[] = $strToken;
 				$this->Database->prepare("
@@ -275,11 +290,118 @@ class ModuleAvisotaSubscription extends Module
 	
 	
 	/**
+	 * Handle subscribetoken's
+	 */
+	protected function subscribetoken()
+	{
+		$arrSubscribetoken = $this->Input->get('subscribetoken');
+		if (is_array($arrSubscribetoken) && count($arrSubscribetoken) > 0)
+		{
+			foreach ($arrSubscribetoken as $strToken)
+			{
+				$objRecipient = $this->Database->prepare("
+						SELECT
+							r.id,
+							l.title
+						FROM
+							`tl_avisota_recipient` r
+						INNER JOIN
+							`tl_avisota_recipient_list` l
+						ON
+							r.`pid`=l.`id`
+						WHERE
+							r.`token`=?")
+					->execute($strToken);
+				if ($objRecipient->next())
+				{
+					$this->Database->prepare("
+							UPDATE
+								`tl_avisota_recipient`
+							SET
+								`confirmed`='1',
+								`token`=''
+							WHERE
+								`id`=?")
+						->execute($objRecipient->id);
+					$_SESSION['avisota_subscription'][] = sprintf($GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['confirm'], $objRecipient->title);
+				}
+			}
+			
+			$this->redirect(preg_replace('#&?subscribetoken\[\]=\w{32}#', '', $this->Environment->request));
+		}
+	}
+	
+	/**
 	 * Handle unsubscribe
 	 */
-	public function unsubscribe()
+	protected function unsubscribe()
 	{
-		$this->findData('unsubscribe', $strEmail, $arrList);
+		$this->findData($strEmail, $arrListIds, 'only');
+		if ($strEmail)
+		{
+			$this->remove_subscription($arrListIds);
+		}
+	}
+	
+	
+	/**
+	 * Handle unsubscribetoken
+	 */
+	protected function unsubscribetoken()
+	{
+		$this->findData($strEmail, $arrListIds, 'only');
+		if ($strEmail)
+		{
+			$strAlias = $this->Input->get('unsubscribetoken');
+			
+			$objRecipientList = $this->Database->prepare("
+					SELECT
+						*
+					FROM
+						`tl_avisota_recipient_list`
+					WHERE
+						`alias`=?")
+				->execute($strAlias);
+			
+			if ($objRecipientList->next() && in_array($objRecipientList->id, $arrListIds))
+			{
+				$this->remove_subscription(array($objRecipientList->id));
+			}
+		}
+	}
+	
+	
+	protected function remove_subscription($arrListIds)
+	{
+		if (!count($arrListIds))
+		{
+			$_SESSION['avisota_subscription'][] = $GLOBALS['TL_LANG']['avisota']['unsubscription']['empty'];
+			$this->redirect($this->Environment->request);
+		}
+		
+		$this->Database->prepare("
+				DELETE FROM
+					`tl_avisota_recipient`
+				WHERE
+						`email`=?
+					AND `pid` IN (" . implode(',', $arrListIds) . ")")
+			->execute($strEmail);
+		
+		$strUrl = $this->Environment->request;
+		
+		$arrList = $this->DomainLink->generateDomainLink($GLOBALS['objPage']->row(), '', $this->getListNames($arrListIds), true);
+		
+		$objPlain = new FrontendTemplate($this->avisota_template_unsubscribe_mail_plain);
+		$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota']['unsubscribe']['mail']['plain'], implode(', ', $arrList), $strUrl);
+
+		$objHtml = new FrontendTemplate($this->avisota_template_unsubscribe_mail_html);
+		$objHtml->title = $GLOBALS['TL_LANG']['avisota']['unsubscribe']['mail']['subject'];
+		$objHtml->content = sprintf($GLOBALS['TL_LANG']['avisota']['unsubscribe']['mail']['html'], implode(', ', $arrList), $strUrl);
+		
+		$this->sendMail('unsubscribe', $objPlain->parse(), $objHtml->parse(), $strEmail);
+		$_SESSION['avisota_subscription'][] = sprintf($GLOBALS['TL_LANG']['avisota']['unsubscribe']['mail']['confirm'], $strEmail);
+		
+		$this->redirect($this->Environment->request);
 	}
 	
 	
@@ -312,9 +434,17 @@ class ModuleAvisotaSubscription extends Module
 		{
 			$this->subscribe();
 		}
+		if ($this->Input->get('subscribetoken'))
+		{
+			$this->subscribetoken();
+		}
 		if ($this->Input->post('unsubscribe'))
 		{
 			$this->unsubscribe();
+		}
+		if ($this->Input->get('unsubscribetoken'))
+		{
+			$this->unsubscribetoken();
 		}
 		
 		$this->Template->messages = $_SESSION['avisota_subscription'];

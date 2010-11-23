@@ -4,3 +4,16 @@
 	background: url("send.png") no-repeat scroll left center transparent;
 	padding: 2px 0 3px 20px;
 }
+
+table.outbox td {
+	padding: .25em .5em;
+	vertical-align: middle;
+}
+
+table.outbox td img {
+	vertical-align: middle;
+}
+
+table.outbox tr.row_highlight td {
+	background-color: #efe;
+}

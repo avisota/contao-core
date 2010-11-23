@@ -74,6 +74,8 @@ class Avisota extends BackendModule
 		parent::__construct();
 		$this->import('DomainLink');
 		$this->import('BackendUser', 'User');
+		$this->import('AvisotaBase', 'Base');
+		$this->loadLanguageFile('tl_avisota_newsletter');
 	}
 	
 	protected function allowBackendSending()
@@ -191,8 +193,6 @@ class Avisota extends BackendModule
 		
 		// build the recipient data array
 		$arrRecipient = $this->getPreviewRecipient($personalized);
-		
-		$this->prepareRecipient($objNewsletter, $objCategory, $arrRecipient, $mode);
 		
 		self::$objCurrentCategory = $objCategory;
 		self::$objCurrentNewsletter = $objNewsletter;
@@ -343,19 +343,29 @@ class Avisota extends BackendModule
 					switch ($arrMatch[1])
 					{
 					case 'list':
+						// Note: do not try to use "r.pid IN (..)", this will cause multiple inserts of the same email
 						$intIdTmp = $arrMatch[2];
 						$this->Database->prepare("
 								INSERT INTO
 									`tl_avisota_newsletter_outbox`
-									(`pid`, `token`, `email`)
-								SELECT
-									DISTINCT ?,?,`email`
+									(`pid`, `token`, `email`, `source`)
+								SELECT DISTINCT
+									?,
+									?,
+									r.`email`,
+									CONCAT('list:', r.pid)
 								FROM
-									`tl_avisota_recipient`
+									`tl_avisota_recipient` r
+								LEFT OUTER JOIN
+									`tl_avisota_newsletter_outbox` o
+								ON
+										o.`email`=r.`email`
+									AND o.`token`=?
 								WHERE
-										`pid`=?
-									AND `confirmed`='1'")
-						   ->execute($objNewsletter->id, $strToken, $intIdTmp);
+										r.`pid`=?
+									AND r.`confirmed`='1'
+									AND o.`id` IS NULL")
+						   ->execute($objNewsletter->id, $strToken, $strToken, $intIdTmp);
 						break;
 						
 					case 'mgroup':
@@ -363,25 +373,34 @@ class Avisota extends BackendModule
 						$this->Database->prepare("
 								INSERT INTO
 									`tl_avisota_newsletter_outbox`
-									(`pid`, `token`, `email`)
+									(`pid`, `token`, `email`, `source`)
 								SELECT DISTINCT
-									?,?,m.`email`
+									?,
+									?,
+									m.`email`,
+									CONCAT('mgroup:', g.id)
 								FROM
 									`tl_member` m
 								INNER JOIN
 									`tl_member_group` g
 								ON
 									m.pid=g.id
+								LEFT OUTER JOIN
+									`tl_avisota_newsletter_outbox` o
+								ON
+										o.`email`=m.`email`
+									AND o.token=?
 								WHERE
 										g.`id`=?
-									AND m.`disable`=''")
-						   ->execute($objNewsletter->id, $strToken, $intIdTmp);
+									AND m.`disable`=''
+									AND o.id IS NULL")
+						   ->execute($objNewsletter->id, $strToken, $strToken, $intIdTmp);
 						break;
 					}
 				}
 			}
 			
-			$this->redirect('contao/main.php?do=avisota_outbox' . ($this->allowBackendSending() ? '&id=' . $objNewsletter->id . '&token=' . $strToken : ''));
+			$this->redirect('contao/main.php?do=avisota_outbox' . ($this->allowBackendSending() ? '&id=' . $objNewsletter->id . '&highlight=' . $strToken : ''));
 		}
 		
 		$strToken = md5(uniqid(mt_rand(), true));
@@ -473,6 +492,9 @@ class Avisota extends BackendModule
 	}
 	
 	
+	/**
+	 * Show outbox and send newsletter.
+	 */
 	protected function outbox()
 	{
 		$this->loadLanguageFile('tl_avisota_newsletter_outbox');
@@ -545,7 +567,7 @@ class Avisota extends BackendModule
 	
 			// Set timeout and count
 			$intTimeout = 1;
-			$intCount = 1;
+			$intCount = 10;
 		
 			if (!$_SESSION['REJECTED_RECIPIENTS'])
 			{
@@ -604,17 +626,28 @@ class Avisota extends BackendModule
 			// Get recipients
 			$objRecipients = $this->Database->prepare("
 				SELECT
-					m.*, o.email, o.id as `outbox`
-				FROM
-					tl_avisota_newsletter_outbox o
-				LEFT JOIN
-					tl_member m
-				ON
-						o.email=m.email
-					AND m.disable=''
-				WHERE
-						o.pid=?
-					AND o.token=?")
+					t.*,
+					t.`outbox_email` as `email`
+				FROM (
+					SELECT
+						m.*,
+						o.email as `outbox_email`,
+						o.id as `outbox`,
+						o.source as `outbox_source`,
+						SUBSTRING(o.`email`, LOCATE('@', o.`email`)) as `domain`
+					FROM
+						tl_avisota_newsletter_outbox o
+					LEFT JOIN
+						tl_member m
+					ON
+							o.`email`=m.`email`
+						AND m.`disable`=''
+					WHERE
+							o.`pid`=?
+						AND o.`token`=?
+						AND o.`send`=0) t
+				GROUP BY
+					`domain`")
 				->limit($intCount)
 				->execute($objNewsletter->pid, $strToken);
 	
@@ -657,11 +690,13 @@ class Avisota extends BackendModule
 					$this->sendNewsletter($objEmail, $objNewsletter, $objCategory, $plain[$personalized], $html[$personalized], $arrRecipient, $personalized);
 						
 					$this->Database->prepare("
-							DELETE FROM
+							UPDATE
 								`tl_avisota_newsletter_outbox`
+							SET
+								`send`=?
 							WHERE
 								`id`=?")
-						->execute($objRecipients->outbox);
+						->execute(time(), $objRecipients->outbox);
 					
 					echo 'Sending newsletter to <strong>' . $objRecipients->email . '</strong><br />';
 				}
@@ -716,6 +751,7 @@ class Avisota extends BackendModule
 						n.`id` as `id`,
 						n.`subject` as `newsletter`,
 						COUNT(o.`email`) as `recipients`,
+						(SELECT COUNT(*) FROM `tl_avisota_newsletter_outbox` o2 WHERE o.`token`=o2.`token` AND o2.`send`=0) as `outstanding`,
 						o.`token`
 					FROM
 						`tl_avisota_newsletter_outbox` o
@@ -779,14 +815,12 @@ class Avisota extends BackendModule
 	{
 		self::$objCurrentCategory = $objCategory;
 		self::$objCurrentNewsletter = $objNewsletter;
-		self::$arrCurrentRecipient = $arrRecipient;
+		self::$arrCurrentRecipient = &$arrRecipient;
 		
 		// Prepare text content
-		$this->prepareRecipient($objNewsletter, $objCategory, $arrRecipient, NL_PLAIN);
 		$objEmail->text = $this->replaceInsertTags($plain);
 
 		// Prepare html content
-		$this->prepareRecipient($objNewsletter, $objCategory, $arrRecipient, NL_HTML);
 		$objEmail->html = $this->replaceInsertTags($html);
 		$objEmail->imageDir = TL_ROOT . '/';
 		
@@ -844,6 +878,53 @@ class Avisota extends BackendModule
 		return $strContent;
 	}
 	
+	
+	/**
+	 * 
+	 */
+	public function generateOnlineNewsletter($strId)
+	{
+		// get the newsletter
+		$objNewsletter = $this->Database->prepare("
+				SELECT
+					*
+				FROM
+					`tl_avisota_newsletter`
+				WHERE
+						`id`=?
+					OR  `alias`=?")
+			->execute($strId, $strId);
+		
+		if (!$objNewsletter->next())
+		{
+			return false;
+		}
+		
+		// get the newsletter category
+		$objCategory = $this->Database->prepare("
+				SELECT
+					*
+				FROM
+					`tl_avisota_newsletter_category`
+				WHERE
+					`id`=?")
+			->execute($objNewsletter->pid);
+		
+		if (!$objCategory->next())
+		{
+			return false;
+		}
+		
+		self::$objCurrentCategory = $objCategory;
+		self::$objCurrentNewsletter = $objNewsletter;
+		
+		self::$arrCurrentRecipient = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'];
+		self::$arrCurrentRecipient['outbox_source'] = 'list:0';
+		
+		$personalized = 'anonymous';
+		
+		return $this->replaceInsertTags($this->generateHtml($objNewsletter, $objCategory, $personalized));
+	}
 	
 	/**
 	 * Generate the html newsletter.
@@ -916,7 +997,7 @@ class Avisota extends BackendModule
 			$head = $this->htmlHeadCache;
 		}
 		
-		$objTemplate = new FrontendTemplate($objNewsletter->template_html);
+		$objTemplate = new FrontendTemplate($objNewsletter->template_html ? $objNewsletter->template_html : $objCategory->template_html);
 		$objTemplate->title = $objNewsletter->subject;
 		$objTemplate->head = $head;
 		$objTemplate->body = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_HTML);
@@ -935,7 +1016,7 @@ class Avisota extends BackendModule
 	 */
 	protected function generatePlain(Database_Result &$objNewsletter, Database_Result &$objCategory, $personalized)
 	{
-		$objTemplate = new FrontendTemplate($objNewsletter->template_plain);
+		$objTemplate = new FrontendTemplate($objNewsletter->template_plain ? $objNewsletter->template_plain : $objCategory->template_plain);
 		$objTemplate->body = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_PLAIN);
 		return $objTemplate->parse();
 	}
@@ -988,30 +1069,11 @@ class Avisota extends BackendModule
 					$strUrl = ($path ? $path . '/' : '') . $strUrl;
 				}
 				
-				$css = str_replace($arrMatch[0], sprintf('url("%s")', $this->extendURL($strUrl)), $css);
+				$css = str_replace($arrMatch[0], sprintf('url("%s")', $this->Base->extendURL($strUrl)), $css);
 			}
 		}
 		
 		return trim($css);
-	}
-	
-	
-	/**
-	 * Extend the url to an absolute url.
-	 */
-	public function extendURL($strUrl, $objCategory = null, $objPage = null)
-	{
-		if (!$objCategory)
-		{
-			$objCategory = self::$objCurrentCategory;
-		}
-		
-		if ($objCategory && !$objPage)
-		{
-			$objPage = $this->getPageDetails($objCategory->jumpTo);
-		}
-		
-		return $this->DomainLink->generateDomainLink($objPage, '', $strUrl, true);
 	}
 	
 	
@@ -1061,7 +1123,6 @@ class Avisota extends BackendModule
 			->execute($objNewsletter->pid);
 		
 		self::$arrCurrentRecipient = $this->getPreviewRecipient($objElement->personalize);
-		$this->prepareRecipient($objNewsletter, $objCategory, $arrRecipient, $mode);
 		
 		$strBuffer = $this->generateNewsletterElement($objElement, $mode, $objElement->personalize);
 		$strBuffer = $this->replaceInsertTags($strBuffer);
@@ -1142,34 +1203,6 @@ class Avisota extends BackendModule
 	}
 	
 	
-	public function prepareRecipient(&$objNewsletter, &$objCategory, &$arrRecipient, $mode)
-	{
-		// add the unsubscribe url
-		
-		if ($objCategory->unsubscribePage > 0)
-		{
-			$objPage = $this->getPageDetails($objCategory->unsubscribePage);
-			$arrRecipient['unsubscribe_url'] = $this->extendURL($this->generateFrontendUrl($objPage->row()) . '?email=' . $arrRecipient['email'] . '&unsubscribe=' . ($objCategory->alias ? $objCategory->alias : $objCategory->id), $objCategory, $objPage);
-		}
-		else
-		{
-			$arrRecipient['unsubscribe_url'] = $this->extendURL('?email=' . $arrRecipient['email'] . '&unsubscribe=' . ($objCategory->alias ? $objCategory->alias : $objCategory->id), $objCategory);
-		}
-		
-		switch ($mode)
-		{
-		case NL_HTML:
-			$arrRecipient['unsubscribe'] = sprintf('<a href="%s">%s</a>', $arrRecipient['unsubscribe_url'], $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe']);
-			break;
-		
-		case NL_PLAIN:
-			$arrRecipient['unsubscribe'] = sprintf("%s\n[%s]", $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe'], $arrRecipient['unsubscribe_url']);
-			break;
-		}
-		
-	}
-
-	
 	/**
 	 * Get a dummy recipient array.
 	 */
@@ -1196,6 +1229,7 @@ class Avisota extends BackendModule
 			else
 			{
 				$arrRecipient = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'];
+				$arrRecipient['email'] = $this->User->email;
 				list($arrRecipient['firstname'], $arrRecipient['lastname']) = $this->splitFriendlyName($arrRecipient['name']);
 				$arrRecipient['personalized'] = 'anonymous';
 			}
@@ -1207,21 +1241,159 @@ class Avisota extends BackendModule
 			$arrRecipient['personalized'] = 'anonymous';
 		}
 		
-		// add the salutation
-		if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrRecipient['gender']]))
-		{
-			$arrRecipient['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrRecipient['gender']];
-		}
-		else
-		{
-			$arrRecipient['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation'];
-		}
+		$arrRecipient['outbox_source'] = 'list:0';
 		
 		return $arrRecipient;
 	}
 }
 
+
+/**
+ * Class AvisotaInsertTag
+ *
+ * InsertTag hook class.
+ * @copyright  InfinitySoft 2010
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    Avisota
+ */
 class AvisotaInsertTag extends Controller
+{
+	public function __construct()
+	{
+		parent::__construct();
+		$this->import('Database');
+		$this->import('DomainLink');
+		$this->import('AvisotaBase', 'Base');
+	}
+	
+	
+	public function replaceNewsletterInsertTags($strTag)
+	{
+		$arrCurrentRecipient = Avisota::getCurrentRecipient();
+		$objCategory = Avisota::getCurrentCategory();
+		$objNewsletter = Avisota::getCurrentNewsletter();
+		
+		$strTag = explode('::', $strTag);
+		switch ($strTag[0])
+		{
+		case 'recipient':
+			switch ($strTag[1])
+			{
+			case 'salutation':
+				if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrCurrentRecipient['gender']]))
+				{
+					return $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrCurrentRecipient['gender']];
+				}
+				else
+				{
+					return $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation'];
+				}
+				
+			case 'name':
+				if (isset($arrCurrentRecipient['name']) && $arrCurrentRecipient['name'])
+				{
+					return $arrCurrentRecipient['name'];
+				}
+				else
+				{
+					return trim($arrCurrentRecipient['firstname'] . ' ' . $arrCurrentRecipient['lastname']);
+				}
+				
+			default:
+				if ($arrCurrentRecipient && isset($arrCurrentRecipient[$strTag[1]]))
+				{
+					return $arrCurrentRecipient[$strTag[1]];
+				}
+				else
+				{
+					return '';
+				}
+			}
+			break;
+			
+		case 'newsletter':
+			if ($arrCurrentRecipient && $objCategory && $objNewsletter)
+			{
+				switch ($strTag[1])
+				{
+				case 'href':
+					$objPage = $this->Base->getViewOnlinePage($objCategory, $arrCurrentRecipient);
+					if ($objPage)
+					{
+						return $this->Base->extendURL($this->generateFrontendUrl($objPage->row(), '/item/' . ($objNewsletter->alias ? $objNewsletter->alias : $objNewsletter->id)), $objPage);
+					}
+					break;
+					
+				case 'unsubscribe':
+				case 'unsubscribe_url':
+					$strAlias = false;
+					if (preg_match('#^list:(\d+)$#', $arrCurrentRecipient['outbox_source'], $arrMatch))
+					{
+						if ($arrMatch[1] > 0)
+						{
+							$objRecipientList = $this->Database->prepare("
+									SELECT
+										*
+									FROM
+										`tl_avisota_recipient_list`
+									WHERE
+										`id`=?")
+								->execute($arrMatch[1]);
+							if (!$objRecipientList->next())
+							{
+								return;
+							}
+							$strAlias = $objRecipientList->alias;
+							$objPage = $this->getPageDetails($objRecipientList->subscriptionPage);
+						}
+					}
+
+					if ($objCategory->subscriptionPage > 0)
+					{
+						$objPage = $this->getPageDetails($objCategory->subscriptionPage);
+					}
+					
+					if ($objPage)
+					{
+						$strUrl = $this->Base->extendURL($this->generateFrontendUrl($objPage->row()) . '?' . ($arrCurrentRecipient['email'] ? 'email=' . $arrCurrentRecipient['email'] : '') . ($strAlias ? '&unsubscribetoken=' . $strAlias : ''));
+					}
+					else
+					{
+						$strUrl = $this->Base->extendURL('?' . ($arrCurrentRecipient['email'] ? 'email=' . $arrCurrentRecipient['email'] : '') . ($strAlias ? '&unsubscribetoken=' . $strAlias : ''));
+					}
+						
+					if ($strTag[1] == 'unsubscribe_url')
+					{
+						return $strUrl;
+					}
+					
+					switch ($strTag[2])
+					{
+					case 'html':
+						return sprintf('<a href="%s">%s</a>', $strUrl, $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe']);
+						
+					case 'plain':
+						return sprintf("%s\n[%s]", $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe'], $strUrl);
+					}
+					break;
+				}
+			}
+			return '';
+		}
+		return false;
+	}
+}
+
+
+/**
+ * Class AvisotaBase
+ *
+ * InsertTag hook class.
+ * @copyright  InfinitySoft 2010
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    Avisota
+ */
+class AvisotaBase extends Controller
 {
 	public function __construct()
 	{
@@ -1231,41 +1403,58 @@ class AvisotaInsertTag extends Controller
 	}
 	
 	
-	public function replaceNewsletterInsertTags($strTag)
+	public function getViewOnlinePage($objCategory = null, $arrRecipient = null)
 	{
-		$strTag = explode('::', $strTag);
-		switch ($strTag[0])
+		if (!$objCategory)
 		{
-		case 'recipient':
-			$arrCurrentRecipient = Avisota::getCurrentRecipient();
-			if ($arrCurrentRecipient && isset($arrCurrentRecipient[$strTag[1]]))
-			{
-				return $arrCurrentRecipient[$strTag[1]];
-			}
-			else
-			{
-				return '';
-			}
-			break;
-			
-		case 'newsletter':
 			$objCategory = Avisota::getCurrentCategory();
-			$objNewsletter = Avisota::getCurrentNewsletter();
-			if ($objCategory && $objNewsletter)
+		}
+		
+		if (!$arrRecipient)
+		{
+			$arrRecipient = Avisota::getCurrentRecipient();
+		}
+		
+		if (preg_match('#^list:(\d+)$#', $arrRecipient['outbox_source'], $arrMatch))
+		{
+			// the dummy list, used on preview
+			if ($arrMatch[1] > 0)
 			{
-				switch ($strTag[1])
+				$objRecipientList = $this->Database->prepare("
+						SELECT
+							*
+						FROM
+							`tl_avisota_recipient_list`
+						WHERE
+							`id`=?")
+					->execute($arrMatch[1]);
+				if ($objRecipientList->next())
 				{
-				case 'href':
-					if ($objCategory->jumpTo > 0)
-					{
-						$objPage = $this->getPageDetails($objCategory->jumpTo);
-						return $this->DomainLink->generateDomainLink($objPage, '', $this->generateFrontendUrl($objPage->row(), '/item/' . ($objNewsletter->alias ? $objNewsletter->alias : $objNewsletter->id)), true);
-					}
+					return $this->getPageDetails($objRecipientList->viewOnlinePage);
 				}
 			}
-			return '';
 		}
+		
+		if ($objCategory->viewOnlinePage > 0)
+		{
+			return $this->getPageDetails($objCategory->viewOnlinePage);
+		}
+		
 		return false;
+	}
+	
+	
+	/**
+	 * Extend the url to an absolute url.
+	 */
+	public function extendURL($strUrl, $objPage = null, $objCategory = null, $arrRecipient = null)
+	{
+		if ($objPage == null)
+		{
+			$objPage = $this->getViewOnlinePage($objCategory, $arrRecipient);
+		}
+		
+		return $this->DomainLink->generateDomainLink($objPage, '', $strUrl, true);
 	}
 }
 ?>

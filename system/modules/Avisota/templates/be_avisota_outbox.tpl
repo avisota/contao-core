@@ -8,7 +8,7 @@
 
 <div class="tl_formbody_edit">
 <?php if (count($this->outbox)): ?>
-<table class="prev_header" summary="" cellpadding="0" cellspacing="0">
+<table class="prev_header outbox" summary="" cellpadding="0" cellspacing="0">
   <thead>
   <tr class="head_0">
     <th class="col_0">&nbsp;<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['newsletter'] ?>&nbsp;</th>
@@ -18,10 +18,10 @@
   </thead>
   <tbody>
   <?php foreach ($this->outbox as $k=>$outbox): ?>
-  <tr class="row_<?php echo $k ?>">
+  <tr class="row_<?php echo $k ?><?php if ($outbox['token'] == $this->Input->get('highlight')): ?> row_highlight<?php endif ?>">
     <td class="col_0"><?php echo $outbox['newsletter'] ?></td>
-    <td class="col_1" align="center"><?php echo $outbox['recipients'] ?></td>
-    <?php if ($this->beSend): ?><td class="col_2"><a href="<?php echo $GLOBALS['TL_CONFIG']['websitePath'] ?>/contao/main.php?do=avisota_outbox&amp;id=<?php echo $outbox['id'] ?>&amp;token=<?php echo $outbox['token'] ?>" title="<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['send'][1]) ?>"><img src="system/modules/Avisota/html/send.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['send'][0]) ?>" /></a></td><?php endif ?>
+    <td class="col_1" align="center"><?php echo $outbox['outstanding'] ?> / <?php echo $outbox['recipients'] ?></td>
+    <?php if ($this->beSend): ?><td class="col_2"><a href="<?php echo $GLOBALS['TL_CONFIG']['websitePath'] ?>/contao/main.php?do=avisota_outbox&amp;id=<?php echo $outbox['id'] ?>&amp;token=<?php echo $outbox['token'] ?>" title="<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['send'][1]) ?>"><img src="system/modules/Avisota/html/send_go.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['send'][0]) ?>" /></a></td><?php endif ?>
   </tr>
   <?php endforeach; ?>
   </tbody>

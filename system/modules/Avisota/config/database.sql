@@ -16,6 +16,8 @@ CREATE TABLE `tl_avisota_recipient_list` (
   `tstamp` int(10) unsigned NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
   `alias` varbinary(128) NOT NULL default '',
+  `viewOnlinePage` int(10) unsigned NOT NULL default '0',
+  `subscriptionPage` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -49,8 +51,8 @@ CREATE TABLE `tl_avisota_newsletter_category` (
   `title` varchar(255) NOT NULL default '',
   `alias` varbinary(128) NOT NULL default '',
   `alias` varbinary(128) NOT NULL default '',
-  `jumpTo` int(10) unsigned NOT NULL default '0',
-  `unsubscribePage` int(10) unsigned NOT NULL default '0',
+  `viewOnlinePage` int(10) unsigned NOT NULL default '0',
+  `subscriptionPage` int(10) unsigned NOT NULL default '0',
   `useSMTP` char(1) NOT NULL default '',
   `smtpHost` varchar(64) NOT NULL default '',
   `smtpUser` varchar(128) NOT NULL default '',
@@ -59,6 +61,8 @@ CREATE TABLE `tl_avisota_newsletter_category` (
   `smtpEnc` varchar(3) NOT NULL default '',
   `sender` varchar(128) NOT NULL default '',
   `senderName` varchar(128) NOT NULL default '',
+  `template_html` varchar(32) NOT NULL default '',
+  `template_plain` varchar(32) NOT NULL default '',
   `stylesheets` blob NULL,
   PRIMARY KEY  (`id`),
   KEY `alias` (`alias`)
@@ -148,6 +152,8 @@ CREATE TABLE `tl_avisota_newsletter_outbox` (
   `pid` int(10) unsigned NOT NULL default '0',
   `token` varchar(32) NOT NULL default '',
   `email` varchar(255) NOT NULL default '',
+  `send` int(10) unsigned NOT NULL default '0',
+  `source` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -165,4 +171,14 @@ CREATE TABLE `tl_module` (
   `avisota_template_subscribe_mail_html` varchar(64) NOT NULL default '',
   `avisota_template_unsubscribe_mail_plain` varchar(64) NOT NULL default '',
   `avisota_template_unsubscribe_mail_html` varchar(64) NOT NULL default '',
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table `tl_page`
+-- 
+
+CREATE TABLE `tl_page` (
+  `jumpBack` int(10) unsigned NOT NULL default '0',
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

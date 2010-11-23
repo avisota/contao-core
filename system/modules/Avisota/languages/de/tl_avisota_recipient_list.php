@@ -32,14 +32,17 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['title'] = array('Titel', 'Hier können Sie den Titel des Verteilers angeben.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['alias'] = array('Alias', 'Der Alias ist eine eindeutige Referenz, die anstelle der numerischen Id aufgerufen werden kann.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['title']              = array('Titel', 'Hier können Sie den Titel des Verteilers angeben.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['alias']              = array('Alias', 'Der Alias ist eine eindeutige Referenz, die anstelle der numerischen Id aufgerufen werden kann.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['viewOnlinePage']     = array('Online-Ansehen Seite', 'Bitte wählen Sie die Newsletterleser-Seite aus, zu der Besucher weitergeleitet werden, wenn Sie einen Newsletter online ansehen wollen.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['subscriptionPage']   = array('Abonnement-Verwalten Seite', 'Bitte wählen Sie die Abonnement-Verwalten Seite aus, zu der Besucher weitergeleitet werden, wenn Sie einen Newsletter kündigen wollen.');
 
 
 /**
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_avisota_recipient_list']['list_legend'] = 'Verteiler';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['expert_legend']   = 'Experten-Einstellungen';
 
 
 /**
