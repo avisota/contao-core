@@ -954,14 +954,17 @@ class Avisota extends BackendModule
 		// remove comments
 		$css = trim(preg_replace('@/\*\*.*\*/@Us', '', $css));
 		
-		// remove @charset
-		/*
+		// handle @charset
 		if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $css, $arrMatch))
 		{
-			// TODO convert charset
+			// convert character encoding to utf-8
+			if (strtoupper($arrMatch[1]) != 'UTF-8')
+			{
+				$css = iconv(strtoupper($arrMatch[1]), 'UTF-8', $css);
+			}
+			// remove @charset tag
 			$css = str_replace($arrMatch[0], '', $css);
 		}
-		*/
 		
 		// extends css urls
 		if (preg_match_all('#url\((.+)\)#U', $css, $arrMatches, PREG_SET_ORDER))
