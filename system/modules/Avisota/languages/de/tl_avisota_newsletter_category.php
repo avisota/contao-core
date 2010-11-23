@@ -32,7 +32,7 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['title']           = array('Titel', 'Hier können Sie den Titel der Kategory angeben.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['title']           = array('Titel', 'Hier können Sie den Titel der Kategorie angeben.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['alias']           = array('Kategoriealias', 'Der Kategoriealias ist eine eindeutige Referenz, die anstelle der numerischen Kategoriealias-Id aufgerufen werden kann.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['jumpTo']          = array('Weiterleitungsseite', 'Bitte wählen Sie die Newsletterleser-Seite aus, zu der Besucher weitergeleitet werden, wenn Sie einen Newsletter anklicken.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['unsubscribePage'] = array('Kündigen-Seite', 'Bitte wählen Sie die Newsletter-Kündigen-Seite aus, zu der Besucher weitergeleitet werden, wenn Sie einen Newsletter kündigen wollen.');
@@ -51,7 +51,7 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['stylesheets']     = array
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['category_legend'] = 'Kategory';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['category_legend'] = 'Kategorie';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['smtp_legend']     = 'SMTP-Einstellungen';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['expert_legend']   = 'Experten-Einstellungen';
 
@@ -59,11 +59,11 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['expert_legend']   = 'Expe
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['new']         = array('Neue Kategory', 'Eine neue Liste erstellen');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['show']        = array('Kategorydetails', 'Details der Kategory ID %s anzeigen');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['copy']        = array('Kategory duplizieren', 'Kategory ID %s duplizieren');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['delete']      = array('Kategory löschen', 'Kategory ID %s löschen');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['edit']        = array('Kategory bearbeiten', 'Kategory ID %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['editheader']  = array('Kategorieeinstellungen bearbeiten', 'Einstellungen der Kategory ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['new']         = array('Neue Kategorie', 'Eine neue Liste erstellen');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['show']        = array('Kategoriedetails', 'Details der Kategorie ID %s anzeigen');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['copy']        = array('Kategorie duplizieren', 'Kategorie ID %s duplizieren');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['delete']      = array('Kategorie löschen', 'Kategorie ID %s löschen');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['edit']        = array('Kategorie bearbeiten', 'Kategorie ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['editheader']  = array('Kategorieeinstellungen bearbeiten', 'Einstellungen der Kategorie ID %s bearbeiten');
 
 ?>
