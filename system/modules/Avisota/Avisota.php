@@ -961,7 +961,7 @@ class Avisota extends BackendModule
 				if (is_array($arrStylesheet) && count($arrStylesheet))
 				{
 					$this->import('LayoutAdditionalSources');
-					$arrArrSources = $this->LayoutAdditionalSources->getSources($arrStylesheet, false, false, true);
+					$arrArrSources = $this->LayoutAdditionalSources->getSources($arrStylesheet, false, false, true, $this->Base->getViewOnlinePage($objCategory));
 					
 					foreach ($arrArrSources['css'] as $arrSource)
 					{
