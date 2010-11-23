@@ -986,6 +986,8 @@ class Avisota extends BackendModule
 		$objTemplate->title = $objNewsletter->subject;
 		$objTemplate->head = $head;
 		$objTemplate->body = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_HTML);
+		$objTemplate->newsletter = $objNewsletter->row();
+		$objTemplate->category = $objCategory->row();
 		return $objTemplate->parse();
 	}
 	
@@ -1003,6 +1005,8 @@ class Avisota extends BackendModule
 	{
 		$objTemplate = new FrontendTemplate($objNewsletter->template_plain ? $objNewsletter->template_plain : $objCategory->template_plain);
 		$objTemplate->body = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_PLAIN);
+		$objTemplate->newsletter = $objNewsletter->row();
+		$objTemplate->category = $objCategory->row();
 		return $objTemplate->parse();
 	}
 	
