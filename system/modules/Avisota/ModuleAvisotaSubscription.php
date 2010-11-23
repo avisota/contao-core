@@ -146,7 +146,7 @@ class ModuleAvisotaSubscription extends Module
 	 */
 	protected function generateSubscribeUrl($arrTokens)
 	{
-		return $this->DomainLink->generateDomainLink($GLOBALS['objPage']->row(), '', $this->generateFrontendUrl($GLOBALS['objPage']->row()) . '?subscribetoken[]=' . implode('&subscribetoken[]=', $arrTokens), true);
+		return $this->DomainLink->absolutizeUrl($this->generateFrontendUrl($GLOBALS['objPage']->row()) . '?subscribetoken[]=' . implode('&subscribetoken[]=', $arrTokens), $GLOBALS['objPage']->row());
 	}
 	
 	
@@ -392,7 +392,7 @@ class ModuleAvisotaSubscription extends Module
 					AND `pid` IN (" . implode(',', $arrListIds) . ")")
 			->execute($strEmail);
 		
-		$strUrl = $this->DomainLink->generateDomainLink($GLOBALS['objPage'], '', preg_replace('#&?unsubscribetoken=\w+#', '', $this->Environment->request), true);
+		$strUrl = $this->DomainLink->absolutizeUrl(preg_replace('#&?unsubscribetoken=\w+#', '', $this->Environment->request), $GLOBALS['objPage']);
 		
 		$arrList = $this->getListNames($arrListIds);
 		

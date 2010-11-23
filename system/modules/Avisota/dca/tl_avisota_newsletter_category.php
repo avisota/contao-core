@@ -294,31 +294,7 @@ class tl_avisota_newsletter_category extends Backend
 			return array();
 		}
 		
-		if (!$dc->activeRecord)
-		{
-			$dc->activeRecord = $this->Database->prepare("
-					SELECT
-						*
-					FROM
-						`tl_avisota_newsletter_category`
-					WHERE
-						`id`=?")
-				->execute($dc->id);
-		}
-
-		$intTheme = 0;
-		if ($dc->activeRecord->jumpTo > 0)
-		{
-			$objPage = $this->getPageDetails($dc->activeRecord->jumpTo);
-			$intTheme = $objPage->layout->pid;
-		}
-		elseif ($dc->activeRecord->unsubscribePage)
-		{
-			$objPage = $this->getPageDetails($dc->activeRecord->unsubscribePage);
-			$intTheme = $objPage->layout->pid;
-		}
-		
-		$arrStylesheets = array();
+		$arrAdditionalSource = array();
 		$objAdditionalSource = $this->Database->prepare("
 				SELECT
 					t.name,
@@ -333,21 +309,66 @@ class tl_avisota_newsletter_category extends Backend
 				ON
 					t.id=s.pid
 				WHERE
-						type='css_url'
-					OR  type='css_file'
+						`type`='css_url'
+					OR  `type`='css_file'
 				ORDER BY
-					`sorting`")
-			->execute($intTheme);
+					s.`sorting`")
+		   ->execute($intTheme);
 		while ($objAdditionalSource->next())
 		{
-			if (!isset($arrStylesheets[$objAdditionalSource->name]))
-			{
-				$arrStylesheets[$objAdditionalSource->name] = array();
+			$strType = $objAdditionalSource->type;
+			$label = $objAdditionalSource->$strType;
+			
+			if ($objAdditionalSource->compress_yui) {
+				$label .= '<span style="color: #009;">.yui</span>';
 			}
-			$arrStylesheets[$objAdditionalSource->name][$objAdditionalSource->id] = $objAdditionalSource->type == 'css_url' ? $objAdditionalSource->css_url : $objAdditionalSource->css_file;
-		}
+			
+			if ($objAdditionalSource->compress_gz) {
+				$label .= '<span style="color: #009;">.gz</span>';
+			}
+			
+			if (strlen($objAdditionalSource->cc)) {
+				$label .= ' <span style="color: #B3B3B3;">[' . $objAdditionalSource->cc . ']</span>';
+			}
+			
+			if (strlen($objAdditionalSource->media)) {
+				$arrMedia = unserialize($objAdditionalSource->media);
+				if (count($arrMedia)) {
+					$label .= ' <span style="color: #B3B3B3;">[' . implode(', ', $arrMedia) . ']</span>';
+				}
+			}
+			
+			switch ($objAdditionalSource->type) {
+			case 'js_file': case 'js_url':
+				$image = 'iconJS.gif';
+				break;
+			
+			case 'css_file': case 'css_url':
+				$image = 'iconCSS.gif';
+				break;
+			
+			default:
+				$image = false;
+				if (isset($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']) && is_array($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']))
+				{
+					foreach ($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage'] as $callback)
+					{
+						$this->import($callback[0]);
+						$image = $this->$callback[0]->$callback[1]($row);
+						if ($image !== false) {
+							break;
+						}
+					}
+				}
+			}
 		
-		return $arrStylesheets;
+			if (!isset($arrAdditionalSource[$objAdditionalSource->name]))
+			{
+				$arrAdditionalSource[$objAdditionalSource->name] = array();
+			}
+			$arrAdditionalSource[$objAdditionalSource->name][$objAdditionalSource->id] = ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . $label;
+		}
+		return $arrAdditionalSource;
 	}
 }
 

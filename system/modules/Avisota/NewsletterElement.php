@@ -133,7 +133,7 @@ abstract class NewsletterElement extends Frontend
 			$objPage = $this->getPageDetails($objCategory->jumpTo);
 		}
 		
-		return $this->DomainLink->generateDomainLink($objPage, '', $strUrl, true);
+		return $this->DomainLink->absolutizeUrl($strUrl, $objPage);
 	}
 
 	

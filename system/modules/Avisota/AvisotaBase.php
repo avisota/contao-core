@@ -98,7 +98,7 @@ class AvisotaBase extends Controller
 			$objPage = $this->getViewOnlinePage($objCategory, $arrRecipient);
 		}
 		
-		return $this->DomainLink->generateDomainLink($objPage, '', $strUrl, true);
+		return $this->DomainLink->absolutizeUrl($strUrl, $objPage);
 	}
 }
 ?>
