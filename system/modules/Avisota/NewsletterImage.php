@@ -88,6 +88,12 @@ class NewsletterImage extends NewsletterElement
 	protected function compile($mode)
 	{
 		$this->addImageToTemplate($this->Template, $this->arrData);
+		
+		$this->Template->src = $this->extendURL($this->Template->src);
+		if ($this->Template->href)
+		{
+			$this->Template->href = $this->extendURL($this->Template->href);
+		}
 	}
 }
 

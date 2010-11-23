@@ -110,8 +110,29 @@ abstract class NewsletterElement extends Frontend
 	 */
 	public function extendURL($strUrl)
 	{
-		// TODO
-		return $strUrl;
+		$this->import('DomainLink');
+		
+		$arrRow = null;
+		
+		// get the newsletter category jump to page
+		$objCategory = $this->Database->prepare("
+				SELECT
+					c.*
+				FROM
+					`tl_avisota_newsletter_category` c
+				INNER JOIN
+					`tl_avisota_newsletter` n
+				ON
+					c.`id`=n.`pid`
+				WHERE
+					n.`id`=?")
+			->execute($this->pid);
+		if ($objCategory->next())
+		{
+			$objPage = $this->getPageDetails($objCategory->jumpTo);
+		}
+		
+		return $this->DomainLink->generateDomainLink($objPage, '', $strUrl, true);
 	}
 
 	

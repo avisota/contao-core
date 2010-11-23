@@ -38,7 +38,14 @@
  */
 class Avisota extends Backend
 {
-
+	private static $arrCurrentRecipient;
+	
+	public static function getCurrentRecipient()
+	{
+		return self::$arrCurrentRecipient;
+	}
+	
+	
 	public function importRecipients()
 	{
 		return 'importRecipients';
@@ -53,22 +60,36 @@ class Avisota extends Backend
 		$this->import('BackendUser', 'User');
 		
 		// get preview mode
-		$mode = $this->Input->get('mode');
+		if ($this->Input->get('mode'))
+		{
+			$mode = $this->Input->get('mode');
+		}
+		else
+		{
+			$mode = $this->Session->get('tl_avisota_preview_mode');
+		}
+		
 		if (!$mode)
 		{
 			$mode = NL_HTML;
 		}
-		$_SESSION['tl_avisota_preview_mode'] = $mode;
+		$this->Session->set('tl_avisota_preview_mode', $mode);
 		
 		// get personalized state
 		if ($this->Input->get('personalized'))
 		{
-			$_SESSION['tl_avisota_preview_personalized'] = $personalized = ($this->Input->get('personalized') == 'no' ? '' : $this->Input->get('personalized'));
+			$personalized = $this->Input->get('personalized');
 		}
 		else
 		{
-			$personalized = $_SESSION['tl_avisota_preview_personalized'];
+			$personalized = $this->Session->get('tl_avisota_preview_personalized');
 		}
+		
+		if (!$personalized)
+		{
+			$personalized = 'anonymous';
+		}
+		$this->Session->set('tl_avisota_preview_personalized', $personalized);
 		
 		// find the newsletter
 		$intId = $this->Input->get('id');
@@ -105,20 +126,21 @@ class Avisota extends Backend
 		// build the recipient data array
 		$arrRecipient = $this->getPreviewRecipient($mode, $personalized);
 		
+		self::$arrCurrentRecipient = $arrRecipient;
+		
 		// generate the preview
 		switch ($mode)
 		{
 		case NL_HTML:
 			header('Content-Type: text/html; charset=utf-8');
-			echo $this->generateHtml($objNewsletter, $objCategory, $arrRecipient, $personalized);
+			echo $this->replaceInsertTags($this->generateHtml($objNewsletter, $objCategory, $arrRecipient, $personalized));
 			exit(0);
 			
 		case NL_PLAIN:
 			header('Content-Type: text/plain; charset=utf-8');
-			echo $this->generatePlain($objNewsletter, $objCategory, $arrRecipient, $personalized);
+			echo $this->replaceInsertTags($this->generatePlain($objNewsletter, $objCategory, $arrRecipient, $personalized));
 			exit(0);
 		}
-		return 'preview';
 	}
 
 	
@@ -183,6 +205,16 @@ class Avisota extends Backend
 			$strFrom = sprintf('%s <%s>', $objCategory->senderName, $strFrom);
 		}
 		$objTemplate->from = $strFrom;
+
+		// Store the current referer
+		$session = $this->Session->get('referer');
+		if ($session['current'] != $this->Environment->requestUri)
+		{
+			$session['tl_avisota_newsletter'] = $this->Environment->requestUri;
+			$session['last'] = $session['current'];
+			$session['current'] = $this->Environment->requestUri;
+			$this->Session->set('referer', $session);
+		}
 		
 		return $objTemplate->parse();
 	}
@@ -216,7 +248,7 @@ class Avisota extends Backend
 		
 		while ($objContent->next())
 		{
-			$strContent .= $this->generateNewsletterElement($objContent, $mode, $arrRecipient, $personalized);
+			$strContent .= $this->generateNewsletterElement($objContent, $mode, $personalized);
 		}
 		
 		return $strContent;
@@ -236,7 +268,7 @@ class Avisota extends Backend
 	{
 		$objTemplate = new FrontendTemplate($objNewsletter->template_html);
 		$objTemplate->body = $this->generateContent($objNewsletter, $objCategory, $arrRecipient, $personalized, NL_HTML);
-		return $this->replaceNewsletterInsertTags($objTemplate->parse(), $arrRecipient);
+		return $objTemplate->parse();
 	}
 	
 	
@@ -253,37 +285,7 @@ class Avisota extends Backend
 	{
 		$objTemplate = new FrontendTemplate($objNewsletter->template_plain);
 		$objTemplate->body = $this->generateContent($objNewsletter, $objCategory, $arrRecipient, $personalized, NL_PLAIN);
-		return $this->replaceNewsletterInsertTags($objTemplate->parse(), $arrRecipient);
-	}
-	
-	
-	/**
-	 * Replace the recipient insert tags and invoke the Controller::replaceInsertTags.
-	 * 
-	 * @param string $strBuffer
-	 * @param array $arrRecipient
-	 * @return string
-	 */
-	protected function replaceNewsletterInsertTags($strBuffer, $arrRecipient)
-	{
-		$tags = preg_split('/{{recipient::([^}]+)}}/', $strBuffer, -1, PREG_SPLIT_DELIM_CAPTURE);
-		
-		$strBuffer = '';
-		$arrCache = array();
-		
-		for($_rit=0; $_rit<count($tags); $_rit=$_rit+2)
-		{
-			$strBuffer .= $tags[$_rit];
-			$strKey = $tags[$_rit+1];
- 
-			if (isset($arrRecipient[strtolower($strKey)]))
-			{
-				$strBuffer .= $arrRecipient[strtolower($strKey)];
-			}
-		}
-		
-		$strBuffer = $this->replaceInsertTags($strBuffer);
-		return $strBuffer;
+		return $objTemplate->parse();
 	}
 	
 	
@@ -316,8 +318,13 @@ class Avisota extends Backend
 			return '';
 		}
 		
-		$strBuffer = $this->generateNewsletterElement($objElement, $mode, $this->getPreviewRecipient($mode, $objElement->personalize), $objElement->personalize);
-		$strBuffer = $this->replaceNewsletterInsertTags($strBuffer, $arrRecipient);
+		self::$arrCurrentRecipient = $this->getPreviewRecipient($mode, $objElement->personalize);
+		
+		$strBuffer = $this->generateNewsletterElement($objElement, $mode, $objElement->personalize);
+		$strBuffer = $this->replaceInsertTags($strBuffer);
+		
+		self::$arrCurrentRecipient = null;
+		
 		return $strBuffer;
 	}
 
@@ -327,7 +334,7 @@ class Avisota extends Backend
 	 * @param integer
 	 * @return string
 	 */
-	public function generateNewsletterElement($objElement, $mode = NL_HTML, $arrRecipient = null, $personalized = '')
+	public function generateNewsletterElement($objElement, $mode = NL_HTML, $personalized = '')
 	{
 		if ($objElement->personalize == 'private' && $personalized != 'private')
 		{
@@ -398,12 +405,7 @@ class Avisota extends Backend
 	public function getPreviewRecipient($mode, $personalized)
 	{
 		$arrRecipient = array();
-		if ($personalized == 'anonymous')
-		{
-			$arrRecipient = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'];
-			$arrRecipient['email'] = $this->User->email;
-		}
-		elseif ($personalized == 'private')
+		if ($personalized == 'private')
 		{
 			$arrRecipient = $this->User->getData();
 			
@@ -413,7 +415,8 @@ class Avisota extends Backend
 					FROM
 						`tl_member`
 					WHERE
-						`email`=?")
+							`email`=?
+						AND `disable`=''")
 				->execute($this->User->email);
 			if ($objMember->next())
 			{
@@ -432,10 +435,8 @@ class Avisota extends Backend
 		}
 		else
 		{
-			$arrRecipient = array
-			(
-				'email' => $this->User->email
-			);
+			$arrRecipient = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'];
+			$arrRecipient['email'] = $this->User->email;
 		}
 		
 		// add the salutation
@@ -449,8 +450,9 @@ class Avisota extends Backend
 		}
 		
 		// add the unsubscribe url
+		$this->import('DomainLink');
 		// TODO unsubscribe_url
-		$arrRecipient['unsubscribe_url'] = 'http://unsubscribe.me/?email=' . $arrRecipient['email'] . '&category=' . $objCategory->alias;
+		$arrRecipient['unsubscribe_url'] = '?newsletter=unsubscribe&amp;email=' . $arrRecipient['email'] . '&amp;category=' . $objCategory->alias;
 		switch ($mode)
 		{
 		case NL_HTML:
@@ -461,9 +463,32 @@ class Avisota extends Backend
 			$arrRecipient['unsubscribe'] = sprintf("%s\n[%s]", $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe'], $arrRecipient['unsubscribe_url']);
 			break;
 		}
+		$arrRecipient['unsubscribe_url'] = $this->DomainLink->generateDomainLink(null, '', $arrRecipient['unsubscribe_url'], true);
 		
 		return $arrRecipient;
 	}
 }
 
+class AvisotaInsertTag extends Controller
+{
+	public function replaceNewsletterInsertTags($strTag)
+	{
+		$strTag = explode('::', $strTag);
+		switch ($strTag[0])
+		{
+		case 'recipient':
+			$arrCurrentRecipient = Avisota::getCurrentRecipient();
+			if ($arrCurrentRecipient && isset($arrCurrentRecipient[$strTag[1]]))
+			{
+				return $arrCurrentRecipient[$strTag[1]];
+			}
+			else
+			{
+				return '';
+			}
+			break;
+		}
+		return false;
+	}
+}
 ?>

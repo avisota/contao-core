@@ -80,7 +80,7 @@ class NewsletterHyperlink extends NewsletterElement
 		}
 		else
 		{
-			$this->url = ampersand($this->url);
+			$this->url = $this->extendURL(ampersand($this->url));
 		}
 
 		$embed = explode('%s', $this->embed);
@@ -114,7 +114,7 @@ class NewsletterHyperlink extends NewsletterElement
 					$this->Template->imgSize = ' ' . $imgSize[3];
 				}
 
-				$this->Template->src = $src;
+				$this->Template->src = $this->extendURL($src);
 				$this->Template->alt = specialchars($this->alt);
 				$this->Template->title = specialchars($this->linkTitle);
 				$this->Template->caption = $this->caption;

@@ -199,7 +199,7 @@ class tl_avisota_newsletter extends Backend
 	 */
 	public function addNewsletter($arrRow)
 	{
-		$key = $arrRow['sendOn'] ? 'published' : 'unpublished';
+		$icon = $arrRow['sendOn'] ? 'visible' : 'invisible';
 
 		$label = $arrRow['subject'];
 		
@@ -208,8 +208,7 @@ class tl_avisota_newsletter extends Backend
 			$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(' . sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['sended'], $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $row['sendOn'])) . ')</span>';
 		}
 		
-		return '
-<div class="cte_type ' . $key . '">' . $label . '</div>';
+		return sprintf('<div class="list_icon" style="background-image:url(\'system/themes/%s/images/%s.gif\');">%s</div>', $this->getTheme(), $icon, $label);
 	}
 }
 ?>

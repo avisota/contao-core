@@ -59,6 +59,12 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 		),
 		'global_operations' => array
 		(
+			'send' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['send'],
+				'href'                => 'table=tl_avisota_newsletter&amp;key=send',
+				'class'               => 'header_send'
+			),
 			'all' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
@@ -196,8 +202,9 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 			'exclude'                 => true,
 			'filter'                  => true,
 			'inputType'               => 'select',
-			'options'                 => array('unpersonalized', 'anonymous', 'private'),
-			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']
+			'options'                 => array('anonymous', 'private'),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content'],
+			'eval'                    => array('tl_class'=>'long')
 		),
 		'addImage' => array
 		(
