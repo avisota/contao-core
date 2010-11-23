@@ -122,5 +122,6 @@ $GLOBALS['TL_NLE'] = array_merge_recursive(
  * Hooks
  */
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('AvisotaInsertTag', 'replaceNewsletterInsertTags');
+$GLOBALS['TL_HOOKS']['getEditorStylesLayout'][] = array('AvisotaEditorStyle', 'getEditorStylesLayout');
 
 ?>
