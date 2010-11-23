@@ -46,16 +46,18 @@ $GLOBALS['BE_MOD'] = array_merge(
 		(
 			'avisota_recipients' => array
 			(
-				'tables'  => array('tl_avisota_list', 'tl_avisota_recipient'),
-				'import'  => array('Avisota', 'importRecipients'),
-				'icon'    => 'system/modules/Avisota/html/recipients.png'
+				'tables'     => array('tl_avisota_list', 'tl_avisota_recipient'),
+				'import'     => array('Avisota', 'importRecipients'),
+				'icon'       => 'system/modules/Avisota/html/recipients.png',
+				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 			),
 			'avisota_newsletter' => array
 			(
-				'tables'  => array('tl_avisota_newsletter_category', 'tl_avisota_newsletter', 'tl_avisota_newsletter_content'),
-				'preview' => array('Avisota', 'preview'),
-				'send'    => array('Avisota', 'send'),
-				'icon'    => 'system/modules/Avisota/html/newsletter.png'
+				'tables'     => array('tl_avisota_newsletter_category', 'tl_avisota_newsletter', 'tl_avisota_newsletter_content'),
+				'preview'    => array('Avisota', 'preview'),
+				'send'       => array('Avisota', 'send'),
+				'icon'       => 'system/modules/Avisota/html/newsletter.png',
+				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 			)
 		)
 	),
@@ -95,5 +97,10 @@ $GLOBALS['TL_NLE'] = array_merge_recursive(
 	is_array($GLOBALS['TL_NLE']) ? $GLOBALS['TL_NLE'] : array()
 );
 
+
+/**
+ * Hooks
+ */
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('AvisotaInsertTag', 'replaceNewsletterInsertTags');
 
 ?>

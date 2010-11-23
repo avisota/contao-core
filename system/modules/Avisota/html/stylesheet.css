@@ -1,0 +1,6 @@
+@CHARSET "UTF-8";
+
+.header_send {
+	background: url("send.png") no-repeat scroll left center transparent;
+	padding: 2px 0 3px 20px;
+}

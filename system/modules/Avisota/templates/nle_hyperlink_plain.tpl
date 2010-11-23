@@ -2,6 +2,7 @@
 
 <?php endif; // headline
 
+echo '⇒ ';
 echo $this->embed_pre;
 if ($this->href != $this->link):
 	printf('%s [%s]', $this->link, $this->href);

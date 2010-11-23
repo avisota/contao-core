@@ -163,7 +163,7 @@ class tl_avisota_recipient extends Backend
 	 */
 	public function addRecipient($arrRow)
 	{
-		$key = $arrRow['confirmed'] ? 'published' : 'unpublished';
+		$icon = $arrRow['confirmed'] ? 'visible' : 'invisible';
 
 		$label = $arrRow['email'];
 		
@@ -176,8 +176,7 @@ class tl_avisota_recipient extends Backend
 			$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(' . $GLOBALS['TL_LANG']['tl_avisota_recipient']['manually'] . ')</span>';
 		}
 		
-		return '
-<div class="cte_type ' . $key . '">' . $label . '</div>';
+		return sprintf('<div class="list_icon" style="background-image:url(\'system/themes/%s/images/%s.gif\');">%s</div>', $this->getTheme(), $icon, $label);
 	}
 	
 	

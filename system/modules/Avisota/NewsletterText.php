@@ -160,6 +160,12 @@ class NewsletterText extends NewsletterElement
 		if ($this->addImage && strlen($this->singleSRC) && is_file(TL_ROOT . '/' . $this->singleSRC))
 		{
 			$this->addImageToTemplate($this->Template, $this->arrData);
+			
+			$this->Template->src = $this->extendURL($this->Template->src);
+			if ($this->Template->href)
+			{
+				$this->Template->href = $this->extendURL($this->Template->href);
+			}
 		}
 	}
 }

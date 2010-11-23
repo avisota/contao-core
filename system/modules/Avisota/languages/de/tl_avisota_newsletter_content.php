@@ -89,9 +89,8 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['expert_legend']    = 'Expe
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['unpersonalized'] = 'Nicht personalisiert';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['anonymous']      = 'Privat personalisierung, wenn nicht möglich Anonym personalisieren';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['private']        = 'Privat personalisierung, wenn nicht möglich das Element ausblenden';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['anonymous']      = 'Anonym personalisieren, falls keine persönlichen Daten verfügbar sind';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['private']        = 'Persönlich personalisieren, blendet das Element aus, wenn keine persönlichen Daten verfügbar sind';
 
 
 /**
@@ -103,7 +102,6 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['cut']         = array('Ele
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['copy']        = array('Element duplizieren', 'Inhaltselement ID %s duplizieren');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['delete']      = array('Element löschen', 'Inhaltselement ID %s löschen');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['edit']        = array('Element bearbeiten', 'Inhaltselement ID %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['editheader']  = array('Artikel bearbeiten', 'Die Artikeleinstellungen bearbeiten');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['pasteafter']  = array('Oben einfügen', 'Nach dem Inhaltselement ID %s einfügen');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['pastenew']    = array('Neues Element oben erstellen', 'Neues Element nach dem Inhaltselement ID %s erstellen');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['toggle']      = array('Sichtbarkeit ändern', 'Die Sichtbarkeit des Inhaltselements ID %s ändern');

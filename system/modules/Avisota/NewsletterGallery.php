@@ -268,6 +268,12 @@ class NewsletterGallery extends NewsletterElement
 				$images[($i+$j)]['fullsize'] = $this->fullsize;
 
 				$this->addImageToTemplate($objCell, $images[($i+$j)], $intMaxWidth);
+			
+				$objCell->src = $this->extendURL($objCell->src);
+				if ($objCell->href)
+				{
+					$objCell->href = $this->extendURL($objCell->href);
+				}
 
 				// Add column width and class
 				$objCell->colWidth = $colwidth . '%';
