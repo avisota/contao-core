@@ -146,7 +146,7 @@ class ModuleAvisotaSubscription extends Module
 	 */
 	protected function generateSubscribeUrl($arrTokens)
 	{
-		return $this->DomainLink->absolutizeUrl($this->generateFrontendUrl($GLOBALS['objPage']->row()) . '?subscribetoken[]=' . implode('&subscribetoken[]=', $arrTokens), $GLOBALS['objPage']);
+		return $this->DomainLink->absolutizeUrl($this->generateFrontendUrl($GLOBALS['objPage']->row()) . '?subscribetoken=' . implode(',', $arrTokens), $GLOBALS['objPage']);
 	}
 	
 	
@@ -293,7 +293,7 @@ class ModuleAvisotaSubscription extends Module
 	 */
 	protected function subscribetoken()
 	{
-		$arrSubscribetoken = $this->Input->get('subscribetoken');
+		$arrSubscribetoken = explode(',', $this->Input->get('subscribetoken'));
 		if (is_array($arrSubscribetoken) && count($arrSubscribetoken) > 0)
 		{
 			foreach ($arrSubscribetoken as $strToken)
@@ -326,7 +326,7 @@ class ModuleAvisotaSubscription extends Module
 				}
 			}
 			
-			$this->redirect(preg_replace('#&?subscribetoken\[\]=[^&]+#', '', urldecode($this->Environment->request)));
+			$this->redirect(preg_replace('#(&amp;|&)?subscribetoken=[^&]+#', '', $this->Environment->request));
 		}
 	}
 	
