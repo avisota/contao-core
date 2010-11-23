@@ -84,7 +84,7 @@ class AvisotaBase extends Controller
 			return $this->getPageDetails($objCategory->viewOnlinePage);
 		}
 		
-		return false;
+		return null;
 	}
 	
 	
