@@ -30,6 +30,12 @@
 
 
 /**
+ * Page types
+ */
+$GLOBALS['TL_LANG']['PTY']['avisota']   = array('Online Newsletter', 'Zeigt einen beliebigen Online-Newsletter aus dem Newslettersystem an.');
+
+
+/**
  * Newsletter content elements
  */
 $GLOBALS['TL_LANG']['NLE']['texts']     = 'Text-Elemente';

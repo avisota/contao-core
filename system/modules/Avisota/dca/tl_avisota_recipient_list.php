@@ -111,7 +111,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_list'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{list_legend},title,alias',
+		'default'                     => '{list_legend},title,alias;{expert_legend:hide},viewOnlinePage,subscriptionPage',
 	),
 
 	// Fields
@@ -136,6 +136,20 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_list'] = array
 			(
 				array('tl_avisota_recipient_list', 'generateAlias')
 			)
+		),
+		'viewOnlinePage' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['viewOnlinePage'],
+			'exclude'                 => true,
+			'inputType'               => 'pageTree',
+			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio')
+		),
+		'subscriptionPage' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['subscriptionPage'],
+			'exclude'                 => true,
+			'inputType'               => 'pageTree',
+			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio')
 		)
 	)
 );

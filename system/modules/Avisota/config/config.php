@@ -37,6 +37,12 @@ define('NL_PLAIN', 'plain');
 
 
 /**
+ * Page types
+ */
+$GLOBALS['TL_PTY']['avisota'] = 'PageAvisotaNewsletter';
+
+
+/**
  * Back end modules
  */
 $i = array_search('design', array_keys($GLOBALS['BE_MOD']));

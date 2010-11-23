@@ -178,7 +178,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options'                 => $this->getTemplateGroup('mail_html_'),
-			'eval'                    => array('tl_class'=>'w50')
+			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'w50')
 		),
 		'template_plain' => array
 		(
@@ -187,7 +187,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options'                 => $this->getTemplateGroup('mail_plain_'),
-			'eval'                    => array('tl_class'=>'w50')
+			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'w50')
 		),
 		'sendOn' => array
 		(

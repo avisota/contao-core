@@ -168,9 +168,9 @@ class tl_avisota_recipient extends Backend
 
 		$label = $arrRow['email'];
 		
-		if ($row['addedOn'])
+		if ($arrRow['addedOn'])
 		{
-			$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(' . sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['subscribed'], $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $row['addedOn'])) . ')</span>';
+			$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(' . sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['subscribed'], $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $arrRow['addedOn'])) . ')</span>';
 		}
 		else
 		{
