@@ -69,12 +69,17 @@ class Avisota extends BackendModule
 	private $htmlHeadCache = false;
 	
 	
+	public function __construct()
+	{
+		parent::__construct();
+		$this->import('DomainLink');
+		$this->import('BackendUser', 'User');
+	}
+	
 	protected function allowBackendSending()
 	{
 		if ($GLOBALS['TL_CONFIG']['avisota_backend_send'])
 		{
-			$this->import('BackendUser', 'User');
-			
 			if ($GLOBALS['TL_CONFIG']['avisota_backend_send'] == 'disabled')
 			{
 				return false;
@@ -120,8 +125,6 @@ class Avisota extends BackendModule
 	 */
 	public function preview()
 	{
-		$this->import('BackendUser', 'User');
-		
 		// get preview mode
 		if ($this->Input->get('mode'))
 		{
@@ -218,8 +221,6 @@ class Avisota extends BackendModule
 	 */
 	public function send()
 	{
-		$this->import('Database');
-		
 		$intId = $this->Input->get('id');
 		
 		// get the newsletter
@@ -251,6 +252,9 @@ class Avisota extends BackendModule
 		{
 			$this->redirect('contao/main.php?do=avisota_newsletter');
 		}
+		
+		self::$objCurrentCategory = $objCategory;
+		self::$objCurrentNewsletter = $objNewsletter;
 		
 		// Send newsletter
 		if (strlen($this->Input->get('token')) && $this->Input->get('token') == $this->Session->get('tl_newsletter_send'))
@@ -513,6 +517,9 @@ class Avisota extends BackendModule
 			{
 				$this->redirect($referer);
 			}
+			
+			self::$objCurrentCategory = $objCategory;
+			self::$objCurrentNewsletter = $objNewsletter;
 	
 			// get total email count
 			$objTotal = $this->Database->prepare("
@@ -799,8 +806,6 @@ class Avisota extends BackendModule
 			$_SESSION['REJECTED_RECIPIENTS'][] = $arrRecipient['email'];
 		}
 		
-		self::$objCurrentCategory = null;
-		self::$objCurrentNewsletter = null;
 		self::$arrCurrentRecipient = null;
 	}
 	
@@ -855,8 +860,6 @@ class Avisota extends BackendModule
 		
 		if ($this->htmlHeadCache === false)
 		{
-			$this->import('DomainLink');
-			
 			$head .= sprintf('<base href="%s">', $this->DomainLink->generateDomainLink(null, '', '', true)) . "\n";
 			
 			$css = '';
@@ -886,14 +889,14 @@ class Avisota extends BackendModule
 						{
 						case 'css_url':
 							$strUrl = $this->DomainLink->generateDomainLink(null, '', $objStylesheet->css_url, true);
-							$css .= $this->cleanCSS(file_get_contents($strUrl)) . "\n";
+							$css .= $this->cleanCSS(file_get_contents($strUrl), $strUrl) . "\n";
 							break;
 							
 						case 'css_file':
 							$strSource = LayoutAdditionalSources::getSource($objStylesheet, false);
 							if (file_exists(TL_ROOT . '/' . $strSource))
 							{
-								$css .= $this->cleanCSS(file_get_contents(TL_ROOT . '/' . $strSource)) . "\n";
+								$css .= $this->cleanCSS(file_get_contents(TL_ROOT . '/' . $strSource), $strSource) . "\n";
 							}
 							break;
 						}
@@ -914,6 +917,7 @@ class Avisota extends BackendModule
 		}
 		
 		$objTemplate = new FrontendTemplate($objNewsletter->template_html);
+		$objTemplate->title = $objNewsletter->subject;
 		$objTemplate->head = $head;
 		$objTemplate->body = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_HTML);
 		return $objTemplate->parse();
@@ -940,10 +944,16 @@ class Avisota extends BackendModule
 	/**
 	 * Clean up CSS Code.
 	 */
-	protected function cleanCSS($css)
+	protected function cleanCSS($css, $source = '')
 	{
+		if ($source)
+		{
+			$source = dirname($source);
+		}
+		
 		// remove comments
 		$css = trim(preg_replace('@/\*\*.*\*/@Us', '', $css));
+		
 		// remove @charset
 		/*
 		if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $css, $arrMatch))
@@ -952,7 +962,53 @@ class Avisota extends BackendModule
 			$css = str_replace($arrMatch[0], '', $css);
 		}
 		*/
+		
+		// extends css urls
+		if (preg_match_all('#url\((.+)\)#U', $css, $arrMatches, PREG_SET_ORDER))
+		{
+			foreach ($arrMatches as $arrMatch)
+			{
+				$path = $source;
+				
+				$strUrl = $arrMatch[1];
+				if (preg_match('#^".*"$#', $strUrl) || preg_match("#^'.*'$#", $strUrl))
+				{
+					$strUrl = substr($strUrl, 1, -1);
+				}
+				while (preg_match('#^\.\./#', $strUrl))
+				{
+					$path = dirname($path);
+					$strUrl = substr($strUrl, 3);
+				}
+				if (!preg_match('#^\w+://#', $strUrl) && $strUrl[0] != '/')
+				{
+					$strUrl = ($path ? $path . '/' : '') . $strUrl;
+				}
+				
+				$css = str_replace($arrMatch[0], sprintf('url("%s")', $this->extendURL($strUrl)), $css);
+			}
+		}
+		
 		return $css;
+	}
+	
+	
+	/**
+	 * Extend the url to an absolute url.
+	 */
+	public function extendURL($strUrl, $objCategory = null, $objPage = null)
+	{
+		if (!$objCategory)
+		{
+			$objCategory = self::$objCurrentCategory;
+		}
+		
+		if ($objCategory && !$objPage)
+		{
+			$objPage = $this->getPageDetails($objCategory->jumpTo);
+		}
+		
+		return $this->DomainLink->generateDomainLink($objPage, '', $strUrl, true);
 	}
 	
 	
@@ -967,8 +1023,6 @@ class Avisota extends BackendModule
 		{
 			return '';
 		}
-
-		$this->import('Database');
 
 		$objElement = $this->Database->prepare("
 				SELECT
@@ -1088,16 +1142,15 @@ class Avisota extends BackendModule
 	public function prepareRecipient(&$objNewsletter, &$objCategory, &$arrRecipient, $mode)
 	{
 		// add the unsubscribe url
-		$this->import('DomainLink');
 		
 		if ($objCategory->unsubscribePage > 0)
 		{
 			$objPage = $this->getPageDetails($objCategory->unsubscribePage);
-			$arrRecipient['unsubscribe_url'] = $this->DomainLink->generateDomainLink($objPage, '', $this->generateFrontendUrl($objPage->row()) . '?email=' . $arrRecipient['email'] . '&unsubscribe=' . ($objCategory->alias ? $objCategory->alias : $objCategory->id), true);
+			$arrRecipient['unsubscribe_url'] = $this->extendURL($this->generateFrontendUrl($objPage->row()) . '?email=' . $arrRecipient['email'] . '&unsubscribe=' . ($objCategory->alias ? $objCategory->alias : $objCategory->id), $objCategory, $objPage);
 		}
 		else
 		{
-			$arrRecipient['unsubscribe_url'] = $this->DomainLink->generateDomainLink(null, '', '?email=' . $arrRecipient['email'] . '&unsubscribe=' . ($objCategory->alias ? $objCategory->alias : $objCategory->id), true);
+			$arrRecipient['unsubscribe_url'] = $this->extendURL('?email=' . $arrRecipient['email'] . '&unsubscribe=' . ($objCategory->alias ? $objCategory->alias : $objCategory->id), $objCategory);
 		}
 		
 		switch ($mode)
