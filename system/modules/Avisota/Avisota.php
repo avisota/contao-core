@@ -857,16 +857,13 @@ class Avisota extends BackendModule
 		{
 			$this->import('DomainLink');
 			
-			$head .= sprintf('<base href="%s"></base>', $this->DomainLink->generateDomainLink(null, '', '', true)) . "\n";
+			$head .= sprintf('<base href="%s">', $this->DomainLink->generateDomainLink(null, '', '', true)) . "\n";
 			
 			$css = '';
 			// Add style sheet newsletter.css
 			if (file_exists(TL_ROOT . '/newsletter.css'))
 			{
-				$buffer = file_get_contents(TL_ROOT . '/newsletter.css');
-				$buffer = preg_replace('@/\*\*.*\*/@Us', '', $buffer);
-	
-				$css .= trim($buffer) . "\n";
+				$css .= $this->cleanCSS(file_get_contents(TL_ROOT . '/newsletter.css')) . "\n";
 			}
 			
 			if (in_array('layout_additional_sources', $this->Config->getActiveModules()))
@@ -889,17 +886,14 @@ class Avisota extends BackendModule
 						{
 						case 'css_url':
 							$strUrl = $this->DomainLink->generateDomainLink(null, '', $objStylesheet->css_url, true);
-							$css .= trim(file_get_contents($strUrl));
+							$css .= $this->cleanCSS(file_get_contents($strUrl)) . "\n";
 							break;
 							
 						case 'css_file':
 							$strSource = LayoutAdditionalSources::getSource($objStylesheet, false);
 							if (file_exists(TL_ROOT . '/' . $strSource))
 							{
-								$buffer = file_get_contents(TL_ROOT . '/' . $strSource);
-								$buffer = preg_replace('@/\*\*.*\*/@Us', '', $buffer);
-					
-								$css .= trim($buffer) . "\n";
+								$css .= $this->cleanCSS(file_get_contents(TL_ROOT . '/' . $strSource)) . "\n";
 							}
 							break;
 						}
@@ -940,6 +934,25 @@ class Avisota extends BackendModule
 		$objTemplate = new FrontendTemplate($objNewsletter->template_plain);
 		$objTemplate->body = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_PLAIN);
 		return $objTemplate->parse();
+	}
+	
+	
+	/**
+	 * Clean up CSS Code.
+	 */
+	protected function cleanCSS($css)
+	{
+		// remove comments
+		$css = trim(preg_replace('@/\*\*.*\*/@Us', '', $css));
+		// remove @charset
+		/*
+		if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $css, $arrMatch))
+		{
+			// TODO convert charset
+			$css = str_replace($arrMatch[0], '', $css);
+		}
+		*/
+		return $css;
 	}
 	
 	
