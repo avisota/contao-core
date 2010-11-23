@@ -946,7 +946,7 @@ class Avisota extends BackendModule
 		
 		if ($this->htmlHeadCache === false)
 		{
-			$head .= sprintf('<base href="%s">', $this->DomainLink->generateDomainLink(null, '', '', true)) . "\n";
+			$head .= sprintf('<base href="%s">', $this->DomainLink->absolutizeUrl('')) . "\n";
 			
 			$css = '';
 			// Add style sheet newsletter.css
@@ -960,32 +960,12 @@ class Avisota extends BackendModule
 				$arrStylesheet = unserialize($objCategory->stylesheets);
 				if (is_array($arrStylesheet) && count($arrStylesheet))
 				{
-					$objStylesheet = $this->Database->execute("
-							SELECT
-								*
-							FROM
-								`tl_additional_source`
-							WHERE
-								`id` IN (" . implode(',', array_map('intval', $arrStylesheet)) . ")
-							ORDER BY
-								`sorting`");
-					while ($objStylesheet->next())
+					$this->import('LayoutAdditionalSources');
+					$arrArrSources = $this->LayoutAdditionalSources->getSources($arrStylesheet, false, false, true);
+					
+					foreach ($arrArrSources['css'] as $arrSource)
 					{
-						switch ($objStylesheet->type)
-						{
-						case 'css_url':
-							$strUrl = $this->DomainLink->generateDomainLink(null, '', $objStylesheet->css_url, true);
-							$css .= $this->cleanCSS(file_get_contents($strUrl), $strUrl) . "\n";
-							break;
-							
-						case 'css_file':
-							$strSource = LayoutAdditionalSources::getSource($objStylesheet, false);
-							if (file_exists(TL_ROOT . '/' . $strSource))
-							{
-								$css .= $this->cleanCSS(file_get_contents(TL_ROOT . '/' . $strSource), $strSource) . "\n";
-							}
-							break;
-						}
+						$css .= file_get_contents(TL_ROOT . '/' . $arrSource['src']);
 					}
 				}
 			}
