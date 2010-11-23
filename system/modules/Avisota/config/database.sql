@@ -50,7 +50,6 @@ CREATE TABLE `tl_avisota_newsletter_category` (
   `tstamp` int(10) unsigned NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
   `alias` varbinary(128) NOT NULL default '',
-  `alias` varbinary(128) NOT NULL default '',
   `viewOnlinePage` int(10) unsigned NOT NULL default '0',
   `subscriptionPage` int(10) unsigned NOT NULL default '0',
   `useSMTP` char(1) NOT NULL default '',

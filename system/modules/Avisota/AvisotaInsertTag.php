@@ -50,49 +50,50 @@ class AvisotaInsertTag extends Controller
 	
 	public function replaceNewsletterInsertTags($strTag)
 	{
-		$arrCurrentRecipient = Avisota::getCurrentRecipient();
-		$objCategory = Avisota::getCurrentCategory();
-		$objNewsletter = Avisota::getCurrentNewsletter();
-		
 		$strTag = explode('::', $strTag);
 		switch ($strTag[0])
 		{
 		case 'recipient':
-			switch ($strTag[1])
+			$arrCurrentRecipient = Avisota::getCurrentRecipient();
+		
+			if ($arrCurrentRecipient)
 			{
-			case 'salutation':
-				if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrCurrentRecipient['gender']]))
+				switch ($strTag[1])
 				{
-					return $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrCurrentRecipient['gender']];
-				}
-				else
-				{
-					return $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation'];
-				}
-				
-			case 'name':
-				if (isset($arrCurrentRecipient['name']) && $arrCurrentRecipient['name'])
-				{
-					return $arrCurrentRecipient['name'];
-				}
-				else
-				{
-					return trim($arrCurrentRecipient['firstname'] . ' ' . $arrCurrentRecipient['lastname']);
-				}
-				
-			default:
-				if ($arrCurrentRecipient && isset($arrCurrentRecipient[$strTag[1]]))
-				{
-					return $arrCurrentRecipient[$strTag[1]];
-				}
-				else
-				{
-					return '';
+				case 'salutation':
+					if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrCurrentRecipient['gender']]))
+					{
+						return $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrCurrentRecipient['gender']];
+					}
+					else
+					{
+						return $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation'];
+					}
+					
+				case 'name':
+					if (isset($arrCurrentRecipient['name']) && $arrCurrentRecipient['name'])
+					{
+						return $arrCurrentRecipient['name'];
+					}
+					else
+					{
+						return trim($arrCurrentRecipient['firstname'] . ' ' . $arrCurrentRecipient['lastname']);
+					}
+					
+				default:
+					if ($arrCurrentRecipient && isset($arrCurrentRecipient[$strTag[1]]))
+					{
+						return $arrCurrentRecipient[$strTag[1]];
+					}
 				}
 			}
-			break;
+			return '';
 			
 		case 'newsletter':
+			$arrCurrentRecipient = Avisota::getCurrentRecipient();
+			$objCategory = Avisota::getCurrentCategory();
+			$objNewsletter = Avisota::getCurrentNewsletter();
+			
 			if ($arrCurrentRecipient && $objCategory && $objNewsletter)
 			{
 				switch ($strTag[1])
@@ -157,6 +158,69 @@ class AvisotaInsertTag extends Controller
 						return sprintf("%s\n[%s]", $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe'], $strUrl);
 					}
 					break;
+				}
+			}
+			return '';
+			
+		case 'newsletter_latest_link':
+		case 'newsletter_latest_url':
+			if (strlen($strTag[1]))
+			{
+				$strId = "'" . implode("','", trimsplit(',', $strTag[1])) . "'";
+				$objNewsletter = $this->Database->prepare("
+						SELECT
+							n.*,
+							c.`viewOnlinePage`,
+							c.`subscriptionPage`
+						FROM
+							`tl_avisota_newsletter` n
+						INNER JOIN
+							`tl_avisota_newsletter_category` c
+						ON
+							c.`id`=n.`pid`
+						WHERE
+							(	c.`id` IN ($strId)
+							OR	c.`alias` IN ($strId))
+							AND n.`sendOn`!=''
+						ORDER BY
+							n.`sendOn` DESC")
+					->limit(1)
+					->execute();
+				if ($objNewsletter->next())
+				{
+					if (strlen($strTag[2]))
+					{
+						$objPage = $this->Database->prepare("
+								SELECT
+									*
+								FROM
+									`tl_page`
+								WHERE
+										`id`=?
+									OR	`alias`=?")
+							->execute($strTag[2], $strTag[2]);
+						if (!$objPage->next())
+						{
+							$objPage = false;
+						}
+					}
+					else
+					{
+						$objPage = $this->Base->getViewOnlinePage($objNewsletter, false);
+					}
+					if ($objPage)
+					{
+						$strUrl = $this->Base->extendURL($this->generateFrontendUrl($objPage->row(), '/item/' . ($objNewsletter->alias ? $objNewsletter->alias : $objNewsletter->id)), $objPage);
+						if ($strTag[0] == 'newsletter_latest_link')
+						{
+							$this->loadLanguageFile('avisota');
+							return sprintf($GLOBALS['TL_LANG']['avisota']['latest_link'], specialchars($strUrl));
+						}
+						else
+						{
+							return $strUrl;
+						}
+					}
 				}
 			}
 			return '';

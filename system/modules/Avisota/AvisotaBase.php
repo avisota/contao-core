@@ -49,17 +49,17 @@ class AvisotaBase extends Controller
 	
 	public function getViewOnlinePage($objCategory = null, $arrRecipient = null)
 	{
-		if (!$objCategory)
+		if (is_null($objCategory))
 		{
 			$objCategory = Avisota::getCurrentCategory();
 		}
 		
-		if (!$arrRecipient)
+		if (is_null($arrRecipient))
 		{
 			$arrRecipient = Avisota::getCurrentRecipient();
 		}
 		
-		if (preg_match('#^list:(\d+)$#', $arrRecipient['outbox_source'], $arrMatch))
+		if ($arrRecipient && preg_match('#^list:(\d+)$#', $arrRecipient['outbox_source'], $arrMatch))
 		{
 			// the dummy list, used on preview
 			if ($arrMatch[1] > 0)
