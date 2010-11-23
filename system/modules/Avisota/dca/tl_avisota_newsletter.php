@@ -25,6 +25,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @filesource
  */
 
 
@@ -52,7 +53,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'mode'                    => 4,
 			'fields'                  => array('subject'),
 			'panelLayout'             => 'search,limit',
-			'headerFields'            => array('title', 'jumpTo', 'tstamp', 'useSMTP', 'senderName', 'sender'),
+			'headerFields'            => array('title', 'jumpTo', 'unsubscribePage', 'tstamp', 'useSMTP', 'senderName', 'sender'),
 			'child_record_callback'   => array('tl_avisota_newsletter', 'addNewsletter'),
 			'child_record_class'      => 'no_padding'
 		),
@@ -72,7 +73,8 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['edit'],
 				'href'                => 'table=tl_avisota_newsletter_content',
-				'icon'                => 'edit.gif'
+				'icon'                => 'edit.gif',
+				'attributes'          => 'class="contextmenu"'
 			),
 			'editheader' => array
 			(
@@ -114,7 +116,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 	'palettes' => array
 	(
 		'__selector__'                => array('addFile'),
-		'default'                     => '{newsletter_legend},subject;{attachment_legend},addFile;{template_legend:hide},template_html,template_plain',
+		'default'                     => '{newsletter_legend},subject,alias;{recipient_legend},recipients;{attachment_legend},addFile;{template_legend:hide},template_html,template_plain',
 	),
 
 	// Subpalettes
@@ -133,7 +135,26 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'search'                  => true,
 			'flag'                    => 1,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>255)
+			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50')
+		),
+		'alias' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['alias'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'inputType'               => 'text',
+			'eval'                    => array('rgxp'=>'alnum', 'unique'=>true, 'spaceToUnderscore'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
+			'save_callback' => array
+			(
+				array('tl_avisota_newsletter', 'generateAlias')
+			)
+		),
+		'recipients' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipients'],
+			'inputType'               => 'checkbox',
+			'options_callback'        => array('tl_avisota_newsletter', 'getRecipients'),
+			'eval'                    => array('mandatory'=>true, 'multiple'=>true, 'tl_class'=>'clr')
 		),
 		'addFile' => array
 		(
@@ -192,6 +213,41 @@ class tl_avisota_newsletter extends Backend
 	}
 	
 	
+	public function getRecipients()
+	{
+		$arrRecipients = array(
+			$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list'] => array(),
+			$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup'] => array()
+		);
+		
+		$objList = $this->Database->execute("
+				SELECT
+					*
+				FROM
+					`tl_avisota_recipient_list`
+				ORDER BY
+					`title`");
+		while ($objList->next())
+		{
+			$arrRecipients[$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']]['list-' . $objList->id] = $objList->title;
+		}
+		
+		$objMember = $this->Database->execute("
+				SELECT
+					*
+				FROM
+					`tl_member_group`
+				ORDER BY
+					`name`");
+		while ($objMember->next())
+		{
+			$arrRecipients[$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']]['mgroup-' . $objMember->id] = $objMember->name;
+		}
+		
+		return $arrRecipients;
+	}
+	
+	
 	/**
 	 * Add the recipient row.
 	 * 
@@ -209,6 +265,42 @@ class tl_avisota_newsletter extends Backend
 		}
 		
 		return sprintf('<div class="list_icon" style="background-image:url(\'system/themes/%s/images/%s.gif\');">%s</div>', $this->getTheme(), $icon, $label);
+	}
+
+	
+	/**
+	 * Autogenerate a news alias if it has not been set yet
+	 * @param mixed
+	 * @param object
+	 * @return string
+	 */
+	public function generateAlias($varValue, DataContainer $dc)
+	{
+		$autoAlias = false;
+
+		// Generate alias if there is none
+		if (!strlen($varValue))
+		{
+			$autoAlias = true;
+			$varValue = standardize($dc->activeRecord->subject);
+		}
+
+		$objAlias = $this->Database->prepare("SELECT id FROM tl_avisota_newsletter WHERE alias=?")
+								   ->execute($varValue);
+
+		// Check whether the news alias exists
+		if ($objAlias->numRows > 1 && !$autoAlias)
+		{
+			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $varValue));
+		}
+
+		// Add ID to alias
+		if ($objAlias->numRows && $autoAlias)
+		{
+			$varValue .= '-' . $dc->id;
+		}
+
+		return $varValue;
 	}
 }
 ?>

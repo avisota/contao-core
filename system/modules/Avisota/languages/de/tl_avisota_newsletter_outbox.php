@@ -21,10 +21,10 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  Leo Feyer 2005-2010
- * @author     Leo Feyer <http://www.contao.org>
- * @package    Language
- * @license    LGPL
+ * @copyright  InfinitySoft 2010
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    Avisota
+ * @license    http://opensource.org/licenses/lgpl-3.0.html
  * @filesource
  */
 
@@ -32,23 +32,32 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_list']['title'] = array('Titel', 'Hier können Sie den Titel der Liste angeben.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['newsletter'] = 'Newsletter';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['count']      = 'Empfänger (ausstehend)';
 
 
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_avisota_list']['list_legend'] = 'Liste';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['headline']           = 'Newsletter versenden';
+
+
+/**
+ * Reference
+ */
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['empty']    = 'Es sind keine Aufträge im Postausgang.';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['rejected'] = '%s ungültige E-Mail-Adresse(n) wurde(n) deaktiviert (siehe System-Log).';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['error']    = 'In diesem Verteiler sind keine aktiven Abonnenten vorhanden.';
 
 
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_avisota_list']['new']         = array('Neue Liste', 'Eine neue Liste erstellen');
-$GLOBALS['TL_LANG']['tl_avisota_list']['show']        = array('Listendetails', 'Details der Liste ID %s anzeigen');
-$GLOBALS['TL_LANG']['tl_avisota_list']['copy']        = array('Liste duplizieren', 'Liste ID %s duplizieren');
-$GLOBALS['TL_LANG']['tl_avisota_list']['delete']      = array('Liste löschen', 'Liste ID %s löschen');
-$GLOBALS['TL_LANG']['tl_avisota_list']['edit']        = array('Liste bearbeiten', 'Liste ID %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_avisota_list']['editheader']  = array('Listeneinstellungen bearbeiten', 'Einstellungen der Liste ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['send'] = array('Versenden', 'Newsletter an ausstehende Empfänger versenden.')
+
+
+/**
+ * Personalisation
+ */
 
 ?>

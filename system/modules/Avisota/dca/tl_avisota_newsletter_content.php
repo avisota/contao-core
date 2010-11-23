@@ -25,6 +25,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @filesource
  */
 
 
@@ -59,9 +60,9 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 		),
 		'global_operations' => array
 		(
-			'send' => array
+			'view' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['send'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view'],
 				'href'                => 'table=tl_avisota_newsletter&amp;key=send',
 				'class'               => 'header_send'
 			),

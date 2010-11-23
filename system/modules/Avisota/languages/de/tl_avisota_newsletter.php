@@ -21,9 +21,10 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  Leo Feyer 2005-2010
- * @author     Leo Feyer <http://www.contao.org>
- * @package    Language
+ * @copyright  InfinitySoft 2010
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    Avisota
+ * @license    http://opensource.org/licenses/lgpl-3.0.html
  * @license    LGPL
  * @filesource
  */
@@ -38,6 +39,7 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['addFile']              = array('Da
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['files']                = array('Dateianhänge', 'Bitte wählen Sie die anzuhängenden Dateien aus der Dateiübersicht.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_html']        = array('HTML E-Mail-Template', 'Hier können Sie das HTML E-Mail-Template auswählen.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_plain']       = array('Plain Text E-Mail-Template', 'Hier können Sie das Plain Text E-Mail-Template auswählen.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipients']           = array('Empfänger', 'Wählen Sie hier die Empfänger aus.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['tstamp']               = array('Änderungsdatum', 'Datum und Uhrzeit der letzten Änderung');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewTo']        = array('Testsendung an', 'Die Testsendung des Newsletters an diese E-Mail-Adresse versenden.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview_mode']         = array('Vorschaumodus', 'Den Vorschaumodus wechseln.', 'HTML Vorschau', 'Plain Text Vorschau');
@@ -64,8 +66,14 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_femaile'] = 'Sehr geehr
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['send']   = array('Ansehen und Versenden', 'Den Newsletter ansehen und versenden.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sended'] = 'versendet am %s';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view']     = array('Ansehen und Versenden', 'Den Newsletter ansehen und versenden.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['send']     = array('Versenden', 'Den Newsletter versenden.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sended']   = 'versendet am %s';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirm']  = 'Der Newsletter wurde an %s Empfänger versendet.';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['online']   = 'Probleme mit der Darstellung? Den Newsletter Online ansehen.';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']     = 'Verteiler';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['member']   = 'Mitglieder';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']   = 'Mitgliedergruppe';
 
 
 /**

@@ -25,6 +25,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @filesource
  */
 
 
@@ -209,7 +210,7 @@ abstract class NewsletterElement extends Frontend
 		$strHl = '';
 		for ($i=0; $i<$intHl; $i++)
 		{
-			$strHl .= '=';
+			$strHl .= '#';
 		}
 		$this->Template->hl = $strHl;
 

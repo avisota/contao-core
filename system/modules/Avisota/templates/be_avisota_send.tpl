@@ -2,13 +2,15 @@
 <a href="<?php echo $this->getReferer(true) ?>" class="header_back" title="<?php echo specialchars($GLOBALS['TL_LANG']['MSC']['backBT']) ?>" accesskey="b"><?php echo $GLOBALS['TL_LANG']['MSC']['backBT'] ?></a> &nbsp; :: &nbsp; <a href="<?php echo TL_PATH ?>/contao/main.php?do=avisota_newsletter&amp;table=tl_avisota_newsletter&amp;act=edit&amp;id=<?php echo $this->id ?>" accesskey="e" title="<?php echo specialchars(sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader'][1], $this->id)) ?>" style="padding:2px 0 3px 18px; background:url('<?php echo TL_PATH ?>/system/themes/<?php echo $this->User->backendTheme ? $this->User->backendTheme : 'default' ?>/images/header.gif') no-repeat left center;"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader'][0] ?></a> &nbsp; :: &nbsp; <a href="<?php echo TL_PATH ?>/contao/main.php?do=avisota_newsletter&amp;table=tl_avisota_newsletter_content&amp;id=<?php echo $this->id ?>" accesskey="b" title="<?php echo specialchars(sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter']['edit'][1], $this->id)) ?>" style="padding:2px 0 3px 16px; background:url('<?php echo TL_PATH ?>/system/themes/<?php echo $this->User->backendTheme ? $this->User->backendTheme : 'default' ?>/images/edit.gif') no-repeat left center;"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['edit'][0] ?></a>
 </div>
 
+<?php echo $this->getMessages(); ?>
+
 <h2 class="sub_headline"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['headline'] ?></h2>
 
 <div class="tl_formbody_edit">
 <table class="prev_header" summary="" cellpadding="0" cellspacing="0">
   <tbody><tr class="row_0">
     <td class="col_0"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['from'] ?></td>
-    <td class="col_1"><a href="mailto:<?php echo $this->from ?>"><?php echo htmlentities($this->from) ?></a></td>
+    <td class="col_1"><?php echo $this->from ?></td>
   </tr>
   <tr class="row_1">
     <td class="col_0"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['subject'][0] ?></td>
@@ -21,6 +23,16 @@
   <tr class="row_3">
     <td class="col_0"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_plain'][0] ?>&nbsp;</td>
     <td class="col_1"><?php echo $this->template_plain ?></td>
+  </tr>
+  <tr class="row_4">
+  	<td class="col_0"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipient_legend'] ?></td>
+  	<td class="col_1">
+      <?php if (count($this->recipients_list)): ?>
+      <div><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['list'] ?>: <?php echo implode(', ', $this->recipients_list) ?></div>
+      <?php endif; if (count($this->recipients_mgroup)): ?>
+      <div><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup'] ?>: <?php echo implode(', ', $this->recipients_mgroup) ?></div>
+      <?php endif ?>
+  	</td>
   </tr>
 </tbody></table>
 </div>
@@ -67,6 +79,7 @@
 <input name="table" value="tl_avisota_newsletter" type="hidden">
 <input name="key" value="send" type="hidden">
 <input name="id" value="<?php echo $this->id ?>" type="hidden">
+<input name="token" value="<?php echo $this->token ?>" type="hidden" />
 <div class="tl_formbody_edit">
 
 <div class="tl_tbox block">
@@ -82,7 +95,7 @@
 
 <div class="tl_submit_container">
 <input name="preview" class="tl_submit" accesskey="p" value="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview'] ?>" type="submit" />
-<input style="float:right" id="send" class="tl_submit" accesskey="s" value="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['headline'] ?>" onclick="return confirm('<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendConfirm']) ?>')" type="submit" />
+<input style="float:right" id="send" name="send" class="tl_submit" accesskey="s" value="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['send'][0] ?>" onclick="return confirm('<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendConfirm']) ?>')" type="submit" />
 </div>
 
 </div>

@@ -25,6 +25,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @filesource
  */
 
 
@@ -38,7 +39,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 	'config' => array
 	(
 		'dataContainer'               => 'Table',
-		'ptable'                      => 'tl_avisota_list',
+		'ptable'                      => 'tl_avisota_recipient_list',
 		'switchToEdit'                => true,
 		'enableVersioning'            => true
 	),

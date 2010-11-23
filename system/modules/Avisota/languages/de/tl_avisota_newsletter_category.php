@@ -21,10 +21,10 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  Leo Feyer 2005-2010
- * @author     Leo Feyer <http://www.contao.org>
- * @package    Language
- * @license    LGPL
+ * @copyright  InfinitySoft 2010
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    Avisota
+ * @license    http://opensource.org/licenses/lgpl-3.0.html
  * @filesource
  */
 
@@ -32,17 +32,20 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['title']      = array('Titel', 'Hier können Sie den Titel der Kategory angeben.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['jumpTo']     = array('Weiterleitungsseite', 'Bitte wählen Sie die Newsletterleser-Seite aus, zu der Besucher weitergeleitet werden, wenn Sie einen Newsletter anklicken.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['senderName'] = array('Absendername', 'Hier können Sie den Namen des Absenders eingeben.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['sender']     = array('Absenderadresse', 'Hier können Sie eine individuelle Absenderadresse eingeben.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['useSMTP']    = array('Eigener SMTP-Server', 'Einen eigenen SMTP-Server für den Newsletter-Versand verwenden.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['smtpHost']   = array('SMTP-Hostname', 'Bitte geben Sie den Hostnamen des SMTP-Servers ein.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['smtpUser']   = array('SMTP-Benutzername', 'Hier können Sie den SMTP-Benutzernamen eingeben.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['smtpPass']   = array('SMTP-Passwort', 'Hier können Sie das SMTP-Passwort eingeben.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['smtpEnc']    = array('SMTP-Verschlüsselung', 'Hier können Sie eine Verschlüsselungsmethode auswählen (SSL oder TLS).');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['smtpPort']   = array('SMTP-Portnummer', 'Bitte geben Sie die Portnummer des SMTP-Servers ein.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['tstamp']     = array('Änderungsdatum', 'Datum und Uhrzeit der letzten Änderung');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['title']           = array('Titel', 'Hier können Sie den Titel der Kategory angeben.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['alias']           = array('Kategoriealias', 'Der Kategoriealias ist eine eindeutige Referenz, die anstelle der numerischen Kategoriealias-Id aufgerufen werden kann.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['jumpTo']          = array('Weiterleitungsseite', 'Bitte wählen Sie die Newsletterleser-Seite aus, zu der Besucher weitergeleitet werden, wenn Sie einen Newsletter anklicken.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['unsubscribePage'] = array('Kündigen-Seite', 'Bitte wählen Sie die Newsletter-Kündigen-Seite aus, zu der Besucher weitergeleitet werden, wenn Sie einen Newsletter kündigen wollen.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['senderName']      = array('Absendername', 'Hier können Sie den Namen des Absenders eingeben.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['sender']          = array('Absenderadresse', 'Hier können Sie eine individuelle Absenderadresse eingeben.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['useSMTP']         = array('Eigener SMTP-Server', 'Einen eigenen SMTP-Server für den Newsletter-Versand verwenden.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['smtpHost']        = array('SMTP-Hostname', 'Bitte geben Sie den Hostnamen des SMTP-Servers ein.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['smtpUser']        = array('SMTP-Benutzername', 'Hier können Sie den SMTP-Benutzernamen eingeben.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['smtpPass']        = array('SMTP-Passwort', 'Hier können Sie das SMTP-Passwort eingeben.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['smtpEnc']         = array('SMTP-Verschlüsselung', 'Hier können Sie eine Verschlüsselungsmethode auswählen (SSL oder TLS).');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['smtpPort']        = array('SMTP-Portnummer', 'Bitte geben Sie die Portnummer des SMTP-Servers ein.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['tstamp']          = array('Änderungsdatum', 'Datum und Uhrzeit der letzten Änderung');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['stylesheets']     = array('Stylesheets', 'Stylesheets, die in den Newsletter eingebunden werden sollen.');
 
 
 /**

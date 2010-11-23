@@ -25,6 +25,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @filesource
  */
 
 
@@ -74,7 +75,8 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['edit'],
 				'href'                => 'table=tl_avisota_newsletter',
-				'icon'                => 'edit.gif'
+				'icon'                => 'edit.gif',
+				'attributes'          => 'class="contextmenu"'
 			),
 			'editheader' => array
 			(
@@ -110,7 +112,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 	'palettes' => array
 	(
 		'__selector__'                => array('useSMTP'),
-		'default'                     => '{category_legend},title,jumpTo;{smtp_legend:hide},useSMTP;{expert_legend:hide},senderName,sender',
+		'default'                     => '{category_legend},title,alias,jumpTo,unsubscribePage;{smtp_legend:hide},useSMTP;{expert_legend:hide},senderName,sender' . (in_array('layout_additional_sources', $this->Config->getActiveModules()) ? ',stylesheets' : ''),
 	),
 
 	// Subpalettes
@@ -128,11 +130,30 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>255)
+			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50')
+		),
+		'alias' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['alias'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'inputType'               => 'text',
+			'eval'                    => array('rgxp'=>'alnum', 'unique'=>true, 'spaceToUnderscore'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
+			'save_callback' => array
+			(
+				array('tl_avisota_newsletter_category', 'generateAlias')
+			)
 		),
 		'jumpTo' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['jumpTo'],
+			'exclude'                 => true,
+			'inputType'               => 'pageTree',
+			'eval'                    => array('fieldType'=>'radio')
+		),
+		'unsubscribePage' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['unsubscribePage'],
 			'exclude'                 => true,
 			'inputType'               => 'pageTree',
 			'eval'                    => array('fieldType'=>'radio')
@@ -199,8 +220,117 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 			'exclude'                 => true,
 			'inputType'               => 'text',
 			'eval'                    => array('mandatory'=>true, 'rgxp'=>'digit', 'nospace'=>true, 'doNotShow'=>true, 'tl_class'=>'w50')
+		),
+		'stylesheets' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['stylesheets'],
+			'inputType'               => 'checkbox',
+			'options_callback'        => array('tl_avisota_newsletter_category', 'getStylesheets'),
+			'eval'                    => array('tl_class'=>'clr', 'multiple'=>true)
 		)
 	)
 );
+
+class tl_avisota_newsletter_category extends Backend
+{
+	/**
+	 * Autogenerate a news alias if it has not been set yet
+	 * @param mixed
+	 * @param object
+	 * @return string
+	 */
+	public function generateAlias($varValue, DataContainer $dc)
+	{
+		$autoAlias = false;
+
+		// Generate alias if there is none
+		if (!strlen($varValue))
+		{
+			$autoAlias = true;
+			$varValue = standardize($dc->activeRecord->title);
+		}
+
+		$objAlias = $this->Database->prepare("SELECT id FROM tl_avisota_newsletter_category WHERE alias=?")
+								   ->execute($varValue);
+
+		// Check whether the news alias exists
+		if ($objAlias->numRows > 1 && !$autoAlias)
+		{
+			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $varValue));
+		}
+
+		// Add ID to alias
+		if ($objAlias->numRows && $autoAlias)
+		{
+			$varValue .= '-' . $dc->id;
+		}
+
+		return $varValue;
+	}
+	
+	
+	public function getStylesheets($dc)
+	{
+		if (!in_array('layout_additional_sources', $this->Config->getActiveModules()))
+		{
+			return array();
+		}
+		
+		if (!$dc->activeRecord)
+		{
+			$dc->activeRecord = $this->Database->prepare("
+					SELECT
+						*
+					FROM
+						`tl_avisota_newsletter_category`
+					WHERE
+						`id`=?")
+				->execute($dc->id);
+		}
+
+		$intTheme = 0;
+		if ($dc->activeRecord->jumpTo > 0)
+		{
+			$objPage = $this->getPageDetails($dc->activeRecord->jumpTo);
+			$intTheme = $objPage->layout->pid;
+		}
+		elseif ($dc->activeRecord->unsubscribePage)
+		{
+			$objPage = $this->getPageDetails($dc->activeRecord->unsubscribePage);
+			$intTheme = $objPage->layout->pid;
+		}
+		
+		$arrStylesheets = array();
+		$objAdditionalSource = $this->Database->prepare("
+				SELECT
+					t.name,
+					s.type,
+					s.id,
+					s.css_url,
+					s.css_file
+				FROM
+					`tl_additional_source` s
+				INNER JOIN
+					`tl_theme` t
+				ON
+					t.id=s.pid
+				WHERE
+						type='css_url'
+					OR  type='css_file'
+				ORDER BY
+					`sorting`")
+			->execute($intTheme);
+		while ($objAdditionalSource->next())
+		{
+			if (!isset($arrStylesheets[$objAdditionalSource->name]))
+			{
+				$arrStylesheets[$objAdditionalSource->name] = array();
+			}
+			$arrStylesheets[$objAdditionalSource->name][$objAdditionalSource->id] = $objAdditionalSource->type == 'css_url' ? $objAdditionalSource->css_url : $objAdditionalSource->css_file;
+		}
+		
+		return $arrStylesheets;
+	}
+}
 
 ?>

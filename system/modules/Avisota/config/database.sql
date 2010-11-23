@@ -8,10 +8,10 @@
 -- **********************************************************
 
 -- 
--- Table `tl_avisota_list`
+-- Table `tl_avisota_recipient_list`
 -- 
 
-CREATE TABLE `tl_avisota_list` (
+CREATE TABLE `tl_avisota_recipient_list` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `tstamp` int(10) unsigned NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
@@ -47,7 +47,9 @@ CREATE TABLE `tl_avisota_newsletter_category` (
   `tstamp` int(10) unsigned NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
   `alias` varbinary(128) NOT NULL default '',
+  `alias` varbinary(128) NOT NULL default '',
   `jumpTo` int(10) unsigned NOT NULL default '0',
+  `unsubscribePage` int(10) unsigned NOT NULL default '0',
   `useSMTP` char(1) NOT NULL default '',
   `smtpHost` varchar(64) NOT NULL default '',
   `smtpUser` varchar(128) NOT NULL default '',
@@ -56,7 +58,9 @@ CREATE TABLE `tl_avisota_newsletter_category` (
   `smtpEnc` varchar(3) NOT NULL default '',
   `sender` varchar(128) NOT NULL default '',
   `senderName` varchar(128) NOT NULL default '',
-  PRIMARY KEY  (`id`)
+  `stylesheets` blob NULL,
+  PRIMARY KEY  (`id`),
+  KEY `alias` (`alias`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -78,7 +82,8 @@ CREATE TABLE `tl_avisota_newsletter` (
   `template_plain` varchar(32) NOT NULL default '',
   `sendOn` varchar(10) NOT NULL default '',
   PRIMARY KEY  (`id`),
-  KEY `pid` (`pid`)
+  KEY `pid` (`pid`),
+  KEY `alias` (`alias`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -127,6 +132,21 @@ CREATE TABLE `tl_avisota_newsletter_content` (
   `guests` char(1) NOT NULL default '',
   `cssID` varchar(255) NOT NULL default '',
   `space` varchar(64) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table `tl_avisota_newsletter_outbox`
+-- 
+
+CREATE TABLE `tl_avisota_newsletter_outbox` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `pid` int(10) unsigned NOT NULL default '0',
+  `token` varchar(32) NOT NULL default '',
+  `email` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
