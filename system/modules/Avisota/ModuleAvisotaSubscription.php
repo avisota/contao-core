@@ -32,7 +32,7 @@
 /**
  * Class ModuleAvisotaSubscription
  *
- * 
+ *
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -326,7 +326,7 @@ class ModuleAvisotaSubscription extends Module
 				}
 			}
 			
-			$this->redirect(preg_replace('#&?subscribetoken\[\]=[^&]+#', '', $this->Environment->request));
+			$this->redirect(preg_replace('#&?subscribetoken\[\]=[^&]+#', '', urldecode($this->Environment->request)));
 		}
 	}
 	
