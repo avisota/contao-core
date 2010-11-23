@@ -10,7 +10,7 @@
 <table class="prev_header outbox" summary="" cellpadding="0" cellspacing="0" width="100%">
   <colgroup>
     <col width="16px" />
-    <col width="120px" />
+    <col width="140px" />
     <col />
   </colgroup>
   <thead>
@@ -25,7 +25,7 @@
   <?php foreach ($this->recipients as $k=>$r): ?>
   <tr class="row_<?php echo $k ?>">
     <td class="col_0"><img src="system/modules/Avisota/html/outbox_<?php echo $r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding' ?>.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox'][($r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding')]); ?>" title="<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox'][$r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding']); ?>" /></td>
-    <td class="col_1"><?php if ($r['send'] > 0): echo $this->parseDate($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['dateims'], $r['send']); endif; ?></td>
+    <td class="col_1"><?php if ($r['send'] > 0): echo $this->parseDate($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['dateimsFormat'], $r['send']); endif; ?></td>
     <td class="col_2"><?php echo $r['email'] ?></td>
     <td class="col_3"><?php echo $r['source'] ?></td>
   </tr>
