@@ -326,7 +326,7 @@ class ModuleAvisotaSubscription extends Module
 				}
 			}
 			
-			$this->redirect(preg_replace('#&?subscribetoken\[\]=\w{32}#', '', $this->Environment->request));
+			$this->redirect(preg_replace('#&?subscribetoken\[\]=[^&]+#', '', $this->Environment->request));
 		}
 	}
 	
