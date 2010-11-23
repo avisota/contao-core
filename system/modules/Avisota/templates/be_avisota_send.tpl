@@ -70,7 +70,7 @@
 </div>
 </noscript>
 <iframe class="tl_avisota_newsletter_preview" id="preview" name="preview" scrolling="auto" width="100%" height="600"
-	src="contao/main.php?do=avisota_newsletter&amp;table=tl_avisota_newsletter&amp;key=preview&amp;id=1"></iframe>
+	src="contao/main.php?do=avisota_newsletter&amp;table=tl_avisota_newsletter&amp;key=preview&amp;id=<?php echo $this->id ?>"></iframe>
 </div>
 </form>
 
