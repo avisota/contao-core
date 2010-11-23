@@ -17,3 +17,14 @@ table.outbox td img {
 table.outbox tr.row_highlight td {
 	background-color: #efe;
 }
+
+table.outbox span.outstanding {
+	font-style: italic;
+}
+
+table.outbox span.total {
+}
+
+table.outbox span.failed {
+	color: red;
+}

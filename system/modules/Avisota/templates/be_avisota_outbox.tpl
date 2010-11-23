@@ -20,7 +20,7 @@
   <?php foreach ($this->outbox as $k=>$outbox): ?>
   <tr class="row_<?php echo $k ?><?php if ($outbox['token'] == $this->Input->get('highlight')): ?> row_highlight<?php endif ?>">
     <td class="col_0"><?php echo $outbox['newsletter'] ?></td>
-    <td class="col_1" align="center"><?php echo $outbox['outstanding'] ?> / <?php echo $outbox['recipients'] ?></td>
+    <td class="col_1" align="center"><span class="outstanding"><?php echo $outbox['outstanding'] ?></span> / <span class="total"><?php echo $outbox['recipients']; ?></span><?php if ($outbox['failed']): ?> / <span class="failed"><?php echo $outbox['failed']; ?></span><?php endif; ?></td>
     <?php if ($this->beSend): ?><td class="col_2"><a href="<?php echo $GLOBALS['TL_CONFIG']['websitePath'] ?>/contao/main.php?do=avisota_outbox&amp;id=<?php echo $outbox['id'] ?>&amp;token=<?php echo $outbox['token'] ?>" title="<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['send'][1]) ?>"><img src="system/modules/Avisota/html/send_go.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['send'][0]) ?>" /></a></td><?php endif ?>
   </tr>
   <?php endforeach; ?>
