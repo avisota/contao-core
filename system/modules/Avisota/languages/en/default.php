@@ -53,7 +53,7 @@ $GLOBALS['TL_LANG']['NLE']['download']  = array('Download', 'Erzeugt einen Link 
 $GLOBALS['TL_LANG']['NLE']['downloads'] = array('Downloads', 'Erzeugt mehrere Links zum Download von Dateien.');
 $GLOBALS['TL_LANG']['NLE']['includes']  = 'Include-Elemente';
 $GLOBALS['TL_LANG']['NLE']['news']      = array('Nachricht', 'Fügt einen Nachrichten-Teaser ein.');
-$GLOBALS['TL_LANG']['NLE']['event']     = array('Event', 'Fügt einen Event-Teaser ein.');
+$GLOBALS['TL_LANG']['NLE']['events']     = array('Events', 'Inserts event-teaser.');
 $GLOBALS['TL_LANG']['NLE']['article']   = array('Artikel', 'Fügt einen Artikel-Teaser ein.');
 
 ?>

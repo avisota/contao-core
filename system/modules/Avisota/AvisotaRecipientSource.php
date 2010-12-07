@@ -30,19 +30,44 @@
 
 
 /**
- * Back end modules
+ * Class AvisotaRecipientSource
+ *
+ * 
+ * @copyright  InfinitySoft 2010
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    Avisota
  */
-$GLOBALS['TL_LANG']['MOD']['avisota']                    = 'Newslettersystem';
-$GLOBALS['TL_LANG']['MOD']['avisota_recipients']         = array('Abonnenten', 'Newsletter Abonnenten verwalten.');
-$GLOBALS['TL_LANG']['MOD']['avisota_newsletter']         = array('Newsletter', 'Newsletter verwalten und versenden.');
-$GLOBALS['TL_LANG']['MOD']['avisota_outbox']             = array('Postausgang', 'Postausgang einsehen und Newsletter versenden.');
-$GLOBALS['TL_LANG']['MOD']['avisota_recipient_source']   = array('Abonnentenquellen', 'Quellen für Newsletter Abonnenten verwalten.');
-
-
-/**
- * Front end modules
- */
-$GLOBALS['TL_LANG']['FMD']['avisota']              = 'Newslettersystem';
-$GLOBALS['TL_LANG']['FMD']['avisota_subscription'] = array('Abonnement verwalten', 'An- und Abmeldung zum Avisota Newslettersystem.');
+interface AvisotaRecipientSource
+{
+	/**
+	 * List all recipient lists.
+	 * 
+	 * @return array
+	 * Assoziative array ID=>Name of the recipient lists.
+	 */
+	public function getLists();
+	
+	
+	/**
+	 * List all recipients.
+	 * 
+	 * @param mixed $varList
+	 * ID of the recipient list.
+	 * 
+	 * @return array
+	 * List of all recipient emails.
+	 */
+	public function getRecipients($varList = null);
+	
+	
+	/**
+	 * Get the recipient details.
+	 * 
+	 * @param string $strEmail
+	 * @return array
+	 * Associative array of recipient details.
+	 */
+	public function getRecipientDetails($strEmail, $varList = null);
+}
 
 ?>

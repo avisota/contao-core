@@ -32,7 +32,7 @@
 /**
  * Class Avisota
  *
- * Parent class for newsletter content elements.
+ * 
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -97,7 +97,138 @@ class Avisota extends BackendModule
 	
 	public function importRecipients()
 	{
-		return 'importRecipients';
+		if ($this->Input->get('key') != 'import')
+		{
+			return '';
+		}
+
+		// Import CSS
+		if ($this->Input->post('FORM_SUBMIT') == 'tl_avisota_recipient_import')
+		{
+			if (!$this->Input->post('source') || !is_array($this->Input->post('source')))
+			{
+				$_SESSION['TL_ERROR'][] = $GLOBALS['TL_LANG']['ERR']['all_fields'];
+				$this->reload();
+			}
+
+			$time = time();
+			$intTotal = 0;
+			$intInvalid = 0;
+
+			foreach ($this->Input->post('source') as $strCsvFile)
+			{
+				$objFile = new File($strCsvFile);
+
+				if ($objFile->extension != 'csv')
+				{
+					$_SESSION['TL_ERROR'][] = sprintf($GLOBALS['TL_LANG']['ERR']['filetype'], $objFile->extension);
+					continue;
+				}
+
+				// Get separator
+				switch ($this->Input->post('separator'))
+				{
+					case 'semicolon':
+						$strSeparator = ';';
+						break;
+
+					case 'tabulator':
+						$strSeparator = '\t';
+						break;
+
+					case 'linebreak':
+						$strSeparator = '\n';
+						break;
+
+					default:
+						$strSeparator = ',';
+						break;
+				}
+
+				$arrRecipients = array();
+				$resFile = $objFile->handle;
+
+				while(($arrRow = @fgetcsv($resFile, null, $strSeparator)) !== false)
+				{
+					$arrRecipients = array_merge($arrRecipients, $arrRow);
+				}
+
+				$arrRecipients = array_filter(array_unique($arrRecipients));
+
+				foreach ($arrRecipients as $strRecipient)
+				{
+					// Skip invalid entries
+					if (!$this->isValidEmailAddress($strRecipient))
+					{
+						$this->log('Recipient address "' . $strRecipient . '" seems to be invalid and has been skipped', 'Newsletter importRecipients()', TL_ERROR);
+
+						++$intInvalid;
+						continue;
+					}
+
+					// Check whether the e-mail address exists
+					$objRecipient = $this->Database->prepare("SELECT COUNT(*) AS total FROM tl_avisota_recipient WHERE pid=? AND email=?")
+												   ->execute($this->Input->get('id'), $strRecipient);
+
+					if ($objRecipient->total < 1)
+					{
+						$this->Database->prepare("INSERT INTO tl_avisota_recipient SET pid=?, tstamp=$time, email=?, confirmed=1")
+									   ->execute($this->Input->get('id'), $strRecipient);
+
+						++$intTotal;
+					}
+				}
+			}
+
+			$_SESSION['TL_CONFIRM'][] = sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['confirm'], $intTotal);
+
+			if ($intInvalid > 0)
+			{
+				$_SESSION['TL_INFO'][] = sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['invalid'], $intInvalid);
+			}
+
+			setcookie('BE_PAGE_OFFSET', 0, 0, '/');
+			$this->reload();
+		}
+
+		$objTree = new FileTree($this->prepareForWidget($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['source'], 'source', null, 'source', 'tl_avisota_recipient'));
+
+		// Return form
+		return '
+<div id="tl_buttons">
+<a href="'.ampersand(str_replace('&key=import', '', $this->Environment->request)).'" class="header_back" title="'.specialchars($GLOBALS['TL_LANG']['MSC']['backBT']).'" accesskey="b">'.$GLOBALS['TL_LANG']['MSC']['backBT'].'</a>
+</div>
+
+<h2 class="sub_headline">'.$GLOBALS['TL_LANG']['tl_avisota_recipient']['import'][1].'</h2>'.$this->getMessages().'
+
+<form action="'.ampersand($this->Environment->request, true).'" id="tl_avisota_recipient_import" class="tl_form" method="post">
+<div class="tl_formbody_edit">
+<input type="hidden" name="FORM_SUBMIT" value="tl_avisota_recipient_import" />
+
+<div class="tl_tbox block">
+  <h3><label for="separator">'.$GLOBALS['TL_LANG']['MSC']['separator'][0].'</label></h3>
+  <select name="separator" id="separator" class="tl_select" onfocus="Backend.getScrollOffset();">
+    <option value="comma">'.$GLOBALS['TL_LANG']['MSC']['comma'].'</option>
+    <option value="semicolon">'.$GLOBALS['TL_LANG']['MSC']['semicolon'].'</option>
+    <option value="tabulator">'.$GLOBALS['TL_LANG']['MSC']['tabulator'].'</option>
+    <option value="linebreak">'.$GLOBALS['TL_LANG']['MSC']['linebreak'].'</option>
+  </select>'.(strlen($GLOBALS['TL_LANG']['MSC']['separator'][1]) ? '
+  <p class="tl_help tl_tip">'.$GLOBALS['TL_LANG']['MSC']['separator'][1].'</p>' : '').'
+  <h3><label for="source">'.$GLOBALS['TL_LANG']['tl_avisota_recipient']['source'][0].'</label> <a href="contao/files.php" title="' . specialchars($GLOBALS['TL_LANG']['MSC']['fileManager']) . '" onclick="Backend.getScrollOffset(); Backend.openWindow(this, 750, 500); return false;">' . $this->generateImage('filemanager.gif', $GLOBALS['TL_LANG']['MSC']['fileManager'], 'style="vertical-align:text-bottom;"') . '</a></h3>
+'.$objTree->generate().(strlen($GLOBALS['TL_LANG']['tl_avisota_recipient']['source'][1]) ? '
+  <p class="tl_help tl_tip">'.$GLOBALS['TL_LANG']['tl_avisota_recipient']['source'][1].'</p>' : '').'
+</div>
+
+</div>
+
+<div class="tl_formbody_submit">
+
+<div class="tl_submit_container">
+  <input type="submit" name="save" id="save" class="tl_submit" accesskey="s" value="'.specialchars($GLOBALS['TL_LANG']['tl_avisota_recipient']['import'][0]).'" />
+</div>
+
+</div>
+</form>';
 	}
 	
 	

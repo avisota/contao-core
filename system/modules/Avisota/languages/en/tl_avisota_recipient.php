@@ -36,7 +36,7 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['email']       = array('E-Mail', 'Hi
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmed']   = array('Bestätigt', 'Hier können Sie die E-Mail Adresse als bestätigt markieren.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['token']       = array('Token', 'Der Auth-Token wird für das Double-Opt-In Verfahren genutzt.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn']     = array('Registrierungsdatum', 'Das Datum des Abonnements.');
-
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['source']  	   = array('Source files', 'Please choose the CSV files you want to import from the files directory.');
 
 /**
  * Legends
@@ -49,6 +49,8 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['recipient_legend'] = 'Abonnent';
  */
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['subscribed'] = 'registriert am %s';
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['manually']   = 'manuell hinzugefügt';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirm']    = '%s new recipients have been imported.';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['invalid']    = '%s invalid entries have been skipped.';
 
 
 /**
@@ -59,5 +61,5 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['show']        = array('Abonnentende
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['copy']        = array('Abonnent duplizieren', 'Abonnent ID %s duplizieren');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['delete']      = array('Abonnent löschen', 'Abonnent ID %s löschen');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['edit']        = array('Abonnent bearbeiten', 'Abonnent ID %s bearbeiten');
-
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['import']      = array('CSV import', 'Import recipients from a CSV file');
 ?>

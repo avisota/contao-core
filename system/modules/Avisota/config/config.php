@@ -43,6 +43,12 @@ $GLOBALS['TL_PTY']['avisota'] = 'PageAvisotaNewsletter';
 
 
 /**
+ * Form fields
+ */
+$GLOBALS['BE_FFL']['columnAssignmentWizard'] = 'ColumnAssignmentWizard';
+
+
+/**
  * Back end modules
  */
 $i = array_search('design', array_keys($GLOBALS['BE_MOD']));
@@ -71,6 +77,12 @@ $GLOBALS['BE_MOD'] = array_merge(
 			(
 				'callback'   => 'Avisota',
 				'icon'       => 'system/modules/Avisota/html/outbox.png',
+				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+			),
+			'avisota_recipient_source' => array
+			(
+				'tables'     => array('tl_avisota_recipient_source'),
+				'icon'       => 'system/modules/Avisota/html/recipient_source.png',
 				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 			)
 		)
@@ -106,15 +118,35 @@ $GLOBALS['TL_NLE'] = array_merge_recursive(
 		(
 			'image'     => 'NewsletterImage',
 			'gallery'   => 'NewsletterGallery'
-		) /*,
+		) ,
 		'includes' => array
 		(
-			'news'      => 'NewsletterNews',
-			'event'     => 'NewsletterEvent',
-			'article'   => 'NewsletterArticle'
-		) */
+			// 'news'      => 'NewsletterNews',
+			'events'    => 'NewsletterEvent',
+			//'article'   => 'NewsletterArticle'
+		) 
 	),
 	is_array($GLOBALS['TL_NLE']) ? $GLOBALS['TL_NLE'] : array()
+);
+
+
+/**
+ * Widgets
+ */
+$GLOBALS['BE_FFL']['eventchooser'] = 'WidgetEventchooser';
+
+
+/**
+ * Recipient sources
+ */
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE'] = array_merge_recursive(
+	array
+	(
+		'integrated'     => 'IntegratedAvisotaRecipientSource',
+		'member_groups'  => 'MemberGroupRecipientSource',
+		'csv_file'       => 'CSVFileRecipientSource'
+	),
+	is_array($GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']) ? $GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE'] : array()
 );
 
 

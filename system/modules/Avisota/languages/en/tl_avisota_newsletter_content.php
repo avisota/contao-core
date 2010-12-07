@@ -66,6 +66,7 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['guests']          = array(
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['cssID']           = array('CSS-Id/Klasse', 'Hier können Sie eine Id und beliebig viele Klassen eingeben.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['space']           = array('Abstand davor und dahinter', 'Hier können Sie den Abstand vor und nach dem Inhaltselement in Pixeln eingeben. Sie sollten Inline-Styles jedoch nach Möglichkeit vermeiden und den Abstand in einem Stylesheet definieren.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['source']          = array('Quelldateien', 'Bitte wählen Sie die zu importierenden CSV-Dateien aus der Dateiübersicht.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['events']   		= array('Events', 'Choose events to include its teaser in the newletter.');
 
 
 /**
@@ -84,6 +85,7 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['template_legend']  = 'Temp
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['include_legend']   = 'Include-Einstellungen';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['protected_legend'] = 'Zugriffsschutz';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['expert_legend']    = 'Experten-Einstellungen';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['events_legend']    = 'Events';
 
 
 /**

@@ -6,26 +6,27 @@
 
 <h2 class="sub_headline"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['headline'] ?></h2>
 
-<div class="tl_formbody_edit">
-<table class="prev_header" summary="" cellpadding="0" cellspacing="0">
+<div class="tl_listing_container">
+<div class="tl_formbody_edit tl_header">
+<table class="tl_header_table" summary="" cellpadding="0" cellspacing="0">
   <tbody><tr class="row_0">
-    <td class="col_0"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['from'] ?></td>
+    <td class="col_0"><span class="tl_label"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['from'] ?>:</span></td>
     <td class="col_1"><?php echo $this->from ?></td>
   </tr>
   <tr class="row_1">
-    <td class="col_0"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['subject'][0] ?></td>
+    <td class="col_0"><span class="tl_label"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['subject'][0] ?>:</span></td>
     <td class="col_1"><?php echo $this->subject ?></td>
   </tr>
   <tr class="row_2">
-    <td class="col_0"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_html'][0] ?>&nbsp;</td>
+    <td class="col_0"><span class="tl_label"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_html'][0] ?>:</span>&nbsp;</td>
     <td class="col_1"><?php echo $this->template_html ?></td>
   </tr>
   <tr class="row_3">
-    <td class="col_0"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_plain'][0] ?>&nbsp;</td>
+    <td class="col_0"><span class="tl_label"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_plain'][0] ?>:</span>&nbsp;</td>
     <td class="col_1"><?php echo $this->template_plain ?></td>
   </tr>
   <tr class="row_4">
-  	<td class="col_0"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipient_legend'] ?></td>
+  	<td class="col_0"><span class="tl_label"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipient_legend'] ?>:</span></td>
   	<td class="col_1">
       <?php if (count($this->recipients_list)): ?>
       <div><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['list'] ?>: <?php echo implode(', ', $this->recipients_list) ?></div>
@@ -35,6 +36,7 @@
   	</td>
   </tr>
 </tbody></table>
+</div>
 </div>
 
 <form action="contao/main.php" id="tl_avisota_newsletter_preview" target="preview" class="tl_form" method="get">

@@ -50,14 +50,21 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 		'sorting' => array
 		(
 			'mode'                    => 4,
-			'fields'                  => array('email', 'confirmed'),
-			'panelLayout'             => 'filter;search,limit',
+			'fields'                  => array('email'),
+			'panelLayout'             => 'filter;sort,search,limit',
 			'headerFields'            => array('title'),
 			'child_record_callback'   => array('tl_avisota_recipient', 'addRecipient'),
 			'child_record_class'      => 'no_padding'
 		),
 		'global_operations' => array
 		(
+			'import' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['import'],
+				'href'                => 'key=import',
+				'class'               => 'header_css_import',
+				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+			),		
 			'all' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
@@ -107,7 +114,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{recipient_legend},email,confirmed',
+		'default'                     => '{recipient_legend},email,firstname,lastname,gender,confirmed',
 	),
 
 	// Fields
@@ -122,6 +129,36 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'flag'                    => 1,
 			'inputType'               => 'text',
 			'eval'                    => array('mandatory'=>true, 'maxlength'=>255)
+		),
+		'firstname' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['firstname'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'flag'                    => 1,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=>255, 'feEditable'=>true, 'feViewable'=>true, 'feGroup'=>'personal', 'tl_class'=>'w50')
+		),
+		'lastname' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['lastname'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'flag'                    => 1,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=>255, 'feEditable'=>true, 'feViewable'=>true, 'feGroup'=>'personal', 'tl_class'=>'w50')
+		),
+		'gender' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['gender'],
+			'exclude'                 => true,
+			'filter'                  => true,
+			'inputType'               => 'select',
+			'options'                 => array('male', 'female'),
+			'reference'               => &$GLOBALS['TL_LANG']['MSC'],
+			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'clr')
 		),
 		'confirmed' => array
 		(
@@ -141,7 +178,12 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'sorting'                 => true,
 			'flag'                    => 8,
 			'eval'                    => array('rgxp'=>'datim')
-		)
+		),
+		'source' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['source'],
+			'eval'                    => array('fieldType'=>'checkbox', 'files'=>true, 'filesOnly'=>true, 'extensions'=>'csv', 'class'=>'mandatory')
+		)		
 	)
 );
 
@@ -166,7 +208,15 @@ class tl_avisota_recipient extends Backend
 	{
 		$icon = $arrRow['confirmed'] ? 'visible' : 'invisible';
 
-		$label = $arrRow['email'];
+		$label = trim($arrRow['firstname'] . ' ' . $arrRow['lastname']);
+		if (strlen($label))
+		{
+			$label .= ' &lt;' . $arrRow['email'] . '&gt;';
+		}
+		else
+		{
+			$label = $arrRow['email'];
+		}
 		
 		if ($arrRow['addedOn'])
 		{

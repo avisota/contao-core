@@ -215,33 +215,34 @@ class tl_avisota_newsletter extends Backend
 	
 	public function getRecipients()
 	{
-		$arrRecipients = array(
-			$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list'] => array(),
-			$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup'] => array()
-		);
+		$arrRecipients = array();
 		
-		$objList = $this->Database->execute("
+		$objSource = $this->Database->execute("
 				SELECT
 					*
 				FROM
-					`tl_avisota_recipient_list`
+					tl_avisota_recipient_source
 				ORDER BY
-					`title`");
-		while ($objList->next())
-		{
-			$arrRecipients[$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']]['list-' . $objList->id] = $objList->title;
-		}
+					title");
 		
-		$objMember = $this->Database->execute("
-				SELECT
-					*
-				FROM
-					`tl_member_group`
-				ORDER BY
-					`name`");
-		while ($objMember->next())
+		while ($objSource->next())
 		{
-			$arrRecipients[$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']]['mgroup-' . $objMember->id] = $objMember->name;
+			$strType = $objSource->type;
+			$strClass = $GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE'][$strType];
+			$objClass = new $strClass($objSource->row());
+			$arrLists = $objClass->getLists();
+			if (is_null($arrLists))
+			{
+				$arrRecipients[$objSource->id] = $objSource->title;
+			}
+			else
+			{
+				$arrRecipients[$objSource->title] = array();
+				foreach ($arrLists as $k=>$v)
+				{
+					$arrRecipients[$objSource->title][$objSource->id . ':' . $k] = $v;
+				}
+			}
 		}
 		
 		return $arrRecipients;

@@ -32,11 +32,32 @@ CREATE TABLE `tl_avisota_recipient` (
   `pid` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
   `email` varchar(255) NOT NULL default '',
+  `firstname` varchar(255) NOT NULL default '',
+  `lastname` varchar(255) NOT NULL default '',
+  `gender` varchar(32) NOT NULL default '',
   `confirmed` char(1) NOT NULL default '',
   `token` char(32) NOT NULL default '',
   `addedOn` varchar(10) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table `tl_avisota_recipient_source`
+-- 
+
+CREATE TABLE `tl_avisota_recipient_source` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  `type` varchar(255) NOT NULL default '',
+  `title` varchar(255) NOT NULL default '',
+  `detail_source` varchar(255) NOT NULL default '',
+  `csv_file_src` blob NULL,
+  `csv_column_assignment` blob NULL,
+  `disable` char(1) NOT NULL default '',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -125,6 +146,7 @@ CREATE TABLE `tl_avisota_newsletter_content` (
   `tfoot` char(1) NOT NULL default '',
   `url` varchar(255) NOT NULL default '',
   `linkTitle` varchar(255) NOT NULL default '',
+  `events` blob NULL,
   `embed` varchar(255) NOT NULL default '',
   `multiSRC` blob NULL,
   `perRow` smallint(5) unsigned NOT NULL default '0',
@@ -146,14 +168,29 @@ CREATE TABLE `tl_avisota_newsletter_content` (
 -- Table `tl_avisota_newsletter_outbox`
 -- 
 
+CREATE TABLE `tl_avisota_newsletter_outbox_job` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `pid` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table `tl_avisota_newsletter_outbox`
+-- 
+
 CREATE TABLE `tl_avisota_newsletter_outbox` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `pid` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
-  `token` varchar(32) NOT NULL default '',
-  `email` varchar(255) NOT NULL default '',
-  `send` int(10) unsigned NOT NULL default '0',
   `source` varchar(255) NOT NULL default '',
+  `email` varchar(255) NOT NULL default '',
+  `data` blob NULL,
+  `mail` blob NULL,
+  `send` int(10) unsigned NOT NULL default '0',
   `failed` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
