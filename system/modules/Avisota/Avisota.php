@@ -1112,7 +1112,14 @@ class Avisota extends BackendModule
 					
 					foreach ($arrArrSources['css'] as $arrSource)
 					{
-						$css .= file_get_contents(TL_ROOT . '/' . $arrSource['src']);
+						if ($arrSource['external'])
+						{
+							$head .= sprintf('<link type="text/css" rel="stylesheet" href="%s">', specialchars($arrSource['src'])) . "\n";
+						}
+						else
+						{
+							$css .= file_get_contents(TL_ROOT . '/' . $arrSource['src']);
+						}
 					}
 				}
 			}
