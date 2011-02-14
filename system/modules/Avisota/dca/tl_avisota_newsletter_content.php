@@ -1,9 +1,13 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
 
 /**
+ * Avisota newsletter and mailing system
+ * Copyright (C) 2010,2011 Tristan Lins
+ *
+ * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- *
+ * 
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -21,10 +25,10 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2010
+ * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
- * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @license    LGPL
  * @filesource
  */
 
@@ -133,7 +137,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 		'gallery'                     => '{type_legend},type,headline;{source_legend},multiSRC;{image_legend},size,imagemargin,perRow,sortBy;{template_legend:hide},galleryHtmlTpl,galleryPlainTpl;{expert_legend:hide},cssID,space',
 		'article'                     => '{type_legend},type;{include_legend},article',
 		'news'                        => '{type_legend},type;{include_legend},news',
-		'event'                       => '{type_legend},type;{include_legend},event',
+		'events'                      => '{type_legend},type,headline;{events_legend},events;{expert_legend:hide},cssID,space',
 	),
 
 	// Subpalettes
@@ -426,7 +430,15 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 			'exclude'                 => true,
 			'inputType'               => 'text',
 			'eval'                    => array('multiple'=>true, 'size'=>2, 'rgxp'=>'digit', 'nospace'=>true)
-		)
+		),
+		'events' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['events'],
+			'exclude'                 => true,
+			'inputType'               => 'eventchooser',
+			// 'options_callback'		  => array('tl_newsletter4ward_content','getEvents'),
+			'eval'                    => array()
+		)		
 	)
 );
 

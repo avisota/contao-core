@@ -34,8 +34,21 @@
 
 
 /**
- * Fields
+ * Class AvisotaBackend
+ *
+ * @copyright  InfinitySoft 2010,2011
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    Avisota
  */
-$GLOBALS['TL_LANG']['tl_page']['jumpBack'] = array('Weiterleitungsseite', 'Bitte wählen Sie die Seite aus, zu der Besucher weitergeleitet werden. Wenn Sie keine Zielseite auswählen, wird automatisch zur übergeordneten Seite weitergeleitet.');
-
+class AvisotaBackend extends Backend
+{
+	public function hookOutputBackendTemplate($strContent, $strTemplate)
+	{
+		if ($strTemplate == 'be_main' && $this->Input->get('table') == 'tl_avisota_recipient_import')
+		{
+			$strContent = str_replace('<form', '<form enctype="multipart/form-data"', $strContent);
+		}
+		return $strContent;
+	}
+}
 ?>

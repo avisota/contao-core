@@ -1,9 +1,13 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
 
 /**
+ * Avisota newsletter and mailing system
+ * Copyright (C) 2010,2011 Tristan Lins
+ *
+ * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- *
+ * 
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -21,10 +25,10 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2010
+ * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
- * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @license    LGPL
  * @filesource
  */
 
@@ -50,14 +54,21 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 		'sorting' => array
 		(
 			'mode'                    => 4,
-			'fields'                  => array('email', 'confirmed'),
-			'panelLayout'             => 'filter;search,limit',
+			'fields'                  => array('email'),
+			'panelLayout'             => 'filter;sort,search,limit',
 			'headerFields'            => array('title'),
 			'child_record_callback'   => array('tl_avisota_recipient', 'addRecipient'),
 			'child_record_class'      => 'no_padding'
 		),
 		'global_operations' => array
 		(
+			'import' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['import'],
+				'href'                => 'table=tl_avisota_recipient_import',
+				'class'               => 'header_css_import',
+				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+			),		
 			'all' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
@@ -141,7 +152,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'sorting'                 => true,
 			'flag'                    => 8,
 			'eval'                    => array('rgxp'=>'datim')
-		)
+		)	
 	)
 );
 

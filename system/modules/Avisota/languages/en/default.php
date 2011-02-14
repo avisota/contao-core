@@ -1,9 +1,13 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
 
 /**
+ * Avisota newsletter and mailing system
+ * Copyright (C) 2010,2011 Tristan Lins
+ *
+ * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- *
+ * 
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -21,10 +25,10 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2010
+ * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
- * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @license    LGPL
  * @filesource
  */
 
@@ -53,7 +57,7 @@ $GLOBALS['TL_LANG']['NLE']['download']  = array('Download', 'Erzeugt einen Link 
 $GLOBALS['TL_LANG']['NLE']['downloads'] = array('Downloads', 'Erzeugt mehrere Links zum Download von Dateien.');
 $GLOBALS['TL_LANG']['NLE']['includes']  = 'Include-Elemente';
 $GLOBALS['TL_LANG']['NLE']['news']      = array('Nachricht', 'Fügt einen Nachrichten-Teaser ein.');
-$GLOBALS['TL_LANG']['NLE']['event']     = array('Event', 'Fügt einen Event-Teaser ein.');
+$GLOBALS['TL_LANG']['NLE']['events']     = array('Events', 'Inserts event-teaser.');
 $GLOBALS['TL_LANG']['NLE']['article']   = array('Artikel', 'Fügt einen Artikel-Teaser ein.');
 
 ?>
