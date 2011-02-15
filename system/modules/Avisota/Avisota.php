@@ -1108,11 +1108,10 @@ class Avisota extends BackendModule
 		{
 			$head .= sprintf('<base href="%s">', $this->DomainLink->absolutizeUrl('')) . "\n";
 			
-			$css = '';
 			// Add style sheet newsletter.css
 			if (file_exists(TL_ROOT . '/newsletter.css'))
 			{
-				$css .= $this->cleanCSS(file_get_contents(TL_ROOT . '/newsletter.css')) . "\n";
+				$head .= '<style type="text/css">' . "\n" . $this->cleanCSS(file_get_contents(TL_ROOT . '/newsletter.css')) . "\n" . '</style>' . "\n";
 			}
 			
 			if (in_array('layout_additional_sources', $this->Config->getActiveModules()))
@@ -1121,25 +1120,9 @@ class Avisota extends BackendModule
 				if (is_array($arrStylesheet) && count($arrStylesheet))
 				{
 					$this->import('LayoutAdditionalSources');
-					$arrArrSources = $this->LayoutAdditionalSources->getSources($arrStylesheet, false, false, true, $this->Base->getViewOnlinePage($objCategory));
-					
-					foreach ($arrArrSources['css'] as $arrSource)
-					{
-						if ($arrSource['external'])
-						{
-							$head .= sprintf('<link type="text/css" rel="stylesheet" href="%s">', specialchars($arrSource['src'])) . "\n";
-						}
-						else
-						{
-							$css .= file_get_contents(TL_ROOT . '/' . $arrSource['src']);
-						}
-					}
+					$this->LayoutAdditionalSources->productive = true;
+					$head .= implode("\n", $this->LayoutAdditionalSources->generateIncludeHtml($arrStylesheet, true, $this->Base->getViewOnlinePage($objCategory)));
 				}
-			}
-			
-			if ($css)
-			{
-				$head .= '<style type="text/css">' . "\n" . $css . '</style>' . "\n";
 			}
 			
 			$this->htmlHeadCache = $head;
