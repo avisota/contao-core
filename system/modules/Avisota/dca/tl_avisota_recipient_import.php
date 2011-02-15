@@ -167,7 +167,7 @@ class tl_avisota_recipient_import extends Backend
 			$objFile->close();
 		}
 		
-		if ($arrUpload && $arrUpload['type'] == 'text/csv')
+		if ($arrUpload)
 		{
 			$resFile = fopen($arrUpload['tmp_name'], 'r');
 			$this->importRecipients($resFile, $strDelimiter, $strEnclosure, $time, $intTotal, $intInvalid);
