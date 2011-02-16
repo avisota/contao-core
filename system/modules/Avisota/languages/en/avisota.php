@@ -59,7 +59,7 @@ Bitte öffnen Sie die folgende Adresse in Ihrem Browser, um das Abonnement zu be
 
 Vielen Dank';
 
-$GLOBALS['TL_LANG']['avisota']['unsubscription']['empty'] = 'Sie sind nicht an unserem Newsletter angemeldet.';
+$GLOBALS['TL_LANG']['avisota']['unsubscribe']['empty'] = 'Sie sind nicht an unserem Newsletter angemeldet.';
 
 $GLOBALS['TL_LANG']['avisota']['unsubscribe']['submit']            = 'Kündigen';
 $GLOBALS['TL_LANG']['avisota']['unsubscribe']['mail']['subject']   = 'Newsletter Abonnement gekündigt';

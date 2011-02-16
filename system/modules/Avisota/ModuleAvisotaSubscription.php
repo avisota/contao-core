@@ -384,7 +384,7 @@ class ModuleAvisotaSubscription extends Module
 	{
 		if (!count($arrListIds))
 		{
-			$_SESSION['avisota_subscription'][] = $GLOBALS['TL_LANG']['avisota']['unsubscription']['empty'];
+			$_SESSION['avisota_subscription'][] = $GLOBALS['TL_LANG']['avisota']['unsubscribe']['empty'];
 			$this->redirect($this->Environment->request);
 		}
 		
