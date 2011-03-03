@@ -120,7 +120,7 @@ class tl_avisota_translation extends Backend
 				(
 					'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_translation'][$k],
 					'inputType'               => 'textarea',
-					'eval'                    => array('rte'=>'tinyNews')
+					'eval'                    => array('rte'=>'tinyNews', 'allowHtml'=>true)
 				);
 				break;
 				
@@ -129,7 +129,8 @@ class tl_avisota_translation extends Backend
 				$GLOBALS['TL_DCA']['tl_avisota_translation']['fields'][$k] = array
 				(
 					'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_translation'][$k],
-					'inputType'               => 'textarea'
+					'inputType'               => 'textarea',
+					'eval'                    => array('allowHtml'=>true)
 				);
 				break;
 				
@@ -138,7 +139,7 @@ class tl_avisota_translation extends Backend
 				(
 					'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_translation'][$k],
 					'inputType'               => 'text',
-					'eval'                    => array('tl_class'=>'long')
+					'eval'                    => array('tl_class'=>'long', 'allowHtml'=>true)
 				);
 			}
 		}
