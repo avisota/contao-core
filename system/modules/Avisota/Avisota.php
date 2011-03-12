@@ -334,12 +334,12 @@ class Avisota extends BackendModule
 		{
 		case NL_HTML:
 			header('Content-Type: text/html; charset=utf-8');
-			echo $this->replaceInsertTags($this->generateHtml($objNewsletter, $objCategory, $personalized));
+			echo $this->replaceInsertTags($this->prepareBeforeSending($this->generateHtml($objNewsletter, $objCategory, $personalized)));
 			exit(0);
 			
 		case NL_PLAIN:
 			header('Content-Type: text/plain; charset=utf-8');
-			echo $this->replaceInsertTags($this->generatePlain($objNewsletter, $objCategory, $personalized));
+			echo $this->replaceInsertTags($this->prepareBeforeSending($this->generatePlain($objNewsletter, $objCategory, $personalized)));
 			exit(0);
 		}
 	}
@@ -435,13 +435,13 @@ class Avisota extends BackendModule
 				// create the contents
 				$plain = array
 				(
-					'anonymous' => $this->generatePlain($objNewsletter, $objCategory, 'anonymous'),
-					'private' => $this->generatePlain($objNewsletter, $objCategory, 'private')
+					'anonymous' => $this->prepareBeforeSending($this->generatePlain($objNewsletter, $objCategory, 'anonymous')),
+					'private' => $this->prepareBeforeSending($this->generatePlain($objNewsletter, $objCategory, 'private'))
 				);
 				$html = array
 				(
-					'anonymous' => $this->generateHtml($objNewsletter, $objCategory, 'anonymous'),
-					'private' => $this->generateHtml($objNewsletter, $objCategory, 'private')
+					'anonymous' => $this->prepareBeforeSending($this->generateHtml($objNewsletter, $objCategory, 'anonymous')),
+					'private' => $this->prepareBeforeSending($this->generateHtml($objNewsletter, $objCategory, 'private'))
 				);
 				
 				// Check the e-mail address
@@ -843,13 +843,13 @@ class Avisota extends BackendModule
 				// create the contents
 				$plain = array
 				(
-					'anonymous' => $this->generatePlain($objNewsletter, $objCategory, 'anonymous'),
-					'private' => $this->generatePlain($objNewsletter, $objCategory, 'private')
+					'anonymous' => $this->prepareBeforeSending($this->generatePlain($objNewsletter, $objCategory, 'anonymous')),
+					'private' => $this->prepareBeforeSending($this->generatePlain($objNewsletter, $objCategory, 'private'))
 				);
 				$html = array
 				(
-					'anonymous' => $this->generateHtml($objNewsletter, $objCategory, 'anonymous'),
-					'private' => $this->generateHtml($objNewsletter, $objCategory, 'private')
+					'anonymous' => $this->prepareBeforeSending($this->generateHtml($objNewsletter, $objCategory, 'anonymous')),
+					'private' => $this->prepareBeforeSending($this->generateHtml($objNewsletter, $objCategory, 'private'))
 				);
 				
 				// Get recipients
@@ -1040,6 +1040,21 @@ class Avisota extends BackendModule
 			
 			return $objTemplate->parse();
 		}
+	}
+	
+	
+	/**
+	 * Prepare the html body code before sending.
+	 * 
+	 * @param string
+	 * @return string
+	 */
+	protected function prepareBeforeSending($strContent)
+	{
+		$strContent = str_replace('{{env::request}}', '{{newsletter::href}}', $strContent);
+		$strContent = preg_replace('#\{\{env::.*\}\}#U', '', $strContent);
+		
+		return $strContent;
 	}
 	
 	
