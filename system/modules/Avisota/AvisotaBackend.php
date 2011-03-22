@@ -40,7 +40,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class AvisotaBackend extends Backend
+class AvisotaBackend extends System
 {
 	public function hookOutputBackendTemplate($strContent, $strTemplate)
 	{
