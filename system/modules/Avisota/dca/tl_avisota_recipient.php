@@ -132,7 +132,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'sorting'                 => true,
 			'flag'                    => 1,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>255)
+			'eval'                    => array('rgxp'=>'email', 'mandatory'=>true, 'maxlength'=>255)
 		),
 		'confirmed' => array
 		(
