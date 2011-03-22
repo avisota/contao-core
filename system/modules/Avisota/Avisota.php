@@ -415,6 +415,21 @@ class Avisota extends BackendModule
 				}
 			}
 			
+			// cleanup multiple inserts
+			$objOutput = $this->Database->prepare("SELECT GROUP_CONCAT(id) as id, COUNT(id) as count FROM tl_avisota_newsletter_outbox WHERE token=? GROUP BY email HAVING count>1")->execute($strToken);
+			$arrCleanIds = array();
+			while ($objOutput->next())
+			{
+				$arrIds = explode(',', $objOutput->id);
+				array_shift($arrIds);
+				$arrCleanIds = array_merge($arrIds, $arrCleanIds);
+			}
+			$arrCleanIds = array_filter(array_map('intval', $arrCleanIds));
+			if (count($arrCleanIds) > 0)
+			{
+				$this->Database->execute("DELETE FROM tl_avisota_newsletter_outbox WHERE id IN (" . implode(',', $arrCleanIds) . ")");
+			}
+			
 			$this->redirect('contao/main.php?do=avisota_outbox' . ($this->allowBackendSending() ? '&id=' . $objNewsletter->id . '&highlight=' . $strToken : ''));
 		}
 		
@@ -479,7 +494,7 @@ class Avisota extends BackendModule
 							WHERE
 								`id`=?")
 						->execute($intIdTmp);
-					$arrMgroups[$intIdTmp] = $objMgroup->title;
+					$arrMgroups[$intIdTmp] = $objMgroup->name;
 					break;
 				}
 			}
