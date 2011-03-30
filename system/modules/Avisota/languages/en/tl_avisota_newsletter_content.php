@@ -38,6 +38,7 @@
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['invisible']       = array('Invisible ',' The element is not shown.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['type']            = array('Element Type ',' Please choose the type of content element.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']            = array('Area', 'Please choose the area the content element should be showed in.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['headline']        = array('Heading ', ' Here you can add a title to the content item.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['text']            = array('Text ', ' You can use HTML tags to format your text.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['definePlain']     = array('Plain Text Over-Ride','Enter the plain text, rather than let it automatically create HTML from the text.');

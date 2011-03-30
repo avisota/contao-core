@@ -77,6 +77,11 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['online']   = 'Problems with viewin
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']     = 'Distribution List';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['member']   = 'Members';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']   = 'Member Group';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['body']     = 'Content';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['header']   = 'Header';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['footer']   = 'Footer';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['left']     = 'Left column';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['right']    = 'Right column';
 
 
 /**

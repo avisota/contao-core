@@ -167,6 +167,16 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 			'reference'               => &$GLOBALS['TL_LANG']['NLE'],
 			'eval'                    => array('helpwizard'=>true, 'submitOnChange'=>true)
 		),
+		'area' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'],
+			'default'                 => 'body',
+			'exclude'                 => true,
+			'filter'                  => true,
+			'inputType'               => 'select',
+			'options_callback'        => array('tl_avisota_newsletter_content', 'getNewsletterAreas'),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']
+		),
 		'headline' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['headline'],
@@ -706,6 +716,24 @@ class tl_avisota_newsletter_content extends Avisota
 					   ->execute($intId);
 
 		$this->createNewVersion('tl_avisota_newsletter_content', $intId);
+	}
+	
+	
+	/**
+	 * Get a list of areas from the parent category.
+	 */
+	public function getNewsletterAreas($dc)
+	{
+		$objCategory = $this->Database->prepare("SELECT c.* FROM tl_avisota_newsletter_category c INNER JOIN tl_avisota_newsletter n ON c.id=n.pid WHERE n.id=?")->execute($dc->id);
+		if ($objCategory->next())
+		{
+			$arrAreas = array_merge(array('body'), trimsplit(',', $objCategory->areas));
+		}
+		else
+		{
+			$arrAreas = array('body');
+		}
+		return $arrAreas;
 	}
 }
 ?>

@@ -77,6 +77,11 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['online']   = 'Probleme mit der Dar
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']     = 'Verteiler';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['member']   = 'Mitglieder';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']   = 'Mitgliedergruppe';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['body']     = 'Inhalt';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['header']   = 'Kopfzeile';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['footer']   = 'Fußzeile';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['left']     = 'Linke Spalte';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['right']    = 'Rechte Spalte';
 
 
 /**

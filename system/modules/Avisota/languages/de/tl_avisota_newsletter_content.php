@@ -38,6 +38,7 @@
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['invisible']       = array('Unsichtbar', 'Das Element auf der Webseite nicht anzeigen.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['type']            = array('Elementtyp', 'Bitte wählen Sie den Typ des Inhaltselements.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']            = array('Bereich', 'Bitte wählen Sie den Bereich in dem das Inhaltselement angezeigt werden soll.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['headline']        = array('Überschrift', 'Hier können Sie dem Inhaltselement eine Überschrift hinzufügen.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['text']            = array('Text', 'Sie können HTML-Tags verwenden, um den Text zu formatieren.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['definePlain']     = array('Plain-Text vorgeben', 'Den Plain-Text angeben, anstatt ihn aus dem HTML Text automatisch erstellen zu lassen.');

@@ -49,6 +49,7 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['smtpPass']           = ar
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['smtpEnc']            = array('SMTP encryption ','Here you can select an encryption method (SSL or TLS).');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['smtpPort']           = array('SMTP port number ',' Please enter the port number of the SMTP server.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['tstamp']             = array('Change Date ', ' Date and time of last modification.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['areas']              = array('Areas', 'Comma separated list of additional content in the newsletter (e.a. header,left,right,footer).');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['template_html']      = array('HTML Email Template ', 'Here you can select the HTML e-mail template.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['template_plain']     = array('Plain text e-mail template ','Here you can choose the Plain Text e-mail template.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['stylesheets']        = array('Style Sheets ',' Style sheets, which are to be included in the Newsletter.');
