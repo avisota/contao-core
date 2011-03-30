@@ -36,8 +36,8 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_mode']  = array('Entwicklermodus', 'Aktiviert den Entwicklermodus.');
-$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_email'] = array('Entwickler E-Mail', 'Im Entwicklermodus werden alle E-Mails an diese Adresse umgeleitet.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_mode']  = array('Developer Mode ',' Enables developer mode.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_email'] = array('Developer E-mail ','Send emails to this address for developer mode.');
 
 
 /**

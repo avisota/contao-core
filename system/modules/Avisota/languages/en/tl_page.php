@@ -36,6 +36,6 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_page']['jumpBack'] = array('Weiterleitungsseite', 'Bitte wählen Sie die Seite aus, zu der Besucher weitergeleitet werden. Wenn Sie keine Zielseite auswählen, wird automatisch zur übergeordneten Seite weitergeleitet.');
+$GLOBALS['TL_LANG']['tl_page']['jumpBack'] = array('Main ', ' Please select the page that you will be redirected to. If you do not select a target page, you will be automatically forwarded to the parent page.');
 
 ?>
