@@ -98,6 +98,11 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['events_legend']    = 'Even
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['anonymous']      = 'Anonymous personalize, if no personal data is available';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['private']        = 'Personal personalize hides the element, if no personal data is available';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['body']   = 'Content';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['header'] = 'Header';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['footer'] = 'Footer';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['left']   = 'Left column';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['right']  = 'Right column';
 
 
 /**

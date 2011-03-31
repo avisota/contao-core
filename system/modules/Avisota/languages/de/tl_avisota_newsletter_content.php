@@ -98,6 +98,11 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['events_legend']    = 'Even
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['anonymous']      = 'Anonym personalisieren, falls keine persönlichen Daten verfügbar sind';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['private']        = 'Persönlich personalisieren, blendet das Element aus, wenn keine persönlichen Daten verfügbar sind';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['body']   = 'Inhalt';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['header'] = 'Kopfzeile';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['footer'] = 'Fußzeile';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['left']   = 'Linke Spalte';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['right']  = 'Rechte Spalte';
 
 
 /**

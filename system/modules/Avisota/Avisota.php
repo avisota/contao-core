@@ -1034,7 +1034,7 @@ class Avisota extends BackendModule
 	 * @param string $mode
 	 * @return string
 	 */
-	protected function generateContent(Database_Result &$objNewsletter, Database_Result &$objCategory, $personalized, $mode)
+	protected function generateContent(Database_Result &$objNewsletter, Database_Result &$objCategory, $personalized, $mode, $area = false)
 	{
 		$strContent = '';
 		
@@ -1046,9 +1046,10 @@ class Avisota extends BackendModule
 				WHERE
 						`pid`=?
 					AND `invisible`=''
+					AND `area`=?
 				ORDER BY
 					`sorting`")
-			->execute($objNewsletter->id);
+			->execute($objNewsletter->id, $area ? $area : 'body');
 		
 		while ($objContent->next())
 		{
@@ -1150,7 +1151,10 @@ class Avisota extends BackendModule
 		$objTemplate = new FrontendTemplate($objNewsletter->template_html ? $objNewsletter->template_html : $objCategory->template_html);
 		$objTemplate->title = $objNewsletter->subject;
 		$objTemplate->head = $head;
-		$objTemplate->body = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_HTML);
+		foreach ($this->getNewsletterAreas($objCategory) as $strArea)
+		{
+			$objTemplate->$strArea = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_HTML, $strArea);
+		}
 		$objTemplate->newsletter = $objNewsletter->row();
 		$objTemplate->category = $objCategory->row();
 		return $objTemplate->parse();
@@ -1169,7 +1173,10 @@ class Avisota extends BackendModule
 	protected function generatePlain(Database_Result &$objNewsletter, Database_Result &$objCategory, $personalized)
 	{
 		$objTemplate = new FrontendTemplate($objNewsletter->template_plain ? $objNewsletter->template_plain : $objCategory->template_plain);
-		$objTemplate->body = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_PLAIN);
+		foreach ($this->getNewsletterAreas($objCategory) as $strArea)
+		{
+			$objTemplate->$strArea = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_PLAIN, $strArea);
+		}
 		$objTemplate->newsletter = $objNewsletter->row();
 		$objTemplate->category = $objCategory->row();
 		return $objTemplate->parse();
@@ -1228,6 +1235,17 @@ class Avisota extends BackendModule
 		}
 		
 		return trim($css);
+	}
+	
+	
+	/**
+	 * Get a list of areas.
+	 * 
+	 * @param Database_Result $objCategory
+	 */
+	protected function getNewsletterAreas(Database_Result $objCategory)
+	{
+		return array_unique(array_filter(array_merge(array('body'), trimsplit(',', $objCategory->areas))));
 	}
 	
 	

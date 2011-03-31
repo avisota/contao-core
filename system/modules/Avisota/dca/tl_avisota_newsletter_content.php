@@ -128,16 +128,16 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 	(
 		'__selector__'                => array('type', 'definePlain', 'addImage', 'useImage', 'protected'),
 		'default'                     => '{type_legend},type',
-		'headline'                    => '{type_legend},type,headline;{expert_legend:hide},cssID,space',
-		'text'                        => '{type_legend},type,headline;{text_legend},text,definePlain,personalize;{image_legend},addImage;{expert_legend:hide},cssID,space',
-		'list'                        => '{type_legend},type,headline;{list_legend},listtype,listitems;{expert_legend:hide},cssID,space',
-		'table'                       => '{type_legend},type,headline;{table_legend},tableitems;{tconfig_legend},summary,thead,tfoot;{sortable_legend:hide},sortable;{expert_legend:hide},cssID,space',
-		'hyperlink'                   => '{type_legend},type,headline;{link_legend},url,linkTitle,embed;{expert_legend:hide},cssID,space',
-		'image'                       => '{type_legend},type,headline;{source_legend},singleSRC;{image_legend},alt,size,imagemargin,imageUrl,caption;{expert_legend:hide},cssID,space',
-		'gallery'                     => '{type_legend},type,headline;{source_legend},multiSRC;{image_legend},size,imagemargin,perRow,sortBy;{template_legend:hide},galleryHtmlTpl,galleryPlainTpl;{expert_legend:hide},cssID,space',
-		'article'                     => '{type_legend},type;{include_legend},article',
-		'news'                        => '{type_legend},type;{include_legend},news',
-		'events'                      => '{type_legend},type,headline;{events_legend},events;{expert_legend:hide},cssID,space',
+		'headline'                    => '{type_legend},type,area,headline;{expert_legend:hide},cssID,space',
+		'text'                        => '{type_legend},type,area,headline;{text_legend},text,definePlain,personalize;{image_legend},addImage;{expert_legend:hide},cssID,space',
+		'list'                        => '{type_legend},type,area,headline;{list_legend},listtype,listitems;{expert_legend:hide},cssID,space',
+		'table'                       => '{type_legend},type,area,headline;{table_legend},tableitems;{tconfig_legend},summary,thead,tfoot;{sortable_legend:hide},sortable;{expert_legend:hide},cssID,space',
+		'hyperlink'                   => '{type_legend},type,area,headline;{link_legend},url,linkTitle,embed;{expert_legend:hide},cssID,space',
+		'image'                       => '{type_legend},type,area,headline;{source_legend},singleSRC;{image_legend},alt,size,imagemargin,imageUrl,caption;{expert_legend:hide},cssID,space',
+		'gallery'                     => '{type_legend},type,area,headline;{source_legend},multiSRC;{image_legend},size,imagemargin,perRow,sortBy;{template_legend:hide},galleryHtmlTpl,galleryPlainTpl;{expert_legend:hide},cssID,space',
+		'article'                     => '{type_legend},type,area;{include_legend},article',
+		'news'                        => '{type_legend},type,area;{include_legend},news',
+		'events'                      => '{type_legend},type,area,headline;{events_legend},events;{expert_legend:hide},cssID,space',
 	),
 
 	// Subpalettes
@@ -165,7 +165,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 			'inputType'               => 'select',
 			'options_callback'        => array('tl_avisota_newsletter_content', 'getNewsletterElements'),
 			'reference'               => &$GLOBALS['TL_LANG']['NLE'],
-			'eval'                    => array('helpwizard'=>true, 'submitOnChange'=>true)
+			'eval'                    => array('helpwizard'=>true, 'submitOnChange'=>true, 'tl_class'=>'w50')
 		),
 		'area' => array
 		(
@@ -174,8 +174,9 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 			'exclude'                 => true,
 			'filter'                  => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('tl_avisota_newsletter_content', 'getNewsletterAreas'),
-			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']
+			'options_callback'        => array('tl_avisota_newsletter_content', 'dcaGetNewsletterAreas'),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'],
+			'eval'                    => array('mandatory'=>true, 'tl_class'=>'w50')
 		),
 		'headline' => array
 		(
@@ -184,7 +185,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 			'search'                  => true,
 			'inputType'               => 'inputUnit',
 			'options'                 => array('h1', 'h2', 'h3', 'h4', 'h5', 'h6'),
-			'eval'                    => array('maxlength'=>255)
+			'eval'                    => array('maxlength'=>255, 'tl_class'=>'clr')
 		),
 		'text' => array
 		(
@@ -651,7 +652,11 @@ class tl_avisota_newsletter_content extends Avisota
 		$key = $arrRow['invisible'] ? 'unpublished' : 'published';
 
 		return '
-<div class="cte_type ' . $key . '">' . (isset($GLOBALS['TL_LANG']['NLE'][$arrRow['type']][0]) ? $GLOBALS['TL_LANG']['NLE'][$arrRow['type']][0] : $arrRow['type']) . ($arrRow['protected'] ? ' (' . $GLOBALS['TL_LANG']['MSC']['protected'] . ')' : ($arrRow['guests'] ? ' (' . $GLOBALS['TL_LANG']['MSC']['guests'] . ')' : '')) . '</div>
+<div class="cte_type ' . $key . '">' .
+	(isset($GLOBALS['TL_LANG']['NLE'][$arrRow['type']][0]) ? $GLOBALS['TL_LANG']['NLE'][$arrRow['type']][0] : $arrRow['type']) .
+	($arrRow['protected'] ? ' (' . $GLOBALS['TL_LANG']['MSC']['protected'] . ')' : ($arrRow['guests'] ? ' (' . $GLOBALS['TL_LANG']['MSC']['guests'] . ')' : '')) .
+	($this->hasMultipleNewsletterAreas($arrRow) ? sprintf(' <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>', isset($GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$arrRow['area']]) ? $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$arrRow['area']] : $arrRow['area']) : '') .
+'</div>
 <div class="limit_height' . (!$GLOBALS['TL_CONFIG']['doNotCollapse'] ? ' h64' : '') . ' block">
 ' . $this->getNewsletterElement($arrRow['id']) . '
 </div>' . "\n";
@@ -720,20 +725,60 @@ class tl_avisota_newsletter_content extends Avisota
 	
 	
 	/**
+	 * Check if there are more than the default 'body' area.
+	 * 
+	 * @param DataContainer $dc
+	 */
+	public function hasMultipleNewsletterAreas($dc)
+	{
+		$arrAreas = $this->dcaGetNewsletterAreas($dc);
+		return count($arrAreas)>1;
+	}
+	
+	
+	/**
 	 * Get a list of areas from the parent category.
 	 */
-	public function getNewsletterAreas($dc)
+	public function dcaGetNewsletterAreas($dc)
 	{
-		$objCategory = $this->Database->prepare("SELECT c.* FROM tl_avisota_newsletter_category c INNER JOIN tl_avisota_newsletter n ON c.id=n.pid WHERE n.id=?")->execute($dc->id);
+		$objCategory = $this->Database->prepare("SELECT c.* FROM tl_avisota_newsletter_category c INNER JOIN tl_avisota_newsletter n ON c.id=n.pid INNER JOIN tl_avisota_newsletter_content nle ON n.id=nle.pid WHERE nle.id=?")->execute(is_array($dc) ? $dc['id'] : (is_object($dc) ? $dc->id : $dc));
 		if ($objCategory->next())
 		{
-			$arrAreas = array_merge(array('body'), trimsplit(',', $objCategory->areas));
+			$arrAreas = array_filter(array_merge(array('body'), trimsplit(',', $objCategory->areas)));
 		}
 		else
 		{
 			$arrAreas = array('body');
 		}
-		return $arrAreas;
+		return array_unique($arrAreas);
+	}
+	
+	
+	/**
+	 * Update this data container.
+	 * 
+	 * @param unknown_type $strName
+	 */
+	public function myLoadDataContainer($strName)
+	{
+		if ($strName == 'tl_avisota_newsletter_content')
+		{
+			if ($this->Input->get('table') == 'tl_avisota_newsletter_content' && $this->Input->get('act') == 'edit')
+			{
+				if (!$this->hasMultipleNewsletterAreas($this->Input->get('id')))
+				{
+					foreach ($GLOBALS['TL_DCA']['tl_avisota_newsletter_content']['palettes'] as $k=>$v)
+					{
+						$GLOBALS['TL_DCA']['tl_avisota_newsletter_content']['palettes'][$k] = str_replace(',area', '', $v);
+					}
+					$GLOBALS['TL_DCA']['tl_avisota_newsletter_content']['fields']['area']['filter'] = false;
+				}
+			}
+		}
 	}
 }
+
+// add hook
+$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('tl_avisota_newsletter_content', 'myLoadDataContainer');
+
 ?>
