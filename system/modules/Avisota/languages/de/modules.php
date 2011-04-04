@@ -1,9 +1,13 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
 
 /**
+ * Avisota newsletter and mailing system
+ * Copyright (C) 2010,2011 Tristan Lins
+ *
+ * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- *
+ * 
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -21,10 +25,10 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2010
+ * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
- * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @license    LGPL
  * @filesource
  */
 
@@ -36,6 +40,7 @@ $GLOBALS['TL_LANG']['MOD']['avisota']                    = 'Newslettersystem';
 $GLOBALS['TL_LANG']['MOD']['avisota_recipients']         = array('Abonnenten', 'Newsletter Abonnenten verwalten.');
 $GLOBALS['TL_LANG']['MOD']['avisota_newsletter']         = array('Newsletter', 'Newsletter verwalten und versenden.');
 $GLOBALS['TL_LANG']['MOD']['avisota_outbox']             = array('Postausgang', 'Postausgang einsehen und Newsletter versenden.');
+$GLOBALS['TL_LANG']['MOD']['avisota_translation']        = array('Sprachvariablen', 'Verändern Sie die Sprachvariablen für das Newslettersystem.');
 $GLOBALS['TL_LANG']['MOD']['avisota_recipient_source']   = array('Abonnentenquellen', 'Quellen für Newsletter Abonnenten verwalten.');
 
 

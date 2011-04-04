@@ -46,3 +46,7 @@ table.outbox span.total {
 table.outbox span.failed {
 	color: red;
 }
+
+code {
+	font-weight: bold;
+}

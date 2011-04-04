@@ -1,9 +1,13 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
 
 /**
+ * Avisota newsletter and mailing system
+ * Copyright (C) 2010,2011 Tristan Lins
+ *
+ * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- *
+ * 
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -21,10 +25,10 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2010
+ * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
- * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @license    LGPL
  * @filesource
  */
 
@@ -174,7 +178,6 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 		'template_html' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_html'],
-			'default'                 => 'mail_html_default',
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options'                 => $this->getTemplateGroup('mail_html_'),
@@ -183,7 +186,6 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 		'template_plain' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_plain'],
-			'default'                 => 'mail_plain_default',
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options'                 => $this->getTemplateGroup('mail_plain_'),

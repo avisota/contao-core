@@ -1,30 +1,34 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
 
 /**
+ * Avisota newsletter and mailing system
+ * Copyright (C) 2010,2011 Tristan Lins
+ *
+ * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- *
+ * 
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation, either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program. If not, please visit the Free
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2010
+ * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
- * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @license    LGPL
  * @filesource
  */
 
@@ -34,6 +38,7 @@
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['invisible']       = array('Unsichtbar', 'Das Element auf der Webseite nicht anzeigen.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['type']            = array('Elementtyp', 'Bitte wählen Sie den Typ des Inhaltselements.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']            = array('Bereich', 'Bitte wählen Sie den Bereich in dem das Inhaltselement angezeigt werden soll.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['headline']        = array('Überschrift', 'Hier können Sie dem Inhaltselement eine Überschrift hinzufügen.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['text']            = array('Text', 'Sie können HTML-Tags verwenden, um den Text zu formatieren.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['definePlain']     = array('Plain-Text vorgeben', 'Den Plain-Text angeben, anstatt ihn aus dem HTML Text automatisch erstellen zu lassen.');
@@ -93,6 +98,11 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['events_legend']    = 'Even
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['anonymous']      = 'Anonym personalisieren, falls keine persönlichen Daten verfügbar sind';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['private']        = 'Persönlich personalisieren, blendet das Element aus, wenn keine persönlichen Daten verfügbar sind';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['body']   = 'Inhalt';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['header'] = 'Kopfzeile';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['footer'] = 'Fußzeile';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['left']   = 'Linke Spalte';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['right']  = 'Rechte Spalte';
 
 
 /**

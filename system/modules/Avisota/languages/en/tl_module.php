@@ -1,9 +1,13 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
 
 /**
+ * Avisota newsletter and mailing system
+ * Copyright (C) 2010,2011 Tristan Lins
+ *
+ * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- *
+ * 
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -21,10 +25,10 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2010
+ * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
- * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @license    LGPL
  * @filesource
  */
 
@@ -32,17 +36,17 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_module']['avisota_show_lists']                      = array('Listenauswahl anzeigen', '');
+$GLOBALS['TL_LANG']['tl_module']['avisota_show_lists']                      = array('Show selection list', '');
 $GLOBALS['TL_LANG']['tl_module']['avisota_lists']                           = array('Listen', '');
-$GLOBALS['TL_LANG']['tl_module']['avisota_template_subscribe_mail_plain']   = array('Anmelden Plain Text E-Mail-Template', '');
-$GLOBALS['TL_LANG']['tl_module']['avisota_template_subscribe_mail_html']    = array('Anmelden HTML E-Mail-Template', '');
-$GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe_mail_plain'] = array('Abmelden Plain Text E-Mail-Template', '');
-$GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe_mail_html']  = array('Abmelden HTML E-Mail-Template', '');
+$GLOBALS['TL_LANG']['tl_module']['avisota_template_subscribe_mail_plain']   = array('Sign in plain text e-mail template', '');
+$GLOBALS['TL_LANG']['tl_module']['avisota_template_subscribe_mail_html']    = array('Sign in HTML e-mail template', '');
+$GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe_mail_plain'] = array('Unsubscribe Plain Text e-mail template', '');
+$GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe_mail_html']  = array('Unsubscribe HTML e-mail template', '');
 
 
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_module']['avisota_subscription_legend'] = 'Abonnement';
+$GLOBALS['TL_LANG']['tl_module']['avisota_subscription_legend'] = 'Subscription';
 
 ?>
