@@ -1,9 +1,13 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
 
 /**
+ * Avisota newsletter and mailing system
+ * Copyright (C) 2010,2011 Tristan Lins
+ *
+ * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- *
+ * 
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -21,10 +25,10 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2010
+ * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
- * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @license    LGPL
  * @filesource
  */
 
@@ -32,8 +36,8 @@
 /**
  * Class Avisota
  *
- * 
- * @copyright  InfinitySoft 2010
+ * Parent class for newsletter content elements.
+ * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
@@ -92,143 +96,6 @@ class Avisota extends BackendModule
 			}
 		}
 		return true;
-	}
-	
-	
-	public function importRecipients()
-	{
-		if ($this->Input->get('key') != 'import')
-		{
-			return '';
-		}
-
-		// Import CSS
-		if ($this->Input->post('FORM_SUBMIT') == 'tl_avisota_recipient_import')
-		{
-			if (!$this->Input->post('source') || !is_array($this->Input->post('source')))
-			{
-				$_SESSION['TL_ERROR'][] = $GLOBALS['TL_LANG']['ERR']['all_fields'];
-				$this->reload();
-			}
-
-			$time = time();
-			$intTotal = 0;
-			$intInvalid = 0;
-
-			foreach ($this->Input->post('source') as $strCsvFile)
-			{
-				$objFile = new File($strCsvFile);
-
-				if ($objFile->extension != 'csv')
-				{
-					$_SESSION['TL_ERROR'][] = sprintf($GLOBALS['TL_LANG']['ERR']['filetype'], $objFile->extension);
-					continue;
-				}
-
-				// Get separator
-				switch ($this->Input->post('separator'))
-				{
-					case 'semicolon':
-						$strSeparator = ';';
-						break;
-
-					case 'tabulator':
-						$strSeparator = '\t';
-						break;
-
-					case 'linebreak':
-						$strSeparator = '\n';
-						break;
-
-					default:
-						$strSeparator = ',';
-						break;
-				}
-
-				$arrRecipients = array();
-				$resFile = $objFile->handle;
-
-				while(($arrRow = @fgetcsv($resFile, null, $strSeparator)) !== false)
-				{
-					$arrRecipients = array_merge($arrRecipients, $arrRow);
-				}
-
-				$arrRecipients = array_filter(array_unique($arrRecipients));
-
-				foreach ($arrRecipients as $strRecipient)
-				{
-					// Skip invalid entries
-					if (!$this->isValidEmailAddress($strRecipient))
-					{
-						$this->log('Recipient address "' . $strRecipient . '" seems to be invalid and has been skipped', 'Newsletter importRecipients()', TL_ERROR);
-
-						++$intInvalid;
-						continue;
-					}
-
-					// Check whether the e-mail address exists
-					$objRecipient = $this->Database->prepare("SELECT COUNT(*) AS total FROM tl_avisota_recipient WHERE pid=? AND email=?")
-												   ->execute($this->Input->get('id'), $strRecipient);
-
-					if ($objRecipient->total < 1)
-					{
-						$this->Database->prepare("INSERT INTO tl_avisota_recipient SET pid=?, tstamp=$time, email=?, confirmed=1")
-									   ->execute($this->Input->get('id'), $strRecipient);
-
-						++$intTotal;
-					}
-				}
-			}
-
-			$_SESSION['TL_CONFIRM'][] = sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['confirm'], $intTotal);
-
-			if ($intInvalid > 0)
-			{
-				$_SESSION['TL_INFO'][] = sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['invalid'], $intInvalid);
-			}
-
-			setcookie('BE_PAGE_OFFSET', 0, 0, '/');
-			$this->reload();
-		}
-
-		$objTree = new FileTree($this->prepareForWidget($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['source'], 'source', null, 'source', 'tl_avisota_recipient'));
-
-		// Return form
-		return '
-<div id="tl_buttons">
-<a href="'.ampersand(str_replace('&key=import', '', $this->Environment->request)).'" class="header_back" title="'.specialchars($GLOBALS['TL_LANG']['MSC']['backBT']).'" accesskey="b">'.$GLOBALS['TL_LANG']['MSC']['backBT'].'</a>
-</div>
-
-<h2 class="sub_headline">'.$GLOBALS['TL_LANG']['tl_avisota_recipient']['import'][1].'</h2>'.$this->getMessages().'
-
-<form action="'.ampersand($this->Environment->request, true).'" id="tl_avisota_recipient_import" class="tl_form" method="post">
-<div class="tl_formbody_edit">
-<input type="hidden" name="FORM_SUBMIT" value="tl_avisota_recipient_import" />
-
-<div class="tl_tbox block">
-  <h3><label for="separator">'.$GLOBALS['TL_LANG']['MSC']['separator'][0].'</label></h3>
-  <select name="separator" id="separator" class="tl_select" onfocus="Backend.getScrollOffset();">
-    <option value="comma">'.$GLOBALS['TL_LANG']['MSC']['comma'].'</option>
-    <option value="semicolon">'.$GLOBALS['TL_LANG']['MSC']['semicolon'].'</option>
-    <option value="tabulator">'.$GLOBALS['TL_LANG']['MSC']['tabulator'].'</option>
-    <option value="linebreak">'.$GLOBALS['TL_LANG']['MSC']['linebreak'].'</option>
-  </select>'.(strlen($GLOBALS['TL_LANG']['MSC']['separator'][1]) ? '
-  <p class="tl_help tl_tip">'.$GLOBALS['TL_LANG']['MSC']['separator'][1].'</p>' : '').'
-  <h3><label for="source">'.$GLOBALS['TL_LANG']['tl_avisota_recipient']['source'][0].'</label> <a href="contao/files.php" title="' . specialchars($GLOBALS['TL_LANG']['MSC']['fileManager']) . '" onclick="Backend.getScrollOffset(); Backend.openWindow(this, 750, 500); return false;">' . $this->generateImage('filemanager.gif', $GLOBALS['TL_LANG']['MSC']['fileManager'], 'style="vertical-align:text-bottom;"') . '</a></h3>
-'.$objTree->generate().(strlen($GLOBALS['TL_LANG']['tl_avisota_recipient']['source'][1]) ? '
-  <p class="tl_help tl_tip">'.$GLOBALS['TL_LANG']['tl_avisota_recipient']['source'][1].'</p>' : '').'
-</div>
-
-</div>
-
-<div class="tl_formbody_submit">
-
-<div class="tl_submit_container">
-  <input type="submit" name="save" id="save" class="tl_submit" accesskey="s" value="'.specialchars($GLOBALS['TL_LANG']['tl_avisota_recipient']['import'][0]).'" />
-</div>
-
-</div>
-</form>';
 	}
 	
 	
@@ -548,6 +415,21 @@ class Avisota extends BackendModule
 				}
 			}
 			
+			// cleanup multiple inserts
+			$objOutput = $this->Database->prepare("SELECT GROUP_CONCAT(id) as id, COUNT(id) as count FROM tl_avisota_newsletter_outbox WHERE token=? GROUP BY email HAVING count>1")->execute($strToken);
+			$arrCleanIds = array();
+			while ($objOutput->next())
+			{
+				$arrIds = explode(',', $objOutput->id);
+				array_shift($arrIds);
+				$arrCleanIds = array_merge($arrIds, $arrCleanIds);
+			}
+			$arrCleanIds = array_filter(array_map('intval', $arrCleanIds));
+			if (count($arrCleanIds) > 0)
+			{
+				$this->Database->execute("DELETE FROM tl_avisota_newsletter_outbox WHERE id IN (" . implode(',', $arrCleanIds) . ")");
+			}
+			
 			$this->redirect('contao/main.php?do=avisota_outbox' . ($this->allowBackendSending() ? '&id=' . $objNewsletter->id . '&highlight=' . $strToken : ''));
 		}
 		
@@ -612,7 +494,7 @@ class Avisota extends BackendModule
 							WHERE
 								`id`=?")
 						->execute($intIdTmp);
-					$arrMgroups[$intIdTmp] = $objMgroup->title;
+					$arrMgroups[$intIdTmp] = $objMgroup->name;
 					break;
 				}
 			}
@@ -1152,7 +1034,7 @@ class Avisota extends BackendModule
 	 * @param string $mode
 	 * @return string
 	 */
-	protected function generateContent(Database_Result &$objNewsletter, Database_Result &$objCategory, $personalized, $mode)
+	protected function generateContent(Database_Result &$objNewsletter, Database_Result &$objCategory, $personalized, $mode, $area = false)
 	{
 		$strContent = '';
 		
@@ -1164,9 +1046,10 @@ class Avisota extends BackendModule
 				WHERE
 						`pid`=?
 					AND `invisible`=''
+					AND `area`=?
 				ORDER BY
 					`sorting`")
-			->execute($objNewsletter->id);
+			->execute($objNewsletter->id, $area ? $area : 'body');
 		
 		while ($objContent->next())
 		{
@@ -1241,11 +1124,10 @@ class Avisota extends BackendModule
 		{
 			$head .= sprintf('<base href="%s">', $this->DomainLink->absolutizeUrl('')) . "\n";
 			
-			$css = '';
 			// Add style sheet newsletter.css
 			if (file_exists(TL_ROOT . '/newsletter.css'))
 			{
-				$css .= $this->cleanCSS(file_get_contents(TL_ROOT . '/newsletter.css')) . "\n";
+				$head .= '<style type="text/css">' . "\n" . $this->cleanCSS(file_get_contents(TL_ROOT . '/newsletter.css')) . "\n" . '</style>' . "\n";
 			}
 			
 			if (in_array('layout_additional_sources', $this->Config->getActiveModules()))
@@ -1254,25 +1136,9 @@ class Avisota extends BackendModule
 				if (is_array($arrStylesheet) && count($arrStylesheet))
 				{
 					$this->import('LayoutAdditionalSources');
-					$arrArrSources = $this->LayoutAdditionalSources->getSources($arrStylesheet, false, false, true, $this->Base->getViewOnlinePage($objCategory));
-					
-					foreach ($arrArrSources['css'] as $arrSource)
-					{
-						if ($arrSource['external'])
-						{
-							$head .= sprintf('<link type="text/css" rel="stylesheet" href="%s">', specialchars($arrSource['src'])) . "\n";
-						}
-						else
-						{
-							$css .= file_get_contents(TL_ROOT . '/' . $arrSource['src']);
-						}
-					}
+					$this->LayoutAdditionalSources->productive = true;
+					$head .= implode("\n", $this->LayoutAdditionalSources->generateIncludeHtml($arrStylesheet, true, $this->Base->getViewOnlinePage($objCategory)));
 				}
-			}
-			
-			if ($css)
-			{
-				$head .= '<style type="text/css">' . "\n" . $css . '</style>' . "\n";
 			}
 			
 			$this->htmlHeadCache = $head;
@@ -1285,7 +1151,10 @@ class Avisota extends BackendModule
 		$objTemplate = new FrontendTemplate($objNewsletter->template_html ? $objNewsletter->template_html : $objCategory->template_html);
 		$objTemplate->title = $objNewsletter->subject;
 		$objTemplate->head = $head;
-		$objTemplate->body = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_HTML);
+		foreach ($this->getNewsletterAreas($objCategory) as $strArea)
+		{
+			$objTemplate->$strArea = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_HTML, $strArea);
+		}
 		$objTemplate->newsletter = $objNewsletter->row();
 		$objTemplate->category = $objCategory->row();
 		return $objTemplate->parse();
@@ -1304,7 +1173,10 @@ class Avisota extends BackendModule
 	protected function generatePlain(Database_Result &$objNewsletter, Database_Result &$objCategory, $personalized)
 	{
 		$objTemplate = new FrontendTemplate($objNewsletter->template_plain ? $objNewsletter->template_plain : $objCategory->template_plain);
-		$objTemplate->body = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_PLAIN);
+		foreach ($this->getNewsletterAreas($objCategory) as $strArea)
+		{
+			$objTemplate->$strArea = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_PLAIN, $strArea);
+		}
 		$objTemplate->newsletter = $objNewsletter->row();
 		$objTemplate->category = $objCategory->row();
 		return $objTemplate->parse();
@@ -1363,6 +1235,17 @@ class Avisota extends BackendModule
 		}
 		
 		return trim($css);
+	}
+	
+	
+	/**
+	 * Get a list of areas.
+	 * 
+	 * @param Database_Result $objCategory
+	 */
+	protected function getNewsletterAreas(Database_Result $objCategory)
+	{
+		return array_unique(array_filter(array_merge(array('body'), trimsplit(',', $objCategory->areas))));
 	}
 	
 	
