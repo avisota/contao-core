@@ -83,6 +83,12 @@ $GLOBALS['BE_MOD'] = array_merge(
 				'icon'       => 'system/modules/Avisota/html/outbox.png',
 				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 			),
+			'avisota_newsletter_draft' => array
+			(
+				'tables'     => array('tl_avisota_newsletter_draft', 'tl_avisota_newsletter_draft_content'),
+				'icon'       => 'system/modules/Avisota/html/newsletter_draft.png',
+				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+			),
 			'avisota_recipient_source' => array
 			(
 				'tables'     => array('tl_avisota_recipient_source'),
