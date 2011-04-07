@@ -1,4 +1,6 @@
-<?php
+<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+
+#copyright
 
 class tl_article_avisota extends tl_article
 {
