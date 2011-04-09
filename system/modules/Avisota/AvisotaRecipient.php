@@ -16,12 +16,13 @@ class AvisotaRecipient
 	/**
 	 * Get a dummy recipient based on be user data.
 	 */
-	public static function dummy()
+	public static function dummy($blnPersonalized = false)
 	{
 		$objUser = BackendUser::getInstance();
 		$objUser->authenticate();
 		
-		return new AvisotaRecipient($objUser->id, $objUser->email, 0);
+		$arrName = explode(' ', $objUser->name, 2);
+		return new AvisotaRecipient($objUser->id, $objUser->email, 0, $blnPersonalized ? array('name'=>$objUser->name, 'firstname'=>$arrName[0], 'lastname'=>$arrName[1]) : false);
 	}
 	
 	

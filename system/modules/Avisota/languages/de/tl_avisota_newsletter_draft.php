@@ -36,5 +36,6 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['copy']        = array('Vorla
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['delete']      = array('Vorlage löschen', 'Vorlage ID %s löschen');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['edit']        = array('Vorlage bearbeiten', 'Vorlage ID %s bearbeiten');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['editheader']  = array('Vorlageeinstellungen bearbeiten', 'Einstellungen der Vorlage ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['preview']     = array('Vorlage ansehen', 'Die Vorlage ID %s ansehen');
 
 ?>

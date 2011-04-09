@@ -78,6 +78,17 @@ class AvisotaNewsletter extends Backend
 			
 		$this->loadLanguageFile('tl_avisota_newsletter');
 	}
+	
+	
+	/**
+	 * Get the data array of this newsletter.
+	 * 
+	 * @return array
+	 */
+	public function getData()
+	{
+		return $this->newsletter->row();
+	}
 		
 	
 	/**
