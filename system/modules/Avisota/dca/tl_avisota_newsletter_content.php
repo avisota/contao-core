@@ -419,7 +419,17 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 			'inputType'               => 'eventchooser',
 			// 'options_callback'		  => array('tl_newsletter4ward_content','getEvents'),
 			'eval'                    => array()
-		)		
+		),
+		'unmodifiable' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['unmodifiable'],
+			'eval'                    => array('doNotShow'=>true)
+		),
+		'undeletable' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['undeletable'],
+			'eval'                    => array('doNotShow'=>true)
+		)	
 	)
 );
 

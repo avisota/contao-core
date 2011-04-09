@@ -156,6 +156,8 @@ CREATE TABLE `tl_avisota_newsletter_draft_content` (
   `guests` char(1) NOT NULL default '',
   `cssID` varchar(255) NOT NULL default '',
   `space` varchar(64) NOT NULL default '',
+  `unmodifiable` char(1) NOT NULL default '',
+  `undeletable` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -231,6 +233,8 @@ CREATE TABLE `tl_avisota_newsletter_content` (
   `guests` char(1) NOT NULL default '',
   `cssID` varchar(255) NOT NULL default '',
   `space` varchar(64) NOT NULL default '',
+  `unmodifiable` char(1) NOT NULL default '',
+  `undeletable` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

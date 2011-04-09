@@ -92,16 +92,16 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_draft_content'] = array
 	(
 		'__selector__'                => array('type', 'definePlain', 'addImage', 'useImage', 'protected'),
 		'default'                     => '{type_legend},type',
-		'headline'                    => '{type_legend},type,area,headline;{expert_legend:hide},cssID,space',
-		'text'                        => '{type_legend},type,area,headline;{text_legend},text,definePlain,personalize;{image_legend},addImage;{expert_legend:hide},cssID,space',
-		'list'                        => '{type_legend},type,area,headline;{list_legend},listtype,listitems;{expert_legend:hide},cssID,space',
-		'table'                       => '{type_legend},type,area,headline;{table_legend},tableitems;{tconfig_legend},summary,thead,tfoot;{sortable_legend:hide},sortable;{expert_legend:hide},cssID,space',
-		'hyperlink'                   => '{type_legend},type,area,headline;{link_legend},url,linkTitle,embed;{expert_legend:hide},cssID,space',
-		'image'                       => '{type_legend},type,area,headline;{source_legend},singleSRC;{image_legend},alt,size,imagemargin,imageUrl,caption;{expert_legend:hide},cssID,space',
-		'gallery'                     => '{type_legend},type,area,headline;{source_legend},multiSRC;{image_legend},size,imagemargin,perRow,sortBy;{template_legend:hide},galleryHtmlTpl,galleryPlainTpl;{expert_legend:hide},cssID,space',
-		'article'                     => '{type_legend},type,area,headline;{include_legend},article;{expert_legend:hide},cssID,space',
-		'news'                        => '{type_legend},type,area,headline;{include_legend},news;{expert_legend:hide},cssID,space',
-		'events'                      => '{type_legend},type,area,headline;{events_legend},events;{expert_legend:hide},cssID,space',
+		'headline'                    => '{type_legend},type,area,headline;{expert_legend:hide},cssID,space,unmodifiable,undeletable',
+		'text'                        => '{type_legend},type,area,headline;{text_legend},text,definePlain,personalize;{image_legend},addImage;{expert_legend:hide},cssID,space,unmodifiable,undeletable',
+		'list'                        => '{type_legend},type,area,headline;{list_legend},listtype,listitems;{expert_legend:hide},cssID,space,unmodifiable,undeletable',
+		'table'                       => '{type_legend},type,area,headline;{table_legend},tableitems;{tconfig_legend},summary,thead,tfoot;{sortable_legend:hide},sortable;{expert_legend:hide},cssID,space,unmodifiable,undeletable',
+		'hyperlink'                   => '{type_legend},type,area,headline;{link_legend},url,linkTitle,embed;{expert_legend:hide},cssID,space,unmodifiable,undeletable',
+		'image'                       => '{type_legend},type,area,headline;{source_legend},singleSRC;{image_legend},alt,size,imagemargin,imageUrl,caption;{expert_legend:hide},cssID,space,unmodifiable,undeletable',
+		'gallery'                     => '{type_legend},type,area,headline;{source_legend},multiSRC;{image_legend},size,imagemargin,perRow,sortBy;{template_legend:hide},galleryHtmlTpl,galleryPlainTpl;{expert_legend:hide},cssID,space,unmodifiable,undeletable',
+		'article'                     => '{type_legend},type,area,headline;{include_legend},article;{expert_legend:hide},cssID,space,unmodifiable,undeletable',
+		'news'                        => '{type_legend},type,area,headline;{include_legend},news;{expert_legend:hide},cssID,space,unmodifiable,undeletable',
+		'events'                      => '{type_legend},type,area,headline;{events_legend},events;{expert_legend:hide},cssID,space,unmodifiable,undeletable',
 	),
 
 	// Subpalettes
@@ -413,6 +413,20 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_draft_content'] = array
 			'exclude'                 => true,
 			'inputType'               => 'text',
 			'eval'                    => array('multiple'=>true, 'size'=>2, 'rgxp'=>'digit', 'nospace'=>true)
+		),
+		'unmodifiable' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['unmodifiable'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class'=>'w50 m12 clr')
+		),
+		'undeletable' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['undeletable'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class'=>'w50 m12')
 		)
 	)
 );
@@ -622,6 +636,8 @@ class tl_avisota_newsletter_draft_content extends Avisota
 
 		return '
 <div class="cte_type ' . $key . '">' .
+	($arrRow['unmodifiable'] ? $this->generateImage('edit_.gif', $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['unmodifiable'][0], 'title="' . specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['unmodifiable'][0]) . '" style="vertical-align: middle;"') . ' ' : '') .
+	($arrRow['undeletable'] ? $this->generateImage('delete_.gif', $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['undeletable'][0], 'title="' . specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['undeletable'][0]) . '" style="vertical-align: middle;"') . ' ' : '') .
 	(isset($GLOBALS['TL_LANG']['NLE'][$arrRow['type']][0]) ? $GLOBALS['TL_LANG']['NLE'][$arrRow['type']][0] : $arrRow['type']) .
 	($arrRow['protected'] ? ' (' . $GLOBALS['TL_LANG']['MSC']['protected'] . ')' : ($arrRow['guests'] ? ' (' . $GLOBALS['TL_LANG']['MSC']['guests'] . ')' : '')) .
 	sprintf(' <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>', isset($GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['area'][$arrRow['area']]) ? $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['area'][$arrRow['area']] : $arrRow['area']) .
