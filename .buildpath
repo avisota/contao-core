@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <buildpath>
-	<buildpathentry kind="src" path=""/>
 	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
+	<buildpathentry external="true" kind="lib" path="/home/tristan/Dropbox/Contao/contao-2.9.4-infinitysoft"/>
+	<buildpathentry kind="src" path=""/>
 </buildpath>
