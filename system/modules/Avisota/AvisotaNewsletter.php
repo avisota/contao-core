@@ -89,7 +89,28 @@ class AvisotaNewsletter extends Backend
 	{
 		return $this->newsletter->row();
 	}
+	
+	
+	/**
+	 * Magic method
+	 */
+	public function __get($k)
+	{
+		switch ($k)
+		{
+		case 'draft':
+			return $this->draft;
 		
+		case 'category':
+			return $this->category;
+		
+		case 'newsletter':
+			return $this->newsletter;
+		
+		default:
+			return $this->newsletter->$k;
+		}
+	}
 	
 	/**
 	 * Generate the email.
@@ -196,7 +217,7 @@ class AvisotaNewsletter extends Backend
 		
 		while ($objContent->next())
 		{
-			$strContent .= $this->generateNewsletterElement($objContent, $mode, $personalized);
+			$strContent .= $this->generateNewsletterElement($objRecipient, $objContent, $mode, $personalized);
 		}
 		
 		return $strContent;
@@ -212,9 +233,17 @@ class AvisotaNewsletter extends Backend
 	 * @param string $personalized
 	 * @return string
 	 */
-	public function generateHtml(AvisotaRecipient $objRecipient)
+	public function generateHtml(AvisotaRecipient $objRecipient, $strTemplate = false)
 	{
-		if ($this->draft && !strlen($this->newsletter->template_html))
+		if (!$strTemplate)
+		{
+			$strTemplate = $this->newsletter->template_html;
+		}
+		if (!$strTemplate && !$this->draft)
+		{
+			$strTemplate = $this->category->template_html;
+		}
+		if (!$strTemplate)
 		{
 			return false;
 		}
@@ -238,15 +267,15 @@ class AvisotaNewsletter extends Backend
 			}
 		}
 		
-		$objTemplate = new FrontendTemplate($this->newsletter->template_html ? $this->newsletter->template_html : $this->category->template_html);
+		$objTemplate = new FrontendTemplate($strTemplate);
 		$objTemplate->title = $this->newsletter->subject;
 		$objTemplate->head = $head;
-		foreach ($this->getNewsletterAreas($this->category) as $strArea)
+		foreach ($this->getNewsletterAreas() as $strArea)
 		{
 			$objTemplate->$strArea = $this->generateContent($objRecipient, NL_HTML, $strArea);
 		}
 		$objTemplate->newsletter = $this->newsletter->row();
-		$objTemplate->category = $this->category->row();
+		$objTemplate->category = $this->draft ? array() : $this->category->row();
 		return $objTemplate->parse();
 	}
 	
@@ -260,20 +289,28 @@ class AvisotaNewsletter extends Backend
 	 * @param string $personalized
 	 * @return string
 	 */
-	public function generatePlain(AvisotaRecipient $objRecipient)
+	public function generatePlain(AvisotaRecipient $objRecipient, $strTemplate = false)
 	{
-		if ($this->draft && !strlen($this->newsletter->template_plain))
+		if (!$strTemplate)
+		{
+			$strTemplate = $this->newsletter->template_plain;
+		}
+		if (!$strTemplate && !$this->draft)
+		{
+			$strTemplate = $this->category->template_plain;
+		}
+		if (!$strTemplate)
 		{
 			return false;
 		}
 		
-		$objTemplate = new FrontendTemplate($this->newsletter->template_plain ? $this->newsletter->template_plain : $this->category->template_plain);
-		foreach ($this->getNewsletterAreas($this->category) as $strArea)
+		$objTemplate = new FrontendTemplate($strTemplate);
+		foreach ($this->getNewsletterAreas() as $strArea)
 		{
 			$objTemplate->$strArea = $this->generateContent($objRecipient, NL_PLAIN, $strArea);
 		}
 		$objTemplate->newsletter = $this->newsletter->row();
-		$objTemplate->category = $this->category->row();
+		$objTemplate->category = $this->draft ? array() : $this->category->row();
 		return $objTemplate->parse();
 	}
 	
@@ -340,6 +377,17 @@ class AvisotaNewsletter extends Backend
 	 */
 	protected function getNewsletterAreas()
 	{
+		if ($this->draft)
+		{
+			$arrAreas = array('body');
+			$objCategory = $this->Database->execute("SELECT * FROM tl_avisota_newsletter_category ORDER BY title");
+			while ($objCategory->next())
+			{
+				$arrAreas = array_merge($arrAreas, trimsplit(',', $objCategory->areas));
+			}
+			return array_unique(array_filter($arrAreas));
+		}
+		
 		return array_unique(array_filter(array_merge(array('body'), trimsplit(',', $this->category->areas))));
 	}
 	
@@ -450,6 +498,31 @@ class AvisotaNewsletter extends Backend
 		}
 
 		return '';
+	}
+	
+	
+	public function getHref($objRecipient = false)
+	{
+		if ($objRecipient)
+		{
+			$objPage = $objRecipient->getViewOnlinePage();
+		}
+		if (!$objRecipient || !$objPage)
+		{
+			$objPage = $this->getViewOnlinePage();
+		}
+		if (!$objPage)
+		{
+			return false;
+		}
+		$this->import('DomainLink');
+		return $this->DomainLink->absolutizeUrl($this->generateFrontendUrl($objPage->row(), '/item/' . (self::$objNewsletter->alias ? self::$objNewsletter->alias : self::$objNewsletter->id)), $objPage);
+	}
+	
+	public function getViewOnlinePage()
+	{
+		// TODO
+		return false;
 	}
 }
 ?>

@@ -106,5 +106,12 @@ class AvisotaRecipient
 		}
 		return '';
 	}
+	
+	
+	public function getViewOnlinePage()
+	{
+		// TODO
+		return false;
+	}
 }
 ?>

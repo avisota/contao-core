@@ -9,7 +9,7 @@
 <body>
 <?php if (TL_MODE != 'FE'): ?><div id="onlinelink"><a href="{{newsletter::href}}"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['online'] ?></a></div><?php endif ?>
 <div id="wrapper">
-<table>
+<table id="main">
 	<?php if ($this->header): ?>
 	<thead>
 		<tr>

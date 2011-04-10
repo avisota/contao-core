@@ -13,6 +13,22 @@
  */
 class AvisotaInsertTag extends Controller
 {
+	protected static $objNewsletter;
+	
+	protected static $objRecipient;
+	
+	public static function setCurrent(AvisotaNewsletter $objNewsletter, AvisotaRecipient $objRecipient)
+	{
+		self::$objNewsletter = $objNewsletter;
+		self::$objRecipient = $objRecipient;
+	}
+	
+	public static function clearCurrent()
+	{
+		self::$objNewsletter = NULL;
+		self::$objRecipient = NULL;
+	}
+	
 	public function __construct()
 	{
 		parent::__construct();
@@ -28,16 +44,14 @@ class AvisotaInsertTag extends Controller
 		switch ($strTag[0])
 		{
 		case 'recipient':
-			$arrCurrentRecipient = Avisota::getCurrentRecipient();
-		
-			if ($arrCurrentRecipient)
+			if (self::$objRecipient)
 			{
 				switch ($strTag[1])
 				{
 				case 'salutation':
-					if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrCurrentRecipient['gender']]))
+					if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . self::$objRecipient->gender]))
 					{
-						return $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrCurrentRecipient['gender']];
+						return $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . self::$objRecipient->gender];
 					}
 					else
 					{
@@ -45,43 +59,34 @@ class AvisotaInsertTag extends Controller
 					}
 					
 				case 'name':
-					if (isset($arrCurrentRecipient['name']) && $arrCurrentRecipient['name'])
+					if (self::$objRecipient->name)
 					{
-						return $arrCurrentRecipient['name'];
+						return self::$objRecipient->name;
 					}
 					else
 					{
-						return trim($arrCurrentRecipient['firstname'] . ' ' . $arrCurrentRecipient['lastname']);
+						return trim(self::$objRecipient->firstname . ' ' . self::$objRecipient->lastname);
 					}
 					
 				default:
-					if ($arrCurrentRecipient && isset($arrCurrentRecipient[$strTag[1]]))
-					{
-						return $arrCurrentRecipient[$strTag[1]];
-					}
+					$strVar = $strTag[1];
+					return self::$objRecipient->$strVar;
 				}
 			}
 			return '';
 			
 		case 'newsletter':
-			$arrCurrentRecipient = Avisota::getCurrentRecipient();
-			$objCategory = Avisota::getCurrentCategory();
-			$objNewsletter = Avisota::getCurrentNewsletter();
-			
-			if ($arrCurrentRecipient && $objCategory && $objNewsletter)
+			if (self::$objNewsletter)
 			{
 				switch ($strTag[1])
 				{
 				case 'href':
-					$objPage = $this->Base->getViewOnlinePage($objCategory, $arrCurrentRecipient);
-					if ($objPage)
-					{
-						return $this->Base->extendURL($this->generateFrontendUrl($objPage->row(), '/item/' . ($objNewsletter->alias ? $objNewsletter->alias : $objNewsletter->id)), $objPage);
-					}
-					break;
+					return self::$objNewsletter->getHref(self::$objRecipient);
 					
 				case 'unsubscribe':
 				case 'unsubscribe_url':
+					/*
+					 * TODO
 					$strAlias = false;
 					if (preg_match('#^list:(\d+)$#', $arrCurrentRecipient['outbox_source'], $arrMatch))
 					{
@@ -131,6 +136,7 @@ class AvisotaInsertTag extends Controller
 					case 'plain':
 						return sprintf("%s\n[%s]", $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe'], $strUrl);
 					}
+					*/
 					break;
 				}
 			}

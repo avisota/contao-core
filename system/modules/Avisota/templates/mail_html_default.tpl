@@ -9,7 +9,9 @@
 <body>
 <?php if (TL_MODE != 'FE'): ?><div id="onlinelink"><a href="{{newsletter::href}}"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['online'] ?></a></div><?php endif ?>
 <div id="wrapper">
-<?php echo $this->body; ?>
+  <div id="main">
+    <?php echo $this->body; ?>
+  </div>
 </div>
 <?php if (TL_MODE != 'FE'): ?><div id="unsubscribe">{{newsletter::unsubscribe::html}}</div><?php endif ?>
 </body>

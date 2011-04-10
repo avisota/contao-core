@@ -38,4 +38,10 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['edit']        = array('Vorla
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['editheader']  = array('Vorlageeinstellungen bearbeiten', 'Einstellungen der Vorlage ID %s bearbeiten');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['preview']     = array('Vorlage ansehen', 'Die Vorlage ID %s ansehen');
 
+
+/**
+ * Messages
+ */
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['missing_template'] = 'Eine Vorlage kann nur angezeigt werden, wenn ein Template ausgewählt wurde.';
+
 ?>

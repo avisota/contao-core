@@ -69,18 +69,53 @@ class AvisotaBackend extends Backend
 			$this->redirect('contao/main.php?act=tl_error');
 		}
 		
+		// get templates
+		$strTemplateHtml = false;
+		if (!$objNewsletter->template_html)
+		{
+			if ($this->Input->get('template_html'))
+			{
+				$strTemplateHtml = $this->Input->get('template_html');
+			}
+			if (!$strTemplateHtml)
+			{
+				$strTemplateHtml = $this->Session->get('tl_avisota_preview_template_html');
+			}
+			$this->Session->set('tl_avisota_preview_template_html', $strTemplateHtml);
+		}
+		
+		$strTemplatePlain = false;
+		if (!$objNewsletter->template_plain)
+		{
+			if ($this->Input->get('template_plain'))
+			{
+				$strTemplatePlain = $this->Input->get('template_plain');
+			}
+			if ($strTemplatePlain)
+			{
+				$strTemplatePlain = $this->Session->get('tl_avisota_preview_template_plain');
+			}
+			$this->Session->set('tl_avisota_preview_template_plain', $strTemplatePlain);
+		}
+		
+		$objRecipient = AvisotaRecipient::dummy($blnPersonalized);
+		AvisotaInsertTag::setCurrent($objNewsletter, $objRecipient);
+		
 		// generate the preview
 		switch ($strMode)
 		{
 		case NL_HTML:
 			header('Content-Type: text/html; charset=utf-8');
-			echo $objNewsletter->generateHtml(AvisotaRecipient::dummy($blnPersonalized));
-			exit(0);
+			echo $this->replaceInsertTags($objNewsletter->generateHtml($objRecipient, $strTemplateHtml));
+			exit;
 			
 		case NL_PLAIN:
 			header('Content-Type: text/plain; charset=utf-8');
-			echo $objNewsletter->generatePlain(AvisotaRecipient::dummy($blnPersonalized));
-			exit(0);
+			echo $this->replaceInsertTags($objNewsletter->generatePlain($objRecipient, $strTemplatePlain));
+			exit;
+		
+		default:
+			$this->redirect('contao/main.php?act=tl_error');
 		}
 	}
 	
@@ -96,8 +131,24 @@ class AvisotaBackend extends Backend
 			$this->redirect('contao/main.php?act=tl_error');
 		}
 		
+		$arrTemplatesHtml = $this->getTemplateGroup('mail_html_');
+		$arrTemplatesPlain = $this->getTemplateGroup('mail_plain_');
+		
+		if (!$objNewsletter->template_html)
+		{
+			$this->Session->set('tl_avisota_preview_template_html', $arrTemplatesHtml[0]);
+		}
+		
+		if (!$objNewsletter->template_plain)
+		{
+			$this->Session->set('tl_avisota_preview_template_plain', $arrTemplatesPlain[0]);
+		}
+		
 		$objTemplate = new BackendTemplate('be_avisota_preview_draft');
 		$objTemplate->setData($objNewsletter->getData());
+		
+		$objTemplate->html_templates = $arrTemplatesHtml;
+		$objTemplate->plain_templates = $arrTemplatesPlain;
 		
 		// Store the current referer
 		$session = $this->Session->get('referer');

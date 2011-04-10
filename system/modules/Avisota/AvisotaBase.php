@@ -21,47 +21,6 @@ class AvisotaBase extends Controller
 	}
 	
 	
-	public function getViewOnlinePage($objCategory = null, $arrRecipient = null)
-	{
-		if (is_null($objCategory))
-		{
-			$objCategory = Avisota::getCurrentCategory();
-		}
-		
-		if (is_null($arrRecipient))
-		{
-			$arrRecipient = Avisota::getCurrentRecipient();
-		}
-		
-		if ($arrRecipient && preg_match('#^list:(\d+)$#', $arrRecipient['outbox_source'], $arrMatch))
-		{
-			// the dummy list, used on preview
-			if ($arrMatch[1] > 0)
-			{
-				$objRecipientList = $this->Database->prepare("
-						SELECT
-							*
-						FROM
-							`tl_avisota_recipient_list`
-						WHERE
-							`id`=?")
-					->execute($arrMatch[1]);
-				if ($objRecipientList->next())
-				{
-					return $this->getPageDetails($objRecipientList->viewOnlinePage);
-				}
-			}
-		}
-		
-		if ($objCategory->viewOnlinePage > 0)
-		{
-			return $this->getPageDetails($objCategory->viewOnlinePage);
-		}
-		
-		return null;
-	}
-	
-	
 	/**
 	 * Extend the url to an absolute url.
 	 */
