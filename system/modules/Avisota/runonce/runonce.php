@@ -66,6 +66,10 @@ class AvisotaRunonce extends Frontend
 	 */
 	protected function upgrade0_4_5()
 	{
+		if (!$this->Database->fieldExists('area', 'tl_avisota_newsletter_content'))
+		{
+			$this->Database->prepare("ALTER TABLE tl_avisota_newsletter_content ADD area varchar(32) NOT NULL default '';");
+		}
 		$this->Database->prepare("UPDATE tl_avisota_newsletter_content SET area=? WHERE area=?")->execute('body', '');
 	}
 }
