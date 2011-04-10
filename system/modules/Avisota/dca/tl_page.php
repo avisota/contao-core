@@ -23,8 +23,8 @@ class tl_page_avisota extends tl_page
 		if ($strName == 'tl_page')
 		{
 			$GLOBALS['TL_DCA']['tl_page']['config']['onsubmit_callback'][] = array('tl_page_avisota', 'onSubmit');
-			$GLOBALS['TL_DCA']['tl_page']['list']['sorting']['paste_button_callback'][0] = 'tl_page_avisota';
-			$GLOBALS['TL_DCA']['tl_page']['list']['label']['label_callback'][0] = 'tl_page_avisota';
+			$GLOBALS['TL_DCA']['tl_page']['list']['sorting']['paste_button_callback'] = array('tl_page_avisota', 'pastePage');
+			$GLOBALS['TL_DCA']['tl_page']['list']['label']['label_callback'] = array('tl_page_avisota', 'addIcon');
 			$GLOBALS['TL_DCA']['tl_page']['fields']['sitemap']['save_callback'][] = array('tl_page_avisota', 'sitemapCallback');
 			$GLOBALS['TL_DCA']['tl_page']['fields']['hide']['save_callback'][] = array('tl_page_avisota', 'hideCallback');
 			$GLOBALS['TL_DCA']['tl_page']['fields']['menu_visibility']['save_callback'][] = array('tl_page_avisota', 'sitemapCallback');
