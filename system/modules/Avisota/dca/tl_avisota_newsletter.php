@@ -174,7 +174,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'filter'                  => true,
 			'sorting'                 => true,
 			'flag'                    => 8,
-			'eval'                    => array('rgxp'=>'datim')
+			'eval'                    => array('rgxp'=>'datim', 'doNotCopy'=>true, 'doNotShow'=>true)
 		)
 	)
 );
