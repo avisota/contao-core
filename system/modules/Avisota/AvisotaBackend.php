@@ -12,15 +12,23 @@
  */
 class AvisotaBackend extends Backend
 {
+	/**
+	 * Render a newsletter indicated by request parameters.
+	 */
 	public function renderNewsletter()
 	{
 		$this->render(false);
 	}
 	
+	
+	/**
+	 * Render a newsletter draft indicated by request parameters.
+	 */
 	public function renderDraft()
 	{
 		$this->render(true);
 	}
+	
 	
 	/**
 	 * Generate and print out the preview.
@@ -119,6 +127,10 @@ class AvisotaBackend extends Backend
 		}
 	}
 	
+	
+	/**
+	 * Show the draft preview form.
+	 */
 	public function previewDraft()
 	{
 		// find the newsletter
@@ -163,6 +175,33 @@ class AvisotaBackend extends Backend
 		return $objTemplate->parse();
 	}
 	
+	
+	/**
+	 * Create a new Newsletter from draft.
+	 */
+	public function createFromDraft()
+	{
+		$varId = $this->Input->post('id') ? $this->Input->post('id') : $this->Input->get('id');
+		if ($varId)
+		{
+			
+		}
+		else
+		{
+			$objNewsletterDraft = $this->Database->execute("SELECT * FROM tl_avisota_newsletter_draft ORDER BY title");
+		}
+		
+		$objTemplate = new BackendTemplate('be_avisota_create_from_draft');
+	}
+	
+	
+	/**
+	 * Change the form enctype for multipart upload.
+	 * 
+	 * @param string $strContent
+	 * @param string $strTemplate
+	 * @return string
+	 */
 	public function hookOutputBackendTemplate($strContent, $strTemplate)
 	{
 		if ($strTemplate == 'be_main' && $this->Input->get('table') == 'tl_avisota_recipient_import')
