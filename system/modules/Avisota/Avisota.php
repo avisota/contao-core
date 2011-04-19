@@ -918,7 +918,7 @@ class Avisota extends BackendModule
 	 */
 	protected function generateEmailObject(Database_Result &$objNewsletter, Database_Result &$objCategory, $arrAttachments)
 	{
-		$objEmail = new Email();
+		$objEmail = new AvisotaEmail();
 
 		$objEmail->from = $objCategory->sender;
 		$objEmail->subject = $objNewsletter->subject;
