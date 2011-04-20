@@ -166,4 +166,13 @@ if ($_GET['table'] == 'tl_avisota_recipient_import' && ($_GET['isAjax'] || $_GET
 	unset($_GET['table']);
 }
 
+
+/**
+ * Hack: Fix ajax load import source tree.
+ */
+if ($_GET['table'] == 'tl_avisota_recipient_import' && ($_GET['isAjax'] || $_POST['isAjax']))
+{
+	unset($_GET['table']);
+}
+
 ?>
