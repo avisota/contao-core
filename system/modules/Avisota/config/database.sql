@@ -99,6 +99,7 @@ CREATE TABLE `tl_avisota_newsletter_draft` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `tstamp` int(10) unsigned NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
+  `description` text NULL,
   `alias` varbinary(128) NOT NULL default '',
   `addFile` char(1) NOT NULL default '',
   `files` blob NULL,

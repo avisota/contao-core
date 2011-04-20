@@ -33,6 +33,13 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 		),
 		'global_operations' => array
 		(
+			'createFromDraft' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['create_from_draft'],
+				'href'                => 'table=tl_avisota_newsletter_create_from_draft',
+				'class'               => 'header_new',
+				'attributes'          => 'onclick="Backend.getScrollOffset();" accesskey="d"'
+			),
 			'all' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],

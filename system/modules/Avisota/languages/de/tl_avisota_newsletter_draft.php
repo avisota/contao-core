@@ -8,6 +8,7 @@
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['title']                = array('Name', 'Bitte geben Sie einen Namen für die Vorlage ein.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['alias']                = array('Alias', 'Der Alias ist eine eindeutige Referenz, die anstelle der numerischen Id aufgerufen werden kann.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['description']          = array('Beschreibung', 'Geben Sie hier eine Beschreibung für die Vorlage an.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['addFile']              = array('Dateien anhängen', 'Dem Newsletter eine oder mehrere Dateien anhängen.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['files']                = array('Dateianhänge', 'Bitte wählen Sie die anzuhängenden Dateien aus der Dateiübersicht.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['template_html']        = array('HTML E-Mail-Template', 'Hier können Sie das HTML E-Mail-Template auswählen.');

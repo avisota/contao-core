@@ -92,7 +92,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_draft'] = array
 	'palettes' => array
 	(
 		'__selector__'                => array('addFile'),
-		'default'                     => '{newsletter_legend},title,alias;{attachment_legend},addFile;{template_legend:hide},template_html,template_plain',
+		'default'                     => '{newsletter_legend},title,alias,description;{attachment_legend},addFile;{template_legend:hide},template_html,template_plain',
 	),
 
 	// Subpalettes
@@ -112,6 +112,14 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_draft'] = array
 			'flag'                    => 1,
 			'inputType'               => 'text',
 			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50')
+		),
+		'description' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['description'],
+			'exclude'                 => true,
+			'inputType'               => 'textarea',
+			'eval'                    => array('rte'=>'tinyMCE', 'helpwizard'=>true),
+			'explanation'             => 'insertTags'
 		),
 		'alias' => array
 		(

@@ -29,7 +29,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_draft_content'] = array
 			'mode'                    => 4,
 			'fields'                  => array('sorting'),
 			'panelLayout'             => 'filter;search,limit',
-			'headerFields'            => array('title'),
+			'headerFields'            => array('title', 'description'),
 			'child_record_callback'   => array('tl_avisota_newsletter_draft_content', 'addElement')
 		),
 		'global_operations' => array

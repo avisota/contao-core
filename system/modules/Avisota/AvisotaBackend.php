@@ -177,25 +177,6 @@ class AvisotaBackend extends Backend
 	
 	
 	/**
-	 * Create a new Newsletter from draft.
-	 */
-	public function createFromDraft()
-	{
-		$varId = $this->Input->post('id') ? $this->Input->post('id') : $this->Input->get('id');
-		if ($varId)
-		{
-			
-		}
-		else
-		{
-			$objNewsletterDraft = $this->Database->execute("SELECT * FROM tl_avisota_newsletter_draft ORDER BY title");
-		}
-		
-		$objTemplate = new BackendTemplate('be_avisota_create_from_draft');
-	}
-	
-	
-	/**
 	 * Change the form enctype for multipart upload.
 	 * 
 	 * @param string $strContent
