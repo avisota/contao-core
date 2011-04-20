@@ -422,12 +422,12 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 		),
 		'unmodifiable' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['unmodifiable'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['unmodifiable'],
 			'eval'                    => array('doNotShow'=>true)
 		),
 		'undeletable' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['undeletable'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['undeletable'],
 			'eval'                    => array('doNotShow'=>true)
 		)	
 	)
@@ -451,6 +451,151 @@ class tl_avisota_newsletter_content extends Avisota
 	 */
 	public function checkPermission()
 	{
+		switch ($this->Input->get('act'))
+		{
+		case 'cut':
+			if ($this->Input->get('mode') == 2)
+			{
+				$objNewsletter = $this->Database->prepare("SELECT n.* FROM tl_avisota_newsletter n WHERE n.id=?")->execute($this->Input->get('pid'));
+			} 
+			else
+			{
+				$objNewsletter = $this->Database->prepare("SELECT n.* FROM tl_avisota_newsletter n INNER JOIN tl_avisota_newsletter_content c ON c.pid=n.id WHERE c.id=?")->execute($this->Input->get('pid'));
+			}
+			
+			// Invalid ID
+			if ($objNewsletter->numRows < 1)
+			{
+				$this->log('Invalid newsletter ' . ($this->Input->get('mode') == 2 ? 'child ID ' : 'ID ') . $this->Input->get('pid'), 'tl_avisota_newsletter_content checkPermission()', TL_ERROR);
+				$this->redirect('contao/main.php?act=error');
+			}
+			
+			$objContent = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_content WHERE id=?")->execute($this->Input->get('id'));
+			
+			// Invalid ID
+			if ($objContent->numRows < 1)
+			{
+				$this->log('Invalid newsletter content element ID ' . $this->Input->get('id'), 'tl_avisota_newsletter_content checkPermission()', TL_ERROR);
+				$this->redirect('contao/main.php?act=error');
+			}
+			
+			// Invalid ID
+			if (	$objContent->numRows < 1
+				||	($objContent->unmodifiable || $objContent->undeletable) && $objContent->pid!=$objNewsletter->id)
+			{
+				$this->redirect('contao/main.php?act=error');
+			}
+			break;
+			
+		case 'edit':
+		case 'delete':
+		case 'toggle':
+		case 'copy':
+			// Check for edit or delete action
+			$objContent = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_content WHERE id=?")->execute($this->Input->get('id'));
+			
+			// Invalid ID
+			if ($objContent->numRows < 1)
+			{
+				$this->log('Invalid newsletter content element ID ' . $this->Input->get('id'), 'tl_avisota_newsletter_content checkPermission()', TL_ERROR);
+				$this->redirect('contao/main.php?act=error');
+			}
+			
+			if (	($this->Input->get('act') == 'toggle' || $this->Input->get('act') == 'copy') && ($objContent->unmodifiable || $objContent->undeletable)
+				||  $this->Input->get('act') == 'edit' && $objContent->unmodifiable
+				||  $this->Input->get('act') == 'delete' && $objContent->undeletable)
+			{
+				$this->redirect('contao/main.php?act=error');
+			}
+			break;
+			
+		case 'cutAll':
+		case 'copyAll':
+			$session = $this->Session->getData();
+			if (count($session['CLIPBOARD']['tl_avisota_newsletter_content']['id']))
+			{
+				if ($this->Input->get('mode') == 2)
+				{
+					$objNewsletter = $this->Database->prepare("SELECT n.* FROM tl_avisota_newsletter n WHERE n.id=?")->execute($this->Input->get('pid'));
+				} 
+				else
+				{
+					$objNewsletter = $this->Database->prepare("SELECT n.* FROM tl_avisota_newsletter n INNER JOIN tl_avisota_newsletter_content c ON c.pid=n.id WHERE c.id=?")->execute($this->Input->get('pid'));
+				}
+				
+				// Invalid ID
+				if ($objNewsletter->numRows < 1)
+				{
+					$this->log('Invalid newsletter ' . ($this->Input->get('mode') == 2 ? 'child ID ' : 'ID ') . $this->Input->get('pid'), 'tl_avisota_newsletter_content checkPermission()', TL_ERROR);
+					$this->redirect('contao/main.php?act=error');
+				}
+				
+				$objContent = $this->Database->execute("SELECT * FROM tl_avisota_newsletter_content WHERE id IN (" . implode(',', $session['CLIPBOARD']['tl_avisota_newsletter_content']['id']) . ")");
+				
+				// Invalid ID
+				if ($objContent->numRows < 1)
+				{
+					$this->log('Invalid newsletter content element IDs ' . implode(', ', $session['CLIPBOARD']['tl_avisota_newsletter_content']['id']), 'tl_avisota_newsletter_content checkPermission()', TL_ERROR);
+					$this->redirect('contao/main.php?act=error');
+				}
+
+				while ($objContent->next())
+				{
+					if (($this->Input->get('act') == 'copyAll' || $objNewsletter->id != $objContent->pid) && ($objContent->unmodifiable || $objContent->undeletable))
+					{
+						// remove elements 
+						unset($session['CLIPBOARD']['tl_avisota_newsletter_content']['id'][array_search($objContent->id, $session['CLIPBOARD']['tl_avisota_newsletter_content']['id'])]);
+					}
+				}
+				
+				if (!count($session['CLIPBOARD']['tl_avisota_newsletter_content']['id']))
+				{
+					unset($session['CLIPBOARD']['tl_avisota_newsletter_content']);
+					$this->Session->setData($session);
+					$this->redirect('contao/main.php?do=avisota_newsletter&table=tl_avisota_newsletter_content&id=' . $this->Input->get('id'));
+				}
+				else
+				{
+					$this->Session->setData($session);
+				}
+			}
+			break;
+			
+		case 'editAll':
+		case 'deleteAll':
+		case 'overrideAll':
+			$session = $this->Session->getData();
+			if (count($session['CURRENT']['IDS']))
+			{
+				// Check for edit or delete action
+				$objContent = $this->Database->execute("SELECT * FROM tl_avisota_newsletter_content WHERE id IN (" . implode(',', $session['CURRENT']['IDS']) . ")");
+				
+				// Invalid ID
+				if ($objContent->numRows < 1)
+				{
+					$this->log('Invalid newsletter content element IDs ' . implode(', ', $session['CURRENT']['IDS']), 'tl_avisota_newsletter_content checkPermission()', TL_ERROR);
+					$this->redirect('contao/main.php?act=error');
+				}
+
+				while ($objContent->next())
+				{
+					if (	($this->Input->get('act') == 'editAll' || $this->Input->get('act') == 'overrideAll') && $objContent->unmodifiable
+						||  $this->Input->get('act') == 'deleteAll' && $objContent->undeletable)
+					{
+						// remove elements 
+						unset($session['CURRENT']['IDS'][array_search($objContent->id, $session['CURRENT']['IDS'])]);
+					}
+				}
+				
+				$this->Session->setData($session);
+				if (!count($session['CURRENT']['IDS']))
+				{
+					$this->redirect('contao/main.php?do=avisota_newsletter&table=tl_avisota_newsletter_content&id=' . $this->Input->get('id'));
+				}
+			}
+			break;
+		}
+		
 		if ($this->User->isAdmin)
 		{
 			return;
@@ -633,6 +778,8 @@ class tl_avisota_newsletter_content extends Avisota
 
 		return '
 <div class="cte_type ' . $key . '">' .
+	($arrRow['unmodifiable'] ? $this->generateImage('edit_.gif', $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['unmodifiable'][0], 'title="' . specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['unmodifiable'][0]) . '" style="vertical-align: middle;"') . ' ' : '') .
+	($arrRow['undeletable'] ? $this->generateImage('delete_.gif', $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['undeletable'][0], 'title="' . specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['undeletable'][0]) . '" style="vertical-align: middle;"') . ' ' : '') .
 	(isset($GLOBALS['TL_LANG']['NLE'][$arrRow['type']][0]) ? $GLOBALS['TL_LANG']['NLE'][$arrRow['type']][0] : $arrRow['type']) .
 	($arrRow['protected'] ? ' (' . $GLOBALS['TL_LANG']['MSC']['protected'] . ')' : ($arrRow['guests'] ? ' (' . $GLOBALS['TL_LANG']['MSC']['guests'] . ')' : '')) .
 	($this->hasMultipleNewsletterAreas($arrRow) ? sprintf(' <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>', isset($GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$arrRow['area']]) ? $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$arrRow['area']] : $arrRow['area']) : '') .

@@ -40,10 +40,10 @@
 </div>
 
 <form action="contao/main.php" id="tl_avisota_newsletter_preview" target="preview" class="tl_form" method="get">
-<input name="do" value="avisota_newsletter" type="hidden">
-<input name="table" value="tl_avisota_newsletter" type="hidden">
-<input name="key" value="preview" type="hidden">
-<input name="id" value="<?php echo $this->id ?>" type="hidden">
+<input name="do" value="avisota_newsletter" type="hidden" />
+<input name="table" value="tl_avisota_newsletter" type="hidden" />
+<input name="key" value="preview" type="hidden" />
+<input name="id" value="<?php echo $this->id ?>" type="hidden" />
 <div class="tl_formbody_edit preview">
 
 <div class="tl_tbox block">

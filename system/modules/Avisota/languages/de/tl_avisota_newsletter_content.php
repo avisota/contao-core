@@ -61,6 +61,8 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['include_legend']   = 'Incl
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['protected_legend'] = 'Zugriffsschutz';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['expert_legend']    = 'Experten-Einstellungen';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['events_legend']    = 'Events';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['unmodifiable']     = array('Nicht veränderbar', 'Das Element als nicht veränderbar markieren. Das Element kann später im Newsletter nicht mehr verändert werden.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['undeletable']      = array('Nicht löschbar', 'Das Element als nicht löschbar markieren. Das Element kann später nicht aus dem Newsletter gelöscht werden.');
 
 
 /**
