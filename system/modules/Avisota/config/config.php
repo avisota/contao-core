@@ -147,4 +147,13 @@ $GLOBALS['TL_HOOKS']['outputBackendTemplate'][] = array('AvisotaBackend', 'hookO
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('AvisotaInsertTag', 'replaceNewsletterInsertTags');
 $GLOBALS['TL_HOOKS']['getEditorStylesLayout'][] = array('AvisotaEditorStyle', 'getEditorStylesLayout');
 
+
+/**
+ * Hack: Fix ajax load import source tree.
+ */
+if ($_GET['table'] == 'tl_avisota_recipient_import' && ($_GET['isAjax'] || $_GET['isAjax']))
+{
+	unset($_GET['table']);
+}
+
 ?>
