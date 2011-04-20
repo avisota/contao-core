@@ -82,6 +82,12 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_import'] = array
 	)
 );
 
+// fix ajax load
+if ($this->Input->post('isAjax'))
+{
+	$this->Input->setGet('table', '');
+}
+
 class tl_avisota_recipient_import extends Backend
 {
 	/**
