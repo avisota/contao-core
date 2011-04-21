@@ -32,12 +32,30 @@ CREATE TABLE `tl_avisota_recipient` (
   `pid` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
   `email` varchar(255) NOT NULL default '',
+  `salutation` varchar(255) NOT NULL default '',
+  `title` varchar(255) NOT NULL default '',
   `firstname` varchar(255) NOT NULL default '',
   `lastname` varchar(255) NOT NULL default '',
   `gender` varchar(32) NOT NULL default '',
   `confirmed` char(1) NOT NULL default '',
   `token` char(32) NOT NULL default '',
-  `addedOn` varchar(10) NOT NULL default '',
+  `addedOn` int(10) NOT NULL default '0',
+  `addedBy` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table `tl_avisota_recipient_blacklist`
+-- 
+
+CREATE TABLE `tl_avisota_recipient_blacklist` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `pid` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  `email` char(32) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

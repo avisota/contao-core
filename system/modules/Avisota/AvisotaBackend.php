@@ -177,6 +177,15 @@ class AvisotaBackend extends Backend
 	
 	
 	/**
+	 * 
+	 */
+	public function hookAddCustomRegexp($strRegexp, $varValue, Widget $objWidget)
+	{
+		return false;
+	}
+	
+	
+	/**
 	 * Change the form enctype for multipart upload.
 	 * 
 	 * @param string $strContent
