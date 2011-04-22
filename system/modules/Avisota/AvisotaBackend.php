@@ -13,6 +13,47 @@
 class AvisotaBackend extends Backend
 {
 	/**
+	 * Generate array of recipient sources.
+	 * 
+	 * @return array
+	 */
+	public function getRecipients()
+	{
+		$arrRecipients = array();
+		
+		$objSource = $this->Database->execute("
+				SELECT
+					*
+				FROM
+					tl_avisota_recipient_source
+				ORDER BY
+					title");
+		
+		while ($objSource->next())
+		{
+			$strType = $objSource->type;
+			$strClass = $GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE'][$strType];
+			$objClass = new $strClass($objSource->row());
+			$arrLists = $objClass->getLists();
+			if (is_null($arrLists))
+			{
+				$arrRecipients[$objSource->id] = $objSource->title;
+			}
+			else
+			{
+				$arrRecipients[$objSource->title] = array();
+				foreach ($arrLists as $k=>$v)
+				{
+					$arrRecipients[$objSource->title][$objSource->id . ':' . $k] = $v;
+				}
+			}
+		}
+		
+		return $arrRecipients;
+	}
+	
+	
+	/**
 	 * Render a newsletter indicated by request parameters.
 	 */
 	public function renderNewsletter()

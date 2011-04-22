@@ -16,7 +16,11 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 		'ptable'                      => 'tl_avisota_newsletter_category',
 		'ctable'                      => array('tl_avisota_newsletter_content'),
 		'switchToEdit'                => true,
-		'enableVersioning'            => true
+		'enableVersioning'            => true,
+		'onload_callback'             => array
+		(
+			array('tl_avisota_newsletter', 'onload')
+		)
 	),
 
 	// List
@@ -97,7 +101,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 	'palettes' => array
 	(
 		'__selector__'                => array('addFile'),
-		'default'                     => '{newsletter_legend},subject,alias;{recipient_legend},recipients;{attachment_legend},addFile;{template_legend:hide},template_html,template_plain',
+		'default'                     => '{newsletter_legend},subject,alias;{attachment_legend},addFile',
 	),
 
 	// Subpalettes
@@ -130,13 +134,6 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 				array('tl_avisota_newsletter', 'generateAlias')
 			)
 		),
-		'recipients' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipients'],
-			'inputType'               => 'checkbox',
-			'options_callback'        => array('tl_avisota_newsletter', 'getRecipients'),
-			'eval'                    => array('mandatory'=>true, 'multiple'=>true, 'tl_class'=>'clr')
-		),
 		'addFile' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['addFile'],
@@ -151,6 +148,13 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
 			'eval'                    => array('fieldType'=>'checkbox', 'files'=>true, 'filesOnly'=>true, 'mandatory'=>true)
+		),
+		'recipients' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipients'],
+			'inputType'               => 'checkbox',
+			'options_callback'        => array('AvisotaBackend', 'getRecipients'),
+			'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
 		),
 		'template_html' => array
 		(
@@ -192,39 +196,34 @@ class tl_avisota_newsletter extends Backend
 	}
 	
 	
-	public function getRecipients()
+	public function onload(DataContainer $dc)
 	{
-		$arrRecipients = array();
-		
-		$objSource = $this->Database->execute("
-				SELECT
-					*
-				FROM
-					tl_avisota_recipient_source
-				ORDER BY
-					title");
-		
-		while ($objSource->next())
+		$objCategory = $this->Database->prepare("SELECT c.* FROM tl_avisota_newsletter_category c INNER JOIN tl_avisota_newsletter n ON n.pid=c.id WHERE n.id=?")
+			->execute($dc->id);
+		if (!$objCategory->force_recipients)
 		{
-			$strType = $objSource->type;
-			$strClass = $GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE'][$strType];
-			$objClass = new $strClass($objSource->row());
-			$arrLists = $objClass->getLists();
-			if (is_null($arrLists))
+			$GLOBALS['TL_DCA']['tl_avisota_newsletter']['palettes']['default'] .= ';{recipient_legend},recipients';
+			
+			if (!strlen($objCategory->recipients))
 			{
-				$arrRecipients[$objSource->id] = $objSource->title;
-			}
-			else
-			{
-				$arrRecipients[$objSource->title] = array();
-				foreach ($arrLists as $k=>$v)
-				{
-					$arrRecipients[$objSource->title][$objSource->id . ':' . $k] = $v;
-				}
+				$GLOBALS['TL_DCA']['tl_avisota_newsletter']['fields']['recipients']['eval']['mandatory'] = true;
 			}
 		}
-		
-		return $arrRecipients;
+		if (!$objCategory->force_template)
+		{
+			$GLOBALS['TL_DCA']['tl_avisota_newsletter']['palettes']['default'] .= ';{template_legend:hide},template_html,template_plain';
+			
+			if (!$objCategory->template_html)
+			{
+				$GLOBALS['TL_DCA']['tl_avisota_newsletter']['fields']['template_html']['eval']['mandatory'] = true;
+				$GLOBALS['TL_DCA']['tl_avisota_newsletter']['fields']['template_html']['eval']['includeBlankOption'] = false;
+			}
+			if (!$objCategory->template_plain)
+			{
+				$GLOBALS['TL_DCA']['tl_avisota_newsletter']['fields']['template_plain']['eval']['mandatory'] = true;
+				$GLOBALS['TL_DCA']['tl_avisota_newsletter']['fields']['template_plain']['eval']['includeBlankOption'] = false;
+			}
+		}
 	}
 	
 	
