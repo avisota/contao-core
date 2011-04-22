@@ -87,17 +87,24 @@ class AvisotaEmail extends Email
 				preg_match_all('/(background|src)="([^"]+\.(jpe?g|png|gif|bmp|tiff?|swf))"/Ui', $this->strHtml, $arrMatches, PREG_SET_ORDER);
 				$strBase = Environment::getInstance()->base;
 
+				$arrSrcEmbeded = array();
 				// Check for internal images
-				foreach (array_unique($arrMatches) as $url)
+				foreach ($arrMatches as $url)
 				{
+					// skip replaced urls
+					if (in_array($url[2], $arrSrcEmbeded))
+					{
+						continue;
+					}
+					$arrSrcEmbeded[] = $url[2];
+
 					// Try to remove the base URL
 					$src = str_replace($strBase, '', $url[2]);
-
 					// Embed the image if the URL is now relative
 					if (!preg_match('@^https?://@', $src) && file_exists($this->strImageDir . $src))
 					{
 						$cid = $this->objMessage->embed(Swift_EmbeddedFile::fromPath($this->strImageDir . $src));
-						$this->strHtml = str_replace($url[1] . '="' . $url[2] . '"', $url[1] . '="' . $cid . '"', $this->strHtml);
+						$this->strHtml = preg_replace('#(background|src)="' . $url[2] . '"#', '$1="' . $cid . '"', $this->strHtml);
 					}
 				}
 			}
