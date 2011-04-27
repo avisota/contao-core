@@ -65,7 +65,7 @@ $GLOBALS['BE_MOD'] = array_merge(
 		(
 			'avisota_recipients' => array
 			(
-				'tables'     => array('tl_avisota_recipient_list', 'tl_avisota_recipient', 'tl_avisota_recipient_import'),
+				'tables'     => array('tl_avisota_recipient_list', 'tl_avisota_recipient', 'tl_avisota_recipient_import', 'tl_avisota_recipient_remove'),
 				'icon'       => 'system/modules/Avisota/html/recipients.png',
 				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 			),
@@ -151,7 +151,7 @@ $GLOBALS['TL_HOOKS']['getEditorStylesLayout'][] = array('AvisotaEditorStyle', 'g
 /**
  * Hack: Fix ajax load import source tree.
  */
-if ($_GET['table'] == 'tl_avisota_recipient_import' && ($_GET['isAjax'] || $_POST['isAjax']))
+if (($_GET['table'] == 'tl_avisota_recipient_import' || $_GET['table'] == 'tl_avisota_recipient_remove') && ($_GET['isAjax'] || $_POST['isAjax']))
 {
 	unset($_GET['table']);
 }

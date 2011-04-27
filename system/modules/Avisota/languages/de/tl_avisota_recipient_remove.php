@@ -34,21 +34,23 @@
 
 
 /**
- * Class AvisotaBackend
- *
- * @copyright  InfinitySoft 2010,2011
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Avisota
+ * Fields
  */
-class AvisotaBackend extends System
-{
-	public function hookOutputBackendTemplate($strContent, $strTemplate)
-	{
-		if ($strTemplate == 'be_main' && ($this->Input->get('table') == 'tl_avisota_recipient_import' || $this->Input->get('table') == 'tl_avisota_recipient_remove'))
-		{
-			$strContent = str_replace('<form', '<form enctype="multipart/form-data"', $strContent);
-		}
-		return $strContent;
-	}
-}
+$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['source'] = array('Quelle', 'Wählen Sie hier die Datei aus, welche die Empfänger enthält die Sie löschen möchten.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['upload'] = array('Upload', 'Laden Sie eine Datei hoch, welche die Empfänger enthält die Sie löschen möchten.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['emails'] = array('E-Mails', 'Tragen Sie hier die Empfänger ein die Sie löschen möchten.');
+
+
+/**
+ * Reference
+ */
+$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['confirm'] = '%s Empfänger wurden gelöscht.';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['edit']    = 'Empfänger löschen';
+
+
+/**
+ * Legends
+ */
+$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['remove_legend']    = 'Löschen';
+
 ?>

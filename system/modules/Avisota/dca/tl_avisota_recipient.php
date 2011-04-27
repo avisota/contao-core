@@ -66,9 +66,16 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['import'],
 				'href'                => 'table=tl_avisota_recipient_import',
-				'class'               => 'header_css_import',
+				'class'               => 'header_recipient_import',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
-			),		
+			),
+			'remove' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['remove'],
+				'href'                => 'table=tl_avisota_recipient_remove',
+				'class'               => 'header_recipient_remove',
+				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+			),
 			'all' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],

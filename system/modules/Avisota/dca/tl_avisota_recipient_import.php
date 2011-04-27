@@ -153,18 +153,21 @@ class tl_avisota_recipient_import extends Backend
 		$intTotal = 0;
 		$intInvalid = 0;
 		
-		foreach ($arrSource as $strCsvFile)
+		if (is_array($arrSource))
 		{
-			$objFile = new File($strCsvFile);
-			
-			if ($objFile->extension != 'csv')
+			foreach ($arrSource as $strCsvFile)
 			{
-				$_SESSION['TL_ERROR'][] = sprintf($GLOBALS['TL_LANG']['ERR']['filetype'], $objFile->extension);
-				continue;
+				$objFile = new File($strCsvFile);
+				
+				if ($objFile->extension != 'csv')
+				{
+					$_SESSION['TL_ERROR'][] = sprintf($GLOBALS['TL_LANG']['ERR']['filetype'], $objFile->extension);
+					continue;
+				}
+				
+				$this->importRecipients($objFile->handle, $strDelimiter, $strEnclosure, $time, $intTotal, $intInvalid);
+				$objFile->close();
 			}
-			
-			$this->importRecipients($objFile->handle, $strDelimiter, $strEnclosure, $time, $intTotal, $intInvalid);
-			$objFile->close();
 		}
 		
 		if ($arrUpload)
