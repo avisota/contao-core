@@ -30,19 +30,22 @@ class IntegratedAvisotaRecipientSource extends Controller implements AvisotaReci
 	 */
 	public function getLists()
 	{
-		$arrLists = array();
-		$objList = $this->Database->execute("
-				SELECT
-					*
-				FROM
-					tl_avisota_recipient_list
-				ORDER BY
-					title");
-		while ($objList->next())
+		if (is_string($this->arrConfig['lists']))
 		{
-			$arrLists[$objList->id] = $objList->title;
+			$this->arrConfig['lists'] = deserialize($this->arrConfig['lists'], true);
 		}
-		return $arrLists;
+		if (count($this->arrConfig['lists']))
+		{
+			$strIds = implode(',', $this->arrConfig['lists']);
+			$arrLists = array();
+			$objList = $this->Database->execute("SELECT * FROM tl_avisota_recipient_list WHERE id IN ($strIds) ORDER BY title");
+			while ($objList->next())
+			{
+				$arrLists[$objList->id] = $objList->title;
+			}
+			return $arrLists;
+		}
+		return array();
 	}
 	
 	

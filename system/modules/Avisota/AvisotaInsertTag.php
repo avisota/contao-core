@@ -17,7 +17,7 @@ class AvisotaInsertTag extends Controller
 	
 	protected static $objRecipient;
 	
-	public static function setCurrent(AvisotaNewsletter $objNewsletter, AvisotaRecipient $objRecipient)
+	public static function setCurrent(Newsletter $objNewsletter, AvisotaRecipient $objRecipient)
 	{
 		self::$objNewsletter = $objNewsletter;
 		self::$objRecipient = $objRecipient;

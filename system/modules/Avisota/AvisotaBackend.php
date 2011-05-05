@@ -10,7 +10,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class AvisotaBackend extends Backend
+class AvisotaBackend extends Controller
 {
 	/**
 	 * Generate array of recipient sources.
@@ -111,7 +111,7 @@ class AvisotaBackend extends Backend
 		// find the newsletter
 		$varId = $this->Input->get('id');
 		
-		$objNewsletter = new AvisotaNewsletter($varId, $blnDraft);
+		$objNewsletter = new Newsletter($varId, $blnDraft);
 		
 		if (!$objNewsletter)
 		{
@@ -177,7 +177,7 @@ class AvisotaBackend extends Backend
 		// find the newsletter
 		$varId = $this->Input->get('id');
 		
-		$objNewsletter = new AvisotaNewsletter($varId, true);
+		$objNewsletter = new Newsletter($varId, true);
 		
 		if (!$objNewsletter)
 		{

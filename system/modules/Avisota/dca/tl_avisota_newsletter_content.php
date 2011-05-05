@@ -774,6 +774,11 @@ class tl_avisota_newsletter_content extends Avisota
 	 */
 	public function addElement($arrRow)
 	{
+		if (!$this->newsletter)
+		{
+			$this->newsletter = new Newsletter($arrRow['pid'], AvisotaRecipient::dummy());
+		}
+		
 		$key = $arrRow['invisible'] ? 'unpublished' : 'published';
 
 		return '
@@ -785,7 +790,7 @@ class tl_avisota_newsletter_content extends Avisota
 	($this->hasMultipleNewsletterAreas($arrRow) ? sprintf(' <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>', isset($GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$arrRow['area']]) ? $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$arrRow['area']] : $arrRow['area']) : '') .
 '</div>
 <div class="limit_height' . (!$GLOBALS['TL_CONFIG']['doNotCollapse'] ? ' h64' : '') . ' block">
-' . $this->getNewsletterElement($arrRow['id']) . '
+' . $this->newsletter->getNewsletterElement($arrRow['id'], NL_HTML) . '
 </div>' . "\n";
 	}
 	

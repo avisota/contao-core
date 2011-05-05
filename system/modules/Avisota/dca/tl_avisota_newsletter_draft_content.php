@@ -627,12 +627,23 @@ class tl_avisota_newsletter_draft_content extends Avisota
 	 */
 	public function addElement($arrRow)
 	{
-		if (!$this->newsletter)
-		{
-			$this->newsletter = new AvisotaNewsletter($arrRow['pid'], true);
-		}
-		
 		$key = $arrRow['invisible'] ? 'unpublished' : 'published';
+		
+		$objElement = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_draft_content WHERE id=?")
+			->execute($arrRow['id']);
+		$objElement->next();
+		$strClass = $this->findNewsletterElement($objElement->type);
+
+		// Return if the class does not exist
+		if (!$this->classFileExists($strClass))
+		{
+			$this->log('Newsletter content element class "'.$strClass.'" (newsletter content element "'.$objElement->type.'") does not exist', 'Newsletter getNewsletterElement()', TL_ERROR);
+			return '';
+		}
+
+		$objElement->typePrefix = 'nle_';
+		$objElement = new $strClass($objElement);
+		$strBuffer = $objElement->generateHTML($this->objRecipient);
 
 		return '
 <div class="cte_type ' . $key . '">' .
@@ -643,11 +654,34 @@ class tl_avisota_newsletter_draft_content extends Avisota
 	sprintf(' <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>', isset($GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['area'][$arrRow['area']]) ? $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['area'][$arrRow['area']] : $arrRow['area']) .
 '</div>
 <div class="limit_height' . (!$GLOBALS['TL_CONFIG']['doNotCollapse'] ? ' h64' : '') . ' block">
-' . $this->newsletter->getNewsletterElement(AvisotaRecipient::dummy(), $arrRow['id']) . '
+' . $strBuffer . '
 </div>' . "\n";
 	}
 	
 
+	/**
+	 * Find a newsletter content element in the TL_NLE array and return its value
+	 * 
+	 * @param string $strName
+	 * @return string
+	 */
+	protected function findNewsletterElement($strName)
+	{
+		foreach ($GLOBALS['TL_NLE'] as $v)
+		{
+			foreach ($v as $kk=>$vv)
+			{
+				if ($kk == $strName)
+				{
+					return $vv;
+				}
+			}
+		}
+
+		return '';
+	}
+	
+	
 	/**
 	 * Return the "toggle visibility" button
 	 * @param array

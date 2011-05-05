@@ -82,9 +82,9 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 	'palettes' => array
 	(
 		'__selector__'                => array('type'),
-		'default'                     => '{recipient_source_legend},type,title,disable',
-		'integrated'                  => '{recipient_source_legend},type,title,detail_source,disable',
-		'csv_file'                    => '{recipient_source_legend},type,title,csv_file_src,csv_column_assignment,disable'
+		'default'                     => '{source_legend},type,title,disable',
+		'integrated'                  => '{source_legend},type,title;{integrated_legend},lists,detail_source;{expert_legend},disable',
+		'csv_file'                    => '{source_legend},type,title;{csv_file_legend},csv_file_src,csv_column_assignment;{expert_legend},disable'
 	),
 
 	// Fields
@@ -103,6 +103,13 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['title'],
 			'inputType'               => 'text',
 			'eval'                    => array('mandatory'=>true, 'maxlength'=>255)
+		),
+		'lists' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['lists'],
+			'inputType'               => 'checkbox',
+			'foreignKey'              => 'tl_avisota_recipient_list.title',
+			'eval'                    => array('mandatory'=>true, 'multiple'=>true)
 		),
 		'detail_source' => array
 		(

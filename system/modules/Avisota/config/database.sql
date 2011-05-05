@@ -72,6 +72,7 @@ CREATE TABLE `tl_avisota_recipient_source` (
   `type` varchar(255) NOT NULL default '',
   `title` varchar(255) NOT NULL default '',
   `detail_source` varchar(255) NOT NULL default '',
+  `lists` blob NULL,
   `csv_file_src` blob NULL,
   `csv_column_assignment` blob NULL,
   `disable` char(1) NOT NULL default '',
