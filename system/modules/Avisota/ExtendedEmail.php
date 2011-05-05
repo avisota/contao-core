@@ -34,14 +34,14 @@
 
 
 /**
- * Class AvisotaEmail
+ * Class ExtendedEmail
  *
  * Special variant of Email with some quick fixes.
  * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class AvisotaEmail extends Email
+class ExtendedEmail extends Email
 {
 	
 	/**
