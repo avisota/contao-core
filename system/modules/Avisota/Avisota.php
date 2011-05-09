@@ -380,7 +380,7 @@ class Avisota extends BackendModule
 									(pid, tstamp, token, email, source)
 								VALUES
 									(?, ?, ?, ?, ?)")
-						   ->execute($objNewsletter->id, $time, $strToken, $objMember->email, 'mgroup:' . $arrIntersect[0]);
+						   ->execute($objNewsletter->id, $time, $strToken, $objMember->email, 'mgroup:' . array_shift($arrIntersect));
 					}
 				}
 			}

@@ -275,7 +275,7 @@ class AvisotaBackend extends Controller
 	 */
 	public function hookOutputBackendTemplate($strContent, $strTemplate)
 	{
-		if ($strTemplate == 'be_main' && $this->Input->get('table') == 'tl_avisota_recipient_import')
+		if ($strTemplate == 'be_main' && ($this->Input->get('table') == 'tl_avisota_recipient_import' || $this->Input->get('table') == 'tl_avisota_recipient_remove'))
 		{
 			$strContent = str_replace('<form', '<form enctype="multipart/form-data"', $strContent);
 		}

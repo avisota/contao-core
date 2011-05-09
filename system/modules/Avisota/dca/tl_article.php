@@ -2,6 +2,7 @@
 
 #copyright
 
+
 class tl_article_avisota extends tl_article
 {
 	public function alterDataContainer($strName)
