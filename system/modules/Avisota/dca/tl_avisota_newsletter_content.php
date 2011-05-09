@@ -34,11 +34,11 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 		),
 		'global_operations' => array
 		(
-			'view' => array
+			'preview' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view'],
-				'href'                => 'table=tl_avisota_newsletter&amp;key=send',
-				'class'               => 'header_send'
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview'],
+				'href'                => 'table=tl_avisota_newsletter&amp;key=preview',
+				'class'               => 'header_preview'
 			),
 			'all' => array
 			(
@@ -774,12 +774,23 @@ class tl_avisota_newsletter_content extends Avisota
 	 */
 	public function addElement($arrRow)
 	{
-		if (!$this->newsletter)
-		{
-			$this->newsletter = new Newsletter($arrRow['pid'], AvisotaRecipient::dummy());
-		}
-		
 		$key = $arrRow['invisible'] ? 'unpublished' : 'published';
+		
+		$objElement = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_content WHERE id=?")
+			->execute($arrRow['id']);
+		$objElement->next();
+		$strClass = $this->findNewsletterElement($objElement->type);
+
+		// Return if the class does not exist
+		if (!$this->classFileExists($strClass))
+		{
+			$this->log('Newsletter content element class "'.$strClass.'" (newsletter content element "'.$objElement->type.'") does not exist', 'Newsletter getNewsletterElement()', TL_ERROR);
+			return '';
+		}
+
+		$objElement->typePrefix = 'nle_';
+		$objElement = new $strClass($objElement->row());
+		$strBuffer = $objElement->generateHTML($this->objRecipient);
 
 		return '
 <div class="cte_type ' . $key . '">' .
@@ -790,7 +801,7 @@ class tl_avisota_newsletter_content extends Avisota
 	($this->hasMultipleNewsletterAreas($arrRow) ? sprintf(' <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>', isset($GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$arrRow['area']]) ? $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$arrRow['area']] : $arrRow['area']) : '') .
 '</div>
 <div class="limit_height' . (!$GLOBALS['TL_CONFIG']['doNotCollapse'] ? ' h64' : '') . ' block">
-' . $this->newsletter->getNewsletterElement($arrRow['id'], NL_HTML) . '
+' . $strBuffer . '
 </div>' . "\n";
 	}
 	

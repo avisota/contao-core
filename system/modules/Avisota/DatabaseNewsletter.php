@@ -108,7 +108,7 @@ class DatabaseNewsletter extends Newsletter
 	{
 		if ($this->arrAreas == null)
 		{
-			$this->arrAreas = array('body'=>array());
+			$this->arrAreas = array('body');
 			foreach (array_filter(trimsplit(',', $this->objCategory->areas)) as $strArea)
 			{
 				$this->arrAreas[] = $strArea;

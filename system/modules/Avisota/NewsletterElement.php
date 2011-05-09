@@ -44,15 +44,15 @@ abstract class NewsletterElement extends Frontend
 	 * @param object
 	 * @return string
 	 */
-	public function __construct(Database_Result $objElement)
+	public function __construct($arrData)
 	{
 		parent::__construct();
 
-		$this->arrData = $objElement->row();
-		$this->space = deserialize($objElement->space);
-		$this->cssID = deserialize($objElement->cssID, true);
+		$this->arrData = $arrData;
+		$this->space = deserialize($arrData['space']);
+		$this->cssID = deserialize($arrData['cssID'], true);
 
-		$arrHeadline = deserialize($objElement->headline);
+		$arrHeadline = deserialize($arrData['headline']);
 		$this->headline = is_array($arrHeadline) ? $arrHeadline['value'] : $arrHeadline;
 		$this->hl = is_array($arrHeadline) ? $arrHeadline['unit'] : 'h1';
 	}

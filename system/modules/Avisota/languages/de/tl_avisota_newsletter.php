@@ -29,7 +29,7 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_legend']    = 'Template-E
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['headline']           = 'Newsletter ansehen und versenden';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['from']               = 'Absender';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['live']               = 'Vorschau aktualisieren';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview']            = 'Testsendung';
+#$GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview']            = 'Testsendung';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendConfirm']        = 'Soll der Newsletter wirklich verschickt werden?';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe']        = 'vom Newsletter abmelden';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation']         = 'Sehr geehrte/-r';
@@ -61,6 +61,7 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['copy']              = array('Newsl
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['delete']            = array('Newsletter löschen', 'Newsletter ID %s löschen');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['edit']              = array('Newsletter bearbeiten', 'Newsletter ID %s bearbeiten');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader']        = array('Newslettereinstellungen bearbeiten', 'Einstellungen des Newsletter ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview']           = array('Newsletter ansehen', 'Den Newsletter ID %s ansehen');
 
 
 /**

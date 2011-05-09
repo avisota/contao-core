@@ -5,6 +5,11 @@
 	padding: 2px 0 3px 20px;
 }
 
+.header_preview {
+	background: url("preview.png") no-repeat scroll left center transparent;
+	padding: 2px 0 3px 20px;
+}
+
 table.outbox {
 	border-collapse: collapse;
 }

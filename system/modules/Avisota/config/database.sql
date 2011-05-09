@@ -68,6 +68,7 @@ CREATE TABLE `tl_avisota_recipient_blacklist` (
 
 CREATE TABLE `tl_avisota_recipient_source` (
   `id` int(10) unsigned NOT NULL auto_increment,
+  `sorting` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
   `type` varchar(255) NOT NULL default '',
   `title` varchar(255) NOT NULL default '',

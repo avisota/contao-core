@@ -34,6 +34,12 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_draft_content'] = array
 		),
 		'global_operations' => array
 		(
+			'preview' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['preview'],
+				'href'                => 'table=&amp;key=preview',
+				'class'               => 'header_preview'
+			),
 			'all' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
@@ -642,7 +648,7 @@ class tl_avisota_newsletter_draft_content extends Avisota
 		}
 
 		$objElement->typePrefix = 'nle_';
-		$objElement = new $strClass($objElement);
+		$objElement = new $strClass($objElement->row());
 		$strBuffer = $objElement->generateHTML($this->objRecipient);
 
 		return '

@@ -91,5 +91,6 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['pastenew']    = arra
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['toggle']      = array('Sichtbarkeit ändern', 'Die Sichtbarkeit des Inhaltselements ID %s ändern');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['editalias']   = array('Quellelement bearbeiten', 'Das Quellelement ID %s bearbeiten');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['editarticle'] = array('Artikel bearbeiten', 'Artikel ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['preview']     = array('Vorlage ansehen', 'Die Vorlage ansehen');
 
 ?>

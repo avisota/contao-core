@@ -13,7 +13,8 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 	'config' => array
 	(
 		'dataContainer'               => 'Table',
-		'enableVersioning'            => true
+		'enableVersioning'            => true,
+		'onsubmit_callback'           => array(array('tl_avisota_recipient_source', 'onsubmit_callback'))
 	),
 
 	// List
@@ -21,9 +22,11 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 	(
 		'sorting' => array
 		(
-			'mode'                    => 0,
+			'mode'                    => 1,
 			'flag'                    => 11,
-			'fields'                  => array('title')
+			'fields'                  => array('sorting'),
+			'disableGrouping'         => true,
+			'root'                    => 0
 		),
 		'label' => array
 		(
@@ -48,13 +51,6 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 				'href'                => 'act=edit',
 				'icon'                => 'edit.gif'
 			),
-			'copy' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['copy'],
-				'href'                => 'act=paste&amp;mode=copy',
-				'icon'                => 'copy.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"'
-			),
 			'delete' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['delete'],
@@ -74,6 +70,10 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['show'],
 				'href'                => 'act=show',
 				'icon'                => 'show.gif'
+			),
+			'move' => array
+			(
+				'button_callback'     => array('tl_avisota_recipient_source', 'move_button_callback')
 			)
 		),
 	),
@@ -82,9 +82,9 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 	'palettes' => array
 	(
 		'__selector__'                => array('type'),
-		'default'                     => '{source_legend},type,title,disable',
-		'integrated'                  => '{source_legend},type,title;{integrated_legend},lists,detail_source;{expert_legend},disable',
-		'csv_file'                    => '{source_legend},type,title;{csv_file_legend},csv_file_src,csv_column_assignment;{expert_legend},disable'
+		'default'                     => '{source_legend},type',
+		'integrated'                  => '{source_legend},title;{integrated_legend},lists,detail_source;{expert_legend},disable',
+		'csv_file'                    => '{source_legend},title;{csv_file_legend},csv_file_src,csv_column_assignment;{expert_legend},disable'
 	),
 
 	// Fields
@@ -96,7 +96,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 			'inputType'               => 'select',
 			'options'                 => array_keys($GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source'],
-			'eval'                    => array('mandatory'=>true, 'submitOnChange'=>true)
+			'eval'                    => array('mandatory'=>true, 'submitOnChange'=>true, 'includeBlankOption'=>true)
 		),
 		'title' => array
 		(
@@ -152,6 +152,14 @@ class tl_avisota_recipient_source extends Backend
 	}
 	
 	
+	public function onsubmit_callback(DataContainer $dc)
+	{
+		$objSource = $this->Database->execute("SELECT MAX(sorting) as sorting FROM tl_avisota_recipient_source");
+		$this->Database->prepare("UPDATE tl_avisota_recipient_source SET sorting=? WHERE id=?")
+			->execute($objSource->next() && $objSource->sorting ? $objSource->sorting * 2 : 128, $dc->id);
+	}
+	
+	
 	/**
 	 * Check permissions to edit table tl_avisota_recipient_source
 	 */
@@ -190,7 +198,7 @@ class tl_avisota_recipient_source extends Backend
 			return '';
 		}
 		
-		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['confirmed']?'':'1');
+		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['disable']?'':'1');
 
 		if ($row['disable'])
 		{
@@ -237,6 +245,34 @@ class tl_avisota_recipient_source extends Backend
 					   ->execute($intId);
 
 		$this->createNewVersion('tl_avisota_recipient_source', $intId);
+	}
+
+
+	public function move_button_callback($arrRow, $href, $label, $title, $icon, $attributes, $strTable, $arrRootIds, $arrChildRecordIds, $blnCircularReference, $strPrevious, $strNext)
+	{
+		$arrDirections = array('up', 'down');
+		$href = '&amp;act=move';
+		$return = '';
+		
+		foreach ($arrDirections as $dir)
+		{
+			$label = strlen($GLOBALS['TL_LANG'][$strTable][$dir][0]) ? $GLOBALS['TL_LANG'][$strTable][$dir][0] : $dir;
+			$title = sprintf(strlen($GLOBALS['TL_LANG'][$strTable][$dir][1]) ? $GLOBALS['TL_LANG'][$strTable][$dir][1] : $dir, $arrRow['id']);
+			
+			$objSource = $this->Database->prepare("SELECT * FROM tl_avisota_recipient_source WHERE " . ($dir == 'up' ? "sorting<?" : "sorting>?") . " ORDER BY sorting " . ($dir == 'up' ? "DESC" : "ASC"))
+				->limit(1)
+				->execute($arrRow['sorting']);
+			if ($objSource->next())
+			{
+				$return .= ' <a href="'.$this->addToUrl($href.'&amp;id='.$arrRow['id']).'&amp;sid='.intval($objSource->id).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($dir.'.gif', $label).'</a> ';
+			}
+			else
+			{
+				$return .= ' '.$this->generateImage('system/modules/Avisota/html/'.$dir.'_.gif', $label);
+			}
+		}
+
+		return trim($return);
 	}
 }
 

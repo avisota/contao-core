@@ -21,9 +21,19 @@ class StoredNewsletter extends Newsletter
 	protected $arrContent = null;
 	
 	
+	/**
+	 * The html template.
+	 * 
+	 * @var string
+	 */
 	protected $strTemplateHtml;
 	
 	
+	/**
+	 * The plain template.
+	 * 
+	 * @var string
+	 */
 	protected $strTemplatePlain;
 	
 	

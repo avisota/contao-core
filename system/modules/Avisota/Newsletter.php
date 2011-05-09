@@ -11,7 +11,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-abstract class Newsletter extends System
+abstract class Newsletter extends Controller
 {
 	/**
 	 * The data.
@@ -51,10 +51,13 @@ abstract class Newsletter extends System
 			case 'recipient':
 				return $this->objRecipient;
 			
+			case 'data':
+				return $this->arrData;
+				
 			default:
-				if ($this->objData[$k])
+				if ($this->arrData[$k])
 				{
-					return $this->objData[$k];
+					return $this->arrData[$k];
 				}
 		}
 		return '';
@@ -158,7 +161,7 @@ abstract class Newsletter extends System
 	{
 		$objTemplate = new FrontendTemplate($strTemplate);
 		$objTemplate->setData($this->objData);
-		$this->generateContent($strMode, $objTemplate);
+		$this->generateContent($objTemplate, $strMode);
 		return $objTemplate;
 	}
 	
@@ -186,7 +189,7 @@ abstract class Newsletter extends System
 	 *     The template object.
 	 * @return void;
 	 */
-	protected function generateContent($strMode, $objTemplate)
+	protected function generateContent($objTemplate, $strMode)
 	{
 		foreach ($this->getContentAreas() as $strArea)
 		{
@@ -198,7 +201,7 @@ abstract class Newsletter extends System
 				$strContent .= $this->generateNewsletterElement($objContent, $strMode);
 			}
 			
-			$objTemplate->$strArea = $this->replaceInsertTags($strContent);
+			$objTemplate->$strArea = $strContent;
 		}
 	}
 	
@@ -292,8 +295,8 @@ abstract class Newsletter extends System
 		}
 
 		$objElement->typePrefix = 'nle_';
-		$objElement = new $strClass($objElement);
-		switch ($mode)
+		$objElement = new $strClass((array)$objElement);
+		switch ($strMode)
 		{
 		case NL_HTML:
 			$strBuffer = $objElement->generateHTML($this->objRecipient);

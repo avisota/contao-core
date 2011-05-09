@@ -15,7 +15,9 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 		'dataContainer'               => 'Table',
 		'ptable'                      => 'tl_avisota_recipient_list',
 		'switchToEdit'                => true,
-		'enableVersioning'            => true
+		'enableVersioning'            => true,
+		'onsubmit_callback'           => array(array('tl_avisota_recipient', 'onsubmit_callback')),
+		'ondelete_callback'           => array(array('tl_avisota_recipient', 'ondelete_callback'))
 	),
 
 	// List
@@ -67,7 +69,14 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+				'attributes'          => 'class="contextmenu" onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+			),
+			'delete_no_blacklist' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['delete_no_blacklist'],
+				'href'                => 'act=delete&amp;blacklist=false',
+				'icon'                => 'delete.gif',
+				'attributes'          => 'class="edit-header" onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 			),
 			'toggle' => array
 			(
@@ -197,6 +206,24 @@ class tl_avisota_recipient extends Backend
 	{
 		parent::__construct();
 		$this->import('BackendUser', 'User');
+	}
+	
+	
+	public function onsubmit_callback($dc)
+	{
+		$this->Database->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid=? AND email=?")
+				->execute($dc->activeRecord->pid, md5($dc->activeRecord->email));
+	}
+	
+	
+	public function ondelete_callback($dc)
+	{
+		if ($this->Input->get('blacklist') !== 'false')
+		{
+			$this->Database->prepare("INSERT INTO tl_avisota_recipient_blacklist %s")
+				->set(array('pid'=>$dc->activeRecord->pid, 'tstamp'=>time(), 'email'=>md5($dc->activeRecord->email)))
+				->execute();
+		}
 	}
 	
 	

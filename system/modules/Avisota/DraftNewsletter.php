@@ -4,22 +4,40 @@
 
 
 /**
- * Class Newsletter
+ * Class DraftNewsletter
  *
  * Parent class for newsletter content elements.
  * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class NewsletterDraft extends Newsletter
+class DraftNewsletter extends Newsletter
 {
+	
+	
+	/**
+	 * The html template.
+	 * 
+	 * @var string
+	 */
+	protected $strTemplateHtml;
+	
+	
+	/**
+	 * The plain template.
+	 * 
+	 * @var string
+	 */
+	protected $strTemplatePlain;
+	
+	
 	/**
 	 * Create a new newsletter draft.
 	 * 
 	 * @param int $varId
 	 * @param AvisotaRecipient $objRecipient
 	 */
-	public function __construct($varId, AvisotaRecipient $objRecipient)
+	public function __construct($varId, AvisotaRecipient $objRecipient, $strTemplateHtml, $strTemplatePlain)
 	{
 		$this->import('Config');
 		$this->import('Database');
@@ -38,11 +56,31 @@ class NewsletterDraft extends Newsletter
 			return false;
 		}
 		
-		AbstractNewsletter::__construct((object)$objNewsletter->row());
-		$this->objCategory = null;
-		$this->objRecipient = $objRecipient;
+		Newsletter::__construct($objNewsletter->row(), $objRecipient);
+		$this->strTemplateHtml = $strTemplateHtml;
+		$this->strTemplatePlain = $strTemplatePlain;
 			
 		$this->loadLanguageFile('tl_avisota_newsletter');
+	}
+	
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see Newsletter::getContentHtmlTemplate()
+	 */
+	protected function getContentHtmlTemplate()
+	{
+		return $this->strTemplateHtml;
+	}
+	
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see Newsletter::getContentPlainTemplate()
+	 */
+	protected function getContentPlainTemplate()
+	{
+		return $this->strTemplatePlain;
 	}
 	
 
@@ -54,7 +92,7 @@ class NewsletterDraft extends Newsletter
 	{
 		if ($this->arrAreas == null)
 		{
-			$this->arrAreas = array('body'=>array());
+			$this->arrAreas = array('body');
 			
 			$objCategory = $this->Database->execute("SELECT * FROM tl_avisota_newsletter_category");
 			while ($objCategory->next())
@@ -84,6 +122,7 @@ class NewsletterDraft extends Newsletter
 		}
 		if ($this->arrContent == null)
 		{
+			$this->arrContent = array();
 			$strSet = "'" . implode("','", $this->arrAreas) . "'";
 			$objContent = $this->Database->prepare("
 					SELECT
@@ -96,10 +135,10 @@ class NewsletterDraft extends Newsletter
 						AND area IN ($strSet)
 					ORDER BY
 						sorting")
-				->execute($this->objNewsletter->id);
+				->execute($this->arrData['id']);
 			while ($objContent->next())
 			{
-				$this->arrContent[$objContent->area] = (object)$objContent->row();
+				$this->arrContent[$objContent->area][] = (object)$objContent->row();
 			}
 		}
 		

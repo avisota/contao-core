@@ -44,8 +44,10 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['missing_email_column']      
  */
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['new']         = array('Neue Abonnentenquelle', 'Eine neue Abonnentenquelle erstellen');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['show']        = array('Abonnentenquelledetails', 'Details der Abonnentenquelle ID %s anzeigen');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['copy']        = array('Abonnentenquelle duplizieren', 'Abonnentenquelle ID %s duplizieren');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['toggle']      = array('Abonnentenquelle aktivieren/deaktiveren', 'Abonnentenquelle ID %s aktivieren/deaktiveren');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['delete']      = array('Abonnentenquelle löschen', 'Abonnentenquelle ID %s löschen');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['edit']        = array('Abonnentenquelle bearbeiten', 'Abonnentenquelle ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['up']          = array('Priorität erhöhen', 'Priorität der Abonnentenquelle ID %s erhöhen');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['down']        = array('Priorität verringern', 'Priorität der Abonnentenquelle ID %s verringern');
 
 ?>
