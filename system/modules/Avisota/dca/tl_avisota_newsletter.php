@@ -29,8 +29,8 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 		'sorting' => array
 		(
 			'mode'                    => 4,
-			'fields'                  => array('subject'),
-			'panelLayout'             => 'search,limit',
+			'fields'                  => array('tstamp'),
+			'panelLayout'             => 'filter;sort,search,limit',
 			'headerFields'            => array('title', 'jumpTo', 'unsubscribePage', 'tstamp', 'useSMTP', 'senderName', 'sender'),
 			'child_record_callback'   => array('tl_avisota_newsletter', 'addNewsletter'),
 			'child_record_class'      => 'no_padding'
@@ -113,11 +113,19 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 	// Fields
 	'fields' => array
 	(
+		'tstamp' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['tstamp'],
+			'sorting'                 => true,
+			'filter'                  => true,
+			'flag'                    => 8
+		),
 		'subject' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['subject'],
 			'exclude'                 => true,
 			'search'                  => true,
+			'sorting'                 => true,
 			'flag'                    => 1,
 			'inputType'               => 'text',
 			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50')
@@ -126,7 +134,6 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['alias'],
 			'exclude'                 => true,
-			'search'                  => true,
 			'inputType'               => 'text',
 			'eval'                    => array('rgxp'=>'alnum', 'unique'=>true, 'spaceToUnderscore'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
 			'save_callback' => array
@@ -171,14 +178,6 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'inputType'               => 'select',
 			'options'                 => $this->getTemplateGroup('mail_plain_'),
 			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'w50')
-		),
-		'sendOn' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['sendOn'],
-			'filter'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 8,
-			'eval'                    => array('rgxp'=>'datim', 'doNotCopy'=>true, 'doNotShow'=>true)
 		)
 	)
 );
@@ -234,16 +233,9 @@ class tl_avisota_newsletter extends Backend
 	 */
 	public function addNewsletter($arrRow)
 	{
-		$icon = $arrRow['sendOn'] ? 'visible' : 'invisible';
-
 		$label = $arrRow['subject'];
 		
-		if ($row['sendOn'])
-		{
-			$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(' . sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['sended'], $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $row['sendOn'])) . ')</span>';
-		}
-		
-		return sprintf('<div class="list_icon" style="background-image:url(\'system/themes/%s/images/%s.gif\');">%s</div>', $this->getTheme(), $icon, $label);
+		return $label;
 	}
 
 	

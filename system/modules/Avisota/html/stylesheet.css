@@ -55,3 +55,11 @@ table.outbox span.failed {
 code {
 	font-weight: bold;
 }
+
+div.preview_resize {
+	text-align: right;
+	padding-right: 1em;
+}
+div.preview_resize img {
+	cursor: pointer;
+}

@@ -18,7 +18,7 @@ class AvisotaHelper extends System
 	{
 		if (!self::$objInstance)
 		{
-			self::$objInstance = new CoreExt();
+			self::$objInstance = new AvisotaHelper();
 		}
 		return self::$objInstance;
 	}
@@ -53,6 +53,16 @@ class AvisotaHelper extends System
 		}
 		return false;
 	}
+	
+	
+	/**
+	 * Generate a newsletter object from a queue.
+	 */
+	public static function generateNewsletterFromQueue($intEntry)
+	{
+		throw new Exception('Missing implementation AvisotaHelper::generateNewsletterFromQueue(..)');
+	}
+	
 	
 	protected function __construct()
 	{

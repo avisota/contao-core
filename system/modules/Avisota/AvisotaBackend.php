@@ -209,6 +209,8 @@ class AvisotaBackend extends Controller
 	 */
 	public function previewDraft()
 	{
+		$this->loadLanguageFile('be_avisota');
+		
 		// find the newsletter
 		$varId = $this->Input->get('id');
 		
@@ -235,6 +237,7 @@ class AvisotaBackend extends Controller
 		}
 		
 		$objTemplate = new BackendTemplate('be_avisota_preview_draft');
+		$objTemplate->import('BackendUser', 'User');
 		$objTemplate->newsletter = $objNewsletter;
 		
 		$objTemplate->html_templates = $arrTemplatesHtml;
