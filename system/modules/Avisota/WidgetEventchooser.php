@@ -74,29 +74,23 @@ class WidgetEventchooser extends Widget
 		$strClass = 'eventchooser';
 		if(!is_array($this->value)) $this->value = array();
 
-		// get events
-		$objEvents = $this->Database->prepare('SELECT e.id, e.title, e.startDate, c.title AS section 
-												FROM tl_calendar_events AS e
-												LEFT JOIN tl_calendar AS c ON (e.pid = c.id)
-												WHERE published="1" AND startDate >= UNIX_TIMESTAMP() 
-												ORDER BY c.title, e.startDate')
-									->execute();
-		
-		if($objEvents->numRows < 1) {
+		$arrEvents = $this->getAllEvents();									
+									
+		if(!count($arrEvents)) {
 			return  '<p class="tl_noopt">'.$GLOBALS['TL_LANG']['MSC']['noResult'].'</p>';
 		}
 		
 		$strBuffer = '';
 		$header = $date = "";
-		while($objEvents->next())
+		foreach($arrEvents as $event)
 		{
-			if($objEvents->section != $header)
+			if($event['calendar'] != $header)
 			{
-				$header = $objEvents->section;
+				$header = $event['calendar'];
 				$strBuffer .= '<br/><h1 class="main_headline">'.$header.'</h1>';
 			}
 			
-			$curDate = $GLOBALS['TL_LANG']['MONTHS'][date('m',$objEvents->startDate)-1].' '.date('Y',$objEvents->startDate);
+			$curDate = $GLOBALS['TL_LANG']['MONTHS'][date('m',$event['startTime'])-1].' '.date('Y',$event['startTime']);
 			if($curDate != $date)
 			{
 				$date = $curDate;
@@ -104,16 +98,106 @@ class WidgetEventchooser extends Widget
 			}
 			
 			$strBuffer .= '<div class="tl_content">';
-			$strBuffer .= '<input type="checkbox" id="event'.$objEvents->id.'" class="tl_checkbox" name="events[]" value="'.$objEvents->id.'"';
-			if(in_array($objEvents->id, $this->value)) $strBuffer .= ' CHECKED';
+			$strBuffer .= '<input type="checkbox" id="event'.$event['id'].'_'.$event['startTime'].'" class="tl_checkbox" name="events[]" value="'.$event['id'].'_'.$event['startTime'].'"';
+			if(in_array($event['id'].'_'.$event['startTime'], $this->value)) $strBuffer .= ' CHECKED';
 			$strBuffer .= '/>';
-			$strBuffer .= '<label for="event'.$objEvents->id.'"> ';
-			$strBuffer .= date('d.m.Y',$objEvents->startDate).' - ';
-			$strBuffer .= '<strong>'.$objEvents->title.'</strong></label>';
+			$strBuffer .= '<label for="event'.$event['id'].'_'.$event['startTime'].'"> ';
+			$strBuffer .= $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'],$event['startTime']).' - ';
+			$strBuffer .= '<strong>'.$event['title'].'</strong></label>';
 			$strBuffer .= '</div>';
 		}
 		
 		return $strBuffer;
+	}
+	
+	/**
+	 * get all events
+	 * @return array
+	 */
+	protected function getAllEvents()
+	{
+		$intStart = time();
+		$intEnd = $intStart + 360*3600*24;
+		
+		// Get events of the current period
+		$objEvents = $this->Database->prepare("SELECT e.startTime, e.endTime, e.id,e.title, e.recurring, e.recurrences, e.repeatEach, c.title AS calendar 
+											   FROM tl_calendar_events AS e
+											   LEFT JOIN tl_calendar AS c ON (e.pid = c.id)
+											   WHERE
+											   		published='1' ". // only published events 
+												   "AND (
+														startTime >= $intStart AND endTime <= $intEnd ". // all events in the period
+													   "OR recurring='1' AND (". // all recurring events which are not ending bevore intStart
+															"recurrences=0 OR repeatEnd>=$intStart
+														)
+													)")
+									->execute();
+
+		if ($objEvents->numRows < 1)
+		{
+			return array();
+		}
+
+		$arrEvents = array();
+		while ($objEvents->next())
+		{
+			
+			// Recurring events
+			if ($objEvents->recurring)
+			{
+				$count = 0;
+				$arrRepeat = deserialize($objEvents->repeatEach);
+
+				while ($objEvents->endTime < $intEnd)
+				{
+					if ($objEvents->recurrences > 0 && $count++ >= $objEvents->recurrences)
+					{
+						break;
+					}
+
+					$arg = $arrRepeat['value'];
+					$unit = $arrRepeat['unit'];
+
+					if ($arg < 1)
+					{
+						break;
+					}
+
+					$strtotime = '+ ' . $arg . ' ' . $unit;
+
+					$objEvents->startTime = strtotime($strtotime, $objEvents->startTime);
+					$objEvents->endTime = strtotime($strtotime, $objEvents->endTime);
+
+					// Skip events outside the scope
+					if ($objEvents->startTime < $intStart)
+					{
+						continue;
+					}
+
+					$arrEvents[] = $objEvents->row();
+				}
+			}
+			else
+			// not recurring
+			{
+				$arrEvents[] = $objEvents->row();
+			}
+		}
+
+		// sort the stuff by Calendar and StartTime
+		$arrCalendars = array();
+		$arrDates = array();
+		foreach($arrEvents as $k => $event)
+		{
+			$arrCalendars[$k] = $event['calendar'];
+			$arrDates[$k] = $event['startTime'];
+		}
+		
+		array_multisort($arrCalendars,$arrDates,$arrEvents);
+		
+		return $arrEvents;
+		
+	
 	}
 }
 

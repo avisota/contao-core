@@ -64,11 +64,21 @@ class NewsletterEvent extends NewsletterElement
 	{
 		$this->import('DomainLink');
 		
-		$eventIds = unserialize($this->events);
-		if(!is_array($eventIds))
+		$events = unserialize($this->events);
+		if(!is_array($events))
 		{
 			$this->Template->events = array();
 			return;
+		}
+		
+		// split ID and startTime
+		$eventIds = array();
+		$eventStartTimes = array();
+		foreach($events as $event)
+		{
+			$tmp = explode('_',$event);
+			$eventIds[] = $tmp[0];
+			$eventStartTimes[] = $tmp[1];
 		}
 		
 		$objEvents = $this->Database->prepare('SELECT e.*,c.jumpTo,c.title AS section
@@ -77,13 +87,53 @@ class NewsletterEvent extends NewsletterElement
 												WHERE e.id IN ('.implode(',',$eventIds).')
 												ORDER BY e.startDate')->execute();
 		
-		$events = $objEvents->fetchAllAssoc();
-		foreach($events as $k => $v)
+		$arrEvents = array();
+		while($objEvents->next())
 		{
-			$events[$k]['href'] = $this->getHref($v['jumpTo'],$v['alias']);
+			$objEvents->href = $this->getHref($objEvents->jumpTo,$objEvents->alias);
+			$arrEvents[$objEvents->id] = $objEvents->row();
 		}
 		
-		$this->Template->events = $events;
+		$arrReturn = array();
+		foreach($eventIds as $k=>$id)
+		{
+			// adjust startTime for recurring events
+			if($arrEvents[$id]['recurring'])
+			{
+				$event = $arrEvents[$id];
+				$count = 0;
+				$arrRepeat = deserialize($event['repeatEach']);
+
+				while ($event['recurrences'] <= $count || ($event['recurrences']!=0 && $event['startTime'] < $event['repeatEnd']))
+				{
+					if($event['startTime'] == $eventStartTimes[$k])
+					{
+						$arrReturn[] = $event;
+						break;
+					}
+					
+					$arg = $arrRepeat['value'];
+					$unit = $arrRepeat['unit'];
+
+					if ($arg < 1)
+					{
+						break;
+					}
+
+					$strtotime = '+ ' . $arg . ' ' . $unit;
+
+					$event['startTime'] = strtotime($strtotime, $event['startTime']);
+					$event['endTime'] = strtotime($strtotime, $event['endTime']);
+
+				}
+			}
+			else
+			{
+				$arrReturn[] = $arrEvents[$id];
+			}
+		}
+		
+		$this->Template->events = $arrReturn;
 	}
 	
 	

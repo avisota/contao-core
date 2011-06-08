@@ -4,7 +4,7 @@
 <ul>
 <?php foreach($this->events as $event): ?>
 	<li>
-		<?php echo date($GLOBALS['TL_CONFIG']['dateFormat'],$event['startDate']);?> - <b><a href="<?php echo $event['href'];?>"><?php echo $event['title'];?></a></b>
+		<?php echo $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'],$event['startTime']);?> - <b><a href="<?php echo $event['href'];?>"><?php echo $event['title'];?></a></b>
 		<?php if(strlen($event['teaser'])):?><p><?php echo $event['teaser'];?></p><?php endif;?>
 	</li>
 <?php endforeach;?>

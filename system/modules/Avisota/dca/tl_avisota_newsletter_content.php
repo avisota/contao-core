@@ -446,9 +446,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['events'],
 			'exclude'                 => true,
-			'inputType'               => 'eventchooser',
-			// 'options_callback'		  => array('tl_newsletter4ward_content','getEvents'),
-			'eval'                    => array()
+			'inputType'               => 'eventchooser'
 		)		
 	)
 );
