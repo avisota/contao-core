@@ -12,6 +12,7 @@
   <colgroup>
     <col width="120px" />
     <col />
+    <col />
     <col width="1%" />
     <col width="1%" />
     <?php if ($this->display_failed): ?><col width="1%" /><?php endif; ?>
@@ -19,15 +20,13 @@
   </colgroup>
   <thead>
   <tr class="head_0">
-    <th class="col_1" rowspan="2">&nbsp;<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['date'] ?>&nbsp;</th>
-    <th class="col_1" rowspan="2">&nbsp;<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['newsletter'] ?>&nbsp;</th>
-    <th class="col_2" colspan="<?php if ($this->display_failed): ?>3<?php else: ?>2<?php endif; ?>">&nbsp;<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['count'] ?>&nbsp;</th>
-    <th class="col_5" rowspan="2"></th>
-  </tr>
-  <tr class="head_1">
+    <th class="col_1">&nbsp;<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['date'] ?>&nbsp;</th>
+    <th class="col_1"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['newsletter'] ?>&nbsp;</th>
+    <th class="col_2"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['count'] ?>&nbsp;</th>
     <th class="col_2"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['outstanding'] ?></th>
     <th class="col_3"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['total'] ?></th>
     <?php if ($this->display_failed): ?><th class="col_4"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['failed'] ?></th><?php endif; ?>
+    <th class="col_5"></th>
   </tr>
   </thead>
   <tbody>
@@ -35,6 +34,7 @@
   <tr class="row_<?php echo $k ?><?php if ($outbox['token'] == $this->Input->get('highlight')): ?> row_highlight<?php endif ?>">
     <td class="col_0"><?php echo $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $outbox['date']) ?></td>
     <td class="col_1"><?php echo $outbox['newsletter'] ?></td>
+    <td class="col_1"><?php echo $outbox['sources'];?></td>
     <td class="col_2" align="center"><span class="outstanding"><?php echo $outbox['outstanding'] ?></span></td>
     <td class="col_3" align="center"><span class="total"><?php echo $outbox['recipients']; ?></span></td>
     <?php if ($this->display_failed): ?><td class="col_4" align="center"><?php if ($outbox['failed'] > 0): ?><span class="failed"><?php echo $outbox['failed']; ?></span><?php endif; ?></td><?php endif; ?>

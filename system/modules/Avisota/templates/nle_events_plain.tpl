@@ -2,8 +2,8 @@
 
 
 <?php foreach($this->events as $event): ?>
- * <?php echo date('d.m.Y',$event['startTime']);?> - *<?php echo $event['title'];?>* [<?php echo $event['href'];?>">]
-   <?php if(strlen($event['teaser'])):?><p><?php echo $event['teaser'];?></p><?php endif;?>
+ * <?php echo date('d.m.Y',$event['startTime']);?> - *<?php echo $event['title'];?>* [<?php echo $event['href'];?>]
+   <?php if(strlen($event['teaser'])):?><?php echo $event['teaser'];?><?php endif;?>
     
 <?php endforeach;?>
 

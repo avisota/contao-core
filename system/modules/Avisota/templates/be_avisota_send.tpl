@@ -1,31 +1,36 @@
 <div id="tl_buttons">
-<a href="<?php echo $this->getReferer(true) ?>" class="header_back" title="<?php echo specialchars($GLOBALS['TL_LANG']['MSC']['backBT']) ?>" accesskey="b"><?php echo $GLOBALS['TL_LANG']['MSC']['backBT'] ?></a> &nbsp; :: &nbsp; <a href="<?php echo TL_PATH ?>/contao/main.php?do=avisota_newsletter&amp;table=tl_avisota_newsletter&amp;act=edit&amp;id=<?php echo $this->id ?>" accesskey="e" title="<?php echo specialchars(sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader'][1], $this->id)) ?>" style="padding:2px 0 3px 18px; background:url('<?php echo TL_PATH ?>/system/themes/<?php echo $this->User->backendTheme ? $this->User->backendTheme : 'default' ?>/images/header.gif') no-repeat left center;"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader'][0] ?></a> &nbsp; :: &nbsp; <a href="<?php echo TL_PATH ?>/contao/main.php?do=avisota_newsletter&amp;table=tl_avisota_newsletter_content&amp;id=<?php echo $this->id ?>" accesskey="b" title="<?php echo specialchars(sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter']['edit'][1], $this->id)) ?>" style="padding:2px 0 3px 16px; background:url('<?php echo TL_PATH ?>/system/themes/<?php echo $this->User->backendTheme ? $this->User->backendTheme : 'default' ?>/images/edit.gif') no-repeat left center;"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['edit'][0] ?></a>
+<a href="<?php echo $this->getReferer(true) ?>" class="header_back" title="<?php echo specialchars($GLOBALS['TL_LANG']['MSC']['backBT']) ?>" accesskey="b"><?php echo $GLOBALS['TL_LANG']['MSC']['backBT'] ?></a> 
 </div>
 
 <?php echo $this->getMessages(); ?>
 
 <h2 class="sub_headline"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['headline'] ?></h2>
 
-<div class="tl_formbody_edit">
-<table class="prev_header" summary="" cellpadding="0" cellspacing="0">
+<div class="tl_listing_container parent_view">
+<div class="tl_header" onmouseover="Theme.hoverDiv(this, 1);" onmouseout="Theme.hoverDiv(this, 0);">
+<div class="tl_content_right">
+<a href="<?php echo TL_PATH ?>/contao/main.php?do=avisota_newsletter&amp;table=tl_avisota_newsletter&amp;act=edit&amp;id=<?php echo $this->id ?>" accesskey="e" title="<?php echo specialchars(sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader'][1], $this->id)) ?>"><img src="<?php echo TL_PATH ?>/system/themes/<?php echo $this->User->backendTheme ? $this->User->backendTheme : 'default' ?>/images/header.gif" alt="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader'][0];?>"/></a>
+<a href="<?php echo TL_PATH ?>/contao/main.php?do=avisota_newsletter&amp;table=tl_avisota_newsletter_content&amp;id=<?php echo $this->id ?>" accesskey="b" title="<?php echo specialchars(sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter']['edit'][1], $this->id)) ?>"> <img src="<?php echo TL_PATH ?>/system/themes/<?php echo $this->User->backendTheme ? $this->User->backendTheme : 'default' ?>/images/edit.gif" alt="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['edit'][0] ?>" /></a>
+</div>
+<table class="tl_header_table" summary="" cellpadding="0" cellspacing="0">
   <tbody><tr class="row_0">
-    <td class="col_0"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['from'] ?></td>
+    <td class="col_0"><span class="tl_label"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['from'] ?></span></td>
     <td class="col_1"><?php echo $this->from ?></td>
   </tr>
   <tr class="row_1">
-    <td class="col_0"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['subject'][0] ?></td>
+    <td class="col_0"><span class="tl_label"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['subject'][0] ?></span></td>
     <td class="col_1"><?php echo $this->subject ?></td>
   </tr>
   <tr class="row_2">
-    <td class="col_0"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_html'][0] ?>&nbsp;</td>
+    <td class="col_0"><span class="tl_label"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_html'][0] ?>&nbsp;</span></td>
     <td class="col_1"><?php echo $this->template_html ?></td>
   </tr>
   <tr class="row_3">
-    <td class="col_0"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_plain'][0] ?>&nbsp;</td>
+    <td class="col_0"><span class="tl_label"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_plain'][0] ?>&nbsp;</span></td>
     <td class="col_1"><?php echo $this->template_plain ?></td>
   </tr>
   <tr class="row_4">
-  	<td class="col_0"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipient_legend'] ?></td>
+  	<td class="col_0"><span class="tl_label"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipient_legend'] ?></span></td>
   	<td class="col_1">
       <?php if (count($this->recipients_list)): ?>
       <div><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['list'] ?>: <?php echo implode(', ', $this->recipients_list) ?></div>
@@ -35,6 +40,7 @@
   	</td>
   </tr>
 </tbody></table>
+</div>
 </div>
 
 <form action="contao/main.php" id="tl_avisota_newsletter_preview" target="preview" class="tl_form" method="get">

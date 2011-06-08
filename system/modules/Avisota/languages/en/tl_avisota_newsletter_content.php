@@ -72,6 +72,7 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['cssID']           = array(
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['space']           = array('Space Before and After ',' Here you can enter the space before and after the content element in pixels. You should avoid inline styles, but if possible, you may add the spacing in a stylesheet.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['source']          = array('Import CSV File ', ' Please choose to import CSV files from the File Browser.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['events']   		= array('Events', 'Choose events to include its teaser in the newletter.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['news']   			= array('News', 'Choose news to include its teaser in the newletter.');
 
 
 /**

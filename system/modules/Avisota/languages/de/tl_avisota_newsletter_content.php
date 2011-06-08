@@ -71,7 +71,8 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['guests']          = array(
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['cssID']           = array('CSS-Id/Klasse', 'Hier können Sie eine Id und beliebig viele Klassen eingeben.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['space']           = array('Abstand davor und dahinter', 'Hier können Sie den Abstand vor und nach dem Inhaltselement in Pixeln eingeben. Sie sollten Inline-Styles jedoch nach Möglichkeit vermeiden und den Abstand in einem Stylesheet definieren.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['source']          = array('Quelldateien', 'Bitte wählen Sie die zu importierenden CSV-Dateien aus der Dateiübersicht.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['events']   		= array('Events', 'Hier können die Events gewählt werden, welche in den Newsletter eingebunden werden sollen.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['events']   		= array('Events', 'Hier können Events gewählt werden, welche in den Newsletter eingebunden werden sollen.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['news']   			= array('Nachrichten', 'Hier können Nachrichten gewählt werden, welche in den Newsletter eingebunden werden sollen.');
 
 
 /**

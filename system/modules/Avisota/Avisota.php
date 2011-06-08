@@ -879,7 +879,8 @@ class Avisota extends BackendModule
 						COUNT(o.`email`) as `recipients`,
 						(SELECT COUNT(*) FROM `tl_avisota_newsletter_outbox` o2 WHERE o.`token`=o2.`token` AND o2.`send`=0) as `outstanding`,
 						(SELECT COUNT(*) FROM `tl_avisota_newsletter_outbox` o2 WHERE o.`token`=o2.`token` AND o2.`failed`='1') as `failed`,
-						o.`token`
+						o.`token`,
+						o.pid as pid
 					FROM
 						`tl_avisota_newsletter_outbox` o
 					INNER JOIN
@@ -894,6 +895,53 @@ class Avisota extends BackendModule
 						n.`subject` ASC");
 			while ($objOutbox->next())
 			{
+				
+				// show source-list-names
+				$objSource = $this->Database->prepare('
+						SELECT 
+							DISTINCT(source)
+						FROM tl_avisota_newsletter_outbox 
+						WHERE pid=?')
+					->execute($objOutbox->pid); 
+		
+				$strSource = '';
+				while($objSource->next())
+				{
+					$arrSource = explode(':', $objSource->source, 2);
+					switch ($arrSource[0])
+					{
+					case 'list':
+						$objList = $this->Database->prepare("
+								SELECT
+									*
+								FROM
+									`tl_avisota_recipient_list`
+								WHERE
+									`id`=?")
+							->execute($arrSource[1]);
+						if ($objList->next())
+						{
+							$strSource .= $objList->title.', ';
+						}
+
+					case 'mgroup':
+						$objMgroup = $this->Database->prepare("
+								SELECT
+									*
+								FROM
+									`tl_member_group`
+								WHERE
+									`id`=?")
+							->execute($arrSource[1]);
+						if ($objMgroup->next())
+						{
+							$strSource .= $objMgroup->name.', ';
+						}
+					}
+				}				
+				$objOutbox->sources = substr($strSource,0,-2);
+
+				
 				if ($objOutbox->outstanding == $objOutbox->recipients)
 				{
 					$arrOutbox['open'][] = $objOutbox->row();
@@ -909,7 +957,7 @@ class Avisota extends BackendModule
 				if ($objOutbox->failed > 0)
 				{
 					$objTemplate->display_failed = true;
-				}
+				}				
 			}
 			if (count($arrOutbox['open']) || count($arrOutbox[incomplete]) || count($arrOutbox['complete']))
 			{

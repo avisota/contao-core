@@ -128,6 +128,7 @@ CREATE TABLE `tl_avisota_newsletter_content` (
   `url` varchar(255) NOT NULL default '',
   `linkTitle` varchar(255) NOT NULL default '',
   `events` blob NULL,
+  `news` blob NULL,  
   `embed` varchar(255) NOT NULL default '',
   `multiSRC` blob NULL,
   `perRow` smallint(5) unsigned NOT NULL default '0',

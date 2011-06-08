@@ -125,7 +125,7 @@ $GLOBALS['TL_NLE'] = array_merge_recursive(
 		) ,
 		'includes' => array
 		(
-			// 'news'      => 'NewsletterNews',
+			'news'      => 'NewsletterNews',
 			'events'    => 'NewsletterEvent',
 			//'article'   => 'NewsletterArticle'
 		) 
@@ -138,6 +138,7 @@ $GLOBALS['TL_NLE'] = array_merge_recursive(
  * Widgets
  */
 $GLOBALS['BE_FFL']['eventchooser'] = 'WidgetEventchooser';
+$GLOBALS['BE_FFL']['newschooser'] = 'WidgetNewschooser';
 
 
 /**
