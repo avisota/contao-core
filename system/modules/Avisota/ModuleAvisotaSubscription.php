@@ -85,6 +85,13 @@ class ModuleAvisotaSubscription extends Module
 			$strEmail = $this->User->email;
 		}
 		
+		// check for valid email address
+		if (!$this->isValidEmailAddress($strEmail))
+		{
+			$strEmail = false;
+			return;
+		}
+		
 		$arrSubscriptions = array();
 		if ($varExistingSubscription)
 		{
