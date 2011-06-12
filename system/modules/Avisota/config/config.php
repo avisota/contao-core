@@ -150,6 +150,12 @@ $GLOBALS['TL_HOOKS']['getEditorStylesLayout'][] = array('AvisotaEditorStyle', 'g
 
 
 /**
+ * Cron
+ */
+$GLOBALS['TL_CRON']['daily'][] = array('AvisotaBackend', 'cronCleanupRecipientList');
+
+
+/**
  * Hack: Fix ajax load import source tree.
  */
 if (($_GET['table'] == 'tl_avisota_recipient_import' || $_GET['table'] == 'tl_avisota_recipient_remove') && ($_GET['isAjax'] || $_POST['isAjax']))

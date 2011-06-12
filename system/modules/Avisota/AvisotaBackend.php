@@ -50,5 +50,25 @@ class AvisotaBackend extends System
 		}
 		return $strContent;
 	}
+	
+	
+	/**
+	 * Clean up recipient list.
+	 */
+	public function cronCleanupRecipientList()
+	{
+		$this->import('Database');
+		
+		// delete not activate recipients older than 7 days
+		$this->Database->prepare("DELETE FROM tl_avisota_recipient WHERE confirmed='' AND token!='' AND addedOn<=?")
+			->execute(mktime(0,0,0)-604800);
+		
+		
+		// remind not activated recipients older than 3 days
+		$this->Database->prepare("SELECT * FROM tl_avisota_recipient WHERE confirmed='' AND token!='' AND addedOn<=?")
+			->execute(mktime(0,0,0)-259200);
+		
+		// TODO
+	}
 }
 ?>
