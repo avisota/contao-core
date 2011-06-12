@@ -42,6 +42,21 @@ CREATE TABLE `tl_avisota_recipient` (
 -- --------------------------------------------------------
 
 -- 
+-- Table `tl_avisota_recipient_blacklist`
+-- 
+
+CREATE TABLE `tl_avisota_recipient_blacklist` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `pid` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  `email` char(32) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
 -- Table `tl_avisota_newsletter_category`
 -- 
 

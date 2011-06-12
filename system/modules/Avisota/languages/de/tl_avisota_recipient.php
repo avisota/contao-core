@@ -57,12 +57,13 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['manually']   = 'manuell hinzugefüg
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['new']         = array('Neuer Abonnent', 'Einen neuen Abonnent erstellen');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['show']        = array('Abonnentendetails', 'Details des Abonnenten ID %s anzeigen');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['copy']        = array('Abonnent duplizieren', 'Abonnent ID %s duplizieren');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['delete']      = array('Abonnent löschen', 'Abonnent ID %s löschen');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['edit']        = array('Abonnent bearbeiten', 'Abonnent ID %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['import']	   = array('CSV-Import','Import von Abbonements aus einer CSV-Datei.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['remove']	   = array('CSV-Löschen','Löschen von Abbonements aus einer CSV-Datei.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['new']                 = array('Neuer Abonnent', 'Einen neuen Abonnent erstellen');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['show']                = array('Abonnentendetails', 'Details des Abonnenten ID %s anzeigen');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['copy']                = array('Abonnent duplizieren', 'Abonnent ID %s duplizieren');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['delete']              = array('Abonnent löschen', 'Abonnent ID %s löschen');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['delete_no_blacklist'] = array('Abonnent löschen ohne Blacklist Eintrag', 'Abonnent ID %s löschen ohne Ihn in die Blacklist einzutragen');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['edit']                = array('Abonnent bearbeiten', 'Abonnent ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['import']	           = array('CSV-Import','Import von Abbonements aus einer CSV-Datei.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['remove']	           = array('CSV-Löschen','Löschen von Abbonements aus einer CSV-Datei.');
 
 ?>

@@ -45,6 +45,10 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_import'] = array
 	(
 		'dataContainer'               => 'Memory',
 		'closed'                      => true,
+		'onload_callback'           => array
+		(
+			array('tl_avisota_recipient_import', 'onload_callback'),
+		),
 		'onsubmit_callback'           => array
 		(
 			array('tl_avisota_recipient_import', 'onsubmit_callback'),
@@ -54,7 +58,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_import'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{import_legend},source,upload;{format_legend:hide},delimiter,enclosure' # ;{personals_legend:hide},personals'
+		'default'                     => '{import_legend},source,upload;{format_legend:hide},delimiter,enclosure,force'
 	),
 	
 	// Fields
@@ -91,6 +95,12 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_import'] = array
 			'options'                 => array('double', 'single'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_import'],
 			'eval'                    => array('mandatory'=>true, 'tl_class'=>'w50')
+		),
+		'force' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['force'],
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class'=>'w50 m12')
 		)
 	)
 );
@@ -104,6 +114,25 @@ class tl_avisota_recipient_import extends Backend
 	{
 		parent::__construct();
 		$this->import('BackendUser', 'User');
+	}
+	
+	
+	/**
+	 * Load the data.
+	 * 
+	 * @param DataContainer $dc
+	 */
+	public function onload_callback(DataContainer $dc)
+	{
+		$varData = $this->Session->get('AVISOTA_IMPORT');
+		
+		if ($varData && is_array($varData))
+		{
+			foreach ($varData as $k=>$v)
+			{
+				$dc->setData($k, $v);
+			}
+		}
 	}
 	
 	
@@ -149,6 +178,14 @@ class tl_avisota_recipient_import extends Backend
 				break;
 		}
 		
+		$blnForce = $dc->getData('force') ? true : false;
+		
+		$this->Session->set('AVISOTA_IMPORT', array(
+			'delimiter' => $dc->getData('delimiter'),
+			'enclosure' => $dc->getData('enclosure'),
+			'columns'   => $dc->getData('columns')
+		));
+	
 		$time = time();
 		$intTotal = 0;
 		$intInvalid = 0;
@@ -165,7 +202,7 @@ class tl_avisota_recipient_import extends Backend
 					continue;
 				}
 				
-				$this->importRecipients($objFile->handle, $strDelimiter, $strEnclosure, $time, $intTotal, $intInvalid);
+				$this->importRecipients($objFile->handle, $strDelimiter, $strEnclosure, $blnForce, $time, $intTotal, $intInvalid);
 				$objFile->close();
 			}
 		}
@@ -173,7 +210,7 @@ class tl_avisota_recipient_import extends Backend
 		if ($arrUpload)
 		{
 			$resFile = fopen($arrUpload['tmp_name'], 'r');
-			$this->importRecipients($resFile, $strDelimiter, $strEnclosure, $time, $intTotal, $intInvalid);
+			$this->importRecipients($resFile, $strDelimiter, $strEnclosure, $blnForce, $time, $intTotal, $intInvalid);
 			fclose($resFile);
 		}
 
@@ -199,7 +236,7 @@ class tl_avisota_recipient_import extends Backend
 	 * @param int $intTotal
 	 * @param int $intInvalid
 	 */
-	protected function importRecipients($resFile, $strDelimiter, $strEnclosure, $time, &$intTotal, &$intInvalid)
+	protected function importRecipients($resFile, $strDelimiter, $strEnclosure, $blnForce, $time, &$intTotal, &$intInvalid)
 	{
 		$arrRecipients = array();
 
@@ -221,6 +258,21 @@ class tl_avisota_recipient_import extends Backend
 				continue;
 			}
 
+			$objBlacklist = $this->Database->prepare("SELECT * FROM tl_avisota_recipient_blacklist WHERE pid=? AND email=?")
+				->execute($this->Input->get('id'), md5($strRecipient));
+			
+			// check blacklist
+			if (!$blnForce && $objBlacklist->numRows > 0)
+			{
+				++$intSkipped;
+				continue;
+			}
+			else if ($blnForce && $objBlacklist->numRows > 0)
+			{
+				$this->Database->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid=? AND email=?")
+					->execute($this->Input->get('id'), md5($strRecipient));
+			}
+			
 			// Check whether the e-mail address exists
 			$objRecipient = $this->Database->prepare("SELECT COUNT(*) AS total FROM tl_avisota_recipient WHERE pid=? AND email=?")
 										   ->execute($this->Input->get('id'), $strRecipient);

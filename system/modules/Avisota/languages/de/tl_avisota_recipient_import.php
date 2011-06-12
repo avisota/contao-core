@@ -41,6 +41,7 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['upload']      = array('Impor
 $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['delimiter']   = array('Feldtrenner', 'Wählen Sie hier das Zeichen aus, nach dem die einzelnen Felder getrennt sind.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['enclosure']   = array('Texttrenner', 'Wählen Sie hier das Zeichen aus, nach dem der Text getrennt ist.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['personals']   = array('Import mit persönlichen Daten', 'Wählen Sie diese Option wenn Ihre CVS nicht nur die E-Mail Adresse, sondern auch persönliche Daten beinhaltet.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['force']       = array('Import erzwingen', 'Warnung: Sie sollten den Wunsch eines Abonnenten Ihren Newsletter nicht mehr erhalten zu wollen respektieren, es besteht die Möglichkeit dass Sie rechtliche Konsequenzen zu befürchten haben, lassen Sie sich diesbezüglich von einem Anwalt beraten! Nutzen Sie diese Option mit Bedacht und nur dann, wenn Sie wissen was Sie tun! Wählen Sie diese Option, wird die interne Blacklist ignoriert. Die Blacklist sorgt dafür, dass Abonnenten die sich abgemeldet haben nicht durch den Import wieder hinzugefügt werden.');
 
 
 /**

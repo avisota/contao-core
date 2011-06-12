@@ -267,6 +267,9 @@ class ModuleAvisotaSubscription extends Module
 					->execute($intId, $time, $strEmail, '', $strToken, $time);
 			}
 			
+			$this->Database->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid=? AND email=?")
+				->execute($intId, md5($strEmail));
+			
 			$strUrl = $this->generateSubscribeUrl($arrTokens);
 			
 			$arrList = $this->getListNames($arrListIds);
@@ -388,13 +391,20 @@ class ModuleAvisotaSubscription extends Module
 			$this->redirect($this->Environment->request);
 		}
 		
-		$objStmt = $this->Database->prepare("
+		$this->Database->prepare("
 				DELETE FROM
 					`tl_avisota_recipient`
 				WHERE
 						`email`=?
 					AND `pid` IN (" . implode(',', $arrListIds) . ")")
 			->execute($strEmail);
+		
+		// build blacklist
+		foreach ($arrListIds as $intId)
+		{
+			$this->Database->prepare("INSERT INTO tl_avisota_recipient_blacklist SET pid=?, tstamp=?, email=?")
+				->execute($intId, time(), md5($strEmail));
+		}
 		
 		$strUrl = $this->DomainLink->absolutizeUrl(preg_replace('#&?unsubscribetoken=\w+#', '', $this->Environment->request), $GLOBALS['objPage']);
 		
