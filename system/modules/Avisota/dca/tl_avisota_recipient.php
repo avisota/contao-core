@@ -64,18 +64,31 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 		),
 		'global_operations' => array
 		(
+			'tools' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['tools'],
+				'class'               => 'header_recipient_tools',
+				'attributes'          => 'id="header_recipient_tools" onclick="Backend.getScrollOffset();"'
+			),
+			'migrate' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['migrate'],
+				'href'                => 'table=tl_avisota_recipient_migrate',
+				'class'               => 'header_recipient_migrate recipient_tool',
+				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+			),
 			'import' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['import'],
 				'href'                => 'table=tl_avisota_recipient_import',
-				'class'               => 'header_recipient_import',
+				'class'               => 'header_recipient_import recipient_tool',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			),
 			'remove' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['remove'],
 				'href'                => 'table=tl_avisota_recipient_remove',
-				'class'               => 'header_recipient_remove',
+				'class'               => 'header_recipient_remove recipient_tool',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			),
 			'all' => array

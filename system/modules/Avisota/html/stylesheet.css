@@ -5,6 +5,16 @@
 	padding: 2px 0 3px 20px;
 }
 
+.header_recipient_tools {
+	background: url("recipient_tools.png") no-repeat scroll left center transparent;
+	padding: 2px 0 3px 20px;
+}
+
+.header_recipient_migrate {
+	background: url("recipient_migrate.png") no-repeat scroll left center transparent;
+	padding: 2px 0 3px 20px;
+}
+
 .header_recipient_import {
 	background: url("recipient_import.png") no-repeat scroll left center transparent;
 	padding: 2px 0 3px 20px;
@@ -13,6 +23,12 @@
 .header_recipient_remove {
 	background: url("recipient_remove.png") no-repeat scroll left center transparent;
 	padding: 2px 0 3px 20px;
+}
+
+#contextmenu .header_recipient_migrate,
+#contextmenu .header_recipient_import,
+#contextmenu .header_recipient_remove {
+	padding: 4px 0 5px 20px;
 }
 
 table.outbox {
