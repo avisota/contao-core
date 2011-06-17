@@ -263,7 +263,7 @@ class ModuleAvisotaSubscription extends Module
 			$arrTokens = array();
 			foreach ($arrListIds as $intId)
 			{
-				$strToken = md5($time . $arrListIds[$intId] . $intId. $strEmail);
+				$strToken = md5($time . $arrListIds[$intId] . $intId . $strEmail);
 				$arrTokens[] = $strToken;
 				$this->Database->prepare("
 						INSERT INTO
@@ -297,6 +297,16 @@ class ModuleAvisotaSubscription extends Module
 				$_SESSION['avisota_subscription'][] = sprintf($GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['rejected'], $strRecipient);
 			}
 			
+			// HOOK: add custom logic
+			if (isset($GLOBALS['TL_HOOKS']['avisotaSubscribe']) && is_array($GLOBALS['TL_HOOKS']['avisotaSubscribe']))
+			{
+				foreach ($GLOBALS['TL_HOOKS']['avisotaSubscribe'] as $callback)
+				{
+					$this->import($callback[0]);
+					$this->$callback[0]->$callback[1]($strEmail, $arrListIds, $arrTokens);
+				}
+			}
+			
 			$this->redirect($this->Environment->request);
 		}
 	}
@@ -315,6 +325,7 @@ class ModuleAvisotaSubscription extends Module
 				$objRecipient = $this->Database->prepare("
 						SELECT
 							r.id,
+							r.email,
 							l.title
 						FROM
 							`tl_avisota_recipient` r
@@ -337,6 +348,16 @@ class ModuleAvisotaSubscription extends Module
 								`id`=?")
 						->execute($objRecipient->id);
 					$_SESSION['avisota_subscription'][] = sprintf($GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['confirm'], $objRecipient->title);
+					
+					// HOOK: add custom logic
+					if (isset($GLOBALS['TL_HOOKS']['avisotaActivateSubscribtion']) && is_array($GLOBALS['TL_HOOKS']['avisotaActivateSubscribtion']))
+					{
+						foreach ($GLOBALS['TL_HOOKS']['avisotaActivateSubscribtion'] as $callback)
+						{
+							$this->import($callback[0]);
+							$this->$callback[0]->$callback[1]($objRecipient->id, $objRecipient->email, $strToken);
+						}
+					}
 				}
 			}
 			
@@ -353,6 +374,16 @@ class ModuleAvisotaSubscription extends Module
 		if ($strEmail && count($arrListIds))
 		{
 			$this->remove_subscription($strEmail, $arrListIds);
+			
+			// HOOK: add custom logic
+			if (isset($GLOBALS['TL_HOOKS']['avisotaUnsubscribe']) && is_array($GLOBALS['TL_HOOKS']['avisotaUnsubscribe']))
+			{
+				foreach ($GLOBALS['TL_HOOKS']['avisotaUnsubscribe'] as $callback)
+				{
+					$this->import($callback[0]);
+					$this->$callback[0]->$callback[1]($strEmail, $arrListIds);
+				}
+			}
 		}
 	}
 	
@@ -379,6 +410,16 @@ class ModuleAvisotaSubscription extends Module
 			if ($objRecipientList->next() && in_array($objRecipientList->id, $arrListIds))
 			{
 				$this->remove_subscription($strEmail, array($objRecipientList->id));
+				
+				// HOOK: add custom logic
+				if (isset($GLOBALS['TL_HOOKS']['avisotaUnsubscribe']) && is_array($GLOBALS['TL_HOOKS']['avisotaUnsubscribe']))
+				{
+					foreach ($GLOBALS['TL_HOOKS']['avisotaUnsubscribe'] as $callback)
+					{
+						$this->import($callback[0]);
+						$this->$callback[0]->$callback[1]($strEmail, array($objRecipientList->id));
+					}
+				}
 			}
 		}
 	}
