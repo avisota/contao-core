@@ -92,7 +92,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_list'] = array
 			'copy' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['copy'],
-				'href'                => 'act=paste&amp;mode=copy',
+				'href'                => 'act=copy',
 				'icon'                => 'copy.gif',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			),
