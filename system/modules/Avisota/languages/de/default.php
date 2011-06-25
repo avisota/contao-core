@@ -60,4 +60,11 @@ $GLOBALS['TL_LANG']['NLE']['news']      = array('Nachricht', 'Fügt einen Nachri
 $GLOBALS['TL_LANG']['NLE']['events']    = array('Events', 'Fügt Event-Teaser ein.');
 $GLOBALS['TL_LANG']['NLE']['article']   = array('Artikel', 'Fügt einen Artikel-Teaser ein.');
 
+
+/**
+ * Miscellaneous
+ */
+$GLOBALS['TL_LANG']['MSC']['delete_no_blacklist'] = 'Löschen ohne Blacklist-Eintrag';
+$GLOBALS['TL_LANG']['MSC']['send']                = 'Versenden';
+
 ?>

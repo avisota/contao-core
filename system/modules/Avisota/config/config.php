@@ -150,6 +150,17 @@ $GLOBALS['TL_HOOKS']['getEditorStylesLayout'][] = array('AvisotaEditorStyle', 'g
 
 
 /**
+ * Custom user permissions.
+ */
+$GLOBALS['TL_PERMISSIONS'][] = 'avisota_recipient_lists';
+$GLOBALS['TL_PERMISSIONS'][] = 'avisota_recipient_list_permissions';
+$GLOBALS['TL_PERMISSIONS'][] = 'avisota_recipient_permissions';
+$GLOBALS['TL_PERMISSIONS'][] = 'avisota_newsletter_categories';
+$GLOBALS['TL_PERMISSIONS'][] = 'avisota_newsletter_category_permissions';
+$GLOBALS['TL_PERMISSIONS'][] = 'avisota_newsletter_permissions';
+
+
+/**
  * Cron
  */
 $GLOBALS['TL_CRON']['daily'][] = array('AvisotaBackend', 'cronCleanupRecipientList');

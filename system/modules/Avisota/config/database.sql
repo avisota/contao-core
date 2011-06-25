@@ -202,3 +202,34 @@ CREATE TABLE `tl_module` (
 CREATE TABLE `tl_page` (
   `jumpBack` int(10) unsigned NOT NULL default '0',
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table `tl_user`
+-- 
+
+CREATE TABLE `tl_user` (
+  `avisota_recipient_lists` blob NULL,
+  `avisota_recipient_list_permissions` blob NULL,
+  `avisota_recipient_permissions` blob NULL,
+  `avisota_newsletter_categories` blob NULL,
+  `avisota_newsletter_category_permissions` blob NULL,
+  `avisota_newsletter_permissions` blob NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+-- --------------------------------------------------------
+
+-- 
+-- Table `tl_user_group`
+-- 
+
+CREATE TABLE `tl_user_group` (
+  `avisota_recipient_lists` blob NULL,
+  `avisota_recipient_list_permissions` blob NULL,
+  `avisota_recipient_permissions` blob NULL,
+  `avisota_newsletter_categories` blob NULL,
+  `avisota_newsletter_category_permissions` blob NULL,
+  `avisota_newsletter_permissions` blob NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
