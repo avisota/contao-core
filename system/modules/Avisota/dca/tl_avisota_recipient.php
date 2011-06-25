@@ -46,8 +46,18 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 		'ptable'                      => 'tl_avisota_recipient_list',
 		'switchToEdit'                => true,
 		'enableVersioning'            => true,
-		'onsubmit_callback'           => array(array('tl_avisota_recipient', 'onsubmit_callback')),
-		'ondelete_callback'           => array(array('tl_avisota_recipient', 'ondelete_callback'))
+		'onload_callback' => array
+		(
+			array('tl_avisota_recipient', 'checkPermission')
+		),
+		'onsubmit_callback'           => array
+		(
+			array('tl_avisota_recipient', 'onsubmit_callback')
+		),
+		'ondelete_callback'           => array
+		(
+			array('tl_avisota_recipient', 'ondelete_callback')
+		)
 	),
 
 	// List
@@ -105,28 +115,34 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['edit'],
 				'href'                => 'act=edit',
-				'icon'                => 'edit.gif'
+				'icon'                => 'edit.gif',
+				'button_callback'     => array('tl_avisota_recipient', 'editRecipient')
 			),
+			/*
 			'copy' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['copy'],
 				'href'                => 'act=paste&amp;mode=copy',
 				'icon'                => 'copy.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+				'attributes'          => 'onclick="Backend.getScrollOffset();"',
+				'button_callback'     => array('tl_avisota_recipient', 'copyRecipient')
 			),
+			*/
 			'delete' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
-				'attributes'          => 'class="contextmenu" onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+				'attributes'          => 'class="contextmenu" onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
+				'button_callback'     => array('tl_avisota_recipient', 'deleteRecipient')
 			),
 			'delete_no_blacklist' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['delete_no_blacklist'],
 				'href'                => 'act=delete&amp;blacklist=false',
 				'icon'                => 'delete.gif',
-				'attributes'          => 'class="edit-header" onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+				'attributes'          => 'class="edit-header" onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
+				'button_callback'     => array('tl_avisota_recipient', 'deleteRecipientNoBlacklist')
 			),
 			'toggle' => array
 			(
@@ -250,22 +266,64 @@ class tl_avisota_recipient extends Backend
 		}
 
 		// Set root IDs
-		if (!is_array($this->User->avisota_lists) || count($this->User->avisota_lists) < 1)
+		if (!is_array($this->User->avisota_recipient_lists) || count($this->User->avisota_recipient_lists) < 1)
 		{
 			$root = array(0);
 		}
 		else
 		{
-			$root = $this->User->avisota_lists;
+			$root = $this->User->avisota_recipient_lists;
 		}
 
 		$id = strlen($this->Input->get('id')) ? $this->Input->get('id') : CURRENT_ID;
+		
+		
+		// Check permissions to add recipients
+		if (!$this->User->hasAccess('create', 'avisota_recipient_permissions'))
+		{
+			$GLOBALS['TL_DCA']['tl_avisota_recipient']['config']['closed'] = true;
+			unset($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['global_operations']['migrate']);
+			unset($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['global_operations']['import']);
+		}
+
+		// Check permission to delete recipients
+		if (!$this->User->hasAccess('delete', 'avisota_recipient_permissions'))
+		{
+			unset($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['global_operations']['remove']);
+			
+			// remove edit header class, if only delete without blacklist is allowed
+			if ($this->User->hasAccess('delete_no_blacklist', 'avisota_recipient_permissions'))
+			{
+				$GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['operations']['delete_no_blacklist']['attributes'] = str_replace(
+						'class="edit-header"',
+						'',
+						$GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['operations']['delete_no_blacklist']['attributes']);
+			}
+			else
+			{
+				unset($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['operations']['delete_no_blacklist']);
+			}
+		}
+		
+		// remove tools if there are no tools
+		$intTools = 0;
+		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['global_operations'] as $arrGlobalOperation)
+		{
+			if (strpos($arrGlobalOperation['class'], 'recipient_tool') !== false)
+			{
+				$intTools ++;
+			}
+		}
+		if ($intTools <= 1)
+		{
+			unset($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['global_operations']['tools']);
+		}
 
 		// Check current action
 		switch ($this->Input->get('act'))
 		{
 			case 'create':
-				if (!strlen($this->Input->get('pid')) || !in_array($this->Input->get('pid'), $root))
+				if (!strlen($this->Input->get('pid')) || !in_array($this->Input->get('pid'), $root) || !$this->User->hasAccess('create', 'avisota_recipient_permissions'))
 				{
 					$this->log('Not enough permissions to create newsletters recipients in list ID "'.$this->Input->get('pid').'"', 'tl_avisota_recipient checkPermission', TL_ERROR);
 					$this->redirect('contao/main.php?act=error');
@@ -287,7 +345,26 @@ class tl_avisota_recipient extends Backend
 					$this->redirect('contao/main.php?act=error');
 				}
 
-				if (!in_array($objRecipient->pid, $root))
+				switch ($this->Input->get('act'))
+				{
+				case 'edit':
+				case 'toggle':
+					$blnHasAccess = (count(preg_grep('/^tl_avisota_recipient::/', $this->User->alexf)) > 0);
+					break;
+					
+				case 'show':
+					$blnHasAccess = true;
+					break;
+					
+				case 'copy':
+					$blnHasAccess = ($this->User->hasAccess('create', 'avisota_recipient_permissions'));
+					break;
+					
+				case 'delete':
+					$blnHasAccess = ($this->User->hasAccess($this->Input->get('blacklist') == 'false' ? 'delete_no_blacklist' : 'delete', 'avisota_recipient_permissions'));
+					break;
+				}
+				if (!in_array($objRecipient->pid, $root) || !$blnHasAccess)
 				{
 					$this->log('Not enough permissions to '.$this->Input->get('act').' recipient ID "'.$id.'" of recipient list ID "'.$objRecipient->pid.'"', 'tl_avisota_recipient checkPermission', TL_ERROR);
 					$this->redirect('contao/main.php?act=error');
@@ -298,7 +375,22 @@ class tl_avisota_recipient extends Backend
 			case 'editAll':
 			case 'deleteAll':
 			case 'overrideAll':
-				if (!in_array($id, $root))
+				switch ($this->Input->get('act'))
+				{
+				case 'select':
+					$blnHasAccess = true;
+					break;
+					
+				case 'editAll':
+				case 'overrideAll':
+					$blnHasAccess = (count(preg_grep('/^tl_avisota_recipient::/', $this->User->alexf)) > 0);
+					break;
+					
+				case 'deleteAll':
+					$blnHasAccess = ($this->User->hasAccess($this->Input->get('blacklist') == 'false' ? 'delete_no_blacklist' : 'delete', 'avisota_recipient_permissions'));
+					break;
+				}
+				if (!in_array($id, $root) || !$blnHasAccess)
 				{
 					$this->log('Not enough permissions to access recipient list ID "'.$id.'"', 'tl_avisota_recipient checkPermission', TL_ERROR);
 					$this->redirect('contao/main.php?act=error');
@@ -405,6 +497,70 @@ class tl_avisota_recipient extends Backend
 					   ->execute($intId);
 
 		$this->createNewVersion('tl_avisota_recipient', $intId);
+	}
+
+
+	/**
+	 * Return the edit header button
+	 * @param array
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @return string
+	 */
+	public function editRecipient($row, $href, $label, $title, $icon, $attributes)
+	{
+		return ($this->User->isAdmin || count(preg_grep('/^tl_avisota_recipient::/', $this->User->alexf)) > 0) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : '';
+	}
+
+
+	/**
+	 * Return the copy channel button
+	 * @param array
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @return string
+	 */
+	public function copyRecipient($row, $href, $label, $title, $icon, $attributes)
+	{
+		return ($this->User->isAdmin || $this->User->hasAccess('create', 'avisota_recipient_permissions')) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
+	}
+
+
+	/**
+	 * Return the delete channel button
+	 * @param array
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @return string
+	 */
+	public function deleteRecipient($row, $href, $label, $title, $icon, $attributes)
+	{
+		return ($this->User->isAdmin || $this->User->hasAccess('delete', 'avisota_recipient_permissions')) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
+	}
+
+
+	/**
+	 * Return the delete channel button
+	 * @param array
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @return string
+	 */
+	public function deleteRecipientNoBlacklist($row, $href, $label, $title, $icon, $attributes)
+	{
+		return ($this->User->isAdmin || $this->User->hasAccess('delete_no_blacklist', 'avisota_recipient_permissions')) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
 	}
 }
 
