@@ -127,7 +127,7 @@ $GLOBALS['TL_NLE'] = array_merge_recursive(
 		(
 			'news'      => 'NewsletterNews',
 			'events'    => 'NewsletterEvent',
-			//'article'   => 'NewsletterArticle'
+			'article'   => 'NewsletterArticleTeaser'
 		) 
 	),
 	is_array($GLOBALS['TL_NLE']) ? $GLOBALS['TL_NLE'] : array()

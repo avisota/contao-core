@@ -135,9 +135,9 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 		'hyperlink'                   => '{type_legend},type,area,headline;{link_legend},url,linkTitle,embed;{expert_legend:hide},cssID,space',
 		'image'                       => '{type_legend},type,area,headline;{source_legend},singleSRC;{image_legend},alt,size,imagemargin,imageUrl,caption;{expert_legend:hide},cssID,space',
 		'gallery'                     => '{type_legend},type,area,headline;{source_legend},multiSRC;{image_legend},size,imagemargin,perRow,sortBy;{template_legend:hide},galleryHtmlTpl,galleryPlainTpl;{expert_legend:hide},cssID,space',
-		'article'                     => '{type_legend},type,area;{include_legend},article',
 		'news'                        => '{type_legend},type,area;{include_legend},news',
 		'events'                      => '{type_legend},type,area,headline;{events_legend},events;{expert_legend:hide},cssID,space',
+		'article'                     => '{type_legend},type,area;{include_legend},articleAlias'
 	),
 
 	// Subpalettes
@@ -453,7 +453,19 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['news'],
 			'exclude'                 => true,
 			'inputType'               => 'newschooser'
-		)		
+		),
+		'articleAlias' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['articleAlias'],
+			'exclude'                 => true,
+			'inputType'               => 'select',
+			'options_callback'        => array('tl_avisota_newsletter_content', 'getArticleAlias'),
+			'eval'                    => array('mandatory'=>true, 'submitOnChange'=>true),
+			'wizard' => array
+			(
+				array('tl_avisota_newsletter_content', 'editArticleAlias')
+			)
+		)
 	)
 );
 
@@ -779,6 +791,61 @@ class tl_avisota_newsletter_content extends Avisota
 				}
 			}
 		}
+	}
+	
+	
+	/**
+	 * Get all articles and return them as array (article alias)
+	 * @param object
+	 * @return array
+	 */
+	public function getArticleAlias(DataContainer $dc)
+	{
+		$arrPids = array();
+		$arrAlias = array();
+
+		if (!$this->User->isAdmin)
+		{
+			foreach ($this->User->pagemounts as $id)
+			{
+				$arrPids[] = $id;
+				$arrPids = array_merge($arrPids, $this->getChildRecords($id, 'tl_page', true));
+			}
+
+			if (empty($arrPids))
+			{
+				return $arrAlias;
+			}
+
+			$objAlias = $this->Database->execute("SELECT a.id, a.title, a.inColumn, p.title AS parent FROM tl_article a LEFT JOIN tl_page p ON p.id=a.pid WHERE a.pid IN(". implode(',', array_map('intval', array_unique($arrPids))) .") ORDER BY parent, a.sorting");
+		}
+		else
+		{
+			$objAlias = $this->Database->execute("SELECT a.id, a.title, a.inColumn, p.title AS parent FROM tl_article a LEFT JOIN tl_page p ON p.id=a.pid ORDER BY parent, a.sorting");
+		}
+
+		if ($objAlias->numRows)
+		{
+			$this->loadLanguageFile('tl_article');
+
+			while ($objAlias->next())
+			{
+				$arrAlias[$objAlias->parent][$objAlias->id] = $objAlias->title . ' (' . (strlen($GLOBALS['TL_LANG']['tl_article'][$objAlias->inColumn]) ? $GLOBALS['TL_LANG']['tl_article'][$objAlias->inColumn] : $objAlias->inColumn) . ', ID ' . $objAlias->id . ')';
+			}
+		}
+
+		return $arrAlias;
+	}
+
+
+	/**
+	 * Return the edit article alias wizard
+	 * @param object
+	 * @return string
+	 */
+	public function editArticleAlias(DataContainer $dc)
+	{
+		return ($dc->value < 1) ? '' : ' <a href="contao/main.php?do=article&amp;table=tl_article&amp;act=edit&amp;id=' . $dc->value . '" title="'.sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editalias'][1]), $dc->value).'" style="padding-left:3px;">' . $this->generateImage('alias.gif', $GLOBALS['TL_LANG']['tl_content']['editalias'][0], 'style="vertical-align:top;"') . '</a>';
 	}
 }
 

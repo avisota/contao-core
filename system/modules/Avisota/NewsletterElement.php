@@ -139,6 +139,86 @@ abstract class NewsletterElement extends Frontend
 		
 		return $this->DomainLink->absolutizeUrl($strUrl, $objPage);
 	}
+	
+
+	/**
+	 * Replace an image tag.
+	 * @param array $arrMatch
+	 */
+	public function replaceImage($arrMatch)
+	{
+		// insert alt or title text
+		return sprintf('%s<%s>', $arrMatch[3] ? $arrMatch[3] . ': ' : $arrMatch[2] ? $arrMatch[2] . ': ' : '', $this->extendURL($arrMatch[1]));
+	}
+	
+	
+	/**
+	 * Replace an link tag.
+	 * @param array $arrMatch
+	 */
+	public function replaceLink($arrMatch)
+	{
+		// insert title text
+		return sprintf('%s%s <%s>', $arrMatch[3], $arrMatch[2] ? ' (' . $arrMatch[2] . ')' : '', $this->extendURL($arrMatch[1]));
+	}
+	
+	
+	/**
+	 * Generate a plain text from html.
+	 */
+	public function getPlainFromHTML($strText)
+	{
+		// remove line breaks
+		$strText = str_replace
+		(
+			array("\r", "\n"),
+			'',
+			$strText
+		);
+		
+		// replace bold, italic and underlined text
+		$strText = preg_replace
+		(
+			array('#</?(b|strong)>#', '#</?(i|em)>#', '#</?u>#'),
+			array('*', '_', '+'),
+			$strText
+		);
+		
+		// replace images
+		$strText = preg_replace_callback
+		(
+			'#<img[^>]+src="([^"]+)"[^>]*(?:alt="([^"])")?[^>]*(?:title="([^"])")?[^>]*>#U',
+			array(&$this, 'replaceImage'),
+			$strText
+		);
+		
+		// replace links
+		$strText = preg_replace_callback
+		(
+			'#<a[^>]+href="([^"]+)"[^>]*(?:title="([^"])")?[^>]*>(.*?)</a>#',
+			array(&$this, 'replaceLink'),
+			$strText
+		);
+		
+		// replace line breaks and paragraphs
+		$strText = str_replace
+		(
+			array('</div>', '</p>', '<br/>', '<br>'),
+			array("\n", "\n\n", "\n", "\n"),
+			$strText
+		);
+		
+		// strip all remeaning tags
+		$strText = strip_tags($strText);
+		
+		// decode html entities
+		$strText = html_entity_decode($strText);
+		
+		// wrap the lines
+		$strText = wordwrap($strText);
+		
+		return $strText;
+	}
 
 	
 	/**
