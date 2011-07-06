@@ -41,7 +41,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class UploadField extends Widget
+class UploadField extends Widget implements uploadable
 {
 	/**
 	 * Submit user input
