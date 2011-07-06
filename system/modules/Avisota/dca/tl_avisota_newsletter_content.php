@@ -285,9 +285,10 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 		'floating' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['floating'],
+			'default'                 => 'above',
 			'exclude'                 => true,
 			'inputType'               => 'radioTable',
-			'options'                 => array('left', 'right'),
+			'options'                 => array('above', 'left', 'right', 'below'),
 			'eval'                    => array('cols'=>2),
 			'reference'               => &$GLOBALS['TL_LANG']['MSC'],
 			'eval'                    => array('mandatory'=>true, 'tl_class'=>'w50')

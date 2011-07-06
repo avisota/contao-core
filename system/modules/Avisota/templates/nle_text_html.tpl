@@ -6,7 +6,7 @@
 <?php endif; ?>
 <?php if ($this->addImage): ?>
 <table>
-<?php if ($this->floating == 'left'): ?>
+<?php if ($this->floating == 'left' || $this->floating == 'above'): ?>
 <tr>
 <td valign="top">
 <div class="image_container<?php echo $this->floatClass; ?>"<?php if ($this->margin || $this->float): ?> style="<?php echo trim($this->margin . $this->float); ?>"<?php endif; ?>>
@@ -22,13 +22,21 @@
 <?php endif; ?>
 </div>
 </td>
+<?php if ($this->floating == 'above'): ?>
+</tr>
+<tr>
+<?php endif; ?>
 <?php endif; ?>
 <td valign="top">
 <?php endif; ?>
 <?php echo $this->text ?>
 <?php if ($this->addImage): ?>
 </td>
-<?php if ($this->floating == 'right'): ?>
+<?php if ($this->floating == 'below'): ?>
+</tr>
+<tr>
+<?php endif; ?>
+<?php if ($this->floating == 'right' || $this->floating == 'below'): ?>
 <td valign="top">
 <div class="image_container<?php echo $this->floatClass; ?>"<?php if ($this->margin || $this->float): ?> style="<?php echo trim($this->margin . $this->float); ?>"<?php endif; ?>>
 <?php if ($this->href): ?>
