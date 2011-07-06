@@ -68,7 +68,8 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view'],
 				'href'                => 'table=tl_avisota_newsletter&amp;key=send',
-				'class'               => 'header_send'
+				'class'               => 'header_send',
+				'button_callback'     => array('tl_avisota_newsletter_content', 'sendNewsletterButton')
 			),
 			'all' => array
 			(
@@ -492,8 +493,6 @@ class tl_avisota_newsletter_content extends Avisota
 			return;
 		}
 
-		/*
-		 * TODO
 		// Check the current action
 		switch ($this->Input->get('act'))
 		{
@@ -505,7 +504,7 @@ class tl_avisota_newsletter_content extends Avisota
 			case 'create':
 			case 'select':
 				// Check access to the article
-				if (!$this->checkAccessToElement(CURRENT_ID, $pagemounts, true))
+				if (!$this->checkAccessToElement(CURRENT_ID, true))
 				{
 					$this->redirect('contao/main.php?act=error');
 				}
@@ -517,7 +516,7 @@ class tl_avisota_newsletter_content extends Avisota
 			case 'cutAll':
 			case 'copyAll':
 				// Check access to the parent element if a content element is moved
-				if (($this->Input->get('act') == 'cutAll' || $this->Input->get('act') == 'copyAll') && !$this->checkAccessToElement($this->Input->get('pid'), $pagemounts, ($this->Input->get('mode') == 2)))
+				if (($this->Input->get('act') == 'cutAll' || $this->Input->get('act') == 'copyAll') && !$this->checkAccessToElement($this->Input->get('pid'), ($this->Input->get('mode') == 2)))
 				{
 					$this->redirect('contao/main.php?act=error');
 				}
@@ -533,7 +532,7 @@ class tl_avisota_newsletter_content extends Avisota
 			case 'cut':
 			case 'copy':
 				// Check access to the parent element if a content element is moved
-				if (!$this->checkAccessToElement($this->Input->get('pid'), $pagemounts, ($this->Input->get('mode') == 2)))
+				if (!$this->checkAccessToElement($this->Input->get('pid'), ($this->Input->get('mode') == 2)))
 				{
 					$this->redirect('contao/main.php?act=error');
 				}
@@ -541,13 +540,12 @@ class tl_avisota_newsletter_content extends Avisota
 
 			default:
 				// Check access to the content element
-				if (!$this->checkAccessToElement($this->Input->get('id'), $pagemounts))
+				if (!$this->checkAccessToElement($this->Input->get('id')))
 				{
 					$this->redirect('contao/main.php?act=error');
 				}
 				break;
 		}
-		*/
 	}
 
 
@@ -558,46 +556,81 @@ class tl_avisota_newsletter_content extends Avisota
 	 * @param boolean
 	 * @return boolean
 	 */
-	protected function checkAccessToElement($id, $pagemounts, $blnIsPid=false)
+	protected function checkAccessToElement($id, $blnIsPid=false)
 	{
-		/*
-		 * TODO
-		if ($blnIsPid)
+		if ($this->User->isAdmin)
 		{
-			$objPage = $this->Database->prepare("SELECT p.id, p.pid, p.includeChmod, p.chmod, p.cuser, p.cgroup, a.id AS aid FROM tl_article a, tl_page p WHERE a.id=? AND a.pid=p.id")
-									  ->limit(1)
-									  ->execute($id);
+			return true;
+		}
+		
+		if (!$blnIsPid)
+		{
+			$objContent = $this->Database
+				->prepare("SELECT * FROM tl_avisota_newsletter_content WHERE id=?")
+				->execute($id);
+			if ($objContent->next())
+			{
+				$id = $objContent->pid;
+			}
+			else
+			{
+				$this->log('Invalid avisota newsletter content element ID ' . $id, 'tl_avisota_newsletter_content checkAccessToElement()', TL_ERROR);
+				return false;
+			}
+		}
+		
+		$objNewsletter = $this->Database
+			->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
+			->execute($id);
+		if ($objNewsletter->next())
+		{
+			$pid = $objNewsletter->pid;
 		}
 		else
 		{
-			$objPage = $this->Database->prepare("SELECT p.id, p.pid, p.includeChmod, p.chmod, p.cuser, p.cgroup, a.id AS aid FROM tl_content c, tl_article a, tl_page p WHERE c.id=? AND c.pid=a.id AND a.pid=p.id")
-									  ->limit(1)
-									  ->execute($id);
+			$this->log('Invalid avisota newsletter ID ' . $id, 'tl_avisota_newsletter_content checkAccessToElement()', TL_ERROR);
+			return false;
 		}
 
-		// Invalid ID
-		if ($objPage->numRows < 1)
+		// Set root IDs
+		if (!is_array($this->User->avisota_newsletter_categories) || count($this->User->avisota_newsletter_categories) < 1)
 		{
-			$this->log('Invalid content element ID ' . $id, 'tl_content checkAccessToElement()', TL_ERROR);
-			return false;
+			$root = array(0);
+		}
+		else
+		{
+			$root = $this->User->avisota_newsletter_categories;
 		}
 
 		// The page is not mounted
-		if (!in_array($objPage->id, $pagemounts))
+		if (!in_array($pid, $root))
 		{
-			$this->log('Not enough permissions to modify article ID ' . $objPage->aid . ' on page ID ' . $objPage->id, 'tl_content checkAccessToElement()', TL_ERROR);
+			$this->log('Not enough permissions to modify newsletter ID ' . $id, 'tl_avisota_newsletter_content checkAccessToElement()', TL_ERROR);
 			return false;
 		}
-
-		// Not enough permissions to modify the article
-		if (!$this->User->isAllowed(4, $objPage->row()))
-		{
-			$this->log('Not enough permissions to modify article ID ' . $objPage->aid, 'tl_content checkAccessToElement()', TL_ERROR);
-			return false;
-		}
-		*/
 
 		return true;
+	}
+
+
+	/**
+	 * Return the send button
+	 * @param array
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @return string
+	 */
+	public function sendNewsletterButton($href, $label, $title, $icon, $attributes)
+	{
+		if (!($this->User->isAdmin || $this->User->hasAccess('send', 'avisota_newsletter_permissions')))
+		{
+			$label = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['view_only'][0];
+			$title = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['view_only'][1];
+		}
+		return ' &#160; :: &#160; <a href="'.$this->addToUrl($href.'&amp;id='.$this->Input->get('id')).'" title="'.specialchars($title).'"'.$attributes.' class="header_send">'.$label.'</a> ';
 	}
 
 

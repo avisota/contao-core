@@ -69,14 +69,15 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_femaile'] = 'Sehr geehr
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view']     = array('Ansehen und Versenden', 'Den Newsletter ansehen und versenden.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['send']     = array('Versenden', 'Den Newsletter versenden.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sended']   = 'versendet am %s';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirm']  = 'Der Newsletter wurde an alle Empfänger versendet.';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['online']   = 'Probleme mit der Darstellung? Den Newsletter Online ansehen.';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']     = 'Verteiler';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['member']   = 'Mitglieder';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']   = 'Mitgliedergruppe';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view']      = array('Ansehen und Versenden', 'Den Newsletter ansehen und versenden.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view_only'] = array('Ansehen', 'Den Newsletter ansehen.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['send']      = array('Versenden', 'Den Newsletter versenden.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sended']    = 'versendet am %s';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirm']   = 'Der Newsletter wurde an alle Empfänger versendet.';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['online']    = 'Probleme mit der Darstellung? Den Newsletter Online ansehen.';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']      = 'Verteiler';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['member']    = 'Mitglieder';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']    = 'Mitgliedergruppe';
 
 
 /**

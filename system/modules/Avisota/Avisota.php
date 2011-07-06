@@ -221,6 +221,24 @@ class Avisota extends BackendModule
 	{
 		$intId = $this->Input->get('id');
 		
+		if (!$this->User->isAdmin)
+		{
+			// Set root IDs
+			if (!is_array($this->User->avisota_newsletter_categories) || count($this->User->avisota_newsletter_categories) < 1)
+			{
+				$root = array(0);
+			}
+			else
+			{
+				$root = $this->User->avisota_newsletter_categories;
+			}
+			
+			if (!in_array($intId, $root))
+			{
+				$this->redirect('contao/main.php?act=error');
+			}
+		}
+		
 		// get the newsletter
 		$objNewsletter = $this->Database->prepare("
 				SELECT
@@ -262,6 +280,11 @@ class Avisota extends BackendModule
 			// Preview
 			if ($this->Input->get('preview'))
 			{
+				if (!$this->User->isAdmin && !$this->User->hasAccess('send', 'avisota_newsletter_permissions') && !in_array($this->Input->get('recipient', true), $this->getAllowedUsers()))
+				{
+					$this->redirect('contao/main.php?act=error');
+				}
+				
 				// Overwrite the SMTP configuration
 				if ($objCategory->useSMTP)
 				{
@@ -328,6 +351,12 @@ class Avisota extends BackendModule
 				// Redirect
 				$_SESSION['TL_CONFIRM'][] = sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirm'], 1);
 				$this->redirect($referer);
+			}
+			
+			if (!$this->User->isAdmin && !$this->User->hasAccess('send', 'avisota_newsletter_permissions'))
+			{
+				$this->log('Not enough permissions to send avisota newsletter', 'Avisota outbox', TL_ERROR);
+				$this->redirect('contao/main.php?act=error');
 			}
 			
 			$strToken = $this->Input->get('token');
@@ -518,7 +547,32 @@ class Avisota extends BackendModule
 			$this->Session->set('referer', $session);
 		}
 		
+		if (!$this->User->isAdmin && !$this->User->hasAccess('send', 'avisota_newsletter_permissions'))
+		{
+			$objTemplate->users = $this->getAllowedUsers();
+		}
+		
 		return $objTemplate->parse();
+	}
+
+
+	protected function getAllowedUsers()
+	{
+		$arrUser = array();
+		$objUser = $this->Database->execute("SELECT * FROM tl_user ORDER BY name,email");
+		while ($objUser->next())
+		{
+			if (!$objUser->admin)
+			{
+				$arrGroups = array_intersect($this->User->groups, deserialize($objUser->groups, true));
+				if (!count($arrGroups))
+				{
+					continue;
+				}
+			}
+			$arrUser[$objUser->id] = $objUser->row();
+		}
+		return $arrUser;
 	}
 	
 	
@@ -527,6 +581,12 @@ class Avisota extends BackendModule
 	 */
 	protected function outbox()
 	{
+		if (!$this->User->isAdmin && !$this->User->hasAccess('send', 'avisota_newsletter_permissions'))
+		{
+			$this->log('Not enough permissions to send avisota newsletter', 'Avisota outbox', TL_ERROR);
+			$this->redirect('contao/main.php?act=error');
+		}
+		
 		$this->loadLanguageFile('tl_avisota_newsletter_outbox');
 		$this->loadLanguageFile('tl_avisota_newsletter');
 		
