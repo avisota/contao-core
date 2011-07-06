@@ -27,6 +27,7 @@
  * PHP version 5
  * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @author     Oliver Hoff <oliver@hofff.com>
  * @package    Avisota
  * @license    LGPL
  * @filesource
@@ -99,6 +100,7 @@ $GLOBALS['BE_MOD'] = array_merge(
  * Front end modules
  */
 $GLOBALS['FE_MOD']['avisota']['avisota_subscription'] = 'ModuleAvisotaSubscription';
+$GLOBALS['FE_MOD']['avisota']['avisota_registration'] = 'ModuleAvisotaRegistration';
 
 
 /**
@@ -145,8 +147,11 @@ $GLOBALS['BE_FFL']['newschooser'] = 'WidgetNewschooser';
  * Hooks
  */
 $GLOBALS['TL_HOOKS']['outputBackendTemplate'][] = array('AvisotaBackend', 'hookOutputBackendTemplate');
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('AvisotaInsertTag', 'replaceNewsletterInsertTags');
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][]     = array('AvisotaInsertTag', 'replaceNewsletterInsertTags');
 $GLOBALS['TL_HOOKS']['getEditorStylesLayout'][] = array('AvisotaEditorStyle', 'getEditorStylesLayout');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][]     = array('AvisotaRegistrationDCA', 'loadDataContainer');
+$GLOBALS['TL_HOOKS']['createNewUser'][]         = array('AvisotaRegistrationDCA', 'createNewUser');
+$GLOBALS['TL_HOOKS']['activateAccount'][]       = array('AvisotaRegistrationDCA', 'activateAccount');
 
 
 /**

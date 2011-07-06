@@ -192,6 +192,7 @@ CREATE TABLE `tl_module` (
   `avisota_template_subscribe_mail_html` varchar(64) NOT NULL default '',
   `avisota_template_unsubscribe_mail_plain` varchar(64) NOT NULL default '',
   `avisota_template_unsubscribe_mail_html` varchar(64) NOT NULL default '',
+  `avisota_registration_lists` blob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -233,4 +234,15 @@ CREATE TABLE `tl_user_group` (
   `avisota_newsletter_categories` blob NULL,
   `avisota_newsletter_category_permissions` blob NULL,
   `avisota_newsletter_permissions` blob NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+-- --------------------------------------------------------
+
+-- 
+-- Table `tl_member`
+-- 
+
+CREATE TABLE `tl_member` (
+  `avisota_registration_lists` blob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

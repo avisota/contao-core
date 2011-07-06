@@ -27,6 +27,7 @@
  * PHP version 5
  * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @author     Oliver Hoff <oliver@hofff.com>
  * @package    Avisota
  * @license    LGPL
  * @filesource
@@ -34,6 +35,7 @@
 
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['avisota_subscription'] = '{title_legend},name,headline,type;{avisota_subscription_legend},avisota_show_lists,avisota_lists;{template_legend},avisota_template_subscribe_mail_plain,avisota_template_subscribe_mail_html,avisota_template_unsubscribe_mail_plain,avisota_template_unsubscribe_mail_html;{protected_legend:hide},protected;{expert_legend:hide},jumpTo,guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['avisota_registration'] = '{avisota_registration_legend},avisota_registration_lists';
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_show_lists'] = array
 (
@@ -80,6 +82,17 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_unsubscribe_mail_htm
 	'inputType'               => 'select',
 	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
 	'eval'                    => array('tl_class'=>'w50')
+);
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_registration_lists'] = array(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_registration_lists'],
+	'inputType'               => 'checkbox',
+	'options_callback'        => array('AvisotaRegistrationDCA', 'getLists'),
+	'eval'                    => array
+	(
+		'multiple'            => true,
+		'tl_class'            => 'clr'
+	)
 );
 
 /**

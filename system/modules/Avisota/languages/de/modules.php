@@ -27,6 +27,7 @@
  * PHP version 5
  * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @author     Oliver Hoff <oliver@hofff.com>
  * @package    Avisota
  * @license    LGPL
  * @filesource
@@ -36,17 +37,18 @@
 /**
  * Back end modules
  */
-$GLOBALS['TL_LANG']['MOD']['avisota']             = 'Newslettersystem';
-$GLOBALS['TL_LANG']['MOD']['avisota_recipients']  = array('Abonnenten', 'Newsletter Abonnenten verwalten.');
-$GLOBALS['TL_LANG']['MOD']['avisota_newsletter']  = array('Newsletter', 'Newsletter verwalten und versenden.');
-$GLOBALS['TL_LANG']['MOD']['avisota_outbox']      = array('Postausgang', 'Postausgang einsehen und Newsletter versenden.');
-$GLOBALS['TL_LANG']['MOD']['avisota_translation'] = array('Sprachvariablen', 'Verändern Sie die Sprachvariablen für das Newslettersystem.');
+$GLOBALS['TL_LANG']['MOD']['avisota']              = 'Newslettersystem';
+$GLOBALS['TL_LANG']['MOD']['avisota_recipients']   = array('Abonnenten', 'Newsletter Abonnenten verwalten.');
+$GLOBALS['TL_LANG']['MOD']['avisota_newsletter']   = array('Newsletter', 'Newsletter verwalten und versenden.');
+$GLOBALS['TL_LANG']['MOD']['avisota_outbox']       = array('Postausgang', 'Postausgang einsehen und Newsletter versenden.');
+$GLOBALS['TL_LANG']['MOD']['avisota_translation']  = array('Sprachvariablen', 'Verändern Sie die Sprachvariablen für das Newslettersystem.');
 
 
 /**
  * Front end modules
  */
-$GLOBALS['TL_LANG']['FMD']['avisota']              = 'Newslettersystem';
-$GLOBALS['TL_LANG']['FMD']['avisota_subscription'] = array('Abonnement verwalten', 'An- und Abmeldung zum Avisota Newslettersystem.');
+$GLOBALS['TL_LANG']['FMD']['avisota']               = 'Newslettersystem';
+$GLOBALS['TL_LANG']['FMD']['avisota_subscription']  = array('Abonnement verwalten', 'An- und Abmeldung zum Avisota Newslettersystem.');
+$GLOBALS['TL_LANG']['FMD']['avisota_registration']  = array('Registrierung (Avisota)', 'Registrierungsmodul mit Avisota Verteilern.');
 
 ?>
