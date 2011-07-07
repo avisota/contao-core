@@ -46,7 +46,7 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['gender']      = array('Geschlecht',
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmed']   = array('Bestätigt', 'Hier können Sie die E-Mail Adresse als bestätigt markieren.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['token']       = array('Token', 'Der Auth-Token wird für das Double-Opt-In Verfahren genutzt.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn']     = array('Eintragungszeitpunkt', 'Der Zeitpunkt, an dem das Abonnement hinzugefügt wurde.', 'hinzugefügt am %s');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy']     = array('Hinzugefügt von', 'Der Benutzer, der den Abonnenten hinzugefügt hat, falls dieser sich nicht selbst eingetragen hat.', ' durch %s', 'einen gelöschten Benutzer');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy']     = array('Hinzugefügt von', 'Der Benutzer, der den Abonnenten hinzugefügt hat, falls dieser sich nicht selbst eingetragen hat.', ' von %s', 'einen gelöschten Benutzer');
 
 
 /**
