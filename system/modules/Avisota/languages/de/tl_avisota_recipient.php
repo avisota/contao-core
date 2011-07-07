@@ -76,6 +76,7 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['edit']                = array('Abon
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['tools']	           = array('Tools','Abonnenten in Massen verarbeiten.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['migrate']	           = array('Migrieren','Abonnenten aus dem Contao Newslettersystem migrieren.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['import']	           = array('CSV-Import','Import von Abbonements aus einer CSV-Datei.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['export']	           = array('CSV-Export','Export von Abbonements in eine CSV-Datei.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['remove']	           = array('CSV-Löschen','Löschen von Abbonements aus einer CSV-Datei.');
 
 ?>

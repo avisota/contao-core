@@ -94,6 +94,13 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 				'class'               => 'header_recipient_import recipient_tool',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			),
+			'export' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['export'],
+				'href'                => 'table=tl_avisota_recipient_export',
+				'class'               => 'header_recipient_export recipient_tool',
+				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+			),
 			'remove' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['remove'],
@@ -167,7 +174,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'sorting'                 => true,
 			'flag'                    => 1,
 			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'email', 'mandatory'=>true, 'maxlength'=>255, 'importable'=>true)
+			'eval'                    => array('rgxp'=>'email', 'mandatory'=>true, 'maxlength'=>255, 'importable'=>true, 'exportable'=>true)
 		),
 		'lists' => array
 		(
@@ -187,7 +194,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'flag'                    => 1,
 			'inputType'               => 'select',
 			'options'                 => array_combine($GLOBALS['TL_CONFIG']['avisota_salutations'], $GLOBALS['TL_CONFIG']['avisota_salutations']),
-			'eval'                    => array('maxlength'=>255, 'includeBlankOption'=>true, 'importable'=>true, 'feEditable'=>true, 'tl_class'=>'w50')
+			'eval'                    => array('maxlength'=>255, 'includeBlankOption'=>true, 'importable'=>true, 'exportable'=>true, 'feEditable'=>true, 'tl_class'=>'w50')
 		),
 		'title' => array
 		(
@@ -197,7 +204,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'sorting'                 => true,
 			'flag'                    => 1,
 			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'importable'=>true, 'feEditable'=>true, 'tl_class'=>'w50')
+			'eval'                    => array('maxlength'=>255, 'importable'=>true, 'exportable'=>true, 'feEditable'=>true, 'tl_class'=>'w50')
 		),
 		'firstname' => array
 		(
@@ -207,7 +214,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'sorting'                 => true,
 			'flag'                    => 1,
 			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'importable'=>true, 'feEditable'=>true, 'tl_class'=>'w50')
+			'eval'                    => array('maxlength'=>255, 'importable'=>true, 'exportable'=>true, 'feEditable'=>true, 'tl_class'=>'w50')
 		),
 		'lastname' => array
 		(
@@ -217,7 +224,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'sorting'                 => true,
 			'flag'                    => 1,
 			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'importable'=>true, 'feEditable'=>true, 'tl_class'=>'w50')
+			'eval'                    => array('maxlength'=>255, 'importable'=>true, 'exportable'=>true, 'feEditable'=>true, 'tl_class'=>'w50')
 		),
 		'gender' => array
 		(
@@ -227,14 +234,15 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'inputType'               => 'select',
 			'options'                 => array('male', 'female'),
 			'reference'               => &$GLOBALS['TL_LANG']['MSC'],
-			'eval'                    => array('includeBlankOption'=>true, 'importable'=>true, 'feEditable'=>true, 'tl_class'=>'clr')
+			'eval'                    => array('includeBlankOption'=>true, 'importable'=>true, 'exportable'=>true, 'feEditable'=>true, 'tl_class'=>'clr')
 		),
 		'confirmed' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmed'],
 			'exclude'                 => true,
 			'filter'                  => true,
-			'inputType'               => 'checkbox'
+			'inputType'               => 'checkbox',
+			'eval'                    => array('exportable'=>true)
 		),
 		'token' => array
 		(
@@ -247,7 +255,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'filter'                  => true,
 			'sorting'                 => true,
 			'flag'                    => 8,
-			'eval'                    => array('doNotShow'=>true, 'doNotCopy'=>true)
+			'eval'                    => array('exportable'=>true, 'doNotShow'=>true, 'doNotCopy'=>true)
 		),
 		'addedBy' => array
 		(
@@ -257,7 +265,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'sorting'                 => true,
 			'flag'                    => 1,
 			'foreignKey'              => 'tl_user.name',
-			'eval'                    => array('doNotShow'=>true, 'doNotCopy'=>true)
+			'eval'                    => array('exportable'=>true, 'doNotShow'=>true, 'doNotCopy'=>true)
 		)		
 	)
 );

@@ -93,7 +93,7 @@ $GLOBALS['BE_MOD'] = array_merge(
 		(
 			'avisota_recipients' => array
 			(
-				'tables'     => array('tl_avisota_recipient_list', 'tl_avisota_recipient', 'tl_avisota_recipient_migrate', 'tl_avisota_recipient_import', 'tl_avisota_recipient_remove'),
+				'tables'     => array('tl_avisota_recipient_list', 'tl_avisota_recipient', 'tl_avisota_recipient_migrate', 'tl_avisota_recipient_import', 'tl_avisota_recipient_export', 'tl_avisota_recipient_remove'),
 				'icon'       => 'system/modules/Avisota/html/recipients.png',
 				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 			),
