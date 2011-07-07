@@ -32,9 +32,15 @@ CREATE TABLE `tl_avisota_recipient` (
   `pid` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
   `email` varchar(255) NOT NULL default '',
+  `salutation` varchar(255) NOT NULL default '',
+  `title` varchar(255) NOT NULL default '',
+  `firstname` varchar(255) NOT NULL default '',
+  `lastname` varchar(255) NOT NULL default '',
+  `gender` varchar(32) NOT NULL default '',
   `confirmed` char(1) NOT NULL default '',
   `token` char(32) NOT NULL default '',
-  `addedOn` varchar(10) NOT NULL default '',
+  `addedOn` int(10) NOT NULL default '0',
+  `addedBy` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -186,6 +192,9 @@ CREATE TABLE `tl_avisota_newsletter_outbox` (
 -- 
 
 CREATE TABLE `tl_module` (
+  `avisota_recipient_fields` blob NULL,
+  `avisota_subscription_sender_name` varchar(255) NOT NULL default '',
+  `avisota_subscription_sender` varchar(255) NOT NULL default '',
   `avisota_show_lists` char(1) NOT NULL default '',
   `avisota_lists` blob NULL,
   `avisota_template_subscribe_mail_plain` varchar(64) NOT NULL default '',
@@ -193,6 +202,7 @@ CREATE TABLE `tl_module` (
   `avisota_template_unsubscribe_mail_plain` varchar(64) NOT NULL default '',
   `avisota_template_unsubscribe_mail_html` varchar(64) NOT NULL default '',
   `avisota_registration_lists` blob NULL,
+  `subscriptionTpl` varchar(64) NOT NULL default '',
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

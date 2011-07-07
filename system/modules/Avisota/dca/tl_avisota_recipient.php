@@ -118,16 +118,6 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 				'icon'                => 'edit.gif',
 				'button_callback'     => array('tl_avisota_recipient', 'editRecipient')
 			),
-			/*
-			'copy' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['copy'],
-				'href'                => 'act=paste&amp;mode=copy',
-				'icon'                => 'copy.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"',
-				'button_callback'     => array('tl_avisota_recipient', 'copyRecipient')
-			),
-			*/
 			'delete' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['delete'],
@@ -163,7 +153,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{recipient_legend},email,confirmed',
+		'default'                     => '{recipient_legend},email;{personals_legend},salutation,title,firstname,lastname,gender,confirmed',
 	),
 
 	// Fields
@@ -177,7 +167,67 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'sorting'                 => true,
 			'flag'                    => 1,
 			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'email', 'mandatory'=>true, 'maxlength'=>255)
+			'eval'                    => array('rgxp'=>'email', 'mandatory'=>true, 'maxlength'=>255, 'importable'=>true)
+		),
+		'lists' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['lists'],
+			'exclude'                 => false,
+			'sorting'                 => false,
+			'inputType'               => 'checkbox',
+			'options'                 => array(),
+			'eval'                    => array('mandatory'=>true, 'doNotShow'=>true)
+		),
+		'salutation' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['salutation'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'flag'                    => 1,
+			'inputType'               => 'select',
+			'options'                 => array_combine($GLOBALS['TL_CONFIG']['avisota_salutations'], $GLOBALS['TL_CONFIG']['avisota_salutations']),
+			'eval'                    => array('maxlength'=>255, 'includeBlankOption'=>true, 'importable'=>true, 'feEditable'=>true, 'tl_class'=>'w50')
+		),
+		'title' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['title'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'flag'                    => 1,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=>255, 'importable'=>true, 'feEditable'=>true, 'tl_class'=>'w50')
+		),
+		'firstname' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['firstname'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'flag'                    => 1,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=>255, 'importable'=>true, 'feEditable'=>true, 'tl_class'=>'w50')
+		),
+		'lastname' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['lastname'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'flag'                    => 1,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=>255, 'importable'=>true, 'feEditable'=>true, 'tl_class'=>'w50')
+		),
+		'gender' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['gender'],
+			'exclude'                 => true,
+			'filter'                  => true,
+			'inputType'               => 'select',
+			'options'                 => array('male', 'female'),
+			'reference'               => &$GLOBALS['TL_LANG']['MSC'],
+			'eval'                    => array('includeBlankOption'=>true, 'importable'=>true, 'feEditable'=>true, 'tl_class'=>'clr')
 		),
 		'confirmed' => array
 		(
@@ -193,11 +243,22 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 		'addedOn' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn'],
+			'default'                 => time(),
 			'filter'                  => true,
 			'sorting'                 => true,
 			'flag'                    => 8,
-			'eval'                    => array('rgxp'=>'datim')
-		)	
+			'eval'                    => array('doNotShow'=>true, 'doNotCopy'=>true)
+		),
+		'addedBy' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy'],
+			'default'                 => $this->User->id,
+			'filter'                  => true,
+			'sorting'                 => true,
+			'flag'                    => 1,
+			'foreignKey'              => 'tl_user.name',
+			'eval'                    => array('doNotShow'=>true, 'doNotCopy'=>true)
+		)		
 	)
 );
 
@@ -240,16 +301,25 @@ class tl_avisota_recipient extends Backend
 	{
 		$icon = $arrRow['confirmed'] ? 'visible' : 'invisible';
 
-		$label = $arrRow['email'];
-		
-		if ($arrRow['addedOn'])
+		$label = trim($arrRow['firstname'] . ' ' . $arrRow['lastname']);
+		if (strlen($label))
 		{
-			$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(' . sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['subscribed'], $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $arrRow['addedOn'])) . ')</span>';
+			$label .= ' &lt;' . $arrRow['email'] . '&gt;';
 		}
 		else
 		{
-			$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(' . $GLOBALS['TL_LANG']['tl_avisota_recipient']['manually'] . ')</span>';
+			$label = $arrRow['email'];
 		}
+		
+		$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(';
+		$label .= sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn'][2], $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $arrRow['addedOn']));
+		if ($arrRow['addedBy'] > 0)
+		{
+			$objUser = $this->Database->prepare("SELECT * FROM tl_user WHERE id=?")
+				->execute($arrRow['addedBy']);
+			$label .= sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy'][2], $objUser->next() ? $objUser->name : $GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy'][3]);
+		}
+		$label .= ')</span>';
 		
 		return sprintf('<div class="list_icon" style="background-image:url(\'system/themes/%s/images/%s.gif\');">%s</div>', $this->getTheme(), $icon, $label);
 	}

@@ -8,35 +8,43 @@
 
 <form action="<?php echo $this->formAction ?>" method="post" id="<?php echo $this->formId ?>">
 <div class="formbody">
+<input type="hidden" name="FORM_SUBMIT" value="<?php echo $this->formId; ?>" />
 
 <p class="preamble"><?php echo $GLOBALS['TL_LANG']['avisota']['subscription']['preamble'] ?></p>
 
-<?php if (count($this->messages)): foreach ($this->messages as $strMessage): ?>
-<p class="message"><?php echo $strMessage ?></p>
-<?php endforeach; endif ?>
+<?php
+foreach ($this->messages as $strClass => $arrMessages):
+foreach ($arrMessages as $strMessage):
+?>
+<p class="message <?php echo $strClass; ?>"><?php echo $strMessage ?></p>
+<?php
+endforeach;
+endforeach;
+?>
 
-<?php if ($this->lists): ?>
-<div class="widget widget-checkbox">
-<div class="checkbox_container">
-	<label><?php echo $GLOBALS['TL_LANG']['avisota']['subscription']['lists'] ?></label>
-	<ul>
-	<?php foreach ($this->lists as $list): ?>
-		<li><input type="checkbox" name="list[]" value="<?php echo specialchars($list['id']) ?>" /> <?php echo $list['title'] ?></li>
-	<?php endforeach; ?>
-	</ul>
+<?php if (!$this->tableless): ?>
+<table cellspacing="0" cellpadding="0" summary="">
+	<tbody>
+		<?php echo $this->fields; ?>
+		<tr class="<?php echo $this->rowLast; ?> row_last">
+			<td class="col_0 col_1 col_submit col_first col_last" colspan="2">
+				<div class="submit_container">
+					<input type="submit" name="subscribe" value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota']['subscribe']['submit']); ?>" />
+					<input type="submit" name="unsubscribe" value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota']['unsubscribe']['submit']); ?>" />
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<?php else: ?>
+<div class="fields">
+	<?php echo $this->fields; ?>
 </div>
-</div>
-<?php endif ?>
-
-<div class="widget widget-text">
-	<label for="ctrl_email"><?php echo $GLOBALS['TL_LANG']['avisota']['subscription']['email'] ?></label>
-	<input type="text" class="text" name="email" id="ctrl_email" value="<?php echo ($this->Input->post('email') ? $this->Input->post('email') : $this->Input->get('email')); ?>" />
-</div>
-
 <div class="submit_container">
 	<input type="submit" name="subscribe" value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota']['subscribe']['submit']); ?>" />
 	<input type="submit" name="unsubscribe" value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota']['unsubscribe']['submit']); ?>" />
 </div>
+<?php endif; ?>
 
 </div>
 </form>

@@ -35,6 +35,16 @@
 
 
 /**
+ * Salutation
+ */
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrter Herr {fullname}';
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrte Frau {fullname}';
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrter {name}';
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrte {name}';
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Hallo {shortname}';
+
+
+/**
  * Constants
  */
 define('NL_HTML', 'html');
