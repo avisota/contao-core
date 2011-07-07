@@ -860,9 +860,6 @@ class Avisota extends BackendModule
 					->limit($intCount)
 					->execute($intId, $strToken);
 		
-				var_dump($objRecipients);
-				exit;
-				
 				echo '<div style="font-family:Verdana, sans-serif; font-size:11px; line-height:16px; margin-bottom:12px;">';
 		
 				// Send newsletter
