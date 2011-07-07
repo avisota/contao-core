@@ -153,7 +153,10 @@ class tl_avisota_recipient_import extends Backend
 		
 		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $k=>$v)
 		{
-			$arr[1]['source'][$k] = $v['label'][0];
+			if (isset($v['eval']) && isset($v['eval']['importable']) && $v['eval']['importable'])
+			{
+				$arr[1]['source'][$k] = $v['label'][0];
+			}
 		}
 		
 		return $arr;
