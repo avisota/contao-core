@@ -172,6 +172,12 @@ $GLOBALS['TL_CRON']['daily'][] = array('AvisotaBackend', 'cronCleanupRecipientLi
 
 
 /**
+ * folderurl support
+ */
+$GLOBALS['URL_KEYWORDS'][] = 'item';
+
+
+/**
  * Hack: Fix ajax load import source tree.
  */
 if (($_GET['table'] == 'tl_avisota_recipient_import' || $_GET['table'] == 'tl_avisota_recipient_remove') && ($_GET['isAjax'] || $_POST['isAjax']))

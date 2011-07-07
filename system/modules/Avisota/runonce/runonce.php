@@ -58,7 +58,6 @@ class AvisotaRunonce extends Controller
 	public function run()
 	{
 		$this->upgrade0_4_5();
-		$this->addFolderUrlSupport();
 	}
 	
 	
@@ -72,32 +71,6 @@ class AvisotaRunonce extends Controller
 			$this->Database->execute("ALTER TABLE tl_avisota_newsletter_content ADD area varchar(32) NOT NULL default ''");
 		}
 		$this->Database->prepare("UPDATE tl_avisota_newsletter_content SET area=? WHERE area=?")->execute('body', '');
-	}
-	
-	
-	/**
-	 * Add folderUrl keyword.
-	 */
-	protected function addFolderUrlSupport()
-	{
-		$strUrlKeywords = '';
-		if (isset($GLOBALS['TL_CONFIG']['urlKeywords']))
-		{
-			$strUrlKeywords = $GLOBALS['TL_CONFIG']['urlKeywords'];
-		}
-		$arrUrlKeywords = trimsplit(',', $strUrlKeywords);
-		
-		# check if "item" url keyword exists
-		if (!in_array('item', $arrUrlKeywords))
-		{
-			# add "item" url keyword
-			$arrUrlKeywords[] = 'item';
-			$strUrlKeywords = implode(',', $arrUrlKeywords);
-			
-			# update urlKeywords setting
-			$this->Config->update('$GLOBALS[\'TL_CONFIG\'][\'urlKeywords\']', $strUrlKeywords);
-			$GLOBALS['TL_CONFIG']['urlKeywords'] = $strUrlKeywords;
-		}
 	}
 }
 
