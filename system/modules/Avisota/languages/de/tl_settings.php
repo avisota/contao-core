@@ -36,8 +36,11 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_mode']  = array('Entwicklermodus', 'Aktiviert den Entwicklermodus.');
-$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_email'] = array('Entwickler E-Mail', 'Im Entwicklermodus werden alle E-Mails an diese Adresse umgeleitet.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_time']    = array('Versanddauer', 'Anzahl Sekunden die pro Zyklus vergehen dürfen, bevor ein neuer Zyklus getriggert wird.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_count']   = array('Versandanzahl', 'Anzahl E-Mails die pro Zyklus versendet werden, bevor ein neuer Zyklus getriggert wird.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_timeout'] = array('Zyklenpause', 'Anzahl Sekunden die zwischen zwei Zyklen gewartet wird.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_mode']   = array('Entwicklermodus', 'Aktiviert den Entwicklermodus.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_email']  = array('Entwickler E-Mail', 'Im Entwicklermodus werden alle E-Mails an diese Adresse umgeleitet.');
 
 
 /**

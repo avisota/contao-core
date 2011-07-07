@@ -35,6 +35,23 @@
 
 
 /**
+ * Request starttime
+ */
+if (!isset($_SERVER['REQUEST_TIME']))
+{
+	$_SERVER['REQUEST_TIME'] = time();
+}
+
+
+/**
+ * Settings
+ */
+$GLOBALS['TL_CONFIG']['avisota_max_send_time']    = floor(0.85 * ini_get('max_execution_time'));
+$GLOBALS['TL_CONFIG']['avisota_max_send_count']   = 100;
+$GLOBALS['TL_CONFIG']['avisota_max_send_timeout'] = 1;
+
+
+/**
  * Salutation
  */
 $GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrter Herr {fullname}';

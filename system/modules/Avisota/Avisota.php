@@ -164,9 +164,9 @@ class Avisota extends BackendModule
 				SELECT
 					*
 				FROM
-					`tl_avisota_newsletter`
+					tl_avisota_newsletter
 				WHERE
-					`id`=?")
+					id=?")
 			->execute($intId);
 		
 		if (!$objNewsletter->next())
@@ -179,9 +179,9 @@ class Avisota extends BackendModule
 				SELECT
 					*
 				FROM
-					`tl_avisota_newsletter_category`
+					tl_avisota_newsletter_category
 				WHERE
-					`id`=?")
+					id=?")
 			->execute($objNewsletter->pid);
 		
 		if (!$objCategory->next())
@@ -244,9 +244,9 @@ class Avisota extends BackendModule
 				SELECT
 					*
 				FROM
-					`tl_avisota_newsletter`
+					tl_avisota_newsletter
 				WHERE
-					`id`=?")
+					id=?")
 			->execute($intId);
 		
 		if (!$objNewsletter->next())
@@ -259,9 +259,9 @@ class Avisota extends BackendModule
 				SELECT
 					*
 				FROM
-					`tl_avisota_newsletter_category`
+					tl_avisota_newsletter_category
 				WHERE
-					`id`=?")
+					id=?")
 			->execute($objNewsletter->pid);
 		
 		if (!$objCategory->next())
@@ -376,25 +376,25 @@ class Avisota extends BackendModule
 						$intIdTmp = $arrMatch[2];
 						$this->Database->prepare("
 								INSERT INTO
-									`tl_avisota_newsletter_outbox`
-									(`pid`, `tstamp`, `token`, `email`, `source`)
+									tl_avisota_newsletter_outbox
+									(pid, tstamp, token, email, source)
 								SELECT DISTINCT
 									?,
 									?,
 									?,
-									r.`email`,
+									r.email,
 									CONCAT('list:', r.pid)
 								FROM
-									`tl_avisota_recipient` r
+									tl_avisota_recipient r
 								LEFT OUTER JOIN
-									`tl_avisota_newsletter_outbox` o
+									tl_avisota_newsletter_outbox o
 								ON
-										o.`email`=r.`email`
-									AND o.`token`=?
+										o.email=r.email
+									AND o.token=?
 								WHERE
-										r.`pid`=?
-									AND r.`confirmed`='1'
-									AND o.`id` IS NULL")
+										r.pid=?
+									AND r.confirmed='1'
+									AND o.id IS NULL")
 						   ->execute($objNewsletter->id, $time, $strToken, $strToken, $intIdTmp);
 						break;
 						
@@ -404,10 +404,10 @@ class Avisota extends BackendModule
 								SELECT
 									*
 								FROM
-									`tl_member_group`
+									tl_member_group
 								WHERE
-										`id`=?
-									AND `disable`=''")
+										id=?
+									AND disable=''")
 							->execute($intIdTmp);
 						if ($objMgroup->numRows > 0)
 						{
@@ -424,9 +424,9 @@ class Avisota extends BackendModule
 						SELECT
 							*
 						FROM
-							`tl_member`
+							tl_member
 						WHERE
-							`disable`=''");
+							disable=''");
 				while ($objMember->next())
 				{
 					$arrMemberGroups = deserialize($objMember->groups, true);
@@ -435,8 +435,8 @@ class Avisota extends BackendModule
 					{
 						$this->Database->prepare("
 								INSERT INTO
-									`tl_avisota_newsletter_outbox`
-									(`pid`, `tstamp`, `token`, `email`, `source`)
+									tl_avisota_newsletter_outbox
+									(pid, tstamp, token, email, source)
 								VALUES
 									(?, ?, ?, ?, ?)")
 						   ->execute($objNewsletter->id, $time, $strToken, $objMember->email, 'mgroup:' . array_shift($arrIntersect));
@@ -506,9 +506,9 @@ class Avisota extends BackendModule
 							SELECT
 								*
 							FROM
-								`tl_avisota_recipient_list`
+								tl_avisota_recipient_list
 							WHERE
-								`id`=?")
+								id=?")
 						->execute($intIdTmp);
 					$arrLists[$intIdTmp] = $objList->title;
 					break;
@@ -519,9 +519,9 @@ class Avisota extends BackendModule
 							SELECT
 								*
 							FROM
-								`tl_member_group`
+								tl_member_group
 							WHERE
-								`id`=?")
+								id=?")
 						->execute($intIdTmp);
 					$arrMgroups[$intIdTmp] = $objMgroup->name;
 					break;
@@ -605,9 +605,9 @@ class Avisota extends BackendModule
 						SELECT
 							*
 						FROM
-							`tl_avisota_newsletter`
+							tl_avisota_newsletter
 						WHERE
-							`id`=?")
+							id=?")
 					->execute($intId);
 				if (!$objNewsletter->next())
 				{
@@ -622,10 +622,10 @@ class Avisota extends BackendModule
 						SELECT
 							*
 						FROM
-							`tl_avisota_newsletter_outbox`
+							tl_avisota_newsletter_outbox
 						WHERE
-								`pid`=?
-							AND `token`=?")
+								pid=?
+							AND token=?")
 					->execute($intId, $strToken);
 				while ($objRecipients->next())
 				{
@@ -639,9 +639,9 @@ class Avisota extends BackendModule
 								SELECT
 									*
 								FROM
-									`tl_avisota_recipient_list`
+									tl_avisota_recipient_list
 								WHERE
-									`id`=?")
+									id=?")
 							->execute($arrSource[1]);
 						if ($objList->next())
 						{
@@ -654,9 +654,9 @@ class Avisota extends BackendModule
 								SELECT
 									*
 								FROM
-									`tl_member_group`
+									tl_member_group
 								WHERE
-									`id`=?")
+									id=?")
 							->execute($arrSource[1]);
 						if ($objMgroup->next())
 						{
@@ -675,10 +675,10 @@ class Avisota extends BackendModule
 			case 'remove':
 				$this->Database->prepare("
 						DELETE FROM
-							`tl_avisota_newsletter_outbox`
+							tl_avisota_newsletter_outbox
 						WHERE
-								`pid`=?
-							AND `token`=?")
+								pid=?
+							AND token=?")
 					->execute($intId, $strToken);
 				$_SESSION['TL_CONFIRM'][] = $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['removed'];
 				$this->redirect($referer);
@@ -695,9 +695,9 @@ class Avisota extends BackendModule
 						SELECT
 							*
 						FROM
-							`tl_avisota_newsletter`
+							tl_avisota_newsletter
 						WHERE
-							`id`=?")
+							id=?")
 					->execute($intId);
 				if (!$objNewsletter->next())
 				{
@@ -709,9 +709,9 @@ class Avisota extends BackendModule
 						SELECT
 							*
 						FROM
-							`tl_avisota_newsletter_category`
+							tl_avisota_newsletter_category
 						WHERE
-							`id`=?")
+							id=?")
 					->execute($objNewsletter->pid);
 				if (!$objCategory->next())
 				{
@@ -724,13 +724,13 @@ class Avisota extends BackendModule
 				// get total email count
 				$objTotal = $this->Database->prepare("
 						SELECT
-							COUNT(*) as `total`
+							COUNT(*) as total
 						FROM
-							`tl_avisota_newsletter_outbox`
+							tl_avisota_newsletter_outbox
 						WHERE
-								`pid`=?
-							AND `token`=?
-							AND `send`=0")
+								pid=?
+							AND token=?
+							AND send=0")
 					->execute($intId, $strToken);
 		
 				// Return if there are no recipients
@@ -742,8 +742,8 @@ class Avisota extends BackendModule
 				}
 		
 				// Set timeout and count
-				$intTimeout = 1;
-				$intCount = 10;
+				$intTimeout = $GLOBALS['TL_CONFIG']['avisota_max_send_timeout'];
+				$intCount = $GLOBALS['TL_CONFIG']['avisota_max_send_count'];
 			
 				// Overwrite the SMTP configuration
 				if ($objCategory->useSMTP)
@@ -794,34 +794,75 @@ class Avisota extends BackendModule
 					'private' => $this->prepareBeforeSending($this->generateHtml($objNewsletter, $objCategory, 'private'))
 				);
 				
+				// load tl_avisota_recipient and tl_member data container
+				$this->loadDataContainer('tl_avisota_recipient');
+				$this->loadDataContainer('tl_member');
+				// build a special field deciding select
+				$strSelect = '';
+				// fields that are allready added (or should not be added)
+				$arrFields = array('id', 'tstamp', 'lists');
+				// add all tl_avisota_recipient fields, with fallback on tl_member fields
+				foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $strField => $arrData)
+				{
+					if (!in_array($strField, $arrFields) && $arrData['type'] != 'password')
+					{
+						if (isset($GLOBALS['TL_DCA']['tl_member']['fields'][$strField]))
+						{
+							$strSelect .= sprintf('IFNULL(r.%1$s, m.%1$s) as %1$s, ', $strField);
+						}
+						else
+						{
+							$strSelect .= sprintf('r.%1$s as %1$s, ', $strField);
+						}
+						$arrFields[] = $strField;
+					}
+				}
+				// add remeaning tl_member fields
+				foreach ($GLOBALS['TL_DCA']['tl_member']['fields'] as $strField => $arrData)
+				{
+					if (!in_array($strField, $arrFields) && $arrData['type'] != 'password')
+					{
+						$strSelect .= sprintf('m.%1$s as %1$s, ', $strField);
+						$arrFields[] = $strField;
+					}
+				}
+				
 				// Get recipients
 				$objRecipients = $this->Database->prepare("
 					SELECT
 						t.*,
-						t.`outbox_email` as `email`
+						t.outbox_email as email
 					FROM (
 						SELECT
-							m.*,
-							o.email as `outbox_email`,
-							o.id as `outbox`,
-							o.source as `outbox_source`,
-							SUBSTRING(o.`email`, LOCATE('@', o.`email`)) as `domain`
+							$strSelect
+							o.email as outbox_email,
+							o.id as outbox,
+							o.source as outbox_source,
+							SUBSTRING(o.email, LOCATE('@', o.email)) as domain
 						FROM
 							tl_avisota_newsletter_outbox o
 						LEFT JOIN
 							tl_member m
 						ON
-								o.`email`=m.`email`
-							AND m.`disable`=''
+								o.email=m.email
+							AND m.disable=''
+						LEFT JOIN
+							tl_avisota_recipient r
+						ON
+								o.email=r.email
+							AND r.pid = SUBSTRING(o.source, 6)
 						WHERE
-								o.`pid`=?
-							AND o.`token`=?
-							AND o.`send`=0) t
+								o.pid=?
+							AND o.token=?
+							AND o.send=0) t
 					GROUP BY
-						`domain`")
+						domain")
 					->limit($intCount)
 					->execute($intId, $strToken);
 		
+				var_dump($objRecipients);
+				exit;
+				
 				echo '<div style="font-family:Verdana, sans-serif; font-size:11px; line-height:16px; margin-bottom:12px;">';
 		
 				// Send newsletter
@@ -839,7 +880,12 @@ class Avisota extends BackendModule
 							->execute(time(), $objNewsletter->id);
 					}
 					
-					while ($objRecipients->next())
+					$n = 0;
+					$s = time();
+					
+					$intEndExecutionTime = $_SERVER['REQUEST_TIME'] + $GLOBALS['TL_CONFIG']['avisota_max_send_time'];
+					
+					while ($intEndExecutionTime > time() && $objRecipients->next())
 					{
 						// private recipient (member id exists)
 						if ($objRecipients->id)
@@ -864,20 +910,20 @@ class Avisota extends BackendModule
 							
 							$this->Database->prepare("
 									UPDATE
-										`tl_avisota_newsletter_outbox`
+										tl_avisota_newsletter_outbox
 									SET
-										`failed`='1'
+										failed='1'
 									WHERE
-										`id`=?")
+										id=?")
 								->execute($objRecipients->outbox);
 							
 							$this->Database->prepare("
 									UPDATE
-										`tl_avisota_recipient`
+										tl_avisota_recipient
 									SET
-										`confirmed`=''
+										confirmed=''
 									WHERE
-										`email`=?")
+										email=?")
 								->execute($objRecipients->email);
 							
 							$this->log('Recipient address "' . $objRecipients->email . '" was rejected and has been deactivated', 'Avisota outbox()', TL_ERROR);
@@ -885,19 +931,24 @@ class Avisota extends BackendModule
 						
 						$this->Database->prepare("
 								UPDATE
-									`tl_avisota_newsletter_outbox`
+									tl_avisota_newsletter_outbox
 								SET
-									`send`=?
+									send=?
 								WHERE
-									`id`=?")
+									id=?")
 							->execute(time(), $objRecipients->outbox);
 						
 						echo 'Sending newsletter to <strong>' . $objRecipients->email . '</strong><br />';
+						$n ++;
+						
+						ob_flush();
 					}
+
+					echo '<div style="margin-top:12px;">Sending ' . $n . ' newletters in ' . (time() - $s) . ' seconds!</div>';
 				}
 				
 				echo '<div style="margin-top:12px;">';
-		
+				
 				// Redirect back home
 				if ($objRecipients->numRows == 0)
 				{
@@ -933,26 +984,26 @@ class Avisota extends BackendModule
 			);
 			$objOutbox = $this->Database->execute("
 					SELECT
-						n.`id` as `id`,
-						n.`subject` as `newsletter`,
-						MIN(o.`tstamp`) as `date`,
-						COUNT(o.`email`) as `recipients`,
-						(SELECT COUNT(*) FROM `tl_avisota_newsletter_outbox` o2 WHERE o.`token`=o2.`token` AND o2.`send`=0) as `outstanding`,
-						(SELECT COUNT(*) FROM `tl_avisota_newsletter_outbox` o2 WHERE o.`token`=o2.`token` AND o2.`failed`='1') as `failed`,
-						o.`token`,
+						n.id as id,
+						n.subject as newsletter,
+						MIN(o.tstamp) as date,
+						COUNT(o.email) as recipients,
+						(SELECT COUNT(*) FROM tl_avisota_newsletter_outbox o2 WHERE o.token=o2.token AND o2.send=0) as outstanding,
+						(SELECT COUNT(*) FROM tl_avisota_newsletter_outbox o2 WHERE o.token=o2.token AND o2.failed='1') as failed,
+						o.token,
 						o.pid as pid
 					FROM
-						`tl_avisota_newsletter_outbox` o
+						tl_avisota_newsletter_outbox o
 					INNER JOIN
-						`tl_avisota_newsletter` n
+						tl_avisota_newsletter n
 					ON
 						n.id=o.pid
 					GROUP BY
-						o.`pid`,
-						o.`token`
+						o.pid,
+						o.token
 					ORDER BY
-						o.`tstamp` DESC,
-						n.`subject` ASC");
+						o.tstamp DESC,
+						n.subject ASC");
 			while ($objOutbox->next())
 			{
 				
@@ -975,9 +1026,9 @@ class Avisota extends BackendModule
 								SELECT
 									*
 								FROM
-									`tl_avisota_recipient_list`
+									tl_avisota_recipient_list
 								WHERE
-									`id`=?")
+									id=?")
 							->execute($arrSource[1]);
 						if ($objList->next())
 						{
@@ -989,9 +1040,9 @@ class Avisota extends BackendModule
 								SELECT
 									*
 								FROM
-									`tl_member_group`
+									tl_member_group
 								WHERE
-									`id`=?")
+									id=?")
 							->execute($arrSource[1]);
 						if ($objMgroup->next())
 						{
@@ -1150,13 +1201,13 @@ class Avisota extends BackendModule
 				SELECT
 					*
 				FROM
-					`tl_avisota_newsletter_content`
+					tl_avisota_newsletter_content
 				WHERE
-						`pid`=?
-					AND `invisible`=''
-					AND `area`=?
+						pid=?
+					AND invisible=''
+					AND area=?
 				ORDER BY
-					`sorting`")
+					sorting")
 			->execute($objNewsletter->id, $area ? $area : 'body');
 		
 		while ($objContent->next())
@@ -1178,10 +1229,10 @@ class Avisota extends BackendModule
 				SELECT
 					*
 				FROM
-					`tl_avisota_newsletter`
+					tl_avisota_newsletter
 				WHERE
-						`id`=?
-					OR  `alias`=?")
+						id=?
+					OR  alias=?")
 			->execute($strId, $strId);
 		
 		if (!$objNewsletter->next())
@@ -1194,9 +1245,9 @@ class Avisota extends BackendModule
 				SELECT
 					*
 				FROM
-					`tl_avisota_newsletter_category`
+					tl_avisota_newsletter_category
 				WHERE
-					`id`=?")
+					id=?")
 			->execute($objNewsletter->pid);
 		
 		if (!$objCategory->next())
@@ -1495,10 +1546,10 @@ class Avisota extends BackendModule
 					SELECT
 						*
 					FROM
-						`tl_member`
+						tl_member
 					WHERE
-							`email`=?
-						AND `disable`=''")
+							email=?
+						AND disable=''")
 				->execute($this->User->email);
 			if ($objMember->next())
 			{

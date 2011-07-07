@@ -37,14 +37,35 @@
  * System configuration
  */
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'avisota_developer_mode';
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{avisota_legend:hide},avisota_developer_mode';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{avisota_legend:hide},avisota_max_send_time,avisota_max_send_count,avisota_max_send_timeout,avisota_developer_mode';
 $GLOBALS['TL_DCA']['tl_settings']['subpalettes']['avisota_developer_mode'] = 'avisota_developer_email';
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_max_send_time'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_time'],
+	'inputType'               => 'text',
+	'eval'                    => array('mandatory'=>true, 'rgxp'=>'digit', 'tl_class'=>'w50')
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_max_send_count'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_count'],
+	'inputType'               => 'text',
+	'eval'                    => array('mandatory'=>true, 'rgxp'=>'digit', 'tl_class'=>'w50')
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_max_send_timeout'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_timeout'],
+	'inputType'               => 'text',
+	'eval'                    => array('mandatory'=>true, 'rgxp'=>'digit', 'tl_class'=>'w50')
+);
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_developer_mode'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_mode'],
 	'inputType'               => 'checkbox',
-	'eval'                    => array('submitOnChange'=>true)
+	'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'clr')
 );
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_developer_email'] = array
