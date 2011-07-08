@@ -454,7 +454,9 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['news'],
 			'exclude'                 => true,
-			'inputType'               => 'newschooser'
+			'inputType'               => 'checkbox',
+			'options_callback'        => array('tl_avisota_newsletter_content', 'getNews'),
+			'eval'                    => array('mandatory'=>true, 'multiple'=>true)
 		),
 		'articleAlias' => array
 		(
@@ -880,6 +882,21 @@ class tl_avisota_newsletter_content extends Avisota
 	public function editArticleAlias(DataContainer $dc)
 	{
 		return ($dc->value < 1) ? '' : ' <a href="contao/main.php?do=article&amp;table=tl_article&amp;act=edit&amp;id=' . $dc->value . '" title="'.sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editalias'][1]), $dc->value).'" style="padding-left:3px;">' . $this->generateImage('alias.gif', $GLOBALS['TL_LANG']['tl_content']['editalias'][0], 'style="vertical-align:top;"') . '</a>';
+	}
+	
+	
+	/**
+	 * Return the news options.
+	 */
+	public function getNews()
+	{
+		$arrNews = array();
+		$objNews = $this->Database->execute("SELECT * FROM tl_news" . ($this->User->isAdmin ? "" : " WHERE pid IN (" . (count($this->User->news) ? implode(',', $this->User->news) : '0') . ")") . " ORDER BY date DESC");
+		while ($objNews->next())
+		{
+			$arrNews[$this->parseDate('F Y', $objNews->date)][$objNews->id] = $objNews->headline;
+		}
+		return $arrNews;
 	}
 }
 
