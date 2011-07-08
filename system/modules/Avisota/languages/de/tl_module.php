@@ -40,8 +40,8 @@
 $GLOBALS['TL_LANG']['tl_module']['avisota_show_lists']                      = array('Listenauswahl anzeigen', 'Zeigt eine Auswahl der Listen im Frontend an.');
 $GLOBALS['TL_LANG']['tl_module']['avisota_lists']                           = array('Listen', 'Wählen Sie hier die Listen aus, zu denen man sich anmelden kann.');
 $GLOBALS['TL_LANG']['tl_module']['avisota_recipient_fields']                = array('Persönliche Daten', 'Wählen Sie hier die persönlichen Felder aus, die ein Abonnent zusätzlich angeben kann.');
-$GLOBALS['TL_LANG']['tl_module']['avisota_subscription_sender_name']        = array('Absenderadresse', 'Hier können Sie eine individuelle Absenderadresse eingeben.');
-$GLOBALS['TL_LANG']['tl_module']['avisota_subscription_sender']             = array('Absendername', 'Hier können Sie den Namen des Absenders eingeben.');
+$GLOBALS['TL_LANG']['tl_module']['avisota_subscription_sender_name']        = array('Absendername', 'Hier können Sie den Namen des Absenders eingeben.');
+$GLOBALS['TL_LANG']['tl_module']['avisota_subscription_sender']             = array('Absenderadresse', 'Hier können Sie eine individuelle Absenderadresse eingeben.');
 $GLOBALS['TL_LANG']['tl_module']['avisota_template_subscribe_mail_plain']   = array('Anmelden Plain Text E-Mail-Template', '');
 $GLOBALS['TL_LANG']['tl_module']['avisota_template_subscribe_mail_html']    = array('Anmelden HTML E-Mail-Template', '');
 $GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe_mail_plain'] = array('Abmelden Plain Text E-Mail-Template', '');
