@@ -34,7 +34,7 @@
  */
 
 
-class ModuleAvisotaReg extends ModuleRegistration {
+class ModuleAvisotaRegistration extends ModuleRegistration {
 	
 	protected function loadDataContainer($strTable)
 	{
