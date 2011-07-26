@@ -1,12 +1,8 @@
-<?php if ($this->headline): ?>
-<tr class="<?php echo $this->class; ?>"<?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
-	<td valign="top">
+<tr>
+	<td valign="top" class="<?php echo $this->class; ?>"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
+		<?php if ($this->headline): ?>
 		<<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
-	</td>
-</tr>
-<?php endif; ?>
-<tr class="<?php echo $this->class; ?>"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
-	<td valign="top">
+		<?php endif; ?>
 		<table cellspacing="0" cellpadding="0"<?php if ($this->sortable): ?> class="sortable"<?php endif; ?> id="<?php echo $this->id; ?>" summary="<?php echo $this->summary; ?>">
 			<?php if ($this->useHeader): ?>
 			<thead>
