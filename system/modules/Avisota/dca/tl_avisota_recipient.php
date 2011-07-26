@@ -242,7 +242,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'exclude'                 => true,
 			'filter'                  => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('exportable'=>true)
+			'eval'                    => array('importable'=>true, 'exportable'=>true)
 		),
 		'token' => array
 		(
@@ -255,7 +255,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'filter'                  => true,
 			'sorting'                 => true,
 			'flag'                    => 8,
-			'eval'                    => array('exportable'=>true, 'doNotShow'=>true, 'doNotCopy'=>true)
+			'eval'                    => array('importable'=>true, 'exportable'=>true, 'doNotShow'=>true, 'doNotCopy'=>true)
 		),
 		'addedBy' => array
 		(
@@ -265,7 +265,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'sorting'                 => true,
 			'flag'                    => 1,
 			'foreignKey'              => 'tl_user.name',
-			'eval'                    => array('exportable'=>true, 'doNotShow'=>true, 'doNotCopy'=>true)
+			'eval'                    => array('importable'=>true, 'exportable'=>true, 'doNotShow'=>true, 'doNotCopy'=>true)
 		)		
 	)
 );
