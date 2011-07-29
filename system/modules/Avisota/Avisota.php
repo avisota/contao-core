@@ -1288,8 +1288,6 @@ class Avisota extends BackendModule
 		
 		if ($this->htmlHeadCache === false)
 		{
-			$head .= sprintf('<base href="%s">', $this->DomainLink->absolutizeUrl('')) . "\n";
-			
 			// Add style sheet newsletter.css
 			if (file_exists(TL_ROOT . '/newsletter.css'))
 			{
