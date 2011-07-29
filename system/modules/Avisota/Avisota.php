@@ -804,12 +804,17 @@ class Avisota extends BackendModule
 				$strSelect = '';
 				// fields that are allready added (or should not be added)
 				$arrFields = array('id', 'tstamp', 'lists');
+				// fields from tl_avisota_recipient
+				$arrRecipientFields = $this->Database->getFieldNames('tl_avisota_recipient');
+				// fields from tl_member
+				$arrMemberFields = $this->Database->getFieldNames('tl_member');
+				
 				// add all tl_avisota_recipient fields, with fallback on tl_member fields
 				foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $strField => $arrData)
 				{
-					if (!in_array($strField, $arrFields) && $arrData['type'] != 'password')
+					if (!in_array($strField, $arrFields) && in_array($strField, $arrRecipientFields) && $arrData['inputType'] != 'password')
 					{
-						if (isset($GLOBALS['TL_DCA']['tl_member']['fields'][$strField]))
+						if (in_array($strField, $arrMemberFields) && isset($GLOBALS['TL_DCA']['tl_member']['fields'][$strField]))
 						{
 							$strSelect .= sprintf('IFNULL(r.%1$s, m.%1$s) as %1$s, ', $strField);
 						}
@@ -823,7 +828,7 @@ class Avisota extends BackendModule
 				// add remeaning tl_member fields
 				foreach ($GLOBALS['TL_DCA']['tl_member']['fields'] as $strField => $arrData)
 				{
-					if (!in_array($strField, $arrFields) && $arrData['type'] != 'password')
+					if (!in_array($strField, $arrFields) && in_array($strField, $arrMemberFields) && $arrData['inputType'] != 'password')
 					{
 						$strSelect .= sprintf('m.%1$s as %1$s, ', $strField);
 						$arrFields[] = $strField;
@@ -838,6 +843,8 @@ class Avisota extends BackendModule
 					FROM (
 						SELECT
 							$strSelect
+							m.id as member_id,
+							r.id as recipient_id,
 							o.email as outbox_email,
 							o.id as outbox,
 							o.source as outbox_source,
@@ -887,7 +894,7 @@ class Avisota extends BackendModule
 					
 					while ($intEndExecutionTime > time() && $objRecipients->next())
 					{
-						// private recipient (member id exists)
+						// private recipient (member/recipient id exists)
 						if ($objRecipients->id)
 						{
 							$arrRecipient = $objRecipients->row();
