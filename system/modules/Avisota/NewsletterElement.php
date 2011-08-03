@@ -132,9 +132,13 @@ abstract class NewsletterElement extends Frontend
 				WHERE
 					n.`id`=?")
 			->execute($this->pid);
-		if ($objCategory->next())
+		if ($objCategory->next() && $objCategory->viewOnlinePage)
 		{
-			$objPage = $this->getPageDetails($objCategory->jumpTo);
+			$objPage = $this->getPageDetails($objCategory->viewOnlinePage);
+		}
+		else
+		{
+			$objPage = null;
 		}
 		
 		return $this->DomainLink->absolutizeUrl($strUrl, $objPage);
@@ -148,7 +152,7 @@ abstract class NewsletterElement extends Frontend
 	public function replaceImage($arrMatch)
 	{
 		// insert alt or title text
-		return sprintf('%s<%s>', $arrMatch[3] ? $arrMatch[3] . ': ' : $arrMatch[2] ? $arrMatch[2] . ': ' : '', $this->extendURL($arrMatch[1]));
+		return sprintf('%s<%s>', $arrMatch[3] ? $arrMatch[3] . ': ' : ($arrMatch[2] ? $arrMatch[2] . ': ' : ''), $this->extendURL($arrMatch[1]));
 	}
 	
 	
