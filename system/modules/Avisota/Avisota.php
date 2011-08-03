@@ -322,6 +322,9 @@ class Avisota extends BackendModule
 					}
 				}
 				
+				// force all URLs absolute
+				$GLOBALS['TL_CONFIG']['forceAbsoluteDomainLink'] = true;
+				
 				// create the contents
 				$plain = array
 				(
