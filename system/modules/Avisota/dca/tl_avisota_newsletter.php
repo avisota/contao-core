@@ -61,7 +61,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'mode'                    => 4,
 			'fields'                  => array('subject'),
 			'panelLayout'             => 'search,limit',
-			'headerFields'            => array('title', 'jumpTo', 'unsubscribePage', 'tstamp', 'useSMTP', 'senderName', 'sender'),
+			'headerFields'            => array('title', 'viewOnlinePage', 'unsubscribePage', 'tstamp', 'useSMTP', 'senderName', 'sender'),
 			'child_record_callback'   => array('tl_avisota_newsletter', 'addNewsletter'),
 			'child_record_class'      => 'no_padding'
 		),
