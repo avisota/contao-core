@@ -44,9 +44,13 @@ class AvisotaBackend extends System
 {
 	public function hookOutputBackendTemplate($strContent, $strTemplate)
 	{
-		if ($strTemplate == 'be_main' && ($this->Input->get('table') == 'tl_avisota_recipient_import' || $this->Input->get('table') == 'tl_avisota_recipient_remove'))
+		if ($strTemplate == 'be_main')
 		{
-			$strContent = str_replace('<form', '<form enctype="multipart/form-data"', $strContent);
+			# add form multipart enctype
+			if (($this->Input->get('table') == 'tl_avisota_recipient_import' || $this->Input->get('table') == 'tl_avisota_recipient_remove'))
+			{
+				$strContent = str_replace('<form', '<form enctype="multipart/form-data"', $strContent);
+			}
 		}
 		return $strContent;
 	}
