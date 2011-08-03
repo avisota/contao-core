@@ -45,7 +45,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_import'] = array
 	(
 		'dataContainer'               => 'Memory',
 		'closed'                      => true,
-		'onload_callback'           => array
+		'onload_callback'             => array
 		(
 			array('tl_avisota_recipient_import', 'onload_callback'),
 		),
@@ -315,18 +315,21 @@ class tl_avisota_recipient_import extends Backend
 			$intSkipped = 0;
 			$intInvalid = 0;
 			
-			foreach ($arrSource as $strCsvFile)
+			if (is_array($arrSource))
 			{
-				$objFile = new File($strCsvFile);
-				
-				if ($objFile->extension != 'csv')
+				foreach ($arrSource as $strCsvFile)
 				{
-					$_SESSION['TL_ERROR'][] = sprintf($GLOBALS['TL_LANG']['ERR']['filetype'], $objFile->extension);
-					continue;
+					$objFile = new File($strCsvFile);
+					
+					if ($objFile->extension != 'csv')
+					{
+						$_SESSION['TL_ERROR'][] = sprintf($GLOBALS['TL_LANG']['ERR']['filetype'], $objFile->extension);
+						continue;
+					}
+					
+					$this->importRecipients($objFile->handle, $strDelimiter, $strEnclosure, $arrColumns, $blnOverwrite, $blnForce, $time, $intTotal, $intOverwrite, $intSkipped, $intInvalid);
+					$objFile->close();
 				}
-				
-				$this->importRecipients($objFile->handle, $strDelimiter, $strEnclosure, $arrColumns, $blnOverwrite, $blnForce, $time, $intTotal, $intOverwrite, $intSkipped, $intInvalid);
-				$objFile->close();
 			}
 			
 			if ($arrUpload)
@@ -376,6 +379,8 @@ class tl_avisota_recipient_import extends Backend
 	protected function importRecipients($resFile, $strDelimiter, $strEnclosure, $arrColumns, $blnOverwrite, $blnForce, $time, &$intTotal, &$intOverwrite, &$intSkipped, &$intInvalid)
 	{
 		$arrRecipients = array();
+		$arrEmail = array();
+		$n = 0;
 
 		while(($arrRow = @fgetcsv($resFile, null, $strDelimiter, $strEnclosure)) !== false)
 		{
@@ -384,42 +389,60 @@ class tl_avisota_recipient_import extends Backend
 			{
 				$arrRecipient[$strField] = $arrRow[$intColnum];
 			}
-			$arrRecipients[] = $arrRecipient;
-		}
-		
-		foreach ($arrRecipients as $arrRecipient)
-		{
+			
 			// Skip invalid entries
 			if (!$this->isValidEmailAddress($arrRecipient['email']))
 			{
 				$this->log('Recipient address "' . $arrRecipient['email'] . '" seems to be invalid and has been skipped', 'Avisota importRecipients()', TL_ERROR);
 
 				++$intInvalid;
-				continue;
 			}
-			
-			$objBlacklist = $this->Database->prepare("SELECT * FROM tl_avisota_recipient_blacklist WHERE pid=? AND email=?")
-				->execute($this->Input->get('id'), md5($arrRecipient['email']));
-			
+			else
+			{
+				$arrRecipients[$n] = $arrRecipient;
+				$arrEmail[$n] = $arrRecipient['email'];
+				$n ++;
+			}
+			unset($arrRecipient, $arrRow);
+		}
+		
+		$arrBlacklist = array();
+		if ($blnForce) {
+			$objBlacklist = $this->Database
+				->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid=? AND email IN (MD5('" . implode("'),MD5('", array_map('md5', $arrEmail)) . "'))")
+				->execute($this->Input->get('id'));
+		} else {
+			$objBlacklist = $this->Database
+				->prepare("SELECT * FROM tl_avisota_recipient_blacklist WHERE pid=? AND email IN (MD5('" . implode("'),MD5('", $arrEmail) . "'))")
+				->execute($this->Input->get('id'));
+			while ($objBlacklist->next())
+			{
+				$arrBlacklist[$objBlacklist->email] = $objBlacklist->id;
+			}
+		}
+		
+		// Check whether the e-mail address exists
+		$arrExistingRecipients = array();
+		$objExistingRecipients = $this->Database
+			->prepare("SELECT id,email FROM tl_avisota_recipient WHERE pid=? AND email IN ('" . implode("','", $arrEmail) . "')")
+			->execute($this->Input->get('id'));
+		while ($objExistingRecipients->next())
+		{
+			$arrExistingRecipients[$objExistingRecipients->email] = $objExistingRecipients->id;
+		}
+		
+		foreach ($arrRecipients as $arrRecipient)
+		{
 			// check blacklist
-			if (!$blnForce && $objBlacklist->numRows > 0)
+			if (!$blnForce && isset($arrBlacklist[$arrRecipient['email']]))
 			{
 				++$intSkipped;
 				continue;
 			}
-			else if ($blnForce && $objBlacklist->numRows > 0)
-			{
-				$this->Database->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid=? AND email=?")
-					->execute($this->Input->get('id'), md5($arrRecipient['email']));
-			}
-			
-			// Check whether the e-mail address exists
-			$objRecipient = $this->Database->prepare("SELECT COUNT(*) AS total FROM tl_avisota_recipient WHERE pid=? AND email=?")
-										   ->execute($this->Input->get('id'), $arrRecipient['email']);
 
 			$arrRecipient['tstamp']    = $time;
 			
-			if ($objRecipient->total < 1)
+			if (!isset($arrExistingRecipients[$arrRecipient['email']]))
 			{
 				$arrRecipient['pid']       = $this->Input->get('id');
 				$arrRecipient['addedOn']   = $time;
