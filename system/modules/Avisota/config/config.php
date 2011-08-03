@@ -105,6 +105,12 @@ $GLOBALS['BE_MOD'] = array_merge(
 				'icon'       => 'system/modules/Avisota/html/newsletter.png',
 				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 			),
+			'avisota_tracking' => array
+			(
+				'callback'   => 'AvisotaTracking',
+				'icon'       => 'system/modules/Avisota/html/tracking.png',
+				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+			),
 			'avisota_outbox' => array
 			(
 				'callback'   => 'Avisota',

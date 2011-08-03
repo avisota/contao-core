@@ -914,7 +914,14 @@ class Avisota extends BackendModule
 						
 						// Send
 						$objEmail = $this->generateEmailObject($objNewsletter, $objCategory, $arrAttachments);
-						if (!$this->sendNewsletter($objEmail, $objNewsletter, $objCategory, $plain[$personalized], $html[$personalized], $arrRecipient, $personalized))
+						if (!$this->sendNewsletter(
+								$objEmail,
+								$objNewsletter,
+								$objCategory,
+								$this->prepareTrackingPlain($objNewsletter, $objCategory, $objRecipients, $plain[$personalized]),
+								$this->prepareTrackingHtml($objNewsletter, $objCategory, $objRecipients, $html[$personalized]),
+								$arrRecipient,
+								$personalized))
 						{
 							$_SESSION['TL_ERROR'][] = sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['rejected'], $objRecipients->email);
 							
@@ -1543,6 +1550,53 @@ class Avisota extends BackendModule
 	
 	
 	/**
+	 * Prepare the html content for tracking.
+	 */
+	protected function prepareTrackingHtml($objNewsletter, $objCategory, $objRecipient, $strHtml)
+	{
+		$objPrepareTrackingHelper = new PrepareTrackingHelper($objNewsletter, $objCategory, $objRecipient);
+		$strHtml = preg_replace_callback('#href=["\']((http|ftp)s?:\/\/.+)["\']#U', array(&$objPrepareTrackingHelper, 'replaceHtml'), $strHtml);
+		
+		$objRead = $this->Database
+			->prepare("SELECT * FROM tl_avisota_newsletter_read WHERE pid=? AND recipient=?")
+			->execute($objNewsletter->id, $objRecipient->outbox_email);
+		if ($objRead->next())
+		{
+			$intRead = $objRead->id;
+		}
+		else
+		{
+			$objRead = $this->Database
+				->prepare("INSERT INTO tl_avisota_newsletter_read (pid,tstamp,recipient) VALUES (?, ?, ?)")
+				->execute($objNewsletter->id, time(), $objRecipient->outbox_email);
+			$intRead = $objRead->insertId;
+		}
+		
+		if ($objCategory->viewOnlinePage)
+		{
+			$objPage = $this->getPageDetails($objCategory->viewOnlinePage);
+		}
+		else
+		{
+			$objPage = null;
+		}
+		
+		$strHtml = str_replace('</body>', '<img src="' . $this->DomainLink->absolutizeUrl('nltrack.php?read=' . $intRead, $objPage) . '" alt="" width="1" height="1" />', $strHtml);
+		return $strHtml;
+	}
+	
+	
+	/**
+	 * Prepare the plain content for tracking.
+	 */
+	protected function prepareTrackingPlain($objNewsletter, $objCategory, $objRecipient, $strPlain)
+	{
+		$objPrepareTrackingHelper = new PrepareTrackingHelper($objNewsletter, $objCategory, $objRecipient);
+		return preg_replace_callback('#<((http|ftp)s?:\/\/.+)>#U', array(&$objPrepareTrackingHelper, 'replacePlain'), $strPlain);
+	}
+	
+	
+	/**
 	 * Get a dummy recipient array.
 	 */
 	public function getPreviewRecipient($personalized)
@@ -1583,6 +1637,88 @@ class Avisota extends BackendModule
 		$arrRecipient['outbox_source'] = 'list:0';
 		
 		return $arrRecipient;
+	}
+}
+
+/**
+ * Helper class.
+ */
+class PrepareTrackingHelper extends Controller
+{
+	protected $objNewsletter;
+	
+	protected $objCategory;
+	
+	protected $objRecipient;
+	
+	public function __construct($objNewsletter, $objCategory, $objRecipient)
+	{
+		parent::__construct();
+		$this->import('Database');
+		$this->import('DomainLink');
+		$this->objNewsletter = $objNewsletter;
+		$this->objCategory = $objCategory;
+		$this->objRecipient = $objRecipient;
+	}
+	
+	public function replaceHtml($m)
+	{
+		$strUrl = $this->replace($m[1]);
+		
+		if ($strUrl)
+		{
+			return 'href="' . specialchars($strUrl) . '"';
+		}
+		return $m[0];
+	}
+	
+	public function replacePlain($m)
+	{
+		$strUrl = $this->replace($m[1]);
+		
+		if ($strUrl)
+		{
+			return '<' . specialchars($strUrl) . '>';
+		}
+		return $m[0];
+	}
+	
+	public function replace($strUrl)
+	{	
+		// do not track ...
+		if (// images
+			preg_match('#\.(jpe?g|png|gif)#i', $strUrl)
+			// unsubscribe url
+			|| preg_match('#unsubscribetoken#i', $strUrl))
+		{
+			return false;
+		}
+		
+		$objLink = $this->Database
+			->prepare("SELECT * FROM tl_avisota_newsletter_link_hit WHERE pid=? AND url=? AND recipient=?")
+			->execute($this->objNewsletter->id, $strUrl, $this->objRecipient->outbox_email);
+		if ($objLink->next())
+		{
+			$intLink = $objLink->id;
+		}
+		else
+		{
+			$objLink = $this->Database
+				->prepare("INSERT INTO tl_avisota_newsletter_link_hit (pid,tstamp,url,recipient) VALUES (?, ?, ?, ?)")
+				->execute($this->objNewsletter->id, time(), $strUrl, $this->objRecipient->outbox_email);
+			$intLink = $objLink->insertId;
+		}
+		
+		if ($this->objCategory->viewOnlinePage)
+		{
+			$objPage = $this->getPageDetails($this->objCategory->viewOnlinePage);
+		}
+		else
+		{
+			$objPage = null;
+		}
+		
+		return $this->DomainLink->absolutizeUrl('nltrack.php?link=' . $intLink, $objPage);
 	}
 }
 ?>

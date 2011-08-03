@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 	(
 		'dataContainer'               => 'Table',
 		'ptable'                      => 'tl_avisota_newsletter_category',
-		'ctable'                      => array('tl_avisota_newsletter_content'),
+		'ctable'                      => array('tl_avisota_newsletter_content', 'tl_avisota_newsletter_read', 'tl_avisota_newsletter_link_hit'),
 		'switchToEdit'                => true,
 		'enableVersioning'            => true,
 		'onload_callback' => array

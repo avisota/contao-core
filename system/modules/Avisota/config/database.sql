@@ -188,6 +188,40 @@ CREATE TABLE `tl_avisota_newsletter_outbox` (
 -- --------------------------------------------------------
 
 -- 
+-- Table `tl_avisota_newsletter_read`
+-- 
+
+CREATE TABLE `tl_avisota_newsletter_read` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `pid` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  `recipient` varchar(255) NOT NULL default '',
+  `readed` char(1) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table `tl_avisota_newsletter_link_hit`
+-- 
+
+CREATE TABLE `tl_avisota_newsletter_link_hit` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `pid` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  `url` blob NULL,
+  `recipient` varchar(255) NOT NULL default '',
+  `hits` int(10) unsigned NOT NULL default '0',
+  `times` blob NULL,
+  PRIMARY KEY  (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
 -- Table `tl_module`
 -- 
 

@@ -1,4 +1,5 @@
 @CHARSET "UTF-8";
+@import url(../jqplot/jquery.jqplot.css);
 
 .header_send {
 	background: url("send.png") no-repeat scroll left center transparent;
@@ -81,4 +82,31 @@ table.outbox span.failed {
 
 code {
 	font-weight: bold;
+}
+
+/** --- Tracking ------------------------------------------------------------ */
+#graphs {
+	margin: 0 18px;
+}
+#graphs #overview {
+}
+#links {
+	margin: 0 18px;
+}
+#links table {
+	width: 100%;
+}
+#links th.url {
+	text-align: left;
+}
+#links th.hits,
+#links td.hits {
+	text-align: right;
+}
+#links th,
+#links td {
+	padding: 4px 0;
+}
+#links td {
+	border-top: 1px solid #999;
 }
