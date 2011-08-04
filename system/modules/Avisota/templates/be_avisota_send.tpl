@@ -1,5 +1,5 @@
 <div id="tl_buttons">
-<a href="<?php echo $this->getReferer(true) ?>" class="header_back" title="<?php echo specialchars($GLOBALS['TL_LANG']['MSC']['backBT']) ?>" accesskey="b"><?php echo $GLOBALS['TL_LANG']['MSC']['backBT'] ?></a> 
+<a href="<?php echo $this->getReferer(true) ?>" class="header_back" title="<?php echo specialchars($GLOBALS['TL_LANG']['MSC']['backBT']) ?>" accesskey="b"><?php echo $GLOBALS['TL_LANG']['MSC']['backBT'] ?></a>
 </div>
 
 <?php echo $this->getMessages(); ?>
@@ -43,10 +43,7 @@
 </div>
 </div>
 
-<form action="contao/main.php" id="tl_avisota_newsletter_preview" target="preview" class="tl_form" method="get">
-<input name="do" value="avisota_newsletter" type="hidden">
-<input name="table" value="tl_avisota_newsletter" type="hidden">
-<input name="key" value="preview" type="hidden">
+<form action="system/modules/Avisota/AvisotaPreview.php" id="tl_avisota_newsletter_preview" target="preview" class="tl_form" method="get">
 <input name="id" value="<?php echo $this->id ?>" type="hidden">
 <div class="tl_formbody_edit preview">
 
@@ -76,42 +73,68 @@
 </div>
 </noscript>
 <iframe class="tl_avisota_newsletter_preview" id="preview" name="preview" scrolling="auto" width="100%" height="600"
-	src="contao/main.php?do=avisota_newsletter&amp;table=tl_avisota_newsletter&amp;key=preview&amp;id=<?php echo $this->id ?>"></iframe>
+	src="system/modules/Avisota/AvisotaPreview.php?id=<?php echo $this->id ?>"></iframe>
 </div>
 </form>
 
-<form action="contao/main.php" id="tl_avisota_newsletter_send" class="tl_form" method="get">
-<input name="do" value="avisota_newsletter" type="hidden">
-<input name="table" value="tl_avisota_newsletter" type="hidden">
-<input name="key" value="send" type="hidden">
+<form action="system/modules/Avisota/AvisotaTransport.php" id="tl_avisota_newsletter_schedule" class="tl_form" method="post">
 <input name="id" value="<?php echo $this->id ?>" type="hidden">
-<input name="token" value="<?php echo $this->token ?>" type="hidden" />
 <div class="tl_formbody_edit">
 
 <div class="tl_tbox block">
 <div class="w50">
-  <h3><label for="ctrl_recipient"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewTo'][0] ?></label></h3>
-  <?php if (!$this->User->isAdmin && !$this->User->hasAccess('send', 'avisota_newsletter_permissions')): ?>
-  <select name="recipient" id="ctrl_recipient" class="tl_select" onfocus="Backend.getScrollOffset();">
+  <h3><label for="ctrl_recipient_user"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewToUser'][0] ?></label></h3>
+  <select name="recipient_user" id="ctrl_recipient_user" class="tl_select" onfocus="Backend.getScrollOffset();">
     <?php foreach ($this->users as $id => $user): ?>
-    <option value="<?php echo $user['email']; ?>"<?php if ($this->User->id == $id): ?> selected="selected"<?php endif; ?>><?php echo $user['name']; ?> &lt;<?php echo $user['email']; ?>&gt;</option>
+    <option value="<?php echo $user['id']; ?>"<?php if ($this->User->id == $id): ?> selected="selected"<?php endif; ?>><?php echo $user['name']; ?> &lt;<?php echo $user['email']; ?>&gt;</option>
     <?php endforeach; ?>
   </select>
-  </select>
-  <?php else: ?>
-  <input name="recipient" id="ctrl_recipient" value="<?php echo $this->User->email ?>" class="tl_text" onfocus="Backend.getScrollOffset();" type="text" />
-  <?php endif; ?>
-  <p class="tl_help tl_tip"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewTo'][1] ?></p>
+  <p class="tl_help tl_tip"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewToUser'][1] ?></p>
+</div>
+
+<?php if ($this->User->isAdmin || $this->User->hasAccess('send', 'avisota_newsletter_permissions')): ?>
+<div class="w50">
+  <h3><label for="ctrl_recipient_email"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewToEmail'][0] ?></label></h3>
+  <input name="recipient_email" id="ctrl_recipient_email" value="" class="tl_text" onfocus="Backend.getScrollOffset();" type="text" />
+  <p class="tl_help tl_tip"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewToEmail'][1] ?></p>
 </div>
 </div>
+<?php endif; ?>
 </div>
 
 <div class="tl_formbody_submit">
 
 <div class="tl_submit_container">
-<input name="preview" class="tl_submit" accesskey="p" value="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview'] ?>" type="submit" />
-<?php if ($this->User->isAdmin || $this->User->hasAccess('send', 'avisota_newsletter_permissions')): ?><input style="float:right" id="send" name="send" class="tl_submit" accesskey="s" value="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['send'][0] ?>" onclick="return confirm('<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendConfirm']) ?>')" type="submit" /><?php endif; ?>
+<button id="btnPreview" name="action" class="tl_submit" accesskey="p" type="submit" value="preview"><img style="display: none;" src="system/modules/Avisota/html/loading.gif" alt="" /><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview'] ?></button>
+<?php if ($this->User->isAdmin || $this->User->hasAccess('send', 'avisota_newsletter_permissions')): ?>
+<button style="float:right" id="btnSchedule" name="action" class="tl_submit" accesskey="s" type="submit" value="schedule"><img style="display: none;" src="system/modules/Avisota/html/loading.gif" alt="" /><?php echo $GLOBALS['TL_LANG']['MSC']['schedule']; ?></button>
+<?php endif; ?>
 </div>
 
 </div>
 </form>
+
+<script>
+// add listener to email input field, that disable the user select field
+$('ctrl_recipient_email').addEvent('keyup', function() {
+	$('ctrl_recipient_user').disabled = this.value.length > 0;
+});
+// submit listener to form
+$('tl_avisota_newsletter_schedule').addEvent('submit', function() {
+	$('tl_avisota_newsletter_schedule').removeEvents('submit').addEvent('submit', function() { return false; });
+});
+// show the indicator gif of a button
+function indicate(e) {
+	e.getElement('img').setStyle('display', '');
+}
+// add listener to preview button
+$('btnPreview').addEvent('click', function() {
+	indicate(this);
+});
+<?php if ($this->User->isAdmin || $this->User->hasAccess('send', 'avisota_newsletter_permissions')): ?>
+// add listener to schedule button
+$('btnSchedule').addEvent('click', function() {
+	indicate(this);
+});
+<?php endif; ?>
+</script>

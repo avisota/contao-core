@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -36,7 +36,7 @@
 /**
  * Class PageAvisotaNewsletter
  *
- * 
+ *
  * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -49,18 +49,18 @@ class PageAvisotaNewsletter extends Frontend
 	 */
 	public function generate(Database_Result $objPage)
 	{
-		$this->import('Avisota');
-		
+		$this->import('AvisotaContent', 'Content');
+
 		$strId = $this->Input->get('item');
-		$strNewsletter = $this->Avisota->generateOnlineNewsletter($strId);
-		
+		$strNewsletter = $this->Content->generateOnlineNewsletter($strId);
+
 		if ($strNewsletter)
 		{
 			header('Content-Type: text/html; charset=utf-8');
 			echo $strNewsletter;
 			exit;
 		}
-		
+
 		$this->redirect($this->generateFrontendUrl($this->getPageDetails($objPage->jumpBack ? $objPage->jumpBack : $objPage->pid))->row());
 	}
 }

@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -44,7 +44,8 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_html']        = array('HT
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_plain']       = array('Plain Text E-Mail-Template', 'Hier können Sie das Plain Text E-Mail-Template auswählen.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipients']           = array('Empfänger', 'Wählen Sie hier die Empfänger aus.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['tstamp']               = array('Änderungsdatum', 'Datum und Uhrzeit der letzten Änderung');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewTo']        = array('Testsendung an', 'Die Testsendung des Newsletters an diese E-Mail-Adresse versenden.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewToUser']    = array('Testsendung an Benutzer', 'Die Testsendung des Newsletters an diesen Benutzer versenden.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewToEmail']   = array('Testsendung an E-Mail', 'Die Testsendung des Newsletters an diese E-Mail-Adresse versenden. Geben Sie hier eine E-Mail Adresse an, wird der Versand an die Benutzerauswahl ignoriert.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview_mode']         = array('Vorschaumodus', 'Den Vorschaumodus wechseln.', 'HTML Vorschau', 'Plain Text Vorschau');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview_personalized'] = array('Personalisieren', 'Die Vorschau personalisieren.', 'Keine', 'Anonym', 'Persönlich');
 
@@ -60,7 +61,6 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['headline']           = 'Newsletter
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['from']               = 'Absender';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['live']               = 'Vorschau aktualisieren';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview']            = 'Testsendung';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendConfirm']        = 'Soll der Newsletter wirklich verschickt werden?';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe']        = 'vom Newsletter abmelden';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation']         = 'Sehr geehrte/-r';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_male']    = 'Sehr geehrter Herr';
@@ -69,15 +69,16 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_femaile'] = 'Sehr geehr
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view']      = array('Ansehen und Versenden', 'Den Newsletter ansehen und versenden.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view_only'] = array('Ansehen', 'Den Newsletter ansehen.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['send']      = array('Versenden', 'Den Newsletter versenden.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sended']    = 'versendet am %s';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirm']   = 'Der Newsletter wurde an alle Empfänger versendet.';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['online']    = 'Probleme mit der Darstellung? Den Newsletter Online ansehen.';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']      = 'Verteiler';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['member']    = 'Mitglieder';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']    = 'Mitgliedergruppe';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view']           = array('Ansehen und Versenden', 'Den Newsletter ansehen und versenden.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view_only']      = array('Ansehen', 'Den Newsletter ansehen.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['send']           = array('Versenden', 'Den Newsletter versenden.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sended']         = 'versendet am %s';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirm']        = 'Der Newsletter wurde an alle Empfänger versendet.';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirmPreview'] = 'Die Testsendung wurde an %s versendet.';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['online']         = 'Probleme mit der Darstellung? Den Newsletter Online ansehen.';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']           = 'Verteiler';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['member']         = 'Mitglieder';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']         = 'Mitgliedergruppe';
 
 
 /**

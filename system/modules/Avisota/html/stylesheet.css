@@ -84,6 +84,14 @@ code {
 	font-weight: bold;
 }
 
+button img {
+	vertical-align: -3px;
+	margin-right: 4px;
+}
+select[disabled] {
+	color: #ccc;
+}
+
 /** --- Tracking ------------------------------------------------------------ */
 #graphs {
 	margin: 0 18px;

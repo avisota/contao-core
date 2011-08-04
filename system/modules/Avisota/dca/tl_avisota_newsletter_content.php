@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -473,7 +473,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 	)
 );
 
-class tl_avisota_newsletter_content extends Avisota
+class tl_avisota_newsletter_content extends Backend
 {
 
 	/**
@@ -483,9 +483,10 @@ class tl_avisota_newsletter_content extends Avisota
 	{
 		parent::__construct();
 		$this->import('BackendUser', 'User');
+		$this->import('AvisotaContent', 'Content');
 	}
 
-	
+
 	/**
 	 * Check permissions to edit table tl_avisota_newsletter_content
 	 */
@@ -565,7 +566,7 @@ class tl_avisota_newsletter_content extends Avisota
 		{
 			return true;
 		}
-		
+
 		if (!$blnIsPid)
 		{
 			$objContent = $this->Database
@@ -581,7 +582,7 @@ class tl_avisota_newsletter_content extends Avisota
 				return false;
 			}
 		}
-		
+
 		$objNewsletter = $this->Database
 			->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
 			->execute($id);
@@ -647,7 +648,7 @@ class tl_avisota_newsletter_content extends Avisota
 		$strField = 'ctrl_' . $dc->field . (($this->Input->get('act') == 'editAll') ? '_' . $dc->id : '');
 		return ' ' . $this->generateImage('pickpage.gif', $GLOBALS['TL_LANG']['MSC']['pagepicker'], 'style="vertical-align:top; cursor:pointer;" onclick="Backend.pickPage(\'' . $strField . '\')"');
 	}
-	
+
 
 	/**
 	 * Return all newsletter elements as array
@@ -692,8 +693,8 @@ class tl_avisota_newsletter_content extends Avisota
 		// Return all gallery templates
 		return $this->getTemplateGroup('nl_gallery_', $objLayout->pid);
 	}
-	
-	
+
+
 	/**
 	 * Add the type of content element
 	 * @param array
@@ -710,10 +711,10 @@ class tl_avisota_newsletter_content extends Avisota
 	($this->hasMultipleNewsletterAreas($arrRow) ? sprintf(' <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>', isset($GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$arrRow['area']]) ? $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$arrRow['area']] : $arrRow['area']) : '') .
 '</div>
 <div class="limit_height' . (!$GLOBALS['TL_CONFIG']['doNotCollapse'] ? ' h64' : '') . ' block">
-' . $this->getNewsletterElement($arrRow['id']) . '
+' . $this->Content->getNewsletterElement($arrRow['id']) . '
 </div>' . "\n";
 	}
-	
+
 
 	/**
 	 * Return the "toggle visibility" button
@@ -738,7 +739,7 @@ class tl_avisota_newsletter_content extends Avisota
 		if ($row['invisible'])
 		{
 			$icon = 'invisible.gif';
-		}		
+		}
 
 		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
 	}
@@ -755,7 +756,7 @@ class tl_avisota_newsletter_content extends Avisota
 		$this->Input->setGet('id', $intId);
 		$this->Input->setGet('act', 'toggle');
 		$this->checkPermission();
-	
+
 		$this->createInitialVersion('tl_avisota_newsletter_content', $intId);
 
 		// Trigger the save_callback
@@ -774,11 +775,11 @@ class tl_avisota_newsletter_content extends Avisota
 
 		$this->createNewVersion('tl_avisota_newsletter_content', $intId);
 	}
-	
-	
+
+
 	/**
 	 * Check if there are more than the default 'body' area.
-	 * 
+	 *
 	 * @param DataContainer $dc
 	 */
 	public function hasMultipleNewsletterAreas($dc)
@@ -786,8 +787,8 @@ class tl_avisota_newsletter_content extends Avisota
 		$arrAreas = $this->dcaGetNewsletterAreas($dc);
 		return count($arrAreas)>1;
 	}
-	
-	
+
+
 	/**
 	 * Get a list of areas from the parent category.
 	 */
@@ -804,11 +805,11 @@ class tl_avisota_newsletter_content extends Avisota
 		}
 		return array_unique($arrAreas);
 	}
-	
-	
+
+
 	/**
 	 * Update this data container.
-	 * 
+	 *
 	 * @param unknown_type $strName
 	 */
 	public function myLoadDataContainer($strName)
@@ -828,8 +829,8 @@ class tl_avisota_newsletter_content extends Avisota
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * Get all articles and return them as array (article alias)
 	 * @param object
@@ -883,8 +884,8 @@ class tl_avisota_newsletter_content extends Avisota
 	{
 		return ($dc->value < 1) ? '' : ' <a href="contao/main.php?do=article&amp;table=tl_article&amp;act=edit&amp;id=' . $dc->value . '" title="'.sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editalias'][1]), $dc->value).'" style="padding-left:3px;">' . $this->generateImage('alias.gif', $GLOBALS['TL_LANG']['tl_content']['editalias'][0], 'style="vertical-align:top;"') . '</a>';
 	}
-	
-	
+
+
 	/**
 	 * Return the news options.
 	 */

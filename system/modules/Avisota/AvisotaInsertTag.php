@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -49,17 +49,18 @@ class AvisotaInsertTag extends Controller
 		$this->import('Database');
 		$this->import('DomainLink');
 		$this->import('AvisotaBase', 'Base');
+		$this->import('AvisotaStatic', 'Static');
 	}
-	
-	
+
+
 	public function replaceNewsletterInsertTags($strTag)
 	{
 		$strTag = explode('::', $strTag);
 		switch ($strTag[0])
 		{
 		case 'recipient':
-			$arrCurrentRecipient = Avisota::getCurrentRecipient();
-		
+			$arrCurrentRecipient = $this->Static->getRecipient();
+
 			if ($arrCurrentRecipient)
 			{
 				switch ($strTag[1])
@@ -73,7 +74,7 @@ class AvisotaInsertTag extends Controller
 					{
 						return $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation'];
 					}
-					
+
 				case 'name':
 					if (isset($arrCurrentRecipient['name']) && $arrCurrentRecipient['name'])
 					{
@@ -83,7 +84,7 @@ class AvisotaInsertTag extends Controller
 					{
 						return trim($arrCurrentRecipient['firstname'] . ' ' . $arrCurrentRecipient['lastname']);
 					}
-					
+
 				default:
 					if ($arrCurrentRecipient && isset($arrCurrentRecipient[$strTag[1]]))
 					{
@@ -92,12 +93,12 @@ class AvisotaInsertTag extends Controller
 				}
 			}
 			return '';
-			
+
 		case 'newsletter':
-			$arrCurrentRecipient = Avisota::getCurrentRecipient();
-			$objCategory = Avisota::getCurrentCategory();
-			$objNewsletter = Avisota::getCurrentNewsletter();
-			
+			$arrCurrentRecipient = $this->Static->getRecipient();
+			$objCategory = $this->Static->getCategory();
+			$objNewsletter = $this->Static->getNewsletter();
+
 			if ($arrCurrentRecipient && $objCategory && $objNewsletter)
 			{
 				switch ($strTag[1])
@@ -109,7 +110,7 @@ class AvisotaInsertTag extends Controller
 						return $this->Base->extendURL($this->generateFrontendUrl($objPage->row(), '/item/' . ($objNewsletter->alias ? $objNewsletter->alias : $objNewsletter->id)), $objPage);
 					}
 					break;
-					
+
 				case 'unsubscribe':
 				case 'unsubscribe_url':
 					$strAlias = false;
@@ -138,7 +139,7 @@ class AvisotaInsertTag extends Controller
 					{
 						$objPage = $this->getPageDetails($objCategory->subscriptionPage);
 					}
-					
+
 					if ($objPage)
 					{
 						$strUrl = $this->Base->extendURL($this->generateFrontendUrl($objPage->row()) . '?' . ($arrCurrentRecipient['email'] ? 'email=' . $arrCurrentRecipient['email'] : '') . ($strAlias ? '&unsubscribetoken=' . $strAlias : ''));
@@ -147,17 +148,17 @@ class AvisotaInsertTag extends Controller
 					{
 						$strUrl = $this->Base->extendURL('?' . ($arrCurrentRecipient['email'] ? 'email=' . $arrCurrentRecipient['email'] : '') . ($strAlias ? '&unsubscribetoken=' . $strAlias : ''));
 					}
-						
+
 					if ($strTag[1] == 'unsubscribe_url')
 					{
 						return $strUrl;
 					}
-					
+
 					switch ($strTag[2])
 					{
 					case 'html':
 						return sprintf('<a href="%s">%s</a>', $strUrl, $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe']);
-						
+
 					case 'plain':
 						return sprintf("%s\n[%s]", $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe'], $strUrl);
 					}
@@ -165,7 +166,7 @@ class AvisotaInsertTag extends Controller
 				}
 			}
 			return '';
-			
+
 		case 'newsletter_latest_link':
 		case 'newsletter_latest_url':
 			if (strlen($strTag[1]))

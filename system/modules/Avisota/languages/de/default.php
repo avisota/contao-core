@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -65,6 +65,7 @@ $GLOBALS['TL_LANG']['NLE']['article']   = array('Artikel', 'Fügt einen Artikel-
  * Miscellaneous
  */
 $GLOBALS['TL_LANG']['MSC']['delete_no_blacklist'] = 'Löschen ohne Blacklist-Eintrag';
+$GLOBALS['TL_LANG']['MSC']['schedule']            = 'Versand planen';
 $GLOBALS['TL_LANG']['MSC']['send']                = 'Versenden';
 
 ?>

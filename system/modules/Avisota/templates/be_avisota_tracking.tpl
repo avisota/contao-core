@@ -62,6 +62,8 @@
 	<div id="graph_timeline"></div>
 </div>
 
+<pre><?php var_dump($this->timeline); ?></pre>
+
 <div id="links">
 	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['graph_links_legend']; ?></h3>
 	<table cellpadding="0" cellspacing="0">

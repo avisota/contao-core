@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -36,33 +36,59 @@
 /**
  * Class AvisotaBase
  *
- * InsertTag hook class.
  * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
 class AvisotaBase extends Controller
 {
-	public function __construct()
+	/**
+	 * Singleton instance.
+	 *
+	 * @var AvisotaBase
+	 */
+	private static $objInstance = null;
+
+
+	/**
+	 * Get singleton instance.
+	 */
+	public static function getInstance()
+	{
+		if (self::$objInstance === null)
+		{
+			self::$objInstance = new AvisotaBase();
+		}
+		return self::$objInstance;
+	}
+
+
+	/**
+	 * Singleton
+	 */
+	protected function __construct()
 	{
 		parent::__construct();
+		$this->import('AvisotaStatic', 'Static');
+		$this->import('BackendUser', 'User');
 		$this->import('Database');
 		$this->import('DomainLink');
+		$this->User->authenticate();
 	}
-	
-	
+
+
 	public function getViewOnlinePage($objCategory = null, $arrRecipient = null)
 	{
 		if (is_null($objCategory))
 		{
-			$objCategory = Avisota::getCurrentCategory();
+			$objCategory = $this->Static->getCategory();
 		}
-		
+
 		if (is_null($arrRecipient))
 		{
-			$arrRecipient = Avisota::getCurrentRecipient();
+			$arrRecipient = $this->Static->getRecipient();
 		}
-		
+
 		if ($arrRecipient && preg_match('#^list:(\d+)$#', $arrRecipient['outbox_source'], $arrMatch))
 		{
 			// the dummy list, used on preview
@@ -82,16 +108,36 @@ class AvisotaBase extends Controller
 				}
 			}
 		}
-		
+
 		if ($objCategory->viewOnlinePage > 0)
 		{
 			return $this->getPageDetails($objCategory->viewOnlinePage);
 		}
-		
+
 		return null;
 	}
-	
-	
+
+
+	/**
+	 * Test if backend sending is allowed.
+	 */
+	public function allowBackendSending()
+	{
+		if ($GLOBALS['TL_CONFIG']['avisota_backend_send'])
+		{
+			if ($GLOBALS['TL_CONFIG']['avisota_backend_send'] == 'disabled')
+			{
+				return false;
+			}
+			if ($GLOBALS['TL_CONFIG']['avisota_disable_backend_send'] == 'admin' && !$this->User->admin)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+
 	/**
 	 * Extend the url to an absolute url.
 	 */
@@ -101,8 +147,52 @@ class AvisotaBase extends Controller
 		{
 			$objPage = $this->getViewOnlinePage($objCategory, $arrRecipient);
 		}
-		
+
 		return $this->DomainLink->absolutizeUrl($strUrl, $objPage);
+	}
+
+
+	/**
+	 * Get a dummy recipient array.
+	 */
+	public function getPreviewRecipient($personalized)
+	{
+		$arrRecipient = array();
+		if ($personalized == 'private')
+		{
+			$objMember = $this->Database->prepare("
+					SELECT
+						*
+					FROM
+						tl_member
+					WHERE
+							email=?
+						AND disable=''")
+				->execute($this->User->email);
+			if ($objMember->next())
+			{
+				$arrRecipient = $objMember->row();
+				$arrRecipient['name'] = $arrRecipient['firstname'] . ' ' . $arrRecipient['lastname'];
+				$arrRecipient['personalized'] = 'private';
+			}
+			else
+			{
+				$arrRecipient = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'];
+				$arrRecipient['email'] = $this->User->email;
+				list($arrRecipient['firstname'], $arrRecipient['lastname']) = $this->splitFriendlyName($arrRecipient['name']);
+				$arrRecipient['personalized'] = 'anonymous';
+			}
+		}
+		else
+		{
+			$arrRecipient = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'];
+			$arrRecipient['email'] = $this->User->email;
+			$arrRecipient['personalized'] = 'anonymous';
+		}
+
+		$arrRecipient['outbox_source'] = 'list:0';
+
+		return $arrRecipient;
 	}
 }
 ?>
