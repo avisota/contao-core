@@ -1,10 +1,37 @@
+<form action="<?php echo $this->Environment->request; ?>" class="tl_form" method="post">
+<div class="tl_formbody">
+<input type="hidden" name="FORM_SUBMIT" value="tl_filters">
+
+<div class="tl_panel">
+
+<div class="tl_submit_panel tl_subpanel">
+<input type="image" name="filter" id="filter" src="system/themes/default/images/reload.gif" class="tl_img_submit" title="<?php echo $GLOBALS['TL_LANG']['MSC']['apply']; ?>" value="<?php echo $GLOBALS['TL_LANG']['MSC']['apply']; ?>">
+</div>
+
+<div class="tl_limit tl_subpanel">
+<strong><?php echo $GLOBALS['TL_LANG']['MSC']['showOnly']; ?>:</strong>
+<select name="tl_filter" class="tl_select" onchange="this.form.submit()">
+  <option value="tl_filter"><?php echo $GLOBALS['TL_LANG']['MSC']['filterRecords']; ?></option>
+  <?php for ($i=0; $i<$this->outbox['recipients']; $i+=$this->limit): ?>
+  <option value="<?php echo $i; ?>,<?php echo $this->limit; ?>"<?php if ($i==$this->offset): ?> selected="selected"<?php endif; ?>><?php echo $i+1; ?> - <?php echo min($i+$this->limit, $this->outbox['recipients']); ?></option>
+  <?php endfor; ?>
+  <option value="all"><?php echo $GLOBALS['TL_LANG']['MSC']['filterAll']; ?></option>
+</select>
+</div>
+
+<div class="clear"></div>
+
+</div>
+</div>
+</form>
+
 <div id="tl_buttons">
 <a href="<?php echo $this->getReferer(true) ?>" class="header_back" title="<?php echo specialchars($GLOBALS['TL_LANG']['MSC']['backBT']) ?>" accesskey="b"><?php echo $GLOBALS['TL_LANG']['MSC']['backBT'] ?></a>
 </div>
 
 <?php echo $this->getMessages(); ?>
 
-<h2 class="sub_headline"><?php echo $this->newsletter ?></h2>
+<h2 class="sub_headline"><?php echo $this->newsletter['subject'] ?></h2>
 
 <div class="tl_formbody_edit">
 <table class="prev_header outbox" summary="" cellpadding="0" cellspacing="0" width="100%">
@@ -27,7 +54,7 @@
     <td class="col_0"><img src="system/modules/Avisota/html/outbox_<?php echo $r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding' ?>.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox'][($r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding')]); ?>" title="<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox'][$r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding']); ?>" /></td>
     <td class="col_1"><?php if ($r['send'] > 0): echo $this->parseDate($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['dateimsFormat'], $r['send']); endif; ?></td>
     <td class="col_2"><?php echo $r['email'] ?></td>
-    <td class="col_3"><?php echo $r['source'] ?></td>
+    <td class="col_3"><?php echo $r['source']['linkedTitle'] ?></td>
   </tr>
   <?php endforeach; ?>
   </tbody>

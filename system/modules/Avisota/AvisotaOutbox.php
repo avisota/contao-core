@@ -53,7 +53,30 @@ class AvisotaOutbox extends BackendModule
 		$this->loadLanguageFile('tl_avisota_newsletter');
 	}
 
-	public function compile()
+	/**
+	 * (non-PHPdoc)
+	 * @see BackendModule::generate()
+	 */
+	public function generate()
+	{
+		if ($this->Input->get('act') == 'details')
+		{
+			$this->strTemplate = 'be_avisota_outbox_details';
+		}
+		if ($this->Input->get('act') == 'send')
+		{
+			$this->strTemplate = 'send';
+		}
+
+		return parent::generate();
+	}
+
+
+	/**
+	 * (non-PHPdoc)
+	 * @see BackendModule::compile()
+	 */
+	protected function compile()
 	{
 		if (!$this->User->isAdmin && !$this->User->hasAccess('send', 'avisota_newsletter_permissions'))
 		{
@@ -64,101 +87,7 @@ class AvisotaOutbox extends BackendModule
 		$this->loadLanguageFile('tl_avisota_newsletter_outbox');
 		$this->loadLanguageFile('tl_avisota_newsletter');
 
-		if ($this->Input->get('id') && $this->Input->get('token'))
-		{
-			$referer = preg_replace('/&(amp;)?(act|id|token)=[^&]*/', '', $this->Environment->request);
-
-			$intId = $this->Input->get('id');
-			$strToken = $this->Input->get('token');
-
-			switch ($this->Input->get('act'))
-			{
-			case 'details':
-				// get the newsletter
-				$objNewsletter = $this->Database->prepare("
-						SELECT
-							*
-						FROM
-							tl_avisota_newsletter
-						WHERE
-							id=?")
-					->execute($intId);
-				if (!$objNewsletter->next())
-				{
-					$this->redirect($referer);
-				}
-
-				$objTemplate = new BackendTemplate('be_avisota_outbox_details');
-				$objTemplate->newsletter = $objNewsletter->subject;
-
-				$arrRecipients = array();
-				$objRecipients = $this->Database->prepare("
-						SELECT
-							*
-						FROM
-							tl_avisota_newsletter_outbox
-						WHERE
-								pid=?
-							AND token=?")
-					->execute($intId, $strToken);
-				while ($objRecipients->next())
-				{
-					$arrRecipient = $objRecipients->row();
-
-					$arrSource = explode(':', $arrRecipient['source'], 2);
-					switch ($arrSource[0])
-					{
-					case 'list':
-						$objList = $this->Database->prepare("
-								SELECT
-									*
-								FROM
-									tl_avisota_recipient_list
-								WHERE
-									id=?")
-							->execute($arrSource[1]);
-						if ($objList->next())
-						{
-							$arrRecipient['source'] = sprintf('%s: %s', $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['recipient_list'], $objList->title);
-						}
-						break;
-
-					case 'mgroup':
-						$objMgroup = $this->Database->prepare("
-								SELECT
-									*
-								FROM
-									tl_member_group
-								WHERE
-									id=?")
-							->execute($arrSource[1]);
-						if ($objMgroup->next())
-						{
-							$arrRecipient['source'] = sprintf('%s: %s', $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['mgroup'], $objMgroup->name);
-						}
-						break;
-					}
-
-					$arrRecipients[] = $arrRecipient;
-				}
-				$objTemplate->recipients = $arrRecipients;
-
-				return $objTemplate->parse();
-				break;
-
-			case 'remove':
-				$this->Database->prepare("
-						DELETE FROM
-							tl_avisota_newsletter_outbox
-						WHERE
-								pid=?
-							AND token=?")
-					->execute($intId, $strToken);
-				$_SESSION['TL_CONFIRM'][] = $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['removed'];
-				$this->redirect($referer);
-				break;
-
-			default:
+		/*
 				if (!$this->Base->allowBackendSending())
 				{
 					$this->redirect($referer);
@@ -455,122 +384,239 @@ class AvisotaOutbox extends BackendModule
 
 				echo '</div></div>';
 				exit;
-			}
-		}
-		else
+		*/
+
+		if ($this->Input->get('act') == 'details')
 		{
-			$objTemplate = new BackendTemplate('be_avisota_outbox');
+			$this->details();
+			return;
+		}
 
-			// allow backend sending
-			$objTemplate->beSend = $this->Base->allowBackendSending();
+		if ($this->Input->get('act') == 'remove')
+		{
+			$this->remove();
+			return;
+		}
 
-			$arrOutbox = array
-			(
-				'open' => array(),
-				'incomplete' => array(),
-				'complete' => array()
-			);
-			$objOutbox = $this->Database->execute("
-					SELECT
-						n.id as id,
-						n.subject as newsletter,
-						MIN(o.tstamp) as date,
-						COUNT(o.email) as recipients,
-						(SELECT COUNT(*) FROM tl_avisota_newsletter_outbox o2 WHERE o.token=o2.token AND o2.send=0) as outstanding,
-						(SELECT COUNT(*) FROM tl_avisota_newsletter_outbox o2 WHERE o.token=o2.token AND o2.failed='1') as failed,
-						o.token,
-						o.pid as pid
-					FROM
-						tl_avisota_newsletter_outbox o
-					INNER JOIN
-						tl_avisota_newsletter n
-					ON
-						n.id=o.pid
-					GROUP BY
-						o.pid,
-						o.token
-					ORDER BY
-						o.tstamp DESC,
-						n.subject ASC");
-			while ($objOutbox->next())
+		if ($this->Input->get('act') == 'send')
+		{
+			$this->send();
+			return;
+		}
+
+		$this->outboxes();
+	}
+
+	protected function details()
+	{
+		// get the outbox
+		$objOutbox = $this->Database
+			->prepare("SELECT
+					*,
+					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE o.id=r.pid) as recipients
+				FROM
+					tl_avisota_newsletter_outbox o
+				WHERE
+					id=?")
+			->execute($this->Input->get('id'));
+
+		if (!$objOutbox->next())
+		{
+			$this->redirect('contao/main.php?do=avisota_outbox');
+		}
+
+		$objNewsletter = $this->Database
+			->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
+			->execute($objOutbox->pid);
+
+		if (!$objNewsletter->next())
+		{
+			$this->redirect('contao/main.php?do=avisota_outbox');
+		}
+
+		$this->Template->outbox = $objOutbox->row();
+		$this->Template->newsletter = $objNewsletter->row();
+
+		$arrSession = $this->Session->get('AVISOTA_OUTBOX');
+
+		if (!$arrSession['offset'] || $arrSession['offset']>$objOutbox->recipients)
+		{
+			$arrSession['offset'] = 0;
+		}
+		if (!$arrSession['limit'])
+		{
+			$arrSession['limit'] = 30;
+		}
+		if ($this->Input->post('FORM_SUBMIT') == 'tl_filters')
+		{
+			if ($this->Input->post('tl_filter') == 'all')
 			{
-
-				// show source-list-names
-				$objSource = $this->Database->prepare('
-						SELECT
-							DISTINCT(source)
-						FROM tl_avisota_newsletter_outbox
-						WHERE pid=?')
-					->execute($objOutbox->pid);
-
-				$strSource = '';
-				while($objSource->next())
-				{
-					$arrSource = explode(':', $objSource->source, 2);
-					switch ($arrSource[0])
-					{
-					case 'list':
-						$objList = $this->Database->prepare("
-								SELECT
-									*
-								FROM
-									tl_avisota_recipient_list
-								WHERE
-									id=?")
-							->execute($arrSource[1]);
-						if ($objList->next())
-						{
-							$strSource .= $objList->title.', ';
-						}
-
-					case 'mgroup':
-						$objMgroup = $this->Database->prepare("
-								SELECT
-									*
-								FROM
-									tl_member_group
-								WHERE
-									id=?")
-							->execute($arrSource[1]);
-						if ($objMgroup->next())
-						{
-							$strSource .= $objMgroup->name.', ';
-						}
-					}
-				}
-				$objOutbox->sources = substr($strSource,0,-2);
-
-
-				if ($objOutbox->outstanding == $objOutbox->recipients)
-				{
-					$arrOutbox['open'][] = $objOutbox->row();
-				}
-				elseif ($objOutbox->outstanding > 0)
-				{
-					$arrOutbox['incomplete'][] = $objOutbox->row();
-				}
-				else
-				{
-					$arrOutbox['complete'][] = $objOutbox->row();
-				}
-				if ($objOutbox->failed > 0)
-				{
-					$objTemplate->display_failed = true;
-				}
+				$arrSession['offset'] = 0;
+				$arrSession['limit'] = 500;
 			}
-			if (count($arrOutbox['open']) || count($arrOutbox[incomplete]) || count($arrOutbox['complete']))
+			else if (preg_match('#^(\d+),(\d+)$#', $this->Input->post('tl_filter'), $m))
 			{
-				$objTemplate->outbox = $arrOutbox;
+				$arrSession['offset'] = intval($m[1]);
+				$arrSession['limit'] = intval($m[2]);
 			}
 			else
 			{
-				$objTemplate->outbox = false;
+				$arrSession['offset'] = 0;
+				$arrSession['limit'] = 30;
 			}
-
-			return $objTemplate->parse();
+			$this->Session->set('AVISOTA_OUTBOX', $arrSession);
+			$this->reload();
 		}
+
+		$this->Session->set('AVISOTA_OUTBOX', $arrSession);
+		$this->Template->offset = $arrSession['offset'];
+		$this->Template->limit = $arrSession['limit'];
+
+		$arrRecipients = array();
+		$objRecipients = $this->Database
+			->prepare("SELECT * FROM tl_avisota_newsletter_outbox_recipient WHERE pid=? ORDER BY email")
+			->limit($arrSession['limit'], $arrSession['offset'])
+			->execute($objOutbox->id);
+		while ($objRecipients->next())
+		{
+			$arrSource = $this->getSource($objRecipients);
+			$arrRecipient = $objRecipients->row();
+			$arrRecipient['source'] = $arrSource;
+			$arrRecipients[] = $arrRecipient;
+		}
+		$this->Template->recipients = $arrRecipients;
 	}
 
+	protected function remove()
+	{
+		$this->Database
+			->prepare("DELETE FROM tl_avisota_newsletter_outbox WHERE id=?")
+			->execute($this->Input->get('id'));
+		$this->Database
+			->prepare("DELETE FROM tl_avisota_newsletter_outbox_recipient WHERE pid=?")
+			->execute($this->Input->get('id'));
+
+		$_SESSION['TL_CONFIRM'][] = $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['removed'];
+
+		$this->redirect('contao/main.php?do=avisota_outbox');
+	}
+
+	protected function outboxes()
+	{
+		// allow backend sending
+		$this->Template->beSend = $this->Base->allowBackendSending();
+
+		$arrOutbox = array
+		(
+			'open' => array(),
+			'incomplete' => array(),
+			'complete' => array()
+		);
+		$objOutbox = $this->Database->execute("
+				SELECT
+					o.id,
+					n.subject as newsletter,
+					o.tstamp,
+					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE r.pid=o.id) as recipients,
+					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE r.pid=o.id AND r.send=0) as outstanding,
+					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE r.pid=o.id AND r.failed='1') as failed
+				FROM
+					tl_avisota_newsletter_outbox o
+				INNER JOIN
+					tl_avisota_newsletter n
+				ON
+					n.id=o.pid
+				ORDER BY
+					o.tstamp DESC,
+					n.subject ASC");
+		while ($objOutbox->next())
+		{
+
+			// show source-list-names
+			$objSource = $this->Database
+				->prepare('SELECT source, sourceID, COUNT(id) as recipients FROM tl_avisota_newsletter_outbox_recipient WHERE pid=? GROUP BY source')
+				->execute($objOutbox->id);
+
+			$arrSources = array();
+			while($objSource->next())
+			{
+				$arrSource = $this->getSource($objSource);
+				if ($arrSource)
+				{
+					$arrSources[] = array_merge($arrSource, $objSource->row());
+				}
+			}
+			$objOutbox->sources = $arrSources;
+
+			if ($objOutbox->outstanding == $objOutbox->recipients)
+			{
+				$arrOutbox['open'][] = $objOutbox->row();
+			}
+			elseif ($objOutbox->outstanding > 0)
+			{
+				$arrOutbox['incomplete'][] = $objOutbox->row();
+			}
+			else
+			{
+				$arrOutbox['complete'][] = $objOutbox->row();
+			}
+			if ($objOutbox->failed > 0)
+			{
+				$this->Template->display_failed = true;
+			}
+		}
+		if (count($arrOutbox['open']) || count($arrOutbox[incomplete]) || count($arrOutbox['complete']))
+		{
+			$this->Template->outbox = $arrOutbox;
+		}
+		else
+		{
+			$this->Template->outbox = false;
+		}
+
+		return $this->Template->parse();
+	}
+
+
+	protected function send()
+	{
+		// TODO
+	}
+
+
+	/**
+	 * Get a source description from outbox recipient.
+	 */
+	protected function getSource($objRecipient)
+	{
+		switch ($objRecipient->source)
+		{
+		case 'list':
+			$objList = $this->Database
+				->prepare("SELECT * FROM tl_avisota_recipient_list WHERE id=?")
+				->execute($objRecipient->sourceID);
+			if ($objList->next())
+			{
+				$arrSource = $objList->row();
+				$arrSource['title'] = sprintf('%s: %s', $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['recipient_list'], $objList->title);
+				$arrSource['linkedTitle'] = sprintf('%s: <a href="contao/main.php?do=avisota_recipients&table=tl_avisota_recipient&id=%d">%s</a>', $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['recipient_list'], $objList->id, $objList->title);
+				return $arrSource;
+			}
+
+		case 'mgroup':
+			$objMgroup = $this->Database
+				->prepare("SELECT * FROM tl_member_group WHERE id=?")
+				->execute($objRecipient->sourceID);
+			if ($objMgroup->next())
+			{
+				$arrSource = $objMgroup->row();
+				$arrSource['title'] = sprintf('%s: %s', $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['mgroup'], $objMgroup->name);
+				$arrSource['linkedTitle'] = sprintf('%s: <a href="contao/main.php?do=member">%s</a>', $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['mgroup'], $objMgroup->name);
+				return $arrSource;
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Prepare the html content for tracking.

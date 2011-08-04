@@ -201,7 +201,9 @@ CREATE TABLE `tl_avisota_newsletter_outbox_recipient` (
   KEY `pid` (`pid`),
   KEY `email` (`email`),
   KEY `domain` (`domain`),
-  KEY `send` (`send`)
+  KEY `send` (`send`),
+  KEY `source` (`source`),
+  KEY `sourceID` (`sourceID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
