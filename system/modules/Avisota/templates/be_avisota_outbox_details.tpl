@@ -4,6 +4,23 @@
 
 <div class="tl_panel">
 
+<div class="tl_filter tl_subpanel">
+<strong><?php echo $GLOBALS['TL_LANG']['MSC']['filter']; ?>:</strong>
+<select name="state" id="state" class="tl_select<?php if ($this->state): ?> active<?php endif; ?>">
+  <option value="tl_state"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['state']; ?></option>
+  <option value="tl_state">---</option>
+  <option value="outstanding"<?php if ($this->state == 'outstanding'): ?> selected="selected"<?php endif; ?>><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['outstanding']; ?></option>
+  <option value="sended"<?php if ($this->state == 'sended'): ?> selected="selected"<?php endif; ?>><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['sended']; ?></option>
+  <option value="failed"<?php if ($this->state == 'failed'): ?> selected="selected"<?php endif; ?>><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['failed']; ?></option>
+</select>
+</div>
+
+<div class="clear"></div>
+
+</div>
+
+<div class="tl_panel">
+
 <div class="tl_submit_panel tl_subpanel">
 <input type="image" name="filter" id="filter" src="system/themes/default/images/reload.gif" class="tl_img_submit" title="<?php echo $GLOBALS['TL_LANG']['MSC']['apply']; ?>" value="<?php echo $GLOBALS['TL_LANG']['MSC']['apply']; ?>">
 </div>

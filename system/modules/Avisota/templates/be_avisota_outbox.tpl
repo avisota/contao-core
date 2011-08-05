@@ -31,7 +31,7 @@
   </thead>
   <tbody>
   <?php foreach ($this->outbox[$strGroup] as $k=>$outbox): ?>
-  <tr class="row_<?php echo $k ?><?php if ($outbox['id'] == $this->Input->get('highlight')): ?> row_highlight<?php endif ?>">
+  <tr class="row_<?php echo $k ?><?php if ($outbox['id'] == $this->Input->get('id')): ?> row_highlight<?php endif ?>">
     <td class="col_0"><?php echo $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $outbox['date']) ?></td>
     <td class="col_1"><?php echo $outbox['newsletter'] ?></td>
     <td class="col_1"><?php foreach ($outbox['sources'] as $source): ?>

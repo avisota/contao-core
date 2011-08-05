@@ -92,6 +92,23 @@ select[disabled] {
 	color: #ccc;
 }
 
+#outbox {
+	padding: 0 18px;
+}
+#outbox h2 {
+	margin: 32px 0 9px 0;
+	text-align: left;
+}
+#outbox td {
+	padding: 6px 0;
+	font-size: 200%;
+	text-align: right;
+	text-align: right;
+}
+#outbox td.title {
+	text-align: left;
+}
+
 /** --- Tracking ------------------------------------------------------------ */
 #graphs {
 	margin: 0 18px;

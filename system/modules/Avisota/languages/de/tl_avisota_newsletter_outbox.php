@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -39,6 +39,7 @@
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['newsletter']  = 'Newsletter';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['date']        = 'Aufgegeben';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['count']       = 'Empfänger';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['state']       = 'Status';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['outstanding'] = 'ausstehend';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['total']       = 'total';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['failed']      = 'fehlgeschlagen';
