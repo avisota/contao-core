@@ -433,7 +433,7 @@ class AvisotaTransport extends Backend
 					// disable recipient from list
 					if ($objRecipients->source == 'list')
 					{
-						if ($GLOBALS['TL_CONFIG']['avisota_disable_recipient_on_failure'])
+						if (!$GLOBALS['TL_CONFIG']['avisota_dont_disable_recipient_on_failure'])
 						{
 							$this->Database
 								->prepare("UPDATE tl_avisota_recipient SET confirmed='' WHERE id=?")
@@ -445,7 +445,7 @@ class AvisotaTransport extends Backend
 					// disable member
 					else if ($objRecipients->source == 'mgroup')
 					{
-						if ($GLOBALS['TL_CONFIG']['avisota_disable_member_on_failure'])
+						if (!$GLOBALS['TL_CONFIG']['avisota_dont_disable_member_on_failure'])
 						{
 							$this->Database
 								->prepare("UPDATE tl_member SET disable='1' WHERE id=?")

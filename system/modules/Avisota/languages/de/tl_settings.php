@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -36,11 +36,13 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_time']    = array('Versanddauer', 'Anzahl Sekunden die pro Zyklus vergehen dürfen, bevor ein neuer Zyklus getriggert wird.');
-$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_count']   = array('Versandanzahl', 'Anzahl E-Mails die pro Zyklus versendet werden, bevor ein neuer Zyklus getriggert wird.');
-$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_timeout'] = array('Zyklenpause', 'Anzahl Sekunden die zwischen zwei Zyklen gewartet wird.');
-$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_mode']   = array('Entwicklermodus', 'Aktiviert den Entwicklermodus.');
-$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_email']  = array('Entwickler E-Mail', 'Im Entwicklermodus werden alle E-Mails an diese Adresse umgeleitet.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_time']                     = array('Versanddauer', 'Anzahl Sekunden die pro Zyklus vergehen dürfen, bevor ein neuer Zyklus getriggert wird.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_count']                    = array('Versandanzahl', 'Anzahl E-Mails die pro Zyklus versendet werden, bevor ein neuer Zyklus getriggert wird.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_timeout']                  = array('Zyklenpause', 'Anzahl Sekunden die zwischen zwei Zyklen gewartet wird.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_dont_disable_recipient_on_failure'] = array('Abonnent bei Fehlversand nicht deaktivieren', 'Deaktiviert die Deaktivierung von Abonnenten, wenn der Versand an sie fehlgeschlagen ist.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_dont_disable_member_on_failure']    = array('Mitglied bei Fehlversand nicht deaktivieren', 'Deaktiviert die Deaktivierung von Mitgliedern, wenn der Versand an sie fehlgeschlagen ist.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_mode']                    = array('Entwicklermodus', 'Aktiviert den Entwicklermodus.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_email']                   = array('Entwickler E-Mail', 'Im Entwicklermodus werden alle E-Mails an diese Adresse umgeleitet.');
 
 
 /**
