@@ -94,7 +94,8 @@ class Tracking extends Frontend
 				$this->Database->prepare("UPDATE tl_avisota_newsletter_read SET tstamp=?, readed=? WHERE readed='' AND pid=? AND recipient=?")->execute(time(), '1', $objLink->pid, $objLink->recipient);
 
 				// increase hit count
-				$this->Database->prepare("UPDATE tl_avisota_newsletter_link_hit SET hits=hits+1, times=IF(times='' OR times=NULL, DATE_FORMAT(NOW(), '%%d.%%m.%%Y %%H'), CONCAT(times, ',', DATE_FORMAT(NOW(), '%%d.%%m.%%Y %%H'))) WHERE id=?")->execute($intId);
+				$strTimes = ($objLink->times ? $objLink->times . ',' : '') . $this->parseDate('d.m.Y H:i');
+				$this->Database->prepare("UPDATE tl_avisota_newsletter_link_hit SET hits=?, times=? WHERE id=?")->execute($objLink->hits+1, $strTimes, $intId);
 
 				header('HTTP/1.1 303 See Other');
 				header('Location: ' . $objLink->url);
