@@ -15,7 +15,7 @@
 <?php foreach ($this->recipients as $recipient): ?>
 <option value="<?php echo $recipient; ?>"<?php if ($this->recipient == $recipient): ?> selected="selected"<?php endif; ?>><?php echo $recipient; ?></option>
 <?php endforeach; ?>
-</select> 
+</select>
 </div>
 
 <div class="tl_newsletter tl_subpanel">
@@ -40,20 +40,8 @@
 
 <h2 class="sub_headline"><?php echo $GLOBALS['TL_LANG']['avisota_tracking']['headline']; ?></h2>
 
-<!--[if IE]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
-<script type="text/javascript" src="system/modules/Avisota/jqplot/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="system/modules/Avisota/jqplot/jquery.jqplot.min.js"></script>
-<script type="text/javascript">jQuery.noConflict();</script>
-<script type="text/javascript" src="system/modules/Avisota/jqplot/plugins/jqplot.highlighter.min.js"></script>
-<script type="text/javascript" src="system/modules/Avisota/jqplot/plugins/jqplot.cursor.min.js"></script>
-<script type="text/javascript" src="system/modules/Avisota/jqplot/plugins/jqplot.dateAxisRenderer.min.js"></script>
-<script type="text/javascript" src="system/modules/Avisota/jqplot/plugins/jqplot.canvasTextRenderer.min.js"></script>
-<script type="text/javascript" src="system/modules/Avisota/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
-<script type="text/javascript" src="system/modules/Avisota/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
-<script type="text/javascript" src="system/modules/Avisota/jqplot/plugins/jqplot.barRenderer.min.js"></script>
-<script type="text/javascript" src="system/modules/Avisota/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
-<script type="text/javascript" src="system/modules/Avisota/jqplot/plugins/jqplot.donutRenderer.min.js"></script>
-<script type="text/javascript" src="system/modules/Avisota/jqplot/plugins/jqplot.pointLabels.min.js"></script>
+<script type="text/javascript" src="system/modules/Avisota/highstock/js/adapters/mootools-adapter.js"></script>
+<script type="text/javascript" src="system/modules/Avisota/highstock/js/highstock.js"></script>
 
 <div id="graphs">
 	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['graph_overview_legend']; ?></h3>
@@ -62,22 +50,18 @@
 	<div id="graph_timeline"></div>
 </div>
 
-<pre><?php var_dump($this->timeline); ?></pre>
-
 <div id="links">
 	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['graph_links_legend']; ?></h3>
-	<table cellpadding="0" cellspacing="0">
-		<thead>
-			<tr>
-				<th class="url"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['url']; ?></th>
-				<th class="hits"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['hits']; ?></th>
-			</tr>
-		</thead>
+	<table cellpadding="0" cellspacing="0" class="tl_listing">
 		<tbody>
-			<?php foreach ($this->links as $i=>$link): ?>
 			<tr>
-				<td class="url"><?php echo $link['url']; ?></td>
-				<td class="hits"><?php echo $link['hits']; ?></td>
+				<td class="tl_folder_tlist url"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['url']; ?></td>
+				<td class="tl_folder_tlist hits"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['hits']; ?></td>
+			</tr>
+			<?php foreach ($this->links as $i=>$link): ?>
+			<tr onmouseover="Theme.hoverRow(this, 1);" onmouseout="Theme.hoverRow(this, 0);">
+				<td class="tl_file_list url"><a href="<?php echo $link['url']; ?>" onclick="window.open(this.href); return false;"><?php echo $link['url']; ?></a></td>
+				<td class="tl_file_list tl_right_nowrap hits"><?php echo $link['hits']; ?></td>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>
@@ -85,8 +69,119 @@
 </div>
 
 <script>
+$(window).addEvent('domready', function() {
+	try {
+	window.overviewChart = new Highcharts.StockChart({
+		chart: {
+			renderTo: 'graph_overview'
+		},
+		rangeSelector: {
+			buttons: [{
+				type: 'day',
+				count: 1,
+				text: '1d'
+			}, {
+				type: 'day',
+				count: 2,
+				text: '2d'
+			}, {
+				type: 'day',
+				count: 3,
+				text: '3d'
+			}, {
+				type: 'week',
+				count: 1,
+				text: '1w'
+			}, {
+				type: 'month',
+				count: 1,
+				text: '1m'
+			}, {
+				type: 'month',
+				count: 6,
+				text: '6m'
+			}, {
+				type: 'year',
+				count: 1,
+				text: '1y'
+			}, {
+				type: 'all',
+				text: 'All'
+			}],
+			selected: 0
+		},
+		xAxis: {
+			maxZoom: 14 * 24 * 3600000 // fourteen days
+		},
+		yAxis: {
+			min: 0,
+			title: {
+				text: ''
+			}
+		},
+		tooltip: {
+			formatter: function(){
+				var point = this.points[0],
+					series = point.series,
+					unit = series.unit && series.unit[0],
+					format = '%A, %b %e, %Y, %H:%M', // with hours
+					s;
+
+				if (unit == 'day') { // skip hours
+					format = '%A, %b %e, %Y';
+				}
+
+				return '<b>' + Highcharts.dateFormat(format, this.x) + '</b>' +
+					'<br/>Reads: ' + Highcharts.numberFormat(this.points[0].y, 0);
+			}
+		},
+		series: [{
+			name: 'Reads',
+			data: [<?php
+			$reads = array();
+			foreach ($this->reads as $i=>$read):
+				$min = $this->parseDate('i', $read['tstamp']);
+				$min -= $min%15; // reduce to 15 minutes
+				$reads[strtotime($this->parseDate('d.m.Y H:', $read['tstamp']) . $min)*1000]++;
+			endforeach;
+			$count = 0;
+			$data = array();
+			foreach ($reads as $k=>$v):
+				$count += $v;
+				$data[] = '[' . $k . ',' . $count . ']';
+			endforeach;
+			echo implode(",\n", $data);
+			?>]
+		}, {
+			name: 'Reacts',
+			data: [<?php
+			$reacts = array();
+			foreach ($this->reads as $i=>$read):
+				$times = explode(',', $read['times']);
+				foreach ($times as $time):
+					$min = $this->parseDate('i', $read['tstamp']);
+					$min -= $min%15; // reduce to 15 minutes
+					$reacts[strtotime($this->parseDate('d.m.Y H:', $read['tstamp']) . $min)*1000]++;
+				endforeach;
+			endforeach;
+			$count = 0;
+			$data = array();
+			foreach ($reacts as $k=>$v):
+				$count += $v;
+				$data[] = '[' . $k . ',' . $count . ']';
+			endforeach;
+			echo implode(",\n", $data);
+			?>]
+		}]
+	});
+	} catch(e) {
+		alert(e);
+	}
+});
+
+/*
 jQuery(document).ready(function() {
-	/* overview graph */
+	/* overview graph * /
 	var data = [
 		[[<?php echo $this->total; ?>, 0]],
 		[[<?php echo $this->reads; ?>, 0]],
@@ -120,7 +215,7 @@ jQuery(document).ready(function() {
 			placement: 'outsideGrid'
 		}
 	});
-	/* links graph */
+	/* links graph * /
 	var data = [
 		<?php foreach ($this->links as $i=>$link): if ($i>0): ?>,<?php endif; ?>
 		['<?php echo $link['url']; ?>', <?php echo $link['hits']; ?>]
@@ -147,4 +242,5 @@ jQuery(document).ready(function() {
 		}
 	});
 });
+*/
 </script>

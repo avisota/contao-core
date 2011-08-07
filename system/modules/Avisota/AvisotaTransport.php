@@ -652,7 +652,7 @@ class PrepareTrackingHelper extends Controller
 		}
 
 		$objLink = $this->Database
-		->prepare("SELECT * FROM tl_avisota_newsletter_link_hit WHERE pid=? AND url=? AND recipient=?")
+		->prepare("SELECT * FROM tl_avisota_newsletter_link WHERE pid=? AND url=? AND recipient=?")
 		->execute($this->objNewsletter->id, $strUrl, $this->objRecipient->email);
 		if ($objLink->next())
 		{
@@ -661,7 +661,7 @@ class PrepareTrackingHelper extends Controller
 		else
 		{
 			$objLink = $this->Database
-			->prepare("INSERT INTO tl_avisota_newsletter_link_hit (pid,tstamp,url,recipient) VALUES (?, ?, ?, ?)")
+			->prepare("INSERT INTO tl_avisota_newsletter_link (pid,tstamp,url,recipient) VALUES (?, ?, ?, ?)")
 			->execute($this->objNewsletter->id, time(), $strUrl, $this->objRecipient->email);
 			$intLink = $objLink->insertId;
 		}

@@ -87,15 +87,14 @@ class Tracking extends Frontend
 		// newsletter link click
 		if ($intId = $this->Input->get('link'))
 		{
-			$objLink = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_link_hit WHERE id=?")->execute($intId);
+			$objLink = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_link WHERE id=?")->execute($intId);
 			if ($objLink->next())
 			{
 				// set read state
 				$this->Database->prepare("UPDATE tl_avisota_newsletter_read SET tstamp=?, readed=? WHERE readed='' AND pid=? AND recipient=?")->execute(time(), '1', $objLink->pid, $objLink->recipient);
 
 				// increase hit count
-				$strTimes = ($objLink->times ? $objLink->times . ',' : '') . $this->parseDate('d.m.Y H:i');
-				$this->Database->prepare("UPDATE tl_avisota_newsletter_link_hit SET hits=?, times=? WHERE id=?")->execute($objLink->hits+1, $strTimes, $intId);
+				$this->Database->prepare("INSERT INTO tl_avisota_newsletter_link_hit SET pid=?, tstamp=?")->execute($intId, time());
 
 				header('HTTP/1.1 303 See Other');
 				header('Location: ' . $objLink->url);
