@@ -194,6 +194,16 @@ class AvisotaOutbox extends BackendModule
 		{
 			$arrSource = $this->getSource($objRecipients);
 			$arrRecipient = $objRecipients->row();
+			switch ($objRecipients->source)
+			{
+			case 'list':
+				$arrRecipient['linkedEmail'] = '<a href="contao/main.php?do=avisota_recipients&table=tl_avisota_recipient&act=edit&id=' . $arrRecipient['recipientID'] . '">' . $arrRecipient['email'] . '</a>';
+				break;
+
+			case 'mgroup':
+				$arrRecipient['linkedEmail'] = '<a href="contao/main.php?do=member&act=edit&id=' . $arrRecipient['recipientID'] . '">' . $arrRecipient['email'] . '</a>';
+				break;
+			}
 			$arrRecipient['source'] = $arrSource;
 			$arrRecipients[] = $arrRecipient;
 		}
@@ -227,6 +237,9 @@ class AvisotaOutbox extends BackendModule
 
 		$this->Template->outbox = $objOutbox->row();
 		$this->Template->newsletter = $objNewsletter->row();
+		$this->Template->cycleTimeout = $GLOBALS['TL_CONFIG']['avisota_max_send_time'];
+		$this->Template->sendTimeout = $GLOBALS['TL_CONFIG']['avisota_max_send_timeout']*1000;
+		$this->Template->expectedTime = ($objOutbox->outstanding / $GLOBALS['TL_CONFIG']['avisota_max_send_count']) * ($GLOBALS['TL_CONFIG']['avisota_max_send_time'] + $GLOBALS['TL_CONFIG']['avisota_max_send_timeout']*1000);
 	}
 
 
@@ -339,52 +352,6 @@ class AvisotaOutbox extends BackendModule
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * Prepare the html content for tracking.
-	 */
-	protected function prepareTrackingHtml($objNewsletter, $objCategory, $objRecipient, $strHtml)
-	{
-		$objPrepareTrackingHelper = new PrepareTrackingHelper($objNewsletter, $objCategory, $objRecipient);
-		$strHtml = preg_replace_callback('#href=["\']((http|ftp)s?:\/\/.+)["\']#U', array(&$objPrepareTrackingHelper, 'replaceHtml'), $strHtml);
-
-		$objRead = $this->Database
-			->prepare("SELECT * FROM tl_avisota_newsletter_read WHERE pid=? AND recipient=?")
-			->execute($objNewsletter->id, $objRecipient->outbox_email);
-		if ($objRead->next())
-		{
-			$intRead = $objRead->id;
-		}
-		else
-		{
-			$objRead = $this->Database
-				->prepare("INSERT INTO tl_avisota_newsletter_read (pid,tstamp,recipient) VALUES (?, ?, ?)")
-				->execute($objNewsletter->id, time(), $objRecipient->outbox_email);
-			$intRead = $objRead->insertId;
-		}
-
-		if ($objCategory->viewOnlinePage)
-		{
-			$objPage = $this->getPageDetails($objCategory->viewOnlinePage);
-		}
-		else
-		{
-			$objPage = null;
-		}
-
-		$strHtml = str_replace('</body>', '<img src="' . $this->DomainLink->absolutizeUrl('nltrack.php?read=' . $intRead, $objPage) . '" alt="" width="1" height="1" />', $strHtml);
-		return $strHtml;
-	}
-
-
-	/**
-	 * Prepare the plain content for tracking.
-	 */
-	protected function prepareTrackingPlain($objNewsletter, $objCategory, $objRecipient, $strPlain)
-	{
-		$objPrepareTrackingHelper = new PrepareTrackingHelper($objNewsletter, $objCategory, $objRecipient);
-		return preg_replace_callback('#<((http|ftp)s?:\/\/.+)>#U', array(&$objPrepareTrackingHelper, 'replacePlain'), $strPlain);
 	}
 
 	protected function getOutbox()

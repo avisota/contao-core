@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -37,7 +37,7 @@
  * System configuration
  */
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'avisota_developer_mode';
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{avisota_legend:hide},avisota_max_send_time,avisota_max_send_count,avisota_max_send_timeout,avisota_developer_mode';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{avisota_legend:hide},avisota_max_send_time,avisota_max_send_count,avisota_max_send_timeout,avisota_disable_recipient_on_failure,avisota_disable_member_on_failure,avisota_developer_mode';
 $GLOBALS['TL_DCA']['tl_settings']['subpalettes']['avisota_developer_mode'] = 'avisota_developer_email';
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_max_send_time'] = array
@@ -59,6 +59,20 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_max_send_timeout'] = array
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_timeout'],
 	'inputType'               => 'text',
 	'eval'                    => array('mandatory'=>true, 'rgxp'=>'digit', 'tl_class'=>'w50')
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_disable_recipient_on_failure'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['avisota_disable_recipient_on_failure'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'clr')
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_disable_member_on_failure'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['avisota_disable_member_on_failure'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'clr')
 );
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_developer_mode'] = array

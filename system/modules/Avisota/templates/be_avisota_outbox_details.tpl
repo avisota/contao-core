@@ -70,7 +70,7 @@
   <tr class="row_<?php echo $k ?>">
     <td class="col_0"><img src="system/modules/Avisota/html/outbox_<?php echo $r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding' ?>.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox'][($r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding')]); ?>" title="<?php echo specialchars($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox'][$r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding']); ?>" /></td>
     <td class="col_1"><?php if ($r['send'] > 0): echo $this->parseDate($GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['dateimsFormat'], $r['send']); endif; ?></td>
-    <td class="col_2"><?php echo $r['email'] ?></td>
+    <td class="col_2"><?php echo $r['linkedEmail'] ?></td>
     <td class="col_3"><?php echo $r['source']['linkedTitle'] ?></td>
   </tr>
   <?php endforeach; ?>

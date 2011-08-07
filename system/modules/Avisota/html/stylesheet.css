@@ -92,21 +92,28 @@ select[disabled] {
 	color: #ccc;
 }
 
+#loading {
+	float: right;
+}
 #outbox {
-	padding: 0 18px;
+	padding: 0 18px 18px;
 }
 #outbox h2 {
 	margin: 32px 0 9px 0;
 	text-align: left;
 }
+#outbox th,
 #outbox td {
-	padding: 6px 0;
-	font-size: 200%;
-	text-align: right;
 	text-align: right;
 }
-#outbox td.title {
-	text-align: left;
+#outbox th {
+	padding-right: 6px;
+}
+#outbox tbody td {
+	font-size: 16px;
+}
+span.negative {
+	color: #00f;
 }
 
 /** --- Tracking ------------------------------------------------------------ */
