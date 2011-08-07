@@ -54,8 +54,8 @@ class Tracking extends Frontend
 	{
 		parent::__construct();
 	}
-	
-	
+
+
 	/**
 	 * Run the controller.
 	 */
@@ -65,9 +65,25 @@ class Tracking extends Frontend
 		if ($intId = $this->Input->get('read'))
 		{
 			$this->Database->prepare("UPDATE tl_avisota_newsletter_read SET tstamp=?, readed=? WHERE readed='' AND id=?")->execute(time(), '1', $intId);
-			$this->sendFileToBrowser('system/modules/Avisota/html/blank.gif');
+
+			$strFile = 'system/modules/Avisota/html/blank.gif';
+			$objFile = new File($strFile);
+
+			// Open the "save as …" dialogue
+			header('Content-Type: ' . $objFile->mime);
+			header('Content-Transfer-Encoding: binary');
+			header('Content-Length: ' . $objFile->filesize);
+			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			header('Pragma: public');
+			header('Expires: 0');
+
+			$resFile = fopen(TL_ROOT . '/' . $strFile, 'rb');
+			fpassthru($resFile);
+			fclose($resFile);
+
+			exit;
 		}
-		
+
 		// newsletter link click
 		if ($intId = $this->Input->get('link'))
 		{
@@ -76,15 +92,15 @@ class Tracking extends Frontend
 			{
 				// set read state
 				$this->Database->prepare("UPDATE tl_avisota_newsletter_read SET tstamp=?, readed=? WHERE readed='' AND pid=? AND recipient=?")->execute(time(), '1', $objLink->pid, $objLink->recipient);
-				
+
 				// increase hit count
 				$this->Database->prepare("UPDATE tl_avisota_newsletter_link_hit SET hits=hits+1, times=IF(times='' OR times=NULL, DATE_FORMAT(NOW(), '%%d.%%m.%%Y %%H'), CONCAT(times, ',', DATE_FORMAT(NOW(), '%%d.%%m.%%Y %%H'))) WHERE id=?")->execute($intId);
-				
+
 				header('HTTP/1.1 303 See Other');
 				header('Location: ' . $objLink->url);
 				exit;
 			}
-			
+
 			$this->import('FrontendUser', 'User');
 			$this->User->authenticate();
 			$objHandler = new $GLOBALS['TL_PTY']['error_404']();
