@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -153,6 +153,13 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['show'],
 				'href'                => 'act=show',
 				'icon'                => 'show.gif'
+			),
+			'tracking' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['tracking'],
+				'href'                => '',
+				'icon'                => 'system/modules/Avisota/html/tracking.png',
+				'button_callback'     => array('tl_avisota_recipient', 'tracking')
 			)
 		),
 	),
@@ -266,7 +273,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'flag'                    => 1,
 			'foreignKey'              => 'tl_user.name',
 			'eval'                    => array('importable'=>true, 'exportable'=>true, 'doNotShow'=>true, 'doNotCopy'=>true)
-		)		
+		)
 	)
 );
 
@@ -280,15 +287,15 @@ class tl_avisota_recipient extends Backend
 		parent::__construct();
 		$this->import('BackendUser', 'User');
 	}
-	
-	
+
+
 	public function onsubmit_callback($dc)
 	{
 		$this->Database->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid=? AND email=?")
 				->execute($dc->activeRecord->pid, md5($dc->activeRecord->email));
 	}
-	
-	
+
+
 	public function ondelete_callback($dc)
 	{
 		if ($this->Input->get('blacklist') !== 'false')
@@ -298,11 +305,11 @@ class tl_avisota_recipient extends Backend
 				->execute();
 		}
 	}
-	
-	
+
+
 	/**
 	 * Add the recipient row.
-	 * 
+	 *
 	 * @param array
 	 */
 	public function addRecipient($arrRow)
@@ -318,7 +325,7 @@ class tl_avisota_recipient extends Backend
 		{
 			$label = $arrRow['email'];
 		}
-		
+
 		$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(';
 		$label .= sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn'][2], $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $arrRow['addedOn']));
 		if ($arrRow['addedBy'] > 0)
@@ -328,11 +335,11 @@ class tl_avisota_recipient extends Backend
 			$label .= sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy'][2], $objUser->next() ? $objUser->name : $GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy'][3]);
 		}
 		$label .= ')</span>';
-		
+
 		return sprintf('<div class="list_icon" style="background-image:url(\'system/themes/%s/images/%s.gif\');">%s</div>', $this->getTheme(), $icon, $label);
 	}
-	
-	
+
+
 	/**
 	 * Check permissions to edit table tl_avisota_recipient
 	 */
@@ -354,8 +361,8 @@ class tl_avisota_recipient extends Backend
 		}
 
 		$id = strlen($this->Input->get('id')) ? $this->Input->get('id') : CURRENT_ID;
-		
-		
+
+
 		// Check permissions to add recipients
 		if (!$this->User->hasAccess('create', 'avisota_recipient_permissions'))
 		{
@@ -368,7 +375,7 @@ class tl_avisota_recipient extends Backend
 		if (!$this->User->hasAccess('delete', 'avisota_recipient_permissions'))
 		{
 			unset($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['global_operations']['remove']);
-			
+
 			// remove edit header class, if only delete without blacklist is allowed
 			if ($this->User->hasAccess('delete_no_blacklist', 'avisota_recipient_permissions'))
 			{
@@ -382,7 +389,7 @@ class tl_avisota_recipient extends Backend
 				unset($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['operations']['delete_no_blacklist']);
 			}
 		}
-		
+
 		// remove tools if there are no tools
 		$intTools = 0;
 		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['global_operations'] as $arrGlobalOperation)
@@ -429,15 +436,15 @@ class tl_avisota_recipient extends Backend
 				case 'toggle':
 					$blnHasAccess = (count(preg_grep('/^tl_avisota_recipient::/', $this->User->alexf)) > 0);
 					break;
-					
+
 				case 'show':
 					$blnHasAccess = true;
 					break;
-					
+
 				case 'copy':
 					$blnHasAccess = ($this->User->hasAccess('create', 'avisota_recipient_permissions'));
 					break;
-					
+
 				case 'delete':
 					$blnHasAccess = ($this->User->hasAccess($this->Input->get('blacklist') == 'false' ? 'delete_no_blacklist' : 'delete', 'avisota_recipient_permissions'));
 					break;
@@ -458,12 +465,12 @@ class tl_avisota_recipient extends Backend
 				case 'select':
 					$blnHasAccess = true;
 					break;
-					
+
 				case 'editAll':
 				case 'overrideAll':
 					$blnHasAccess = (count(preg_grep('/^tl_avisota_recipient::/', $this->User->alexf)) > 0);
 					break;
-					
+
 				case 'deleteAll':
 					$blnHasAccess = ($this->User->hasAccess($this->Input->get('blacklist') == 'false' ? 'delete_no_blacklist' : 'delete', 'avisota_recipient_permissions'));
 					break;
@@ -502,8 +509,8 @@ class tl_avisota_recipient extends Backend
 				break;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Return the "toggle visibility" button
 	 * @param array
@@ -527,18 +534,18 @@ class tl_avisota_recipient extends Backend
 		{
 			return '';
 		}
-		
+
 		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['confirmed']?'':'1');
 
 		if (!$row['confirmed'])
 		{
 			$icon = 'invisible.gif';
-		}		
+		}
 
 		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
 	}
-	
-	
+
+
 	/**
 	 * Toggle the visibility of an element
 	 * @param integer
@@ -550,14 +557,14 @@ class tl_avisota_recipient extends Backend
 		$this->Input->setGet('id', $intId);
 		$this->Input->setGet('act', 'toggle');
 		$this->checkPermission();
-	
+
 		// Check permissions to publish
 		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_avisota_recipient::confirmed', 'alexf'))
 		{
 			$this->log('Not enough permissions to publish/unpublish newsletter recipient ID "'.$intId.'"', 'tl_avisota_recipient toggleVisibility', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
-		
+
 		$this->createInitialVersion('tl_avisota_recipient', $intId);
 
 		// Trigger the save_callback
@@ -639,6 +646,22 @@ class tl_avisota_recipient extends Backend
 	public function deleteRecipientNoBlacklist($row, $href, $label, $title, $icon, $attributes)
 	{
 		return ($this->User->isAdmin || $this->User->hasAccess('delete_no_blacklist', 'avisota_recipient_permissions')) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
+	}
+
+
+	/**
+	 * Return the tracking button
+	 * @param array
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @return string
+	 */
+	public function tracking($row, $href, $label, $title, $icon, $attributes)
+	{
+		return '<a href="contao/main.php?do=avisota_tracking&amp;recipient='.urlencode($row['email']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
 	}
 }
 

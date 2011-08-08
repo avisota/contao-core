@@ -55,49 +55,45 @@ class AvisotaTracking extends BackendModule
 		$this->loadLanguageFile('avisota_tracking');
 
 		# load the session settings
-		$arrSession = $this->Session->get('avisota_tracking');
-
-		# create an empty session
-		if (!is_array($arrSession))
-		{
-			$arrSession = array
-			(
-				'newsletter' => 0,
-				'recipient'  => ''
-			);
-		}
+		$intNewsletter = $this->Session->get('AVISOTA_TRACKING');
+		$strRecipient = '';
 
 		# evaluate the post and get parameters
 		if ($this->Input->post('newsletter'))
 		{
-			$arrSession['newsletter'] = $this->Input->post('newsletter');
+			$intNewsletter = $this->Input->post('newsletter');
+		}
+		else if ($this->Input->get('newsletter'))
+		{
+			$intNewsletter = $this->Input->get('newsletter');
 		}
 		if ($this->Input->post('recipient'))
 		{
-			$arrSession['recipient'] = $this->Input->post('recipient');
+			$strRecipient = urldecode($this->Input->post('recipient'));
 		}
-		if ($this->Input->get('newsletter'))
+		else if ($this->Input->get('recipient'))
 		{
-			$arrSession['newsletter'] = $this->Input->get('newsletter');
-		}
-		if ($this->Input->get('recipient'))
-		{
-			$arrSession['recipient'] = $this->Input->get('recipient');
+			$strRecipient = urldecode($this->Input->get('recipient'));
 		}
 
-		$arrRecipients = $this->Database->execute("SELECT recipient FROM tl_avisota_newsletter_read GROUP BY recipient ORDER BY recipient")->fetchEach('recipient');
-		if ($arrSession['recipient'] && !in_array($arrSession['recipient'], $arrRecipients))
+		$objRecipient = $this->Database
+			->prepare("SELECT * FROM tl_avisota_newsletter_read WHERE recipient=?")
+			->limit(1)
+			->execute($strRecipient);
+		if (!$objRecipient->numRows)
 		{
-			$arrSession['recipient'] = '';
+			$strRecipient = '';
 		}
 
 		# where statement, if the newsletters have to filter by a specific recipient
 		$strWhere = '';
 
 		# collect read state and build where statement for a specific recipient
-		if ($arrSession['recipient'])
+		if ($strRecipient)
 		{
-			$objRead = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_read WHERE recipient=?")->execute($arrSession['recipient']);
+			$objRead = $this->Database
+				->prepare("SELECT * FROM tl_avisota_newsletter_read WHERE recipient=?")
+				->execute($strRecipient);
 			$arrIds = $objRead->fetchEach('pid');
 			if (count($arrIds))
 			{
@@ -107,13 +103,6 @@ class AvisotaTracking extends BackendModule
 			{
 				$strWhere = ' AND id=0';
 			}
-
-			$objRead = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_read WHERE recipient=? AND readed=?")->execute($arrSession['recipient'], 1);
-			$this->Template->read = $objRead->fetchEach('pid');
-		}
-		else
-		{
-			$this->Template->read = array();
 		}
 
 		# read all available newsletters (if set, only for a specific recipient)
@@ -125,66 +114,218 @@ class AvisotaTracking extends BackendModule
 		}
 
 		# find last sended newsletter
-		if (!isset($arrNewsletters[$arrSession['newsletter']]))
+		if (!$intNewsletter)
 		{
-			$arrSession['newsletter'] = '';
+			$arrIds = array_keys($arrNewsletters);
+			$intNewsletter = array_shift($arrIds);
 		}
 
-		if ($arrSession['newsletter'])
+		$objNewsletter = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")->execute($intNewsletter);
+		if ($objNewsletter->next())
 		{
-			$objNewsletter = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")->execute($arrSession['newsletter']);
-			if ($objNewsletter->next())
+			$this->Template->newsletter = $objNewsletter->row();
+
+			$this->Template->links = array();
+
+			# collect links hits
+			if ($strRecipient)
 			{
-				$this->Template->newsletter = $objNewsletter;
-
-				# collect links hits
-				if ($arrSession['recipient'])
-				{
-					$objLink = $this->Database->prepare("SELECT url,(SELECT COUNT(id) FROM tl_avisota_newsletter_link_hit h WHERE l.id=h.pid) as hits FROM tl_avisota_newsletter_link l WHERE pid=? AND recipient=? ORDER BY hits DESC")->execute($arrSession['newsletter'], $arrSession['recipient']);
-				}
-				else
-				{
-					$objLink = $this->Database->prepare("SELECT url,SUM(hits) as hits FROM (SELECT url,(SELECT COUNT(id) FROM tl_avisota_newsletter_link_hit h WHERE l.id=h.pid) as hits FROM tl_avisota_newsletter_link l WHERE pid=?) t GROUP BY url ORDER BY hits DESC")->execute($arrSession['newsletter']);
-				}
-				$this->Template->links = $objLink->fetchAllAssoc();
-
-				// collect newsletter/recipient, reads and reacts count
-				if ($arrSession['recipient'])
-				{
-					// total number of recived newsletters
-					$this->Template->total  = $this->Database->prepare("SELECT COUNT(pid) as total FROM tl_avisota_newsletter_read WHERE recipient=?")->execute($arrSession['recipient'])->total;
-					// total number of readed newsletters
-					$this->Template->reads  = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_read WHERE recipient=? AND readed=? ORDER BY tstamp")->execute($arrSession['recipient'], 1)->fetchAllAssoc();
-					// total number of newsletters the recipients reacts on (clicked a link)
-					$this->Template->reacts = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_link_hit WHERE recipient=? AND hits>0 GROUP BY pid ORDER BY tstamp")->execute($arrSession['recipient'])->fetchAllAssoc();
-				}
-				else
-				{
-					// total number of recipients for this newsletter
-					$this->Template->total  = $this->Database->prepare("SELECT COUNT(recipient) as total FROM tl_avisota_newsletter_read WHERE pid=?")->execute($objNewsletter->id)->total;
-					// total number of recipients that reads this newsletter
-					$this->Template->reads  = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_read WHERE pid=? AND readed=? ORDER BY tstamp")->execute($objNewsletter->id, 1)->fetchAllAssoc();
-					// total number ov recipients taht reacts on this newsletter (clicked a link)
-					$this->Template->reacts = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_link_hit WHERE pid=? AND hits>0 GROUP BY recipient ORDER BY tstamp")->execute($objNewsletter->id)->fetchAllAssoc();
-				}
+				$objLink = $this->Database->prepare("SELECT url,(SELECT COUNT(id) FROM tl_avisota_newsletter_link_hit h WHERE l.id=h.pid) as hits FROM tl_avisota_newsletter_link l WHERE pid=? AND recipient=? ORDER BY hits DESC")->execute($intNewsletter, $strRecipient);
 			}
 			else
 			{
-				$arrSession['newsletter'] = '';
+				$objLink = $this->Database->prepare("SELECT url,SUM(hits) as hits FROM (SELECT url,(SELECT COUNT(id) FROM tl_avisota_newsletter_link_hit h WHERE l.id=h.pid) as hits FROM tl_avisota_newsletter_link l WHERE pid=?) t GROUP BY url ORDER BY hits DESC")->execute($intNewsletter);
+			}
+			$this->Template->links = $objLink->fetchAllAssoc();
+		}
+		else
+		{
+			$this->redirect('contao/main.php?act=error');
+		}
+
+		if ($this->Input->get('data'))
+		{
+			switch ($this->Input->get('data'))
+			{
+			case 'recipients':
+				$this->json_recipients($objNewsletter);
+
+			case 'sends':
+				$this->json_sends($objNewsletter, $strRecipient);
+
+			case 'reads':
+				$this->json_reads($objNewsletter, $strRecipient);
+
+			case 'reacts':
+				$this->json_reacts($objNewsletter, $strRecipient);
+
+			default:
+				exit;
 			}
 		}
 
-		if (!$arrSession['newsletter'])
+		if ($strRecipient)
 		{
-
+			$objRead = $this->Database
+				->prepare("SELECT n.id, n.subject, r.readed
+					FROM tl_avisota_newsletter_read r
+					INNER JOIN tl_avisota_newsletter n
+					ON n.id=r.pid
+					WHERE r.recipient=? AND r.readed=?")
+				->execute($strRecipient, 1);
+			$this->Template->newsletter_reads = $objRead->fetchAllAssoc();
+		}
+		else
+		{
+			$this->Template->newsletter_reads = false;
 		}
 
-		$this->Template->mode = ($arrSession['recipient']) ? 'recipient' : 'newsletter';
+		$this->Template->mode = ($strRecipient) ? 'recipient' : 'newsletter';
 		$this->Template->newsletters = $arrNewsletters;
 		$this->Template->recipients = $arrRecipients;
-		$this->Template->recipient = $arrSession['recipient'];
+		$this->Template->recipient = $strRecipient;
 
-		$this->Session->set('avisota_tracking', $arrSession);
+		$this->Session->set('AVISOTA_TRACKING', $intNewsletter);
+	}
+
+	protected function json_recipients($objNewsletter)
+	{
+		$objResultSet = $this->Database
+			->prepare("SELECT recipient
+				FROM tl_avisota_newsletter_read
+				WHERE pid=? AND recipient LIKE ?
+				ORDER BY recipient")
+			->limit($this->Input->get('limit') ? $this->Input->get('limit') : 20)
+			->execute($objNewsletter->id, '%' . $this->Input->get('q') . '%');
+
+		header('Content-Type: application/json');
+		echo '[' . "\n";
+		$n = 0;
+		while ($objResultSet->next())
+		{
+			if ($n++ > 0)
+			{
+				echo ",\n";
+			}
+			echo json_encode(array('value' => $objResultSet->recipient, 'text' => $objResultSet->recipient));
+		}
+		echo "\n" . ']';
+		exit;
+	}
+
+	protected function json_sends($objNewsletter, $strRecipient)
+	{
+		// collect newsletter/recipient, reads and reacts count
+		if ($strRecipient)
+		{
+			// total number of recived newsletters
+			$objResultSet = $this->Database
+				->prepare("SELECT r.send as time, COUNT(r.id) as sum
+					FROM tl_avisota_newsletter_outbox_recipient r
+					WHERE r.email=? AND r.send>0
+					GROUP BY time
+					ORDER BY time")
+				->execute($strRecipient);
+		}
+		else
+		{
+			// total number of recipients for this newsletter
+			$objResultSet = $this->Database
+				->prepare("SELECT r.send as time, COUNT(r.id) as sum
+					FROM tl_avisota_newsletter_outbox_recipient r
+					INNER JOIN tl_avisota_newsletter_outbox o
+					WHERE o.pid=? AND r.send>0
+					GROUP BY time
+					ORDER BY time")
+				->execute($objNewsletter->id);
+		}
+		$this->json_output($objResultSet);
+	}
+
+	protected function json_reads($objNewsletter, $strRecipient)
+	{
+		// collect newsletter/recipient, reads and reacts count
+		if ($strRecipient)
+		{
+			// total number of readed newsletters
+			// TODO
+			$objResultSet  = $this->Database
+				->prepare("SELECT tstamp as time, COUNT(id) as sum
+					FROM tl_avisota_newsletter_read
+					WHERE recipient=? AND readed=?
+					GROUP BY time
+					ORDER BY time")
+				->execute($strRecipient, 1);
+		}
+		else
+		{
+			// total number of recipients that reads this newsletter
+			$objResultSet = $this->Database
+				->prepare("SELECT tstamp as time, COUNT(id) as sum
+					FROM tl_avisota_newsletter_read
+					WHERE pid=? AND readed=?
+					GROUP BY time
+					ORDER BY time")
+				->execute($objNewsletter->id, 1);
+		}
+		$this->json_output($objResultSet);
+	}
+
+	protected function json_reacts($objNewsletter, $strRecipient)
+	{
+		// collect newsletter/recipient, reads and reacts count
+		if ($strRecipient)
+		{
+			// total number of newsletters the recipients reacts on (clicked a link)
+			$objResultSet = $this->Database
+				->prepare("SELECT time,COUNT(url) as sum
+					FROM (
+						SELECT DISTINCT l.url,h.tstamp as time
+						FROM tl_avisota_newsletter_link_hit h
+						INNER JOIN tl_avisota_newsletter_link l ON l.id=h.pid
+						WHERE l.recipient=?
+						ORDER BY time
+					) t
+					GROUP BY time")
+				->execute($strRecipient);
+		}
+		else
+		{
+			// total number ov recipients taht reacts on this newsletter (clicked a link)
+			$objResultSet = $this->Database
+				->prepare("SELECT time,COUNT(recipient) as sum
+					FROM (
+						SELECT DISTINCT l.recipient,h.tstamp as time
+						FROM tl_avisota_newsletter_link_hit h
+						INNER JOIN tl_avisota_newsletter_link l ON l.id=h.pid
+						WHERE l.pid=?
+						ORDER BY time
+					) t
+					GROUP BY time")
+				->execute($objNewsletter->id);
+		}
+		$this->json_output($objResultSet);
+	}
+
+	protected function json_output(Database_Result $objResultSet)
+	{
+		$intTimezoneOffset = $this->parseDate('Z', $objResultSet->time);
+
+		header('Content-Type: application/json');
+		echo '[' . "\n";
+		$n = 0;
+		$sum = 0;
+		while ($objResultSet->next())
+		{
+			$sum += $objResultSet->sum;
+			if ($n++ > 0)
+			{
+				echo ",\n";
+			}
+			echo '[' . (($objResultSet->time + $intTimezoneOffset) * 1000) . ',' . $sum . ']';
+		}
+		echo "\n" . ']';
+		exit;
 	}
 
 	protected function search_intersect($a, $b)

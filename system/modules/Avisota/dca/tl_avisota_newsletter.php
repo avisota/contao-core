@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 	(
 		'dataContainer'               => 'Table',
 		'ptable'                      => 'tl_avisota_newsletter_category',
-		'ctable'                      => array('tl_avisota_newsletter_content', 'tl_avisota_newsletter_read', 'tl_avisota_newsletter_link_hit'),
+		'ctable'                      => array('tl_avisota_newsletter_content'),
 		'switchToEdit'                => true,
 		'enableVersioning'            => true,
 		'onload_callback' => array
@@ -136,7 +136,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 	(
 		'addFile'                     => 'files'
 	),
-	
+
 	// Fields
 	'fields' => array
 	(
@@ -248,7 +248,7 @@ class tl_avisota_newsletter extends Backend
 		{
 			$GLOBALS['TL_DCA']['tl_avisota_newsletter']['config']['closed'] = true;
 		}
-		
+
 		// Check current action
 		switch ($this->Input->get('act'))
 		{
@@ -372,15 +372,15 @@ class tl_avisota_newsletter extends Backend
 		}
 		return '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
 	}
-	
-	
+
+
 	public function getRecipients()
 	{
 		$arrRecipients = array(
 			$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list'] => array(),
 			$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup'] => array()
 		);
-		
+
 		$objList = $this->Database->execute("
 				SELECT
 					*
@@ -392,7 +392,7 @@ class tl_avisota_newsletter extends Backend
 		{
 			$arrRecipients[$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']]['list-' . $objList->id] = $objList->title;
 		}
-		
+
 		$objMember = $this->Database->execute("
 				SELECT
 					*
@@ -404,14 +404,14 @@ class tl_avisota_newsletter extends Backend
 		{
 			$arrRecipients[$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']]['mgroup-' . $objMember->id] = $objMember->name;
 		}
-		
+
 		return $arrRecipients;
 	}
-	
-	
+
+
 	/**
 	 * Add the recipient row.
-	 * 
+	 *
 	 * @param array
 	 */
 	public function addNewsletter($arrRow)
@@ -419,16 +419,16 @@ class tl_avisota_newsletter extends Backend
 		$icon = $arrRow['sendOn'] ? 'visible' : 'invisible';
 
 		$label = $arrRow['subject'];
-		
+
 		if ($row['sendOn'])
 		{
 			$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(' . sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['sended'], $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $row['sendOn'])) . ')</span>';
 		}
-		
+
 		return sprintf('<div class="list_icon" style="background-image:url(\'system/themes/%s/images/%s.gif\');">%s</div>', $this->getTheme(), $icon, $label);
 	}
 
-	
+
 	/**
 	 * Autogenerate a news alias if it has not been set yet
 	 * @param mixed

@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-@import url(../jqplot/jquery.jqplot.css);
+@IMPORT url("../Meio.Autocomplete/meio.autocomplete.css");
 
 .header_send {
 	background: url("send.png") no-repeat scroll left center transparent;
@@ -92,9 +92,6 @@ select[disabled] {
 	color: #ccc;
 }
 
-#loading {
-	float: right;
-}
 #outbox {
 	padding: 0 18px 18px;
 }
@@ -115,12 +112,23 @@ select[disabled] {
 span.negative {
 	color: #00f;
 }
+input.ma-loading {
+	background-image: url(loading.gif);
+	background-repeat: no-repeat;
+	background-position: right center;
+}
 
 /** --- Tracking ------------------------------------------------------------ */
 #graphs {
 	margin: 0 18px;
 }
-#graphs #overview {
+#overview {
+}
+.empty_stats {
+	padding: 18px 0;
+}
+#newsletters {
+	margin: 0 18px;
 }
 #links {
 	margin: 0 18px;
