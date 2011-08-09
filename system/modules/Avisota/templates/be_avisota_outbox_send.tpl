@@ -62,6 +62,7 @@
 	</table>
 </div>
 
+<script type="text/javascript" src="system/modules/Avisota/html/Number.js"></script>
 <script type="text/javascript" src="system/modules/Avisota/html/outbox.js"></script>
 <script type="text/javascript">
 window.addEvent('load', function() {

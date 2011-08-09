@@ -76,8 +76,11 @@ class AvisotaTracking extends BackendModule
 			$strRecipient = urldecode($this->Input->get('recipient'));
 		}
 
+		# where statement, if the newsletters have to filter by a specific recipient
+		$strWhere = '';
+
 		$objRecipient = $this->Database
-			->prepare("SELECT * FROM tl_avisota_newsletter_read WHERE recipient=?")
+			->prepare("SELECT * FROM tl_avisota_statistic_raw_recipient WHERE recipient=?")
 			->limit(1)
 			->execute($strRecipient);
 		if (!$objRecipient->numRows)
@@ -85,16 +88,10 @@ class AvisotaTracking extends BackendModule
 			$strRecipient = '';
 		}
 
-		# where statement, if the newsletters have to filter by a specific recipient
-		$strWhere = '';
-
 		# collect read state and build where statement for a specific recipient
-		if ($strRecipient)
+		else
 		{
-			$objRead = $this->Database
-				->prepare("SELECT * FROM tl_avisota_newsletter_read WHERE recipient=?")
-				->execute($strRecipient);
-			$arrIds = $objRead->fetchEach('pid');
+			$arrIds = $objRecipient->fetchEach('pid');
 			if (count($arrIds))
 			{
 				$strWhere = ' AND id IN (' . implode(',', $arrIds) . ')';
@@ -124,19 +121,6 @@ class AvisotaTracking extends BackendModule
 		if ($objNewsletter->next())
 		{
 			$this->Template->newsletter = $objNewsletter->row();
-
-			$this->Template->links = array();
-
-			# collect links hits
-			if ($strRecipient)
-			{
-				$objLink = $this->Database->prepare("SELECT url,(SELECT COUNT(id) FROM tl_avisota_newsletter_link_hit h WHERE l.id=h.pid) as hits FROM tl_avisota_newsletter_link l WHERE pid=? AND recipient=? ORDER BY hits DESC")->execute($intNewsletter, $strRecipient);
-			}
-			else
-			{
-				$objLink = $this->Database->prepare("SELECT url,SUM(hits) as hits FROM (SELECT url,(SELECT COUNT(id) FROM tl_avisota_newsletter_link_hit h WHERE l.id=h.pid) as hits FROM tl_avisota_newsletter_link l WHERE pid=?) t GROUP BY url ORDER BY hits DESC")->execute($intNewsletter);
-			}
-			$this->Template->links = $objLink->fetchAllAssoc();
 		}
 		else
 		{
@@ -150,6 +134,9 @@ class AvisotaTracking extends BackendModule
 			case 'recipients':
 				$this->json_recipients($objNewsletter);
 
+			case 'flags':
+				$this->json_newsletter_flags();
+
 			case 'sends':
 				$this->json_sends($objNewsletter, $strRecipient);
 
@@ -159,16 +146,37 @@ class AvisotaTracking extends BackendModule
 			case 'reacts':
 				$this->json_reacts($objNewsletter, $strRecipient);
 
+			case 'links':
+				$this->json_links($objNewsletter, $strRecipient);
+
 			default:
 				exit;
 			}
 		}
 
+		# collect links hits
+		$arrLinks = array();
+		if ($strRecipient)
+		{
+			$objLink = $this->Database->prepare("SELECT url,(SELECT COUNT(id) FROM tl_avisota_statistic_raw_link_hit h WHERE l.id=h.recipientLinkID) as hits FROM tl_avisota_statistic_raw_recipient_link l WHERE pid=? AND recipient=? ORDER BY hits DESC")->execute($intNewsletter, $strRecipient);
+		}
+		else
+		{
+			$objLink = $this->Database->prepare("SELECT url,SUM(hits) as hits FROM (SELECT url,(SELECT COUNT(id) FROM tl_avisota_statistic_raw_link_hit h WHERE l.id=h.linkID) as hits FROM tl_avisota_statistic_raw_link l WHERE pid=?) t GROUP BY url ORDER BY hits DESC")->execute($intNewsletter);
+		}
+		$arrLinks = $objLink->fetchAllAssoc();
+		$intHits = array_sum($objLink->fetchEach('hits'));
+		for ($i=0; $i<count($arrLinks); $i++)
+		{
+			$arrLinks[$i]['percent'] = $intHits > 0 ? intval($arrLinks[$i]['hits']/$intHits*100) : 0;
+		}
+		$this->Template->links = $arrLinks;
+
 		if ($strRecipient)
 		{
 			$objRead = $this->Database
 				->prepare("SELECT n.id, n.subject, r.readed
-					FROM tl_avisota_newsletter_read r
+					FROM tl_avisota_statistic_raw_recipient r
 					INNER JOIN tl_avisota_newsletter n
 					ON n.id=r.pid
 					WHERE r.recipient=? AND r.readed=?")
@@ -192,7 +200,7 @@ class AvisotaTracking extends BackendModule
 	{
 		$objResultSet = $this->Database
 			->prepare("SELECT recipient
-				FROM tl_avisota_newsletter_read
+				FROM tl_avisota_statistic_raw_recipient
 				WHERE pid=? AND recipient LIKE ?
 				ORDER BY recipient")
 			->limit($this->Input->get('limit') ? $this->Input->get('limit') : 20)
@@ -210,6 +218,31 @@ class AvisotaTracking extends BackendModule
 			echo json_encode(array('value' => $objResultSet->recipient, 'text' => $objResultSet->recipient));
 		}
 		echo "\n" . ']';
+		exit;
+	}
+
+	protected function json_newsletter_flags()
+	{
+		$objResultSet = $this->Database
+			->execute("SELECT * FROM tl_avisota_newsletter WHERE sendOn>0 ORDER BY sendOn");
+
+		header('Content-Type: application/json');
+		echo '[' . "\n";
+		$n = 0;
+		while ($objResultSet->next())
+		{
+			if ($n++ > 0)
+			{
+				echo ",\n";
+			}
+			echo '{' . "\n";
+			echo '"x": ' . ($objResultSet->sendOn*1000) . ",\n";
+			echo '"title": "N",' . "\n";
+			echo '"text": ' . json_encode('<b>' . $objResultSet->subject . '</b> ' . $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $objResultSet->sendOn)) . "\n";
+			echo '}' . "\n";
+		}
+		echo "\n" . ']';
+
 		exit;
 	}
 
@@ -248,10 +281,9 @@ class AvisotaTracking extends BackendModule
 		if ($strRecipient)
 		{
 			// total number of readed newsletters
-			// TODO
 			$objResultSet  = $this->Database
 				->prepare("SELECT tstamp as time, COUNT(id) as sum
-					FROM tl_avisota_newsletter_read
+					FROM tl_avisota_statistic_raw_recipient
 					WHERE recipient=? AND readed=?
 					GROUP BY time
 					ORDER BY time")
@@ -262,7 +294,7 @@ class AvisotaTracking extends BackendModule
 			// total number of recipients that reads this newsletter
 			$objResultSet = $this->Database
 				->prepare("SELECT tstamp as time, COUNT(id) as sum
-					FROM tl_avisota_newsletter_read
+					FROM tl_avisota_statistic_raw_recipient
 					WHERE pid=? AND readed=?
 					GROUP BY time
 					ORDER BY time")
@@ -278,28 +310,26 @@ class AvisotaTracking extends BackendModule
 		{
 			// total number of newsletters the recipients reacts on (clicked a link)
 			$objResultSet = $this->Database
-				->prepare("SELECT time,COUNT(url) as sum
+				->prepare("SELECT time, SUM(sum) as sum
 					FROM (
-						SELECT DISTINCT l.url,h.tstamp as time
-						FROM tl_avisota_newsletter_link_hit h
-						INNER JOIN tl_avisota_newsletter_link l ON l.id=h.pid
-						WHERE l.recipient=?
-						ORDER BY time
+						SELECT MIN(h.tstamp) as time, 1 as sum
+						FROM tl_avisota_statistic_raw_link_hit
+						WHERE recipient=?
+						GROUP BY recipient
 					) t
 					GROUP BY time")
 				->execute($strRecipient);
 		}
 		else
 		{
-			// total number ov recipients taht reacts on this newsletter (clicked a link)
+			// total number ov recipients that reacts on this newsletter (clicked a link)
 			$objResultSet = $this->Database
-				->prepare("SELECT time,COUNT(recipient) as sum
+				->prepare("SELECT time, SUM(sum) as sum
 					FROM (
-						SELECT DISTINCT l.recipient,h.tstamp as time
-						FROM tl_avisota_newsletter_link_hit h
-						INNER JOIN tl_avisota_newsletter_link l ON l.id=h.pid
-						WHERE l.pid=?
-						ORDER BY time
+						SELECT MIN(tstamp) as time, 1 as sum
+						FROM tl_avisota_statistic_raw_link_hit
+						WHERE pid=?
+						GROUP BY linkID,recipientLinkID
 					) t
 					GROUP BY time")
 				->execute($objNewsletter->id);
@@ -307,11 +337,62 @@ class AvisotaTracking extends BackendModule
 		$this->json_output($objResultSet);
 	}
 
-	protected function json_output(Database_Result $objResultSet)
+	protected function json_links($objNewsletter, $strRecipient)
 	{
-		$intTimezoneOffset = $this->parseDate('Z', $objResultSet->time);
+		// collect newsletter/recipient, reads and reacts count
+		if ($strRecipient)
+		{
+			// total number of newsletters the recipients reacts on (clicked a link)
+			$objLink = $this->Database
+				->prepare("SELECT id,url FROM tl_avisota_statistic_raw_recipient_link WHERE pid=? AND recipient=?")
+				->execute($objNewsletter->id, $strRecipient);
+			$strWhere = 'recipientLinkId';
+		}
+		else
+		{
+			// total number ov recipients that reacts on this newsletter (clicked a link)
+			$objLink = $this->Database
+				->prepare("SELECT id,url FROM tl_avisota_statistic_raw_link WHERE pid=?")
+				->execute($objNewsletter->id);
+			$strWhere = 'linkId';
+		}
 
 		header('Content-Type: application/json');
+		$n = 0;
+		echo '[' . "\n";
+		while ($objLink->next())
+		{
+			if ($n++ > 0)
+			{
+				echo ',' . "\n";
+			}
+			echo '{' . "\n";
+			echo '"name": ' . json_encode($objLink->url) . ',' . "\n";
+			echo '"data": ';
+			$objResultSet = $this->Database
+				->prepare("SELECT tstamp as time,COUNT(tstamp) as sum
+					FROM tl_avisota_statistic_raw_link_hit
+					WHERE $strWhere=?
+					GROUP BY time")
+				->execute($objLink->id);
+			$this->json_output_array($objResultSet);
+			echo "\n" . '}';
+		}
+		echo "\n" . ']';
+
+		exit;
+	}
+
+	protected function json_output(Database_Result $objResultSet)
+	{
+		header('Content-Type: application/json');
+		$this->json_output_array($objResultSet);
+		exit;
+	}
+
+	protected function json_output_array(Database_Result $objResultSet)
+	{
+		$intTimezoneOffset = $this->parseDate('Z', time());
 		echo '[' . "\n";
 		$n = 0;
 		$sum = 0;
@@ -325,7 +406,6 @@ class AvisotaTracking extends BackendModule
 			echo '[' . (($objResultSet->time + $intTimezoneOffset) * 1000) . ',' . $sum . ']';
 		}
 		echo "\n" . ']';
-		exit;
 	}
 
 	protected function search_intersect($a, $b)

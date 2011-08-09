@@ -39,18 +39,23 @@
 $GLOBALS['TL_LANG']['avisota_tracking']['headline']         = 'Analytics und Tracking';
 $GLOBALS['TL_LANG']['avisota_tracking']['newsletter_label'] = 'Newsletter';
 $GLOBALS['TL_LANG']['avisota_tracking']['recipient_label']  = 'Abonnent';
+
 $GLOBALS['TL_LANG']['avisota_tracking']['empty_stats']      = 'Zur Zeit liegen keine Daten vor!';
 
-$GLOBALS['TL_LANG']['avisota_tracking']['newsletter']['graph_overview_legend'] = 'Lese- und Reaktionsverhalten';
+$GLOBALS['TL_LANG']['avisota_tracking']['col_sum']      = 'Summe';
+$GLOBALS['TL_LANG']['avisota_tracking']['col_percent']  = '% / Versendet';
+$GLOBALS['TL_LANG']['avisota_tracking']['col_percent2'] = '% / Gelesen';
+
+$GLOBALS['TL_LANG']['avisota_tracking']['newsletter']['stats_legend'] = 'Lese- und Reaktionsverhalten';
 $GLOBALS['TL_LANG']['avisota_tracking']['newsletter']['sends']  = 'Newsletter';
 $GLOBALS['TL_LANG']['avisota_tracking']['newsletter']['reads']  = 'Gelesen';
 $GLOBALS['TL_LANG']['avisota_tracking']['newsletter']['reacts'] = 'Reaktion';
 
-$GLOBALS['TL_LANG']['avisota_tracking']['newsletter']['graph_links_legend'] = 'Links';
+$GLOBALS['TL_LANG']['avisota_tracking']['newsletter']['links_legend'] = 'Links';
 $GLOBALS['TL_LANG']['avisota_tracking']['newsletter']['url'] = 'URL';
 $GLOBALS['TL_LANG']['avisota_tracking']['newsletter']['hits'] = 'Klicks';
 
-$GLOBALS['TL_LANG']['avisota_tracking']['recipient']['overview_legend'] = 'Lese- und Reaktionsverhalten';
+$GLOBALS['TL_LANG']['avisota_tracking']['recipient']['stats_legend'] = 'Lese- und Reaktionsverhalten';
 $GLOBALS['TL_LANG']['avisota_tracking']['recipient']['sends']  = 'Newsletter';
 $GLOBALS['TL_LANG']['avisota_tracking']['recipient']['reads']  = 'Gelesen';
 $GLOBALS['TL_LANG']['avisota_tracking']['recipient']['reacts'] = 'Reaktion';
@@ -59,6 +64,6 @@ $GLOBALS['TL_LANG']['avisota_tracking']['recipient']['newsletters_legend'] = 'Ne
 $GLOBALS['TL_LANG']['avisota_tracking']['recipient']['readed'] = 'Gelesen';
 $GLOBALS['TL_LANG']['avisota_tracking']['recipient']['newsletter'] = 'Newsletter';
 
-$GLOBALS['TL_LANG']['avisota_tracking']['recipient']['graph_links_legend'] = 'Links';
+$GLOBALS['TL_LANG']['avisota_tracking']['recipient']['links_legend'] = 'Links';
 $GLOBALS['TL_LANG']['avisota_tracking']['recipient']['url'] = 'URL';
 $GLOBALS['TL_LANG']['avisota_tracking']['recipient']['hits'] = 'Klicks';

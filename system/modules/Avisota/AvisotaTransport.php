@@ -571,8 +571,8 @@ class AvisotaTransport extends Backend
 		$strHtml = preg_replace_callback('#href=["\']((http|ftp)s?:\/\/.+)["\']#U', array(&$objPrepareTrackingHelper, 'replaceHtml'), $strHtml);
 
 		$objRead = $this->Database
-			->prepare("SELECT * FROM tl_avisota_newsletter_read WHERE pid=? AND recipient=?")
-			->execute($objNewsletter->id, $objRecipient->email);
+			->prepare("SELECT * FROM tl_avisota_statistic_raw_recipient WHERE pid=? AND recipient=?")
+			->executeUncached($objNewsletter->id, $objRecipient->email);
 		if ($objRead->next())
 		{
 			$intRead = $objRead->id;
@@ -580,7 +580,7 @@ class AvisotaTransport extends Backend
 		else
 		{
 			$objRead = $this->Database
-				->prepare("INSERT INTO tl_avisota_newsletter_read (pid,tstamp,recipient) VALUES (?, ?, ?)")
+				->prepare("INSERT INTO tl_avisota_statistic_raw_recipient (pid,tstamp,recipient) VALUES (?, ?, ?)")
 				->execute($objNewsletter->id, time(), $objRecipient->email);
 			$intRead = $objRead->insertId;
 		}
@@ -647,26 +647,41 @@ class PrepareTrackingHelper extends Controller
 	{
 		// do not track ...
 		if (// images
-		preg_match('#\.(jpe?g|png|gif)#i', $strUrl)
-		// unsubscribe url
-		|| preg_match('#unsubscribetoken#i', $strUrl))
+			preg_match('#\.(jpe?g|png|gif)#i', $strUrl)
+			// unsubscribe url
+			|| preg_match('#unsubscribetoken#i', $strUrl))
 		{
 			return false;
 		}
 
 		$objLink = $this->Database
-		->prepare("SELECT * FROM tl_avisota_newsletter_link WHERE pid=? AND url=? AND recipient=?")
-		->execute($this->objNewsletter->id, $strUrl, $this->objRecipient->email);
+			->prepare("SELECT * FROM tl_avisota_statistic_raw_link WHERE pid=? AND url=?")
+			->executeUncached($this->objNewsletter->id, $strUrl);
 		if ($objLink->next())
 		{
 			$intLink = $objLink->id;
 		}
 		else
 		{
-			$objLink = $this->Database
-			->prepare("INSERT INTO tl_avisota_newsletter_link (pid,tstamp,url,recipient) VALUES (?, ?, ?, ?)")
-			->execute($this->objNewsletter->id, time(), $strUrl, $this->objRecipient->email);
-			$intLink = $objLink->insertId;
+			$intLink = $this->Database
+				->prepare("INSERT INTO tl_avisota_statistic_raw_link (pid,tstamp,url) VALUES (?, ?, ?)")
+				->execute($this->objNewsletter->id, time(), $strUrl)
+				->insertId;
+		}
+
+		$objRecipientLink = $this->Database
+			->prepare("SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE pid=? AND linkID=? AND url=? AND recipient=?")
+			->executeUncached($this->objNewsletter->id, $intLink, $strUrl, $this->objRecipient->email);
+		if ($objLink->next())
+		{
+			$intRecipientLink = $objRecipientLink->id;
+		}
+		else
+		{
+			$intRecipientLink = $this->Database
+				->prepare("INSERT INTO tl_avisota_statistic_raw_recipient_link (pid,linkID,tstamp,url,recipient) VALUES (?, ?, ?, ?, ?)")
+				->execute($this->objNewsletter->id, $intLink, time(), $strUrl, $this->objRecipient->email)
+				->insertId;
 		}
 
 		if ($this->objCategory->viewOnlinePage)

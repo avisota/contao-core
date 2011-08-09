@@ -34,17 +34,82 @@
 
 <h2 class="sub_headline"><?php echo $GLOBALS['TL_LANG']['avisota_tracking']['headline']; ?></h2>
 
+<script type="text/javascript" src="system/modules/Avisota/html/Number.js"></script>
+<script type="text/javascript" src="system/modules/Avisota/html/functions.js"></script>
 <script type="text/javascript" src="system/modules/Avisota/Meio.Autocomplete/<?php if (VERSION == 2.9): ?>1.0<?php else: ?>2.0<?php endif; ?>/Meio.Autocomplete.js"></script>
 <script type="text/javascript" src="system/modules/Avisota/jquery/jquery.min.js"></script>
 <script type="text/javascript">jQuery.noConflict();</script>
 <script type="text/javascript" src="system/modules/Avisota/highstock/js/highstock.js"></script>
 
-<div id="graphs">
-	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['graph_overview_legend']; ?></h3>
-	<div id="graph_overview" style="position: relative; height: 420px; background: url(system/modules/Avisota/html/loading.gif) no-repeat center center;"></div>
+<div id="stats">
+	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['stats_legend']; ?></h3>
+	<div id="chart" style="position: relative; height: 420px; background: url(system/modules/Avisota/html/loading.gif) no-repeat center center;"></div>
+
+	<table cellpadding="0" cellspacing="0" class="tl_listing">
+		<colgroup>
+			<col />
+			<col />
+			<col width="120" />
+			<col width="120" />
+		</colgroup>
+		<tbody>
+			<tr>
+				<td class="tl_folder_tlist">&nbsp;</td>
+				<td class="tl_folder_tlist tl_right_nowrap"><?php echo $GLOBALS['TL_LANG']['avisota_tracking']['col_sum']; ?></td>
+				<td class="tl_folder_tlist tl_right_nowrap"><?php echo $GLOBALS['TL_LANG']['avisota_tracking']['col_percent']; ?></td>
+				<td class="tl_folder_tlist tl_right_nowrap"><?php echo $GLOBALS['TL_LANG']['avisota_tracking']['col_percent2']; ?></td>
+			</tr>
+			<tr onmouseover="Theme.hoverRow(this, 1);" onmouseout="Theme.hoverRow(this, 0);">
+				<td class="tl_file_list"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['sends']; ?></td>
+				<td class="tl_file_list tl_right_nowrap" id="col_sends">0</td>
+				<td class="tl_file_list tl_right_nowrap" id="col_sends_percent"></td>
+				<td class="tl_file_list tl_right_nowrap" id="col_sends_percent2"></td>
+			</tr>
+			<tr onmouseover="Theme.hoverRow(this, 1);" onmouseout="Theme.hoverRow(this, 0);">
+				<td class="tl_file_list"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['reads']; ?></td>
+				<td class="tl_file_list tl_right_nowrap" id="col_reads"></td>
+				<td class="tl_file_list tl_right_nowrap" id="col_reads_percent"></td>
+				<td class="tl_file_list tl_right_nowrap" id="col_reads_percent2"></td>
+			</tr>
+			<tr onmouseover="Theme.hoverRow(this, 1);" onmouseout="Theme.hoverRow(this, 0);">
+				<td class="tl_file_list"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['reacts']; ?></td>
+				<td class="tl_file_list tl_right_nowrap" id="col_reacts"></td>
+				<td class="tl_file_list tl_right_nowrap" id="col_reacts_percent"></td>
+				<td class="tl_file_list tl_right_nowrap" id="col_reacts_percent2"></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<br/><br/>
+
+<div id="links">
+	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['links_legend']; ?></h3>
+	<div id="chart_links" style="position: relative; height: 420px; background: url(system/modules/Avisota/html/loading.gif) no-repeat center center;"></div>
+	<table cellpadding="0" cellspacing="0" class="tl_listing">
+		<colgroup>
+			<col />
+			<col />
+			<col width="45" />
+		</colgroup>
+		<tbody>
+			<tr>
+				<td class="tl_folder_tlist"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['url']; ?></td>
+				<td class="tl_folder_tlist tl_right_nowrap"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['hits']; ?></td>
+				<td class="tl_folder_tlist"></td>
+			</tr>
+			<?php foreach ($this->links as $i=>$link): ?>
+			<tr onmouseover="Theme.hoverRow(this, 1);" onmouseout="Theme.hoverRow(this, 0);">
+				<td class="tl_file_list"><a href="<?php echo $link['url']; ?>" onclick="window.open(this.href); return false;"><?php echo $link['url']; ?></a></td>
+				<td class="tl_file_list tl_right_nowrap"><?php echo number_format($link['hits'], 0, ',', '.'); ?></td>
+				<td class="tl_file_list tl_right_nowrap"><?php echo $link['percent']; ?>&nbsp;%</td>
+			</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
 </div>
 
 <?php if (is_array($this->newsletter_reads)): ?>
+<br/><br/>
 <div id="newsletters">
 	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['newsletters_legend']; ?></h3>
 	<table cellpadding="0" cellspacing="0" class="tl_listing">
@@ -54,13 +119,13 @@
 		</colgroup>
 		<tbody>
 			<tr>
-				<td class="tl_folder_tlist readed"></td>
-				<td class="tl_folder_tlist url"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['newsletter']; ?></td>
+				<td class="tl_folder_tlist">&nbsp;</td>
+				<td class="tl_folder_tlist"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['newsletter']; ?></td>
 			</tr>
 			<?php foreach ($this->newsletter_reads as $i=>$read): ?>
 			<tr onmouseover="Theme.hoverRow(this, 1);" onmouseout="Theme.hoverRow(this, 0);">
-				<td class="tl_file_list tl_right_nowrap readed"><?php if ($read['readed']): ?><img src="system/modules/Avisota/html/outbox_sended.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['readed']); ?>" width="16" height="16" /><?php else: ?><img src="system/modules/Avisota/html/blank.gif" alt="" width="16" height="16" /><?php endif; ?></td>
-				<td class="tl_file_list newsletter"><a href="contao/main.php?do=avisota_newsletter&table=tl_avisota_newsletter&key=send&id=<?php echo $read['id']; ?>"><?php echo $read['subject']; ?></a></td>
+				<td class="tl_file_list"><?php if ($read['readed']): ?><img src="system/modules/Avisota/html/outbox_sended.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['readed']); ?>" width="16" height="16" /><?php else: ?><img src="system/modules/Avisota/html/blank.gif" alt="" width="16" height="16" /><?php endif; ?></td>
+				<td class="tl_file_list"><a href="contao/main.php?do=avisota_newsletter&table=tl_avisota_newsletter&key=send&id=<?php echo $read['id']; ?>"><?php echo $read['subject']; ?></a></td>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>
@@ -68,28 +133,13 @@
 </div>
 <?php endif; ?>
 
-<div id="links">
-	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['graph_links_legend']; ?></h3>
-	<table cellpadding="0" cellspacing="0" class="tl_listing">
-		<tbody>
-			<tr>
-				<td class="tl_folder_tlist url"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['url']; ?></td>
-				<td class="tl_folder_tlist hits"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['hits']; ?></td>
-			</tr>
-			<?php foreach ($this->links as $i=>$link): ?>
-			<tr onmouseover="Theme.hoverRow(this, 1);" onmouseout="Theme.hoverRow(this, 0);">
-				<td class="tl_file_list url"><a href="<?php echo $link['url']; ?>" onclick="window.open(this.href); return false;"><?php echo $link['url']; ?></a></td>
-				<td class="tl_file_list tl_right_nowrap hits"><?php echo number_format($link['hits'], 0, ',', '.'); ?></td>
-			</tr>
-			<?php endforeach; ?>
-		</tbody>
-	</table>
-</div>
-
 <script>
+<?php if ($this->mode == 'recipient'): ?>var flags = false;
+<?php endif; ?>
 var sends = false;
 var reads = false;
 var reacts = false;
+var links = false;
 
 $(window).addEvent('domready', function() {
 	new Meio.Autocomplete(
@@ -107,132 +157,249 @@ $(window).addEvent('load', function() {
 	if (sends || reads || reacts) return;
 
 	function drawChart() {
-		if (!sends || !reads || !reacts) return;
+		if (!sends || !reads || !reacts || !links<?php if ($this->mode == 'recipient'): ?> || !flags<?php endif; ?>) return;
 
-		if (!sends.length && !reads.length && !reacts.length) {
-			$('graph_overview').setAttribute('style', '');
-			$('graph_overview')
+		if (!sends.length && !reads.length && !reacts.length<?php if ($this->mode == 'recipient'): ?> && !flags.length<?php endif; ?>) {
+			$('chart').setAttribute('style', '');
+			$('chart')
 				.addClass('empty_stats')
 				.set('text', '<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking']['empty_stats']); ?>');
-			return;
-		}
+		} else {
+			var send = sends[sends.length-1][1];
+			var read = reads[reads.length-1][1];
+			var react = reacts[reacts.length-1][1];
 
-		var a = 0;
-		var b = 0;
-		var c = 0;
-		while (a < sends.length || b < reads.length || c < reacts.length) {
-			// send smaller read
-			if (sends[a] && (!reads[b] || sends[a][0] < reads[b][0])) {
-				// insert into reads
-				reads.splice(b, 0, [sends[a][0], b>0 ? reads[b-1][1] : 0]);
+			$('col_sends').set('text', send.formatNumber());
+			$('col_reads').set('text', read.formatNumber());
+			$('col_reads_percent').set('text', parseInt(read/send*100) + ' %');
+			$('col_reacts').set('text', react.formatNumber());
+			$('col_reacts_percent').set('text', parseInt(react/send*100) + ' %');
+			$('col_reacts_percent2').set('text', parseInt(react/read*100) + ' %');
 
-				continue;
+			<?php if ($this->mode == 'recipient'): ?>
+			if (flags[0] && (!sends[0] || flags[0].x < sends[0][0])) {
+				sends.splice(0, 0, [flags[0].x, 0]);
 			}
 
-			// read smaller react
-			if (reads[b] && (!reacts[c] || reads[b][0] < reacts[c][0])) {
-				// insert into reacts
-				reacts.splice(c, 0, [reads[b][0], c>0 ? reacts[c-1][1] : 0]);
+			<?php endif; ?>
+			equalize([sends, reads, reacts]);
 
-				continue;
-			}
+			$('chart').setAttribute('style', '');
 
-			// reacts smaller send
-			if (reacts[c] && (!sends[a] || reacts[c][0] < sends[a][0])) {
-				// insert into sends
-				sends.splice(a, 0, [reacts[c][0], a>0 ? sends[a-1][1] : 0]);
+			var timespan = (sends[sends.length-1][0] - sends[0][0]) / 1000;
 
-				continue;
-			}
-
-			a ++;
-			b ++;
-			c ++;
-		}
-
-		$('graph_overview').setAttribute('style', '');
-
-		window.overviewChart = new Highcharts.StockChart({
-			chart: {
-				renderTo: 'graph_overview'
-			},
-			rangeSelector: {
-				buttons: [{
-					type: 'day',
-					count: 1,
-					text: '1d'
-				}, {
-					type: 'day',
-					count: 2,
-					text: '2d'
-				}, {
-					type: 'day',
-					count: 3,
-					text: '3d'
-				}, {
-					type: 'week',
-					count: 1,
-					text: '1w'
-				}, {
-					type: 'month',
-					count: 1,
-					text: '1m'
-				}, {
-					type: 'month',
-					count: 6,
-					text: '6m'
-				}, {
-					type: 'year',
-					count: 1,
-					text: '1y'
-				}, {
-					type: 'all',
-					text: 'All'
-				}],
-				selected: 0
-			},
-			xAxis: {
-				maxZoom: 14 * 24 * 3600000 // fourteen days
-			},
-			yAxis: {
-				min: 0,
-				title: {
-					text: ''
-				}
-			},
-			tooltip: {
-				formatter: function(){
-					var point = this.points[0];
-					var series = point.series;
-					var unit = series.unit && series.unit[0];
-					var format = series.tooltipHeaderFormat;
-
-					var s = '<b>' + Highcharts.dateFormat(format, this.x) + '</b>';
-					for (var i=0; i<this.points.length; i++) {
-						s += '<br/><strong style="color:' + this.points[i].series.color + '">' + this.points[i].series.name + '</strong>: ' + Highcharts.numberFormat(this.points[i].y, 0);
+			new Highcharts.StockChart({
+				chart: {
+					renderTo: 'chart'
+				},
+				rangeSelector: {
+					buttons: [{
+						type: 'minute',
+						count: 60,
+						text: '1h'
+					}, {
+						type: 'minute',
+						count: 6*60,
+						text: '6h'
+					}, {
+						type: 'minute',
+						count: 12*60,
+						text: '12h'
+					}, {
+						type: 'day',
+						count: 1,
+						text: '1d'
+					}, {
+						type: 'day',
+						count: 2,
+						text: '2d'
+					}, {
+						type: 'day',
+						count: 3,
+						text: '3d'
+					}, {
+						type: 'week',
+						count: 1,
+						text: '1w'
+					}, {
+						type: 'month',
+						count: 1,
+						text: '1m'
+					}, {
+						type: 'all',
+						text: 'All'
+					}],
+					selected: getRangeIndex(timespan)
+				},
+				yAxis: {
+					min: 0,
+					title: {
+						text: ''
 					}
+				},
+				tooltip: {
+					formatter: function(){
+						if (this.points) {
+							var point = this.points[0];
+							var series = point.series;
+							var unit = series.unit && series.unit[0];
+							var format = series.tooltipHeaderFormat;
 
-					return s;
-				}
-			},
-			series: [{
-				name: '<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['sends']); ?>',
-				data: sends
-			}, {
-				name: '<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['reads']); ?>',
-				data: reads
-			}, {
-				name: '<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['reacts']); ?>',
-				data: reacts
-			}]
-		});
+							var s = '<b>' + Highcharts.dateFormat(format, this.x) + '</b>';
+							for (var i=0; i<this.points.length; i++) {
+								s += '<br/><b style="color:' + this.points[i].series.color + '">' + this.points[i].series.name + '</b>: ' + Highcharts.numberFormat(this.points[i].y, 0);
+							}
+							return s;
+						} else {
+							return this.series.data[0].text;
+						}
+					}
+				},
+				series: [{
+					name: '<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['sends']); ?>',
+					data: sends<?php if ($this->mode == 'recipient'): ?>,
+					id: 'newsletter'<?php endif; ?>
+				}, {
+					name: '<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['reads']); ?>',
+					data: reads
+				}, {
+					name: '<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['reacts']); ?>',
+					data: reacts
+				}<?php if ($this->mode == 'recipient'): ?>, {
+					type: 'flags',
+					data: flags,
+					onSeries: 'newsletter',
+					shape: 'circlepin',
+					width: 16,
+					cursor: 'pointer'
+				}<?php endif; ?>]
+			});
+		}
+
+		if (!links.length) {
+			$('chart_links').setAttribute('style', '');
+			$('chart_links')
+				.addClass('empty_stats')
+				.set('text', '<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking']['empty_stats']); ?>');
+		} else {
+			<?php if ($this->mode == 'recipient'): ?>
+
+			if (flags[0] && (!links[0].data[0] || flags[0].x < links[0].data[0][0])) {
+				links[0].data.splice(0, 0, [flags[0].x, 0]);
+			}
+
+			<?php endif; ?>
+			var link_arrays = [];
+			$each(links, function(v) {
+				link_arrays.push(v.data);
+			});
+			equalize(link_arrays);
+
+			<?php if ($this->mode == 'recipient'): ?>
+
+			links[0].id = 'first';
+			links.push({
+				type: 'flags',
+				data: flags,
+				onSeries: 'first',
+				shape: 'circlepin',
+				width: 16,
+				cursor: 'pointer'
+			});
+
+			<?php endif; ?>
+			$('chart_links').setAttribute('style', '');
+
+			var timespan = (link_arrays[0][link_arrays[0].length-1][0] - link_arrays[0][0][0]) / 1000;
+
+			new Highcharts.StockChart({
+				chart: {
+					renderTo: 'chart_links'
+				},
+				rangeSelector: {
+					buttons: [{
+						type: 'minute',
+						count: 60,
+						text: '1h'
+					}, {
+						type: 'minute',
+						count: 6*60,
+						text: '6h'
+					}, {
+						type: 'minute',
+						count: 12*60,
+						text: '12h'
+					}, {
+						type: 'day',
+						count: 1,
+						text: '1d'
+					}, {
+						type: 'day',
+						count: 2,
+						text: '2d'
+					}, {
+						type: 'day',
+						count: 3,
+						text: '3d'
+					}, {
+						type: 'week',
+						count: 1,
+						text: '1w'
+					}, {
+						type: 'month',
+						count: 1,
+						text: '1m'
+					}, {
+						type: 'all',
+						text: 'All'
+					}],
+					selected: getRangeIndex(timespan)
+				},
+				yAxis: {
+					min: 0,
+					title: {
+						text: ''
+					}
+				},
+				tooltip: {
+					formatter: function(){
+						if (this.points) {
+							var point = this.points[0];
+							var series = point.series;
+							var unit = series.unit && series.unit[0];
+							var format = series.tooltipHeaderFormat;
+
+							var s = '<b>' + Highcharts.dateFormat(format, this.x) + '</b>';
+							for (var i=0; i<this.points.length; i++) {
+								s += '<br/><strong style="color:' + this.points[i].series.color + '">' + this.points[i].series.name + '</strong>: ' + Highcharts.numberFormat(this.points[i].y, 0);
+							}
+
+							return s;
+						} else {
+							return this.series.data[0].text;
+						}
+					}
+				},
+				series: links
+			});
+		}
 	}
 
+	<?php if ($this->mode == 'recipient'): ?>
+	new Request.JSON({
+		url: 'contao/main.php?do=avisota_tracking&newsletter=<?php echo $this->newsletter['id']; ?>&recipient=<?php echo urlencode($this->recipient); ?>&data=flags',
+		onComplete: function(json) {
+			flags = json;
+			drawChart();
+		}
+	}).get();
+
+	<?php endif; ?>
 	new Request.JSON({
 		url: 'contao/main.php?do=avisota_tracking&newsletter=<?php echo $this->newsletter['id']; ?>&recipient=<?php echo urlencode($this->recipient); ?>&data=sends',
 		onComplete: function(json) {
 			sends = json;
-			drawChart()
+			drawChart();
 		}
 	}).get();
 
@@ -240,7 +407,7 @@ $(window).addEvent('load', function() {
 		url: 'contao/main.php?do=avisota_tracking&newsletter=<?php echo $this->newsletter['id']; ?>&recipient=<?php echo urlencode($this->recipient); ?>&data=reads',
 		onComplete: function(json) {
 			reads = json;
-			drawChart()
+			drawChart();
 		}
 	}).get();
 
@@ -248,7 +415,15 @@ $(window).addEvent('load', function() {
 		url: 'contao/main.php?do=avisota_tracking&newsletter=<?php echo $this->newsletter['id']; ?>&recipient=<?php echo urlencode($this->recipient); ?>&data=reacts',
 		onComplete: function(json) {
 			reacts = json;
-			drawChart()
+			drawChart();
+		}
+	}).get();
+
+	new Request.JSON({
+		url: 'contao/main.php?do=avisota_tracking&newsletter=<?php echo $this->newsletter['id']; ?>&recipient=<?php echo urlencode($this->recipient); ?>&data=links',
+		onComplete: function(json) {
+			links = json;
+			drawChart();
 		}
 	}).get();
 });

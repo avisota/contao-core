@@ -64,7 +64,9 @@ class Tracking extends Frontend
 		// newsletter read
 		if ($intId = $this->Input->get('read'))
 		{
-			$this->Database->prepare("UPDATE tl_avisota_newsletter_read SET tstamp=?, readed=? WHERE readed='' AND id=?")->execute(time(), '1', $intId);
+			$this->Database
+				->prepare("UPDATE tl_avisota_statistic_raw_recipient SET tstamp=?, readed=? WHERE readed='' AND id=?")
+				->execute(time(), '1', $intId);
 
 			$strFile = 'system/modules/Avisota/html/blank.gif';
 			$objFile = new File($strFile);
@@ -87,17 +89,23 @@ class Tracking extends Frontend
 		// newsletter link click
 		if ($intId = $this->Input->get('link'))
 		{
-			$objLink = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_link WHERE id=?")->execute($intId);
-			if ($objLink->next())
+			$objRecipientLink = $this->Database
+				->prepare("SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE id=?")
+				->execute($intId);
+			if ($objRecipientLink->next())
 			{
 				// set read state
-				$this->Database->prepare("UPDATE tl_avisota_newsletter_read SET tstamp=?, readed=? WHERE readed='' AND pid=? AND recipient=?")->execute(time(), '1', $objLink->pid, $objLink->recipient);
+				$this->Database
+					->prepare("UPDATE tl_avisota_statistic_raw_recipient SET tstamp=?, readed=? WHERE readed='' AND pid=? AND recipient=?")
+					->execute(time(), '1', $objRecipientLink->pid, $objRecipientLink->recipient);
 
 				// increase hit count
-				$this->Database->prepare("INSERT INTO tl_avisota_newsletter_link_hit SET pid=?, tstamp=?")->execute($intId, time());
+				$this->Database
+					->prepare("INSERT INTO tl_avisota_statistic_raw_link_hit SET pid=?, linkID=?, recipientLinkID=?, recipient=?, tstamp=?")
+					->execute($objRecipientLink->pid, $objRecipientLink->linkID, $objRecipientLink->id, $objRecipientLink->recipient, time());
 
 				header('HTTP/1.1 303 See Other');
-				header('Location: ' . $objLink->url);
+				header('Location: ' . $objRecipientLink->url);
 				exit;
 			}
 

@@ -119,7 +119,7 @@ input.ma-loading {
 }
 
 /** --- Tracking ------------------------------------------------------------ */
-#graphs {
+#stats {
 	margin: 0 18px;
 }
 #overview {
@@ -133,20 +133,7 @@ input.ma-loading {
 #links {
 	margin: 0 18px;
 }
-#links table {
-	width: 100%;
-}
-#links th.url {
-	text-align: left;
-}
-#links th.hits,
-#links td.hits {
+th.number,
+td.number {
 	text-align: right;
-}
-#links th,
-#links td {
-	padding: 4px 0;
-}
-#links td {
-	border-top: 1px solid #999;
 }
