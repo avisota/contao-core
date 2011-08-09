@@ -36,6 +36,9 @@
 define('TL_MODE', 'FE');
 include('../../initialize.php');
 
+// disable error reporting
+error_reporting(0);
+
 /**
  * Class AvisotaTransport
  *
