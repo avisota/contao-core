@@ -187,6 +187,15 @@ $GLOBALS['TL_HOOKS']['activateAccount'][]       = array('AvisotaRegistrationDCA'
 
 
 /**
+ * Graphical text support.
+ */
+if(class_exists('FrontendGraphicalText') && method_exists('FrontendGraphicalText', 'replaceGraphicalTextTag'))
+{
+	$GLOBALS['TL_HOOKS']['parseFrontendTemplate'][] = array('FrontendGraphicalText', 'replaceGraphicalTextTag');
+}
+
+
+/**
  * Custom user permissions.
  */
 $GLOBALS['TL_PERMISSIONS'][] = 'avisota_recipient_lists';
