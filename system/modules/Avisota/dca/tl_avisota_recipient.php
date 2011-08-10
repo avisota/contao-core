@@ -181,7 +181,11 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'sorting'                 => true,
 			'flag'                    => 1,
 			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'email', 'mandatory'=>true, 'maxlength'=>255, 'importable'=>true, 'exportable'=>true)
+			'eval'                    => array('rgxp'=>'email', 'mandatory'=>true, 'maxlength'=>255, 'importable'=>true, 'exportable'=>true),
+			'save_callback'           => array
+			(
+				array('tl_avisota_recipient', 'validateBlacklist')
+			)
 		),
 		'lists' => array
 		(
@@ -291,8 +295,6 @@ class tl_avisota_recipient extends Backend
 
 	public function onsubmit_callback($dc)
 	{
-		$this->Database->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid=? AND email=?")
-				->execute($dc->activeRecord->pid, md5($dc->activeRecord->email));
 	}
 
 
@@ -304,6 +306,29 @@ class tl_avisota_recipient extends Backend
 				->set(array('pid'=>$dc->activeRecord->pid, 'tstamp'=>time(), 'email'=>md5($dc->activeRecord->email)))
 				->execute();
 		}
+	}
+
+
+	public function validateBlacklist($strEmail)
+	{
+		$objBlacklist = $this->Database
+			->prepare("SELECT * FROM tl_avisota_recipient_blacklist WHERE email=?")
+			->execute(md5($strEmail));
+		if ($objBlacklist->numRows)
+		{
+			$k = 'AVISOTA_BLACKLIST_WARNING_' . md5($strEmail);
+			if (isset($_SESSION[$k]) && time()-$_SESSION[$k]<60)
+			{
+				$this->Database->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid=? AND email=?")
+						->execute($dc->activeRecord->pid, md5($dc->activeRecord->email));
+			}
+			else
+			{
+				$_SESSION[$k] = time();
+				throw new Exception($GLOBALS['TL_LANG']['tl_avisota_recipient']['blacklist']);
+			}
+		}
+		return $strEmail;
 	}
 
 

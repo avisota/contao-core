@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -78,5 +78,11 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['migrate']	           = array('Migri
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['import']	           = array('CSV-Import','Import von Abbonements aus einer CSV-Datei.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['export']	           = array('CSV-Export','Export von Abbonements in eine CSV-Datei.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['remove']	           = array('CSV-Löschen','Löschen von Abbonements aus einer CSV-Datei.');
+
+
+/**
+ * Exceptions
+ */
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['blacklist'] = 'Diese E-Mail Adresse befindet sich in der Blacklist, wenn Sie den Eintrag überschreiben wollen, speichern Sie erneut!';
 
 ?>
