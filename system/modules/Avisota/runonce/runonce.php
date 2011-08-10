@@ -164,10 +164,10 @@ class AvisotaRunonce extends Controller
 
 				// update recipientID
 				$objRecipient = $this->Database
-					->prepare("SELECT * FROM tl_avisota_newsletter_outbox_recipient WHERE recipientID=0");
+					->execute("SELECT * FROM tl_avisota_newsletter_outbox_recipient WHERE recipientID=0");
 				while ($objRecipient->next())
 				{
-					switch ($objRecipient->list)
+					switch ($objRecipient->source)
 					{
 					case 'list':
 						$objResult = $this->Database
