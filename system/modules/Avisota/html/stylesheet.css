@@ -122,7 +122,9 @@ input.ma-loading {
 #stats {
 	margin: 0 18px;
 }
-#overview {
+#chart,
+#chart_links {
+	margin-bottom: 18px;
 }
 .empty_stats {
 	padding: 18px 0;

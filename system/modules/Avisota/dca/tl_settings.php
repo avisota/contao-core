@@ -37,8 +37,10 @@
  * System configuration
  */
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'avisota_developer_mode';
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{avisota_legend:hide},avisota_max_send_time,avisota_max_send_count,avisota_max_send_timeout,avisota_dont_disable_recipient_on_failure,avisota_dont_disable_member_on_failure,avisota_developer_mode';
-$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['avisota_developer_mode'] = 'avisota_developer_email';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'avisota_chart_highstock';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{avisota_legend:hide},avisota_max_send_time,avisota_max_send_count,avisota_max_send_timeout,avisota_dont_disable_recipient_on_failure,avisota_dont_disable_member_on_failure,avisota_chart_highstock,avisota_developer_mode';
+$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['avisota_developer_mode']  = 'avisota_developer_email';
+$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['avisota_chart_highstock'] = 'avisota_chart_highstock_confirmed';
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_max_send_time'] = array
 (
@@ -73,6 +75,20 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_dont_disable_member_on_fail
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['avisota_dont_disable_member_on_failure'],
 	'inputType'               => 'checkbox',
 	'eval'                    => array('tl_class'=>'w50')
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_chart_highstock'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['avisota_chart_highstock'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'clr long')
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_chart_highstock_confirmed'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['avisota_chart_highstock_confirmed'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('tl_class'=>'long')
 );
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_developer_mode'] = array

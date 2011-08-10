@@ -50,6 +50,9 @@ class AvisotaTracking extends BackendModule
 	protected $strTemplate = 'be_avisota_tracking';
 
 
+	protected $blnUseHighstock = false;
+
+
 	public function compile()
 	{
 		$this->loadLanguageFile('avisota_tracking');
@@ -126,6 +129,9 @@ class AvisotaTracking extends BackendModule
 		{
 			$this->redirect('contao/main.php?act=error');
 		}
+
+		$this->blnUseHighstock = ($GLOBALS['TL_CONFIG']['avisota_chart_highstock'] && $GLOBALS['TL_CONFIG']['avisota_chart_highstock_confirmed']) ? true : false;
+		$this->Template->chart = $this->blnUseHighstock ? 'highstock' : 'jqplot';
 
 		if ($this->Input->get('data'))
 		{
@@ -392,7 +398,8 @@ class AvisotaTracking extends BackendModule
 
 	protected function json_output_array(Database_Result $objResultSet)
 	{
-		$intTimezoneOffset = $this->parseDate('Z', time());
+		// highstock require local time, jqplot use utc time
+		$intTimezoneOffset = $this->blnUseHighstock ? $this->parseDate('Z', time()) : 0;
 		echo '[' . "\n";
 		$n = 0;
 		$sum = 0;
