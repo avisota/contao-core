@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -137,7 +137,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_registration_lists'] = array
 /**
  * Class tl_module_avisota
  *
- * 
+ *
  * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -160,7 +160,7 @@ class tl_module_avisota extends Backend
 		}
 		return $arrList;
 	}
-	
+
 	public function getTemplates(DataContainer $dc)
 	{
 		// Return all templates
@@ -181,10 +181,10 @@ class tl_module_avisota extends Backend
 		default:
 			return array();
 		}
-		
+
 		return $this->getTemplateGroup($strTemplatePrefix, $dc->activeRecord->pid);
 	}
-	
+
 	public function getEditableRecipientProperties()
 	{
 		$return = array();
@@ -202,8 +202,8 @@ class tl_module_avisota extends Backend
 
 		return $return;
 	}
-	
-	
+
+
 	/**
 	 * Return all subscription templates as array
 	 * @param object
@@ -218,7 +218,11 @@ class tl_module_avisota extends Backend
 			$intPid = $this->Input->get('id');
 		}
 
-		return $this->getTemplateGroup('subscription_', $intPid);
+		return array_merge
+		(
+			array('mod_avisota_subscription' => 'mod_avisota_subscription'),
+			$this->getTemplateGroup('subscription_', $intPid)
+		);
 	}
 }
 ?>

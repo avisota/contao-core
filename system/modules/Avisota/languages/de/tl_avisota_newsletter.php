@@ -62,9 +62,9 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['from']               = 'Absender';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['live']               = 'Vorschau aktualisieren';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview']            = 'Testsendung';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe']        = 'vom Newsletter abmelden';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation']         = 'Sehr geehrte/-r';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_male']    = 'Sehr geehrter Herr';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_femaile'] = 'Sehr geehrte Frau';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation']         = 'Sehr geehrte/-r {fullname}';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_male']    = 'Sehr geehrter Herr {fullname}';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_female']  = 'Sehr geehrte Frau {fullname}';
 
 /**
  * Reference
@@ -95,7 +95,9 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader']  = array('Newslettere
 /**
  * Personalisation
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous']['salutation'] = 'Sehr geehrte/-r';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous']['salutation'] = 'Sehr geehrte/-r {fullname}';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous']['name']       = 'Abonnent/-in';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous']['fullname']   = 'Abonnent/-in';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous']['shortname']  = 'Abonnent/-in';
 
 ?>

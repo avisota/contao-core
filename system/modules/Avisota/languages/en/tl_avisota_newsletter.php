@@ -64,7 +64,7 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendConfirm']        = 'Newsletter
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe']        = 'Unsubscribe from Newsletter';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation']         = 'Dear/-r';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_male']    = 'Dear Sir';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_femaile'] = 'Dear Miss';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_female'] = 'Dear Miss';
 
 /**
  * Reference

@@ -295,6 +295,7 @@ CREATE TABLE `tl_module` (
   `avisota_template_subscribe_mail_html` varchar(64) NOT NULL default '',
   `avisota_template_unsubscribe_mail_plain` varchar(64) NOT NULL default '',
   `avisota_template_unsubscribe_mail_html` varchar(64) NOT NULL default '',
+  `avisota_template_subscription` varchar(64) NOT NULL default '',
   `avisota_registration_lists` blob NULL,
   `subscriptionTpl` varchar(64) NOT NULL default '',
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

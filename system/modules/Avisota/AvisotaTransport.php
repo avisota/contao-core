@@ -37,7 +37,7 @@ define('TL_MODE', 'FE');
 include('../../initialize.php');
 
 // disable error reporting
-error_reporting(0);
+#error_reporting(0);
 
 /**
  * Class AvisotaTransport
@@ -199,6 +199,7 @@ class AvisotaTransport extends Backend
 			$objUser = $this->Database->prepare("SELECT * FROM tl_user WHERE id=?")->execute($this->Input->post('recipient_user'));
 			if ($objUser->next())
 			{
+				$arrRecipient = $objUser->row();
 				$strEmail = $objUser->email;
 			}
 		}
@@ -214,27 +215,21 @@ class AvisotaTransport extends Backend
 		$arrSession = $this->Session->get('AVISOTA_PREVIEW');
 
 		// create the recipient object
-		$arrRecipient = $this->Base->getPreviewRecipient($arrSession['personalized']);
-		$arrRecipient['email'] = $strEmail;
+		if (empty($arrRecipient))
+		{
+			$arrRecipient = $this->Base->getPreviewRecipient($arrSession['personalized']);
+			$arrRecipient['email'] = $strEmail;
+		}
+		$personalized = $this->finalizeRecipientArray($arrRecipient);
 		$this->Static->setRecipient($arrRecipient);
 
 		// create the contents
-		switch ($arrRecipient['personalized'])
-		{
-		case 'private':
-			$plain = $this->Content->prepareBeforeSending($this->Content->generatePlain($this->objNewsletter, $this->objCategory, 'private'));
-			$html = $this->Content->prepareBeforeSending($this->Content->generateHtml($this->objNewsletter, $this->objCategory, 'private'));
-			break;
-
-		case 'anonymous':
-			$plain = $this->Content->prepareBeforeSending($this->Content->generatePlain($this->objNewsletter, $this->objCategory, 'anonymous'));
-			$html = $this->Content->prepareBeforeSending($this->Content->generateHtml($this->objNewsletter, $this->objCategory, 'anonymous'));
-			break;
-		}
+		$plain = $this->Content->prepareBeforeSending($this->Content->generatePlain($this->objNewsletter, $this->objCategory, $personalized));
+		$html = $this->Content->prepareBeforeSending($this->Content->generateHtml($this->objNewsletter, $this->objCategory, $personalized));
 
 		// Send
 		$objEmail = $this->generateEmailObject();
-		$this->sendNewsletter($objEmail, $this->objNewsletter, $this->objCategory, $plain, $html, $arrRecipient, $arrRecipient['personalized']);
+		$this->sendNewsletter($objEmail, $plain, $html, $arrRecipient, $personalized);
 
 		// Redirect
 		$_SESSION['TL_CONFIRM'][] = sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirmPreview'], $strEmail);
@@ -303,7 +298,7 @@ class AvisotaTransport extends Backend
 								SUBSTRING(m.email, LOCATE('@', m.email)+1),
 								m.id,
 								'mgroup',
-								m.pid
+								g.group_id
 							FROM
 								tl_member m
 							LEFT JOIN
@@ -386,33 +381,43 @@ class AvisotaTransport extends Backend
 
 			while ($intEndExecutionTime > time() && $objRecipients->next())
 			{
-				// private recipient (member/recipient id exists)
-				if ($objRecipients->id)
-				{
-					$arrRecipient = $objRecipients->row();
-					$personalized = 'private';
+				$arrRecipient = array
+				(
+					'email' => $objRecipients->email
+				);
 
-					// create the contents
-					$plain = $this->Content->generatePlain($this->objNewsletter, $this->objCategory, 'private');
-					$html = $this->Content->generateHtml($this->objNewsletter, $this->objCategory, 'private');
+				// add recipient details
+				if ($objRecipients->source == 'list')
+				{
+					$objData = $this->Database
+						->prepare("SELECT * FROM tl_avisota_recipient WHERE id=?")
+						->execute($objRecipients->recipientID);
+					$this->extendArray($objData->row(), $arrRecipient);
 				}
 
-				// anonymous recipient
-				else
+				// add member details
+				if (   $objRecipients->source == 'mgroup'
+					|| $GLOBALS['TL_CONFIG']['avisota_merge_member_details'])
 				{
-					$arrRecipient = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'];
-					$arrRecipient['email'] = $objRecipients->email;
-					$personalized = 'anonymous';
-
-					// create the contents
-					$plain = $this->Content->generatePlain($this->objNewsletter, $this->objCategory, 'anonymous');
-					$html = $this->Content->generateHtml($this->objNewsletter, $this->objCategory, 'anonymous');
+					$objData = $this->Database
+						->prepare("SELECT * FROM tl_member WHERE id=?")
+						->execute($objRecipients->recipientID);
+					$this->extendArray($objData->row(), $arrRecipient);
 				}
+
+				$personalized = $this->finalizeRecipientArray($arrRecipient);
+
+				$this->Static->setRecipient($arrRecipient);
+				//var_dump($personalized, $arrRecipient);
+				//exit;
+
+				// create the contents
+				$plain = $this->Content->generatePlain($this->objNewsletter, $this->objCategory, $personalized);
+				$html = $this->Content->generateHtml($this->objNewsletter, $this->objCategory, $personalized);
 
 				// prepare content for sending, e.a. replace specific insert tags
 				$plain = $this->Content->prepareBeforeSending($plain);
 				$html  = $this->Content->prepareBeforeSending($html);
-
 
 				// Send
 				$objEmail = $this->generateEmailObject();
@@ -597,6 +602,86 @@ class AvisotaTransport extends Backend
 	{
 		$objPrepareTrackingHelper = new PrepareTrackingHelper($objNewsletter, $objCategory, $objRecipient);
 		return preg_replace_callback('#<((http|ftp)s?:\/\/.+)>#U', array(&$objPrepareTrackingHelper, 'replacePlain'), $strPlain);
+	}
+
+	protected function finalizeRecipientArray(&$arrRecipient)
+	{
+		// set the firstname and lastname field if missing
+		if (empty($arrRecipient['firstname']) && empty($arrRecipient['lastname']) && !empty($arrRecipient['name']))
+		{
+			list($arrRecipient['firstname'], $arrRecipient['lastname']) = explode(' ', $arrRecipient['name'], 2);
+		}
+
+		// set the name field, if missing
+		if (empty($arrRecipient['name']) && !(empty($arrRecipient['firstname']) && empty($arrRecipient['lastname'])))
+		{
+			$arrRecipient['name'] = trim($arrRecipient['firstname'] . ' ' . $arrRecipient['lastname']);
+		}
+
+		// set the fullname field, if missing
+		if (empty($arrRecipient['fullname']) && !empty($arrRecipient['name']))
+		{
+			$arrRecipient['fullname'] = trim($arrRecipient['title'] . ' ' . $arrRecipient['name']);
+		}
+
+		// set the shortname field, if missing
+		if (empty($arrRecipient['shortname']) && !empty($arrRecipient['firstname']))
+		{
+			$arrRecipient['shortname'] = $arrRecipient['firstname'];
+		}
+
+		// a recipient is anonymous, if he has no name
+		if (!empty($arrRecipient['name']))
+		{
+			$personalized = 'private';
+		}
+		else
+		{
+			$personalized = 'anonymous';
+		}
+
+		// extend with maybe missing anonymous informations
+		$this->extendArray($GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'], $arrRecipient);
+
+		// update salutation
+		if (empty($arrRecipient['salutation']))
+		{
+			if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrRecipient['gender']]))
+			{
+				$arrRecipient['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrRecipient['gender']];
+			}
+			else
+			{
+				$arrRecipient['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation'];
+			}
+		}
+
+		// replace placeholders in salutation
+		preg_match_all('#\{([^\}]+)\}#U', $arrRecipient['salutation'], $matches, PREG_SET_ORDER);
+		foreach ($matches as $match)
+		{
+			$arrRecipient['salutation'] = str_replace($match[0], $arrRecipient[$match[1]], $arrRecipient['salutation']);
+		}
+
+		return $personalized;
+	}
+
+
+	protected function extendArray($arrSource, &$arrTarget)
+	{
+		foreach ($arrSource as $k=>$v)
+		{
+			if (   !empty($v)
+				&& empty($arrTarget[$k])
+				&& !in_array($k, array(
+					// tl_avisota_recipient fields
+					'id', 'pid', 'tstamp', 'confirmed', 'token', 'addedOn', 'addedBy',
+					// tl_member fields
+					'password', 'session')))
+			{
+				$arrTarget[$k] = $v;
+			}
+		}
 	}
 }
 

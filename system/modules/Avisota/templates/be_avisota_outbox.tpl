@@ -35,7 +35,7 @@
     <td class="col_0"><?php echo $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $outbox['date']) ?></td>
     <td class="col_1"><?php echo $outbox['newsletter'] ?></td>
     <td class="col_1"><?php foreach ($outbox['sources'] as $source): ?>
-    <?php echo $source['linkedTitle']; ?> (<?php echo number_format($source['recipients'], 0, ',', '.'); ?>)
+    <?php echo $source['linkedTitle']; ?> (<?php echo number_format($source['recipients'], 0, ',', '.'); ?>)<br/>
     <?php endforeach; ?></td>
     <td class="col_2" align="center"><span class="outstanding"><?php echo number_format($outbox['outstanding'], 0, ',', '.') ?></span></td>
     <td class="col_3" align="center"><span class="total"><?php echo number_format($outbox['recipients'], 0, ',', '.'); ?></span></td>

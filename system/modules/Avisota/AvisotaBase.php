@@ -157,6 +157,8 @@ class AvisotaBase extends Controller
 	 */
 	public function getPreviewRecipient($personalized)
 	{
+		$this->loadLanguageFile('tl_avisota_newsletter');
+
 		$arrRecipient = array();
 		if ($personalized == 'private')
 		{

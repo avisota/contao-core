@@ -65,26 +65,6 @@ class AvisotaInsertTag extends Controller
 			{
 				switch ($strTag[1])
 				{
-				case 'salutation':
-					if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrCurrentRecipient['gender']]))
-					{
-						return $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrCurrentRecipient['gender']];
-					}
-					else
-					{
-						return $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation'];
-					}
-
-				case 'name':
-					if (isset($arrCurrentRecipient['name']) && $arrCurrentRecipient['name'])
-					{
-						return $arrCurrentRecipient['name'];
-					}
-					else
-					{
-						return trim($arrCurrentRecipient['firstname'] . ' ' . $arrCurrentRecipient['lastname']);
-					}
-
 				default:
 					if ($arrCurrentRecipient && isset($arrCurrentRecipient[$strTag[1]]))
 					{
