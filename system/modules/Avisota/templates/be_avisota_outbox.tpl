@@ -23,9 +23,9 @@
     <th class="col_1">&nbsp;<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['date'] ?>&nbsp;</th>
     <th class="col_1"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['newsletter'] ?>&nbsp;</th>
     <th class="col_2"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['count'] ?>&nbsp;</th>
-    <th class="col_2"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['outstanding'] ?></th>
-    <th class="col_3"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['total'] ?></th>
-    <?php if ($this->display_failed): ?><th class="col_4"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['failed'] ?></th><?php endif; ?>
+    <th class="col_2"><img src="system/modules/Avisota/html/outbox_outstanding.png" alt="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['outstanding'] ?>" title="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['outstanding'] ?>" /></th>
+    <th class="col_3"><img src="system/modules/Avisota/html/recipients.png" alt="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['total'] ?>" title="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['total'] ?>" /></th>
+    <?php if ($this->display_failed): ?><th class="col_4"><img src="system/modules/Avisota/html/outbox_failed.png" alt="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['failed'] ?>" title="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['failed'] ?>" /></th><?php endif; ?>
     <th class="col_5"></th>
   </tr>
   </thead>
