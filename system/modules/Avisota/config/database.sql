@@ -41,6 +41,9 @@ CREATE TABLE `tl_avisota_recipient` (
   `token` char(32) NOT NULL default '',
   `addedOn` int(10) NOT NULL default '0',
   `addedBy` int(10) unsigned NOT NULL default '0',
+  `addedByModule` int(10) unsigned NOT NULL default '0',
+  `addedOnPage` int(10) unsigned NOT NULL default '0',
+  `notification` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -298,6 +301,12 @@ CREATE TABLE `tl_module` (
   `avisota_template_subscription` varchar(64) NOT NULL default '',
   `avisota_registration_lists` blob NULL,
   `subscriptionTpl` varchar(64) NOT NULL default '',
+  `avisota_send_notification` char(1) NOT NULL default '',
+  `avisota_notification_time` int(10) NOT NULL default '3',
+  `avisota_template_notification_mail_plain` varchar(64) NOT NULL default '',
+  `avisota_template_notification_mail_html` varchar(64) NOT NULL default '',
+  `avisota_do_cleanup` char(1) NOT NULL default '',
+  `avisota_cleanup_time` int(10) NOT NULL default '7',
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

@@ -311,6 +311,12 @@ class tl_avisota_recipient extends Backend
 
 	public function validateBlacklist($strEmail)
 	{
+		// do not check in frontend mode
+		if (TL_MODE == 'FE')
+		{
+			return $strEmail;
+		}
+
 		$objBlacklist = $this->Database
 			->prepare("SELECT * FROM tl_avisota_recipient_blacklist WHERE email=?")
 			->execute(md5($strEmail));

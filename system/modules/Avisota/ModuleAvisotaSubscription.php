@@ -311,6 +311,8 @@ class ModuleAvisotaSubscription extends Module
 			$arrRecipient['tstamp'] = $time;
 			$arrRecipient['confirmed'] = '';
 			$arrRecipient['addedOn'] = $time;
+			$arrRecipient['addedByModule'] = $this->id;
+			$arrRecipient['addedOnPage'] = $GLOBALS['objPage']->id;
 			foreach ($arrTokens as $intId => $strToken)
 			{
 				$arrRecipient['pid'] = $intId;
@@ -324,7 +326,7 @@ class ModuleAvisotaSubscription extends Module
 			}
 
 			$_SESSION['avisota_subscription'][] = sprintf($GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['send'], $arrRecipient['email']).'|confirmation';
-			$this->log('Add new recipient ', 'ModuleAvisotaSubscription::subscribe', TL_INFO);
+			$this->log('Add new recipient ' . $arrRecipient['email'] . ' to ' . implode(', ', $arrList), 'ModuleAvisotaSubscription::subscribe', TL_INFO);
 		}
 		else
 		{

@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -38,11 +38,18 @@
  */
 $GLOBALS['TL_LANG']['avisota']['latest_link'] = '<a href="%s" target="_blank">Unser aktueller Newsletter</a>';
 
+/**
+ * Subscription
+ */
 $GLOBALS['TL_LANG']['avisota']['subscription']['preamble'] = 'Melden Sie sich zu unserem Newsletter an.';
 $GLOBALS['TL_LANG']['avisota']['subscription']['lists']    = 'Verteiler';
 $GLOBALS['TL_LANG']['avisota']['subscription']['email']    = 'E-Mail Adresse';
 $GLOBALS['TL_LANG']['avisota']['subscription']['empty']    = 'Sie sind bereits zu unserem Newsletter angemeldet.';
 
+
+/**
+ * Subscribe
+ */
 $GLOBALS['TL_LANG']['avisota']['subscribe']['submit']              = 'Abonnieren';
 $GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['subject']     = 'Newsletter Abonnement bestätigen';
 $GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['send']        = 'Sie wurden erfolgreich zu unserem Newsletter angemeldet, Sie erhalten in Kürze eine Aktivierungsmail um Ihr Abonnent zu bestätigen.';
@@ -59,6 +66,9 @@ Bitte öffnen Sie die folgende Adresse in Ihrem Browser, um das Abonnement zu be
 
 Vielen Dank';
 
+/**
+ * Unsubscribe
+ */
 $GLOBALS['TL_LANG']['avisota']['unsubscribe']['empty'] = 'Sie sind nicht an unserem Newsletter angemeldet.';
 
 $GLOBALS['TL_LANG']['avisota']['unsubscribe']['submit']            = 'Kündigen';
@@ -75,6 +85,23 @@ $GLOBALS['TL_LANG']['avisota']['unsubscribe']['mail']['plain']     = 'Sehr geehr
 Wir bedauern Ihre Entscheidung und würden uns freuen, Sie in Zukunft wieder als Abonnenten begrüßen zu dürfen.
 
 Sie können sich jederzeit wieder an unserem Newsletter anmelden.
+%s
+
+Vielen Dank';
+
+/**
+ * Notification
+ */
+$GLOBALS['TL_LANG']['avisota']['notification']['mail']['subject']   = 'Erinnerung - Newsletter Abonnement bestätigen';
+$GLOBALS['TL_LANG']['avisota']['notification']['mail']['html']        = '<p>Sehr geehrter Interessent,<br>
+wir möchten Sie daran Erinnern, dass Sie Ihr Abonnent unseres Newsletters %s noch nicht bestätigt haben. Wir können Ihnen leider erst unseren Newsletter zukommen lassen, wenn Sie Ihr Abonnement bestätigt haben.</p>
+<p>Bitte öffnen Sie die folgende Adresse in Ihrem Browser, um das Abonnement zu bestätigen.<br>
+<a href="%2$s">%2$s</a></p>
+<p>Vielen Dank</p>';
+$GLOBALS['TL_LANG']['avisota']['notification']['mail']['plain']       = 'Sehr geehrter Interessent,
+wir möchten Sie daran Erinnern, dass Sie Ihr Abonnent unseres Newsletters %s noch nicht bestätigt haben. Wir können Ihnen leider erst unseren Newsletter zukommen lassen, wenn Sie Ihr Abonnement bestätigt haben.
+
+Bitte öffnen Sie die folgende Adresse in Ihrem Browser, um das Abonnement zu bestätigen.
 %s
 
 Vielen Dank';

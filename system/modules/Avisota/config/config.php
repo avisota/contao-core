@@ -210,6 +210,7 @@ $GLOBALS['TL_PERMISSIONS'][] = 'avisota_newsletter_permissions';
  * Cron
  */
 $GLOBALS['TL_CRON']['daily'][] = array('AvisotaBackend', 'cronCleanupRecipientList');
+$GLOBALS['TL_CRON']['daily'][] = array('AvisotaBackend', 'cronNotifyRecipients');
 
 
 /**
