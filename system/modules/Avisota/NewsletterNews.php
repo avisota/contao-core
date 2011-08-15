@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -26,9 +26,11 @@
  *
  * PHP version 5
  * @copyright  4ward.media 2011
+ * @copyright  InfinitySoft 2011
  * @author     Christoph Wiechert <christoph.wiechert@4wardmedia.de>
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
- * @license    LGPL 
+ * @license    LGPL
  * @filesource
  */
 
@@ -53,9 +55,8 @@ class NewsletterNews extends NewsletterElement
 	 * @var mixed tl_page-rows
 	 */
 	protected $arrObjJumpToPages = array();
-	
-	
-	
+
+
 	/**
 	 * Generate content element
 	 * @param str $mode Compile either html or plaintext part
@@ -63,59 +64,23 @@ class NewsletterNews extends NewsletterElement
 	protected function compile($mode)
 	{
 		$this->import('DomainLink');
-		
+
 		$newsIDs = unserialize($this->news);
 		if(!is_array($newsIDs))
 		{
 			$this->Template->events = array();
 			return;
 		}
-		
-		$objNews = $this->Database->prepare('SELECT n.*,a.jumpTo,a.title AS section
-												FROM tl_news as n
-												LEFT JOIN tl_news_archive as a ON (n.pid = a.id)
-												WHERE n.id IN ('.implode(',',$newsIDs).')
-												ORDER BY n.time')->execute();
-		
-		while($objNews->next())
-		{
-			$objNews->href = $this->getHref($objNews->jumpTo,$objNews->alias);
-		}
-		
+
+		$objNews = $this->Database
+			->prepare('SELECT n.*,a.jumpTo,a.title AS section
+				FROM tl_news as n
+				LEFT JOIN tl_news_archive as a ON (n.pid = a.id)
+				WHERE n.id IN ('.implode(',',$newsIDs).')
+				ORDER BY n.time')
+			->execute();
+
 		$this->Template->news = $objNews->fetchAllAssoc();
-	}
-	
-	
-	
-	/**
-	 * Generate the event-link
-	 * @param int $id jumpTo-page-id
-	 * @param str $alias alias
-	 */
-	protected function getHref($id,$alias)
-	{
-		if(!isset($this->arrObjJumpToPages[$id]))
-		{
-			$tmp = $this->Database->prepare("SELECT id, alias FROM tl_page WHERE id=? AND (start='' OR start<UNIX_TIMESTAMP()) AND (stop='' OR stop>UNIX_TIMESTAMP()) AND published=1")
-											->limit(1)
-											->execute($id);
-											
-			if($tmp->numRows < 1)
-			{
-				$this->arrObjJumpToPages[$id] = false;
-			}
-			else
-			{
-				$this->arrObjJumpToPages[$id] = $tmp;
-			}
-		}
-		
-		
-		if($this->arrObjJumpToPages[$id])
-			return $this->DomainLink->absolutizeUrl($this->generateFrontendUrl($this->arrObjJumpToPages[$id]->row(),'/items/'.$alias),$this->arrObjJumpToPages[$id]);
-		else 
-			return '';
-		
 	}
 }
 

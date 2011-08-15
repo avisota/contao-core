@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -26,9 +26,11 @@
  *
  * PHP version 5
  * @copyright  4ward.media 2010
+ * @copyright  InfinitySoft 2010,2011
  * @author     Christoph Wiechert <christoph.wiechert@4wardmedia.de>
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
- * @license    LGPL 
+ * @license    LGPL
  * @filesource
  */
 
@@ -53,9 +55,9 @@ class NewsletterEvent extends NewsletterElement
 	 * @var mixed tl_page-rows
 	 */
 	protected $arrObjJumpToPages = array();
-	
-	
-	
+
+
+
 	/**
 	 * Generate content element
 	 * @param str $mode Compile either html or plaintext part
@@ -63,14 +65,14 @@ class NewsletterEvent extends NewsletterElement
 	protected function compile($mode)
 	{
 		$this->import('DomainLink');
-		
+
 		$events = unserialize($this->events);
 		if(!is_array($events))
 		{
 			$this->Template->events = array();
 			return;
 		}
-		
+
 		// split ID and startTime
 		$eventIds = array();
 		$eventStartTimes = array();
@@ -80,20 +82,19 @@ class NewsletterEvent extends NewsletterElement
 			$eventIds[] = $tmp[0];
 			$eventStartTimes[] = $tmp[1];
 		}
-		
+
 		$objEvents = $this->Database->prepare('SELECT e.*,c.jumpTo,c.title AS section
 												FROM tl_calendar_events as e
 												LEFT JOIN tl_calendar as c ON (e.pid = c.id)
 												WHERE e.id IN ('.implode(',',$eventIds).')
 												ORDER BY e.startDate')->execute();
-		
+
 		$arrEvents = array();
 		while($objEvents->next())
 		{
-			$objEvents->href = $this->getHref($objEvents->jumpTo,$objEvents->alias);
 			$arrEvents[$objEvents->id] = $objEvents->row();
 		}
-		
+
 		$arrReturn = array();
 		foreach($eventIds as $k=>$id)
 		{
@@ -111,7 +112,7 @@ class NewsletterEvent extends NewsletterElement
 						$arrReturn[] = $event;
 						break;
 					}
-					
+
 					$arg = $arrRepeat['value'];
 					$unit = $arrRepeat['unit'];
 
@@ -132,41 +133,8 @@ class NewsletterEvent extends NewsletterElement
 				$arrReturn[] = $arrEvents[$id];
 			}
 		}
-		
+
 		$this->Template->events = $arrReturn;
-	}
-	
-	
-	
-	/**
-	 * Generate the event-link
-	 * @param int $id jumpTo-page-id
-	 * @param str $alias alias
-	 */
-	protected function getHref($id,$alias)
-	{
-		if(!isset($this->arrObjJumpToPages[$id]))
-		{
-			$tmp = $this->Database->prepare("SELECT id, alias FROM tl_page WHERE id=? AND (start='' OR start<UNIX_TIMESTAMP()) AND (stop='' OR stop>UNIX_TIMESTAMP()) AND published=1")
-											->limit(1)
-											->execute($id);
-											
-			if($tmp->numRows < 1)
-			{
-				$this->arrObjJumpToPages[$id] = false;
-			}
-			else
-			{
-				$this->arrObjJumpToPages[$id] = $tmp;
-			}
-		}
-		
-		
-		if($this->arrObjJumpToPages[$id])
-			return $this->DomainLink->absolutizeUrl($this->generateFrontendUrl($this->arrObjJumpToPages[$id]->row(),'/events/'.$alias),$this->arrObjJumpToPages[$id]);
-		else 
-			return '';
-		
 	}
 }
 
