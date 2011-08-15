@@ -92,6 +92,14 @@ select[disabled] {
 	color: #ccc;
 }
 
+#transport_error {
+	padding: 0 18px 18px;
+}
+#transport_error pre {
+	border: 1px solid #008080;
+	background: #C0FFFF;
+	padding: 18px;
+}
 #outbox {
 	padding: 0 18px 18px;
 }

@@ -6,6 +6,11 @@
 
 <h2 class="sub_headline" id="headline"><?php echo $this->newsletter['subject'] ?></h2>
 
+<div id="transport_error" style="display:none">
+	<p class="message"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['transport_error']; ?></p>
+	<pre class="response"></pre>
+</div>
+
 <div id="outbox">
 	<table id="outbox_details" class="tl_listing" cellpadding="0" cellspacing="0">
 		<colgroup>

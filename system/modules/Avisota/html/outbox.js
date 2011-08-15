@@ -21,6 +21,7 @@ var Outbox = new Class({
 		this.logElement = null;
 		this.logDummy = this.logContainer.getElement('tr').dispose();
 		
+		var timerTrigger = false;
 		var timer = function() {
 			this.elapsedTime ++;
 			$('elapsed_time').set('html', this.elapsedTime.formatTime());
@@ -33,7 +34,7 @@ var Outbox = new Class({
 				this.logElement.getElement('td.time').set('html', (-this.remeaningTime).formatTime());
 			}
 			
-			timer.delay(1000, this);
+			timerTrigger = timer.delay(1000, this);
 		};
 		
 		this.request = new Request.JSON({
@@ -83,17 +84,31 @@ var Outbox = new Class({
 						
 						this.request.post.delay(this.cyclePause, this.request, { id: this.outbox.id, action: 'send' });
 					}
-				} else {
-					alert('error');
+				}
+				// logged out
+				else if (responseText.indexOf('name="FORM_SUBMIT" value="tl_login"') > -1) {
+					window.location.reload();
+				}
+				// other error
+				else {
+					window.clearTimeout(timerTrigger);
+					
+					var e = $('transport_error');
+					e.setStyle('display', '');
+					e.getElement('pre.response').set('text', responseText);
 				}
 			}.bind(this),
 			onError: function(text, error) {
-				alert(error);
+				window.clearTimeout(timerTrigger);
+				
+				var e = $('transport_error');
+				e.setStyle('display', '');
+				e.getElement('pre.response').set('text', error);
 			}.bind(this)
 		});
 		
 		(function() {
-			timer.delay(1000, this);
+			timerTrigger = timer.delay(1000, this);
 			
 			this.request.post({ id: this.outbox.id, action: 'send' });
 		}).delay(100, this);
