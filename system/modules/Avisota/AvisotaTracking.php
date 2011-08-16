@@ -318,7 +318,7 @@ class AvisotaTracking extends BackendModule
 			$objResultSet = $this->Database
 				->prepare("SELECT time, SUM(sum) as sum
 					FROM (
-						SELECT MIN(h.tstamp) as time, 1 as sum
+						SELECT MIN(tstamp) as time, 1 as sum
 						FROM tl_avisota_statistic_raw_link_hit
 						WHERE recipient=?
 						GROUP BY recipient
@@ -403,14 +403,21 @@ class AvisotaTracking extends BackendModule
 		echo '[' . "\n";
 		$n = 0;
 		$sum = 0;
-		while ($objResultSet->next())
+		if ($objResultSet->numRows)
 		{
-			$sum += $objResultSet->sum;
-			if ($n++ > 0)
+			while ($objResultSet->next())
 			{
-				echo ",\n";
+				$sum += $objResultSet->sum;
+				if ($n++ > 0)
+				{
+					echo ",\n";
+				}
+				echo '[' . (($objResultSet->time + $intTimezoneOffset) * 1000) . ',' . $sum . ']';
 			}
-			echo '[' . (($objResultSet->time + $intTimezoneOffset) * 1000) . ',' . $sum . ']';
+		}
+		else
+		{
+			echo '[' . time() . ',0]';
 		}
 		echo "\n" . ']';
 	}
