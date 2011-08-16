@@ -17,6 +17,8 @@ function drawChart() {
 			.addClass('empty_stats')
 			.set('text', '<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking']['empty_stats']); ?>');
 	} else {
+		equalize([sends, reads, reacts]);
+
 		var send = sends[sends.length-1][1];
 		var read = reads[reads.length-1][1];
 		var react = reacts[reacts.length-1][1];
@@ -70,6 +72,7 @@ function drawChart() {
 		var data = links.map(function(link) {
 			return link.data;
 		});
+		equalize(data);
 
 		jQuery.jqplot('chart_links', data, {
 			height: 420,
