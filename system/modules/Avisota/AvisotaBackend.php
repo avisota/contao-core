@@ -45,8 +45,6 @@ class AvisotaBackend extends Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->import('Database');
-		$this->import('DomainLink');
 	}
 
 
@@ -69,6 +67,8 @@ class AvisotaBackend extends Controller
 	 */
 	public function cronCleanupRecipientList()
 	{
+		$this->import('Database');
+
 		$objModule = $this->Database
 			->execute("SELECT * FROM tl_module WHERE type='avisota_subscription' AND avisota_do_cleanup='1' AND avisota_cleanup_time>0");
 		while ($objModule->next())
@@ -93,6 +93,8 @@ class AvisotaBackend extends Controller
 	 */
 	public function cronNotifyRecipients()
 	{
+		$this->import('Database');
+		$this->import('DomainLink');
 		$this->loadLanguageFile('avisota');
 
 		$objModule = $this->Database
