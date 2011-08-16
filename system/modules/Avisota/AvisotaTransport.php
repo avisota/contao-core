@@ -392,24 +392,38 @@ class AvisotaTransport extends Backend
 					$objData = $this->Database
 						->prepare("SELECT * FROM tl_avisota_recipient WHERE id=?")
 						->execute($objRecipients->recipientID);
-					$this->extendArray($objData->row(), $arrRecipient);
+					if ($objData->next())
+					{
+						$this->extendArray($objData->row(), $arrRecipient);
+					}
 				}
 
 				// add member details
-				if (   $objRecipients->source == 'mgroup'
-					|| $GLOBALS['TL_CONFIG']['avisota_merge_member_details'])
+				if ($objRecipients->source == 'mgroup')
 				{
 					$objData = $this->Database
 						->prepare("SELECT * FROM tl_member WHERE id=?")
 						->execute($objRecipients->recipientID);
-					$this->extendArray($objData->row(), $arrRecipient);
+					if ($objData->next())
+					{
+						$this->extendArray($objData->row(), $arrRecipient);
+					}
+				}
+				// merge member details
+				else if ($GLOBALS['TL_CONFIG']['avisota_merge_member_details'])
+				{
+					$objData = $this->Database
+						->prepare("SELECT * FROM tl_member WHERE email=?")
+						->execute($objRecipients->email);
+					if ($objData->next())
+					{
+						$this->extendArray($objData->row(), $arrRecipient);
+					}
 				}
 
 				$personalized = $this->finalizeRecipientArray($arrRecipient);
 
 				$this->Static->setRecipient($arrRecipient);
-				//var_dump($personalized, $arrRecipient);
-				//exit;
 
 				// create the contents
 				$plain = $this->Content->generatePlain($this->objNewsletter, $this->objCategory, $personalized);
@@ -669,17 +683,20 @@ class AvisotaTransport extends Backend
 
 	protected function extendArray($arrSource, &$arrTarget)
 	{
-		foreach ($arrSource as $k=>$v)
+		if (is_array($arrSource))
 		{
-			if (   !empty($v)
-				&& empty($arrTarget[$k])
-				&& !in_array($k, array(
-					// tl_avisota_recipient fields
-					'id', 'pid', 'tstamp', 'confirmed', 'token', 'addedOn', 'addedBy',
-					// tl_member fields
-					'password', 'session')))
+			foreach ($arrSource as $k=>$v)
 			{
-				$arrTarget[$k] = $v;
+				if (   !empty($v)
+					&& empty($arrTarget[$k])
+					&& !in_array($k, array(
+						// tl_avisota_recipient fields
+						'id', 'pid', 'tstamp', 'confirmed', 'token', 'addedOn', 'addedBy',
+						// tl_member fields
+						'password', 'session')))
+				{
+					$arrTarget[$k] = $v;
+				}
 			}
 		}
 	}
