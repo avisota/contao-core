@@ -67,24 +67,6 @@ class Avisota extends Backend
 	{
 		$intId = $this->Input->get('id');
 
-		if (!$this->User->isAdmin)
-		{
-			// Set root IDs
-			if (!is_array($this->User->avisota_newsletter_categories) || count($this->User->avisota_newsletter_categories) < 1)
-			{
-				$root = array(0);
-			}
-			else
-			{
-				$root = $this->User->avisota_newsletter_categories;
-			}
-
-			if (!in_array($intId, $root))
-			{
-				$this->redirect('contao/main.php?act=error');
-			}
-		}
-
 		// get the newsletter
 		$objNewsletter = $this->Database->prepare("
 				SELECT
@@ -113,6 +95,24 @@ class Avisota extends Backend
 		if (!$objCategory->next())
 		{
 			$this->redirect('contao/main.php?do=avisota_newsletter');
+		}
+
+		if (!$this->User->isAdmin)
+		{
+			// Set root IDs
+			if (!is_array($this->User->avisota_newsletter_categories) || count($this->User->avisota_newsletter_categories) < 1)
+			{
+				$root = array(0);
+			}
+			else
+			{
+				$root = $this->User->avisota_newsletter_categories;
+			}
+
+			if (!in_array($objCategory->id, $root))
+			{
+				$this->redirect('contao/main.php?act=error');
+			}
 		}
 
 		$this->Static->setCategory($objCategory);
