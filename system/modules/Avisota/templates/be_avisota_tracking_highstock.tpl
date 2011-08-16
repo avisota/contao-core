@@ -11,6 +11,8 @@ function drawChart() {
 			.addClass('empty_stats')
 			.set('text', '<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking']['empty_stats']); ?>');
 	} else {
+		equalize([sends, reads, reacts]);
+
 		var send = sends[sends.length-1][1];
 		var read = reads[reads.length-1][1];
 		var react = reacts[reacts.length-1][1];
@@ -28,7 +30,6 @@ function drawChart() {
 		}
 
 		<?php endif; ?>
-		equalize([sends, reads, reacts]);
 
 		$('chart').setAttribute('style', '');
 
@@ -135,9 +136,8 @@ function drawChart() {
 		}
 
 		<?php endif; ?>
-		var link_arrays = [];
-		$each(links, function(v) {
-			link_arrays.push(v.data);
+		var link_arrays = links.map(function(link) {
+			return link.data;
 		});
 		equalize(link_arrays);
 
