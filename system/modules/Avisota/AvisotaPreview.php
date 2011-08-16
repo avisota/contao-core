@@ -148,5 +148,13 @@ class AvisotaPreview extends Backend
 	}
 }
 
-$objAvisotaPreview = new AvisotaPreview();
-$objAvisotaPreview->run();
+try {
+	$objAvisotaPreview = new AvisotaPreview();
+	$objAvisotaPreview->run();
+} catch(Exception $e) {
+	header('HTTP/1.0 500 Internal Server Error');
+	header('Content-Type: text/plain');
+	echo $e->getMessage();
+	echo "\n";
+	echo $e->getTraceAsString();
+}
