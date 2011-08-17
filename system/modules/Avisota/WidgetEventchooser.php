@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -26,9 +26,11 @@
  *
  * PHP version 5
  * @copyright  4ward.media 2010
+ * @copyright  InfinitySoft 2011
  * @author     Christoph Wiechert <christoph.wiechert@4wardmedia.de>
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    WidgetEventchooser
- * @license    LGPL 
+ * @license    LGPL
  * @filesource
  */
 
@@ -74,12 +76,12 @@ class WidgetEventchooser extends Widget
 		$strClass = 'eventchooser';
 		if(!is_array($this->value)) $this->value = array();
 
-		$arrEvents = $this->getAllEvents();									
-									
+		$arrEvents = $this->getAllEvents();
+
 		if(!count($arrEvents)) {
 			return  '<p class="tl_noopt">'.$GLOBALS['TL_LANG']['MSC']['noResult'].'</p>';
 		}
-		
+
 		$strBuffer = '';
 		$header = $date = "";
 		foreach($arrEvents as $event)
@@ -89,14 +91,14 @@ class WidgetEventchooser extends Widget
 				$header = $event['calendar'];
 				$strBuffer .= '<br/><h1 class="main_headline">'.$header.'</h1>';
 			}
-			
+
 			$curDate = $GLOBALS['TL_LANG']['MONTHS'][date('m',$event['startTime'])-1].' '.date('Y',$event['startTime']);
 			if($curDate != $date)
 			{
 				$date = $curDate;
 				$strBuffer .= '<div class="tl_content_header">'.$curDate.'</div>';
 			}
-			
+
 			$strBuffer .= '<div class="tl_content">';
 			$strBuffer .= '<input type="checkbox" id="event'.$event['id'].'_'.$event['startTime'].'" class="tl_checkbox" name="events[]" value="'.$event['id'].'_'.$event['startTime'].'"';
 			if(in_array($event['id'].'_'.$event['startTime'], $this->value)) $strBuffer .= ' CHECKED';
@@ -106,10 +108,10 @@ class WidgetEventchooser extends Widget
 			$strBuffer .= '<strong>'.$event['title'].'</strong></label>';
 			$strBuffer .= '</div>';
 		}
-		
+
 		return $strBuffer;
 	}
-	
+
 	/**
 	 * get all events
 	 * @return array
@@ -118,13 +120,13 @@ class WidgetEventchooser extends Widget
 	{
 		$intStart = time();
 		$intEnd = $intStart + 360*3600*24;
-		
+
 		// Get events of the current period
-		$objEvents = $this->Database->prepare("SELECT e.startTime, e.endTime, e.id,e.title, e.recurring, e.recurrences, e.repeatEach, c.title AS calendar 
+		$objEvents = $this->Database->prepare("SELECT e.startTime, e.endTime, e.id,e.title, e.recurring, e.recurrences, e.repeatEach, c.title AS calendar
 											   FROM tl_calendar_events AS e
 											   LEFT JOIN tl_calendar AS c ON (e.pid = c.id)
 											   WHERE
-											   		published='1' ". // only published events 
+											   		published='1' ". // only published events
 												   "AND (
 														startTime >= $intStart AND endTime <= $intEnd ". // all events in the period
 													   "OR recurring='1' AND (". // all recurring events which are not ending bevore intStart
@@ -141,7 +143,7 @@ class WidgetEventchooser extends Widget
 		$arrEvents = array();
 		while ($objEvents->next())
 		{
-			
+
 			// Recurring events
 			if ($objEvents->recurring)
 			{
@@ -150,7 +152,7 @@ class WidgetEventchooser extends Widget
 
 				while ($objEvents->endTime < $intEnd)
 				{
-					if ($objEvents->recurrences > 0 && $count++ >= $objEvents->recurrences)
+					if ($objEvents->recurrences > 0 && $count++ > $objEvents->recurrences)
 					{
 						break;
 					}
@@ -163,11 +165,6 @@ class WidgetEventchooser extends Widget
 						break;
 					}
 
-					$strtotime = '+ ' . $arg . ' ' . $unit;
-
-					$objEvents->startTime = strtotime($strtotime, $objEvents->startTime);
-					$objEvents->endTime = strtotime($strtotime, $objEvents->endTime);
-
 					// Skip events outside the scope
 					if ($objEvents->startTime < $intStart)
 					{
@@ -175,6 +172,12 @@ class WidgetEventchooser extends Widget
 					}
 
 					$arrEvents[] = $objEvents->row();
+
+					// calculate next time after adding, otherwise the first event date is skipped!
+					$strtotime = '+ ' . $arg . ' ' . $unit;
+
+					$objEvents->startTime = strtotime($strtotime, $objEvents->startTime);
+					$objEvents->endTime = strtotime($strtotime, $objEvents->endTime);
 				}
 			}
 			else
@@ -192,12 +195,12 @@ class WidgetEventchooser extends Widget
 			$arrCalendars[$k] = $event['calendar'];
 			$arrDates[$k] = $event['startTime'];
 		}
-		
+
 		array_multisort($arrCalendars,$arrDates,$arrEvents);
-		
+
 		return $arrEvents;
-		
-	
+
+
 	}
 }
 
