@@ -14,3 +14,5 @@ endif; // addImage
 
 echo $this->text;
 ?>
+
+
