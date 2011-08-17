@@ -62,7 +62,7 @@
 		<?php if ($this->headline): ?>
 		<<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
 		<?php endif; ?>
-		<?php echo $this->text ?>
+		<?php echo $this->text; ?>
 	</td>
 </tr>
 <?php endif; ?>

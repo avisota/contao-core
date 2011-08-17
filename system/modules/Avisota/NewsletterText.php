@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -36,7 +36,7 @@
 /**
  * Class NewsletterText
  *
- * 
+ *
  * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -55,7 +55,7 @@ class NewsletterText extends NewsletterElement
 	 * @var string
 	 */
 	protected $strTemplatePlain = 'nle_text_plain';
-	
+
 	/**
 	 * Compile the current element
 	 */
@@ -74,7 +74,7 @@ class NewsletterText extends NewsletterElement
 				$this->String->encodeEmail($this->text)
 			);
 			break;
-			
+
 		case NL_PLAIN:
 			if ($this->plain)
 			{
@@ -92,7 +92,7 @@ class NewsletterText extends NewsletterElement
 		if ($this->addImage && strlen($this->singleSRC) && is_file(TL_ROOT . '/' . $this->singleSRC))
 		{
 			$this->addImageToTemplate($this->Template, $this->arrData);
-			
+
 			$this->Template->src = $this->extendURL($this->Template->src);
 			if ($this->Template->href)
 			{

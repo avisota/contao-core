@@ -11,7 +11,7 @@
 <table class="before" align="center" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<?php if (isset($GLOBALS['objPage'])): ?><div id="onlinelink"><a href="{{newsletter::href}}"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['online'] ?></a></div><?php endif ?>
+			<?php if (!isset($GLOBALS['objPage'])): ?><div id="onlinelink"><a href="{{newsletter::href}}"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['online'] ?></a></div><?php endif ?>
 		</td>
 	</tr>
 </table>
@@ -133,7 +133,7 @@
 <table class="after" align="center" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<?php if (isset($GLOBALS['objPage'])): ?><div id="unsubscribe">{{newsletter::unsubscribe::html}}</div><?php endif ?>
+			<?php if (!isset($GLOBALS['objPage'])): ?><div id="unsubscribe">{{newsletter::unsubscribe::html}}</div><?php endif ?>
 		</td>
 	</tr>
 </table>

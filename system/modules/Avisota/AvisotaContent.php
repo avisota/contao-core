@@ -129,8 +129,7 @@ class AvisotaContent extends Controller
 		$this->Static->setCategory($objCategory);
 		$this->Static->setNewsletter($objNewsletter);
 
-		$GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous']['outbox_source'] = 'list:0';
-		$this->Static->setRecipient($GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous']);
+		$this->Static->setRecipient($this->Base->getPreviewRecipient('anonymous'));
 
 		$personalized = 'anonymous';
 

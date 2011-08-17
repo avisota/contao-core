@@ -70,7 +70,14 @@ class AvisotaBase extends Controller
 	{
 		parent::__construct();
 		$this->import('AvisotaStatic', 'Static');
-		$this->import('BackendUser', 'User');
+		if (TL_MODE == 'FE')
+		{
+			$this->import('FrontendUser', 'User');
+		}
+		else
+		{
+			$this->import('BackendUser', 'User');
+		}
 		$this->import('Database');
 		$this->import('DomainLink');
 		$this->User->authenticate();
@@ -194,7 +201,105 @@ class AvisotaBase extends Controller
 
 		$arrRecipient['outbox_source'] = 'list:0';
 
+		$this->finalizeRecipientArray($arrRecipient);
+
 		return $arrRecipient;
+	}
+
+
+	/**
+	 * Update missing informations to the recipient array.
+	 *
+	 * @param array $arrRecipient
+	 * @return string The personalized state.
+	 */
+	public function finalizeRecipientArray(&$arrRecipient)
+	{
+		// set the firstname and lastname field if missing
+		if (empty($arrRecipient['firstname']) && empty($arrRecipient['lastname']) && !empty($arrRecipient['name']))
+		{
+			list($arrRecipient['firstname'], $arrRecipient['lastname']) = explode(' ', $arrRecipient['name'], 2);
+		}
+
+		// set the name field, if missing
+		if (empty($arrRecipient['name']) && !(empty($arrRecipient['firstname']) && empty($arrRecipient['lastname'])))
+		{
+			$arrRecipient['name'] = trim($arrRecipient['firstname'] . ' ' . $arrRecipient['lastname']);
+		}
+
+		// set the fullname field, if missing
+		if (empty($arrRecipient['fullname']) && !empty($arrRecipient['name']))
+		{
+			$arrRecipient['fullname'] = trim($arrRecipient['title'] . ' ' . $arrRecipient['name']);
+		}
+
+		// set the shortname field, if missing
+		if (empty($arrRecipient['shortname']) && !empty($arrRecipient['firstname']))
+		{
+			$arrRecipient['shortname'] = $arrRecipient['firstname'];
+		}
+
+		// a recipient is anonymous, if he has no name
+		if (!empty($arrRecipient['name']))
+		{
+			$personalized = 'private';
+		}
+		else
+		{
+			$personalized = 'anonymous';
+		}
+
+		// extend with maybe missing anonymous informations
+		$this->extendArray($GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'], $arrRecipient);
+
+		// update salutation
+		if (empty($arrRecipient['salutation']))
+		{
+			if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrRecipient['gender']]))
+			{
+				$arrRecipient['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrRecipient['gender']];
+			}
+			else
+			{
+				$arrRecipient['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation'];
+			}
+		}
+
+		// replace placeholders in salutation
+		preg_match_all('#\{([^\}]+)\}#U', $arrRecipient['salutation'], $matches, PREG_SET_ORDER);
+		foreach ($matches as $match)
+		{
+			$arrRecipient['salutation'] = str_replace($match[0], $arrRecipient[$match[1]], $arrRecipient['salutation']);
+		}
+
+		return $personalized;
+	}
+
+
+	/**
+	 * Extend the target array with missing fields from the source array.
+	 *
+	 * @param array $arrSource
+	 * @param array $arrTarget
+	 */
+	public function extendArray($arrSource, &$arrTarget)
+	{
+		if (is_array($arrSource))
+		{
+			foreach ($arrSource as $k=>$v)
+			{
+				if (   !empty($v)
+					&& empty($arrTarget[$k])
+					&& !in_array($k, array(
+						// tl_avisota_recipient fields
+						'id', 'pid', 'tstamp', 'confirmed', 'token', 'addedOn', 'addedBy',
+						// tl_member fields
+						'password', 'session')))
+				{
+					$arrTarget[$k] = $v;
+				}
+			}
+		}
 	}
 }
 ?>

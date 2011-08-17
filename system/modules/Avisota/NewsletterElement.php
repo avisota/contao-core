@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -55,7 +55,7 @@ abstract class NewsletterElement extends Frontend
 	 * @var string
 	 */
 	protected $strTemplatePlain = null;
-	
+
 	/**
 	 * Current record
 	 * @var array
@@ -109,16 +109,16 @@ abstract class NewsletterElement extends Frontend
 		return $this->arrData[$strKey];
 	}
 
-	
+
 	/**
 	 * Extend the url to an absolute url.
 	 */
 	public function extendURL($strUrl)
 	{
 		$this->import('DomainLink');
-		
+
 		$arrRow = null;
-		
+
 		// get the newsletter category jump to page
 		$objCategory = $this->Database->prepare("
 				SELECT
@@ -140,10 +140,10 @@ abstract class NewsletterElement extends Frontend
 		{
 			$objPage = null;
 		}
-		
+
 		return $this->DomainLink->absolutizeUrl($strUrl, $objPage);
 	}
-	
+
 
 	/**
 	 * Replace an image tag.
@@ -154,8 +154,8 @@ abstract class NewsletterElement extends Frontend
 		// insert alt or title text
 		return sprintf('%s<%s>', $arrMatch[3] ? $arrMatch[3] . ': ' : ($arrMatch[2] ? $arrMatch[2] . ': ' : ''), $this->extendURL($arrMatch[1]));
 	}
-	
-	
+
+
 	/**
 	 * Replace an link tag.
 	 * @param array $arrMatch
@@ -165,8 +165,8 @@ abstract class NewsletterElement extends Frontend
 		// insert title text
 		return sprintf('%s%s <%s>', $arrMatch[3], $arrMatch[2] ? ' (' . $arrMatch[2] . ')' : '', $this->extendURL($arrMatch[1]));
 	}
-	
-	
+
+
 	/**
 	 * Generate a plain text from html.
 	 */
@@ -179,7 +179,7 @@ abstract class NewsletterElement extends Frontend
 			'',
 			$strText
 		);
-		
+
 		// replace bold, italic and underlined text
 		$strText = preg_replace
 		(
@@ -187,7 +187,7 @@ abstract class NewsletterElement extends Frontend
 			array('*', '_', '+'),
 			$strText
 		);
-		
+
 		// replace images
 		$strText = preg_replace_callback
 		(
@@ -195,7 +195,7 @@ abstract class NewsletterElement extends Frontend
 			array(&$this, 'replaceImage'),
 			$strText
 		);
-		
+
 		// replace links
 		$strText = preg_replace_callback
 		(
@@ -203,7 +203,7 @@ abstract class NewsletterElement extends Frontend
 			array(&$this, 'replaceLink'),
 			$strText
 		);
-		
+
 		// replace line breaks and paragraphs
 		$strText = str_replace
 		(
@@ -211,20 +211,20 @@ abstract class NewsletterElement extends Frontend
 			array("\n", "\n\n", "\n", "\n"),
 			$strText
 		);
-		
+
 		// strip all remeaning tags
 		$strText = strip_tags($strText);
-		
+
 		// decode html entities
 		$strText = html_entity_decode($strText);
-		
+
 		// wrap the lines
 		$strText = wordwrap($strText);
-		
+
 		return $strText;
 	}
 
-	
+
 	/**
 	 * Add an image to a template
 	 * @param object
@@ -292,8 +292,8 @@ abstract class NewsletterElement extends Frontend
 		$objTemplate->caption = $arrItem['caption'];
 		$objTemplate->addImage = true;
 	}
-	
-	
+
+
 	/**
 	 * Parse the html template
 	 * @return string
@@ -304,9 +304,9 @@ abstract class NewsletterElement extends Frontend
 		{
 			return '';
 		}
-		
+
 		$this->arrStyle = array();
-		
+
 		if (strlen($this->arrData['space'][0]))
 		{
 			$this->arrStyle[] = 'margin-top:'.$this->arrData['space'][0].'px;';
@@ -350,9 +350,9 @@ abstract class NewsletterElement extends Frontend
 		{
 			return '';
 		}
-		
+
 		$this->arrStyle = array();
-		
+
 		$this->Template = new FrontendTemplate($this->strTemplatePlain);
 		$this->Template->setData($this->arrData);
 
@@ -373,7 +373,7 @@ abstract class NewsletterElement extends Frontend
 
 		return $this->Template->parse();
 	}
-	
+
 
 	/**
 	 * Compile the current element

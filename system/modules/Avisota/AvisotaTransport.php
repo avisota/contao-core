@@ -220,7 +220,7 @@ class AvisotaTransport extends Backend
 			$arrRecipient = $this->Base->getPreviewRecipient($arrSession['personalized']);
 			$arrRecipient['email'] = $strEmail;
 		}
-		$personalized = $this->finalizeRecipientArray($arrRecipient);
+		$personalized = $this->Base->finalizeRecipientArray($arrRecipient);
 		$this->Static->setRecipient($arrRecipient);
 
 		// create the contents
@@ -394,7 +394,7 @@ class AvisotaTransport extends Backend
 						->execute($objRecipients->recipientID);
 					if ($objData->next())
 					{
-						$this->extendArray($objData->row(), $arrRecipient);
+						$this->Base->extendArray($objData->row(), $arrRecipient);
 					}
 				}
 
@@ -406,7 +406,7 @@ class AvisotaTransport extends Backend
 						->execute($objRecipients->recipientID);
 					if ($objData->next())
 					{
-						$this->extendArray($objData->row(), $arrRecipient);
+						$this->Base->extendArray($objData->row(), $arrRecipient);
 					}
 				}
 				// merge member details
@@ -417,11 +417,11 @@ class AvisotaTransport extends Backend
 						->execute($objRecipients->email);
 					if ($objData->next())
 					{
-						$this->extendArray($objData->row(), $arrRecipient);
+						$this->Base->extendArray($objData->row(), $arrRecipient);
 					}
 				}
 
-				$personalized = $this->finalizeRecipientArray($arrRecipient);
+				$personalized = $this->Base->finalizeRecipientArray($arrRecipient);
 
 				$this->Static->setRecipient($arrRecipient);
 
@@ -616,89 +616,6 @@ class AvisotaTransport extends Backend
 	{
 		$objPrepareTrackingHelper = new PrepareTrackingHelper($objNewsletter, $objCategory, $objRecipient);
 		return preg_replace_callback('#<((http|ftp)s?:\/\/.+)>#U', array(&$objPrepareTrackingHelper, 'replacePlain'), $strPlain);
-	}
-
-	protected function finalizeRecipientArray(&$arrRecipient)
-	{
-		// set the firstname and lastname field if missing
-		if (empty($arrRecipient['firstname']) && empty($arrRecipient['lastname']) && !empty($arrRecipient['name']))
-		{
-			list($arrRecipient['firstname'], $arrRecipient['lastname']) = explode(' ', $arrRecipient['name'], 2);
-		}
-
-		// set the name field, if missing
-		if (empty($arrRecipient['name']) && !(empty($arrRecipient['firstname']) && empty($arrRecipient['lastname'])))
-		{
-			$arrRecipient['name'] = trim($arrRecipient['firstname'] . ' ' . $arrRecipient['lastname']);
-		}
-
-		// set the fullname field, if missing
-		if (empty($arrRecipient['fullname']) && !empty($arrRecipient['name']))
-		{
-			$arrRecipient['fullname'] = trim($arrRecipient['title'] . ' ' . $arrRecipient['name']);
-		}
-
-		// set the shortname field, if missing
-		if (empty($arrRecipient['shortname']) && !empty($arrRecipient['firstname']))
-		{
-			$arrRecipient['shortname'] = $arrRecipient['firstname'];
-		}
-
-		// a recipient is anonymous, if he has no name
-		if (!empty($arrRecipient['name']))
-		{
-			$personalized = 'private';
-		}
-		else
-		{
-			$personalized = 'anonymous';
-		}
-
-		// extend with maybe missing anonymous informations
-		$this->extendArray($GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'], $arrRecipient);
-
-		// update salutation
-		if (empty($arrRecipient['salutation']))
-		{
-			if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrRecipient['gender']]))
-			{
-				$arrRecipient['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrRecipient['gender']];
-			}
-			else
-			{
-				$arrRecipient['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation'];
-			}
-		}
-
-		// replace placeholders in salutation
-		preg_match_all('#\{([^\}]+)\}#U', $arrRecipient['salutation'], $matches, PREG_SET_ORDER);
-		foreach ($matches as $match)
-		{
-			$arrRecipient['salutation'] = str_replace($match[0], $arrRecipient[$match[1]], $arrRecipient['salutation']);
-		}
-
-		return $personalized;
-	}
-
-
-	protected function extendArray($arrSource, &$arrTarget)
-	{
-		if (is_array($arrSource))
-		{
-			foreach ($arrSource as $k=>$v)
-			{
-				if (   !empty($v)
-					&& empty($arrTarget[$k])
-					&& !in_array($k, array(
-						// tl_avisota_recipient fields
-						'id', 'pid', 'tstamp', 'confirmed', 'token', 'addedOn', 'addedBy',
-						// tl_member fields
-						'password', 'session')))
-				{
-					$arrTarget[$k] = $v;
-				}
-			}
-		}
 	}
 }
 
