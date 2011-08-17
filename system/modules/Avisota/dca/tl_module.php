@@ -282,7 +282,7 @@ class tl_module_avisota extends Backend
 
 		return array_merge
 		(
-			array('mod_avisota_subscription' => 'mod_avisota_subscription'),
+			array('mod_avisota_subscription'),
 			$this->getTemplateGroup('subscription_', $intPid)
 		);
 	}
