@@ -109,8 +109,6 @@ class Tracking extends Frontend
 				exit;
 			}
 
-			$this->import('FrontendUser', 'User');
-			$this->User->authenticate();
 			$objHandler = new $GLOBALS['TL_PTY']['error_404']();
 			$objHandler->generate('nltrack.php');
 		}
