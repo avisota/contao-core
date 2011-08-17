@@ -47,8 +47,8 @@ class AvisotaPreview extends Backend
 {
 	public function __construct()
 	{
-		parent::__construct();
 		$this->import('BackendUser', 'User');
+		parent::__construct();
 		$this->import('AvisotaBase', 'Base');
 		$this->import('AvisotaContent', 'Content');
 		$this->import('AvisotaStatic', 'Static');
