@@ -9,11 +9,13 @@
 </head>
 <body>
 <table class="before" align="center" cellpadding="0" cellspacing="0" border="0">
-	<tr>
-		<td>
-			<?php if (!isset($GLOBALS['objPage'])): ?><div id="onlinelink"><a href="{{newsletter::href}}"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['online'] ?></a></div><?php endif ?>
-		</td>
-	</tr>
+	<tbody>
+		<tr>
+			<td>
+				<?php if (!isset($GLOBALS['objPage'])): ?><div id="onlinelink"><a href="{{newsletter::href}}"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['online'] ?></a></div><?php endif ?>
+			</td>
+		</tr>
+	</tbody>
 </table>
 <table class="wrapper" align="center" cellpadding="0" cellspacing="0" border="0">
 	<tbody>
@@ -29,11 +31,13 @@
 	</tbody>
 </table>
 <table class="after" align="center" cellpadding="0" cellspacing="0" border="0">
-	<tr>
-		<td>
-			<?php if (!isset($GLOBALS['objPage'])): ?><div id="unsubscribe">{{newsletter::unsubscribe::html}}</div><?php endif ?>
-		</td>
-	</tr>
+	<tbody>
+		<tr>
+			<td>
+				<?php if (!isset($GLOBALS['objPage'])): ?><div id="unsubscribe">{{newsletter::unsubscribe::html}}</div><?php endif ?>
+			</td>
+		</tr>
+	</tbody>
 </table>
 </body>
 </html>
