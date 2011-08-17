@@ -15,5 +15,6 @@
 <?php if ($this->footer): echo $this->footer; ?>
 
 <?php endif; ?>
+
 --------------------------------------------------------------------------------
 {{newsletter::unsubscribe::plain}}

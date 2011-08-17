@@ -134,7 +134,7 @@ class AvisotaContent extends Controller
 
 		$personalized = 'anonymous';
 
-		return $this->replaceInsertTags($this->Content->generateHtml($objNewsletter, $objCategory, $personalized));
+		return $this->replaceInsertTags($this->generateHtml($objNewsletter, $objCategory, $personalized));
 	}
 
 
