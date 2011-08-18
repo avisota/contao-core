@@ -53,6 +53,7 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy']     = array('Hinzugefügt
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['recipient_legend'] = 'Abonnent';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['personals_legend'] = 'Persönliche Daten';
 
 
 /**
