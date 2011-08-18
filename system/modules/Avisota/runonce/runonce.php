@@ -59,6 +59,10 @@ class AvisotaRunonce extends Controller
 	{
 		$this->upgrade0_4_5();
 		$this->upgrade1_5_0();
+
+		// delete this runonce and reload
+		unlink(__FILE__);
+		$this->reload();
 	}
 
 
