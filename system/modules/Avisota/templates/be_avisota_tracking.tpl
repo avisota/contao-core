@@ -17,7 +17,7 @@
 <strong><?php echo $GLOBALS['TL_LANG']['avisota_tracking']['newsletter_label']; ?>:</strong>
 <select name="newsletter" class="tl_select" onchange="this.form.submit()">
 <?php foreach ($this->newsletters as $id=>$newsletter): ?>
-<option value="<?php echo $id; ?>"<?php if ($this->newsletter->id == $id): ?> selected="selected"<?php endif; ?>><?php echo $newsletter; ?></option>
+<option value="<?php echo $id; ?>"<?php if ($this->newsletter['id'] == $id): ?> selected="selected"<?php endif; ?>><?php echo $newsletter; ?></option>
 <?php endforeach; ?>
 </select>
 </div>
