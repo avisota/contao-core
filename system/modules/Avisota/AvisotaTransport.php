@@ -221,11 +221,21 @@ class AvisotaTransport extends Backend
 			$arrRecipient['email'] = $strEmail;
 		}
 		$personalized = $this->Base->finalizeRecipientArray($arrRecipient);
-		$this->Static->setRecipient($arrRecipient);
+
+		// register static data
+		$this->Static->set($this->objCategory, $this->objNewsletter, $arrRecipient);
 
 		// create the contents
-		$plain = $this->Content->prepareBeforeSending($this->Content->generatePlain($this->objNewsletter, $this->objCategory, $personalized));
-		$html = $this->Content->prepareBeforeSending($this->Content->generateHtml($this->objNewsletter, $this->objCategory, $personalized));
+		$plain = $this->Content->generatePlain($this->objNewsletter, $this->objCategory, $personalized);
+		$html = $this->Content->generateHtml($this->objNewsletter, $this->objCategory, $personalized);
+
+		// prepare content for sending, e.a. replace specific insert tags
+		$plain = $this->Content->prepareBeforeSending($plain);
+		$html  = $this->Content->prepareBeforeSending($html);
+
+		// replace insert tags
+		$plain = $this->replaceInsertTags($plain);
+		$html  = $this->replaceInsertTags($html);
 
 		// Send
 		$objEmail = $this->generateEmailObject();
@@ -423,7 +433,7 @@ class AvisotaTransport extends Backend
 
 				$personalized = $this->Base->finalizeRecipientArray($arrRecipient);
 
-				$this->Static->setRecipient($arrRecipient);
+				$this->Static->set($this->objCategory, $this->objNewsletter, $arrRecipient);
 
 				// create the contents
 				$plain = $this->Content->generatePlain($this->objNewsletter, $this->objCategory, $personalized);
@@ -432,6 +442,10 @@ class AvisotaTransport extends Backend
 				// prepare content for sending, e.a. replace specific insert tags
 				$plain = $this->Content->prepareBeforeSending($plain);
 				$html  = $this->Content->prepareBeforeSending($html);
+
+				// replace insert tags
+				$plain = $this->replaceInsertTags($plain);
+				$html  = $this->replaceInsertTags($html);
 
 				// Send
 				$objEmail = $this->generateEmailObject();
@@ -542,13 +556,11 @@ class AvisotaTransport extends Backend
 	 */
 	protected function sendNewsletter(Email $objEmail, $plain, $html, $arrRecipient, $personalized)
 	{
-		$this->Static->set($this->objCategory, $this->objNewsletter, $arrRecipient);
-
-		// Prepare text content
-		$objEmail->text = $this->replaceInsertTags($plain);
+		// set text content
+		$objEmail->text = $plain;
 
 		// Prepare html content
-		$objEmail->html = $this->replaceInsertTags($html);
+		$objEmail->html = $html;
 		$objEmail->imageDir = TL_ROOT . '/';
 
 		$blnFailed = false;
@@ -586,6 +598,8 @@ class AvisotaTransport extends Backend
 	 */
 	protected function prepareTrackingHtml($objNewsletter, $objCategory, $objRecipient, $strHtml)
 	{
+		$strHtml = $strHtml;
+
 		$objPrepareTrackingHelper = new PrepareTrackingHelper($objNewsletter, $objCategory, $objRecipient);
 		$strHtml = preg_replace_callback('#href=["\']((http|ftp)s?:\/\/.+)["\']#U', array(&$objPrepareTrackingHelper, 'replaceHtml'), $strHtml);
 
@@ -614,6 +628,8 @@ class AvisotaTransport extends Backend
 	 */
 	protected function prepareTrackingPlain($objNewsletter, $objCategory, $objRecipient, $strPlain)
 	{
+		$strPlain = $strPlain;
+
 		$objPrepareTrackingHelper = new PrepareTrackingHelper($objNewsletter, $objCategory, $objRecipient);
 		return preg_replace_callback('#<((http|ftp)s?:\/\/.+)>#U', array(&$objPrepareTrackingHelper, 'replacePlain'), $strPlain);
 	}
