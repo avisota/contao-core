@@ -113,6 +113,13 @@ class AvisotaTracking extends BackendModule
 			$arrNewsletters[$objNewsletters->id] = $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $objNewsletters->sendOn) . ' ' . $objNewsletters->subject;
 		}
 
+		// cancel, if no newsletters
+		if (count($arrNewsletters) == 0)
+		{
+			$this->Template->empty = true;
+			return;
+		}
+
 		# find last sended newsletter
 		if (!$intNewsletter)
 		{
@@ -125,9 +132,14 @@ class AvisotaTracking extends BackendModule
 		{
 			$this->Template->newsletter = $objNewsletter->row();
 		}
+
+		// Newsletter does not exists, use another one and reload
 		else
 		{
-			$this->redirect('contao/main.php?act=error');
+			$arrIds = array_keys($arrNewsletters);
+			$intNewsletter = array_shift($arrIds);
+			$this->Session->set('AVISOTA_TRACKING', $intNewsletter);
+			$this->reload();
 		}
 
 		$this->blnUseHighstock = ($GLOBALS['TL_CONFIG']['avisota_chart_highstock'] && $GLOBALS['TL_CONFIG']['avisota_chart_highstock_confirmed']) ? true : false;

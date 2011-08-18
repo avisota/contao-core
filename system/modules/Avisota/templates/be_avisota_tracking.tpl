@@ -1,3 +1,6 @@
+<?php if ($this->empty): ?>
+<p class="tl_gerror"><?php echo $GLOBALS['TL_LANG']['avisota_tracking']['empty_stats']; ?></p>
+<?php else: ?>
 <form action="contao/main.php?do=avisota_tracking" class="tl_form" method="post">
 <div class="tl_formbody">
 <input type="hidden" name="FORM_SUBMIT" value="tl_filters">
@@ -205,3 +208,4 @@ $(window).addEvent('load', function() {
 </script>
 
 <br>
+<?php endif; ?>
