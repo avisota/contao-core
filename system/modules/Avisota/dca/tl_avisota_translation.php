@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -60,7 +60,7 @@ $GLOBALS['TL_DCA']['tl_avisota_translation'] = array
 	(
 		'default'                     => '{translation_legend}'
 	),
-	
+
 	// Fields
 	'fields' => array()
 );
@@ -75,8 +75,8 @@ class tl_avisota_translation extends Backend
 		parent::__construct();
 		$this->import('BackendUser', 'User');
 	}
-	
-	
+
+
 	/**
 	 * Build the palette and field list.
 	 */
@@ -84,96 +84,125 @@ class tl_avisota_translation extends Backend
 	{
 		foreach ($GLOBALS['TL_LANG']['avisota'] as $k=>$v)
 		{
-			$this->_buildFields($k, $v);
+			$this->_buildFields($k, $v, 'avisota');
+		}
+
+		$GLOBALS['TL_DCA']['tl_avisota_translation']['palettes']['default'] .= ';{recipient_legend}';
+		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $k=>$v)
+		{
+			if (isset($v['inputType']) && $k != 'confirmed')
+			{
+				$this->_buildFields($k, $GLOBALS['TL_LANG']['tl_avisota_recipient'][$k], 'tl_avisota_recipient', false, true);
+			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * Recursive function.
-	 * 
+	 *
 	 * @param string $k
 	 * @param mixed $v
 	 */
-	protected function _buildFields($k, $v)
+	protected function _buildFields($k, $v, $prefix, $blnLegend = true, $blnOnlyIndex0 = false)
 	{
 		if (is_array($v))
 		{
-			if (strpos($k, '__') === false)
+			if (strpos($k, '__') === false && $blnLegend)
 			{
 				$GLOBALS['TL_DCA']['tl_avisota_translation']['palettes']['default'] .= ';{' . $k . '_legend}';
 			}
 			foreach ($v as $kk=>$vv)
 			{
-				$this->_buildFields($k . '__' . $kk, $vv, $dc);
+				if ($blnOnlyIndex0 && is_int($kk) && $kk == 0 && !is_array($vv) || !is_int($kk))
+				{
+					$this->_buildFields($k . '__' . $kk, $vv, $prefix, $blnLegend, $blnOnlyIndex0);
+				}
 			}
 		}
 		else
 		{
-			$GLOBALS['TL_DCA']['tl_avisota_translation']['palettes']['default'] .= ',' . $k;
-			
+			$GLOBALS['TL_DCA']['tl_avisota_translation']['palettes']['default'] .= ',' . $prefix . ':' . $k;
+
 			switch ($k)
 			{
 			case 'subscribe__mail__html':
 			case 'unsubscribe__mail__html':
-				$GLOBALS['TL_DCA']['tl_avisota_translation']['fields'][$k] = array
+			case 'notification__mail__html':
+				$GLOBALS['TL_DCA']['tl_avisota_translation']['fields'][$prefix . ':' . $k] = array
 				(
-					'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_translation'][$k],
+					'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_translation'][$prefix . ':' . $k],
 					'inputType'               => 'textarea',
 					'eval'                    => array('rte'=>'tinyNews', 'allowHtml'=>true)
 				);
 				break;
-				
+
 			case 'subscribe__mail__plain':
 			case 'unsubscribe__mail__plain':
-				$GLOBALS['TL_DCA']['tl_avisota_translation']['fields'][$k] = array
+			case 'notification__mail__plain':
+				$GLOBALS['TL_DCA']['tl_avisota_translation']['fields'][$prefix . ':' . $k] = array
 				(
-					'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_translation'][$k],
+					'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_translation'][$prefix . ':' . $k],
 					'inputType'               => 'textarea',
 					'eval'                    => array('allowHtml'=>true)
 				);
 				break;
-				
+
 			default:
-				$GLOBALS['TL_DCA']['tl_avisota_translation']['fields'][$k] = array
+				$GLOBALS['TL_DCA']['tl_avisota_translation']['fields'][$prefix . ':' . $k] = array
 				(
-					'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_translation'][$k],
+					'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_translation'][$prefix . ':' . $k],
 					'inputType'               => 'text',
 					'eval'                    => array('tl_class'=>'long', 'allowHtml'=>true)
 				);
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * Load translations.
-	 * 
+	 *
 	 * @param DataContainer $dc
 	 */
 	public function onload_callback(DataContainer $dc)
 	{
+		define('TL_AVISOTA_TRANSLATION', '1');
+
+		$this->loadLanguageFile('avisota');
+		$this->loadLanguageFile('tl_avisota_recipient');
+		$this->loadDataContainer('tl_avisota_recipient');
+
+		$this->buildFields();
+
 		foreach ($GLOBALS['TL_LANG']['avisota'] as $k=>$v)
 		{
-			$this->setData($k, $v, $dc);
+			$this->setData($k, $v, $dc, 'avisota');
+		}
+		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $k=>$v)
+		{
+			if (isset($v['inputType']) && $k != 'confirmed')
+			{
+				$this->setData($k, $GLOBALS['TL_LANG']['tl_avisota_recipient'][$k], $dc, 'tl_avisota_recipient');
+			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * Save translations.
-	 * 
+	 *
 	 * @param DataContainer $dc
 	 */
 	public function onsubmit_callback(DataContainer $dc)
 	{
 		$objFile = new File('system/config/langconfig.php');
-		
+
 		$strContent = '';
 		$arrLines = $objFile->getContentAsArray();
-		
+
 		$n = preg_match('/^\?>/', $arrLines[count($arrLines)-1]) ? count($arrLines)-1 : count($arrLines);
-		
+
 		for ($i=0; $i<$n; $i++)
 		{
 			if (preg_match('/^### AVISOTA TRANSLATIONS ' . $GLOBALS['TL_LANGUAGE'] . ' START ###/', $arrLines[$i]))
@@ -191,40 +220,40 @@ class tl_avisota_translation extends Backend
 				$strContent .= $arrLines[$i] . "\n";
 			}
 		}
-		
+
 		$strContent .= $this->generateTranslationLines($dc);
 		$strContent .= '?>';
-		
+
 		$objFile->write($strContent);
 	}
-	
-	
+
+
 	/**
 	 * Set the field values.
-	 * 
+	 *
 	 * @param unknown_type $k
 	 * @param unknown_type $v
 	 * @param DataContainer $dc
 	 */
-	protected function setData($k, $v, DataContainer $dc)
+	protected function setData($k, $v, DataContainer $dc, $strGroup)
 	{
 		if (is_array($v))
 		{
 			foreach ($v as $kk=>$vv)
 			{
-				$this->setData($k . '__' . $kk, $vv, $dc);
+				$this->setData($k . '__' . $kk, $vv, $dc, $strGroup);
 			}
 		}
 		else
 		{
-			$dc->setData($k, $v);
+			$dc->setData($strGroup . ':' . $k, $v);
 		}
 	}
 
-	
+
 	/**
 	 * Generate the new translations php code.
-	 * 
+	 *
 	 * @param DataContainer $dc
 	 * @return string
 	 */
@@ -235,43 +264,53 @@ class tl_avisota_translation extends Backend
 		$strBuffer .= "{\n";
 		foreach ($GLOBALS['TL_LANG']['avisota'] as $k=>$v)
 		{
-			$strBuffer .= $this->getData($k, $v, $dc, sprintf("['%s']", $k));
+			$strBuffer .= $this->getData($k, $v, $dc, sprintf("['%s']", $k), 'avisota');
 		}
+		$strBuffer .= "  if (TL_MODE == 'FE' || defined('TL_AVISOTA_TRANSLATION'))\n";
+		$strBuffer .= "  {\n";
+		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $k=>$v)
+		{
+			if (isset($v['inputType']) && $k != 'confirmed')
+			{
+				$strBuffer .= $this->getData($k, $GLOBALS['TL_LANG']['tl_avisota_recipient'][$k], $dc, sprintf("['%s']", $k), 'tl_avisota_recipient');
+			}
+		}
+		$strBuffer .= "  }\n";
 		$strBuffer .= "}\n";
 		$strBuffer .= "### AVISOTA TRANSLATIONS $GLOBALS[TL_LANGUAGE] STOP ###\n";
 		return $strBuffer;
 	}
-	
-	
+
+
 	/**
 	 * Get the php code.
-	 * 
+	 *
 	 * @param string $k
 	 * @param mixed $v
 	 * @param DataContainer $dc
 	 * @param string $strPath
 	 * @return string
 	 */
-	protected function getData($k, $v, DataContainer $dc, $strPath)
+	protected function getData($k, $v, DataContainer $dc, $strPath, $strGroup)
 	{
 		$strBuffer = '';
 		if (is_array($v))
 		{
 			foreach ($v as $kk=>$vv)
 			{
-				$strBuffer .= $this->getData($k . '__' . $kk, $vv, $dc, sprintf("%s['%s']", $strPath, $kk));
+				$strBuffer .= $this->getData($k . '__' . $kk, $vv, $dc, sprintf("%s[%s]", $strPath, is_numeric($kk) ? $kk : "'" . $kk . "'"), $strGroup);
 			}
 		}
 		else
 		{
-			$strBuffer .= sprintf("\t\$GLOBALS['TL_LANG']['avisota']%s = '%s';\n", $strPath, str_replace(array('\\', "'"), array('\\\\', "\\'"), $dc->getData($k)));
+			$varValue = $dc->getData($strGroup . ':' . $k);
+			if ($varValue)
+			{
+				$strBuffer .= sprintf("\t\$GLOBALS['TL_LANG']['%s']%s = '%s';\n", $strGroup, $strPath, str_replace(array('\\', "'"), array('\\\\', "\\'"), $varValue));
+			}
 		}
 		return $strBuffer;
 	}
 }
-
-$this->loadLanguageFile('avisota');
-$this->import('tl_avisota_translation');
-$this->tl_avisota_translation->buildFields();
 
 ?>

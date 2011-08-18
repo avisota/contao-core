@@ -42,8 +42,6 @@ $GLOBALS['TL_LANG']['avisota']['latest_link'] = '<a href="%s" target="_blank">Un
  * Subscription
  */
 $GLOBALS['TL_LANG']['avisota']['subscription']['preamble'] = 'Melden Sie sich zu unserem Newsletter an.';
-$GLOBALS['TL_LANG']['avisota']['subscription']['lists']    = 'Verteiler';
-$GLOBALS['TL_LANG']['avisota']['subscription']['email']    = 'E-Mail Adresse';
 $GLOBALS['TL_LANG']['avisota']['subscription']['empty']    = 'Sie sind bereits zu unserem Newsletter angemeldet.';
 
 
