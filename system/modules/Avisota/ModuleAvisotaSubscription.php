@@ -770,7 +770,10 @@ class ModuleAvisotaSubscription extends Module
 			{
 				$arrMessages[$strClass] = array();
 			}
-			$arrMessages[$strClass][] = $strMessage;
+			if (!in_array($strMessage, $arrMessages[$strClass]))
+			{
+				$arrMessages[$strClass][] = $strMessage;
+			}
 		}
 		$this->Template->messages = $arrMessages;
 		unset($_SESSION['avisota_subscription']);
