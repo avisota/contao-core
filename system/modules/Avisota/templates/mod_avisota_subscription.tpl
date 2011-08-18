@@ -22,6 +22,7 @@ endforeach;
 endforeach;
 ?>
 
+<?php if (!$this->hideForm): ?>
 <?php if (!$this->tableless): ?>
 <table cellspacing="0" cellpadding="0" summary="">
 	<tbody>
@@ -44,6 +45,7 @@ endforeach;
 	<input type="submit" name="subscribe" value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota']['subscribe']['submit']); ?>" />
 	<input type="submit" name="unsubscribe" value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota']['unsubscribe']['submit']); ?>" />
 </div>
+<?php endif; ?>
 <?php endif; ?>
 
 </div>

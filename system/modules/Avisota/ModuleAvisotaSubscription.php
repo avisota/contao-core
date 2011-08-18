@@ -777,6 +777,7 @@ class ModuleAvisotaSubscription extends Module
 
 		$this->Template->formId = 'tl_avisota_recipient';
 		$this->Template->formAction = $this->jumpTo ? $this->generateFrontendUrl($this->getPageDetails($this->jumpTo)->row()) : $this->getIndexFreeRequest();
+		$this->Template->hideForm = (count($arrMessages['confirmation'])>0 && count($arrMessages['error'])==0);
 	}
 }
 
