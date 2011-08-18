@@ -167,7 +167,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{recipient_legend},email;{personals_legend},salutation,title,firstname,lastname,gender,confirmed',
+		'default'                     => '{recipient_legend},email,confirmed;{personals_legend},salutation,title,firstname,lastname,gender',
 	),
 
 	// Fields
@@ -181,11 +181,19 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'sorting'                 => true,
 			'flag'                    => 1,
 			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'email', 'mandatory'=>true, 'maxlength'=>255, 'importable'=>true, 'exportable'=>true),
+			'eval'                    => array('tl_class'=>'w50', 'rgxp'=>'email', 'mandatory'=>true, 'maxlength'=>255, 'importable'=>true, 'exportable'=>true),
 			'save_callback'           => array
 			(
 				array('tl_avisota_recipient', 'validateBlacklist')
 			)
+		),
+		'confirmed' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmed'],
+			'exclude'                 => true,
+			'filter'                  => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class'=>'w50 m12', 'importable'=>true, 'exportable'=>true)
 		),
 		'lists' => array
 		(
@@ -246,14 +254,6 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'options'                 => array('male', 'female'),
 			'reference'               => &$GLOBALS['TL_LANG']['MSC'],
 			'eval'                    => array('includeBlankOption'=>true, 'importable'=>true, 'exportable'=>true, 'feEditable'=>true, 'tl_class'=>'clr')
-		),
-		'confirmed' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmed'],
-			'exclude'                 => true,
-			'filter'                  => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('importable'=>true, 'exportable'=>true)
 		),
 		'token' => array
 		(
