@@ -120,7 +120,8 @@ class AvisotaRunonce extends Controller
 		}
 
 		// split the outbox table data
-		if (   $this->Database->fieldExists('email',  'tl_avisota_newsletter_outbox')
+		if (   $this->Database->fieldExists('token',  'tl_avisota_newsletter_outbox')
+			&& $this->Database->fieldExists('email',  'tl_avisota_newsletter_outbox')
 			&& $this->Database->fieldExists('send',   'tl_avisota_newsletter_outbox')
 			&& $this->Database->fieldExists('source', 'tl_avisota_newsletter_outbox')
 			&& $this->Database->fieldExists('failed', 'tl_avisota_newsletter_outbox'))
@@ -136,15 +137,18 @@ class AvisotaRunonce extends Controller
 				// create the outboxes
 				foreach ($arrNewsletters as $arrRow)
 				{
-					$time = $this->Database
-						->prepare("SELECT MIN(tstamp) as tstamp FROM tl_avisota_newsletter_outbox WHERE token=?")
-						->execute($arrRow['token'])
-						->tstamp;
+					if ($arrRow['token'])
+					{
+						$time = $this->Database
+							->prepare("SELECT IF (tstamp, tstamp, send) as time FROM (SELECT MIN(tstamp) as tstamp, MIN(send) as send FROM tl_avisota_newsletter_outbox WHERE token=? GROUP BY token) t")
+							->execute($arrRow['token'])
+							->time;
 
-					$arrOutboxes[$arrRow['token']] = $this->Database
-						->prepare("INSERT INTO tl_avisota_newsletter_outbox SET pid=?, tstamp=?")
-						->execute($arrRow['pid'], $time)
-						->insertId;
+						$arrOutboxes[$arrRow['token']] = $this->Database
+							->prepare("INSERT INTO tl_avisota_newsletter_outbox SET pid=?, tstamp=?")
+							->execute($arrRow['pid'], $time)
+							->insertId;
+					}
 				}
 
 				// move the recipients
@@ -200,6 +204,15 @@ class AvisotaRunonce extends Controller
 				// delete old entries from outbox
 				$this->Database
 					->execute("DELETE FROM tl_avisota_newsletter_outbox WHERE id NOT IN (" . implode(',', $arrOutboxes) . ")");
+
+				// delete old fields
+				foreach (array('token', 'email', 'send', 'source', 'failed') as $strField)
+				{
+					if ($this->Database->fieldExists($strField,  'tl_avisota_newsletter_outbox'))
+					{
+						$this->Database->execute('ALTER TABLE tl_avisota_newsletter_outbox DROP ' . $strField);
+					}
+				}
 			}
 		}
 	}
