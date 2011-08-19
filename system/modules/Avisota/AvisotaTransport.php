@@ -728,7 +728,7 @@ class PrepareTrackingHelper extends Controller
 			$objPage = null;
 		}
 
-		return $this->DomainLink->absolutizeUrl('nltrack.php?link=' . $intLink, $objPage);
+		return $this->DomainLink->absolutizeUrl('nltrack.php?link=' . $intRecipientLink, $objPage);
 	}
 }
 
