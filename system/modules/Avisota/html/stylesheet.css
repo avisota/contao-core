@@ -147,3 +147,6 @@ th.number,
 td.number {
 	text-align: right;
 }
+table.jqplot-table-legend {
+	margin-top: 54px !important;
+}

@@ -429,7 +429,7 @@ class AvisotaTracking extends BackendModule
 		}
 		else
 		{
-			echo '[' . time() . ',0]';
+			echo '[' . (time() * 1000) . ',0]';
 		}
 		echo "\n" . ']';
 	}

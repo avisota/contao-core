@@ -51,6 +51,15 @@ function drawChart() {
 			seriesDefaults: {
 				showMarker: false
 			},
+			series: [
+				{ label: '<?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['sends']; ?>' },
+				{ label: '<?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['reads']; ?>' },
+				{ label: '<?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['reacts']; ?>' }
+			],
+			legend: {
+				show: true,
+				location: 'nw'
+			},
 			highlighter: {
 				show: true
 			},
@@ -100,7 +109,8 @@ function drawChart() {
 			}),
 			legend: {
 				show: true,
-				location: 'nw'
+				location: 's',
+				placement: 'outside'
 			},
 			highlighter: {
 				show: true
@@ -110,6 +120,15 @@ function drawChart() {
 				tooltipLocation:'nw'
 			}
 		});
+
+		(function() {
+			var links = $('chart_links');
+			var legend = links.getElement('table.jqplot-table-legend');
+			if (legend)
+			{
+				links.setStyle('margin-bottom', (legend.getHeight() + 46) + 'px');
+			}
+		}).delay(1);
 	}
 }
 </script>
