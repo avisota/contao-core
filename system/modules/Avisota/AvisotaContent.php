@@ -186,30 +186,21 @@ class AvisotaContent extends Controller
 	{
 		$head = '';
 
-		if ($this->htmlHeadCache === false)
+		// Add style sheet newsletter.css
+		if (file_exists(TL_ROOT . '/newsletter.css'))
 		{
-			// Add style sheet newsletter.css
-			if (file_exists(TL_ROOT . '/newsletter.css'))
-			{
-				$head .= '<style type="text/css">' . "\n" . $this->cleanCSS(file_get_contents(TL_ROOT . '/newsletter.css')) . "\n" . '</style>' . "\n";
-			}
-
-			if (in_array('layout_additional_sources', $this->Config->getActiveModules()))
-			{
-				$arrStylesheet = unserialize($objCategory->stylesheets);
-				if (is_array($arrStylesheet) && count($arrStylesheet))
-				{
-					$this->import('LayoutAdditionalSources');
-					$this->LayoutAdditionalSources->productive = true;
-					$head .= implode("\n", $this->LayoutAdditionalSources->generateIncludeHtml($arrStylesheet, true, $this->Base->getViewOnlinePage($objCategory)));
-				}
-			}
-
-			$this->htmlHeadCache = $head;
+			$head .= '<style type="text/css">' . "\n" . $this->cleanCSS(file_get_contents(TL_ROOT . '/newsletter.css')) . "\n" . '</style>' . "\n";
 		}
-		else
+
+		if (in_array('layout_additional_sources', $this->Config->getActiveModules()))
 		{
-			$head = $this->htmlHeadCache;
+			$arrStylesheet = unserialize($objCategory->stylesheets);
+			if (is_array($arrStylesheet) && count($arrStylesheet))
+			{
+				$this->import('LayoutAdditionalSources');
+				$this->LayoutAdditionalSources->productive = true;
+				$head .= implode("\n", $this->LayoutAdditionalSources->generateIncludeHtml($arrStylesheet, true, $this->Base->getViewOnlinePage($objCategory)));
+			}
 		}
 
 		$objTemplate = new FrontendTemplate($objNewsletter->template_html ? $objNewsletter->template_html : $objCategory->template_html);

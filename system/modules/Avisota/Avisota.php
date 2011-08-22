@@ -42,10 +42,6 @@
  */
 class Avisota extends Backend
 {
-
-	private $htmlHeadCache = false;
-
-
 	public function __construct()
 	{
 		parent::__construct();
