@@ -51,6 +51,9 @@ class PageAvisotaNewsletter extends Frontend
 	{
 		$this->import('AvisotaContent', 'Content');
 
+		// force all URLs absolute
+		$GLOBALS['TL_CONFIG']['forceAbsoluteDomainLink'] = true;
+
 		$strId = $this->Input->get('item');
 		$strNewsletter = $this->Content->generateOnlineNewsletter($strId);
 
