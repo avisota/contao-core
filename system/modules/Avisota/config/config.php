@@ -180,11 +180,11 @@ $GLOBALS['BE_FFL']['newschooser'] = 'WidgetNewschooser';
  * Hooks
  */
 $GLOBALS['TL_HOOKS']['outputBackendTemplate'][] = array('AvisotaBackend', 'hookOutputBackendTemplate');
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][]     = array('AvisotaInsertTag', 'replaceNewsletterInsertTags');
-$GLOBALS['TL_HOOKS']['getEditorStylesLayout'][] = array('AvisotaEditorStyle', 'getEditorStylesLayout');
-$GLOBALS['TL_HOOKS']['loadDataContainer'][]     = array('AvisotaRegistrationDCA', 'loadDataContainer');
-$GLOBALS['TL_HOOKS']['createNewUser'][]         = array('AvisotaRegistrationDCA', 'createNewUser');
-$GLOBALS['TL_HOOKS']['activateAccount'][]       = array('AvisotaRegistrationDCA', 'activateAccount');
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][]     = array('AvisotaInsertTag', 'hookReplaceNewsletterInsertTags');
+$GLOBALS['TL_HOOKS']['getEditorStylesLayout'][] = array('AvisotaEditorStyle', 'hookGetEditorStylesLayout');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][]     = array('AvisotaRegistrationDCA', 'hookLoadDataContainer');
+$GLOBALS['TL_HOOKS']['createNewUser'][]         = array('AvisotaRegistrationDCA', 'hookCreateNewUser');
+$GLOBALS['TL_HOOKS']['activateAccount'][]       = array('AvisotaRegistrationDCA', 'hookActivateAccount');
 
 
 /**

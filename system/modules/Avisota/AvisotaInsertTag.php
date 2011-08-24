@@ -53,7 +53,7 @@ class AvisotaInsertTag extends Controller
 	}
 
 
-	public function replaceNewsletterInsertTags($strTag)
+	public function hookReplaceNewsletterInsertTags($strTag)
 	{
 		$strTag = explode('::', $strTag);
 		switch ($strTag[0])
