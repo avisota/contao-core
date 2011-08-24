@@ -65,6 +65,9 @@ class AvisotaTransport extends Backend
 
 		// force all URLs absolute
 		$GLOBALS['TL_CONFIG']['forceAbsoluteDomainLink'] = true;
+
+		// load default translations
+		$this->loadLanguageFile('default');
 	}
 
 	public function run()
