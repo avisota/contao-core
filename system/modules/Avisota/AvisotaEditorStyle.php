@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -49,9 +49,9 @@ class AvisotaEditorStyle extends Controller
 		$this->import('Database');
 		$this->import('Input');
 	}
-	
-	
-	public function getEditorStylesLayout($strEditor)
+
+
+	public function hookGetEditorStylesLayout($strEditor)
 	{
 		if (	$strEditor == 'newsletter'
 			&&	$this->Input->get('do') == 'avisota_newsletter'
@@ -59,7 +59,7 @@ class AvisotaEditorStyle extends Controller
 			&&	$this->Input->get('act') == 'edit')
 		{
 			$strId = $this->Input->get('id');
-			
+
 			$objNewsletter = $this->Database->prepare("
 					SELECT
 						n.*
@@ -72,7 +72,7 @@ class AvisotaEditorStyle extends Controller
 					WHERE
 						c.`id`=?")
 				->execute($strId);
-			
+
 			$objCategory = $this->Database->prepare("
 					SELECT
 						*
@@ -81,7 +81,7 @@ class AvisotaEditorStyle extends Controller
 					WHERE
 						`id`=?")
 				->execute($objNewsletter->pid);
-			
+
 			if ($objCategory->viewOnlinePage > 0 && 0)
 			{
 				// the "view online" page does not contains the option to set a layout, use parent page instead
