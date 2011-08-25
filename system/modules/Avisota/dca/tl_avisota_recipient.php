@@ -449,6 +449,7 @@ class tl_avisota_recipient extends Backend
 			case 'edit':
 			case 'show':
 			case 'copy':
+			case 'paste':
 			case 'delete':
 			case 'toggle':
 				$objRecipient = $this->Database->prepare("SELECT pid FROM tl_avisota_recipient WHERE id=?")

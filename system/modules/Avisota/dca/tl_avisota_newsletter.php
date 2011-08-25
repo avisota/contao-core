@@ -259,6 +259,7 @@ class tl_avisota_newsletter extends Backend
 
 			case 'edit':
 			case 'copy':
+			case 'paste':
 			case 'delete':
 			case 'show':
 				$intPid = -1;

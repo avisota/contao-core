@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -131,7 +131,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 	(
 		'useSMTP'                     => 'smtpHost,smtpUser,smtpPass,smtpEnc,smtpPort'
 	),
-	
+
 	// Fields
 	'fields' => array
 	(
@@ -369,6 +369,7 @@ class tl_avisota_newsletter_category extends Backend
 				// No break;
 
 			case 'copy':
+			case 'paste':
 			case 'delete':
 			case 'show':
 				if (!in_array($this->Input->get('id'), $root) || ($this->Input->get('act') == 'delete' && !$this->User->hasAccess('delete', 'avisota_newsletter_category_permissions')))
@@ -486,15 +487,15 @@ class tl_avisota_newsletter_category extends Backend
 
 		return $varValue;
 	}
-	
-	
+
+
 	public function getStylesheets($dc)
 	{
 		if (!in_array('layout_additional_sources', $this->Config->getActiveModules()))
 		{
 			return array();
 		}
-		
+
 		$arrAdditionalSource = array();
 		$objAdditionalSource = $this->Database->prepare("
 				SELECT
@@ -519,35 +520,35 @@ class tl_avisota_newsletter_category extends Backend
 		{
 			$strType = $objAdditionalSource->type;
 			$label = $objAdditionalSource->$strType;
-			
+
 			if ($objAdditionalSource->compress_yui) {
 				$label .= '<span style="color: #009;">.yui</span>';
 			}
-			
+
 			if ($objAdditionalSource->compress_gz) {
 				$label .= '<span style="color: #009;">.gz</span>';
 			}
-			
+
 			if (strlen($objAdditionalSource->cc)) {
 				$label .= ' <span style="color: #B3B3B3;">[' . $objAdditionalSource->cc . ']</span>';
 			}
-			
+
 			if (strlen($objAdditionalSource->media)) {
 				$arrMedia = unserialize($objAdditionalSource->media);
 				if (count($arrMedia)) {
 					$label .= ' <span style="color: #B3B3B3;">[' . implode(', ', $arrMedia) . ']</span>';
 				}
 			}
-			
+
 			switch ($objAdditionalSource->type) {
 			case 'js_file': case 'js_url':
 				$image = 'iconJS.gif';
 				break;
-			
+
 			case 'css_file': case 'css_url':
 				$image = 'iconCSS.gif';
 				break;
-			
+
 			default:
 				$image = false;
 				if (isset($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']) && is_array($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']))
@@ -562,7 +563,7 @@ class tl_avisota_newsletter_category extends Backend
 					}
 				}
 			}
-		
+
 			if (!isset($arrAdditionalSource[$objAdditionalSource->name]))
 			{
 				$arrAdditionalSource[$objAdditionalSource->name] = array();
