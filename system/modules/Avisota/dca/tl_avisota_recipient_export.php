@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -60,7 +60,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_export'] = array
 	(
 		'default'                     => '{format_legend:hide},delimiter,enclosure,fields'
 	),
-	
+
 	// Fields
 	'fields' => array
 	(
@@ -99,7 +99,7 @@ class tl_avisota_recipient_export extends Backend
 	{
 		parent::__construct();
 		$this->import('BackendUser', 'User');
-		
+
 		$this->loadLanguageFile('tl_avisota_recipient');
 		$this->loadDataContainer('tl_avisota_recipient');
 	}
@@ -118,20 +118,21 @@ class tl_avisota_recipient_export extends Backend
 				$arrOptions[$strField] = empty($arrData['label'][0]) ? $strField : $arrData['label'][0] . ' [' . $strField . ']';
 			}
 		}
-		
+		$arrOptions['statistic:links'] = &$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'][0];
+
 		return $arrOptions;
 	}
-	
+
 
 	/**
 	 * Load the data.
-	 * 
+	 *
 	 * @param DataContainer $dc
 	 */
 	public function onload_callback(DataContainer $dc)
 	{
 		$varData = $this->Session->get('AVISOTA_EXPORT');
-		
+
 		if ($varData && is_array($varData))
 		{
 			foreach ($varData as $k=>$v)
@@ -140,11 +141,11 @@ class tl_avisota_recipient_export extends Backend
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * Do the export.
-	 * 
+	 *
 	 * @param DataContainer $dc
 	 */
 	public function onsubmit_callback(DataContainer $dc)
@@ -168,7 +169,7 @@ class tl_avisota_recipient_export extends Backend
 				$strDelimiter = ',';
 				break;
 		}
-		
+
 		// Get enclosure
 		switch ($dc->getData('enclosure'))
 		{
@@ -180,84 +181,136 @@ class tl_avisota_recipient_export extends Backend
 				$strEnclosure = '"';
 				break;
 		}
-		
+
 		// Get fields
 		$arrFields = $dc->getData('fields');
-		
+
 		// Get field labels
 		$arrLabels = array();
 		foreach ($arrFields as $strField)
 		{
-			$arrData = $GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$strField];
-			if (empty($arrData['label'][0]))
+			switch ($strField)
 			{
-				$arrLabels[] = $strField;
-			}
-			else
-			{
-				$arrLabels[] = $arrData['label'][0] . ' [' . $strField . ']';
+			case 'statistic:links':
+				$arrLabels[] = &$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'][1];
+				break;
+
+			default:
+				$arrData = $GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$strField];
+				if (empty($arrData['label'][0]))
+				{
+					$arrLabels[] = $strField;
+				}
+				else
+				{
+					$arrLabels[] = $arrData['label'][0] . ' [' . $strField . ']';
+				}
+				break;
 			}
 		}
-		
+
 		$this->Session->set('AVISOTA_EXPORT', array(
 			'delimiter' => $dc->getData('delimiter'),
 			'enclosure' => $dc->getData('enclosure'),
 			'fields'    => $dc->getData('fields')
 		));
-		
+
 		// search for the list
-		$objList = $this->Database->prepare("SELECT * FROM tl_avisota_recipient_list WHERE id=?")
+		$objList = $this->Database
+			->prepare("SELECT * FROM tl_avisota_recipient_list WHERE id=?")
 			->execute($this->Input->get('id'));
-		
+
 		if (!$objList->next())
 		{
 			$this->log('The recipient list ID ' . $this->Input->get('id') . ' does not exists!', 'tl_avisota_recipient_export', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
-		
+
 		// create temporary file
 		$strFile = substr(tempnam(TL_ROOT . '/system/tmp', 'recipients_export_') . '.csv', strlen(TL_ROOT) + 1);
-		
+
 		// create new file object
 		$objFile = new File($strFile);
-		
+
 		// open file handle
 		$objFile->write('');
-		
+
 		// write the headline
 		fputcsv($objFile->handle, $arrLabels, $strDelimiter, $strEnclosure);
-		
+
 		// write recipient rows
-		$objRecipient = $this->Database->prepare("SELECT * FROM tl_avisota_recipient WHERE pid=?")
+		$objRecipient = $this->Database
+			->prepare("SELECT * FROM tl_avisota_recipient WHERE pid=?")
 			->execute($this->Input->get('id'));
 		while ($objRecipient->next())
 		{
 			$arrRow = array();
 			foreach ($arrFields as $strField)
 			{
-				$arrRow[] = $objRecipient->$strField;
+				$intStatisticLinksIndex = -1;
+				switch ($strField)
+				{
+				case 'statistic:links':
+					$intStatisticLinksIndex = count($arrRow);
+					$arrRow[] = '';
+					break;
+
+				default:
+					$arrRow[] = $objRecipient->$strField;
+				}
 			}
+
+			if ($intStatisticLinksIndex)
+			{
+				$objLinks = $this->Database
+					->prepare("SELECT l.url
+						FROM tl_avisota_statistic_raw_recipient_link l
+						INNER JOIN tl_avisota_statistic_raw_link_hit h
+						ON h.recipientLinkID = l.id
+						WHERE l.recipient=?
+						GROUP BY l.url
+						ORDER BY l.url")
+					->execute($objRecipient->email);
+
+				if ($objLinks->numRows)
+				{
+					$arrEmptyRow = array();
+					for ($i=0; $i<count($arrRow); $i++)
+					{
+						$arrEmptyRow[] = '';
+					}
+
+					while ($objLinks->next())
+					{
+						$arrRow[$intStatisticLinksIndex] = $objLinks->url;
+						fputcsv($objFile->handle, $arrRow, $strDelimiter, $strEnclosure);
+						$arrRow = $arrEmptyRow;
+					}
+					continue;
+				}
+			}
+
 			fputcsv($objFile->handle, $arrRow, $strDelimiter, $strEnclosure);
 		}
-		
+
 		// close file handle
 		$objFile->close();
-		
+
 		// create temporary zip file
 		$strZip = $strFile . '.zip';
-		
+
 		// create a zip writer
 		$objZip = new ZipWriter($strZip);
-		
+
 		// add the temporary csv
 		$objZip->addFile($strFile, $objList->title . '.csv');
-		
+
 		// close the zip
 		$objZip->close();
-		
+
 		// create new file object
 		$objZip = new File($strZip);
-		
+
 		// Open the "save as â€¦" dialogue
         header('Content-Type: ' . $objZip->mime);
         header('Content-Transfer-Encoding: binary');
@@ -266,16 +319,16 @@ class tl_avisota_recipient_export extends Backend
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
         header('Expires: 0');
- 
+
  		// send the zip file
         $resFile = fopen(TL_ROOT . '/' . $strZip, 'rb');
         fpassthru($resFile);
         fclose($resFile);
-		
+
 		// delete temporary files
 		$objFile->delete();
 		$objZip->delete();
-		
+
 		exit;
 	}
 }

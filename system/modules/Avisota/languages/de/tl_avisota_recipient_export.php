@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -36,10 +36,10 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['delimiter']   = array('Feldtrenner', 'Wählen Sie hier das Zeichen aus, nach dem die einzelnen Felder getrennt sind.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['enclosure']   = array('Texttrenner', 'Wählen Sie hier das Zeichen aus, nach dem der Text getrennt ist.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['fields']      = array('Felder', 'Wählen Sie hier, wie die Felder die exportiert werden sollen.');
-
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['delimiter']       = array('Feldtrenner', 'Wählen Sie hier das Zeichen aus, nach dem die einzelnen Felder getrennt sind.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['enclosure']       = array('Texttrenner', 'Wählen Sie hier das Zeichen aus, nach dem der Text getrennt ist.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['fields']          = array('Felder', 'Wählen Sie hier, wie die Felder die exportiert werden sollen.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'] = array('Statistik - Links (nicht importierbar)', 'Angeklickte Links');
 
 /**
  * Reference
