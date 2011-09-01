@@ -42,6 +42,8 @@ $GLOBALS['TL_LANG']['avisota_tracking']['recipient_label']  = 'Abonnent';
 
 $GLOBALS['TL_LANG']['avisota_tracking']['empty_stats']      = 'Zur Zeit liegen keine Daten vor!';
 
+$GLOBALS['TL_LANG']['avisota_tracking']['export'] = array('CSV-Export', 'Export der Statistik in eine CSV-Datei.');
+
 $GLOBALS['TL_LANG']['avisota_tracking']['col_sum']      = 'Summe';
 $GLOBALS['TL_LANG']['avisota_tracking']['col_percent']  = '% / Versendet';
 $GLOBALS['TL_LANG']['avisota_tracking']['col_percent2'] = '% / Gelesen';

@@ -53,6 +53,17 @@ class AvisotaTracking extends BackendModule
 	protected $blnUseHighstock = false;
 
 
+	public function generate()
+	{
+		if ($this->Input->get('table'))
+		{
+			return $this->objDc->edit();
+		}
+
+		return parent::generate();
+	}
+
+
 	public function compile()
 	{
 		$this->loadLanguageFile('avisota_tracking');

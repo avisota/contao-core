@@ -107,6 +107,7 @@ $GLOBALS['BE_MOD'] = array_merge(
 			'avisota_tracking' => array
 			(
 				'callback'   => 'AvisotaTracking',
+				'tables'     => array('tl_avisota_tracking_export'),
 				'icon'       => 'system/modules/Avisota/html/tracking.png',
 				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 			),

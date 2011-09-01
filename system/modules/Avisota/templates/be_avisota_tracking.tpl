@@ -31,7 +31,9 @@
 </div>
 </form>
 
-<div id="tl_buttons"></div>
+<div id="tl_buttons">
+<a href="contao/main.php?do=avisota_tracking&amp;table=tl_avisota_tracking_export" class="header_tracking_export" title="<?php echo $GLOBALS['TL_LANG']['avisota_tracking']['export'][1]; ?>" onclick="Backend.getScrollOffset();"><?php echo $GLOBALS['TL_LANG']['avisota_tracking']['export'][0]; ?></a>
+</div>
 
 <?php echo $this->getMessages(); ?>
 
