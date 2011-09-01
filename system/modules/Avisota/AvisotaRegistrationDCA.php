@@ -63,20 +63,20 @@ class AvisotaRegistrationDCA extends Controller {
 		if(!$arrLists)
 			return;
 
-		$objPrepared = $this->Database->prepare('
-			SELECT	r.confirmed, r.id AS rid
-			FROM	tl_avisota_recipient_list AS l
-			LEFT JOIN (
-				SELECT	r1.confirmed, r1.id, r1.pid
-				FROM	tl_avisota_recipient AS r1
-				WHERE	r1.email = ?
-			) AS r ON l.id = r.pid
-			WHERE l.id = ?
-		');
+		$objStmt = $this->Database->prepare('');
 		$intTime = time();
 
 		foreach($arrLists as $intListID) {
-			$objAlreadySubscribed = $objPrepared->execute($strEmail, $intListID);
+			$objAlreadySubscribed = $objStmt->prepare('
+				SELECT	r.confirmed, r.id AS rid
+				FROM	tl_avisota_recipient_list AS l
+				LEFT JOIN (
+					SELECT	r1.confirmed, r1.id, r1.pid
+					FROM	tl_avisota_recipient AS r1
+					WHERE	r1.email = ?
+				) AS r ON l.id = r.pid
+				WHERE l.id = ?
+			')->execute($strEmail, $intListID);
 
 			if(!$objAlreadySubscribed->numRows) // list doesnt exist
 				continue;
@@ -146,8 +146,9 @@ class AvisotaRegistrationDCA extends Controller {
 	public function hookLoadDataContainer($strTable)
 	{
 		if(!$strTable == 'tl_module') return;
-		$GLOBALS['TL_DCA']['tl_module']['palettes']['avisota_registration']
-			= $GLOBALS['TL_DCA']['tl_module']['palettes']['registration'] . $GLOBALS['TL_DCA']['tl_module']['palettes']['avisota_registration'];
+		$arrPalettes = &$GLOBALS['TL_DCA']['tl_module']['palettes'];
+		if(isset($arrPalettes['avisota_registration'])) return;
+		$arrPalettes['avisota_registration'] = $arrPalettes['registration'] . $arrPalettes['__avisota_registration'];
 	}
 
 	protected function __construct()
