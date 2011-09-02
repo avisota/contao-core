@@ -296,6 +296,7 @@ class AvisotaTracking extends BackendModule
 				->prepare("SELECT r.send as time, COUNT(r.id) as sum
 					FROM tl_avisota_newsletter_outbox_recipient r
 					INNER JOIN tl_avisota_newsletter_outbox o
+					ON r.pid=o.id
 					WHERE o.pid=? AND r.send>0
 					GROUP BY time
 					ORDER BY time")
