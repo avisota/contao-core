@@ -1,7 +1,7 @@
 <?php
 $GLOBALS['TL_CSS'][] = 'system/modules/Avisota/jqplot/jquery.jqplot.min.css';
 ?>
-<script type="text/javascript" src="system/modules/Avisota/jqplot/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="system/modules/Avisota/jquery/jquery.min.js"></script>
 <script type="text/javascript">jQuery.noConflict();</script>
 <script type="text/javascript" src="system/modules/Avisota/jqplot/jquery.jqplot.min.js"></script>
 <script type="text/javascript" src="system/modules/Avisota/jqplot/plugins/jqplot.highlighter.min.js"></script>
