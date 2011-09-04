@@ -212,7 +212,7 @@ class AvisotaContent extends Controller
 		}
 		$objTemplate->newsletter = $objNewsletter->row();
 		$objTemplate->category = $objCategory->row();
-		return $objTemplate->parse();
+		return $this->replaceAndExtendURLs($objTemplate->parse());
 	}
 
 
@@ -416,6 +416,25 @@ class AvisotaContent extends Controller
 		}
 
 		return '';
+	}
+
+
+	/**
+	 * Extend image src and a href.
+	 */
+	public function replaceAndExtendURLs($strHtml)
+	{
+		return preg_replace_callback('#(href|src)=(".*"|\'.*\')#U', array($this, 'callbackReplaceAndExtend'), $strHtml);
+	}
+
+
+	/**
+	 * Callback function for replaceAndExtendURLs(..)
+	 */
+	public function callbackReplaceAndExtend($m)
+	{
+		$strUrl = substr($m[2], 1, -1);
+		return $m[1] . '="' . $this->Base->extendURL($strUrl) . '"';
 	}
 
 
