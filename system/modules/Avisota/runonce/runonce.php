@@ -59,6 +59,7 @@ class AvisotaRunonce extends Controller
 	{
 		$this->upgrade0_4_5();
 		$this->upgrade1_5_0();
+		$this->upgrade1_5_1();
 
 		// delete this runonce and reload
 		$objFile = new File(substr(__FILE__, strlen(TL_ROOT)+1));
@@ -214,6 +215,128 @@ class AvisotaRunonce extends Controller
 						$this->Database->execute('ALTER TABLE tl_avisota_newsletter_outbox DROP ' . $strField);
 					}
 				}
+			}
+		}
+	}
+
+
+	/**
+	 * Database upgrade to 1.5.1
+	 */
+	protected function upgrade1_5_1()
+	{
+		$this->import('AvisotaStatic', 'Static');
+
+		// make sure the real_url field exists
+		if (!$this->Database->fieldExists('real_url', 'tl_avisota_statistic_raw_recipient_link'))
+		{
+			$this->Database
+				->execute("ALTER TABLE tl_avisota_statistic_raw_recipient_link ADD real_url blob NULL");
+		}
+
+		// temporary caches
+		$arrNewsletterCache  = array();
+		$arrCategoryCache    = array();
+		$arrUnsubscribeCache = array();
+
+		// links that are reduced
+		$arrLinks = array();
+
+		$objLink = $this->Database
+			->executeUncached("SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE real_url='' OR ISNULL(real_url)");
+		while ($objLink->next())
+		{
+			$objNewsletter     = false;
+			$objCategory       = false;
+			$strUnsubscribeUrl = false;
+
+			if (isset($arrNewsletterCache[$objLink->pid]))
+			{
+				$objNewsletter = $arrNewsletterCache[$objLink->pid];
+			}
+			else
+			{
+				$objNewsletter = $this->Database
+					->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
+					->execute($objLink->pid);
+				if ($objNewsletter->next())
+				{
+					$objNewsletter = $arrNewsletterCache[$objLink->pid] = (object)$objNewsletter->row();
+				}
+				else
+				{
+					$objNewsletter = $arrNewsletterCache[$objLink->pid] = false;
+				}
+			}
+
+			if ($objNewsletter)
+			{
+				if (isset($objCategoryCache[$objNewsletter->pid]))
+				{
+					$objCategory = $objCategoryCache[$objNewsletter->pid];
+				}
+				else
+				{
+					$objCategory = $this->Database
+						->prepare("SELECT * FROM tl_avisota_newsletter_category WHERE id=?")
+						->execute($objNewsletter->pid);
+					if ($objCategory->next())
+					{
+						$objCategory = $objCategoryCache[$objNewsletter->pid] = (object)$objCategory->row();
+					}
+					else
+					{
+						$objCategory = $objCategoryCache[$objNewsletter->pid] = false;
+					}
+				}
+			}
+
+			if ($objCategory)
+			{
+				if (isset($arrUnsubscribeCache[$objLink->recipient]))
+				{
+					$strUnsubscribeUrl = $arrUnsubscribeCache[$objLink->recipient];
+				}
+				else
+				{
+					$arrRecipient = array('email' => $objLink->recipient);
+					$this->Static->set($objCategory, $objNewsletter, $arrRecipient);
+					$strUnsubscribeUrl = $arrUnsubscribeCache[$objLink->recipient] = $this->replaceInsertTags('{{newsletter::unsubscribe_url}}');
+				}
+			}
+
+			if ($strUnsubscribeUrl && $strUnsubscribeUrl == $objLink->url)
+			{
+				// create a new (real) url
+				$strRealUrl = $objLink->url;
+				$strUrl = preg_replace('#email=[^&]*#', 'email=…', $objLink->url);
+
+				// update the recipient-less-link
+				if (!$arrLinks[$strUrl])
+				{
+					$this->Database
+						->prepare("UPDATE tl_avisota_statistic_raw_link SET url=? WHERE id=?")
+						->execute($strUrl, $objLink->linkID);
+					$arrLinks[$strUrl] = $objLink->linkID;
+				}
+
+				// or delete if there is allready a link with this url
+				else
+				{
+					$this->Database
+						->prepare("DELETE FROM tl_avisota_statistic_raw_link WHERE id=?")
+						->execute($objLink->linkID);
+				}
+
+				// update the recipient-link
+				$this->Database
+					->prepare("UPDATE tl_avisota_statistic_raw_recipient_link SET linkID=?, url=?, real_url=? WHERE id=?")
+					->execute($arrLinks[$strUrl], $strUrl, $strRealUrl, $objLink->id);
+
+				// update link hit
+				$this->Database
+					->prepare("UPDATE tl_avisota_statistic_raw_link_hit SET linkID=? WHERE linkID=? AND recipientLinkID=?")
+					->execute($arrLinks[$strUrl], $objLink->linkID, $objLink->id);
 			}
 		}
 	}
