@@ -714,7 +714,7 @@ class PrepareTrackingHelper extends Controller
 		else
 		{
 			$intLink = $this->Database
-				->prepare("INSERT INTO tl_avisota_statistic_raw_link (pid,tstamp,url) VALUES (?, ?, ?, ?)")
+				->prepare("INSERT INTO tl_avisota_statistic_raw_link (pid,tstamp,url) VALUES (?, ?, ?)")
 				->execute($this->objNewsletter->id, time(), $strUrl)
 				->insertId;
 		}
