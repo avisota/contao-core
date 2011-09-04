@@ -256,6 +256,7 @@ CREATE TABLE `tl_avisota_statistic_raw_recipient_link` (
   `linkID` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
   `url` blob NULL,
+  `real_url` blob NULL,
   `recipient` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`),

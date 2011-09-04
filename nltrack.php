@@ -105,7 +105,7 @@ class Tracking extends Frontend
 					->execute($objRecipientLink->pid, $objRecipientLink->linkID, $objRecipientLink->id, $objRecipientLink->recipient, time());
 
 				header('HTTP/1.1 303 See Other');
-				header('Location: ' . $objRecipientLink->url);
+				header('Location: ' . ($objRecipientLink->real_url ? $objRecipientLink->real_url : $objRecipientLink->url));
 				exit;
 			}
 

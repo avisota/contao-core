@@ -604,7 +604,7 @@ class AvisotaTransport extends Backend
 		$strHtml = $strHtml;
 
 		$objPrepareTrackingHelper = new PrepareTrackingHelper($objNewsletter, $objCategory, $objRecipient);
-		$strHtml = preg_replace_callback('#href=["\']((http|ftp)s?:\/\/.+)["\']#U', array(&$objPrepareTrackingHelper, 'replaceHtml'), $strHtml);
+		$strHtml = preg_replace_callback('#(<a[^>]*)href=["\']((http|ftp)s?:\/\/.+)["\']#U', array(&$objPrepareTrackingHelper, 'replaceHtml'), $strHtml);
 
 		$objRead = $this->Database
 			->prepare("SELECT * FROM tl_avisota_statistic_raw_recipient WHERE pid=? AND recipient=?")
@@ -649,23 +649,29 @@ class PrepareTrackingHelper extends Controller
 
 	protected $objRecipient;
 
+	protected $strRecipientUnsubscribeUrl;
+
 	public function __construct($objNewsletter, $objCategory, $objRecipient)
 	{
 		parent::__construct();
 		$this->import('Database');
 		$this->import('DomainLink');
+		$this->import('AvisotaStatic', 'Static');
 		$this->objNewsletter = $objNewsletter;
 		$this->objCategory = $objCategory;
 		$this->objRecipient = $objRecipient;
+
+		$arrRecipeient = $this->Static->getRecipient();
+		$this->strRecipientUnsubscribeUrl = $this->replaceInsertTags('{{newsletter::unsubscribe_url}}');
 	}
 
 	public function replaceHtml($m)
 	{
-		$strUrl = $this->replace($m[1]);
+		$strUrl = $this->replace($m[2]);
 
 		if ($strUrl)
 		{
-			return 'href="' . specialchars($strUrl) . '"';
+			return $m[1] . 'href="' . specialchars($strUrl) . '"';
 		}
 		return $m[0];
 	}
@@ -683,13 +689,19 @@ class PrepareTrackingHelper extends Controller
 
 	public function replace($strUrl)
 	{
+
 		// do not track ...
 		if (// images
-			preg_match('#\.(jpe?g|png|gif)#i', $strUrl)
-			// unsubscribe url
-			|| preg_match('#unsubscribetoken#i', $strUrl))
+			preg_match('#\.(jpe?g|png|gif)#i', $strUrl))
 		{
 			return false;
+		}
+
+		$strRealUrl = '';
+		if ($this->strRecipientUnsubscribeUrl == $strUrl)
+		{
+			$strRealUrl = $strUrl;
+			$strUrl = preg_replace('#email=[^&]*#', 'email=…', $strUrl);
 		}
 
 		$objLink = $this->Database
@@ -702,7 +714,7 @@ class PrepareTrackingHelper extends Controller
 		else
 		{
 			$intLink = $this->Database
-				->prepare("INSERT INTO tl_avisota_statistic_raw_link (pid,tstamp,url) VALUES (?, ?, ?)")
+				->prepare("INSERT INTO tl_avisota_statistic_raw_link (pid,tstamp,url) VALUES (?, ?, ?, ?)")
 				->execute($this->objNewsletter->id, time(), $strUrl)
 				->insertId;
 		}
@@ -717,8 +729,8 @@ class PrepareTrackingHelper extends Controller
 		else
 		{
 			$intRecipientLink = $this->Database
-				->prepare("INSERT INTO tl_avisota_statistic_raw_recipient_link (pid,linkID,tstamp,url,recipient) VALUES (?, ?, ?, ?, ?)")
-				->execute($this->objNewsletter->id, $intLink, time(), $strUrl, $this->objRecipient->email)
+				->prepare("INSERT INTO tl_avisota_statistic_raw_recipient_link (pid,linkID,tstamp,url,real_url,recipient) VALUES (?, ?, ?, ?, ?, ?)")
+				->execute($this->objNewsletter->id, $intLink, time(), $strUrl, $strRealUrl, $this->objRecipient->email)
 				->insertId;
 		}
 
