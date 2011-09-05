@@ -466,7 +466,7 @@ class AvisotaTransport extends Backend
 					$arrFailed[] = $objRecipients->row();
 
 					$this->Database
-						->prepare("UPDATE tl_avisota_newsletter_outbox SET failed='1' WHERE id=?")
+						->prepare("UPDATE tl_avisota_newsletter_outbox_recipient SET failed='1' WHERE id=?")
 						->execute($objRecipients->id);
 
 					// disable recipient from list
