@@ -280,7 +280,7 @@ class AvisotaContent extends Controller
 					$path = dirname($path);
 					$strUrl = substr($strUrl, 3);
 				}
-				if (!preg_match('#^\w+://#', $strUrl) && $strUrl[0] != '/')
+				if (!preg_match('#^\w+:#', $strUrl) && $strUrl[0] != '/')
 				{
 					$strUrl = ($path ? $path . '/' : '') . $strUrl;
 				}
