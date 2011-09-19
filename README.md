@@ -1,9 +1,13 @@
 # Avisota
+
 Avisota is a newsletter and mailing system for the Contao CMS <www.contao.org>
 
 ## Branches
+
 **master** This is the current stable upstream development branch.
+
 **version1.X** This is the stable bugfix branch.
+
 **version2** This is the future unstable upstream branch. (currently here is no development)
 
 ## Version 2
