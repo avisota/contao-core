@@ -68,6 +68,15 @@ $GLOBALS['TL_DCA']['tl_avisota_translation'] = array
 	'fields' => array()
 );
 
+/**
+ * Class tl_avisota_translation
+ *
+ * Helper class for tl_avisota_translation dca.
+ * 
+ * @copyright  InfinitySoft 2010,2011
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    Avisota
+ */
 class tl_avisota_translation extends Backend
 {
 	/**
