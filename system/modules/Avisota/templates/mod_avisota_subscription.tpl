@@ -9,6 +9,7 @@
 <form action="<?php echo $this->formAction ?>" method="post" id="<?php echo $this->formId ?>">
 <div class="formbody">
 <input type="hidden" name="FORM_SUBMIT" value="<?php echo $this->formId; ?>" />
+<input type="hidden" name="REQUEST_TOKEN" value="{{request_token}}" />
 
 <p class="preamble"><?php echo $GLOBALS['TL_LANG']['avisota']['subscription']['preamble'] ?></p>
 
