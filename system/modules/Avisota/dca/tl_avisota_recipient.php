@@ -83,28 +83,28 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'migrate' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['migrate'],
-				'href'                => 'table=tl_avisota_recipient_migrate',
+				'href'                => 'table=tl_avisota_recipient_migrate&amp;act=edit',
 				'class'               => 'header_recipient_migrate recipient_tool',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			),
 			'import' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['import'],
-				'href'                => 'table=tl_avisota_recipient_import',
+				'href'                => 'table=tl_avisota_recipient_import&amp;act=edit',
 				'class'               => 'header_recipient_import recipient_tool',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			),
 			'export' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['export'],
-				'href'                => 'table=tl_avisota_recipient_export',
+				'href'                => 'table=tl_avisota_recipient_export&amp;act=edit',
 				'class'               => 'header_recipient_export recipient_tool',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			),
 			'remove' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['remove'],
-				'href'                => 'table=tl_avisota_recipient_remove',
+				'href'                => 'table=tl_avisota_recipient_remove&amp;act=edit',
 				'class'               => 'header_recipient_remove recipient_tool',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			),
