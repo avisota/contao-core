@@ -36,7 +36,10 @@
 // disable contao 2.10 token check
 define('BYPASS_TOKEN_CHECK', true);
 
+// run in FE mode
 define('TL_MODE', 'FE');
+
+// initialize contao
 include('../../initialize.php');
 
 // disable error reporting
