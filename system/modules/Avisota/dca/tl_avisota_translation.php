@@ -52,7 +52,10 @@ $GLOBALS['TL_DCA']['tl_avisota_translation'] = array
 		'onsubmit_callback'           => array
 		(
 			array('tl_avisota_translation', 'onsubmit_callback'),
-		)
+		),
+        'dcMemory_showAll_callback' => array(
+            array('tl_avisota_translation', 'show_all')
+        )
 	),
 
 	// Palettes
@@ -311,6 +314,15 @@ class tl_avisota_translation extends Backend
 		}
 		return $strBuffer;
 	}
-}
+	
 
-?>
+    /**
+     * Change active mode to edit
+     *
+     * @return string
+     */
+    public function show_all($dc, $strReturn)
+    {
+        return $strReturn . $dc->edit();
+    }
+}
