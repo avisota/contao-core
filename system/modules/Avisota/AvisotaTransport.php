@@ -33,6 +33,9 @@
  */
 
 
+// disable contao 2.10 token check
+define('BYPASS_TOKEN_CHECK', true);
+
 define('TL_MODE', 'FE');
 include('../../initialize.php');
 
