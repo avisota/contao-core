@@ -187,7 +187,11 @@ class AvisotaContent extends Controller
 		$head = '';
 
 		// Add style sheet newsletter.css
-		if (file_exists(TL_ROOT . '/newsletter.css'))
+		if (file_exists(TL_ROOT . '/system/scripts/newsletter.css'))
+		{
+			$head .= '<style type="text/css">' . "\n" . $this->cleanCSS(file_get_contents(TL_ROOT . '/system/scripts/newsletter.css'), '/system/scripts/newsletter.css') . "\n" . '</style>' . "\n";
+		}
+		else if (file_exists(TL_ROOT . '/newsletter.css'))
 		{
 			$head .= '<style type="text/css">' . "\n" . $this->cleanCSS(file_get_contents(TL_ROOT . '/newsletter.css')) . "\n" . '</style>' . "\n";
 		}
