@@ -103,3 +103,8 @@ Bitte öffnen Sie die folgende Adresse in Ihrem Browser, um das Abonnement zu be
 %s
 
 Vielen Dank';
+
+/**
+ * Reader
+ */
+$GLOBALS['TL_LANG']['avisota']['reader']['notFound'] = 'Der gewünschte Newsletter konnte nicht gefunden werden!';
