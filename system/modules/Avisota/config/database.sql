@@ -310,6 +310,8 @@ CREATE TABLE `tl_module` (
   `avisota_cleanup_time` int(10) NOT NULL default '7',
   `avisota_categories` blob NULL,
   `avisota_reader_template` varchar(64) NOT NULL default '',
+  `avisota_list_template` varchar(64) NOT NULL default '',
+  `avisota_view_page` int(10) NOT NULL default '0',
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

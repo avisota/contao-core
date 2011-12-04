@@ -38,6 +38,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'avisota_send_no
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'avisota_do_cleanup';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['avisota_subscription'] = '{title_legend},name,headline,type;{avisota_subscription_legend},avisota_show_lists,avisota_lists,avisota_recipient_fields;{avisota_mail_legend},avisota_subscription_sender_name,avisota_subscription_sender;{template_legend},tableless,avisota_template_subscribe_mail_plain,avisota_template_subscribe_mail_html,avisota_template_unsubscribe_mail_plain,avisota_template_unsubscribe_mail_html,avisota_template_subscription;{avisota_notification_legend:hide},avisota_send_notification;{avisota_cleanup_legend:hide},avisota_do_cleanup;{protected_legend:hide},protected;{expert_legend:hide},jumpTo,guests,cssID,space';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['avisota_reader']       = '{title_legend},name,headline,type;{avisota_reader_legend},avisota_categories;{template_legend},avisota_reader_template;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['avisota_list']         = '{title_legend},name,headline,type;{avisota_list_legend},avisota_categories,perPage;{template_legend},avisota_list_template;{protected_legend:hide},protected;{expert_legend:hide},avisota_view_page,guests,cssID,space';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__avisota_registration'] = '{avisota_registration_legend},avisota_registration_lists';
 $GLOBALS['TL_DCA']['tl_module']['subpalettes']['avisota_send_notification'] = 'avisota_notification_time,avisota_template_notification_mail_plain,avisota_template_notification_mail_html';
 $GLOBALS['TL_DCA']['tl_module']['subpalettes']['avisota_do_cleanup'] = 'avisota_cleanup_time';
@@ -209,6 +210,23 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_reader_template'] = array
 	'eval'                    => array('mandatory'=>true, 'tl_class'=>'w50')
 );
 
+$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_list_template'] = array
+(
+	'exclude'                 => true,
+	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_list_template'],
+	'inputType'               => 'select',
+	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
+	'eval'                    => array('mandatory'=>true, 'tl_class'=>'w50')
+);
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_view_page'] = array
+(
+	'exclude'                 => true,
+	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_view_page'],
+	'inputType'               => 'pageTree',
+	'eval'                    => array('fieldType'=>'radio')
+);
+
 /**
  * Class tl_module_avisota
  *
@@ -283,6 +301,9 @@ class tl_module_avisota extends Backend
 				break;
 			case 'avisota_reader_template':
 				$strTemplatePrefix = 'avisota_reader_';
+				break;
+			case 'avisota_list_template':
+				$strTemplatePrefix = 'avisota_list_';
 				break;
 			default:
 				return array();
