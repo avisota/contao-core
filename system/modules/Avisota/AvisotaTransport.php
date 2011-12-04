@@ -624,8 +624,8 @@ class AvisotaTransport extends Backend
 		else
 		{
 			$objRead = $this->Database
-				->prepare("INSERT INTO tl_avisota_statistic_raw_recipient (pid,tstamp,recipient) VALUES (?, ?, ?)")
-				->execute($objNewsletter->id, time(), $objRecipient->email);
+				->prepare("INSERT INTO tl_avisota_statistic_raw_recipient (pid,tstamp,recipient,recipientID,source,sourceID) VALUES (?, ?, ?, ?, ?, ?)")
+				->execute($objNewsletter->id, time(), $objRecipient->email, $objRecipient->recipientID, $objRecipient->source, $objRecipient->sourceID);
 			$intRead = $objRead->insertId;
 		}
 
