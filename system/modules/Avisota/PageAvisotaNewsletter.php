@@ -44,6 +44,11 @@
 class PageAvisotaNewsletter extends Frontend
 {
 	/**
+	 * @var AvisotaContent
+	 */
+	protected $Content;
+
+	/**
 	 * Generate a newsletter
 	 * @param object
 	 */
