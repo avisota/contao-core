@@ -400,10 +400,7 @@ class AvisotaTransport extends Backend
 
 			while ($intEndExecutionTime > time() && $objRecipients->next())
 			{
-				$arrRecipient = array
-				(
-					'email' => $objRecipients->email
-				);
+				$arrRecipient = $objRecipients->row();
 
 				// add recipient details
 				if ($objRecipients->source == 'list')
