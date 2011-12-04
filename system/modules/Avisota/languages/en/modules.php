@@ -47,6 +47,6 @@ $GLOBALS['TL_LANG']['MOD']['avisota_translation'] = array('Language Variables', 
  * Front end modules
  */
 $GLOBALS['TL_LANG']['FMD']['avisota']              = 'Newsletter';
+$GLOBALS['TL_LANG']['FMD']['avisota_list']         = array('Newsletter list', 'Navigation list of all sended newsletters.');
+$GLOBALS['TL_LANG']['FMD']['avisota_reader']       = array('Newsletter reader', 'Show a newsletter in a regular page.');
 $GLOBALS['TL_LANG']['FMD']['avisota_subscription'] = array('Manage Subscriptions', 'Login and Logout of the Newsletter System.');
-
-?>
