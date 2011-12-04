@@ -52,9 +52,12 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_migrate'] = array
 	),
 
 	// Palettes
-	'palettes' => array
+	'metapalettes' => array
 	(
-		'default'                     => '{migrate_legend},source,personals,force'
+		'default' => array
+		(
+			'migrate' => array('source', 'personals', 'force')
+		)
 	),
 	
 	// Fields

@@ -52,9 +52,12 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_remove'] = array
 	),
 
 	// Palettes
-	'palettes' => array
+	'metapalettes' => array
 	(
-		'default'                     => '{remove_legend},source,upload,emails'
+		'default' => array
+		(
+			'remove' => array('source', 'upload', 'emails')
+		)
 	),
 	
 	// Fields

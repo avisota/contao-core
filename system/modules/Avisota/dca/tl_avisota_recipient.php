@@ -165,9 +165,13 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 	),
 
 	// Palettes
-	'palettes' => array
+	'metapalettes' => array
 	(
-		'default'                     => '{recipient_legend},email,confirmed;{personals_legend},salutation,title,firstname,lastname,gender',
+		'default' => array
+		(
+			'recipient' => array('email', 'confirmed'),
+			'personals' => array('salutation', 'title', 'firstname', 'lastname', 'gender')
+		)
 	),
 
 	// Fields

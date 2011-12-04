@@ -127,27 +127,88 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'__selector__'                => array('type', 'definePlain', 'addImage', 'useImage', 'protected'),
-		'default'                     => '{type_legend},type',
-		'headline'                    => '{type_legend},type,area,headline;{expert_legend:hide},cssID,space',
-		'text'                        => '{type_legend},type,area,headline;{text_legend},text,definePlain,personalize;{image_legend},addImage;{expert_legend:hide},cssID,space',
-		'list'                        => '{type_legend},type,area,headline;{list_legend},listtype,listitems;{expert_legend:hide},cssID,space',
-		'table'                       => '{type_legend},type,area,headline;{table_legend},tableitems;{tconfig_legend},summary,thead,tfoot;{sortable_legend:hide},sortable;{expert_legend:hide},cssID,space',
-		'hyperlink'                   => '{type_legend},type,area,headline;{link_legend},url,linkTitle,embed;{expert_legend:hide},cssID,space',
-		'image'                       => '{type_legend},type,area,headline;{source_legend},singleSRC;{image_legend},alt,size,imagemargin,imageUrl,caption;{expert_legend:hide},cssID,space',
-		'gallery'                     => '{type_legend},type,area,headline;{source_legend},multiSRC;{image_legend},size,imagemargin,perRow,sortBy;{template_legend:hide},galleryHtmlTpl,galleryPlainTpl;{expert_legend:hide},cssID,space',
-		'news'                        => '{type_legend},type,area,headline;{include_legend},news',
-		'events'                      => '{type_legend},type,area,headline;{events_legend},events;{expert_legend:hide},cssID,space',
-		'article'                     => '{type_legend},type,area,headline;{include_legend},articleAlias'
+		'__selector__' => array('type')
+	),
+	'metapalettes' => array
+	(
+		'default' => array
+		(
+			'type' => array('type')
+		),
+		'headline' => array
+		(
+			'type'   => array('type', 'area', 'headline'),
+			'expert' => array(':hide', 'cssID', 'space')
+		),
+		'text' => array
+		(
+			'type'   => array('type', 'area', 'headline'),
+			'text'   => array('text', 'definePlain', 'personalize'),
+			'image'  => array('addImage'),
+			'expert' => array(':hide', 'cssID', 'space')
+		),
+		'list' => array
+		(
+			'type'   => array('type', 'area', 'headline'),
+			'list'   => array('listtype', 'listitems'),
+			'expert' => array(':hide', 'cssID', 'space')
+		),
+		'table' => array
+		(
+			'type'     => array('type', 'area', 'headline'),
+			'table'    => array('tableitems'),
+			'tconfig'  => array('summary', 'thead', 'tfoot'),
+			'sortable' => array(':hide', 'sortable'),
+			'expert'   => array(':hide', 'cssID', 'space')
+		),
+		'hyperlink' => array
+		(
+			'type'   => array('type', 'area', 'headline'),
+			'link'   => array('url', 'linkTitle', 'embed'),
+			'expert' => array(':hide', 'cssID', 'space')
+		),
+		'image' => array
+		(
+			'type'   => array('type', 'area', 'headline'),
+			'source' => array('singleSRC'),
+			'image'  => array('alt', 'size', 'imagemargin', 'imageUrl', 'caption'),
+			'expert' => array(':hide', 'cssID', 'space')
+		),
+		'gallery' => array
+		(
+			'type'    => array('type', 'area', 'headline'),
+			'source'   => array('multiSRC'),
+			'image'    => array('size', 'imagemargin', 'perRow', 'sortBy'),
+			'template' => array(':hide', 'galleryHtmlTpl', 'galleryPlainTpl'),
+			'expert'   => array(':hide', 'cssID', 'space')
+		),
+		'news' => array
+		(
+			'type'    => array('type', 'area', 'headline'),
+			'include' => array('news'),
+			'expert' => array(':hide', 'cssID', 'space')
+		),
+		'events' => array
+		(
+			'type'   => array('type', 'area', 'headline'),
+			'events' => array('events'),
+			'expert' => array(':hide', 'cssID', 'space')
+		),
+		'article' => array
+		(
+			'type'    => array('type', 'area', 'headline'),
+			'include' => array('articleAlias'),
+			'expert' => array(':hide', 'cssID', 'space')
+		)
 	),
 
 	// Subpalettes
-	'subpalettes' => array
+	'metasubpalettes' => array
 	(
-		'definePlain'                 => 'plain',
-		'addImage'                    => 'singleSRC,alt,size,imagemargin,imageUrl,caption,floating',
-		'useImage'                    => 'singleSRC,alt,size,caption',
-		'protected'                   => 'groups'
+		'definePlain' => array('plain'),
+		'addImage'    => array('singleSRC', 'alt', 'size', 'imagemargin', 'imageUrl', 'caption', 'floating'),
+		'useImage'    => array('singleSRC', 'alt', 'size', 'caption'),
+		'protected'   => array('groups')
 	),
 
 	// Fields

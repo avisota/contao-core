@@ -56,9 +56,13 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_import'] = array
 	),
 
 	// Palettes
-	'palettes' => array
+	'metapalettes' => array
 	(
-		'default'                     => '{import_legend},source,upload;{format_legend:hide},delimiter,enclosure,columns,overwrite,force'
+		'default' => array
+		(
+			'import' => array('source', 'upload'),
+			'format' => array(':hide', 'delimiter', 'enclosure', 'columns', 'overwrite', 'force')
+		)
 	),
 	
 	// Fields
