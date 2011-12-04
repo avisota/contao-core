@@ -59,7 +59,7 @@ class PageAvisotaNewsletter extends Frontend
 		// force all URLs absolute
 		$GLOBALS['TL_CONFIG']['forceAbsoluteDomainLink'] = true;
 
-		$strId = $this->Input->get('item');
+		$strId = $this->Input->get('item') ? $this->Input->get('item') : $this->Input->get('items');
 		$strNewsletter = $this->Content->generateOnlineNewsletter($strId);
 
 		if ($strNewsletter)
