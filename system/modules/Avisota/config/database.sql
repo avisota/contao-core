@@ -256,6 +256,7 @@ CREATE TABLE `tl_avisota_statistic_raw_recipient_link` (
   `linkID` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
   `url` blob NULL,
+  `real_url` blob NULL,
   `recipient` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`),
@@ -307,6 +308,10 @@ CREATE TABLE `tl_module` (
   `avisota_template_notification_mail_html` varchar(64) NOT NULL default '',
   `avisota_do_cleanup` char(1) NOT NULL default '',
   `avisota_cleanup_time` int(10) NOT NULL default '7',
+  `avisota_categories` blob NULL,
+  `avisota_reader_template` varchar(64) NOT NULL default '',
+  `avisota_list_template` varchar(64) NOT NULL default '',
+  `avisota_view_page` int(10) NOT NULL default '0',
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

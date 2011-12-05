@@ -120,16 +120,21 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 	),
 
 	// Palettes
-	'palettes' => array
+	'metapalettes' => array
 	(
-		'__selector__'                => array('useSMTP'),
-		'default'                     => '{category_legend},title,alias;{smtp_legend:hide},useSMTP;{expert_legend:hide},areas,viewOnlinePage,subscriptionPage,senderName,sender;{template_legend:hide},template_html,template_plain' . (in_array('layout_additional_sources', $this->Config->getActiveModules()) ? ',stylesheets' : ''),
+		'default'                     => array
+		(
+			'category' => array('title', 'alias'),
+			'smtp'     => array(':hide', 'useSMTP'),
+			'expert'   => array(':hide', 'areas', 'viewOnlinePage', 'subscriptionPage', 'senderName', 'sender'),
+			'template' => array(':hide', 'template_html', 'template_plain')
+		)
 	),
 
 	// Subpalettes
-	'subpalettes' => array
+	'metasubpalettes' => array
 	(
-		'useSMTP'                     => 'smtpHost,smtpUser,smtpPass,smtpEnc,smtpPort'
+		'useSMTP' => array('smtpHost', 'smtpUser', 'smtpPass', 'smtpEnc', 'smtpPort')
 	),
 
 	// Fields

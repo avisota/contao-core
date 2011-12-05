@@ -34,12 +34,46 @@
  */
 
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'avisota_send_notification';
-$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'avisota_do_cleanup';
-$GLOBALS['TL_DCA']['tl_module']['palettes']['avisota_subscription'] = '{title_legend},name,headline,type;{avisota_subscription_legend},avisota_show_lists,avisota_lists,avisota_recipient_fields;{avisota_mail_legend},avisota_subscription_sender_name,avisota_subscription_sender;{template_legend},tableless,avisota_template_subscribe_mail_plain,avisota_template_subscribe_mail_html,avisota_template_unsubscribe_mail_plain,avisota_template_unsubscribe_mail_html,avisota_template_subscription;{avisota_notification_legend:hide},avisota_send_notification;{avisota_cleanup_legend:hide},avisota_do_cleanup;{protected_legend:hide},protected;{expert_legend:hide},jumpTo,guests,cssID,space';
-$GLOBALS['TL_DCA']['tl_module']['palettes']['avisota_registration'] = '{avisota_registration_legend},avisota_registration_lists';
-$GLOBALS['TL_DCA']['tl_module']['subpalettes']['avisota_send_notification'] = 'avisota_notification_time,avisota_template_notification_mail_plain,avisota_template_notification_mail_html';
-$GLOBALS['TL_DCA']['tl_module']['subpalettes']['avisota_do_cleanup'] = 'avisota_cleanup_time';
+$GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_subscription'] = array
+(
+	'title'                => array('name', 'headline', 'type'),
+	'avisota_subscription' => array('avisota_show_lists', 'avisota_lists', 'avisota_recipient_fields'),
+	'avisota_mail'         => array('avisota_subscription_sender_name', 'avisota_subscription_sender'),
+	'template'             => array('tableless', 'avisota_template_subscribe_mail_plain', 'avisota_template_subscribe_mail_html', 'avisota_template_unsubscribe_mail_plain', 'avisota_template_unsubscribe_mail_html', 'avisota_template_subscription'),
+	'avisota_notification' => array(':hide', 'avisota_send_notification'),
+	'avisota_cleanup'      => array(':hide', 'avisota_do_cleanup'),
+	'protected'            => array(':hide', 'protected'),
+	'expert'               => array(':hide', 'jumpTo', 'guests', 'cssID', 'space')
+);
+$GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_reader'] = array
+(
+	'title'          => array('name', 'headline', 'type'),
+	'avisota_reader' => array('avisota_categories'),
+	'template'       => array('avisota_reader_template'),
+	'protected'      => array(':hide', 'protected'),
+	'expert'         => array(':hide', 'guests', 'cssID', 'space')
+);
+$GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_list'] = array
+(
+	'title'        => array('name', 'headline', 'type'),
+	'avisota_list' => array('avisota_categories', 'perPage'),
+	'redirect'     => array(':hide', 'avisota_view_page'),
+	'template'     => array(':hide', 'avisota_list_template'),
+	'protected'    => array(':hide', 'protected'),
+	'expert'       => array(':hide', 'guests,cssID,space')
+);
+$GLOBALS['TL_DCA']['tl_module']['metapalettes']['__avisota_registration'] = array
+(
+	'avisota_registration' => array('avisota_registration_lists')
+);
+$GLOBALS['TL_DCA']['tl_module']['metasubpalettes']['avisota_send_notification'] = array
+(
+	'avisota_notification_time', 'avisota_template_notification_mail_plain', 'avisota_template_notification_mail_html'
+);
+$GLOBALS['TL_DCA']['tl_module']['metasubpalettes']['avisota_do_cleanup'] = array
+(
+	'avisota_cleanup_time'
+);
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_recipient_fields'] = array
 (
@@ -190,6 +224,41 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_cleanup_time'] = array
 	'eval'                    => array('mandatory' => true, 'rgxp' => 'digit')
 );
 
+$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_categories'] = array
+(
+	'exclude'                 => true,
+	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_categories'],
+	'inputType'               => 'checkbox',
+	'options_callback'        => array('tl_module_avisota', 'getCategories'),
+	'eval'                    => array('mandatory'=>true, 'multiple'=>true)
+);
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_reader_template'] = array
+(
+	'exclude'                 => true,
+	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_reader_template'],
+	'inputType'               => 'select',
+	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
+	'eval'                    => array('mandatory'=>true, 'tl_class'=>'w50')
+);
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_list_template'] = array
+(
+	'exclude'                 => true,
+	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_list_template'],
+	'inputType'               => 'select',
+	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
+	'eval'                    => array('mandatory'=>true, 'tl_class'=>'w50')
+);
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_view_page'] = array
+(
+	'exclude'                 => true,
+	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_view_page'],
+	'inputType'               => 'pageTree',
+	'eval'                    => array('fieldType'=>'radio')
+);
+
 /**
  * Class tl_module_avisota
  *
@@ -200,6 +269,28 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_cleanup_time'] = array
  */
 class tl_module_avisota extends Backend
 {
+	/**
+	 * Get the category options
+	 *
+	 * @return array
+	 */
+	public function getCategories()
+	{
+		$objCategory = $this->Database
+			->execute("SELECT * FROM tl_avisota_newsletter_category ORDER BY title");
+		$arrList = array();
+		while ($objCategory->next())
+		{
+			$arrList[$objCategory->id] = $objCategory->title;
+		}
+		return $arrList;
+	}
+
+	/**
+	 * Get the lists options.
+	 *
+	 * @return array
+	 */
 	public function getLists()
 	{
 		$objList = $this->Database->execute("
@@ -222,26 +313,32 @@ class tl_module_avisota extends Backend
 		// Return all templates
 		switch ($dc->field)
 		{
-		case 'avisota_template_subscribe_mail_plain':
-			$strTemplatePrefix = 'mail_subscribe_plain_';
-			break;
-		case 'avisota_template_subscribe_mail_html':
-			$strTemplatePrefix = 'mail_subscribe_html_';
-			break;
-		case 'avisota_template_unsubscribe_mail_plain':
-			$strTemplatePrefix = 'mail_unsubscribe_plain_';
-			break;
-		case 'avisota_template_unsubscribe_mail_html':
-			$strTemplatePrefix = 'mail_unsubscribe_html_';
-			break;
-		case 'avisota_template_notification_mail_plain':
-			$strTemplatePrefix = 'mail_notification_plain_';
-			break;
-		case 'avisota_template_notification_mail_html':
-			$strTemplatePrefix = 'mail_notification_html_';
-			break;
-		default:
-			return array();
+			case 'avisota_template_subscribe_mail_plain':
+				$strTemplatePrefix = 'mail_subscribe_plain_';
+				break;
+			case 'avisota_template_subscribe_mail_html':
+				$strTemplatePrefix = 'mail_subscribe_html_';
+				break;
+			case 'avisota_template_unsubscribe_mail_plain':
+				$strTemplatePrefix = 'mail_unsubscribe_plain_';
+				break;
+			case 'avisota_template_unsubscribe_mail_html':
+				$strTemplatePrefix = 'mail_unsubscribe_html_';
+				break;
+			case 'avisota_template_notification_mail_plain':
+				$strTemplatePrefix = 'mail_notification_plain_';
+				break;
+			case 'avisota_template_notification_mail_html':
+				$strTemplatePrefix = 'mail_notification_html_';
+				break;
+			case 'avisota_reader_template':
+				$strTemplatePrefix = 'avisota_reader_';
+				break;
+			case 'avisota_list_template':
+				$strTemplatePrefix = 'avisota_list_';
+				break;
+			default:
+				return array();
 		}
 
 		return $this->getTemplateGroup($strTemplatePrefix, $dc->activeRecord->pid);

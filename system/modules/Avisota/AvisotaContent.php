@@ -187,7 +187,11 @@ class AvisotaContent extends Controller
 		$head = '';
 
 		// Add style sheet newsletter.css
-		if (file_exists(TL_ROOT . '/newsletter.css'))
+		if (file_exists(TL_ROOT . '/system/scripts/newsletter.css'))
+		{
+			$head .= '<style type="text/css">' . "\n" . $this->cleanCSS(file_get_contents(TL_ROOT . '/system/scripts/newsletter.css'), '/system/scripts/newsletter.css') . "\n" . '</style>' . "\n";
+		}
+		else if (file_exists(TL_ROOT . '/newsletter.css'))
 		{
 			$head .= '<style type="text/css">' . "\n" . $this->cleanCSS(file_get_contents(TL_ROOT . '/newsletter.css')) . "\n" . '</style>' . "\n";
 		}
@@ -212,7 +216,7 @@ class AvisotaContent extends Controller
 		}
 		$objTemplate->newsletter = $objNewsletter->row();
 		$objTemplate->category = $objCategory->row();
-		return $objTemplate->parse();
+		return $this->replaceAndExtendURLs($objTemplate->parse());
 	}
 
 
@@ -280,7 +284,7 @@ class AvisotaContent extends Controller
 					$path = dirname($path);
 					$strUrl = substr($strUrl, 3);
 				}
-				if (!preg_match('#^\w+://#', $strUrl) && $strUrl[0] != '/')
+				if (!preg_match('#^\w+:#', $strUrl) && $strUrl[0] != '/')
 				{
 					$strUrl = ($path ? $path . '/' : '') . $strUrl;
 				}
@@ -416,6 +420,25 @@ class AvisotaContent extends Controller
 		}
 
 		return '';
+	}
+
+
+	/**
+	 * Extend image src and a href.
+	 */
+	public function replaceAndExtendURLs($strHtml)
+	{
+		return preg_replace_callback('#(href|src)=(".*"|\'.*\')#U', array($this, 'callbackReplaceAndExtend'), $strHtml);
+	}
+
+
+	/**
+	 * Callback function for replaceAndExtendURLs(..)
+	 */
+	public function callbackReplaceAndExtend($m)
+	{
+		$strUrl = substr($m[2], 1, -1);
+		return $m[1] . '="' . $this->Base->extendURL($strUrl) . '"';
 	}
 
 

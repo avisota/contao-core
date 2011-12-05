@@ -56,9 +56,12 @@ $GLOBALS['TL_DCA']['tl_avisota_tracking_export'] = array
 	),
 
 	// Palettes
-	'palettes' => array
+	'metapalettes' => array
 	(
-		'default'                     => '{format_legend:hide},delimiter,enclosure'
+		'default' => array
+		(
+			'format' => array(':hide', 'delimiter', 'enclosure')
+		)
 	),
 
 	// Fields

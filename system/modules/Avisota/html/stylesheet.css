@@ -155,3 +155,51 @@ td.number {
 table.jqplot-table-legend {
 	margin-top: 54px !important;
 }
+
+/** --- Update -------------------------------------------------------------- */
+.header_more {
+	background: url("more.png") no-repeat scroll left center transparent;
+	padding: 2px 0 3px 20px;
+}
+
+.versions {
+	overflow: hidden;
+	margin: 3px 50px 8px;
+}
+.versions .previous,
+.versions .installed {
+	width: 260px;
+	padding: 10px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-ie-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+	text-align: center;
+}
+.versions .previous {
+	float: left;
+	border: 1px solid #000099;
+	background: #f9f9ff;
+}
+.versions .installed {
+	float: right;
+	border: 1px solid #009900;
+	background: #f9fff9;
+}
+.versions .title {
+	display: block;
+}
+.versions .version {
+	display: block;
+	font-weight: bold;
+	font-size: 32px;
+}
+fieldset.update legend {
+	background-image: none;
+}
+fieldset.update legend img,
+fieldset.update legend input {
+	vertical-align: -4px;
+}

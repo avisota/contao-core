@@ -125,16 +125,21 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 	),
 
 	// Palettes
-	'palettes' => array
+	'metapalettes' => array
 	(
-		'__selector__'                => array('addFile'),
-		'default'                     => '{newsletter_legend},subject,alias;{recipient_legend},recipients;{attachment_legend},addFile;{template_legend:hide},template_html,template_plain',
+		'default'                     => array
+		(
+			'newsletter' => array('subject', 'alias'),
+			'recipient'  => array('recipients'),
+			'attachment' => array('addFile'),
+			'template'   => array(':hide', 'template_html', 'template_plain')
+		),
 	),
 
 	// Subpalettes
-	'subpalettes' => array
+	'metasubpalettes' => array
 	(
-		'addFile'                     => 'files'
+		'addFile' => array('files')
 	),
 
 	// Fields

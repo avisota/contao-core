@@ -36,7 +36,16 @@
 /**
  * Table tl_page
  */
-$GLOBALS['TL_DCA']['tl_page']['palettes']['avisota'] = '{title_legend},title,alias,type;{redirect_legend},jumpBack;{protected_legend:hide},protected;{cache_legend:hide},includeCache;{chmod_legend:hide},includeChmod;{expert_legend:hide},guests;{publish_legend},published,start,stop';
+$GLOBALS['TL_DCA']['tl_page']['metapalettes']['avisota'] = array
+(
+	'title'     => array('title', 'alias', 'type'),
+	'redirect'  => array('jumpBack'),
+	'protected' => array(':hide', 'protected'),
+	'cache'     => array(':hide', 'includeCache'),
+	'chmod'     => array(':hide', 'includeChmod'),
+	'expert'    => array(':hide', 'guests'),
+	'publish'   => array('published', 'start', 'stop')
+);
 
 $GLOBALS['TL_DCA']['tl_page']['fields']['jumpBack'] = array
 (

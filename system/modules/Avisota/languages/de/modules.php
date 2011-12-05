@@ -43,6 +43,7 @@ $GLOBALS['TL_LANG']['MOD']['avisota_newsletter']   = array('Newsletter', 'Newsle
 $GLOBALS['TL_LANG']['MOD']['avisota_tracking']     = array('Analytics', 'Lese und Reaktionsverhalten analysieren.');
 $GLOBALS['TL_LANG']['MOD']['avisota_outbox']       = array('Postausgang', 'Postausgang einsehen und Newsletter versenden.');
 $GLOBALS['TL_LANG']['MOD']['avisota_translation']  = array('Sprachvariablen', 'Verändern Sie die Sprachvariablen für das Newslettersystem.');
+$GLOBALS['TL_LANG']['MOD']['avisota_update']       = array('Update', 'Avisota Newslettersystem aktualisieren.');
 
 
 /**
@@ -50,6 +51,6 @@ $GLOBALS['TL_LANG']['MOD']['avisota_translation']  = array('Sprachvariablen', 'V
  */
 $GLOBALS['TL_LANG']['FMD']['avisota']               = 'Newslettersystem';
 $GLOBALS['TL_LANG']['FMD']['avisota_subscription']  = array('Abonnement verwalten', 'An- und Abmeldung zum Avisota Newslettersystem.');
+$GLOBALS['TL_LANG']['FMD']['avisota_list']          = array('Newsletter-Liste', 'List aller versendeten Newsletter.');
+$GLOBALS['TL_LANG']['FMD']['avisota_reader']        = array('Newsletter-Leser', 'Einen Newsletter innerhalb einer Seite anzeigen.');
 $GLOBALS['TL_LANG']['FMD']['avisota_registration']  = array('Registrierung (Avisota)', 'Registrierungsmodul mit Avisota Verteilern.');
-
-?>

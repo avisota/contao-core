@@ -146,6 +146,16 @@ abstract class NewsletterElement extends Frontend
 
 
 	/**
+	 * Callback function for replaceAndExtendURLs(..)
+	 */
+	public function callbackReplaceAndExtendHref($m)
+	{
+		$strUrl = substr($m[1], 1, -1);
+		return 'href="' . $this->extendURL($strUrl) . '"';
+	}
+
+
+	/**
 	 * Replace an image tag.
 	 * @param array $arrMatch
 	 */

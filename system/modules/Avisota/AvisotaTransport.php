@@ -400,10 +400,7 @@ class AvisotaTransport extends Backend
 
 			while ($intEndExecutionTime > time() && $objRecipients->next())
 			{
-				$arrRecipient = array
-				(
-					'email' => $objRecipients->email
-				);
+				$arrRecipient = $objRecipients->row();
 
 				// add recipient details
 				if ($objRecipients->source == 'list')
@@ -472,7 +469,7 @@ class AvisotaTransport extends Backend
 					$arrFailed[] = $objRecipients->row();
 
 					$this->Database
-						->prepare("UPDATE tl_avisota_newsletter_outbox SET failed='1' WHERE id=?")
+						->prepare("UPDATE tl_avisota_newsletter_outbox_recipient SET failed='1' WHERE id=?")
 						->execute($objRecipients->id);
 
 					// disable recipient from list
@@ -610,7 +607,7 @@ class AvisotaTransport extends Backend
 		$strHtml = $strHtml;
 
 		$objPrepareTrackingHelper = new PrepareTrackingHelper($objNewsletter, $objCategory, $objRecipient);
-		$strHtml = preg_replace_callback('#href=["\']((http|ftp)s?:\/\/.+)["\']#U', array(&$objPrepareTrackingHelper, 'replaceHtml'), $strHtml);
+		$strHtml = preg_replace_callback('#(<a[^>]*)href=["\']((http|ftp)s?:\/\/.+)["\']#U', array(&$objPrepareTrackingHelper, 'replaceHtml'), $strHtml);
 
 		$objRead = $this->Database
 			->prepare("SELECT * FROM tl_avisota_statistic_raw_recipient WHERE pid=? AND recipient=?")
@@ -622,8 +619,8 @@ class AvisotaTransport extends Backend
 		else
 		{
 			$objRead = $this->Database
-				->prepare("INSERT INTO tl_avisota_statistic_raw_recipient (pid,tstamp,recipient) VALUES (?, ?, ?)")
-				->execute($objNewsletter->id, time(), $objRecipient->email);
+				->prepare("INSERT INTO tl_avisota_statistic_raw_recipient (pid,tstamp,recipient,recipientID,source,sourceID) VALUES (?, ?, ?, ?, ?, ?)")
+				->execute($objNewsletter->id, time(), $objRecipient->email, $objRecipient->recipientID, $objRecipient->source, $objRecipient->sourceID);
 			$intRead = $objRead->insertId;
 		}
 
@@ -655,23 +652,29 @@ class PrepareTrackingHelper extends Controller
 
 	protected $objRecipient;
 
+	protected $strRecipientUnsubscribeUrl;
+
 	public function __construct($objNewsletter, $objCategory, $objRecipient)
 	{
 		parent::__construct();
 		$this->import('Database');
 		$this->import('DomainLink');
+		$this->import('AvisotaStatic', 'Static');
 		$this->objNewsletter = $objNewsletter;
 		$this->objCategory = $objCategory;
 		$this->objRecipient = $objRecipient;
+
+		$arrRecipeient = $this->Static->getRecipient();
+		$this->strRecipientUnsubscribeUrl = $this->replaceInsertTags('{{newsletter::unsubscribe_url}}');
 	}
 
 	public function replaceHtml($m)
 	{
-		$strUrl = $this->replace($m[1]);
+		$strUrl = $this->replace($m[2]);
 
 		if ($strUrl)
 		{
-			return 'href="' . specialchars($strUrl) . '"';
+			return $m[1] . 'href="' . specialchars($strUrl) . '"';
 		}
 		return $m[0];
 	}
@@ -689,13 +692,19 @@ class PrepareTrackingHelper extends Controller
 
 	public function replace($strUrl)
 	{
+
 		// do not track ...
 		if (// images
-			preg_match('#\.(jpe?g|png|gif)#i', $strUrl)
-			// unsubscribe url
-			|| preg_match('#unsubscribetoken#i', $strUrl))
+			preg_match('#\.(jpe?g|png|gif)#i', $strUrl))
 		{
 			return false;
+		}
+
+		$strRealUrl = '';
+		if ($this->strRecipientUnsubscribeUrl == $strUrl)
+		{
+			$strRealUrl = $strUrl;
+			$strUrl = preg_replace('#email=[^&]*#', 'email=…', $strUrl);
 		}
 
 		$objLink = $this->Database
@@ -723,8 +732,8 @@ class PrepareTrackingHelper extends Controller
 		else
 		{
 			$intRecipientLink = $this->Database
-				->prepare("INSERT INTO tl_avisota_statistic_raw_recipient_link (pid,linkID,tstamp,url,recipient) VALUES (?, ?, ?, ?, ?)")
-				->execute($this->objNewsletter->id, $intLink, time(), $strUrl, $this->objRecipient->email)
+				->prepare("INSERT INTO tl_avisota_statistic_raw_recipient_link (pid,linkID,tstamp,url,real_url,recipient) VALUES (?, ?, ?, ?, ?, ?)")
+				->execute($this->objNewsletter->id, $intLink, time(), $strUrl, $strRealUrl, $this->objRecipient->email)
 				->insertId;
 		}
 

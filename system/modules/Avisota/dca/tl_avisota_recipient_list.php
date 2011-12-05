@@ -120,9 +120,13 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_list'] = array
 	),
 
 	// Palettes
-	'palettes' => array
+	'metapalettes' => array
 	(
-		'default'                     => '{list_legend},title,alias;{expert_legend:hide},viewOnlinePage,subscriptionPage',
+		'default' => array
+		(
+			'list'   => array('title', 'alias'),
+			'expert' => array(':hide', 'viewOnlinePage', 'subscriptionPage')
+		)
 	),
 
 	// Fields
@@ -134,7 +138,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_list'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>255)
+			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50')
 		),
 		'alias' => array
 		(

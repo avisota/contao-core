@@ -94,30 +94,24 @@ class AvisotaInsertTag extends Controller
 				case 'unsubscribe':
 				case 'unsubscribe_url':
 					$strAlias = false;
-					if (preg_match('#^list:(\d+)$#', $arrCurrentRecipient['outbox_source'], $arrMatch))
+					if ($arrCurrentRecipient['source'] == 'list')
 					{
-						if ($arrMatch[1] > 0)
+						$objRecipientList = $this->Database
+							->prepare("SELECT * FROM tl_avisota_recipient_list WHERE id=?")
+							->execute($arrCurrentRecipient['sourceID']);
+						if (!$objRecipientList->next())
 						{
-							$objRecipientList = $this->Database->prepare("
-									SELECT
-										*
-									FROM
-										`tl_avisota_recipient_list`
-									WHERE
-										`id`=?")
-								->execute($arrMatch[1]);
-							if (!$objRecipientList->next())
-							{
-								return;
-							}
-							$strAlias = $objRecipientList->alias;
-							$objPage = $this->getPageDetails($objRecipientList->subscriptionPage);
+							return '';
 						}
+						$strAlias = $objRecipientList->alias;
+						$objPage = $this->getPageDetails($objRecipientList->subscriptionPage);
 					}
-
-					if ($objCategory->subscriptionPage > 0)
+					else if ($arrCurrentRecipient['source'] == 'mgroup')
 					{
-						$objPage = $this->getPageDetails($objCategory->subscriptionPage);
+						if ($objCategory->subscriptionPage > 0)
+						{
+							$objPage = $this->getPageDetails($objCategory->subscriptionPage);
+						}
 					}
 
 					if ($objPage)
@@ -136,11 +130,11 @@ class AvisotaInsertTag extends Controller
 
 					switch ($strTag[2])
 					{
-					case 'html':
-						return sprintf('<a href="%s">%s</a>', $strUrl, $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe']);
+						case 'html':
+							return sprintf('<a href="%s">%s</a>', $strUrl, $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe']);
 
-					case 'plain':
-						return sprintf("%s\n[%s]", $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe'], $strUrl);
+						case 'plain':
+							return sprintf("%s\n[%s]", $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe'], $strUrl);
 					}
 					break;
 				}

@@ -296,6 +296,7 @@ class AvisotaTracking extends BackendModule
 				->prepare("SELECT r.send as time, COUNT(r.id) as sum
 					FROM tl_avisota_newsletter_outbox_recipient r
 					INNER JOIN tl_avisota_newsletter_outbox o
+					ON r.pid=o.id
 					WHERE o.pid=? AND r.send>0
 					GROUP BY time
 					ORDER BY time")
@@ -415,27 +416,41 @@ class AvisotaTracking extends BackendModule
 	protected function json_output(Database_Result $objResultSet)
 	{
 		header('Content-Type: application/json');
-		$this->json_output_array($objResultSet);
+		$this->json_output_array($objResultSet, !$this->blnUseHighstock);
 		exit;
 	}
 
-	protected function json_output_array(Database_Result $objResultSet)
+	protected function json_output_array(Database_Result $objResultSet, $blnReduceTime = false)
 	{
 		// highstock require local time, jqplot use utc time
 		$intTimezoneOffset = $this->blnUseHighstock ? $this->parseDate('Z', time()) : 0;
 		echo '[' . "\n";
 		$n = 0;
 		$sum = 0;
+		$time = -1;
 		if ($objResultSet->numRows)
 		{
 			while ($objResultSet->next())
 			{
 				$sum += $objResultSet->sum;
+				if ($blnReduceTime)
+				{
+					$temp = floor($objResultSet->time-($objResultSet->time%(60)));
+					if ($temp == $time)
+					{
+						continue;
+					}
+					$time = $temp;
+				}
+				else
+				{
+					$time = $objResultSet->time;
+				}
 				if ($n++ > 0)
 				{
 					echo ",\n";
 				}
-				echo '[' . (($objResultSet->time + $intTimezoneOffset) * 1000) . ',' . $sum . ']';
+				echo '[' . (($time + $intTimezoneOffset) * 1000) . ',' . $sum . ']';
 			}
 		}
 		else

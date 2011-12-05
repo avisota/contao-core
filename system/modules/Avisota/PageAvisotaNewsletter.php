@@ -44,6 +44,11 @@
 class PageAvisotaNewsletter extends Frontend
 {
 	/**
+	 * @var AvisotaContent
+	 */
+	protected $Content;
+
+	/**
 	 * Generate a newsletter
 	 * @param object
 	 */
@@ -54,7 +59,7 @@ class PageAvisotaNewsletter extends Frontend
 		// force all URLs absolute
 		$GLOBALS['TL_CONFIG']['forceAbsoluteDomainLink'] = true;
 
-		$strId = $this->Input->get('item');
+		$strId = $this->Input->get('item') ? $this->Input->get('item') : $this->Input->get('items');
 		$strNewsletter = $this->Content->generateOnlineNewsletter($strId);
 
 		if ($strNewsletter)
@@ -64,7 +69,7 @@ class PageAvisotaNewsletter extends Frontend
 			exit;
 		}
 
-		$this->redirect($this->generateFrontendUrl($this->getPageDetails($objPage->jumpBack ? $objPage->jumpBack : $objPage->pid))->row());
+		$this->redirect($this->generateFrontendUrl($this->getPageDetails($objPage->jumpBack ? $objPage->jumpBack : $objPage->pid)->row()));
 	}
 }
 ?>
