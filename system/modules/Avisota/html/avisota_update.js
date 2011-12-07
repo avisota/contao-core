@@ -7,7 +7,7 @@ $(window).addEvent('domready', function() {
 		if (update.length) {
 			update = update[update.length-1];
 
-			new Request.HTML({
+			new Request({
 				url: 'contao/main.php',
 				data: {
 					'do': 'avisota_update',
@@ -21,16 +21,25 @@ $(window).addEvent('domready', function() {
 						.set('src', 'system/modules/Avisota/html/update.gif')
 						.replaces(update);
 				},
-				onSuccess: function(responseTree, responseElements, responseHTML, responseJavaScript) {
-					responseElements[0].replaces(update);
+				onSuccess: function(responseText, responseXML) {
+					update = new Element('img')
+						.set('src', 'system/modules/Avisota/html/updated.png')
+						.set('alt', responseText)
+						.set('title', responseText)
+						.replaces(update);
 					setTimeout(doUpdate, 1);
 				},
-				onFailure: function() {
+				onFailure: function(xhr) {
+					console.log(arguments);
 					update = new Element('img')
 						.set('src', 'system/modules/Avisota/html/error.png')
+						.set('alt', xhr.responseText)
+						.set('title', xhr.responseText)
 						.replaces(update);
 				}
 			}).send();
+		} else {
+			window.location.href = window.location.href.replace(/main\.php.*/, 'main.php?do=repository_manager&update=database');
 		}
 	}
 
