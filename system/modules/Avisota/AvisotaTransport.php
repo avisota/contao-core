@@ -39,6 +39,11 @@ define('BYPASS_TOKEN_CHECK', true);
 // run in FE mode
 define('TL_MODE', 'FE');
 
+// Define the static URL constants
+define('TL_FILES_URL', '');
+define('TL_SCRIPT_URL', '');
+define('TL_PLUGINS_URL', '');
+
 // initialize contao
 include('../../initialize.php');
 
