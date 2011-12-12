@@ -54,6 +54,11 @@ class PageAvisotaNewsletter extends Frontend
 	 */
 	public function generate(Database_Result $objPage)
 	{
+		// Define the static URL constants
+		define('TL_FILES_URL', ($objPage->staticFiles != '' && !$GLOBALS['TL_CONFIG']['debugMode']) ? $objPage->staticFiles . TL_PATH . '/' : '');
+		define('TL_SCRIPT_URL', ($objPage->staticSystem != '' && !$GLOBALS['TL_CONFIG']['debugMode']) ? $objPage->staticSystem . TL_PATH . '/' : '');
+		define('TL_PLUGINS_URL', ($objPage->staticPlugins != '' && !$GLOBALS['TL_CONFIG']['debugMode']) ? $objPage->staticPlugins . TL_PATH . '/' : '');
+
 		$this->import('AvisotaContent', 'Content');
 
 		// force all URLs absolute
