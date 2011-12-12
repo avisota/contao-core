@@ -65,7 +65,9 @@ class NewsletterArticleTeaser extends NewsletterElement
 	{
 		if ($this->loadArticle())
 		{
-			return parent::generateHTML();
+			$strBuffer = parent::generateHTML();
+			unset($GLOBALS['objPage']);
+			return $strBuffer;
 		}
 		return '';
 	}
@@ -79,7 +81,9 @@ class NewsletterArticleTeaser extends NewsletterElement
 	{
 		if ($this->loadArticle())
 		{
-			return parent::generatePlain();
+			$strBuffer = parent::generatePlain();
+			unset($GLOBALS['objPage']);
+			return $strBuffer;
 		}
 		return '';
 	}
