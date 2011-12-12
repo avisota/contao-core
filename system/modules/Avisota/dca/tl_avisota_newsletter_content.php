@@ -772,7 +772,7 @@ class tl_avisota_newsletter_content extends Backend
 	($this->hasMultipleNewsletterAreas($arrRow) ? sprintf(' <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>', isset($GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$arrRow['area']]) ? $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$arrRow['area']] : $arrRow['area']) : '') .
 '</div>
 <div class="limit_height' . (!$GLOBALS['TL_CONFIG']['doNotCollapse'] ? ' h64' : '') . ' block">
-' . $this->Content->getNewsletterElement($arrRow['id']) . '
+<table>' . $this->Content->getNewsletterElement($arrRow['id']) . '</table>
 </div>' . "\n";
 	}
 
