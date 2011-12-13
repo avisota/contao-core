@@ -76,6 +76,8 @@ $GLOBALS['TL_CONFIG']['avisota_max_send_timeout']             = 1;
  */
 $GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrter Herr {fullname}';
 $GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrte Frau {fullname}';
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrter Herr {lastname}';
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrte Frau {lastname}';
 $GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrter {name}';
 $GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrte {name}';
 $GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Hallo {shortname}';
