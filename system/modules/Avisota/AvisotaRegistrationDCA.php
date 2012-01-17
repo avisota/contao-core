@@ -156,7 +156,7 @@ class AvisotaRegistrationDCA extends Controller {
 		$this->import('Database');
 	}
 
-	private static $objInstance;
+	protected static $objInstance;
 
 	public static function getInstance()
 	{
