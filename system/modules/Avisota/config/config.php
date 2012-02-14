@@ -128,12 +128,6 @@ $arrAvisotaBeMod = array
 			'callback'   => 'AvisotaOutbox',
 			'icon'       => 'system/modules/Avisota/html/outbox.png',
 			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
-		),
-		'avisota_translation' => array
-		(
-			'tables'     => array('tl_avisota_translation'),
-			'icon'       => 'system/modules/Avisota/html/translation.png',
-			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 		)
 	)
 );
