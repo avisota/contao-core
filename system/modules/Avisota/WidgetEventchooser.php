@@ -2,11 +2,11 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright (C) 2010,2011 Tristan Lins
+ * Copyright (C) 2010,2011,2012 Tristan Lins
  *
  * Extension for:
  * Contao Open Source CMS
- * Copyright (C) 2005-2010 Leo Feyer
+ * Copyright (C) 2005-2012 Leo Feyer
  *
  * Formerly known as TYPOlight Open Source CMS.
  *
@@ -26,7 +26,7 @@
  *
  * PHP version 5
  * @copyright  4ward.media 2010
- * @copyright  InfinitySoft 2011
+ * @copyright  InfinitySoft 2011,2012
  * @author     Christoph Wiechert <christoph.wiechert@4wardmedia.de>
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    WidgetEventchooser
@@ -34,6 +34,16 @@
  * @filesource
  */
 
+
+/**
+ * Class WidgetEventchooser
+ *
+ * @copyright  4ward.media 2010
+ * @copyright  InfinitySoft 2010,2011,2012
+ * @author     Christoph Wiechert <christoph.wiechert@4wardmedia.de>
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    Avisota
+ */
 class WidgetEventchooser extends Widget
 {
 

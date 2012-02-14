@@ -2,11 +2,11 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright (C) 2010,2011 Tristan Lins
+ * Copyright (C) 2010,2011,2012 Tristan Lins
  *
  * Extension for:
  * Contao Open Source CMS
- * Copyright (C) 2005-2010 Leo Feyer
+ * Copyright (C) 2005-2012 Leo Feyer
  * 
  * Formerly known as TYPOlight Open Source CMS.
  *
@@ -25,7 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2010,2011
+ * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  * @license    LGPL
