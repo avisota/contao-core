@@ -218,7 +218,7 @@ $GLOBALS['TL_HOOKS']['activateAccount'][]       = array('AvisotaRegistrationDCA'
 /**
  * Graphical text support.
  */
-if(class_exists('FrontendGraphicalText') && method_exists('FrontendGraphicalText', 'replaceGraphicalTextTag'))
+if(in_array('graphicaltext', $this->getActiveModules()))
 {
 	$GLOBALS['TL_HOOKS']['parseFrontendTemplate'][] = array('FrontendGraphicalText', 'replaceGraphicalTextTag');
 }
