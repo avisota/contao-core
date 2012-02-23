@@ -405,8 +405,6 @@ class ModuleAvisotaSubscription extends Module
 	 */
 	protected function unsubscribe($arrRecipient)
 	{
-		$this->remove_subscription($arrRecipient['email'], $arrRecipient['lists']);
-
 		// HOOK: add custom logic
 		if (isset($GLOBALS['TL_HOOKS']['avisotaUnsubscribe']) && is_array($GLOBALS['TL_HOOKS']['avisotaUnsubscribe']))
 		{
@@ -416,6 +414,8 @@ class ModuleAvisotaSubscription extends Module
 				$this->$callback[0]->$callback[1]($arrRecipient);
 			}
 		}
+
+		$this->remove_subscription($arrRecipient['email'], $arrRecipient['lists']);
 	}
 
 
@@ -440,8 +440,6 @@ class ModuleAvisotaSubscription extends Module
 
 			if ($objRecipientList->next() && in_array($objRecipientList->id, $arrListIds))
 			{
-				$this->remove_subscription($strEmail, array($objRecipientList->id));
-
 				// HOOK: add custom logic
 				if (isset($GLOBALS['TL_HOOKS']['avisotaUnsubscribe']) && is_array($GLOBALS['TL_HOOKS']['avisotaUnsubscribe']))
 				{
@@ -451,6 +449,8 @@ class ModuleAvisotaSubscription extends Module
 						$this->$callback[0]->$callback[1]($strEmail, array($objRecipientList->id));
 					}
 				}
+
+				$this->remove_subscription($strEmail, array($objRecipientList->id));
 			}
 		}
 	}
