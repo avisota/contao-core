@@ -1,0 +1,49 @@
+#wrapper {
+	width: 500px;
+	margin: 40px auto;
+	padding: 40px;
+	border: 1px solid #990000;
+	background: #eee;
+	overflow: hidden;
+	line-height: 1.5em;
+}
+img {
+	float: left;
+	margin-right: 20px;
+}
+div.buttons {
+	clear: left;
+	padding-top: 20px;
+}
+a.disableAvisota,
+a.uninstallAvisota {
+	width: 220px;
+	height: 32px;
+	line-height: 32px;
+	margin: 0;
+	padding: 0;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-ie-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+	text-align: center;
+}
+a.disableAvisota {
+	float: left;
+	border: 1px solid #0000ff;
+	background: #f6f6ff;
+}
+a.disableAvisota:hover {
+	color: #0000ff;
+}
+a.uninstallAvisota {
+	float: right;
+	border: 1px solid #009900;
+	background: #f6fff6;
+	cursor: pointer;
+}
+a.uninstallAvisota:hover {
+	color: #009900;
+}

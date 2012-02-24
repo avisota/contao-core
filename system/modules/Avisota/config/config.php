@@ -261,11 +261,30 @@ if (TL_MODE == 'BE' && $_GET['do'] == 'avisota_recipients' && $_GET['table'] == 
 
 
 /**
+ * Compatibility check
+ */
+if (version_compare(Database::getInstance()->query('SHOW VARIABLES WHERE Variable_name = \'version\'')->Value, '5', '<')) {
+	$objEnvironment = Environment::getInstance();
+	if (// The update controller itself
+		   strpos($objEnvironment->requestUri, 'system/modules/Avisota/AvisotaCompatibilityController.php') === false
+		// Backend login
+		&& strpos($objEnvironment->requestUri, 'contao/index.php') === false
+		// Extension manager
+		&& strpos($objEnvironment->requestUri, 'contao/main.php?do=repository_manager') === false
+		// Install Tool
+		&& strpos($objEnvironment->requestUri, 'contao/install.php') === false)
+	{
+		header('Location: ' . $objEnvironment->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/system/modules/Avisota/AvisotaCompatibilityController.php');
+		exit;
+	}
+}
+
+/**
  * Update script
  */
- if (TL_MODE == 'BE')
- {
- 	$objEnvironment = Environment::getInstance();
+else if (TL_MODE == 'BE')
+{
+	$objEnvironment = Environment::getInstance();
 	if (   $blnAvisotaUpdate
 		// The update controller itself
 		&& strpos($objEnvironment->requestUri, 'contao/main.php?do=avisota_update') === false
