@@ -34,12 +34,12 @@
  */
 
 
- /**
-  * Constants
-  */
- define('AVISOTA_VERSION', '1.6.0');
- define('NL_HTML', 'html');
- define('NL_PLAIN', 'plain');
+/**
+ * Constants
+ */
+define('AVISOTA_VERSION', '1.6.0');
+define('NL_HTML', 'html');
+define('NL_PLAIN', 'plain');
 
 
 /**
@@ -57,8 +57,7 @@ foreach (AvisotaUpdate::$updates as $strVersion)
 /**
  * Request starttime
  */
-if (!isset($_SERVER['REQUEST_TIME']))
-{
+if (!isset($_SERVER['REQUEST_TIME'])) {
 	$_SERVER['REQUEST_TIME'] = time();
 }
 
@@ -66,9 +65,9 @@ if (!isset($_SERVER['REQUEST_TIME']))
 /**
  * Settings
  */
-$GLOBALS['TL_CONFIG']['avisota_max_send_time']                = ini_get('max_execution_time') > 0 ? floor(0.85 * ini_get('max_execution_time')) : 120;
-$GLOBALS['TL_CONFIG']['avisota_max_send_count']               = 100;
-$GLOBALS['TL_CONFIG']['avisota_max_send_timeout']             = 1;
+$GLOBALS['TL_CONFIG']['avisota_max_send_time']    = ini_get('max_execution_time') > 0 ? floor(0.85 * ini_get('max_execution_time')) : 120;
+$GLOBALS['TL_CONFIG']['avisota_max_send_count']   = 100;
+$GLOBALS['TL_CONFIG']['avisota_max_send_timeout'] = 1;
 
 
 /**
@@ -103,27 +102,33 @@ $arrAvisotaBeMod = array
 (
 	'avisota' => array
 	(
-		'avisota_recipients' => array
+		'avisota_mailing_list' => array
 		(
-			'tables'     => array('tl_avisota_recipient_list', 'tl_avisota_recipient', 'tl_avisota_recipient_migrate', 'tl_avisota_recipient_import', 'tl_avisota_recipient_export', 'tl_avisota_recipient_remove'),
+			'tables'     => array('tl_avisota_mailing_list'),
+			'icon'       => 'system/modules/Avisota/html/mailing_list.png',
+			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+		),
+		'avisota_recipients'   => array
+		(
+			'tables'     => array('tl_avisota_recipient', 'tl_avisota_recipient_migrate', 'tl_avisota_recipient_import', 'tl_avisota_recipient_export', 'tl_avisota_recipient_remove'),
 			'icon'       => 'system/modules/Avisota/html/recipients.png',
 			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 		),
-		'avisota_newsletter' => array
+		'avisota_newsletter'   => array
 		(
 			'tables'     => array('tl_avisota_newsletter_category', 'tl_avisota_newsletter', 'tl_avisota_newsletter_content'),
 			'send'       => array('Avisota', 'send'),
 			'icon'       => 'system/modules/Avisota/html/newsletter.png',
 			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 		),
-		'avisota_tracking' => array
+		'avisota_tracking'     => array
 		(
 			'callback'   => 'AvisotaTracking',
 			'tables'     => array('tl_avisota_tracking_export'),
 			'icon'       => 'system/modules/Avisota/html/tracking.png',
 			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 		),
-		'avisota_outbox' => array
+		'avisota_outbox'       => array
 		(
 			'callback'   => 'AvisotaOutbox',
 			'icon'       => 'system/modules/Avisota/html/outbox.png',
@@ -131,8 +136,7 @@ $arrAvisotaBeMod = array
 		)
 	)
 );
-if ($blnAvisotaUpdate)
-{
+if ($blnAvisotaUpdate) {
 	$arrAvisotaBeMod['avisota']['avisota_update'] = array
 	(
 		'callback'   => 'AvisotaUpdate',
@@ -141,7 +145,7 @@ if ($blnAvisotaUpdate)
 	);
 }
 
-$i = array_search('design', array_keys($GLOBALS['BE_MOD']));
+$i                 = array_search('design', array_keys($GLOBALS['BE_MOD']));
 $GLOBALS['BE_MOD'] = array_merge(
 	array_slice($GLOBALS['BE_MOD'], 0, $i),
 	$arrAvisotaBeMod,
@@ -164,22 +168,22 @@ $GLOBALS['FE_MOD']['avisota']['avisota_registration'] = 'ModuleAvisotaRegistrati
 $GLOBALS['TL_NLE'] = array_merge_recursive(
 	array
 	(
-		'texts' => array
+		'texts'    => array
 		(
 			'headline'  => 'NewsletterHeadline',
 			'text'      => 'NewsletterText',
 			'list'      => 'NewsletterList',
 			'table'     => 'NewsletterTable'
 		),
-		'links' => array
+		'links'    => array
 		(
 			'hyperlink' => 'NewsletterHyperlink'
 		),
-		'images' => array
+		'images'   => array
 		(
 			'image'     => 'NewsletterImage',
 			'gallery'   => 'NewsletterGallery'
-		) ,
+		),
 		'includes' => array
 		(
 			'news'      => 'NewsletterNews',
@@ -195,25 +199,39 @@ $GLOBALS['TL_NLE'] = array_merge_recursive(
  * Widgets
  */
 $GLOBALS['BE_FFL']['eventchooser'] = 'WidgetEventchooser';
-$GLOBALS['BE_FFL']['newschooser'] = 'WidgetNewschooser';
+$GLOBALS['BE_FFL']['newschooser']  = 'WidgetNewschooser';
 
 
 /**
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['outputBackendTemplate'][] = array('AvisotaBackend', 'hookOutputBackendTemplate');
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][]     = array('AvisotaInsertTag', 'hookReplaceNewsletterInsertTags');
-$GLOBALS['TL_HOOKS']['getEditorStylesLayout'][] = array('AvisotaEditorStyle', 'hookGetEditorStylesLayout');
-$GLOBALS['TL_HOOKS']['loadDataContainer'][]     = array('AvisotaRegistrationDCA', 'hookLoadDataContainer');
-$GLOBALS['TL_HOOKS']['createNewUser'][]         = array('AvisotaRegistrationDCA', 'hookCreateNewUser');
-$GLOBALS['TL_HOOKS']['activateAccount'][]       = array('AvisotaRegistrationDCA', 'hookActivateAccount');
+$GLOBALS['TL_HOOKS']['outputBackendTemplate'][]   = array('AvisotaBackend', 'hookOutputBackendTemplate');
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][]       = array('AvisotaInsertTag', 'hookReplaceNewsletterInsertTags');
+$GLOBALS['TL_HOOKS']['getEditorStylesLayout'][]   = array('AvisotaEditorStyle', 'hookGetEditorStylesLayout');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][]       = array('AvisotaRegistrationDCA', 'hookLoadDataContainer');
+$GLOBALS['TL_HOOKS']['createNewUser'][]           = array('AvisotaRegistrationDCA', 'hookCreateNewUser');
+$GLOBALS['TL_HOOKS']['activateAccount'][]         = array('AvisotaRegistrationDCA', 'hookActivateAccount');
+$GLOBALS['TL_HOOKS']['sqlCompileCommands'][]      = array('AvisotaUpdate', 'hookSqlCompileCommands');
+$GLOBALS['TL_HOOKS']['mysqlMultiTriggerCreate'][] = array('AvisotaUpdate', 'hookMysqlMultiTriggerCreate');
+
+
+/**
+ * Multi Triggers
+ */
+$GLOBALS['TL_TRIGGER']['tl_avisota_recipient']['after']['insert'][]     = 'CALL avisota_recipient_list(NEW.id, NEW.lists);';
+$GLOBALS['TL_TRIGGER']['tl_avisota_recipient']['after']['update'][]     = 'CALL avisota_recipient_list(NEW.id, NEW.lists);';
+$GLOBALS['TL_TRIGGER']['tl_avisota_recipient']['before']['delete'][]    = 'DELETE FROM tl_avisota_recipient_to_mailing_list WHERE recipient=OLD.id;';
+$GLOBALS['TL_TRIGGER']['tl_member']['after']['insert'][]                = 'CALL avisota_member_list(NEW.id, NEW.avisota_lists);';
+$GLOBALS['TL_TRIGGER']['tl_member']['after']['update'][]                = 'CALL avisota_member_list(NEW.id, NEW.avisota_lists);';
+$GLOBALS['TL_TRIGGER']['tl_member']['before']['delete'][]               = 'DELETE FROM tl_member_to_mailing_list WHERE member=OLD.id;';
+$GLOBALS['TL_TRIGGER']['tl_avisota_mailing_list']['before']['delete'][] = 'DELETE FROM tl_avisota_recipient_to_mailing_list WHERE list=OLD.id;
+DELETE FROM tl_member_to_mailing_list WHERE list=OLD.id;';
 
 
 /**
  * Graphical text support.
  */
-if(in_array('graphicaltext', $this->getActiveModules()))
-{
+if (in_array('graphicaltext', $this->getActiveModules())) {
 	$GLOBALS['TL_HOOKS']['parseFrontendTemplate'][] = array('FrontendGraphicalText', 'replaceGraphicalTextTag');
 }
 
@@ -245,8 +263,7 @@ $GLOBALS['URL_KEYWORDS'][] = 'item';
 /**
  * Hack: Fix ajax load import source tree.
  */
-if (($_GET['table'] == 'tl_avisota_recipient_import' || $_GET['table'] == 'tl_avisota_recipient_remove') && ($_GET['isAjax'] || $_POST['isAjax']))
-{
+if (($_GET['table'] == 'tl_avisota_recipient_import' || $_GET['table'] == 'tl_avisota_recipient_remove') && ($_GET['isAjax'] || $_POST['isAjax'])) {
 	unset($_GET['table']);
 }
 
@@ -254,8 +271,7 @@ if (($_GET['table'] == 'tl_avisota_recipient_import' || $_GET['table'] == 'tl_av
 /**
  * JavaScript inject
  */
-if (TL_MODE == 'BE' && $_GET['do'] == 'avisota_recipients' && $_GET['table'] == 'tl_avisota_recipient')
-{
+if (TL_MODE == 'BE' && $_GET['do'] == 'avisota_recipients') {
 	$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/Avisota/html/tl_avisota_recipient.js.php';
 }
 
@@ -265,15 +281,15 @@ if (TL_MODE == 'BE' && $_GET['do'] == 'avisota_recipients' && $_GET['table'] == 
  */
 if (version_compare(Database::getInstance()->query('SHOW VARIABLES WHERE Variable_name = \'version\'')->Value, '5', '<')) {
 	$objEnvironment = Environment::getInstance();
-	if (// The update controller itself
-		   strpos($objEnvironment->requestUri, 'system/modules/Avisota/AvisotaCompatibilityController.php') === false
+	if ( // The update controller itself
+		strpos($objEnvironment->requestUri, 'system/modules/Avisota/AvisotaCompatibilityController.php') === false
 		// Backend login
 		&& strpos($objEnvironment->requestUri, 'contao/index.php') === false
 		// Extension manager
 		&& strpos($objEnvironment->requestUri, 'contao/main.php?do=repository_manager') === false
 		// Install Tool
-		&& strpos($objEnvironment->requestUri, 'contao/install.php') === false)
-	{
+		&& strpos($objEnvironment->requestUri, 'contao/install.php') === false
+	) {
 		header('Location: ' . $objEnvironment->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/system/modules/Avisota/AvisotaCompatibilityController.php');
 		exit;
 	}
@@ -282,10 +298,9 @@ if (version_compare(Database::getInstance()->query('SHOW VARIABLES WHERE Variabl
 /**
  * Update script
  */
-else if (TL_MODE == 'BE')
-{
+else if (TL_MODE == 'BE') {
 	$objEnvironment = Environment::getInstance();
-	if (   $blnAvisotaUpdate
+	if ($blnAvisotaUpdate
 		// The update controller itself
 		&& strpos($objEnvironment->requestUri, 'contao/main.php?do=avisota_update') === false
 		// The system log
@@ -293,10 +308,9 @@ else if (TL_MODE == 'BE')
 		// Backend login
 		&& strpos($objEnvironment->requestUri, 'contao/index.php') === false
 		// Install Tool
-		&& strpos($objEnvironment->requestUri, 'contao/install.php') === false)
-	{
+		&& strpos($objEnvironment->requestUri, 'contao/install.php') === false
+	) {
 		header('Location: ' . $objEnvironment->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/contao/main.php?do=avisota_update');
 		exit;
 	}
 }
-

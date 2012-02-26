@@ -36,27 +36,27 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['title']              = array('Titel ','Her kan du indtaste titlen på distributions gruppen.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['alias']              = array('Alias',' Aliaset er en unik reference, der kan kaldes i stedet for det numeriske ID.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['viewOnlinePage']     = array('Se Online Side ','Vælg venligst den side, som abonnenten vil blive omdirigeret til, hvis de ønsker at se nyhedsbrevet online.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['subscriptionPage']   = array('Administrer tilmeldingssiden ','Vælg en side, som abonnenten vil blive omdirigeret til, hvis de ønsker at ændre deres nyhedsbrevspræferencer.');
+$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['title']              = array('Titel ','Her kan du indtaste titlen på distributions gruppen.');
+$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['alias']              = array('Alias',' Aliaset er en unik reference, der kan kaldes i stedet for det numeriske ID.');
+$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['viewOnlinePage']     = array('Se Online Side ','Vælg venligst den side, som abonnenten vil blive omdirigeret til, hvis de ønsker at se nyhedsbrevet online.');
+$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['subscriptionPage']   = array('Administrer tilmeldingssiden ','Vælg en side, som abonnenten vil blive omdirigeret til, hvis de ønsker at ændre deres nyhedsbrevspræferencer.');
 
 
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['list_legend'] = 'Distributiongruppe';
-$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['expert_legend']   = 'Redirect Indstillinger';
+$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['list_legend'] = 'Distributiongruppe';
+$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['expert_legend']   = 'Redirect Indstillinger';
 
 
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['new']         = array('Ny distributionsliste','Tilføj en ny distributørliste');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['show']        = array('Distributions Detaljer','Nærmere oplysninger om distribution ID %s');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['copy']        = array('Kopier Distribution', 'Kopier distribution ID %s');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['delete']      = array('Slet Distribution', 'Slet distribution ID %s');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['edit']        = array('Rediger Distribution', 'Rediger detaljer for distribution ID %s');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_list']['editheader']  = array('Rediger Header', 'Edit headeren for distribution ID %s');
+$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['new']         = array('Ny distributionsliste','Tilføj en ny distributørliste');
+$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['show']        = array('Distributions Detaljer','Nærmere oplysninger om distribution ID %s');
+$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['copy']        = array('Kopier Distribution', 'Kopier distribution ID %s');
+$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['delete']      = array('Slet Distribution', 'Slet distribution ID %s');
+$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['edit']        = array('Rediger Distribution', 'Rediger detaljer for distribution ID %s');
+$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['editheader']  = array('Rediger Header', 'Edit headeren for distribution ID %s');
 
 ?>

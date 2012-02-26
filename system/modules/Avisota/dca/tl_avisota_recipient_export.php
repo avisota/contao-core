@@ -220,7 +220,7 @@ class tl_avisota_recipient_export extends Backend
 
 		// search for the list
 		$objList = $this->Database
-			->prepare("SELECT * FROM tl_avisota_recipient_list WHERE id=?")
+			->prepare("SELECT * FROM tl_avisota_mailing_list WHERE id=?")
 			->execute($this->Input->get('id'));
 
 		if (!$objList->next())

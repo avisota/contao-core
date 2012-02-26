@@ -329,7 +329,7 @@ class AvisotaOutbox extends BackendModule
 		{
 		case 'list':
 			$objList = $this->Database
-				->prepare("SELECT * FROM tl_avisota_recipient_list WHERE id=?")
+				->prepare("SELECT * FROM tl_avisota_mailing_list WHERE id=?")
 				->execute($objRecipient->sourceID);
 			if ($objList->next())
 			{

@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -33,16 +33,23 @@
  * @filesource
  */
 
+MetaPalettes::appendBefore('tl_member', 'default', 'login', array('avisota' => array(':hide', 'avisota_lists')));
 
-$GLOBALS['TL_DCA']['tl_member']['fields']['avisota_registration_lists'] = array
+$GLOBALS['TL_DCA']['tl_member']['fields']['avisota_lists'] = array
 (
-	'label'	            => &$GLOBALS['TL_LANG']['tl_member']['avisota_registration_lists'],
-	'inputType'	        => 'checkbox',
-	'options_callback'  => array('AvisotaRegistrationDCA', 'getSelectableLists'),
-	'eval'		        => array
+	'label'            => &$GLOBALS['TL_LANG']['tl_member']['avisota_lists'],
+	'inputType'        => 'checkbox',
+	'options_callback' => array('AvisotaDCA', 'getSelectableLists'),
+	'load_callback'    => array(array('AvisotaDCA', 'convertFromStringList')),
+	'save_callback'    => array(array('AvisotaDCA', 'convertToStringList')),
+	'eval'             => array
 	(
-		'multiple'      => true,
-		'feEditable'    => true,
-		'feGroup'       => 'newsletter'
+		'multiple'     => true,
+		'feEditable'   => true,
+		'feGroup'      => 'newsletter'
 	)
 );
+
+if ($this->Input->get('avisota_showlist')) {
+	$GLOBALS['TL_DCA']['tl_member']['list']['sorting']['filter'][] = array('FIND_IN_SET(?, avisota_lists)', $this->Input->get('avisota_showlist'));
+}

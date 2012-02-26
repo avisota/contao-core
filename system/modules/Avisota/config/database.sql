@@ -8,10 +8,10 @@
 -- **********************************************************
 
 -- 
--- Table `tl_avisota_recipient_list`
+-- Table `tl_avisota_mailing_list`
 -- 
 
-CREATE TABLE `tl_avisota_recipient_list` (
+CREATE TABLE `tl_avisota_mailing_list` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `tstamp` int(10) unsigned NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
@@ -29,15 +29,15 @@ CREATE TABLE `tl_avisota_recipient_list` (
 
 CREATE TABLE `tl_avisota_recipient` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `pid` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
   `email` varchar(255) NOT NULL default '',
+  `confirmed` char(1) NOT NULL default '',
+  `lists` varchar(255) NOT NULL default '',
   `salutation` varchar(255) NOT NULL default '',
   `title` varchar(255) NOT NULL default '',
   `firstname` varchar(255) NOT NULL default '',
   `lastname` varchar(255) NOT NULL default '',
   `gender` varchar(32) NOT NULL default '',
-  `confirmed` char(1) NOT NULL default '',
   `token` char(32) NOT NULL default '',
   `addedOn` int(10) NOT NULL default '0',
   `addedBy` int(10) unsigned NOT NULL default '0',
@@ -45,7 +45,18 @@ CREATE TABLE `tl_avisota_recipient` (
   `addedOnPage` int(10) unsigned NOT NULL default '0',
   `notification` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
-  KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table `tl_avisota_recipient_to_mailing_list`
+--
+
+CREATE TABLE `tl_avisota_recipient_to_mailing_list` (
+  `recipient` int(10) unsigned NOT NULL default '0',
+  `list` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`recipient`, `list`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -355,6 +366,17 @@ CREATE TABLE `tl_user_group` (
   `avisota_newsletter_permissions` blob NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table `tl_member_to_mailing_list`
+--
+
+CREATE TABLE `tl_member_to_mailing_list` (
+  `member` int(10) unsigned NOT NULL default '0',
+  `list` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`member`, `list`),
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -363,5 +385,5 @@ CREATE TABLE `tl_user_group` (
 -- 
 
 CREATE TABLE `tl_member` (
-  `avisota_registration_lists` blob NULL,
+  `avisota_lists` blob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

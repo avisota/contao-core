@@ -155,7 +155,7 @@ class Avisota extends Backend
 							SELECT
 								*
 							FROM
-								tl_avisota_recipient_list
+								tl_avisota_mailing_list
 							WHERE
 								id=?")
 						->execute($intIdTmp);

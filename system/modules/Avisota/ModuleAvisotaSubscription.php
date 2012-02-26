@@ -123,7 +123,7 @@ class ModuleAvisotaSubscription extends Module
 					SELECT
 						*
 					FROM
-						`tl_avisota_recipient_list`
+						`tl_avisota_mailing_list`
 					WHERE
 						`id` IN (" . implode(',', $arrPlaceholder) . ")
 						" . ($varExistingSubscription == 'ignore' && count($arrSubscriptions) ? " AND `id` NOT IN (" . implode(',', $arrSubscriptions) . ")" : ''))
@@ -181,7 +181,7 @@ class ModuleAvisotaSubscription extends Module
 					SELECT
 						*
 					FROM
-						`tl_avisota_recipient_list`
+						`tl_avisota_mailing_list`
 					WHERE
 						`id` IN (" . implode(',', $arrPlaceholder) . ")
 					ORDER BY
@@ -365,7 +365,7 @@ class ModuleAvisotaSubscription extends Module
 						FROM
 							`tl_avisota_recipient` r
 						INNER JOIN
-							`tl_avisota_recipient_list` l
+							`tl_avisota_mailing_list` l
 						ON
 							r.`pid`=l.`id`
 						WHERE
@@ -433,7 +433,7 @@ class ModuleAvisotaSubscription extends Module
 					SELECT
 						*
 					FROM
-						`tl_avisota_recipient_list`
+						`tl_avisota_mailing_list`
 					WHERE
 						`alias`=?")
 				->execute($strAlias);
@@ -582,7 +582,7 @@ class ModuleAvisotaSubscription extends Module
 				->execute("SELECT
 						*
 					FROM
-						tl_avisota_recipient_list" . (count($this->avisota_lists) ? "
+						tl_avisota_mailing_list" . (count($this->avisota_lists) ? "
 					WHERE
 						id IN (" . implode(',', $this->avisota_lists) . ")" : '') . "
 					ORDER BY
@@ -602,7 +602,7 @@ class ModuleAvisotaSubscription extends Module
 		// or use all, if there are no lists selected
 		else
 		{
-			$arrRecipient['lists'] = $this->Database->execute("SELECT id FROM tl_avisota_recipient_list")->fetchEach('id');
+			$arrRecipient['lists'] = $this->Database->execute("SELECT id FROM tl_avisota_mailing_list")->fetchEach('id');
 		}
 
 		// on unsubscribe, only email and lists is mandatory!

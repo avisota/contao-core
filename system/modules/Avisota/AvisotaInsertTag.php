@@ -97,7 +97,7 @@ class AvisotaInsertTag extends Controller
 					if ($arrCurrentRecipient['source'] == 'list')
 					{
 						$objRecipientList = $this->Database
-							->prepare("SELECT * FROM tl_avisota_recipient_list WHERE id=?")
+							->prepare("SELECT * FROM tl_avisota_mailing_list WHERE id=?")
 							->execute($arrCurrentRecipient['sourceID']);
 						if (!$objRecipientList->next())
 						{

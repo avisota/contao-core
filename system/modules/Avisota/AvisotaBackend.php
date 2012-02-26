@@ -208,7 +208,7 @@ class AvisotaBackend extends Controller
 					SELECT
 						*
 					FROM
-						`tl_avisota_recipient_list`
+						`tl_avisota_mailing_list`
 					WHERE
 						`id` IN (" . implode(',', $arrPlaceholder) . ")
 					ORDER BY
@@ -222,4 +222,3 @@ class AvisotaBackend extends Controller
 		return $arrList;
 	}
 }
-?>

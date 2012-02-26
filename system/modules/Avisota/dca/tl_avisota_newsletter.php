@@ -391,7 +391,7 @@ class tl_avisota_newsletter extends Backend
 				SELECT
 					*
 				FROM
-					`tl_avisota_recipient_list`
+					`tl_avisota_mailing_list`
 				ORDER BY
 					`title`");
 		while ($objList->next())

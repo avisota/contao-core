@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -27,7 +27,6 @@
  * PHP version 5
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @author     Oliver Hoff <oliver@hofff.com>
  * @package    Avisota
  * @license    LGPL
  * @filesource
@@ -35,12 +34,64 @@
 
 
 /**
- * Fields
+ * Class AvisotaDCA
+ *
+ * @copyright  InfinitySoft 2010,2011,2012
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    Avisota
  */
-$GLOBALS['TL_LANG']['tl_member']['avisota_lists'] = array(TL_MODE == 'FE' ? 'Newsletter' : 'Avisota Verteiler', 'Wählen Sie hier die Verteiler, die der Abonnent erhalten soll.');
+class AvisotaDCA extends Controller
+{
+	/**
+	 * Convert a string list into an array.
+	 *
+	 * @param $strLists
+	 *
+	 * @return array
+	 */
+	public function convertFromStringList($strLists)
+	{
+		return explode(',', $strLists);
+	}
 
 
-/**
- * Legends
- */
-$GLOBALS['TL_LANG']['tl_member']['avisota_legend'] = 'Avisota Newslettersystem';
+	/**
+	 * Convert an array into a string list.
+	 *
+	 * @param $arrLists
+	 *
+	 * @return string
+	 */
+	public function convertToStringList($arrLists)
+	{
+		$arrLists = deserialize($arrLists);
+		return is_array($arrLists) ? implode(',', $arrLists) : '';
+	}
+
+	public function getSelectableLists(DataContainer $dc)
+	{
+		$strSql = 'SELECT * FROM tl_avisota_mailing_list';
+		if (false) {
+			$strSql .= ' WHERE id IN (0,' .
+				implode(',',
+					array_filter(
+						array_map('intval',
+							deserialize($arrIDs, true)
+						)
+					)
+				) .
+				')';
+		}
+		$strSql .= ' ORDER BY title';
+
+		$this->import('Database');
+		$objLists = $this->Database->execute($strSql);
+
+		$arrOptions = array();
+		while ($objLists->next()) {
+			$arrOptions[$objLists->id] = $objLists->title;
+		}
+
+		return $arrOptions;
+	}
+}

@@ -38,6 +38,7 @@
  * Back end modules
  */
 $GLOBALS['TL_LANG']['MOD']['avisota']              = 'Newslettersystem';
+$GLOBALS['TL_LANG']['MOD']['avisota_mailing_list'] = array('Verteiler', 'Newsletter Verteiler verwalten.');
 $GLOBALS['TL_LANG']['MOD']['avisota_recipients']   = array('Abonnenten', 'Newsletter Abonnenten verwalten.');
 $GLOBALS['TL_LANG']['MOD']['avisota_newsletter']   = array('Newsletter', 'Newsletter verwalten und versenden.');
 $GLOBALS['TL_LANG']['MOD']['avisota_tracking']     = array('Analytics', 'Lese und Reaktionsverhalten analysieren.');
