@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -45,13 +45,14 @@ $GLOBALS['TL_LANG']['MOD']['avisota_tracking']     = array('Analytics', 'Lese un
 $GLOBALS['TL_LANG']['MOD']['avisota_outbox']       = array('Postausgang', 'Postausgang einsehen und Newsletter versenden.');
 $GLOBALS['TL_LANG']['MOD']['avisota_translation']  = array('Sprachvariablen', 'Verändern Sie die Sprachvariablen für das Newslettersystem.');
 $GLOBALS['TL_LANG']['MOD']['avisota_update']       = array('Update', 'Avisota Newslettersystem aktualisieren.');
+$GLOBALS['TL_LANG']['MOD']['avisota_recipient_source'] = array('Abonnentenquellen', 'Quellen für Newsletter Abonnenten verwalten.');
 
 
 /**
  * Front end modules
  */
-$GLOBALS['TL_LANG']['FMD']['avisota']               = 'Newslettersystem';
-$GLOBALS['TL_LANG']['FMD']['avisota_subscription']  = array('Abonnement verwalten', 'An- und Abmeldung zum Avisota Newslettersystem.');
-$GLOBALS['TL_LANG']['FMD']['avisota_list']          = array('Newsletter-Liste', 'List aller versendeten Newsletter.');
-$GLOBALS['TL_LANG']['FMD']['avisota_reader']        = array('Newsletter-Leser', 'Einen Newsletter innerhalb einer Seite anzeigen.');
-$GLOBALS['TL_LANG']['FMD']['avisota_registration']  = array('Registrierung (Avisota)', 'Registrierungsmodul mit Avisota Verteilern.');
+$GLOBALS['TL_LANG']['FMD']['avisota']              = 'Newslettersystem';
+$GLOBALS['TL_LANG']['FMD']['avisota_subscription'] = array('Abonnement verwalten', 'An- und Abmeldung zum Avisota Newslettersystem.');
+$GLOBALS['TL_LANG']['FMD']['avisota_list']         = array('Newsletter-Liste', 'List aller versendeten Newsletter.');
+$GLOBALS['TL_LANG']['FMD']['avisota_reader']       = array('Newsletter-Leser', 'Einen Newsletter innerhalb einer Seite anzeigen.');
+$GLOBALS['TL_LANG']['FMD']['avisota_registration'] = array('Registrierung (Avisota)', 'Registrierungsmodul mit Avisota Verteilern.');

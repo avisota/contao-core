@@ -170,7 +170,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipients'],
 			'inputType'               => 'checkbox',
-			'options_callback'        => array('tl_avisota_newsletter', 'getRecipients'),
+			'options_callback'        => array('AvisotaBackend', 'getRecipients'),
 			'eval'                    => array('mandatory'=>true, 'multiple'=>true, 'tl_class'=>'clr')
 		),
 		'addFile' => array
@@ -380,41 +380,6 @@ class tl_avisota_newsletter extends Backend
 	}
 
 
-	public function getRecipients()
-	{
-		$arrRecipients = array(
-			$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list'] => array(),
-			$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup'] => array()
-		);
-
-		$objList = $this->Database->execute("
-				SELECT
-					*
-				FROM
-					`tl_avisota_mailing_list`
-				ORDER BY
-					`title`");
-		while ($objList->next())
-		{
-			$arrRecipients[$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']]['list-' . $objList->id] = $objList->title;
-		}
-
-		$objMember = $this->Database->execute("
-				SELECT
-					*
-				FROM
-					`tl_member_group`
-				ORDER BY
-					`name`");
-		while ($objMember->next())
-		{
-			$arrRecipients[$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']]['mgroup-' . $objMember->id] = $objMember->name;
-		}
-
-		return $arrRecipients;
-	}
-
-
 	/**
 	 * Add the recipient row.
 	 *
@@ -470,4 +435,4 @@ class tl_avisota_newsletter extends Backend
 		return $varValue;
 	}
 }
-?>
+

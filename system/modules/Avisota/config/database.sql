@@ -76,7 +76,40 @@ CREATE TABLE `tl_avisota_recipient_blacklist` (
 
 -- --------------------------------------------------------
 
--- 
+--
+-- Table `tl_avisota_recipient_source`
+--
+
+CREATE TABLE `tl_avisota_recipient_source` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `sorting` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  `type` varchar(255) NOT NULL default '',
+  `title` varchar(255) NOT NULL default '',
+-- integraded recipients
+  `integratedMailingLists` blob NULL,
+  `integratedAllowSingleSelection` char(1) NOT NULL default '',
+  `integratedDetails` varchar(255) NOT NULL default '',
+  `integratedFilterByColumns` blob NULL,
+-- members
+  `memberBy` char(32) NOT NULL default '',
+  `memberMailingLists` blob NULL,
+  `memberAllowSingleMailingListSelection` char(1) NOT NULL default '',
+  `memberGroups` blob NULL,
+  `memberAllowSingleGroupSelection` char(1) NOT NULL default '',
+  `memberAllowSingleSelection` char(1) NOT NULL default '',
+  `memberFilterByColumns` blob NULL,
+-- csv file
+  `csvFileSrc` blob NULL,
+  `csvColumnAssignment` blob NULL,
+  `filter` char(1) NOT NULL default '',
+  `disable` char(1) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table `tl_avisota_newsletter_category`
 -- 
 

@@ -133,6 +133,12 @@ $arrAvisotaBeMod = array
 			'callback'   => 'AvisotaOutbox',
 			'icon'       => 'system/modules/Avisota/html/outbox.png',
 			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+		),
+		'avisota_recipient_source' => array
+		(
+			'tables'     => array('tl_avisota_recipient_source'),
+			'icon'       => 'system/modules/Avisota/html/recipient_source.png',
+			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 		)
 	)
 );
@@ -200,6 +206,14 @@ $GLOBALS['TL_NLE'] = array_merge_recursive(
  */
 $GLOBALS['BE_FFL']['eventchooser'] = 'WidgetEventchooser';
 $GLOBALS['BE_FFL']['newschooser']  = 'WidgetNewschooser';
+
+
+/**
+ * Recipient sources
+ */
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['integrated']    = 'IntegratedAvisotaRecipientSource';
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['member'] = 'MemberGroupRecipientSource';
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['csv_file']      = 'CSVFileRecipientSource';
 
 
 /**

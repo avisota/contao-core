@@ -125,7 +125,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 		'default'                     => array
 		(
 			'category' => array('title', 'alias'),
-			'smtp'     => array(':hide', 'useSMTP'),
+			'defaults' => array('recipients', 'doNotAllowRecipientOverwrite'),
 			'expert'   => array(':hide', 'areas', 'viewOnlinePage', 'subscriptionPage', 'senderName', 'sender'),
 			'template' => array(':hide', 'template_html', 'template_plain')
 		)
