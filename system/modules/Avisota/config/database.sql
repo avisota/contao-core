@@ -329,6 +329,27 @@ CREATE TABLE `tl_avisota_statistic_raw_link_hit` (
 
 -- --------------------------------------------------------
 
+--
+-- Table `tl_avisota_transport`
+--
+
+CREATE TABLE `tl_avisota_transport` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  `type` varchar(255) NOT NULL default '',
+  `title` varchar(255) NOT NULL default '',
+-- swift mailer
+  `swiftUseSmtp` char(1) NOT NULL default '',
+  `swiftSmtpHost` varchar(255) NOT NULL default '',
+  `swiftSmtpUser` varchar(255) NOT NULL default '',
+  `swiftSmtpPass` varchar(255) NOT NULL default '',
+  `swiftSmtpEnc` char(3) NOT NULL default '',
+  `swiftSmtpPort` int(5) unsigned NOT NULL default '25',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
 -- 
 -- Table `tl_module`
 -- 
