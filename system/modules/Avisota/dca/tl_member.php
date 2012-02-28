@@ -35,6 +35,9 @@
 
 MetaPalettes::appendBefore('tl_member', 'default', 'login', array('avisota' => array(':hide', 'avisota_lists')));
 
+$GLOBALS['TL_DCA']['tl_member']['config']['onload_callback'][]   = array('tl_member_avisota', 'onload_callback');
+$GLOBALS['TL_DCA']['tl_member']['config']['onsubmit_callback'][] = array('tl_member_avisota', 'onsubmit_callback');
+
 $GLOBALS['TL_DCA']['tl_member']['fields']['avisota_lists'] = array
 (
 	'label'            => &$GLOBALS['TL_LANG']['tl_member']['avisota_lists'],
@@ -50,6 +53,49 @@ $GLOBALS['TL_DCA']['tl_member']['fields']['avisota_lists'] = array
 	)
 );
 
+$GLOBALS['TL_DCA']['tl_member']['fields']['avisota_subscribe'] = array
+(
+	'label'            => &$GLOBALS['TL_LANG']['tl_member']['avisota_subscribe'],
+	'inputType'        => 'checkbox',
+	'eval'             => array
+	(
+		'feEditable'   => true,
+		'feGroup'      => 'newsletter'
+	)
+);
+
 if ($this->Input->get('avisota_showlist')) {
 	$GLOBALS['TL_DCA']['tl_member']['list']['sorting']['filter'][] = array('FIND_IN_SET(?, avisota_lists)', $this->Input->get('avisota_showlist'));
+}
+
+class tl_member_avisota extends Backend
+{
+	public function onload_callback()
+	{
+		// Hack, because ModulePersonalData does not call the load_callback for the avisota_lists field
+		if (TL_MODE == 'FE' && version_compare(VERSION . '.' . BUILD, '2.11.0', '<=')) {
+			$this->import('FrontendUser', 'User');
+			$this->User->avisota_lists = explode(',', $this->User->avisota_lists);
+		}
+	}
+
+	public function onsubmit_callback()
+	{
+		if (TL_MODE == 'FE') {
+			list($objUser, $arrFormData, $objModulePersonalData) = func_get_args();
+			$arrLists = deserialize($arrFormData['avisota_lists'], true);
+			$intId    = $objUser->id;
+		}
+		else {
+			list($dc) = func_get_args();
+			$arrLists = deserialize($dc->activeRecord->avisota_lists, true);
+			$intId    = $dc->id;
+		}
+
+		if (empty($arrLists)) {
+			$this->Database
+				->prepare("UPDATE tl_member SET avisota_subscribe=? WHERE id=?")
+				->execute('', $intId);
+		}
+	}
 }

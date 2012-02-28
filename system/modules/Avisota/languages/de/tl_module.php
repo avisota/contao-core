@@ -37,8 +37,9 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_module']['avisota_show_lists']                       = array('Listenauswahl anzeigen', 'Zeigt eine Auswahl der Listen im Frontend an.');
-$GLOBALS['TL_LANG']['tl_module']['avisota_lists']                            = array('Listen', 'Wählen Sie hier die Listen aus, zu denen man sich anmelden kann.');
+$GLOBALS['TL_LANG']['tl_module']['avisota_show_lists']                       = array('Verteilerauswahl anzeigen', 'Zeigt eine Auswahl der Verteiler im Frontend an.');
+$GLOBALS['TL_LANG']['tl_module']['avisota_lists']                            = array('Verteiler', 'Wählen Sie hier die Verteiler aus, zu denen man sich anmelden kann.');
+$GLOBALS['TL_LANG']['tl_module']['avisota_selectable_lists']                 = array('Avisota Verteiler', 'Wählen Sie hier die Verteiler aus, die zur Auswahl stehen bzw. abonniert werden (beim Feld Newsletter abonnieren).');
 $GLOBALS['TL_LANG']['tl_module']['avisota_recipient_fields']                 = array('Persönliche Daten', 'Wählen Sie hier die persönlichen Felder aus, die ein Abonnent zusätzlich angeben kann.');
 $GLOBALS['TL_LANG']['tl_module']['avisota_subscription_sender_name']         = array('Absendername', 'Hier können Sie den Namen des Absenders eingeben.');
 $GLOBALS['TL_LANG']['tl_module']['avisota_subscription_sender']              = array('Absenderadresse', 'Hier können Sie eine individuelle Absenderadresse eingeben.');

@@ -68,19 +68,16 @@ class AvisotaDCA extends Controller
 		return is_array($arrLists) ? implode(',', $arrLists) : '';
 	}
 
-	public function getSelectableLists(DataContainer $dc)
+	public function getSelectableLists($varContainer)
 	{
 		$strSql = 'SELECT * FROM tl_avisota_mailing_list';
-		if (false) {
-			$strSql .= ' WHERE id IN (0,' .
-				implode(',',
-					array_filter(
-						array_map('intval',
-							deserialize($arrIDs, true)
-						)
-					)
-				) .
-				')';
+		if ($varContainer instanceof ModuleRegistration) {
+			$arrLists = array_filter(
+				array_map('intval',
+					deserialize($varContainer->avisota_selectable_lists, true)
+				)
+			);
+			$strSql .= ' WHERE id IN (' . (count($arrLists) ? implode(',', $arrLists) : '0') . ')';
 		}
 		$strSql .= ' ORDER BY title';
 
@@ -93,5 +90,50 @@ class AvisotaDCA extends Controller
 		}
 
 		return $arrOptions;
+	}
+
+	public function hookCreateNewUser($insertId, $arrData, $objModuleRegistration)
+	{
+		if ($arrData['avisota_subscribe']) {
+			// TODO rework to send confirmation mail
+			$this->import('Database');
+			$this->Database
+				->prepare("UPDATE tl_member SET avisota_lists = ? WHERE id = ?")
+				->execute(implode(',', deserialize($objModuleRegistration->avisota_selectable_lists, true)), $insertId);
+		}
+	}
+
+	public function hookUpdatePersonalData($objUser, $arrFormData, $objModulePersonalData)
+	{
+		// Hack, because ModulePersonalData does not call the onsubmit_callback
+		if (version_compare(VERSION . '.' . BUILD, '2.11.0', '<=') && isset($arrFormData['avisota_lists'])) {
+			$arrLists = deserialize($arrFormData['avisota_lists'], true);
+			if (empty($arrLists)) {
+				$this->import('Database');
+				$this->Database
+					->prepare("UPDATE tl_member SET avisota_subscribe=? WHERE id=?")
+					->execute('', $objUser->id);
+			}
+		}
+
+		if (isset($arrFormData['avisota_subscribe'])) {
+			if ($arrFormData['avisota_subscribe']) {
+				$arrLists = array_unique(array_merge(
+					array_filter(array_map('intval', is_array($objUser->avisota_lists) ? $objUser->avisota_lists : explode(',', $objUser->avisota_lists))),
+					array_filter(array_map('intval', deserialize($objModulePersonalData->avisota_selectable_lists, true)))
+				));
+			} else {
+				$arrLists = array_diff(
+					array_filter(array_map('intval', is_array($objUser->avisota_lists) ? $objUser->avisota_lists : explode(',', $objUser->avisota_lists))),
+					array_filter(array_map('intval', deserialize($objModulePersonalData->avisota_selectable_lists, true)))
+				);
+			}
+
+			// TODO rework to send confirmation mail
+			$this->import('Database');
+			$this->Database
+				->prepare("UPDATE tl_member SET avisota_lists = ? WHERE id = ?")
+				->execute(implode(',', $arrLists), $objUser->id);
+		}
 	}
 }

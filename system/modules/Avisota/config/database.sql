@@ -56,6 +56,7 @@ CREATE TABLE `tl_avisota_recipient` (
 CREATE TABLE `tl_avisota_recipient_to_mailing_list` (
   `recipient` int(10) unsigned NOT NULL default '0',
   `list` int(10) unsigned NOT NULL default '0',
+  `confirmed` char(1) NOT NULL default '',
   PRIMARY KEY  (`recipient`, `list`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -365,7 +366,7 @@ CREATE TABLE `tl_module` (
   `avisota_template_unsubscribe_mail_plain` varchar(64) NOT NULL default '',
   `avisota_template_unsubscribe_mail_html` varchar(64) NOT NULL default '',
   `avisota_template_subscription` varchar(64) NOT NULL default '',
-  `avisota_registration_lists` blob NULL,
+  `avisota_selectable_lists` blob NULL,
   `subscriptionTpl` varchar(64) NOT NULL default '',
   `avisota_send_notification` char(1) NOT NULL default '',
   `avisota_notification_time` int(10) NOT NULL default '3',
@@ -429,6 +430,7 @@ CREATE TABLE `tl_user_group` (
 CREATE TABLE `tl_member_to_mailing_list` (
   `member` int(10) unsigned NOT NULL default '0',
   `list` int(10) unsigned NOT NULL default '0',
+  `confirmed` char(1) NOT NULL default '',
   PRIMARY KEY  (`member`, `list`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -440,4 +442,5 @@ CREATE TABLE `tl_member_to_mailing_list` (
 
 CREATE TABLE `tl_member` (
   `avisota_lists` blob NULL,
+  `avisota_subscribe` char(1) NOT NULL default '',
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -33,6 +33,7 @@
  * @filesource
  */
 
+$GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array('tl_module_avisota', 'onload_callback');
 
 $GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_subscription'] = array
 (
@@ -62,10 +63,7 @@ $GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_list'] = array
 	'protected'    => array(':hide', 'protected'),
 	'expert'       => array(':hide', 'guests,cssID,space')
 );
-$GLOBALS['TL_DCA']['tl_module']['metapalettes']['__avisota_registration'] = array
-(
-	'avisota_registration' => array('avisota_registration_lists')
-);
+
 $GLOBALS['TL_DCA']['tl_module']['metasubpalettes']['avisota_send_notification'] = array
 (
 	'avisota_notification_time', 'avisota_template_notification_mail_plain', 'avisota_template_notification_mail_html'
@@ -163,15 +161,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_subscription'] = arr
 	'eval'                    => array('addBlankOption' => true, 'tl_class' => 'clr')
 );
 
-$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_registration_lists'] = array
-(
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_registration_lists'],
-	'inputType'               => 'checkbox',
-	'options_callback'        => array('AvisotaRegistrationDCA', 'getLists'),
-	'eval'                    => array('multiple' => true, 'tl_class' => 'clr')
-);
-
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_send_notification'] = array
 (
 	'exclude'                 => true,
@@ -259,6 +248,16 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_view_page'] = array
 	'eval'                    => array('fieldType'=>'radio')
 );
 
+$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_selectable_lists'] = array
+(
+	'exclude'                 => true,
+	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_selectable_lists'],
+	'inputType'               => 'checkbox',
+	'options_callback'        => array('tl_module_avisota', 'getLists'),
+	'eval'                    => array('multiple'=>true)
+);
+
+
 /**
  * Class tl_module_avisota
  *
@@ -269,6 +268,12 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_view_page'] = array
  */
 class tl_module_avisota extends Backend
 {
+	public function onload_callback()
+	{
+		MetaPalettes::appendFields('tl_module', 'registration', 'config', array('avisota_selectable_lists'));
+		MetaPalettes::appendFields('tl_module', 'personalData', 'config', array('avisota_selectable_lists'));
+	}
+
 	/**
 	 * Get the category options
 	 *
