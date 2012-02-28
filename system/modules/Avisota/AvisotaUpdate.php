@@ -497,51 +497,6 @@ class AvisotaUpdate extends BackendModule
 		return true;
 	}
 
-	/**
-	 * Generate Procedure/Trigger Commands for the Install Tool.
-	 *
-	 * @param $return
-	 * @return mixed
-	 */
-	public function hookSqlCompileCommands($return)
-	{
-		$this->import('Database');
-
-		// fetch defined procedures
-		$arrProcedures = $this->Database
-			->prepare("SHOW PROCEDURE STATUS WHERE Db = ?")
-			->execute($GLOBALS['TL_CONFIG']['dbDatabase'])
-			->fetchEach('Name');
-
-		// create procedure avisota_recipient_list
-		if (!in_array('avisota_recipient_to_mailing_list', $arrProcedures)) {
-			$return['CREATE'][] = 'CREATE PROCEDURE avisota_recipient_to_mailing_list (IN RECIPIENT_ID INT, IN LIST_IDS BLOB)
-  BEGIN
-    -- clear the association table
-	DELETE FROM tl_avisota_recipient_to_mailing_list WHERE recipient=RECIPIENT_ID;
-
-    -- insert new association
-    INSERT INTO tl_avisota_recipient_to_mailing_list (recipient, list)
-      SELECT RECIPIENT_ID, id FROM tl_avisota_mailing_list WHERE FIND_IN_SET(id, LIST_IDS);
-  END;';
-		}
-
-		// create procedure avisota_member_list
-		if (!in_array('member_to_mailing_list', $arrProcedures)) {
-			$return['CREATE'][] = 'CREATE PROCEDURE member_to_mailing_list (IN MEMBER_ID INT, IN LIST_IDS BLOB)
-  BEGIN
-    -- clear the association table
-	DELETE FROM tl_member_to_mailing_list WHERE member=MEMBER_ID;
-
-    -- insert new association
-    INSERT INTO tl_member_to_mailing_list (member, list)
-      SELECT MEMBER_ID, id FROM tl_avisota_mailing_list WHERE FIND_IN_SET(id, LIST_IDS);
-  END;';
-		}
-
-		return $return;
-	}
-
 
 	public function hookMysqlMultiTriggerCreate($strTriggerName, $objTrigger, $return)
 	{
