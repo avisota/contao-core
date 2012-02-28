@@ -171,7 +171,6 @@ $GLOBALS['BE_MOD'] = array_merge(
 $GLOBALS['FE_MOD']['avisota']['avisota_subscription'] = 'ModuleAvisotaSubscription';
 $GLOBALS['FE_MOD']['avisota']['avisota_list']         = 'ModuleAvisotaList';
 $GLOBALS['FE_MOD']['avisota']['avisota_reader']       = 'ModuleAvisotaReader';
-$GLOBALS['FE_MOD']['avisota']['avisota_registration'] = 'ModuleAvisotaRegistration';
 
 
 /**
@@ -234,11 +233,9 @@ $GLOBALS['TL_AVISOTA_TRANSPORT']['swift'] = 'SwiftTransport';
 $GLOBALS['TL_HOOKS']['outputBackendTemplate'][]   = array('AvisotaBackend', 'hookOutputBackendTemplate');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][]       = array('AvisotaInsertTag', 'hookReplaceNewsletterInsertTags');
 $GLOBALS['TL_HOOKS']['getEditorStylesLayout'][]   = array('AvisotaEditorStyle', 'hookGetEditorStylesLayout');
-$GLOBALS['TL_HOOKS']['loadDataContainer'][]       = array('AvisotaRegistrationDCA', 'hookLoadDataContainer');
-$GLOBALS['TL_HOOKS']['createNewUser'][]           = array('AvisotaRegistrationDCA', 'hookCreateNewUser');
-$GLOBALS['TL_HOOKS']['activateAccount'][]         = array('AvisotaRegistrationDCA', 'hookActivateAccount');
 $GLOBALS['TL_HOOKS']['mysqlMultiTriggerCreate'][] = array('AvisotaUpdate', 'hookMysqlMultiTriggerCreate');
 $GLOBALS['TL_HOOKS']['createNewUser'][]           = array('AvisotaDCA', 'hookCreateNewUser');
+$GLOBALS['TL_HOOKS']['activateAccount'][]         = array('AvisotaDCA', 'hookActivateAccount');
 $GLOBALS['TL_HOOKS']['updatePersonalData'][]      = array('AvisotaDCA', 'hookUpdatePersonalData');
 
 

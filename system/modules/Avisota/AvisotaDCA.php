@@ -103,6 +103,11 @@ class AvisotaDCA extends Controller
 		}
 	}
 
+	public function hookActivateAccount()
+	{
+		// TODO
+	}
+
 	public function hookUpdatePersonalData($objUser, $arrFormData, $objModulePersonalData)
 	{
 		// Hack, because ModulePersonalData does not call the onsubmit_callback

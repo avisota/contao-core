@@ -48,7 +48,6 @@ $GLOBALS['TL_LANG']['tl_module']['avisota_template_subscribe_mail_html']     = a
 $GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe_mail_plain']  = array('Abmelden Plain Text E-Mail-Template', '');
 $GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe_mail_html']   = array('Abmelden HTML E-Mail-Template', '');
 $GLOBALS['TL_LANG']['tl_module']['avisota_template_subscription']            = array('Formulartemplate', 'Hier können Sie das Formulartemplate auswählen. Das Template muss den Prefix <strong>subscription_</strong> haben.');
-$GLOBALS['TL_LANG']['tl_module']['avisota_registration_lists']               = array('Auswählbare Verteiler', 'Die Verteiler die der Benutzer auswählen können soll.');
 
 $GLOBALS['TL_LANG']['tl_module']['avisota_send_notification']                = array('Erinnerung senden', 'Sendet eine Erinnerung, wenn das Abonnement nach einigen Tagen noch nicht aktiviert wurde.');
 $GLOBALS['TL_LANG']['tl_module']['avisota_notification_time']                = array('Tage bis zur Erinnerung', 'Anzahl Tage nach denen die Erinnerung verschickt werden soll.');
@@ -69,7 +68,6 @@ $GLOBALS['TL_LANG']['tl_module']['avisota_view_page']                        = a
  */
 $GLOBALS['TL_LANG']['tl_module']['avisota_subscription_legend'] = 'Abonnement';
 $GLOBALS['TL_LANG']['tl_module']['avisota_mail_legend']         = 'Mail Einstellungen';
-$GLOBALS['TL_LANG']['tl_module']['avisota_registration_legend'] = 'Avisota Verteiler';
 $GLOBALS['TL_LANG']['tl_module']['avisota_notification_legend'] = 'Erinnerung';
 $GLOBALS['TL_LANG']['tl_module']['avisota_cleanup_legend']      = 'Aufräumen';
 $GLOBALS['TL_LANG']['tl_module']['avisota_reader_legend']       = 'Newsletter-Leser';

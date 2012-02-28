@@ -56,4 +56,3 @@ $GLOBALS['TL_LANG']['FMD']['avisota']              = 'Newslettersystem';
 $GLOBALS['TL_LANG']['FMD']['avisota_subscription'] = array('Abonnement verwalten', 'An- und Abmeldung zum Avisota Newslettersystem.');
 $GLOBALS['TL_LANG']['FMD']['avisota_list']         = array('Newsletter-Liste', 'List aller versendeten Newsletter.');
 $GLOBALS['TL_LANG']['FMD']['avisota_reader']       = array('Newsletter-Leser', 'Einen Newsletter innerhalb einer Seite anzeigen.');
-$GLOBALS['TL_LANG']['FMD']['avisota_registration'] = array('Registrierung (Avisota)', 'Registrierungsmodul mit Avisota Verteilern.');
