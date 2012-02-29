@@ -73,13 +73,46 @@ $GLOBALS['TL_CONFIG']['avisota_max_send_timeout'] = 1;
 /**
  * Salutation
  */
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrter Herr {fullname}';
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrte Frau {fullname}';
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrter Herr {lastname}';
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrte Frau {lastname}';
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrter {name}';
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Sehr geehrte {name}';
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Hallo {shortname}';
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrter Herr',
+                                                       'title'      => true,
+                                                       'firstname'  => true,
+                                                       'lastname'   => true);
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte Frau',
+                                                       'title'      => true,
+                                                       'firstname'  => true,
+                                                       'lastname'   => true);
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte/-r Herr/Frau',
+                                                       'title'      => true,
+                                                       'firstname'  => true,
+                                                       'lastname'   => true);
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrter Herr',
+                                                       'title'      => false,
+                                                       'firstname'  => true,
+                                                       'lastname'   => true);
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte Frau',
+                                                       'title'      => false,
+                                                       'firstname'  => true,
+                                                       'lastname'   => true);
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte/-r Herr/Frau',
+                                                       'title'      => false,
+                                                       'firstname'  => true,
+                                                       'lastname'   => true);
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrter',
+                                                       'title'      => false,
+                                                       'firstname'  => true,
+                                                       'lastname'   => true);
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte',
+                                                       'title'      => false,
+                                                       'firstname'  => true,
+                                                       'lastname'   => true);
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte/-r',
+                                                       'title'      => false,
+                                                       'firstname'  => true,
+                                                       'lastname'   => true);
+$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Hallo',
+                                                       'title'      => false,
+                                                       'firstname'  => true,
+                                                       'lastname'   => false);
 
 
 /**
@@ -102,33 +135,33 @@ $arrAvisotaBeMod = array
 (
 	'avisota' => array
 	(
-		'avisota_mailing_list' => array
+		'avisota_mailing_list'     => array
 		(
 			'tables'     => array('tl_avisota_mailing_list'),
 			'icon'       => 'system/modules/Avisota/html/mailing_list.png',
 			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 		),
-		'avisota_recipients'   => array
+		'avisota_recipients'       => array
 		(
 			'tables'     => array('tl_avisota_recipient', 'tl_avisota_recipient_migrate', 'tl_avisota_recipient_import', 'tl_avisota_recipient_export', 'tl_avisota_recipient_remove'),
 			'icon'       => 'system/modules/Avisota/html/recipients.png',
 			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 		),
-		'avisota_newsletter'   => array
+		'avisota_newsletter'       => array
 		(
 			'tables'     => array('tl_avisota_newsletter_category', 'tl_avisota_newsletter', 'tl_avisota_newsletter_content'),
 			'send'       => array('Avisota', 'send'),
 			'icon'       => 'system/modules/Avisota/html/newsletter.png',
 			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 		),
-		'avisota_tracking'     => array
+		'avisota_tracking'         => array
 		(
 			'callback'   => 'AvisotaTracking',
 			'tables'     => array('tl_avisota_tracking_export'),
 			'icon'       => 'system/modules/Avisota/html/tracking.png',
 			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 		),
-		'avisota_outbox'       => array
+		'avisota_outbox'           => array
 		(
 			'callback'   => 'AvisotaOutbox',
 			'icon'       => 'system/modules/Avisota/html/outbox.png',
@@ -140,10 +173,16 @@ $arrAvisotaBeMod = array
 			'icon'       => 'system/modules/Avisota/html/recipient_source.png',
 			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 		),
-		'avisota_transport' => array
+		'avisota_transport'        => array
 		(
 			'tables'     => array('tl_avisota_transport'),
 			'icon'       => 'system/modules/Avisota/html/transport.png',
+			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+		),
+		'avisota_settings'         => array
+		(
+			'tables'     => array('tl_avisota_settings'),
+			'icon'       => 'system/modules/Avisota/html/settings.png',
 			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 		)
 	)
@@ -216,9 +255,9 @@ $GLOBALS['BE_FFL']['newschooser']  = 'WidgetNewschooser';
 /**
  * Recipient sources
  */
-$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['integrated']    = 'IntegratedAvisotaRecipientSource';
-$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['member'] = 'MemberGroupRecipientSource';
-$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['csv_file']      = 'CSVFileRecipientSource';
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['integrated'] = 'IntegratedAvisotaRecipientSource';
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['member']     = 'MemberGroupRecipientSource';
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['csv_file']   = 'CSVFileRecipientSource';
 
 
 /**
