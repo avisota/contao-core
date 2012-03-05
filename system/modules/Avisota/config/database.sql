@@ -32,7 +32,6 @@ CREATE TABLE `tl_avisota_recipient` (
   `tstamp` int(10) unsigned NOT NULL default '0',
   `email` varchar(255) NOT NULL default '',
   `confirmed` char(1) NOT NULL default '',
-  `lists` varchar(255) NOT NULL default '',
   `salutation` varchar(255) NOT NULL default '',
   `title` varchar(255) NOT NULL default '',
   `firstname` varchar(255) NOT NULL default '',
@@ -45,6 +44,7 @@ CREATE TABLE `tl_avisota_recipient` (
   `addedOnPage` int(10) unsigned NOT NULL default '0',
   `notification` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
+  UNIQUE `email` (`email`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -56,6 +56,9 @@ CREATE TABLE `tl_avisota_recipient` (
 CREATE TABLE `tl_avisota_recipient_to_mailing_list` (
   `recipient` int(10) unsigned NOT NULL default '0',
   `list` int(10) unsigned NOT NULL default '0',
+  `confirmationSent` int(10) unsigned NOT NULL default '0',
+  `reminderSent` int(10) unsigned NOT NULL default '0',
+  `reminderCount` int(1) unsigned NOT NULL default '0',
   `confirmed` char(1) NOT NULL default '',
   PRIMARY KEY  (`recipient`, `list`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -339,6 +342,8 @@ CREATE TABLE `tl_avisota_transport` (
   `tstamp` int(10) unsigned NOT NULL default '0',
   `type` varchar(255) NOT NULL default '',
   `title` varchar(255) NOT NULL default '',
+  `sender` varchar(128) NOT NULL default '',
+  `senderName` varchar(128) NOT NULL default '',
 -- swift mailer
   `swiftUseSmtp` char(1) NOT NULL default '',
   `swiftSmtpHost` varchar(255) NOT NULL default '',

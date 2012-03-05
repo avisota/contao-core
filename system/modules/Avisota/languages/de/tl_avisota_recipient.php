@@ -36,33 +36,42 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['email']       = array('E-Mail', 'Hier können Sie die E-Mail Adresse des Abonnenten angeben.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['lists']       = array('Verteiler', 'Wählen Sie hier die zu abonnierenden Verteiler aus.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['salutation']  = array('Anrede', 'Hier können Sie die Anrede auswählen.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['title']       = array('Titel', 'Hier können Sie den Titel eingeben.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['firstname']   = array('Vorname', 'Hier können Sie den Vornamen eingeben.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['lastname']    = array('Nachname', 'Hier können Sie den Nachnamen eingeben.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['gender']      = array('Geschlecht', 'Bitte wählen Sie das Geschlecht.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmed']   = array('Bestätigt', 'Hier können Sie die E-Mail Adresse als bestätigt markieren.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['token']       = array('Token', 'Der Auth-Token wird für das Double-Opt-In Verfahren genutzt.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn']     = array('Eintragungszeitpunkt', 'Der Zeitpunkt, an dem das Abonnement hinzugefügt wurde.', 'hinzugefügt am %s');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy']     = array('Hinzugefügt von', 'Der Benutzer, der den Abonnenten hinzugefügt hat, falls dieser sich nicht selbst eingetragen hat.', ' von %s', 'einen gelöschten Benutzer');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['email']              = array('E-Mail', 'Hier können Sie die E-Mail Adresse des Abonnenten angeben.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['lists']              = array('Verteiler', 'Wählen Sie hier die zu abonnierenden Verteiler aus.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['subscriptionAction'] = array('Abonnementaktivierung', 'Wählen Sie hier wie die Aktivierung des Abonnements für neu ausgewählte Verteiler durchgeführt werden soll.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['salutation']         = array('Anrede', 'Hier können Sie die Anrede auswählen.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['title']              = array('Titel', 'Hier können Sie den Titel eingeben.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['firstname']          = array('Vorname', 'Hier können Sie den Vornamen eingeben.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['lastname']           = array('Nachname', 'Hier können Sie den Nachnamen eingeben.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['gender']             = array('Geschlecht', 'Bitte wählen Sie das Geschlecht.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmed']          = array('Bestätigt', 'Hier können Sie die E-Mail Adresse als bestätigt markieren.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['token']              = array('Token', 'Der Auth-Token wird für das Double-Opt-In Verfahren genutzt.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn']            = array('Eintragungszeitpunkt', 'Der Zeitpunkt, an dem das Abonnement hinzugefügt wurde.', 'hinzugefügt am %s');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy']            = array('Hinzugefügt von', 'Der Benutzer, der den Abonnenten hinzugefügt hat, falls dieser sich nicht selbst eingetragen hat.', ' von %s', 'einen gelöschten Benutzer');
 
 
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['recipient_legend'] = 'Abonnent';
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['personals_legend'] = 'Persönliche Daten';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['recipient_legend']    = 'Abonnent';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['subscription_legend'] = 'Abonnement';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['personals_legend']    = 'Persönliche Daten';
 
 
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirm']    = '%s neue Abonnenten wurden importiert.';
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['invalid']    = '%s ungültige Einträge wurden übersprungen.';
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['subscribed'] = 'registriert am %s';
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['manually']   = 'manuell hinzugefügt';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirm']                 = '%s neue Abonnenten wurden importiert.';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['invalid']                 = '%s ungültige Einträge wurden übersprungen.';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['subscribed']              = 'registriert am %s';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['manually']                = 'manuell hinzugefügt';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmManualActivation'] = 'Sind Sie sicher, dass Sie dieses Abonnement manuell aktivieren möchten?';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmationSent']        = 'Bestätigungsmail gesendet am %s';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['reminderSent']            = 'Erinnerungsmail gesendet am %s';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['remindersSent']           = '%d. Erinnerungsmail gesendet am %s';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['sendConfirmation']        = 'Bestätigungsmail senden';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['activateSubscription']    = 'Abonnement direkt aktivieren';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['doNothink']               = 'Abonnement unbestätigt eintragen';
 
 
 /**
@@ -74,11 +83,11 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['copy']                = array('Abon
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['delete']              = array('Abonnent löschen', 'Abonnent ID %s löschen');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['delete_no_blacklist'] = array('Abonnent löschen ohne Blacklist Eintrag', 'Abonnent ID %s löschen ohne Ihn in die Blacklist einzutragen');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['edit']                = array('Abonnent bearbeiten', 'Abonnent ID %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['tools']	           = array('Tools','Abonnenten in Massen verarbeiten.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['migrate']	           = array('Migrieren','Abonnenten aus dem Contao Newslettersystem migrieren.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['import']	           = array('CSV-Import','Import von Abbonements aus einer CSV-Datei.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['export']	           = array('CSV-Export','Export von Abbonements in eine CSV-Datei.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['remove']	           = array('CSV-Löschen','Löschen von Abbonements aus einer CSV-Datei.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['tools']               = array('Tools', 'Abonnenten in Massen verarbeiten.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['migrate']             = array('Migrieren', 'Abonnenten aus dem Contao Newslettersystem migrieren.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['import']              = array('CSV-Import', 'Import von Abbonements aus einer CSV-Datei.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['export']              = array('CSV-Export', 'Export von Abbonements in eine CSV-Datei.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['remove']              = array('CSV-Löschen', 'Löschen von Abbonements aus einer CSV-Datei.');
 
 
 /**

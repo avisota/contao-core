@@ -42,9 +42,20 @@
  */
 class AvisotaBackend extends Controller
 {
-	public function __construct()
+	protected static $objInstance = null;
+
+	public static function getInstance()
+	{
+		if (self::$objInstance === null) {
+			self::$objInstance = new AvisotaBackend();
+		}
+		return self::$objInstance;
+	}
+
+	protected function __construct()
 	{
 		parent::__construct();
+		$this->import('Database');
 	}
 
 
@@ -102,6 +113,44 @@ class AvisotaBackend extends Controller
 			}
 		}
 		return $strContent;
+	}
+
+	public function hookAvisotaMailingListLabel($arrRow, $strLabel, DataContainer $dc)
+	{
+		$objResult = $this->Database
+			->prepare("SELECT
+				(SELECT COUNT(rl.recipient) FROM tl_avisota_recipient_to_mailing_list rl WHERE rl.list=?) as total_recipients,
+				(SELECT COUNT(rl.recipient) FROM tl_avisota_recipient_to_mailing_list rl INNER JOIN tl_avisota_recipient r ON r.id=rl.recipient WHERE r.confirmed=? AND rl.list=?) as disabled_recipients,
+				(SELECT COUNT(ml.member) FROM tl_member_to_mailing_list ml WHERE ml.list=?) as total_members,
+				(SELECT COUNT(ml.member) FROM tl_member_to_mailing_list ml INNER JOIN tl_member m ON m.id=ml.member WHERE m.disable=? AND ml.list=?) as disabled_members")
+			->execute($arrRow['id'], '', $arrRow['id'], $arrRow['id'], '1', $arrRow['id']);
+		if ($objResult->next()) {
+			if ($objResult->total_recipients > 0) {
+				$strLabel .= '<div style="padding: 1px 0;">' .
+					'<a href="contao/main.php?do=avisota_recipients&amp;showlist=' . $arrRow['id'] . '">' .
+					$this->generateImage('system/modules/Avisota/html/recipients.png', '') .
+					' ' .
+					sprintf($GLOBALS['TL_LANG']['tl_avisota_mailing_list']['label_recipients'],
+					$objResult->total_recipients,
+					$objResult->total_recipients - $objResult->disabled_recipients,
+					$objResult->disabled_recipients) .
+					'</a>' .
+					'</div>';
+			}
+			if ($objResult->total_members > 0) {
+				$strLabel .= '<div style="padding: 1px 0;">' .
+					'<a href="contao/main.php?do=member&amp;avisota_showlist=' . $arrRow['id'] . '">' .
+					$this->generateImage('system/themes/default/images/member.gif', '') .
+					' ' .
+					sprintf($GLOBALS['TL_LANG']['tl_avisota_mailing_list']['label_members'],
+					$objResult->total_members,
+					$objResult->total_members - $objResult->disabled_members,
+					$objResult->disabled_members) .
+					'</a>' .
+					'</div>';
+			}
+		}
+		return $strLabel;
 	}
 
 

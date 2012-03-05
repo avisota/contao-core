@@ -35,6 +35,7 @@
 
 MetaPalettes::appendBefore('tl_member', 'default', 'login', array('avisota' => array(':hide', 'avisota_lists')));
 
+$GLOBALS['TL_DCA']['tl_member']['config']['onload_callback'][]   = array('AvisotaDCA', 'filterByMailingLists');
 $GLOBALS['TL_DCA']['tl_member']['config']['onload_callback'][]   = array('tl_member_avisota', 'onload_callback');
 $GLOBALS['TL_DCA']['tl_member']['config']['onsubmit_callback'][] = array('tl_member_avisota', 'onsubmit_callback');
 
@@ -63,10 +64,6 @@ $GLOBALS['TL_DCA']['tl_member']['fields']['avisota_subscribe'] = array
 		'feGroup'      => 'newsletter'
 	)
 );
-
-if ($this->Input->get('avisota_showlist')) {
-	$GLOBALS['TL_DCA']['tl_member']['list']['sorting']['filter'][] = array('FIND_IN_SET(?, avisota_lists)', $this->Input->get('avisota_showlist'));
-}
 
 class tl_member_avisota extends Backend
 {

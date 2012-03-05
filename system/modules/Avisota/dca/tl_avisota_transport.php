@@ -109,6 +109,7 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 		),
 		'swift'   => array(
 			'transport' => array('title', 'type'),
+			'sender'    => array('sender', 'senderName'),
 			'swift'     => array('swiftUseSmtp')
 		)
 	),
@@ -139,6 +140,26 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 			'eval'                    => array('mandatory'=> true,
 			                                   'maxlength'=> 255,
 			                                   'tl_class' => 'w50')
+		),
+
+		'sender' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['sender'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'filter'                  => true,
+			'inputType'               => 'text',
+			'eval'                    => array('rgxp'=>'email', 'maxlength'=>128, 'decodeEntities'=>true, 'tl_class'=>'w50')
+		),
+		'senderName' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['senderName'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'flag'                    => 11,
+			'inputType'               => 'text',
+			'eval'                    => array('decodeEntities'=>true, 'maxlength'=>128, 'tl_class'=>'w50')
 		),
 
 		// swift mailer

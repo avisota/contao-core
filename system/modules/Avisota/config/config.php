@@ -145,7 +145,8 @@ $arrAvisotaBeMod = array
 		(
 			'tables'     => array('tl_avisota_recipient', 'tl_avisota_recipient_migrate', 'tl_avisota_recipient_import', 'tl_avisota_recipient_export', 'tl_avisota_recipient_remove'),
 			'icon'       => 'system/modules/Avisota/html/recipients.png',
-			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css',
+			'javascript' => 'system/modules/Avisota/html/backend.js'
 		),
 		'avisota_newsletter'       => array
 		(
@@ -276,22 +277,13 @@ $GLOBALS['TL_HOOKS']['mysqlMultiTriggerCreate'][] = array('AvisotaUpdate', 'hook
 $GLOBALS['TL_HOOKS']['createNewUser'][]           = array('AvisotaDCA', 'hookCreateNewUser');
 $GLOBALS['TL_HOOKS']['activateAccount'][]         = array('AvisotaDCA', 'hookActivateAccount');
 $GLOBALS['TL_HOOKS']['updatePersonalData'][]      = array('AvisotaDCA', 'hookUpdatePersonalData');
+$GLOBALS['TL_HOOKS']['avisotaMailingListLabel'][] = array('AvisotaBackend', 'hookAvisotaMailingListLabel');
 
 
 /**
  * Procedures
  */
-$GLOBALS['TL_PROCEDURE']['avisota_recipient_to_mailing_list(IN RECIPIENT_ID INT, IN LIST_IDS BLOB)'] = '
--- clear the association table
-DELETE FROM tl_avisota_recipient_to_mailing_list WHERE recipient=RECIPIENT_ID
-	AND list NOT IN (SELECT id FROM tl_avisota_mailing_list WHERE FIND_IN_SET(id, LIST_IDS));
-
--- insert new association
-INSERT INTO tl_avisota_recipient_to_mailing_list (recipient, list)
-	SELECT RECIPIENT_ID, id FROM tl_avisota_mailing_list WHERE FIND_IN_SET(id, LIST_IDS)
-		AND id NOT IN (SELECT list FROM tl_avisota_recipient_to_mailing_list WHERE recipient=RECIPIENT_ID);
-';
-$GLOBALS['TL_PROCEDURE']['member_to_mailing_list(IN MEMBER_ID INT, IN LIST_IDS BLOB)'] = '
+$GLOBALS['TL_PROCEDURE']['member_to_mailing_list(IN MEMBER_ID INT, IN LIST_IDS BLOB)']               = '
 -- clear the association table
 DELETE FROM tl_member_to_mailing_list WHERE member=MEMBER_ID
 	AND list NOT IN (SELECT id FROM tl_avisota_mailing_list WHERE FIND_IN_SET(id, LIST_IDS));
@@ -306,8 +298,6 @@ INSERT INTO tl_member_to_mailing_list (member, list)
 /**
  * Multi Triggers
  */
-$GLOBALS['TL_TRIGGER']['tl_avisota_recipient']['after']['insert'][]     = 'CALL avisota_recipient_to_mailing_list(NEW.id, NEW.lists);';
-$GLOBALS['TL_TRIGGER']['tl_avisota_recipient']['after']['update'][]     = 'CALL avisota_recipient_to_mailing_list(NEW.id, NEW.lists);';
 $GLOBALS['TL_TRIGGER']['tl_avisota_recipient']['before']['delete'][]    = 'DELETE FROM tl_avisota_recipient_to_mailing_list WHERE recipient=OLD.id;';
 $GLOBALS['TL_TRIGGER']['tl_member']['after']['insert'][]                = 'CALL member_to_mailing_list(NEW.id, NEW.avisota_lists);';
 $GLOBALS['TL_TRIGGER']['tl_member']['after']['update'][]                = 'CALL member_to_mailing_list(NEW.id, NEW.avisota_lists);';

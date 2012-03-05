@@ -284,38 +284,12 @@ class tl_avisota_mailing_list extends Backend
 
 	public function getLabel($arrRow, $strLabel, DataContainer $dc)
 	{
-		$strLabel = '<p><strong>' . $strLabel . '</strong></p>';
-		$objResult = $this->Database
-			->prepare("SELECT
-				(SELECT COUNT(rl.recipient) FROM tl_avisota_recipient_list rl WHERE rl.list=?) as total_recipients,
-				(SELECT COUNT(rl.recipient) FROM tl_avisota_recipient_list rl INNER JOIN tl_avisota_recipient r ON r.id=rl.recipient WHERE r.confirmed=? AND rl.list=?) as disabled_recipients,
-				(SELECT COUNT(ml.member) FROM tl_member_to_mailing_list ml WHERE ml.list=?) as total_members,
-				(SELECT COUNT(ml.member) FROM tl_member_to_mailing_list ml INNER JOIN tl_member m ON m.id=ml.member WHERE m.disable=? AND ml.list=?) as disabled_members")
-			->execute($arrRow['id'], '', $arrRow['id'], $arrRow['id'], '1', $arrRow['id']);
-		if ($objResult->next()) {
-			if ($objResult->total_recipients > 0) {
-				$strLabel .= '<p>' .
-					'<a href="contao/main.php?do=avisota_recipients&amp;showlist=' . $arrRow['id'] . '">' .
-					$this->generateImage('system/modules/Avisota/html/recipients.png', '') .
-					' ' .
-					sprintf($GLOBALS['TL_LANG']['tl_avisota_mailing_list']['label_recipients'],
-					$objResult->total_recipients,
-					$objResult->total_recipients - $objResult->disabled_recipients,
-					$objResult->disabled_recipients) .
-					'</a>' .
-					'</p>';
-			}
-			if ($objResult->total_members > 0) {
-				$strLabel .= '<p>' .
-					'<a href="contao/main.php?do=member&amp;avisota_showlist=' . $arrRow['id'] . '">' .
-					$this->generateImage('system/themes/default/images/member.gif', '') .
-					' ' .
-					sprintf($GLOBALS['TL_LANG']['tl_avisota_mailing_list']['label_members'],
-					$objResult->total_members,
-					$objResult->total_members - $objResult->disabled_members,
-					$objResult->disabled_members) .
-					'</a>' .
-					'</p>';
+		$strLabel = '<div style="padding: 3px 0;"><strong>' . $strLabel . '</strong></div>';
+
+		if (isset($GLOBALS['TL_HOOKS']['avisotaMailingListLabel']) && is_array($GLOBALS['TL_HOOKS']['avisotaMailingListLabel'])) {
+			foreach ($GLOBALS['TL_HOOKS']['avisotaMailingListLabel'] as $callback) {
+				$this->import($callback[0]);
+				$strLabel = $this->$callback[0]->$callback[1]($arrRow, $strLabel, $dc);
 			}
 		}
 		return $strLabel;

@@ -257,6 +257,14 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_selectable_lists'] = array
 	'eval'                    => array('multiple'=>true)
 );
 
+$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_confirm_on_activate'] = array
+(
+	'exclude'                 => true,
+	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_confirm_on_activate'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array()
+);
+
 
 /**
  * Class tl_module_avisota

@@ -42,6 +42,23 @@
  */
 class AvisotaDCA extends Controller
 {
+	protected static $objInstance = null;
+
+	public static function getInstance()
+	{
+		if (self::$objInstance == null) {
+			self::$objInstance = new AvisotaDCA();
+		}
+
+		return self::$objInstance;
+	}
+
+	protected function __construct()
+	{
+		parent::__construct();
+		$this->import('Database');
+	}
+
 	/**
 	 * Convert a string list into an array.
 	 *
@@ -81,7 +98,6 @@ class AvisotaDCA extends Controller
 		}
 		$strSql .= ' ORDER BY title';
 
-		$this->import('Database');
 		$objLists = $this->Database->execute($strSql);
 
 		$arrOptions = array();
@@ -92,20 +108,61 @@ class AvisotaDCA extends Controller
 		return $arrOptions;
 	}
 
+	public function filterByMailingLists(DataContainer $dc)
+	{
+		switch ($dc->table) {
+			case 'tl_member':
+				$varId = $this->Input->get('avisota_showlist');
+				break;
+			case 'tl_avisota_recipient':
+				$varId = $this->Input->get('showlist');
+				break;
+		}
+		if ($varId) {
+			$objList = $this->Database
+				->prepare("SELECT * FROM tl_avisota_mailing_list WHERE id=?")
+				->execute($varId);
+			if ($objList->next()) {
+				switch ($dc->table) {
+					case 'tl_member':
+						$GLOBALS['TL_DCA']['tl_member']['list']['sorting']['filter'][] = array(
+							'FIND_IN_SET(?, avisota_lists)',
+							$varId
+						);
+						break;
+					case 'tl_avisota_recipient':
+						$GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['sorting']['filter'][] = array(
+							'id IN (SELECT recipient FROM tl_avisota_recipient_to_mailing_list WHERE list=?)',
+							$varId
+						);
+						break;
+				}
+				$this->loadLanguageFile('avisota_dca');
+				$_SESSION['TL_INFO'][] = sprintf(
+					$GLOBALS['TL_LANG']['avisota_dca']['filteredByMailingList'],
+					$objList->title,
+					preg_replace('#[&\?](avisota_)?showlist=\d+#', '', $this->Environment->request)
+				);
+			}
+		}
+	}
+
 	public function hookCreateNewUser($insertId, $arrData, $objModuleRegistration)
 	{
 		if ($arrData['avisota_subscribe']) {
 			// TODO rework to send confirmation mail
-			$this->import('Database');
 			$this->Database
 				->prepare("UPDATE tl_member SET avisota_lists = ? WHERE id = ?")
 				->execute(implode(',', deserialize($objModuleRegistration->avisota_selectable_lists, true)), $insertId);
 		}
 	}
 
-	public function hookActivateAccount()
+	public function hookActivateAccount($objMember, $objModuleRegistration)
 	{
-		// TODO
+		if ($objModuleRegistration->avisota_confirm_on_activate) {
+			$arrLists = array_filter(array_map('intval', deserialize($objModuleRegistration->avisota_selectable_lists, true)));
+
+		}
 	}
 
 	public function hookUpdatePersonalData($objUser, $arrFormData, $objModulePersonalData)
@@ -135,7 +192,6 @@ class AvisotaDCA extends Controller
 			}
 
 			// TODO rework to send confirmation mail
-			$this->import('Database');
 			$this->Database
 				->prepare("UPDATE tl_member SET avisota_lists = ? WHERE id = ?")
 				->execute(implode(',', $arrLists), $objUser->id);

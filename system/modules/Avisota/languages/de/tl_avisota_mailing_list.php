@@ -63,4 +63,4 @@ $GLOBALS['TL_LANG']['tl_avisota_mailing_list']['edit']   = array('Verteilereinst
  * Label
  */
 $GLOBALS['TL_LANG']['tl_avisota_mailing_list']['label_recipients'] = '%1$d Abonnenten (<span title="%2$d aktive Abonnenten">%2$d</span> / <span title="%3$d inaktive Abonnenten">%3$d</span>)';
-$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['label_memberss']   = '%1$d Mitglieder (<span title="%2$d aktive Mitglieder">%2$d</span> / <span title="%3$d inaktive Mitglieder">%3$d</span>)';
+$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['label_members']    = '%1$d Mitglieder (<span title="%2$d aktive Mitglieder">%2$d</span> / <span title="%3$d inaktive Mitglieder">%3$d</span>)';
