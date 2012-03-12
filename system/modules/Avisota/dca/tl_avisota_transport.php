@@ -104,19 +104,19 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 	// Meta Palettes
 	'metapalettes'    => array
 	(
-		'default' => array(
+		'default'            => array(
 			'transport' => array('type')
 		),
-		'swift'   => array(
+		'swift'              => array(
 			'transport' => array('title', 'type'),
 			'sender'    => array('sender', 'senderName'),
 			'swift'     => array('swiftUseSmtp')
+		),
+		'swiftswiftSmtpOn'   => array(
+			'transport' => array('title', 'type'),
+			'sender'    => array('sender', 'senderName'),
+			'swift'     => array('swiftUseSmtp', 'swiftSmtpHost', 'swiftSmtpUser', 'swiftSmtpPass', 'swiftSmtpEnc', 'swiftSmtpPort')
 		)
-	),
-
-	'submetapalettes' => array
-	(
-		'swiftUseSmtp' => array('swiftSmtpHost', 'swiftSmtpUser', 'swiftSmtpPass', 'swiftSmtpEnc', 'swiftSmtpPort')
 	),
 
 	// Fields
@@ -142,16 +142,19 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 			                                   'tl_class' => 'w50')
 		),
 
-		'sender' => array
+		'sender'        => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['sender'],
 			'exclude'                 => true,
 			'search'                  => true,
 			'filter'                  => true,
 			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'email', 'maxlength'=>128, 'decodeEntities'=>true, 'tl_class'=>'w50')
+			'eval'                    => array('rgxp'          => 'email',
+			                                   'maxlength'     => 128,
+			                                   'decodeEntities'=> true,
+			                                   'tl_class'      => 'w50')
 		),
-		'senderName' => array
+		'senderName'    => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['senderName'],
 			'exclude'                 => true,
@@ -159,16 +162,45 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 			'sorting'                 => true,
 			'flag'                    => 11,
 			'inputType'               => 'text',
-			'eval'                    => array('decodeEntities'=>true, 'maxlength'=>128, 'tl_class'=>'w50')
+			'eval'                    => array('decodeEntities'=> true,
+			                                   'maxlength'     => 128,
+			                                   'tl_class'      => 'w50')
+		),
+		'replyTo'        => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['replyTo'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'filter'                  => true,
+			'inputType'               => 'text',
+			'eval'                    => array('rgxp'          => 'email',
+			                                   'maxlength'     => 128,
+			                                   'decodeEntities'=> true,
+			                                   'tl_class'      => 'w50')
+		),
+		'replyToName'    => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['replyToName'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'flag'                    => 11,
+			'inputType'               => 'text',
+			'eval'                    => array('decodeEntities'=> true,
+			                                   'maxlength'     => 128,
+			                                   'tl_class'      => 'w50')
 		),
 
 		// swift mailer
 		'swiftUseSmtp'  => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftUseSmtp'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('submitOnChange'=> true)
+			'label'                       => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftUseSmtp'],
+			'default'                     => 'swiftSmtpSystemSettings',
+			'exclude'                     => true,
+			'inputType'                   => 'select',
+			'option'                      => array('swiftSmtpSystemSettings', 'swiftSmtpOn', 'swiftSmtpOff'),
+			'reference'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport'],
+			'eval'                        => array('submitOnChange'=> true)
 		),
 		'swiftSmtpHost' => array
 		(

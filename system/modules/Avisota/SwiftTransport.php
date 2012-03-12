@@ -40,74 +40,30 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class SwiftTransport extends AvisotaAbstractTransportModule
+class SwiftTransport extends MailerTransport
 {
 	/**
-	 * Transport a mail.
-	 *
-	 * @param string $strRecipientEmail
-	 * @param Email $objEmail
-	 *
-	 * @return void
-	 * @throws AvisotaTransportException
+	 * @var string
 	 */
-	public function transportEmail($varRecipient, Email $objEmail)
+	protected $mailerImplementation = 'swift';
+
+	protected function createMailerConfig()
 	{
-		global $objPage;
+		$objMailerConfig = parent::createMailerConfig();
 
-		try
-		{
-			$objEmail->logFile = 'avisota_swift_transport_' . $this->config->id . '.log';
-
-			// set sender email
-			if ($this->sender) {
-				$objEmail->from = $this->sender;
-			} else if (isset($objPage) && strlen($objPage->adminEmail)) {
-				$objEmail->from = $objPage->adminEmail;
-			} else {
-				$objEmail->from = $GLOBALS['TL_CONFIG']['adminEmail'];
-			}
-
-			// set sender name
-			if (strlen($this->senderName)) {
-				$objEmail->fromName = $this->senderName;
-			}
-
-			$arrTempSettings = array();
-			if ($this->swiftUseSMTP)
-			{
-				$arrTempSettings = array(
-					'useSMTP' => $GLOBALS['TL_CONFIG']['useSMTP'],
-					'smtpHost' => $GLOBALS['TL_CONFIG']['smtpHost'],
-					'smtpUser' => $GLOBALS['TL_CONFIG']['smtpUser'],
-					'smtpPass' => $GLOBALS['TL_CONFIG']['smtpPass'],
-					'smtpEnc' => $GLOBALS['TL_CONFIG']['smtpEnc'],
-					'smtpPort' => $GLOBALS['TL_CONFIG']['smtpPort']
-				);
-
-				$GLOBALS['TL_CONFIG']['useSMTP'] = true;
-
-				$GLOBALS['TL_CONFIG']['smtpHost'] = $this->swiftSmtpHost;
-				$GLOBALS['TL_CONFIG']['smtpUser'] = $this->swiftSmtpUser;
-				$GLOBALS['TL_CONFIG']['smtpPass'] = $this->swiftSmtpPass;
-				$GLOBALS['TL_CONFIG']['smtpEnc']  = $this->swiftSmtpEnc;
-				$GLOBALS['TL_CONFIG']['smtpPort'] = $this->swiftSmtpPort;
-			}
-
-			$objEmail->sendTo($varRecipient);
-
-			foreach ($arrTempSettings as $k=>$v) {
-				$GLOBALS['TL_CONFIG'][$k] = $v;
-			}
+		switch ($this->config->swiftUseSMTP) {
+			case 'swiftSmtpOn':
+				$objMailerConfig->setUseSMTP(true);
+				$objMailerConfig->setSmtpHost($this->config->swiftSmtpHost);
+				$objMailerConfig->setSmtpPort($this->config->swiftSmtpPort);
+				$objMailerConfig->setSmtpUser($this->config->swiftSmtpUser);
+				$objMailerConfig->setSmtpPassword($this->config->swiftSmtpPass);
+				$objMailerConfig->setSmtpEncryption($this->config->swiftSmtpEnc);
+				break;
+			case 'swiftSmtpOff':
+				$objMailerConfig->setUseSMTP(false);
 		}
-		catch (Swift_RfcComplianceException $e)
-		{
-			foreach ($arrTempSettings as $k=>$v) {
-				$GLOBALS['TL_CONFIG'][$k] = $v;
-			}
-			throw new AvisotaTransportEmailException($varRecipient, $objEmail, $e->getMessage(), $e->getCode(), $e);
-		}
+
+		return $objMailerConfig;
 	}
-
-
 }

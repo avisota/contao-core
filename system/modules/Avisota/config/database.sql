@@ -345,8 +345,10 @@ CREATE TABLE `tl_avisota_transport` (
   `title` varchar(255) NOT NULL default '',
   `sender` varchar(128) NOT NULL default '',
   `senderName` varchar(128) NOT NULL default '',
+  `replyTo` varchar(128) NOT NULL default '',
+  `replyToName` varchar(128) NOT NULL default '',
 -- swift mailer
-  `swiftUseSmtp` char(1) NOT NULL default '',
+  `swiftUseSmtp` char(23) NOT NULL default '',
   `swiftSmtpHost` varchar(255) NOT NULL default '',
   `swiftSmtpUser` varchar(255) NOT NULL default '',
   `swiftSmtpPass` varchar(255) NOT NULL default '',

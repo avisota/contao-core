@@ -67,12 +67,12 @@ interface AvisotaTransportModule
 	 * Transport a mail.
 	 *
 	 * @param string $strRecipientEmail
-	 * @param Email $objEmail
+	 * @param Mail $objEmail
 	 *
 	 * @return void
 	 * @throws AvisotaTransportException
 	 */
-	public function transportEmail($strRecipientEmail, Email $objEmail);
+	public function transportEmail($strRecipientEmail, Mail $objEmail);
 
 	/**
 	 * Finalise the transport.
