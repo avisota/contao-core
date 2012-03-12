@@ -45,14 +45,22 @@ class AvisotaBlacklistException extends Exception
 {
 	protected $email;
 
-	public function __construct($email = null, $message = '', $code = 0, $previous = null)
+	protected $lists;
+
+	public function __construct($email = null, array $lists = array(), $message = '', $code = 0, $previous = null)
 	{
 		parent::__construct($message, $code, $previous);
 		$this->email = $email;
+		$this->lists = $lists;
 	}
 
 	public function getEmail()
 	{
 		return $this->email;
+	}
+
+	public function getLists()
+	{
+		return $this->lists;
 	}
 }

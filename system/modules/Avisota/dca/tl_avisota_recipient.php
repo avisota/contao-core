@@ -230,7 +230,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'sorting'                 => true,
 			'flag'                    => 1,
 			'inputType'               => 'select',
-			'options'                 => array_combine($GLOBALS['TL_CONFIG']['avisota_salutations'], $GLOBALS['TL_CONFIG']['avisota_salutations']),
+			'options'                 => array(), //array_combine($GLOBALS['TL_CONFIG']['avisota_salutations'], $GLOBALS['TL_CONFIG']['avisota_salutations']),
 			'eval'                    => array('maxlength'         => 255,
 			                                   'includeBlankOption'=> true,
 			                                   'importable'        => true,
@@ -397,9 +397,13 @@ class tl_avisota_recipient extends Backend
 	public function onload_callback($dc)
 	{
 		if ($this->Input->get('act') == 'toggleConfirmation') {
+			$intRecipient = $this->Input->get('recipient');
+			$intList = $this->Input->get('list');
+
 			$this->Database
 				->prepare("UPDATE tl_avisota_recipient_to_mailing_list SET confirmed=? WHERE recipient=? AND list=?")
-				->execute($this->Input->get('confirmed') ? '1' : '', $this->Input->get('recipient'), $this->Input->get('list'));
+				->execute($this->Input->get('confirmed') ? '1' : '', $intRecipient, $intList);
+
 			header('Content-Type: application/javascript');
 			echo json_encode(array(
 				'confirmed' => $this->Input->get('confirmed') ? true : false
@@ -410,23 +414,50 @@ class tl_avisota_recipient extends Backend
 
 	public function onsubmit_callback($dc)
 	{
-		var_dump($dc->activeRecord->lists, $dc->activeRecord->subscriptionAction, $_SESSION['avisotaMailingLists'], $_SESSION['avisotaSubscriptionAction']);
-		exit;
+		$objRecipient = AvisotaIntegratedRecipient::byEmail($dc->activeRecord->email);
+		$objRecipient->subscribe($_SESSION['avisotaMailingLists'], true);
+
+		switch ($_SESSION['avisotaSubscriptionAction']) {
+			case 'sendConfirmation':
+				$objRecipient->sendSubscriptionConfirmation($_SESSION['avisotaMailingLists']);
+				break;
+			case 'activateSubscription':
+				$objRecipient->confirmSubscription($_SESSION['avisotaMailingLists']);
+				break;
+		}
+
 		unset ($_SESSION['avisotaMailingLists'], $_SESSION['avisotaSubscriptionAction']);
 	}
 
 
 	public function ondelete_callback($dc)
 	{
-		// TODO rework !!!
-		/*
 		if ($this->Input->get('blacklist') !== 'false')
 		{
-			$this->Database->prepare("INSERT INTO tl_avisota_recipient_blacklist %s")
-				->set(array('pid'=>$dc->activeRecord->pid, 'tstamp'=>time(), 'email'=>md5($dc->activeRecord->email)))
-				->execute();
+			$time = time();
+
+			$arrLists = $this->loadMailingLists('', $dc, true);
+
+			// build insert values
+			$arrValues = array();
+			$arrArgs = array();
+			foreach ($arrLists as $intList) {
+				$arrValues[] = '(?, ?, ?)';
+				$arrArgs[] = $time;
+				$arrArgs[] = $intList;
+				$arrArgs[] = md5(strtolower($dc->activeRecord->email));
+			}
+
+			// on duplicate key update tstamp
+			$arrArgs[] = $time;
+
+			// execute query
+			$this->Database
+				->prepare("INSERT INTO tl_avisota_recipient_blacklist (tstamp, pid, email)
+						   VALUES " . implode(',', $arrValues) . "
+						   ON DUPLICATE KEY UPDATE tstamp=?")
+				->execute($arrArgs);
 		}
-		*/
 	}
 
 
@@ -443,54 +474,70 @@ class tl_avisota_recipient extends Backend
 	}
 
 
-	public function validateBlacklist($strEmail, DataContainer $dc)
+	public function validateBlacklist($arrLists, DataContainer $dc)
 	{
 		// do not check in frontend mode
 		if (TL_MODE == 'FE') {
-			return $strEmail;
+			return $arrLists;
 		}
 
-		// TODO rework !!!
-		/*
+		$strEmail = $this->Input->post('email');
+		$arrLists = deserialize($arrLists, true);
+		$arrLists = array_map('intval', $arrLists);
+		$arrLists = array_filter($arrLists);
+		if (!count($arrLists)) {
+			return $arrLists;
+		}
+		$strLists = implode(',', $arrLists);
+
 		$objBlacklist = $this->Database
-			->prepare("SELECT * FROM tl_avisota_recipient_blacklist WHERE email=?")
+			->prepare("SELECT m.* FROM tl_avisota_recipient_blacklist b
+			           INNER JOIN tl_avisota_mailing_list m ON m.id=b.pid
+			           WHERE b.email=? AND b.pid IN (" . $strLists . ")
+			           ORDER BY title")
 			->execute(md5(strtolower($strEmail)));
 		if ($objBlacklist->numRows)
 		{
-			$k = 'AVISOTA_BLACKLIST_WARNING_' . md5($strEmail);
+			$k = 'AVISOTA_BLACKLIST_WARNING_' . md5(implode(',', $objBlacklist->fetchEach('id')));
 			if (isset($_SESSION[$k]) && time()-$_SESSION[$k]<60)
 			{
-				$this->Database->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid=? AND email=?")
-						->execute($dc->activeRecord->pid, md5($dc->activeRecord->email));
+				$this->Database
+					->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid IN (" . $strLists . ") AND email=?")
+					->execute($dc->activeRecord->pid, md5(strtolower($strEmail)));
 			}
 			else
 			{
 				$_SESSION[$k] = time();
-				throw new Exception($GLOBALS['TL_LANG']['tl_avisota_recipient']['blacklist']);
+				throw new Exception(
+					sprintf(
+						$GLOBALS['TL_LANG']['tl_avisota_recipient'][$objBlacklist->numRows > 1 ? 'blacklists' : 'blacklist'],
+						implode(', ', $objBlacklist->fetchEach('title'))
+					)
+				);
 			}
 		}
-		*/
-		return $strEmail;
+		return $arrLists;
 	}
 
-	public function loadMailingLists($varValue, DataContainer $dc)
+	public function loadMailingLists($varValue, DataContainer $dc, $blnConfirmed = null)
 	{
 		return $this->Database
-			->prepare("SELECT * FROM tl_avisota_recipient_to_mailing_list WHERE recipient=?")
-			->execute($dc->id)
+			->prepare("SELECT * FROM tl_avisota_recipient_to_mailing_list WHERE recipient=?"
+					  . ($blnConfirmed !== null ? ' AND confirmed=?' : ''))
+			->execute($dc->id, $blnConfirmed ? '1' : '')
 			->fetchEach('list');
 	}
 
 	public function saveMailingLists($varValue)
 	{
 		$_SESSION['avisotaMailingLists'] = $varValue;
-		return '';
+		return null;
 	}
 
 	public function saveSubscriptionAction($varValue)
 	{
 		$_SESSION['avisotaSubscriptionAction'] = $varValue;
-		return '';
+		return null;
 	}
 
 	/**

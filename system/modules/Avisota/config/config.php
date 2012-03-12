@@ -73,47 +73,50 @@ $GLOBALS['TL_CONFIG']['avisota_max_send_timeout'] = 1;
 /**
  * Salutation
  */
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrter Herr',
-                                                       'title'      => true,
-                                                       'firstname'  => true,
-                                                       'lastname'   => true);
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte Frau',
-                                                       'title'      => true,
-                                                       'firstname'  => true,
-                                                       'lastname'   => true);
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte/-r Herr/Frau',
-                                                       'title'      => true,
-                                                       'firstname'  => true,
-                                                       'lastname'   => true);
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrter Herr',
-                                                       'title'      => false,
-                                                       'firstname'  => true,
-                                                       'lastname'   => true);
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte Frau',
-                                                       'title'      => false,
-                                                       'firstname'  => true,
-                                                       'lastname'   => true);
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte/-r Herr/Frau',
-                                                       'title'      => false,
-                                                       'firstname'  => true,
-                                                       'lastname'   => true);
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrter',
-                                                       'title'      => false,
-                                                       'firstname'  => true,
-                                                       'lastname'   => true);
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte',
-                                                       'title'      => false,
-                                                       'firstname'  => true,
-                                                       'lastname'   => true);
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte/-r',
-                                                       'title'      => false,
-                                                       'firstname'  => true,
-                                                       'lastname'   => true);
-$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Hallo',
-                                                       'title'      => false,
-                                                       'firstname'  => true,
-                                                       'lastname'   => false);
-
+if (!isset($GLOBALS['TL_CONFIG']['avisota_salutations'])) {
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrter Herr',
+	                                                       'title'      => true,
+	                                                       'firstname'  => true,
+	                                                       'lastname'   => true);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte Frau',
+	                                                       'title'      => true,
+	                                                       'firstname'  => true,
+	                                                       'lastname'   => true);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte/-r Herr/Frau',
+	                                                       'title'      => true,
+	                                                       'firstname'  => true,
+	                                                       'lastname'   => true);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrter Herr',
+	                                                       'title'      => false,
+	                                                       'firstname'  => true,
+	                                                       'lastname'   => true);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte Frau',
+	                                                       'title'      => false,
+	                                                       'firstname'  => true,
+	                                                       'lastname'   => true);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte/-r Herr/Frau',
+	                                                       'title'      => false,
+	                                                       'firstname'  => true,
+	                                                       'lastname'   => true);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrter',
+	                                                       'title'      => false,
+	                                                       'firstname'  => true,
+	                                                       'lastname'   => true);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte',
+	                                                       'title'      => false,
+	                                                       'firstname'  => true,
+	                                                       'lastname'   => true);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte/-r',
+	                                                       'title'      => false,
+	                                                       'firstname'  => true,
+	                                                       'lastname'   => true);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Hallo',
+	                                                       'title'      => false,
+	                                                       'firstname'  => true,
+	                                                       'lastname'   => false);
+} else if (is_string($GLOBALS['TL_CONFIG']['avisota_salutations'])) {
+	$GLOBALS['TL_CONFIG']['avisota_salutations'] = deserialize($GLOBALS['TL_CONFIG']['avisota_salutations'], true);
+}
 
 /**
  * Page types

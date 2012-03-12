@@ -43,6 +43,13 @@
  */
 abstract class AvisotaAbstractTransportModule implements AvisotaTransportModule
 {
+	protected $config;
+
+	public function __construct(Database_Result $objRow)
+	{
+		$this->config = (object) $objRow->row();
+	}
+
 	/**
 	 * Initialise the transport.
 	 *
@@ -58,4 +65,18 @@ abstract class AvisotaAbstractTransportModule implements AvisotaTransportModule
 	 * @throws AvisotaTransportFinalisationException
 	 */
 	public function finaliseTransport() {}
+
+	/**
+	 * Transport a specific newsletter.
+	 *
+	 * @param AvisotaRecipient $objRecipient
+	 * @param AvisotaNewsletter $objNewsletter
+	 *
+	 * @return void
+	 * @throws AvisotaTransportException
+	 */
+	public function transportNewsletter(AvisotaRecipient $objRecipient, AvisotaNewsletter $objNewsletter)
+	{
+		// TODO
+	}
 }

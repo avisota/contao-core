@@ -37,6 +37,21 @@
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations']                       = array('Anredeformen', 'Tragen Sie hier die möglichen Anredeformen ein. Wählen Sie dazu aus, aus welchen Teilen sich der Name zusammen setzt, dem Titel (z.B. Dr.), dem Vornamen und dem Nachnamen.');
+// subscription
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_subscribe_mail_plain']    = array('Anmelden Plain Text E-Mail-Template', '');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_subscribe_mail_html']     = array('Anmelden HTML E-Mail-Template', '');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_unsubscribe_mail_plain']  = array('Abmelden Plain Text E-Mail-Template', '');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_unsubscribe_mail_html']   = array('Abmelden HTML E-Mail-Template', '');
+// notification
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_send_notification']                = array('Erinnerung senden', 'Sendet eine Erinnerung, wenn das Abonnement nach einigen Tagen noch nicht aktiviert wurde.');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_notification_time']                = array('Tage bis zur Erinnerung', 'Anzahl Tage nach denen die Erinnerung verschickt werden soll.');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_notification_mail_plain'] = array('Erinnerung Plain Text E-Mail-Template', '');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_notification_mail_html']  = array('Erinnerung HTML E-Mail-Template', '');
+// cleanup
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_do_cleanup']                       = array('Unbestätige Abonnements löschen', 'Löscht unbestätigte Abonnements nach einigen Tagen.');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_cleanup_time']                     = array('Tage bis zur Löschung', 'Anzahl Tage nach denen das Abonnement wieder gelöscht wird.');
+// transport
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_default_transport']                 = array('Standard Transportmodul', 'Wählen Sie hier das Standard Transportmodul aus.');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_max_send_time']                     = array('Versanddauer', 'Anzahl Sekunden die pro Zyklus vergehen dürfen, bevor ein neuer Zyklus getriggert wird.');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_max_send_count']                    = array('Versandanzahl', 'Anzahl E-Mails die pro Zyklus versendet werden, bevor ein neuer Zyklus getriggert wird.');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_max_send_timeout']                  = array('Zyklenpause', 'Anzahl Sekunden die zwischen zwei Zyklen gewartet wird.');
@@ -52,6 +67,9 @@ $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_email']           
  * Legend
  */
 $GLOBALS['TL_LANG']['tl_avisota_settings']['recipients_legend']              = 'Abonnenten';
+$GLOBALS['TL_LANG']['tl_avisota_settings']['subscription_legend']            = 'Abonnement';
+$GLOBALS['TL_LANG']['tl_avisota_settings']['notification_legend']            = 'Erinnerung';
+$GLOBALS['TL_LANG']['tl_avisota_settings']['cleanup_legend']                 = 'Aufräumen';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['transport_legend']               = 'Versand';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['backend_legend']                 = 'Backend';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['developer_legend']               = 'Entwickler';

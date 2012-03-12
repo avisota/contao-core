@@ -16,8 +16,7 @@ CREATE TABLE `tl_avisota_mailing_list` (
   `tstamp` int(10) unsigned NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
   `alias` varbinary(128) NOT NULL default '',
-  `viewOnlinePage` int(10) unsigned NOT NULL default '0',
-  `subscriptionPage` int(10) unsigned NOT NULL default '0',
+  `integratedRecipientManageSubscriptionPage` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -44,7 +43,7 @@ CREATE TABLE `tl_avisota_recipient` (
   `addedOnPage` int(10) unsigned NOT NULL default '0',
   `notification` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
-  UNIQUE `email` (`email`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -60,6 +59,7 @@ CREATE TABLE `tl_avisota_recipient_to_mailing_list` (
   `reminderSent` int(10) unsigned NOT NULL default '0',
   `reminderCount` int(1) unsigned NOT NULL default '0',
   `confirmed` char(1) NOT NULL default '',
+  `token` char(8) NOT NULL default '',
   PRIMARY KEY  (`recipient`, `list`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -75,7 +75,8 @@ CREATE TABLE `tl_avisota_recipient_blacklist` (
   `tstamp` int(10) unsigned NOT NULL default '0',
   `email` char(32) NOT NULL default '',
   PRIMARY KEY  (`id`),
-  KEY `pid` (`pid`)
+  KEY `pid` (`pid`),
+  UNIQUE KEY `recipient` (`pid`, `email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

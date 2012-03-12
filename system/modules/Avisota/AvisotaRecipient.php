@@ -68,8 +68,12 @@ class AvisotaRecipient extends Controller
 	public function __set($k, $v)
 	{
 		switch ($k) {
+			case 'id':
+				$v = intval($v);
+				break;
+
 			case 'email':
-				$v = strtolower($k);
+				$v = strtolower($v);
 				break;
 		}
 		$this->arrData[$k] = $v;
@@ -134,7 +138,7 @@ class AvisotaRecipient extends Controller
 	 */
 	public function subscribe(array $arrLists, $blnIgnoreBlacklist = false)
 	{
-		throw new AvisotaSubscriptionException('This recipient cannot subscribe!');
+		throw new AvisotaSubscriptionException($this, 'This recipient cannot subscribe!');
 
 	}
 
@@ -146,7 +150,7 @@ class AvisotaRecipient extends Controller
 	 */
 	public function confirmSubscription(array $arrLists)
 	{
-		throw new AvisotaSubscriptionException('This recipient cannot subscribe!');
+		throw new AvisotaSubscriptionException($this, 'This recipient cannot subscribe!');
 	}
 
 	/**
@@ -158,7 +162,7 @@ class AvisotaRecipient extends Controller
 	 */
 	public function unsubscribe(array $arrLists, $blnDoNotBlacklist = false)
 	{
-		throw new AvisotaSubscriptionException('This recipient cannot subscribe!');
+		throw new AvisotaSubscriptionException($this, 'This recipient cannot subscribe!');
 	}
 
 	/**
@@ -170,7 +174,7 @@ class AvisotaRecipient extends Controller
 	 */
 	public function sendSubscriptionConfirmation(array $arrLists = null)
 	{
-		throw new AvisotaSubscriptionException('This recipient cannot subscribe!');
+		throw new AvisotaSubscriptionException($this, 'This recipient cannot subscribe!');
 	}
 
 	/**
@@ -182,6 +186,6 @@ class AvisotaRecipient extends Controller
 	 */
 	public function sendRemind(array $arrLists = null)
 	{
-		throw new AvisotaSubscriptionException('This recipient cannot subscribe!');
+		throw new AvisotaSubscriptionException($this, 'This recipient cannot subscribe!');
 	}
 }

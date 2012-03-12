@@ -57,10 +57,22 @@ interface AvisotaTransportModule
 	 * @abstract
 	 * @param AvisotaRecipient $objRecipient
 	 * @param AvisotaNewsletter $objNewsletter
+	 *
 	 * @return void
 	 * @throws AvisotaTransportException
 	 */
-	public function transport(AvisotaRecipient $objRecipient, AvisotaNewsletter $objNewsletter);
+	public function transportNewsletter(AvisotaRecipient $objRecipient, AvisotaNewsletter $objNewsletter);
+
+	/**
+	 * Transport a mail.
+	 *
+	 * @param string $strRecipientEmail
+	 * @param Email $objEmail
+	 *
+	 * @return void
+	 * @throws AvisotaTransportException
+	 */
+	public function transportEmail($strRecipientEmail, Email $objEmail);
 
 	/**
 	 * Finalise the transport.

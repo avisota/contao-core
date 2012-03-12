@@ -43,16 +43,71 @@
 class SwiftTransport extends AvisotaAbstractTransportModule
 {
 	/**
-	 * Transport a specific newsletter.
+	 * Transport a mail.
 	 *
-	 * @param AvisotaRecipient $objRecipient
-	 * @param AvisotaNewsletter $objNewsletter
+	 * @param string $strRecipientEmail
+	 * @param Email $objEmail
 	 *
 	 * @return void
 	 * @throws AvisotaTransportException
 	 */
-	public function transport(AvisotaRecipient $objRecipient, AvisotaNewsletter $objNewsletter)
+	public function transportEmail($varRecipient, Email $objEmail)
 	{
-		// TODO: Implement transport() method.
+		global $objPage;
+
+		try
+		{
+			$objEmail->logFile = 'avisota_swift_transport_' . $this->config->id . '.log';
+
+			// set sender email
+			if ($this->sender) {
+				$objEmail->from = $this->sender;
+			} else if (isset($objPage) && strlen($objPage->adminEmail)) {
+				$objEmail->from = $objPage->adminEmail;
+			} else {
+				$objEmail->from = $GLOBALS['TL_CONFIG']['adminEmail'];
+			}
+
+			// set sender name
+			if (strlen($this->senderName)) {
+				$objEmail->fromName = $this->senderName;
+			}
+
+			$arrTempSettings = array();
+			if ($this->swiftUseSMTP)
+			{
+				$arrTempSettings = array(
+					'useSMTP' => $GLOBALS['TL_CONFIG']['useSMTP'],
+					'smtpHost' => $GLOBALS['TL_CONFIG']['smtpHost'],
+					'smtpUser' => $GLOBALS['TL_CONFIG']['smtpUser'],
+					'smtpPass' => $GLOBALS['TL_CONFIG']['smtpPass'],
+					'smtpEnc' => $GLOBALS['TL_CONFIG']['smtpEnc'],
+					'smtpPort' => $GLOBALS['TL_CONFIG']['smtpPort']
+				);
+
+				$GLOBALS['TL_CONFIG']['useSMTP'] = true;
+
+				$GLOBALS['TL_CONFIG']['smtpHost'] = $this->swiftSmtpHost;
+				$GLOBALS['TL_CONFIG']['smtpUser'] = $this->swiftSmtpUser;
+				$GLOBALS['TL_CONFIG']['smtpPass'] = $this->swiftSmtpPass;
+				$GLOBALS['TL_CONFIG']['smtpEnc']  = $this->swiftSmtpEnc;
+				$GLOBALS['TL_CONFIG']['smtpPort'] = $this->swiftSmtpPort;
+			}
+
+			$objEmail->sendTo($varRecipient);
+
+			foreach ($arrTempSettings as $k=>$v) {
+				$GLOBALS['TL_CONFIG'][$k] = $v;
+			}
+		}
+		catch (Swift_RfcComplianceException $e)
+		{
+			foreach ($arrTempSettings as $k=>$v) {
+				$GLOBALS['TL_CONFIG'][$k] = $v;
+			}
+			throw new AvisotaTransportEmailException($varRecipient, $objEmail, $e->getMessage(), $e->getCode(), $e);
+		}
 	}
+
+
 }

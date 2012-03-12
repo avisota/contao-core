@@ -4,10 +4,14 @@ var Avisota = {
 		new Request.JSON({
 			url: 'contao/main.php',
 			onSuccess: function(responseJSON, responseText) {
-				link.setProperty('data-confirmed', responseJSON.confirmed ? '1' : '')
-				var img = link.getElement('img');
-				img.setProperty('src',
-					img.getProperty('src').replace(/\/(in)?visible.gif/, (responseJSON.confirmed ? '/visible.gif' : '/invisible.gif')))
+				if (responseJSON.blacklisted) {
+
+				} else {
+					link.setProperty('data-confirmed', responseJSON.confirmed ? '1' : '')
+					var img = link.getElement('img');
+					img.setProperty('src',
+						img.getProperty('src').replace(/\/(in)?visible.gif/, (responseJSON.confirmed ? '/visible.gif' : '/invisible.gif')));
+				}
 			}
 		}).get({
 			'do': 'avisota_recipients',

@@ -33,9 +33,6 @@
  */
 
 
-$this->loadLanguageFile('tl_avisota_recipient');
-$this->loadDataContainer('tl_avisota_recipient');
-
 /**
  * Class AvisotaIntegratedRecipient
  *
@@ -54,6 +51,31 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		$objRecipient = new AvisotaIntegratedRecipient(array('email' => $strEmail));
 		$objRecipient->load();
 		return $objRecipient;
+	}
+
+	public static function checkBlacklisted($strEmail, $arrLists)
+	{
+		$arrLists = array_map('intval', $arrLists);
+		$arrLists = array_filter($arrLists);
+		if (count($arrLists)) {
+			$strLists = implode(',', $arrLists);
+			$objBlacklist = Database::getInstance()
+				->prepare("SELECT * FROM tl_avisota_recipient_blacklist
+				           WHERE email=? AND pid IN (" . $strLists . ")")
+				->execute(md5(strtolower($strEmail)));
+			if ($objBlacklist->numRows) {
+				return $objBlacklist->fetchEach('list');
+			}
+		}
+		return false;
+	}
+
+	public function __construct(array $arrData = null)
+	{
+		parent::__construct($arrData);
+
+		$this->loadLanguageFile('tl_avisota_recipient');
+		$this->loadDataContainer('tl_avisota_recipient');
 	}
 
 	protected function load()
@@ -75,7 +97,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 			$this->setData($arrRecipient);
 		} else {
-			throw new AvisotaRecipientException($this->arrData, 'The recipient data could not be loaded!');
+			throw new AvisotaRecipientException($this->arrData, 'The recipient data for ' . $this->email . ' could not be loaded!');
 		}
 	}
 
@@ -134,10 +156,10 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 	public function getMailingLists()
 	{
-		return $this->Database
+		return array_map('intval', $this->Database
 			->prepare("SELECT * FROM tl_avisota_recipient_to_mailing_list rtml WHERE recipient=?")
 			->execute($this->id)
-			->fetchEach('mailing_list');
+			->fetchEach('list'));
 	}
 
 	/**
@@ -152,8 +174,55 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	 */
 	public function subscribe(array $arrLists, $blnIgnoreBlacklist = false)
 	{
-		throw new AvisotaSubscriptionException('This recipient cannot subscribe!');
+		if (!$this->id) {
+			throw new AvisotaSubscriptionException($this, 'This recipient has no ID!');
+		}
 
+		$arrLists = array_filter(array_map('intval', $arrLists));
+		if (!count($arrLists)) {
+			return false;
+		}
+
+		if (!$blnIgnoreBlacklist) {
+			$arrBlacklisted = self::checkBlacklisted($this->email, $arrLists);
+			if ($arrBlacklisted) {
+				throw new AvisotaBlacklistException($this->email, $arrBlacklisted);
+			}
+		}
+
+		var_dump($arrLists, $this->getMailingLists());
+		$arrLists = array_diff($arrLists, $this->getMailingLists());
+		if (count($arrLists)) {
+			$arrValues = array();
+			$arrArgs = array();
+			foreach ($arrLists as $intList) {
+				$arrValues[] = '(?, ?)';
+				$arrArgs[] = $this->id;
+				$arrArgs[] = $intList;
+			}
+			$this->Database
+				->prepare("INSERT INTO tl_avisota_recipient_to_mailing_list (recipient, list) VALUES " . implode(', ', $arrValues))
+				->execute($arrArgs);
+
+			// clean up blacklist
+			$this->Database
+				->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE email=? AND pid IN (" . implode(',', $arrLists) . ")")
+				->execute(md5(strtolower($this->email)));
+
+			// HOOK: add custom logic
+			if (isset($GLOBALS['TL_HOOKS']['avisotaIntegratedRecipientSubscribe']) && is_array($GLOBALS['TL_HOOKS']['avisotaIntegratedRecipientSubscribe']))
+			{
+				foreach ($GLOBALS['TL_HOOKS']['avisotaIntegratedRecipientSubscribe'] as $callback)
+				{
+					$this->import($callback[0]);
+					$this->$callback[0]->$callback[1]($this, $arrLists);
+				}
+			}
+
+			return $arrLists;
+		}
+
+		return true;
 	}
 
 	/**
@@ -164,7 +233,12 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	 */
 	public function confirmSubscription(array $arrLists)
 	{
-		throw new AvisotaSubscriptionException('This recipient cannot subscribe!');
+		if (!$this->id) {
+			throw new AvisotaSubscriptionException($this, 'This recipient has no ID!');
+		}
+
+
+		throw new AvisotaSubscriptionException($this, 'This recipient cannot subscribe!');
 	}
 
 	/**
@@ -176,7 +250,11 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	 */
 	public function unsubscribe(array $arrLists, $blnDoNotBlacklist = false)
 	{
-		throw new AvisotaSubscriptionException('This recipient cannot subscribe!');
+		if (!$this->id) {
+			throw new AvisotaSubscriptionException($this, 'This recipient has no ID!');
+		}
+
+		throw new AvisotaSubscriptionException($this, 'This recipient cannot subscribe!');
 	}
 
 	/**
@@ -188,7 +266,102 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	 */
 	public function sendSubscriptionConfirmation(array $arrLists = null)
 	{
-		throw new AvisotaSubscriptionException('This recipient cannot subscribe!');
+		if (!$this->id) {
+			throw new AvisotaSubscriptionException($this, 'This recipient has no ID!');
+		}
+
+		if ($arrLists !== null) {
+			$arrLists = array_filter(array_map('intval', $arrLists));
+			if (!count($arrLists)) {
+				return false;
+			}
+		}
+
+		$time = time();
+
+		$objList = $this->Database
+			->execute("SELECT l.* FROM tl_avisota_recipient_to_mailing_list t
+					   INNER JOIN tl_avisota_mailing_list l
+					   ON l.id=t.list
+					   WHERE t.confirmationSent=0"
+					   . ($arrLists !== null ? " AND t.list IN (" . implode(',', $arrLists) . ")" : '')
+					   . "ORDER BY l.title");
+
+		$arrListsByPage = array();
+		while ($objList->next()) {
+			$arrList = $objList->row();
+
+			// generate a token
+			if (empty($arrList['token'])) {
+				$arrList['token'] = substr(md5(mt_rand() . '-' . $this->id . '-' . $objList->id . '-' . $this->email . '-' . time()), 0, 8);
+			}
+
+			// set send time
+			$arrList['confirmationSent'] = $time;
+
+			$arrListsByPage[$objList->integratedRecipientManageSubscriptionPage][$objList->id] = $arrList;
+		}
+
+		foreach ($arrListsByPage as $intPage=>$arrLists) {
+			$objPage = $this->getPageDetails($intPage);
+
+			$arrToken = array();
+			foreach ($arrLists as $arrList) {
+				$arrToken[] = $arrList['token'];
+			}
+			$strUrl = $this->generateFrontendUrl($objPage) . '?subscribetoken=' . implode(',', $arrToken);
+
+			$objPlain = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_subscribe_mail_plain']);
+			$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['subscribe']['plain'], implode(', ', $arrList), $strUrl);
+
+			$objHtml = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_subscribe_mail_html']);
+			$objHtml->title = $GLOBALS['TL_LANG']['avisota']['subscribe']['subject'];
+			$objHtml->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['subscribe']['html'], implode(', ', $arrList), $strUrl);
+
+			$objEmail = new BasicEmail();
+		}
+
+		$strUrl = $this->generateSubscribeUrl($arrTokens);
+
+		$arrList = $this->getListNames($arrRecipient['lists']);
+
+		if ($this->sendMail('subscribe', $objPlain->parse(), $objHtml->parse(), $arrRecipient['email']))
+		{
+			unset($arrRecipient['lists']);
+			$arrRecipient['tstamp'] = $time;
+			$arrRecipient['confirmed'] = '';
+			$arrRecipient['addedOn'] = $time;
+			$arrRecipient['addedByModule'] = $this->id;
+			$arrRecipient['addedOnPage'] = $GLOBALS['objPage']->id;
+			foreach ($arrTokens as $intId => $strToken)
+			{
+				$arrRecipient['pid'] = $intId;
+				$arrRecipient['token'] = $strToken;
+				$this->Database->prepare("INSERT INTO `tl_avisota_recipient` %s")
+					->set($arrRecipient)
+					->execute();
+
+				$this->Database->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid=? AND email=?")
+					->execute($intId, md5($arrRecipient['email']));
+			}
+
+			$_SESSION['avisota_subscription'][] = sprintf($GLOBALS['TL_LANG']['avisota']['subscribe']['send'], $arrRecipient['email']).'|confirmation';
+			$this->log('Add new recipient ' . $arrRecipient['email'] . ' to ' . implode(', ', $arrList), 'ModuleAvisotaSubscription::subscribe', TL_INFO);
+		}
+		else
+		{
+			$_SESSION['avisota_subscription'][] = sprintf($GLOBALS['TL_LANG']['avisota']['subscribe']['rejected'], $arrRecipient['email']).'|error';
+		}
+
+		// HOOK: add custom logic
+		if (isset($GLOBALS['TL_HOOKS']['avisotaSubscribe']) && is_array($GLOBALS['TL_HOOKS']['avisotaSubscribe']))
+		{
+			foreach ($GLOBALS['TL_HOOKS']['avisotaSubscribe'] as $callback)
+			{
+				$this->import($callback[0]);
+				$this->$callback[0]->$callback[1]($arrRecipient, $arrTokens);
+			}
+		}
 	}
 
 	/**
@@ -200,6 +373,10 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	 */
 	public function sendRemind(array $arrLists = null)
 	{
-		throw new AvisotaSubscriptionException('This recipient cannot subscribe!');
+		if (!$this->id) {
+			throw new AvisotaSubscriptionException($this, 'This recipient has no ID!');
+		}
+
+		throw new AvisotaSubscriptionException($this, 'This recipient cannot subscribe!');
 	}
 }

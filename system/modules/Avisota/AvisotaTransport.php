@@ -59,6 +59,57 @@ include('../../initialize.php');
  */
 class AvisotaTransport extends Backend
 {
+	protected static $arrTransportModules = array();
+
+	/**
+	 * @static
+	 * @param int $intTransportModule
+	 * @return AvisotaTransportModule
+	 * @throws AvisotaTransportException
+	 */
+	public static function getTransportModule($intTransportModule = 0)
+	{
+		if ($intTransportModule == 0) {
+			$intTransportModule = $GLOBALS['TL_CONFIG']['avisota_default_transport'];
+		}
+
+		if (isset(self::$arrTransportModules[$intTransportModule])) {
+			return self::$arrTransportModules[$intTransportModule];
+		}
+
+		$objTransportModule = $this->Database
+			->prepare("SELECT * FROM tl_avisota_transport WHERE id=?")
+			->execute($intTransportModule);
+		if ($objTransportModule->next()) {
+			$strType = $objTransportModule->type;
+
+			if (isset($GLOBALS['TL_AVISOTA_TRANSPORT'][$strType])) {
+				$strClass = $GLOBALS['TL_AVISOTA_TRANSPORT'][$strType];
+				return self::$arrTransportModules[$intTransportModule] = new $strClass($objTransportModule);
+			}
+
+			$this->log('Unsupported transport module TYPE ' . $strType, 'AvisotaTransport::getTransportModule' . '!', TL_ERROR);
+			throw new AvisotaTransportException('Unsupported transport module TYPE ' . $strType . '!');
+		}
+
+		$this->log('Unknown transport module ID ' . $intTransportModule . '!', 'AvisotaTransport::getTransportModule', TL_ERROR);
+		throw new AvisotaTransportException('Unknown transport module ID ' . $intTransportModule . '!');
+	}
+
+	public static function transportNewsletter(AvisotaRecipient $objRecipient, AvisotaNewsletter $objNewsletter, $intTransportModule = 0)
+	{
+		/** @var AvisotaTransportModule $objTransportModule */
+		$objTransportModule = self::getTransportModule($intTransportModule);
+		$objTransportModule->transportNewsletter($objRecipient, $objNewsletter);
+	}
+
+	public static function transportEmail($varRecipientEmail, Email $objEmail, $intTransportModule = 0)
+	{
+		/** @var AvisotaTransportModule $objTransportModule */
+		$objTransportModule = self::getTransportModule($intTransportModule);
+		$objTransportModule->transportEmail($varRecipientEmail, $objEmail);
+	}
+
 	protected $objNewsletter;
 
 	protected $objCategory;
@@ -536,7 +587,7 @@ class AvisotaTransport extends Backend
 	 */
 	protected function generateEmailObject()
 	{
-		$objEmail = new ExtendedEmail();
+		$objEmail = new BasicEmail();
 
 		$objEmail->from = $this->objCategory->sender;
 		$objEmail->subject = $this->objNewsletter->subject;

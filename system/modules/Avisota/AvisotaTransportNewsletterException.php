@@ -34,25 +34,33 @@
 
 
 /**
- * Class AvisotaSubscriptionException
+ * Class AvisotaTransportNewsletterException
  *
  *
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class AvisotaSubscriptionException extends Exception
+class AvisotaTransportNewsletterException extends Exception
 {
 	protected $recipient;
 
-	public function __construct(AvisotaRecipient $objRecipient, $message = '', $code = 0, $previous = null)
+	protected $newsletter;
+
+	public function __construct(AvisotaRecipient $objRecipient, AvisotaNewsletter $objNewsletter, $message = '', $code = 0, $previous = null)
 	{
 		parent::__construct($message, $code, $previous);
 		$this->recipient = $objRecipient;
+		$this->newsletter = $objNewsletter;
 	}
 
 	public function getRecipient()
 	{
 		return $this->recipient;
+	}
+
+	public function getNewsletter()
+	{
+		return $this->newsletter;
 	}
 }

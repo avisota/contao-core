@@ -43,24 +43,4 @@
  */
 class AvisotaTransportException extends Exception
 {
-	protected $recipient;
-
-	protected $newsletter;
-
-	public function __construct(AvisotaRecipient $objRecipient, AvisotaNewsletter $objNewsletter, $message = '', $code = 0, $previous = null)
-	{
-		parent::__construct($message, $code, $previous);
-		$this->recipient = $objRecipient;
-		$this->newsletter = $objNewsletter;
-	}
-
-	public function getRecipient()
-	{
-		return $this->recipient;
-	}
-
-	public function getNewsletter()
-	{
-		return $this->newsletter;
-	}
 }

@@ -40,9 +40,7 @@ $GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_subscription'] = array
 	'title'                => array('name', 'headline', 'type'),
 	'avisota_subscription' => array('avisota_show_lists', 'avisota_lists', 'avisota_recipient_fields'),
 	'avisota_mail'         => array('avisota_subscription_sender_name', 'avisota_subscription_sender'),
-	'template'             => array('tableless', 'avisota_template_subscribe_mail_plain', 'avisota_template_subscribe_mail_html', 'avisota_template_unsubscribe_mail_plain', 'avisota_template_unsubscribe_mail_html', 'avisota_template_subscription'),
-	'avisota_notification' => array(':hide', 'avisota_send_notification'),
-	'avisota_cleanup'      => array(':hide', 'avisota_do_cleanup'),
+	'template'             => array('tableless', 'avisota_template_subscription'),
 	'protected'            => array(':hide', 'protected'),
 	'expert'               => array(':hide', 'jumpTo', 'guests', 'cssID', 'space')
 );
@@ -116,42 +114,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_lists'] = array
 	'eval'                    => array('multiple'=>true)
 );
 
-$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_subscribe_mail_plain'] = array
-(
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_subscribe_mail_plain'],
-	'inputType'               => 'select',
-	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
-	'eval'                    => array('tl_class'=>'w50 clr')
-);
-
-$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_subscribe_mail_html'] = array
-(
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_subscribe_mail_html'],
-	'inputType'               => 'select',
-	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
-	'eval'                    => array('tl_class'=>'w50')
-);
-
-$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_unsubscribe_mail_plain'] = array
-(
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe_mail_plain'],
-	'inputType'               => 'select',
-	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
-	'eval'                    => array('tl_class'=>'w50')
-);
-
-$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_unsubscribe_mail_html'] = array
-(
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe_mail_html'],
-	'inputType'               => 'select',
-	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
-	'eval'                    => array('tl_class'=>'w50')
-);
-
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_subscription'] = array
 (
 	'exclude'                 => true,
@@ -159,58 +121,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_subscription'] = arr
 	'inputType'               => 'select',
 	'options_callback'        => array('tl_module_avisota', 'getSubscriptionTemplates'),
 	'eval'                    => array('addBlankOption' => true, 'tl_class' => 'clr')
-);
-
-$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_send_notification'] = array
-(
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_send_notification'],
-	'inputType'               => 'checkbox',
-	'eval'                    => array('submitOnChange' => true, 'tl_class' => 'clr')
-);
-
-$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_notification_mail_plain'] = array
-(
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_notification_mail_plain'],
-	'inputType'               => 'select',
-	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
-	'eval'                    => array('tl_class'=>'w50')
-);
-
-$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_notification_time'] = array
-(
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_notification_time'],
-	'default'                 => 3,
-	'inputType'               => 'text',
-	'eval'                    => array('mandatory' => true, 'rgxp' => 'digit')
-);
-
-$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_notification_mail_html'] = array
-(
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_notification_mail_html'],
-	'inputType'               => 'select',
-	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
-	'eval'                    => array('tl_class'=>'w50')
-);
-
-$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_do_cleanup'] = array
-(
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_do_cleanup'],
-	'inputType'               => 'checkbox',
-	'eval'                    => array('submitOnChange' => true, 'tl_class' => 'clr')
-);
-
-$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_cleanup_time'] = array
-(
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_cleanup_time'],
-	'default'                 => 7,
-	'inputType'               => 'text',
-	'eval'                    => array('mandatory' => true, 'rgxp' => 'digit')
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_categories'] = array
@@ -326,24 +236,6 @@ class tl_module_avisota extends Backend
 		// Return all templates
 		switch ($dc->field)
 		{
-			case 'avisota_template_subscribe_mail_plain':
-				$strTemplatePrefix = 'mail_subscribe_plain_';
-				break;
-			case 'avisota_template_subscribe_mail_html':
-				$strTemplatePrefix = 'mail_subscribe_html_';
-				break;
-			case 'avisota_template_unsubscribe_mail_plain':
-				$strTemplatePrefix = 'mail_unsubscribe_plain_';
-				break;
-			case 'avisota_template_unsubscribe_mail_html':
-				$strTemplatePrefix = 'mail_unsubscribe_html_';
-				break;
-			case 'avisota_template_notification_mail_plain':
-				$strTemplatePrefix = 'mail_notification_plain_';
-				break;
-			case 'avisota_template_notification_mail_html':
-				$strTemplatePrefix = 'mail_notification_html_';
-				break;
 			case 'avisota_reader_template':
 				$strTemplatePrefix = 'avisota_reader_';
 				break;
