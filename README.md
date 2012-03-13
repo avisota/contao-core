@@ -6,14 +6,38 @@ Avisota is a newsletter and mailing system for the Contao CMS <www.contao.org>
 
 **master** This is the current stable upstream development branch.
 
-**version1.X** This is the stable bugfix branch.
+**version1.5** This is the stable bugfix branch.
 
-**version2** This is the future unstable upstream branch. (currently here is no development)
+## Hooks
 
-## Version 2
+These hooks are added in the **master** branch.
 
-The main goal of version 2 is a complete rewrite with an API driven development design.
-Version 2 is currently freezed, because the future of Contao 3 is unknown and under heavy discussion.
-Be patient, the planned features for version 2 will be implemented in version 1. Expecting the API driven development design.
-If the future of Contao 3 is clear, the development status of version 2 may be changed.
+### avisotaIntegratedRecipientSubscribe
 
+Called when an integrated recipient is added to some mailing lists (unconfirmed).
+
+Synopsis: `function avisotaIntegratedRecipientSubscribe(AvisotaRecipient $objRecipient, array $arrLists)`
+
+### avisotaIntegratedRecipientSendSubscriptionConfirmation
+
+Called when the subscription confirmation email is send to an integrated recipient.
+
+Synopsis: `function avisotaIntegratedRecipientSendSubscriptionConfirmation(AvisotaRecipient $objRecipient, array $arrListsByPage)`
+
+### avisotaIntegratedRecipientSendSubscriptionReminder
+
+Called when the subscription reminder email is send to an integrated recipient.
+
+Synopsis: `function avisotaIntegratedRecipientSendSubscriptionReminder(AvisotaRecipient $objRecipient, array $arrListsByPage)`
+
+### avisotaIntegratedRecipientUnsubscribe
+
+Called when an integrated recipient unsubscribe.
+
+Synopsis: `function avisotaIntegratedRecipientUnsubscribe(AvisotaRecipient $objRecipient, array $arrListsByPage, bool $blnDeleted)`
+
+### avisotaIntegratedRecipientConfirmSubscription
+
+Called when an integrated recipient confirm his subscription.
+
+Synopsis: `function avisotaIntegratedRecipientConfirmSubscription(AvisotaRecipient $objRecipient, array $arrLists)`

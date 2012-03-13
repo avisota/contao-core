@@ -145,10 +145,10 @@ class AvisotaRecipient extends Controller
 	/**
 	 * Confirm the subscription of the mailing lists.
 	 *
-	 * @param array $arrLists
+	 * @param array $arrToken
 	 * @throws AvisotaSubscriptionException
 	 */
-	public function confirmSubscription(array $arrLists)
+	public function confirmSubscription(array $arrToken)
 	{
 		throw new AvisotaSubscriptionException($this, 'This recipient cannot subscribe!');
 	}

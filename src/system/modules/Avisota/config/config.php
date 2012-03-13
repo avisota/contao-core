@@ -65,9 +65,12 @@ if (!isset($_SERVER['REQUEST_TIME'])) {
 /**
  * Settings
  */
-$GLOBALS['TL_CONFIG']['avisota_max_send_time']    = ini_get('max_execution_time') > 0 ? floor(0.85 * ini_get('max_execution_time')) : 120;
-$GLOBALS['TL_CONFIG']['avisota_max_send_count']   = 100;
-$GLOBALS['TL_CONFIG']['avisota_max_send_timeout'] = 1;
+$GLOBALS['TL_CONFIG']['avisota_max_send_time']      = ini_get('max_execution_time') > 0 ? floor(0.85 * ini_get('max_execution_time')) : 120;
+$GLOBALS['TL_CONFIG']['avisota_max_send_count']     = 100;
+$GLOBALS['TL_CONFIG']['avisota_max_send_timeout']   = 1;
+$GLOBALS['TL_CONFIG']['avisota_notification_time']  = 3;
+$GLOBALS['TL_CONFIG']['avisota_notification_count'] = 3;
+$GLOBALS['TL_CONFIG']['avisota_cleanup_time']       = 14;
 
 
 /**
@@ -286,7 +289,7 @@ $GLOBALS['TL_HOOKS']['avisotaMailingListLabel'][] = array('AvisotaBackend', 'hoo
 /**
  * Procedures
  */
-$GLOBALS['TL_PROCEDURE']['member_to_mailing_list(IN MEMBER_ID INT, IN LIST_IDS BLOB)']               = '
+$GLOBALS['TL_PROCEDURE']['member_to_mailing_list(IN MEMBER_ID INT, IN LIST_IDS BLOB)'] = '
 -- clear the association table
 DELETE FROM tl_member_to_mailing_list WHERE member=MEMBER_ID
 	AND list NOT IN (SELECT id FROM tl_avisota_mailing_list WHERE FIND_IN_SET(id, LIST_IDS));

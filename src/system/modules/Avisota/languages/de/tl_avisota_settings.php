@@ -36,20 +36,21 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations']                       = array('Anredeformen', 'Tragen Sie hier die möglichen Anredeformen ein. Wählen Sie dazu aus, aus welchen Teilen sich der Name zusammen setzt, dem Titel (z.B. Dr.), dem Vornamen und dem Nachnamen.');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations'] = array('Anredeformen', 'Tragen Sie hier die möglichen Anredeformen ein. Wählen Sie dazu aus, aus welchen Teilen sich der Name zusammen setzt, dem Titel (z.B. Dr.), dem Vornamen und dem Nachnamen.');
 // subscription
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_subscribe_mail_plain']    = array('Anmelden Plain Text E-Mail-Template', '');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_subscribe_mail_html']     = array('Anmelden HTML E-Mail-Template', '');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_unsubscribe_mail_plain']  = array('Abmelden Plain Text E-Mail-Template', '');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_unsubscribe_mail_html']   = array('Abmelden HTML E-Mail-Template', '');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_subscribe_mail_plain']   = array('Anmelden Plain Text E-Mail-Template', '');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_subscribe_mail_html']    = array('Anmelden HTML E-Mail-Template', '');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_unsubscribe_mail_plain'] = array('Abmelden Plain Text E-Mail-Template', '');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_unsubscribe_mail_html']  = array('Abmelden HTML E-Mail-Template', '');
 // notification
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_send_notification']                = array('Erinnerung senden', 'Sendet eine Erinnerung, wenn das Abonnement nach einigen Tagen noch nicht aktiviert wurde.');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_notification_time']                = array('Tage bis zur Erinnerung', 'Anzahl Tage nach denen die Erinnerung verschickt werden soll.');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_notification_count']               = array('Anzahl Erinnerungen', 'Anzahl Erinnerungen die maximal verschickt werden soll. Die Zeit wird jeweils um 50% verlängert.');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_notification_mail_plain'] = array('Erinnerung Plain Text E-Mail-Template', '');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_notification_mail_html']  = array('Erinnerung HTML E-Mail-Template', '');
 // cleanup
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_do_cleanup']                       = array('Unbestätige Abonnements löschen', 'Löscht unbestätigte Abonnements nach einigen Tagen.');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_cleanup_time']                     = array('Tage bis zur Löschung', 'Anzahl Tage nach denen das Abonnement wieder gelöscht wird.');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_do_cleanup']   = array('Unbestätige Abonnements löschen', 'Löscht unbestätigte Abonnements nach einigen Tagen.');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_cleanup_time'] = array('Tage bis zur Löschung', 'Anzahl Tage nach denen das Abonnement wieder gelöscht wird.');
 // transport
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_default_transport']                 = array('Standard Transportmodul', 'Wählen Sie hier das Standard Transportmodul aus.');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_max_send_time']                     = array('Versanddauer', 'Anzahl Sekunden die pro Zyklus vergehen dürfen, bevor ein neuer Zyklus getriggert wird.');
@@ -84,5 +85,5 @@ $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_lastname']   = a
  */
 $GLOBALS['TL_LANG']['tl_avisota_settings']['missing_hightstock'] = '<div>
 <h3>Highstock Charts</h3>
-<p>Die <a href="http://www.highcharts.com/" onclick="window.open(this.href); return false;">Highstock Charts</a> werden nicht mehr mit Avisota ausgeliefert. Bitte installieren Sie die Library von Hand nach, wenn Sie diese nutzen möchten.</p>
+<p>Die <a href="http://www.highcharts.com/" onclick="window.open(this.href); return false;">Highstock Charts</a> werden nicht mehr mit Avisota ausgeliefert.<br>Bitte installieren Sie die Library von Hand nach, wenn Sie diese nutzen möchten.</p>
 </div>';
