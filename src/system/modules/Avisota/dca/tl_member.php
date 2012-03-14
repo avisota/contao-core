@@ -70,10 +70,11 @@ class tl_member_avisota extends Backend
 	public function onload_callback()
 	{
 		// Hack, because ModulePersonalData does not call the load_callback for the avisota_lists field
-		if (TL_MODE == 'FE' && version_compare(VERSION . '.' . BUILD, '2.11.0', '<=')) {
+		// uncomment when https://github.com/contao/core/pull/4018 is merged
+		// if (TL_MODE == 'FE' && version_compare(VERSION . '.' . BUILD, '2.11.0', '<=')) {
 			$this->import('FrontendUser', 'User');
 			$this->User->avisota_lists = explode(',', $this->User->avisota_lists);
-		}
+		// }
 	}
 
 	public function onsubmit_callback()

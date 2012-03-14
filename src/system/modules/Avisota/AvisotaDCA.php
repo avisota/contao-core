@@ -168,7 +168,8 @@ class AvisotaDCA extends Controller
 	public function hookUpdatePersonalData($objUser, $arrFormData, $objModulePersonalData)
 	{
 		// Hack, because ModulePersonalData does not call the onsubmit_callback
-		if (version_compare(VERSION . '.' . BUILD, '2.11.0', '<=') && isset($arrFormData['avisota_lists'])) {
+		// uncomment when https://github.com/contao/core/pull/4018 is merged
+		// if (version_compare(VERSION . '.' . BUILD, '2.11.0', '<=') && isset($arrFormData['avisota_lists'])) {
 			$arrLists = deserialize($arrFormData['avisota_lists'], true);
 			if (empty($arrLists)) {
 				$this->import('Database');
@@ -176,7 +177,7 @@ class AvisotaDCA extends Controller
 					->prepare("UPDATE tl_member SET avisota_subscribe=? WHERE id=?")
 					->execute('', $objUser->id);
 			}
-		}
+		// }
 
 		if (isset($arrFormData['avisota_subscribe'])) {
 			if ($arrFormData['avisota_subscribe']) {
