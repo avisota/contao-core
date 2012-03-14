@@ -67,6 +67,13 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 		),
 		'global_operations' => array
 		(
+			'createFromDraft' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['create_from_draft'],
+				'href'                => 'table=tl_avisota_newsletter_create_from_draft&amp;act=edit',
+				'class'               => 'header_new',
+				'attributes'          => 'onclick="Backend.getScrollOffset();" accesskey="d"'
+			),
 			'all' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
@@ -187,22 +194,6 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
 			'eval'                    => array('fieldType'=>'checkbox', 'files'=>true, 'filesOnly'=>true, 'mandatory'=>true)
-		),
-		'template_html' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_html'],
-			'exclude'                 => true,
-			'inputType'               => 'select',
-			'options'                 => $this->getTemplateGroup('mail_html_'),
-			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'w50')
-		),
-		'template_plain' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_plain'],
-			'exclude'                 => true,
-			'inputType'               => 'select',
-			'options'                 => $this->getTemplateGroup('mail_plain_'),
-			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'w50')
 		),
 		'sendOn' => array
 		(

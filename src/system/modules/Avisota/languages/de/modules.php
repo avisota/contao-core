@@ -45,6 +45,7 @@ $GLOBALS['TL_LANG']['MOD']['avisota_tracking']     = array('Analytics', 'Lese un
 $GLOBALS['TL_LANG']['MOD']['avisota_outbox']       = array('Postausgang', 'Postausgang einsehen und Newsletter versenden.');
 
 $GLOBALS['TL_LANG']['MOD']['avisota_settings_group']   = 'Newslettersystem';
+$GLOBALS['TL_LANG']['MOD']['avisota_newsletter_draft'] = array('Vorlagen', 'Vorlagen verwalten.');
 $GLOBALS['TL_LANG']['MOD']['avisota_update']           = array('Update', 'Avisota Newslettersystem aktualisieren.');
 $GLOBALS['TL_LANG']['MOD']['avisota_settings']         = array('Einstellungen', 'Einstellungen verwalten.');
 $GLOBALS['TL_LANG']['MOD']['avisota_theme']            = array('Layouts', 'Newsletter Layouts verwalten.');

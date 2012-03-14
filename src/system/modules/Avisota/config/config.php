@@ -159,7 +159,7 @@ $GLOBALS['BE_MOD'] = array_merge(
 			),
 			'avisota_newsletter'       => array
 			(
-				'tables'     => array('tl_avisota_newsletter_category', 'tl_avisota_newsletter', 'tl_avisota_newsletter_content'),
+				'tables'     => array('tl_avisota_newsletter_category', 'tl_avisota_newsletter', 'tl_avisota_newsletter_content', 'tl_avisota_newsletter_create_from_draft'),
 				'send'       => array('Avisota', 'send'),
 				'icon'       => 'system/modules/Avisota/html/newsletter.png',
 				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
@@ -182,7 +182,19 @@ $GLOBALS['BE_MOD'] = array_merge(
 	array_slice($GLOBALS['BE_MOD'], $i)
 );
 
-$arrAvisotaBeMod = array('avisota_settings_group' => array());
+$arrAvisotaBeMod = array(
+	'avisota_settings_group' => array
+	(
+		'avisota_newsletter_draft' => array
+		(
+			'tables'     => array('tl_avisota_newsletter_draft', 'tl_avisota_newsletter_draft_content'),
+			'render'     => array('AvisotaBackend', 'renderDraft'),
+			'preview'    => array('AvisotaBackend', 'previewDraft'),
+			'icon'       => 'system/modules/Avisota/html/newsletter_draft.png',
+			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+		)
+	)
+);
 if ($blnAvisotaUpdate) {
 	$arrAvisotaBeMod['avisota_settings_group']['avisota_update'] = array
 	(

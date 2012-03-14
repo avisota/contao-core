@@ -220,6 +220,82 @@ CREATE TABLE `tl_avisota_newsletter_content` (
   `guests` char(1) NOT NULL default '',
   `cssID` varchar(255) NOT NULL default '',
   `space` varchar(64) NOT NULL default '',
+  `unmodifiable` char(1) NOT NULL default '',
+  `undeletable` char(1) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table `tl_avisota_newsletter_draft`
+--
+
+CREATE TABLE `tl_avisota_newsletter_draft` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  `title` varchar(255) NOT NULL default '',
+  `description` text NULL,
+  `alias` varbinary(128) NOT NULL default '',
+  `addFile` char(1) NOT NULL default '',
+  `files` blob NULL,
+  PRIMARY KEY  (`id`),
+  KEY `alias` (`alias`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table `tl_avisota_newsletter_draft_content`
+--
+
+CREATE TABLE `tl_avisota_newsletter_draft_content` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `pid` int(10) unsigned NOT NULL default '0',
+  `sorting` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  `invisible` char(1) NOT NULL default '',
+  `type` varchar(32) NOT NULL default '',
+  `area` varchar(32) NOT NULL default '',
+  `headline` varchar(255) NOT NULL default '',
+  `text` mediumtext NULL,
+  `definePlain` char(1) NOT NULL default '',
+  `plain` mediumtext NULL,
+  `personalize` varchar(32) NOT NULL default '',
+  `addImage` char(1) NOT NULL default '',
+  `singleSRC` varchar(255) NOT NULL default '',
+  `alt` varchar(255) NOT NULL default '',
+  `size` varchar(64) NOT NULL default '',
+  `imagemargin` varchar(128) NOT NULL default '',
+  `imageUrl` varchar(255) NOT NULL default '',
+  `caption` varchar(255) NOT NULL default '',
+  `floating` varchar(32) NOT NULL default '',
+  `html` mediumtext NULL,
+  `listtype` varchar(32) NOT NULL default '',
+  `listitems` blob NULL,
+  `tableitems` mediumblob NULL,
+  `summary` varchar(255) NOT NULL default '',
+  `thead` char(1) NOT NULL default '',
+  `tfoot` char(1) NOT NULL default '',
+  `url` varchar(255) NOT NULL default '',
+  `linkTitle` varchar(255) NOT NULL default '',
+  `events` blob NULL,
+  `news` blob NULL,
+  `articleAlias` int(10) unsigned NOT NULL default '0',
+  `embed` varchar(255) NOT NULL default '',
+  `multiSRC` blob NULL,
+  `perRow` smallint(5) unsigned NOT NULL default '0',
+  `sortBy` varchar(32) NOT NULL default '',
+  `galleryHtmlTpl` varchar(64) NOT NULL default '',
+  `galleryPlainTpl` varchar(64) NOT NULL default '',
+  `protected` char(1) NOT NULL default '',
+  `groups` blob NULL,
+  `guests` char(1) NOT NULL default '',
+  `cssID` varchar(255) NOT NULL default '',
+  `space` varchar(64) NOT NULL default '',
+  `unmodifiable` char(1) NOT NULL default '',
+  `undeletable` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
