@@ -98,7 +98,7 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 
 	// Palettes
 	'palettes'        => array(
-		'__selector__' => array('type')
+		'__selector__' => array('type', 'swiftUseSmtp')
 	),
 
 	// Meta Palettes
@@ -122,7 +122,7 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 	// Fields
 	'fields'          => array
 	(
-		'type'          => array
+		'type'           => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['type'],
 			'inputType'               => 'select',
@@ -133,7 +133,7 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 			                                   'includeBlankOption'=> true,
 			                                   'tl_class'          => 'w50')
 		),
-		'title'         => array
+		'title'          => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['title'],
 			'inputType'               => 'text',
@@ -142,7 +142,7 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 			                                   'tl_class' => 'w50')
 		),
 
-		'sender'        => array
+		'sender'         => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['sender'],
 			'exclude'                 => true,
@@ -154,7 +154,7 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 			                                   'decodeEntities'=> true,
 			                                   'tl_class'      => 'w50')
 		),
-		'senderName'    => array
+		'senderName'     => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['senderName'],
 			'exclude'                 => true,
@@ -192,17 +192,18 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 		),
 
 		// swift mailer
-		'swiftUseSmtp'  => array
+		'swiftUseSmtp'   => array
 		(
 			'label'                       => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftUseSmtp'],
 			'default'                     => 'swiftSmtpSystemSettings',
 			'exclude'                     => true,
 			'inputType'                   => 'select',
-			'option'                      => array('swiftSmtpSystemSettings', 'swiftSmtpOn', 'swiftSmtpOff'),
+			'options'                     => array('swiftSmtpSystemSettings', 'swiftSmtpOn', 'swiftSmtpOff'),
 			'reference'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport'],
-			'eval'                        => array('submitOnChange'=> true)
+			'eval'                        => array('submitOnChange'=> true,
+			                                       'tl_class'      => 'w50')
 		),
-		'swiftSmtpHost' => array
+		'swiftSmtpHost'  => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpHost'],
 			'exclude'                 => true,
@@ -211,9 +212,9 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 			                                   'maxlength'=> 64,
 			                                   'nospace'  => true,
 			                                   'doNotShow'=> true,
-			                                   'tl_class' => 'long')
+			                                   'tl_class' => 'w50')
 		),
-		'swiftSmtpUser' => array
+		'swiftSmtpUser'  => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpUser'],
 			'exclude'                 => true,
@@ -223,7 +224,7 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 			                                   'doNotShow'     => true,
 			                                   'tl_class'      => 'w50')
 		),
-		'swiftSmtpPass' => array
+		'swiftSmtpPass'  => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpPass'],
 			'exclude'                 => true,
@@ -233,7 +234,7 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 			                                   'doNotShow'     => true,
 			                                   'tl_class'      => 'w50')
 		),
-		'swiftSmtpEnc'  => array
+		'swiftSmtpEnc'   => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpEnc'],
 			'exclude'                 => true,
@@ -244,7 +245,7 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 			                                   'doNotShow'          => true,
 			                                   'tl_class'           => 'w50')
 		),
-		'swiftSmtpPort' => array
+		'swiftSmtpPort'  => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpPort'],
 			'default'                 => 25,

@@ -151,6 +151,13 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 				'href'                => 'act=show',
 				'icon'                => 'show.gif'
 			),
+			'notify'            => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['notify'],
+				'href'                => '',
+				'icon'                => 'system/modules/Avisota/html/notify.png',
+				'button_callback'     => array('tl_avisota_recipient', 'notify')
+			),
 			'tracking'            => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['tracking'],
@@ -488,32 +495,27 @@ class tl_avisota_recipient extends Backend
 		if (!count($arrLists)) {
 			return $arrLists;
 		}
-		$strLists = implode(',', $arrLists);
 
-		$objBlacklist = $this->Database
-			->prepare("SELECT m.* FROM tl_avisota_recipient_blacklist b
-			           INNER JOIN tl_avisota_mailing_list m ON m.id=b.pid
-			           WHERE b.email=? AND b.pid IN (" . $strLists . ")
-			           ORDER BY title")
-			->execute(md5(strtolower($strEmail)));
-		if ($objBlacklist->numRows)
-		{
-			$k = 'AVISOTA_BLACKLIST_WARNING_' . md5(implode(',', $objBlacklist->fetchEach('id')));
-			if (isset($_SESSION[$k]) && time()-$_SESSION[$k]<60)
+		$arrBlacklisted = AvisotaIntegratedRecipient::checkBlacklisted($strEmail, $arrLists);
+
+		if ($arrBlacklisted) {
+			$objBlacklist = $this->Database
+				->execute("SELECT * FROM tl_avisota_mailing_list
+				           WHERE id IN (" . implode(',', $arrBlacklisted) . ")
+				           ORDER BY title");
+			if ($objBlacklist->numRows)
 			{
-				$this->Database
-					->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid IN (" . $strLists . ") AND email=?")
-					->execute($dc->activeRecord->pid, md5(strtolower($strEmail)));
-			}
-			else
-			{
-				$_SESSION[$k] = time();
-				throw new Exception(
-					sprintf(
-						$GLOBALS['TL_LANG']['tl_avisota_recipient'][$objBlacklist->numRows > 1 ? 'blacklists' : 'blacklist'],
-						implode(', ', $objBlacklist->fetchEach('title'))
-					)
-				);
+				$k = 'AVISOTA_BLACKLIST_WARNING_' . md5(implode(',', $objBlacklist->fetchEach('id')));
+				if (!(isset($_SESSION[$k]) && time()-$_SESSION[$k]<60))
+				{
+					$_SESSION[$k] = time();
+					throw new Exception(
+						sprintf(
+							$GLOBALS['TL_LANG']['tl_avisota_recipient'][$objBlacklist->numRows > 1 ? 'blacklists' : 'blacklist'],
+							implode(', ', $objBlacklist->fetchEach('title'))
+						)
+					);
+				}
 			}
 		}
 		return $arrLists;
@@ -768,6 +770,24 @@ class tl_avisota_recipient extends Backend
 	public function deleteRecipientNoBlacklist($row, $href, $label, $title, $icon, $attributes)
 	{
 		return ($this->User->isAdmin || $this->User->hasAccess('delete_no_blacklist', 'avisota_recipient_permissions')) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)) . ' ';
+	}
+
+
+	/**
+	 * Return the notify button
+	 *
+	 * @param array
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 *
+	 * @return string
+	 */
+	public function notify($row, $href, $label, $title, $icon, $attributes)
+	{
+		return '<a href="contao/main.php?do=avisota_recipients&amp;table=tl_avisota_recipient_notify&amp;act=edit&amp;id=' . $row['id'] . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ';
 	}
 
 

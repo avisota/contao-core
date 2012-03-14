@@ -67,6 +67,7 @@ $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_email']           
 /**
  * Legend
  */
+$GLOBALS['TL_LANG']['tl_avisota_settings']['edit']                           = 'Newslettersystem konfigurieren';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['recipients_legend']              = 'Abonnenten';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['subscription_legend']            = 'Abonnement';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['notification_legend']            = 'Erinnerung';

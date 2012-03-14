@@ -49,6 +49,8 @@ class AvisotaRecipient extends Controller
 	 */
 	public function __construct(array $arrData = null)
 	{
+		parent::__construct();
+
 		$this->import('Database');
 
 		$this->arrData = array();

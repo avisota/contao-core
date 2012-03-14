@@ -149,7 +149,7 @@ $arrAvisotaBeMod = array
 		),
 		'avisota_recipients'       => array
 		(
-			'tables'     => array('tl_avisota_recipient', 'tl_avisota_recipient_migrate', 'tl_avisota_recipient_import', 'tl_avisota_recipient_export', 'tl_avisota_recipient_remove'),
+			'tables'     => array('tl_avisota_recipient', 'tl_avisota_recipient_migrate', 'tl_avisota_recipient_import', 'tl_avisota_recipient_export', 'tl_avisota_recipient_remove', 'tl_avisota_recipient_notify'),
 			'icon'       => 'system/modules/Avisota/html/recipients.png',
 			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css',
 			'javascript' => 'system/modules/Avisota/html/backend.js'

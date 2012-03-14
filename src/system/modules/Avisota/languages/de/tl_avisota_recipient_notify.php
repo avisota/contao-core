@@ -34,49 +34,23 @@
 
 
 /**
- * Class AvisotaAbstractTransportModule
- *
- * 
- * @copyright  InfinitySoft 2010
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Avisota
+ * Fields
  */
-abstract class AvisotaAbstractTransportModule implements AvisotaTransportModule
-{
-	protected $config;
+$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['recipient']     = array('Abonnent', 'Wählen Sie hier den Abonnenten aus.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['confirmations'] = array('Bestätigungen versenden', 'Noch nicht versendete Bestätiungsmails versenden.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['notifications'] = array('Erinnerungen versenden', 'Erinnerungen für noch nicht bestätigte Abonnements versenden.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['overdue']       = array('Überfällig', 'Überfällige Abonnements, für die eine Bestätigung- und alle Erinnerungen versendet wurden.');
 
-	public function __construct(Database_Result $objRow)
-	{
-		$this->config = (object) $objRow->row();
-	}
 
-	/**
-	 * Initialise the transport.
-	 *
-	 * @return void
-	 * @throws AvisotaTransportInitialisationException
-	 */
-	public function initialiseTransport() {}
+/**
+ * Reference
+ */
+$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['edit']             = 'Abonnent benachrichtigen';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['confirmationSent'] = 'Bestätigungsmail gesendet am %s';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['reminderSent']     = '%d. Erinnerung gesendet am %s';
 
-	/**
-	 * Finalise the transport.
-	 *
-	 * @return void
-	 * @throws AvisotaTransportFinalisationException
-	 */
-	public function finaliseTransport() {}
 
-	/**
-	 * Transport a specific newsletter.
-	 *
-	 * @param AvisotaRecipient $objRecipient
-	 * @param AvisotaNewsletter $objNewsletter
-	 *
-	 * @return void
-	 * @throws AvisotaTransportException
-	 */
-	public function transportNewsletter(AvisotaRecipient $objRecipient, AvisotaNewsletter $objNewsletter)
-	{
-		// TODO
-	}
-}
+/**
+ * Legends
+ */
+$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['notify_legend'] = 'Benachrichtung';

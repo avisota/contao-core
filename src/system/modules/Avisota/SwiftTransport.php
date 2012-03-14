@@ -51,7 +51,7 @@ class SwiftTransport extends MailerTransport
 	{
 		$objMailerConfig = parent::createMailerConfig();
 
-		switch ($this->config->swiftUseSMTP) {
+		switch ($this->config->swiftUseSmtp) {
 			case 'swiftSmtpOn':
 				$objMailerConfig->setUseSMTP(true);
 				$objMailerConfig->setSmtpHost($this->config->swiftSmtpHost);

@@ -40,7 +40,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-abstract class MailerTransport extends AvisotaAbstractTransportModule
+abstract class MailerTransport extends AvisotaTransport
 {
 	/**
 	 * @var string
