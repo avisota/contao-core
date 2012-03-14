@@ -37,17 +37,19 @@
 /**
  * Back end modules
  */
-$GLOBALS['TL_LANG']['MOD']['avisota']                  = 'Newslettersystem';
-$GLOBALS['TL_LANG']['MOD']['avisota_mailing_list']     = array('Verteiler', 'Newsletter Verteiler verwalten.');
-$GLOBALS['TL_LANG']['MOD']['avisota_recipients']       = array('Abonnenten', 'Newsletter Abonnenten verwalten.');
-$GLOBALS['TL_LANG']['MOD']['avisota_newsletter']       = array('Newsletter', 'Newsletter verwalten und versenden.');
-$GLOBALS['TL_LANG']['MOD']['avisota_tracking']         = array('Analytics', 'Lese und Reaktionsverhalten analysieren.');
-$GLOBALS['TL_LANG']['MOD']['avisota_outbox']           = array('Postausgang', 'Postausgang einsehen und Newsletter versenden.');
+$GLOBALS['TL_LANG']['MOD']['avisota']              = 'Newsletter';
+$GLOBALS['TL_LANG']['MOD']['avisota_mailing_list'] = array('Verteiler', 'Newsletter Verteiler verwalten.');
+$GLOBALS['TL_LANG']['MOD']['avisota_recipients']   = array('Abonnenten', 'Newsletter Abonnenten verwalten.');
+$GLOBALS['TL_LANG']['MOD']['avisota_newsletter']   = array('Newsletter', 'Newsletter verwalten und versenden.');
+$GLOBALS['TL_LANG']['MOD']['avisota_tracking']     = array('Analytics', 'Lese und Reaktionsverhalten analysieren.');
+$GLOBALS['TL_LANG']['MOD']['avisota_outbox']       = array('Postausgang', 'Postausgang einsehen und Newsletter versenden.');
+
+$GLOBALS['TL_LANG']['MOD']['avisota_settings_group']   = 'Newslettersystem';
+$GLOBALS['TL_LANG']['MOD']['avisota_update']           = array('Update', 'Avisota Newslettersystem aktualisieren.');
+$GLOBALS['TL_LANG']['MOD']['avisota_settings']         = array('Einstellungen', 'Einstellungen verwalten.');
 $GLOBALS['TL_LANG']['MOD']['avisota_theme']            = array('Layouts', 'Newsletter Layouts verwalten.');
 $GLOBALS['TL_LANG']['MOD']['avisota_recipient_source'] = array('Abonnentenquellen', 'Quellen für Newsletter Abonnenten verwalten.');
 $GLOBALS['TL_LANG']['MOD']['avisota_transport']        = array('Transportmodule', 'Transportmodule verwalten.');
-$GLOBALS['TL_LANG']['MOD']['avisota_settings']         = array('Einstellungen', 'Einstellungen verwalten.');
-$GLOBALS['TL_LANG']['MOD']['avisota_update']           = array('Update', 'Avisota Newslettersystem aktualisieren.');
 
 
 /**
