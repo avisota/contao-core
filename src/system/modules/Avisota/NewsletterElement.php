@@ -41,7 +41,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-abstract class NewsletterElement extends Frontend
+abstract class NewsletterElement extends AvisotaFrontend
 {
 
 	/**

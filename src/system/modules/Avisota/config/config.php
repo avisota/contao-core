@@ -174,6 +174,12 @@ $arrAvisotaBeMod = array
 			'icon'       => 'system/modules/Avisota/html/outbox.png',
 			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 		),
+		'avisota_theme'           => array
+		(
+			'tables'     => array('tl_avisota_newsletter_theme'),
+			'icon'       => 'system/modules/Avisota/html/theme.png',
+			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+		),
 		'avisota_recipient_source' => array
 		(
 			'tables'     => array('tl_avisota_recipient_source'),

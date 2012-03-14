@@ -301,5 +301,150 @@ class AvisotaBase extends Controller
 			}
 		}
 	}
+
+	/**
+	 * Find a particular template file and return its path
+	 *
+	 * @author     Leo Feyer <http://www.contao.org>
+	 * @see Controll::getTemplate in Contao OpenSource CMS
+	 * @param string
+	 * @param string
+	 * @return string
+	 * @throws Exception
+	 */
+	public function getTemplate($strTemplate)
+	{
+		$strTemplate = basename($strTemplate);
+		$strFilename = $strTemplate . '.html5';
+
+		/** @var AvisotaNewsletter $objNewsletter */
+		global $objNewsletter;
+
+		// Check for a theme folder
+		if ($objNewsletter) {
+			$strTemplateGroup = $objNewsletter->getNewsletterTheme()->templateDirectory;
+		} else {
+			$strTemplateGroup = '';
+		}
+
+		$strPath = TL_ROOT . '/templates';
+
+		// Check the theme folder first
+		if (TL_MODE == 'FE' && $strTemplateGroup != '')
+		{
+			$strFile = $strPath . '/' . $strTemplateGroup . '/' . $strFilename;
+
+			if (file_exists($strFile))
+			{
+				return $strFile;
+			}
+
+			// Also check for .tpl files (backwards compatibility)
+			$strFile = $strPath . '/' . $strTemplateGroup . '/' . $strTemplate . '.tpl';
+
+			if (file_exists($strFile))
+			{
+				return $strFile;
+			}
+		}
+
+		// Then check the global templates directory
+		$strFile = $strPath . '/' . $strFilename;
+
+		if (file_exists($strFile))
+		{
+			return $strFile;
+		}
+
+		// Also check for .tpl files (backwards compatibility)
+		$strFile = $strPath . '/' . $strTemplate . '.tpl';
+
+		if (file_exists($strFile))
+		{
+			return $strFile;
+		}
+
+		// At last browse all module folders in reverse order
+		foreach (array_reverse($this->Config->getActiveModules()) as $strModule)
+		{
+			$strFile = TL_ROOT . '/system/modules/' . $strModule . '/templates/' . $strFilename;
+
+			if (file_exists($strFile))
+			{
+				return $strFile;
+			}
+
+			// Also check for .tpl files (backwards compatibility)
+			$strFile = TL_ROOT . '/system/modules/' . $strModule . '/templates/' . $strTemplate . '.tpl';
+
+			if (file_exists($strFile))
+			{
+				return $strFile;
+			}
+		}
+
+		throw new Exception('Could not find template file "' . $strFilename . '"');
+	}
+
+
+	/**
+	 * Return all template files of a particular group as array
+	 *
+	 * @author     Leo Feyer <http://www.contao.org>
+	 * @see Controll::getTemplate in Contao OpenSource CMS
+	 * @param string
+	 * @param integer
+	 * @return array
+	 * @throws Exception
+	 */
+	protected function getTemplateGroup($strPrefix, $intTheme=0)
+	{
+		$arrFolders = array();
+		$arrTemplates = array();
+
+		// Add the templates root directory
+		$arrFolders[] = TL_ROOT . '/templates';
+
+		// Add the theme templates folder
+		if ($intTheme > 0)
+		{
+			$objTheme = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_theme WHERE id=?")
+									   ->limit(1)
+									   ->execute($intTheme);
+
+			if ($objTheme->numRows > 0 && $objTheme->templateDirectory != '')
+			{
+				$arrFolders[] = TL_ROOT .'/'. $objTheme->templateDirectory;
+			}
+		}
+
+		// Add the module templates folders if they exist
+		foreach ($this->Config->getActiveModules() as $strModule)
+		{
+			$strFolder = TL_ROOT . '/system/modules/' . $strModule . '/templates';
+
+			if (is_dir($strFolder))
+			{
+				$arrFolders[] = $strFolder;
+			}
+		}
+
+		// Find all matching templates
+		foreach ($arrFolders as $strFolder)
+		{
+			$arrFiles = preg_grep('/^' . preg_quote($strPrefix, '/') . '/i',  scan($strFolder));
+
+			foreach ($arrFiles as $strTemplate)
+			{
+				$strName = basename($strTemplate);
+				$arrTemplates[] = substr($strName, 0, strrpos($strName, '.'));
+			}
+		}
+
+		natcasesort($arrTemplates);
+		$arrTemplates = array_values(array_unique($arrTemplates));
+
+		return $arrTemplates;
+	}
+
 }
-?>

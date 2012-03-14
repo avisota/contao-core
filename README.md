@@ -41,3 +41,19 @@ Synopsis: `function avisotaIntegratedRecipientUnsubscribe(AvisotaRecipient $objR
 Called when an integrated recipient confirm his subscription.
 
 Synopsis: `function avisotaIntegratedRecipientConfirmSubscription(AvisotaRecipient $objRecipient, array $arrLists)`
+
+### avisotaCollectThemeCss
+
+Called in DCA, when collection css files of a theme, allow other modules (like external_stylesheets or theme_plus) to add selectable css files.
+
+Synopsis: `function avisotaCollectThemeCss($arrStylesheets, $arrTheme)`
+The function must return $arrStylesheets!
+
+### avisotaCollectCss
+
+Called in DCA, when collection theme independend css files, allow other modules (like external_stylesheets or theme_plus) to add selectable css files.
+
+Synopsis: `function avisotaCollectThemeCss($arrStylesheets)`
+The function must return $arrStylesheets!
+
+
