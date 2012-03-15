@@ -58,8 +58,8 @@ $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_max_send_count']            
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_max_send_timeout']                  = array('Zyklenpause', 'Anzahl Sekunden die zwischen zwei Zyklen gewartet wird.');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_dont_disable_recipient_on_failure'] = array('Abonnent bei Fehlversand nicht deaktivieren', 'Deaktiviert die Deaktivierung von Abonnenten, wenn der Versand an sie fehlgeschlagen ist.');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_dont_disable_member_on_failure']    = array('Mitglied bei Fehlversand nicht deaktivieren', 'Deaktiviert die Deaktivierung von Mitgliedern, wenn der Versand an sie fehlgeschlagen ist.');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_chart_highstock']                   = array('Highstock Charts verwenden (frei für privaten und nicht-kommerziellen Gebrauch, Lizenz beachten!)', 'Beachten Sie die <a href="http://www.highcharts.com/license" onclick="window.open(this.href); return false;"><u>Lizenz</u></a> und <a href="http://www.highcharts.com/component/content/article/uncategorised/32-highstock-license-and-pricing" onclick="window.open(this.href); return false;"><u>Preisauszeichnung</u></a>. Verwendet die <a href="http://www.highcharts.com/" onclick="window.open(this.href); return false;"><u>Highstock Charts</u></a> anstelle von jqplot.');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_chart_highstock_confirmed']         = array('Ich/Wir bestätigen, dass dieses Newsletter-Projekt den Lizenzbestimmungen entspricht.', 'Beachten Sie die <a href="http://www.highcharts.com/license" onclick="window.open(this.href); return false;"><u>Lizenz</u></a> und <a href="http://www.highcharts.com/component/content/article/uncategorised/32-highstock-license-and-pricing" onclick="window.open(this.href); return false;"><u>Preisauszeichnung</u></a>. Hiermit bestätigen Sie dass dieses Newsletter-Projekt privat oder für nicht-kommerzielle Zwecke benutzt wird oder eine entsprechende Lizenz erworben wurde');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_chart']                             = array('Chart Rendering', 'Wählen Sie eine Methode aus, wie die Graphen gerendert werden sollen.');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_chart_highstock_confirmed']         = array('Ich/Wir bestätigen, dass dieses Newsletter-Projekt den Lizenzbestimmungen entspricht.', 'Beachten Sie die <a href="http://www.highcharts.com/license" onclick="window.open(this.href); return false;"><u>Lizenz</u></a> und <a href="http://www.highcharts.com/component/content/article/uncategorised/32-highstock-license-and-pricing" onclick="window.open(this.href); return false;"><u>Preisauszeichnung</u></a>. Hiermit bestätigen Sie dass dieses Newsletter-Projekt privat oder für nicht-kommerzielle Zwecke benutzt wird oder eine entsprechende Lizenz erworben wurde.');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_mode']                    = array('Entwicklermodus', 'Aktiviert den Entwicklermodus.');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_email']                   = array('Entwickler E-Mail', 'Im Entwicklermodus werden alle E-Mails an diese Adresse umgeleitet.');
 
@@ -84,7 +84,10 @@ $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_lastname']   = a
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_avisota_settings']['missing_hightstock'] = '<div>
+$GLOBALS['TL_LANG']['tl_avisota_settings']['jqplot']            = 'jqPlot (JavaScript)';
+$GLOBALS['TL_LANG']['tl_avisota_settings']['highstock']         = 'Highstock Charts (JavaScript)';
+$GLOBALS['TL_LANG']['tl_avisota_settings']['pchart']            = 'pChart (PHP)';
+$GLOBALS['TL_LANG']['tl_avisota_settings']['missing_highstock'] = '<div>
 <h3>Highstock Charts</h3>
 <p>Die <a href="http://www.highcharts.com/" onclick="window.open(this.href); return false;">Highstock Charts</a> werden nicht mehr mit Avisota ausgeliefert.<br>Bitte installieren Sie die Library von Hand nach, wenn Sie diese nutzen möchten.</p>
 </div>';

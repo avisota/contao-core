@@ -44,6 +44,11 @@
 class AvisotaTracking extends BackendModule
 {
 	/**
+	 * @var AvisotaTrackingAjax
+	 */
+	protected $Ajax;
+
+	/**
 	 * Template
 	 * @var string
 	 */
@@ -55,10 +60,11 @@ class AvisotaTracking extends BackendModule
 
 	public function generate()
 	{
-		if ($this->Input->get('table'))
-		{
+		if ($this->Input->get('table')) {
 			return $this->objDc->edit();
 		}
+
+		$this->import('AvisotaTrackingAjax', 'Ajax');
 
 		return parent::generate();
 	}
@@ -68,51 +74,92 @@ class AvisotaTracking extends BackendModule
 	{
 		$this->loadLanguageFile('avisota_tracking');
 
+		// generate chart
+		switch ($GLOBALS['TL_CONFIG']['avisota_chart']) {
+			case 'jqplot':
+				$objChart = new AvisotaChartJqPlot();
+				break;
+			case 'highstock':
+				if (is_dir(TL_ROOT . '/system/modules/Avisota/highstock') &&
+					!is_file(TL_ROOT . '/system/modules/Avisota/highstock/js/highstock.js') &&
+					$GLOBALS['TL_CONFIG']['avisota_chart_highstock_confirm']
+				) {
+					$objChart = new AvisotaChartHighstock();
+				} else {
+					$this->log('Highstock.js is not installed or confirmed to licensed!', 'AvisotaTracking::compile()', TL_ERROR);
+					$this->redirect('contao/main.php?act=error');
+				}
+				break;
+			case 'pchart':
+				$objChart = new AvisotaChartPChart();
+				break;
+			default:
+				$this->log('No chart renderer found.', 'AvisotaTracking::compile()', TL_ERROR);
+				$this->redirect('contao/main.php?act=error');
+		}
+
+		if ($this->Environment->isAjaxRequest) {
+			$objNewsletter = $this->Database
+				->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
+				->execute($this->Input->get('newsletter'));
+			$strRecipient = $this->Input->get('recipient');
+
+			if ($objNewsletter->next()) {
+				switch ($this->Input->get('data'))
+				{
+					case 'recipients':
+						$this->Ajax->json_recipients($objNewsletter);
+				}
+
+				$objChart->handleAjax($objNewsletter, $strRecipient);
+			}
+
+			header('Content-Type: application/json');
+			echo json_encode(array('error'=>'Invalid newsletter ID.'));
+			exit;
+		}
+
 		# load the session settings
-		$intNewsletter = $this->Session->get('AVISOTA_TRACKING');
-		$strRecipient = '';
+		list($intNewsletter, $strRecipient) = $this->Session->get('AVISOTA_TRACKING');
 
 		# evaluate the post and get parameters
-		if ($this->Input->post('newsletter'))
-		{
-			$intNewsletter = $this->Input->post('newsletter');
+		if ($this->Input->post('FORM_SUBMIT') == 'tl_filters') {
+			$this->Session->set('AVISOTA_TRACKING', array(
+				$this->Input->post('newsletter'),
+				urldecode($this->Input->post('recipient'))
+			));
+			$this->redirect('contao/main.php?do=avisota_tracking');
 		}
-		else if ($this->Input->get('newsletter'))
-		{
-			$intNewsletter = $this->Input->get('newsletter');
-		}
-		if ($this->Input->post('recipient'))
-		{
-			$strRecipient = urldecode($this->Input->post('recipient'));
-		}
-		else if ($this->Input->get('recipient'))
-		{
-			$strRecipient = urldecode($this->Input->get('recipient'));
+
+		if ($this->Input->get('recipient')) {
+			$this->Session->set('AVISOTA_TRACKING', array($intNewsletter, urldecode($this->Input->get('recipient'))));
+			$this->redirect('contao/main.php?do=avisota_tracking');
 		}
 
 		# where statement, if the newsletters have to filter by a specific recipient
 		$strWhere = '';
 
-		$objRecipient = $this->Database
-			->prepare("SELECT * FROM tl_avisota_statistic_raw_recipient WHERE recipient=?")
-			->limit(1)
-			->execute($strRecipient);
-		if (!$objRecipient->numRows)
-		{
-			$strRecipient = '';
-		}
-
-		# collect read state and build where statement for a specific recipient
-		else
-		{
-			$arrIds = $objRecipient->fetchEach('pid');
-			if (count($arrIds))
-			{
-				$strWhere = ' AND id IN (' . implode(',', $arrIds) . ')';
+		if ($strRecipient) {
+			$objRecipient = $this->Database
+				->prepare("SELECT * FROM tl_avisota_statistic_raw_recipient WHERE recipient=?")
+				->limit(1)
+				->execute($strRecipient);
+			if (!$objRecipient->numRows) {
+				$this->Session->set('AVISOTA_TRACKING', array($intNewsletter, ''));
+				$this->redirect('contao/main.php?do=avisota_tracking');
 			}
+
+			# collect read state and build where statement for a specific recipient
 			else
 			{
-				$strWhere = ' AND id=0';
+				$arrIds = $objRecipient->fetchEach('pid');
+				if (count($arrIds)) {
+					$strWhere = ' AND id IN (' . implode(',', $arrIds) . ')';
+				}
+				else
+				{
+					$strWhere = ' AND id=0';
+				}
 			}
 		}
 
@@ -125,350 +172,34 @@ class AvisotaTracking extends BackendModule
 		}
 
 		// cancel, if no newsletters
-		if (count($arrNewsletters) == 0)
-		{
+		if (count($arrNewsletters) == 0) {
 			$this->Template->empty = true;
 			return;
 		}
 
 		# find last sended newsletter
-		if (!$intNewsletter)
-		{
-			$arrIds = array_keys($arrNewsletters);
+		if (!$intNewsletter) {
+			$arrIds        = array_keys($arrNewsletters);
 			$intNewsletter = array_shift($arrIds);
+			$this->Session->set('AVISOTA_TRACKING', array($intNewsletter, $strRecipient));
+			$this->redirect('contao/main.php?do=avisota_tracking');
 		}
 
-		$objNewsletter = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")->execute($intNewsletter);
-		if ($objNewsletter->next())
-		{
-			$this->Template->newsletter = $objNewsletter->row();
-		}
-
+		$objNewsletter = $this->Database
+			->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
+			->execute($intNewsletter);
 		// Newsletter does not exists, use another one and reload
-		else
-		{
-			$arrIds = array_keys($arrNewsletters);
+		if (!$objNewsletter->next()) {
+			$arrIds        = array_keys($arrNewsletters);
 			$intNewsletter = array_shift($arrIds);
-			$this->Session->set('AVISOTA_TRACKING', $intNewsletter);
-			$this->reload();
+			$this->Session->set('AVISOTA_TRACKING', array($intNewsletter, $strRecipient));
+			$this->redirect('contao/main.php?do=avisota_tracking');
 		}
 
-		$this->blnUseHighstock = ($GLOBALS['TL_CONFIG']['avisota_chart_highstock'] && $GLOBALS['TL_CONFIG']['avisota_chart_highstock_confirmed']) ? true : false;
-		$this->Template->chart = $this->blnUseHighstock ? 'highstock' : 'jqplot';
-
-		if ($this->Input->get('data'))
-		{
-			switch ($this->Input->get('data'))
-			{
-			case 'recipients':
-				$this->json_recipients($objNewsletter);
-
-			case 'flags':
-				$this->json_newsletter_flags();
-
-			case 'sends':
-				$this->json_sends($objNewsletter, $strRecipient);
-
-			case 'reads':
-				$this->json_reads($objNewsletter, $strRecipient);
-
-			case 'reacts':
-				$this->json_reacts($objNewsletter, $strRecipient);
-
-			case 'links':
-				$this->json_links($objNewsletter, $strRecipient);
-
-			default:
-				exit;
-			}
-		}
-
-		# collect links hits
-		$arrLinks = array();
-		if ($strRecipient)
-		{
-			$objLink = $this->Database->prepare("SELECT url,(SELECT COUNT(id) FROM tl_avisota_statistic_raw_link_hit h WHERE l.id=h.recipientLinkID) as hits FROM tl_avisota_statistic_raw_recipient_link l WHERE pid=? AND recipient=? ORDER BY hits DESC")->execute($intNewsletter, $strRecipient);
-		}
-		else
-		{
-			$objLink = $this->Database->prepare("SELECT url,SUM(hits) as hits FROM (SELECT url,(SELECT COUNT(id) FROM tl_avisota_statistic_raw_link_hit h WHERE l.id=h.linkID) as hits FROM tl_avisota_statistic_raw_link l WHERE pid=?) t GROUP BY url ORDER BY hits DESC")->execute($intNewsletter);
-		}
-		$arrLinks = $objLink->fetchAllAssoc();
-		$intHits = array_sum($objLink->fetchEach('hits'));
-		for ($i=0; $i<count($arrLinks); $i++)
-		{
-			$arrLinks[$i]['percent'] = $intHits > 0 ? intval($arrLinks[$i]['hits']/$intHits*100) : 0;
-		}
-		$this->Template->links = $arrLinks;
-
-		if ($strRecipient)
-		{
-			$objRead = $this->Database
-				->prepare("SELECT n.id, n.subject, r.readed
-					FROM tl_avisota_statistic_raw_recipient r
-					INNER JOIN tl_avisota_newsletter n
-					ON n.id=r.pid
-					WHERE r.recipient=? AND r.readed=?")
-				->execute($strRecipient, 1);
-			$this->Template->newsletter_reads = $objRead->fetchAllAssoc();
-		}
-		else
-		{
-			$this->Template->newsletter_reads = false;
-		}
-
-		$this->Template->mode = ($strRecipient) ? 'recipient' : 'newsletter';
+		$this->Template->chart       = $objChart->generateChart($objNewsletter, $strRecipient);
+		$this->Template->mode        = ($strRecipient) ? 'recipient' : 'newsletter';
 		$this->Template->newsletters = $arrNewsletters;
-		$this->Template->recipients = $arrRecipients;
-		$this->Template->recipient = $strRecipient;
-
-		$this->Session->set('AVISOTA_TRACKING', $intNewsletter);
-	}
-
-	protected function json_recipients($objNewsletter)
-	{
-		$objResultSet = $this->Database
-			->prepare("SELECT recipient
-				FROM tl_avisota_statistic_raw_recipient
-				WHERE pid=? AND recipient LIKE ?
-				ORDER BY recipient")
-			->limit($this->Input->get('limit') ? $this->Input->get('limit') : 20)
-			->execute($objNewsletter->id, '%' . $this->Input->get('q') . '%');
-
-		header('Content-Type: application/json');
-		echo '[' . "\n";
-		$n = 0;
-		while ($objResultSet->next())
-		{
-			if ($n++ > 0)
-			{
-				echo ",\n";
-			}
-			echo json_encode(array('value' => $objResultSet->recipient, 'text' => $objResultSet->recipient));
-		}
-		echo "\n" . ']';
-		exit;
-	}
-
-	protected function json_newsletter_flags()
-	{
-		$objResultSet = $this->Database
-			->execute("SELECT * FROM tl_avisota_newsletter WHERE sendOn>0 ORDER BY sendOn");
-
-		header('Content-Type: application/json');
-		echo '[' . "\n";
-		$n = 0;
-		while ($objResultSet->next())
-		{
-			if ($n++ > 0)
-			{
-				echo ",\n";
-			}
-			echo '{' . "\n";
-			echo '"x": ' . ($objResultSet->sendOn*1000) . ",\n";
-			echo '"title": "N",' . "\n";
-			echo '"text": ' . json_encode('<b>' . $objResultSet->subject . '</b> ' . $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $objResultSet->sendOn)) . "\n";
-			echo '}' . "\n";
-		}
-		echo "\n" . ']';
-
-		exit;
-	}
-
-	protected function json_sends($objNewsletter, $strRecipient)
-	{
-		// collect newsletter/recipient, reads and reacts count
-		if ($strRecipient)
-		{
-			// total number of recived newsletters
-			$objResultSet = $this->Database
-				->prepare("SELECT r.send as time, COUNT(r.id) as sum
-					FROM tl_avisota_newsletter_outbox_recipient r
-					WHERE r.email=? AND r.send>0
-					GROUP BY time
-					ORDER BY time")
-				->execute($strRecipient);
-		}
-		else
-		{
-			// total number of recipients for this newsletter
-			$objResultSet = $this->Database
-				->prepare("SELECT r.send as time, COUNT(r.id) as sum
-					FROM tl_avisota_newsletter_outbox_recipient r
-					INNER JOIN tl_avisota_newsletter_outbox o
-					ON r.pid=o.id
-					WHERE o.pid=? AND r.send>0
-					GROUP BY time
-					ORDER BY time")
-				->execute($objNewsletter->id);
-		}
-		$this->json_output($objResultSet);
-	}
-
-	protected function json_reads($objNewsletter, $strRecipient)
-	{
-		// collect newsletter/recipient, reads and reacts count
-		if ($strRecipient)
-		{
-			// total number of readed newsletters
-			$objResultSet  = $this->Database
-				->prepare("SELECT tstamp as time, COUNT(id) as sum
-					FROM tl_avisota_statistic_raw_recipient
-					WHERE recipient=? AND readed=?
-					GROUP BY time
-					ORDER BY time")
-				->execute($strRecipient, 1);
-		}
-		else
-		{
-			// total number of recipients that reads this newsletter
-			$objResultSet = $this->Database
-				->prepare("SELECT tstamp as time, COUNT(id) as sum
-					FROM tl_avisota_statistic_raw_recipient
-					WHERE pid=? AND readed=?
-					GROUP BY time
-					ORDER BY time")
-				->execute($objNewsletter->id, 1);
-		}
-		$this->json_output($objResultSet);
-	}
-
-	protected function json_reacts($objNewsletter, $strRecipient)
-	{
-		// collect newsletter/recipient, reads and reacts count
-		if ($strRecipient)
-		{
-			// total number of newsletters the recipients reacts on (clicked a link)
-			$objResultSet = $this->Database
-				->prepare("SELECT time, SUM(sum) as sum
-					FROM (
-						SELECT MIN(tstamp) as time, 1 as sum
-						FROM tl_avisota_statistic_raw_link_hit
-						WHERE recipient=?
-						GROUP BY recipient
-					) t
-					GROUP BY time")
-				->execute($strRecipient);
-		}
-		else
-		{
-			// total number ov recipients that reacts on this newsletter (clicked a link)
-			$objResultSet = $this->Database
-				->prepare("SELECT time, SUM(sum) as sum
-					FROM (
-						SELECT MIN(tstamp) as time, 1 as sum
-						FROM tl_avisota_statistic_raw_link_hit
-						WHERE pid=?
-						GROUP BY linkID,recipientLinkID
-					) t
-					GROUP BY time")
-				->execute($objNewsletter->id);
-		}
-		$this->json_output($objResultSet);
-	}
-
-	protected function json_links($objNewsletter, $strRecipient)
-	{
-		// collect newsletter/recipient, reads and reacts count
-		if ($strRecipient)
-		{
-			// total number of newsletters the recipients reacts on (clicked a link)
-			$objLink = $this->Database
-				->prepare("SELECT id,url FROM tl_avisota_statistic_raw_recipient_link WHERE pid=? AND recipient=?")
-				->execute($objNewsletter->id, $strRecipient);
-			$strWhere = 'recipientLinkId';
-		}
-		else
-		{
-			// total number ov recipients that reacts on this newsletter (clicked a link)
-			$objLink = $this->Database
-				->prepare("SELECT id,url FROM tl_avisota_statistic_raw_link WHERE pid=?")
-				->execute($objNewsletter->id);
-			$strWhere = 'linkId';
-		}
-
-		header('Content-Type: application/json');
-		$n = 0;
-		echo '[' . "\n";
-		while ($objLink->next())
-		{
-			if ($n++ > 0)
-			{
-				echo ',' . "\n";
-			}
-			echo '{' . "\n";
-			echo '"name": ' . json_encode($objLink->url) . ',' . "\n";
-			echo '"data": ';
-			$objResultSet = $this->Database
-				->prepare("SELECT tstamp as time,COUNT(tstamp) as sum
-					FROM tl_avisota_statistic_raw_link_hit
-					WHERE $strWhere=?
-					GROUP BY time")
-				->execute($objLink->id);
-			$this->json_output_array($objResultSet);
-			echo "\n" . '}';
-		}
-		echo "\n" . ']';
-
-		exit;
-	}
-
-	protected function json_output(Database_Result $objResultSet)
-	{
-		header('Content-Type: application/json');
-		$this->json_output_array($objResultSet, !$this->blnUseHighstock);
-		exit;
-	}
-
-	protected function json_output_array(Database_Result $objResultSet, $blnReduceTime = false)
-	{
-		// highstock require local time, jqplot use utc time
-		$intTimezoneOffset = $this->blnUseHighstock ? $this->parseDate('Z', time()) : 0;
-		echo '[' . "\n";
-		$n = 0;
-		$sum = 0;
-		$time = -1;
-		if ($objResultSet->numRows)
-		{
-			while ($objResultSet->next())
-			{
-				$sum += $objResultSet->sum;
-				if ($blnReduceTime)
-				{
-					$temp = floor($objResultSet->time-($objResultSet->time%(60)));
-					if ($temp == $time)
-					{
-						continue;
-					}
-					$time = $temp;
-				}
-				else
-				{
-					$time = $objResultSet->time;
-				}
-				if ($n++ > 0)
-				{
-					echo ",\n";
-				}
-				echo '[' . (($time + $intTimezoneOffset) * 1000) . ',' . $sum . ']';
-			}
-		}
-		else
-		{
-			echo '[' . (time() * 1000) . ',0]';
-		}
-		echo "\n" . ']';
-	}
-
-	protected function search_intersect($a, $b)
-	{
-		foreach ($a as $e)
-		{
-			if (in_array($e, $b))
-			{
-				return true;
-			}
-		}
-		return false;
+		$this->Template->newsletter  = $objNewsletter->row();
+		$this->Template->recipient   = $strRecipient;
 	}
 }

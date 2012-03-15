@@ -1,0 +1,102 @@
+
+<div id="stats">
+	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['stats_legend']; ?></h3>
+	<div id="chart" style="position: relative; height: 420px; background: url(system/modules/Avisota/html/loading.gif) no-repeat center center;">
+		<a href="contao/main.php?do=avisota_tracking&amp;chart=sends&amp;size=large" data-lightbox="chart" title="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['stats_legend']); ?>">
+			<img src="contao/main.php?do=avisota_tracking&amp;chart=sends" width="690" height="420">
+		</a>
+	</div>
+
+	<table cellpadding="0" cellspacing="0" class="tl_listing">
+		<colgroup>
+			<col />
+			<col />
+			<col width="120" />
+			<col width="120" />
+		</colgroup>
+		<tbody>
+			<tr>
+				<td class="tl_folder_tlist">&nbsp;</td>
+				<td class="tl_folder_tlist tl_right_nowrap"><?php echo $GLOBALS['TL_LANG']['avisota_tracking']['col_sum']; ?></td>
+				<td class="tl_folder_tlist tl_right_nowrap"><?php echo $GLOBALS['TL_LANG']['avisota_tracking']['col_percent']; ?></td>
+				<td class="tl_folder_tlist tl_right_nowrap"><?php echo $GLOBALS['TL_LANG']['avisota_tracking']['col_percent2']; ?></td>
+			</tr>
+			<tr onmouseover="Theme.hoverRow(this, 1);" onmouseout="Theme.hoverRow(this, 0);">
+				<td class="tl_file_list"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['sends']; ?></td>
+				<td class="tl_file_list tl_right_nowrap"><?php echo $this->sends; ?></td>
+				<td class="tl_file_list tl_right_nowrap"></td>
+				<td class="tl_file_list tl_right_nowrap"></td>
+			</tr>
+			<tr onmouseover="Theme.hoverRow(this, 1);" onmouseout="Theme.hoverRow(this, 0);">
+				<td class="tl_file_list"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['reads']; ?></td>
+				<td class="tl_file_list tl_right_nowrap"><?php echo $this->reads; ?></td>
+				<td class="tl_file_list tl_right_nowrap"><?php echo $this->sends > 0 ? round($this->reads / $this->sends * 100) : 0; ?> %</td>
+				<td class="tl_file_list tl_right_nowrap"></td>
+			</tr>
+			<tr onmouseover="Theme.hoverRow(this, 1);" onmouseout="Theme.hoverRow(this, 0);">
+				<td class="tl_file_list"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['reacts']; ?></td>
+				<td class="tl_file_list tl_right_nowrap"><?php echo $this->reacts; ?></td>
+				<td class="tl_file_list tl_right_nowrap"><?php echo $this->sends > 0 ? round($this->reacts / $this->sends * 100) : 0; ?> %</td>
+				<td class="tl_file_list tl_right_nowrap"><?php echo $this->reads > 0 ? round($this->reacts / $this->reads * 100) : 0; ?> %</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<br/><br/>
+
+<div id="links">
+	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['links_legend']; ?></h3>
+	<div id="chart_links" style="position: relative; min-height: 420px; background: url(system/modules/Avisota/html/loading.gif) no-repeat center center;">
+		<a href="contao/main.php?do=avisota_tracking&amp;chart=links&amp;size=large" data-lightbox="chart" title="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['links_legend']); ?>">
+			<img src="contao/main.php?do=avisota_tracking&amp;chart=links" width="690">
+		</a>
+	</div>
+	<table cellpadding="0" cellspacing="0" class="tl_listing">
+		<colgroup>
+			<col />
+			<col />
+			<col width="45" />
+		</colgroup>
+		<tbody>
+			<tr>
+				<td class="tl_folder_tlist"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['url']; ?></td>
+				<td class="tl_folder_tlist tl_right_nowrap"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['hits']; ?></td>
+				<td class="tl_folder_tlist"></td>
+			</tr>
+			<?php foreach ($this->links as $i=>$link): ?>
+			<tr onmouseover="Theme.hoverRow(this, 1);" onmouseout="Theme.hoverRow(this, 0);">
+				<td class="tl_file_list"><a href="<?php echo $link['url']; ?>" onclick="window.open(this.href); return false;"><?php echo $link['url']; ?></a></td>
+				<td class="tl_file_list tl_right_nowrap"><?php echo number_format($link['hits'], 0, ',', '.'); ?></td>
+				<td class="tl_file_list tl_right_nowrap"><?php echo $link['percent']; ?>&nbsp;%</td>
+			</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+</div>
+
+<?php if (is_array($this->newsletter_reads)): ?>
+<br/><br/>
+<div id="newsletters">
+	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['newsletters_legend']; ?></h3>
+	<table cellpadding="0" cellspacing="0" class="tl_listing">
+		<colgroup>
+			<col width="16" />
+			<col />
+		</colgroup>
+		<tbody>
+			<tr>
+				<td class="tl_folder_tlist">&nbsp;</td>
+				<td class="tl_folder_tlist"><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['newsletter']; ?></td>
+			</tr>
+			<?php foreach ($this->newsletter_reads as $i=>$read): ?>
+			<tr onmouseover="Theme.hoverRow(this, 1);" onmouseout="Theme.hoverRow(this, 0);">
+				<td class="tl_file_list"><?php if ($read['readed']): ?><img src="system/modules/Avisota/html/outbox_sended.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['readed']); ?>" width="16" height="16" /><?php else: ?><img src="system/modules/Avisota/html/blank.gif" alt="" width="16" height="16" /><?php endif; ?></td>
+				<td class="tl_file_list"><a href="contao/main.php?do=avisota_newsletter&table=tl_avisota_newsletter&key=send&id=<?php echo $read['id']; ?>"><?php echo $read['subject']; ?></a></td>
+			</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+</div>
+<?php endif; ?>
+
+<br>

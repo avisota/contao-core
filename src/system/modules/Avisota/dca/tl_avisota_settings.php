@@ -41,7 +41,7 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 (
 
 	// Config
-	'config'          => array
+	'config'                => array
 	(
 		'dataContainer'               => 'File',
 		'closed'                      => true,
@@ -51,12 +51,12 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 	),
 
 	// Palettes
-	'palettes'        => array
+	'palettes'              => array
 	(
 		'__selector__'                => array(),
 	),
 
-	'metapalettes'    => array
+	'metapalettes'          => array
 	(
 		'default' => array(
 			'recipients'   => array('avisota_salutations', 'avisota_dont_disable_recipient_on_failure', 'avisota_dont_disable_member_on_failure'),
@@ -64,22 +64,29 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 			'notification' => array(':hide', 'avisota_send_notification'),
 			'cleanup'      => array(':hide', 'avisota_do_cleanup'),
 			'transport'    => array('avisota_default_transport', 'avisota_max_send_time', 'avisota_max_send_count', 'avisota_max_send_timeout'),
-			'backend'      => array(':hide', 'avisota_chart_highstock'),
+			'backend'      => array(':hide', 'avisota_chart'),
 			'developer'    => array(':hide', 'avisota_developer_mode')
 		)
 	),
 
 	// Subpalettes
-	'metasubpalettes' => array
+	'metasubpalettes'       => array
 	(
 		'avisota_send_notification' => array('avisota_notification_time', 'avisota_notification_count', 'avisota_template_notification_mail_plain', 'avisota_template_notification_mail_html'),
 		'avisota_do_cleanup'        => array('avisota_cleanup_time'),
-		'avisota_chart_highstock'   => array('avisota_chart_highstock_confirmed'),
 		'avisota_developer_mode'    => array('avisota_developer_email')
 	),
 
+	'metasubselectpalettes' => array
+	(
+		'avisota_chart' => array
+		(
+			'highstock' => array('avisota_chart_highstock_confirmed')
+		)
+	),
+
 	// Fields
-	'fields'          => array
+	'fields'                => array
 	(
 		'avisota_salutations'                           => array
 		(
@@ -246,12 +253,14 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=> 'w50')
 		),
-		'avisota_chart_highstock'                       => array
+		'avisota_chart'                                 => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_chart_highstock'],
-			'inputType'               => 'checkbox',
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_chart'],
+			'inputType'               => 'select',
+			'options'                 => array('jqplot', 'highstock', 'pchart'),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_settings'],
 			'eval'                    => array('submitOnChange'=> true,
-			                                   'tl_class'      => 'clr long')
+			                                   'tl_class'      => 'clr')
 		),
 		'avisota_chart_highstock_confirmed'             => array
 		(
@@ -280,16 +289,16 @@ class tl_avisota_settings extends Backend
 {
 	public function onload_callback()
 	{
-		if (!is_dir(TL_ROOT . '/system/modules/Avisota/hightstock')
+		if (!is_dir(TL_ROOT . '/system/modules/Avisota/highstock')
 			|| !is_file(TL_ROOT . '/system/modules/Avisota/highstock/js/highstock.js')
 		) {
-			$GLOBALS['TL_DCA']['tl_avisota_settings']['fields']['avisota_chart_highstock']['input_field_callback'] = array('tl_avisota_settings', 'renderMissingHighstockField');
+			$GLOBALS['TL_DCA']['tl_avisota_settings']['fields']['avisota_chart_highstock_confirm']['input_field_callback'] = array('tl_avisota_settings', 'renderMissingHighstockField');
 		}
 	}
 
 	public function renderMissingHighstockField(DataContainer $dc, $strLabel)
 	{
-		return $GLOBALS['TL_LANG']['tl_avisota_settings']['missing_hightstock'];
+		return $GLOBALS['TL_LANG']['tl_avisota_settings']['missing_highstock'];
 	}
 
 	public function getTemplates(DataContainer $dc)

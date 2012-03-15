@@ -71,6 +71,7 @@ $GLOBALS['TL_CONFIG']['avisota_max_send_timeout']   = 1;
 $GLOBALS['TL_CONFIG']['avisota_notification_time']  = 3;
 $GLOBALS['TL_CONFIG']['avisota_notification_count'] = 3;
 $GLOBALS['TL_CONFIG']['avisota_cleanup_time']       = 14;
+$GLOBALS['TL_CONFIG']['avisota_chart']              = 'jqplot';
 
 
 /**
