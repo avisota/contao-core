@@ -446,5 +446,4 @@ class AvisotaBase extends Controller
 
 		return $arrTemplates;
 	}
-
 }

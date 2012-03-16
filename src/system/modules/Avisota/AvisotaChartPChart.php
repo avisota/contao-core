@@ -183,6 +183,8 @@ class AvisotaChartPChart extends Backend implements AvisotaChart
 			$objTemplate->newsletter_reads = false;
 		}
 
+		$objTemplate->timespan = $this->getTstamp($objNewsletter, $strRecipient);
+
 		$objTemplate->sends  = $objSends->sum;
 		$objTemplate->reads  = $objReads->sum;
 		$objTemplate->reacts = $objReacts->sum;
@@ -245,6 +247,18 @@ class AvisotaChartPChart extends Backend implements AvisotaChart
 		return $tstamp;
 	}
 
+	protected function getUpScale()
+	{
+		$args = func_get_args();
+		$max = 0;
+		foreach ($args as $arg) {
+			$max = max($max, $arg);
+		}
+		$length = strlen($max);
+		$div = pow(10, $length-1);
+		return ceil($max / $div) * $div;
+	}
+
 	protected function addSeries(&$arrSeries, $objResultSet, $strSerie, $timemod)
 	{
 		$sum       = 0;
@@ -296,9 +310,13 @@ class AvisotaChartPChart extends Backend implements AvisotaChart
 		$until = $this->Input->get('until') ? $this->Input->get('until') : $tstamp['max'];
 		if ($since >= $tstamp['min'] && $since < $tstamp['max'] && $since < $until) {
 			$tstamp['min'] = $since;
+		} else {
+			$since = $tstamp['min'];
 		}
 		if ($until > $tstamp['min'] && $until <= $tstamp['max'] && $since < $until) {
 			$tstamp['max'] = $until;
+		} else {
+			$until = $tstamp['max'];
 		}
 
 		$strFile = TL_ROOT . '/system/html/chart-sends-' . $objNewsletter->id . ($strRecipient ? '-' . substr(md5($strRecipient), 0, 8) : '') . '-' . $tstamp['min'] . '-' . $tstamp['max'] . '-' . $intWidth . 'x' . $intHeight . '.png';
@@ -408,13 +426,19 @@ class AvisotaChartPChart extends Backend implements AvisotaChart
 			$arrSerieReads   = array();
 			$intLastReactSum = 0;
 			$arrSerieReacts  = array();
+			$arrDateTimes    = array();
 			foreach ($arrSeries as $datetime => $temp) {
-				$arrSerieSends[] =  $intLastSendSum  = empty($temp['sends']) ? $intLastSendSum : $temp['sends'];
-				$arrSerieReads[] =  $intLastReadSum  = empty($temp['reads']) ? $intLastReadSum : $temp['reads'];
-				$arrSerieReacts[] = $intLastReactSum = empty($temp['reacts']) ? $intLastReactSum : $temp['reacts'];
+				$intLastSendSum  = empty($temp['sends']) ? $intLastSendSum : $temp['sends'];
+				$intLastReadSum  = empty($temp['reads']) ? $intLastReadSum : $temp['reads'];
+				$intLastReactSum = empty($temp['reacts']) ? $intLastReactSum : $temp['reacts'];
+				if ($datetime >= $since && $datetime <= $until) {
+					$arrSerieSends[]  =  $intLastSendSum;
+					$arrSerieReads[]  =  $intLastReadSum;
+					$arrSerieReacts[] = $intLastReactSum;
+					$arrDateTimes[]   = $datetime;
+				}
 			}
 
-			$arrDateTimes = array_keys($arrSeries);
 			/*
 			$arrDateTimes = array();
 			for ($i=$tstamp['min']-($tstamp['min'] % $timemod)+$timemod; count($arrDateTimes)<count($arrSerieSends); $i+=3*$timemod) {
@@ -452,6 +476,7 @@ class AvisotaChartPChart extends Backend implements AvisotaChart
 
 			// Initialise the graph
 			$objChart = new pChart($intWidth, $intHeight);
+			$objChart->setFixedScale(0, $this->getUpScale($intLastSendSum, $intLastReadSum, $intLastReactSum));
 			$objChart->setFontProperties(TL_ROOT . '/plugins/pchart/Fonts/tahoma.ttf', 9);
 			$objChart->setGraphArea(85, 30, $intWidth - 50, $intHeight - 70);
 			$objChart->drawGraphArea(252, 252, 252);
@@ -505,9 +530,13 @@ class AvisotaChartPChart extends Backend implements AvisotaChart
 		$until = $this->Input->get('until') ? $this->Input->get('until') : $tstamp['max'];
 		if ($since >= $tstamp['min'] && $since < $tstamp['max'] && $since < $until) {
 			$tstamp['min'] = $since;
+		} else {
+			$since = $tstamp['min'];
 		}
 		if ($until > $tstamp['min'] && $until <= $tstamp['max'] && $since < $until) {
 			$tstamp['max'] = $until;
+		} else {
+			$until = $tstamp['max'];
 		}
 
 		$strFile = TL_ROOT . '/system/html/chart-links-' . $objNewsletter->id . ($strRecipient ? '-' . substr(md5($strRecipient), 0, 8) : '') . '-' . $tstamp['min'] . '-' . $tstamp['max'] . '-' . $intWidth . 'x' . $intHeight . '.png';
@@ -562,6 +591,7 @@ class AvisotaChartPChart extends Backend implements AvisotaChart
 
 			$arrSeriesLast  = array();
 			$arrSeriesLinks = array();
+			$arrDateTimes = array();
 			foreach ($arrSeries as $datetime => $array) {
 				foreach ($arrLinks as $link) {
 					if (!isset($arrSeriesLinks[$link])) {
@@ -571,13 +601,19 @@ class AvisotaChartPChart extends Backend implements AvisotaChart
 						$arrSeriesLast[$link] = 0;
 					}
 
-					$arrSeriesLinks[$link][] = $arrSeriesLast[$link] = empty($array[$link])
+					$arrSeriesLast[$link] = empty($array[$link])
 						? $arrSeriesLast[$link]
 						: $array[$link];
+
+					if ($datetime >= $since && $datetime <= $until) {
+						$arrSeriesLinks[$link][] = $arrSeriesLast[$link];
+					}
+				}
+
+				if ($datetime >= $since && $datetime <= $until) {
+					$arrDateTimes[] = $datetime;
 				}
 			}
-
-			$arrDateTimes = array_keys($arrSeries);
 
 			// Dataset definition
 			$objDataSet = new pData;
@@ -639,7 +675,7 @@ class AvisotaChartPChart extends Backend implements AvisotaChart
 		if ($this->Input->get('download')) {
 			// Open the "save as …" dialogue
 			header('Content-Transfer-Encoding: binary');
-			header('Content-Disposition: attachment; filename="' . $strName . '.png"');
+			header('Content-Disposition: attachment; filename="' . str_replace(':', '.', $strName) . '.png"');
 			header('Content-Length: ' . filesize($strFile));
 			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 			header('Pragma: public');

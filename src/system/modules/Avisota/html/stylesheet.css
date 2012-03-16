@@ -155,6 +155,11 @@ td.number {
 table.jqplot-table-legend {
 	margin-top: 54px !important;
 }
+div.slidedownload {
+	text-align: right;
+	overflow: hidden;
+	margin-bottom: 18px;
+}
 
 /** --- Update -------------------------------------------------------------- */
 .header_more {
