@@ -466,6 +466,7 @@ class AvisotaChartPChart extends Backend implements AvisotaChart
 			$objChart->drawLegend(95, 35, $objDataSet->GetDataDescription(), 255, 255, 255);
 			$objChart->setFontProperties(TL_ROOT . '/plugins/pchart/Fonts/tahoma.ttf', 10);
 			$objChart->drawTitle(85, 22, sprintf($GLOBALS['TL_LANG']['avisota_tracking']['chart']['headline'],
+				$GLOBALS['TL_LANG']['avisota_tracking'][($strRecipient) ? 'recipient' : 'newsletter']['stats_legend'],
 				$objNewsletter->subject,
 				$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['min']),
 				$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['max'])
@@ -473,10 +474,11 @@ class AvisotaChartPChart extends Backend implements AvisotaChart
 			$objChart->Render($strFile);
 		}
 
-		while (ob_end_clean()) ;
-		header('Content-Type: image/png');
-		readfile($strFile);
-		exit;
+		$this->output($strFile, sprintf($GLOBALS['TL_LANG']['avisota_tracking']['chart']['headline'],
+			$GLOBALS['TL_LANG']['avisota_tracking'][($strRecipient) ? 'recipient' : 'newsletter']['stats_legend'],
+			$objNewsletter->subject,
+			$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['min']),
+			$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['max'])));
 	}
 
 	protected function chartLinks($objNewsletter, $strRecipient)
@@ -607,6 +609,7 @@ class AvisotaChartPChart extends Backend implements AvisotaChart
 			$objChart->drawLegend(85, $intHeight + 8, $objDataSet->GetDataDescription(), 245, 245, 245);
 			$objChart->setFontProperties(TL_ROOT . '/plugins/pchart/Fonts/tahoma.ttf', 10);
 			$objChart->drawTitle(85, 22, sprintf($GLOBALS['TL_LANG']['avisota_tracking']['chart']['headline'],
+				$GLOBALS['TL_LANG']['avisota_tracking'][($strRecipient) ? 'recipient' : 'newsletter']['links_legend'],
 				$objNewsletter->subject,
 				$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['min']),
 				$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['max'])
@@ -614,9 +617,39 @@ class AvisotaChartPChart extends Backend implements AvisotaChart
 			$objChart->Render($strFile);
 		}
 
-		while (ob_end_clean()) ;
+		$this->output($strFile, sprintf($GLOBALS['TL_LANG']['avisota_tracking']['chart']['headline'],
+			$GLOBALS['TL_LANG']['avisota_tracking'][($strRecipient) ? 'recipient' : 'newsletter']['links_legend'],
+			$objNewsletter->subject,
+			$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['min']),
+			$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['max'])));
+	}
+
+	protected function output($strFile, $strName)
+	{
+		// Make sure no output buffer is active
+		// @see http://ch2.php.net/manual/en/function.fpassthru.php#74080
+		while (@ob_end_clean());
+
+		// Prevent session locking (see #2804)
+		session_write_close();
+
+		// set content type
 		header('Content-Type: image/png');
+
+		if ($this->Input->get('download')) {
+			// Open the "save as …" dialogue
+			header('Content-Transfer-Encoding: binary');
+			header('Content-Disposition: attachment; filename="' . $strName . '.png"');
+			header('Content-Length: ' . filesize($strFile));
+			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			header('Pragma: public');
+			header('Expires: 0');
+			header('Connection: close');
+		}
+
+		// send file content
 		readfile($strFile);
+
 		exit;
 	}
 }

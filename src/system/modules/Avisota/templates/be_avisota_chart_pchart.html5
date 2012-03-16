@@ -2,8 +2,15 @@
 <div id="stats">
 	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['stats_legend']; ?></h3>
 	<div id="chart" style="position: relative; height: 420px; background: url(system/modules/Avisota/html/loading.gif) no-repeat center center;">
-		<a href="contao/main.php?do=avisota_tracking&amp;chart=sends&amp;size=large" data-lightbox="chart" title="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['stats_legend']); ?>">
+		<a href="contao/main.php?do=avisota_tracking&amp;chart=sends&amp;size=large" data-lightbox="chart 1024 768" title="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['stats_legend']); ?>">
 			<img src="contao/main.php?do=avisota_tracking&amp;chart=sends" width="690" height="420">
+		</a>
+	</div>
+
+	<div>
+		<a href="contao/main.php?do=avisota_tracking&amp;chart=sends&amp;size=giant&amp;download=1">
+			<?php echo $this->generateImage('system/modules/Avisota/html/chart_save.png', '', 'style="vertical-align:middle"'); ?>
+			<?php echo $GLOBALS['TL_LANG']['avisota_tracking']['chart']['download']; ?>
 		</a>
 	</div>
 
@@ -47,10 +54,18 @@
 <div id="links">
 	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['links_legend']; ?></h3>
 	<div id="chart_links" style="position: relative; min-height: 420px; background: url(system/modules/Avisota/html/loading.gif) no-repeat center center;">
-		<a href="contao/main.php?do=avisota_tracking&amp;chart=links&amp;size=large" data-lightbox="chart" title="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['links_legend']); ?>">
+		<a href="contao/main.php?do=avisota_tracking&amp;chart=links&amp;size=large" data-lightbox="chart 1074 768" title="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['links_legend']); ?>">
 			<img src="contao/main.php?do=avisota_tracking&amp;chart=links" width="690">
 		</a>
 	</div>
+
+	<div>
+		<a href="contao/main.php?do=avisota_tracking&amp;chart=links&amp;size=giant&amp;download=1">
+			<?php echo $this->generateImage('system/modules/Avisota/html/chart_save.png', '', 'style="vertical-align:middle"'); ?>
+			<?php echo $GLOBALS['TL_LANG']['avisota_tracking']['chart']['download']; ?>
+		</a>
+	</div>
+
 	<table cellpadding="0" cellspacing="0" class="tl_listing">
 		<colgroup>
 			<col />

@@ -70,4 +70,5 @@ $GLOBALS['TL_LANG']['avisota_tracking']['recipient']['links_legend'] = 'Links';
 $GLOBALS['TL_LANG']['avisota_tracking']['recipient']['url'] = 'URL';
 $GLOBALS['TL_LANG']['avisota_tracking']['recipient']['hits'] = 'Klicks';
 
-$GLOBALS['TL_LANG']['avisota_tracking']['chart']['headline'] = '%s vom %s bis zum %s';
+$GLOBALS['TL_LANG']['avisota_tracking']['chart']['headline'] = '%s - %s vom %s bis zum %s';
+$GLOBALS['TL_LANG']['avisota_tracking']['chart']['download'] = 'Herunterladen';
