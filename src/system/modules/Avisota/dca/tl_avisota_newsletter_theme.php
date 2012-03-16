@@ -113,10 +113,10 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 	(
 		'default'                     => array
 		(
-			'theme'    => array('title'),
+			'theme'       => array('title', 'preview'),
 			'structure'   => array('areas'),
-			'template' => array('stylesheets', 'template_html', 'template_plain'),
-			'expert'   => array(':hide', 'templateDirectory')
+			'template'    => array('stylesheets', 'template_html', 'template_plain'),
+			'expert'      => array(':hide', 'templateDirectory')
 		)
 	),
 
@@ -128,7 +128,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 	// Fields
 	'fields'          => array
 	(
-		'title'             => array
+		'title'               => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_theme']['title'],
 			'exclude'                 => true,
@@ -138,8 +138,19 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 			                                   'maxlength'=> 255,
 			                                   'tl_class' => 'w50')
 		),
+		'preview'             => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_theme']['preview'],
+			'exclude'                 => true,
+			'inputType'               => 'fileTree',
+			'eval'                    => array('files'     => true,
+			                                   'filesOnly' => true,
+			                                   'fieldType' => 'radio',
+			                                   'extensions'=> 'jpg,jpeg,png,gif',
+			                                   'tl_class'  => 'clr')
+		),
 
-		'areas'             => array
+		'areas'               => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_theme']['areas'],
 			'exclude'                 => true,
@@ -148,7 +159,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 			                                   'rgxp'     => 'extnd',
 			                                   'nospace'  => true)
 		),
-		'stylesheets'       => array
+		'stylesheets'         => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_theme']['stylesheets'],
 			'inputType'               => 'checkboxWizard',
@@ -156,7 +167,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 			'eval'                    => array('tl_class'=> 'clr',
 			                                   'multiple'=> true)
 		),
-		'template_html'     => array
+		'template_html'       => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_theme']['template_html'],
 			'default'                 => 'mail_html_default',
@@ -165,7 +176,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 			'options'                 => array('tl_avisota_newsletter_theme', 'getHtmlTemplates'),
 			'eval'                    => array('tl_class'=> 'w50')
 		),
-		'template_plain'    => array
+		'template_plain'      => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_theme']['template_plain'],
 			'default'                 => 'mail_plain_default',
@@ -174,7 +185,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 			'options'                 => array('tl_avisota_newsletter_theme', 'getPlainTemplates'),
 			'eval'                    => array('tl_class'=> 'w50')
 		),
-		'templateDirectory' => array
+		'templateDirectory'   => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_theme']['templateDirectory'],
 			'exclude'                 => true,
@@ -420,8 +431,7 @@ class tl_avisota_newsletter_theme extends Backend
 			}
 
 			// HOOK: add custom logic
-			if (isset($GLOBALS['TL_HOOKS']['avisotaCollectThemeCss']) && is_array($GLOBALS['TL_HOOKS']['avisotaCollectThemeCss']))
-			{
+			if (isset($GLOBALS['TL_HOOKS']['avisotaCollectThemeCss']) && is_array($GLOBALS['TL_HOOKS']['avisotaCollectThemeCss'])) {
 				foreach ($GLOBALS['TL_HOOKS']['avisotaCollectThemeCss'] as $callback)
 				{
 					$this->import($callback[0]);
@@ -431,8 +441,7 @@ class tl_avisota_newsletter_theme extends Backend
 		}
 
 		// HOOK: add custom logic
-		if (isset($GLOBALS['TL_HOOKS']['avisotaCollectCss']) && is_array($GLOBALS['TL_HOOKS']['avisotaCollectCss']))
-		{
+		if (isset($GLOBALS['TL_HOOKS']['avisotaCollectCss']) && is_array($GLOBALS['TL_HOOKS']['avisotaCollectCss'])) {
 			foreach ($GLOBALS['TL_HOOKS']['avisotaCollectCss'] as $callback)
 			{
 				$this->import($callback[0]);

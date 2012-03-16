@@ -122,6 +122,7 @@ CREATE TABLE `tl_avisota_newsletter_theme` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `tstamp` int(10) unsigned NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
+  `preview` blob NULL,
   `areas` varchar(255) NOT NULL default '',
   `template_html` varchar(32) NOT NULL default '',
   `template_plain` varchar(32) NOT NULL default '',

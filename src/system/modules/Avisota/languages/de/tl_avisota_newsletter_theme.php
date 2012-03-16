@@ -37,6 +37,7 @@
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_theme']['title']             = array('Titel', 'Hier können Sie den Titel des Layouts angeben.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_theme']['preview']           = array('Vorschaubild', 'Wählen Sie hier ein Vorschaubild zu diesem Layout aus. Das Vorschaubild sollte eine Größe von 120x120 haben!');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_theme']['areas']             = array('Bereiche', 'Komma-getrennte Liste von zusätzlichen Newsletterbereichen (z.B. header,left,right,footer).');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_theme']['stylesheets']       = array('Stylesheets', 'Stylesheets, die in den Newsletter eingebunden werden sollen.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_theme']['template_html']     = array('HTML E-Mail-Template', 'Hier können Sie das HTML E-Mail-Template auswählen.');
