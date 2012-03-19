@@ -174,7 +174,7 @@ class tl_page_avisota extends tl_page
 		if ($row['type'] == 'avisota')
 		{
 			$sub = 0;
-			$image = 'system/modules/Avisota/html/page.png';
+			$image = 'system/modules/Avisota2/html/page.png';
 	
 			// Page not published or not active
 			if ((!$row['published'] || $row['start'] && $row['start'] > time() || $row['stop'] && $row['stop'] < time()))
@@ -191,7 +191,7 @@ class tl_page_avisota extends tl_page
 			// Get image name
 			if ($sub > 0)
 			{
-				$image = 'system/modules/Avisota/html/page_'.$sub.'.png';
+				$image = 'system/modules/Avisota2/html/page_'.$sub.'.png';
 			}
 				
 			// Return the image only

@@ -564,7 +564,7 @@ class tl_avisota_recipient_source extends Backend
 			}
 			else
 			{
-				$return .= ' ' . $this->generateImage('system/modules/Avisota/html/' . $dir . '_.gif', $label);
+				$return .= ' ' . $this->generateImage('system/modules/Avisota2/html/' . $dir . '_.gif', $label);
 			}
 		}
 

@@ -289,8 +289,8 @@ class tl_avisota_settings extends Backend
 {
 	public function onload_callback()
 	{
-		if (!is_dir(TL_ROOT . '/system/modules/Avisota/highstock')
-			|| !is_file(TL_ROOT . '/system/modules/Avisota/highstock/js/highstock.js')
+		if (!is_dir(TL_ROOT . '/system/modules/Avisota2/highstock')
+			|| !is_file(TL_ROOT . '/system/modules/Avisota2/highstock/js/highstock.js')
 		) {
 			$GLOBALS['TL_DCA']['tl_avisota_settings']['fields']['avisota_chart_highstock_confirm']['input_field_callback'] = array('tl_avisota_settings', 'renderMissingHighstockField');
 		}

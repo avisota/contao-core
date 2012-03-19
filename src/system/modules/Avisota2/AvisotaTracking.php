@@ -80,8 +80,8 @@ class AvisotaTracking extends BackendModule
 				$objChart = new AvisotaChartJqPlot();
 				break;
 			case 'highstock':
-				if (is_dir(TL_ROOT . '/system/modules/Avisota/highstock') &&
-					!is_file(TL_ROOT . '/system/modules/Avisota/highstock/js/highstock.js') &&
+				if (is_dir(TL_ROOT . '/system/modules/Avisota2/highstock') &&
+					!is_file(TL_ROOT . '/system/modules/Avisota2/highstock/js/highstock.js') &&
 					$GLOBALS['TL_CONFIG']['avisota_chart_highstock_confirm']
 				) {
 					$objChart = new AvisotaChartHighstock();

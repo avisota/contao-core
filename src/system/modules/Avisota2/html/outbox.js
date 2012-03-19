@@ -38,7 +38,7 @@ var Outbox = new Class({
 		};
 		
 		this.request = new Request.JSON({
-			url: 'system/modules/Avisota/AvisotaTransport.php',
+			url: 'system/modules/Avisota2/AvisotaTransport.php',
 			link: 'ignore',
 			onRequest: function() {
 				this.logElement = this.logDummy
@@ -50,7 +50,7 @@ var Outbox = new Class({
 			onComplete: function() {
 				this.logElement
 					.getElement('td.indicator img')
-					.src = 'system/modules/Avisota/html/blank.gif';
+					.src = 'system/modules/Avisota2/html/blank.gif';
 				this.remeaningTime = 0;
 			}.bind(this),
 			onSuccess: function(responseJSON, responseText) {

@@ -37,7 +37,7 @@
 
 	<h2 class="sub_headline"><?php echo $GLOBALS['TL_LANG']['avisota_tracking']['headline']; ?></h2>
 
-	<script type="text/javascript" src="system/modules/Avisota/Meio.Autocomplete/2.0/Meio.Autocomplete.js"></script>
+	<script type="text/javascript" src="system/modules/Avisota2/Meio.Autocomplete/2.0/Meio.Autocomplete.js"></script>
 
 	<?php echo $this->chart; ?>
 <?php endif; ?>

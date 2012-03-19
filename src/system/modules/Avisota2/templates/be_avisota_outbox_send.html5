@@ -61,14 +61,14 @@
 				<td class="tl_file_list sended"></td>
 				<td class="tl_file_list failed"></td>
 				<td class="tl_file_list time"></td>
-				<td class="tl_file_list indicator"><img src="system/modules/Avisota/html/loading.gif" alt="" width="16" height="16" /></td>
+				<td class="tl_file_list indicator"><img src="system/modules/Avisota2/html/loading.gif" alt="" width="16" height="16" /></td>
 			</tr>
 		</tbody>
 	</table>
 </div>
 
-<script type="text/javascript" src="system/modules/Avisota/html/Number.js"></script>
-<script type="text/javascript" src="system/modules/Avisota/html/outbox.js"></script>
+<script type="text/javascript" src="system/modules/Avisota2/html/Number.js"></script>
+<script type="text/javascript" src="system/modules/Avisota2/html/outbox.js"></script>
 <script type="text/javascript">
 window.addEvent('load', function() {
 	new Outbox(<?php echo json_encode($this->outbox); ?>,

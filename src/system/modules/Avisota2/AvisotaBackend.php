@@ -118,7 +118,7 @@ class AvisotaBackend extends Controller
 			if ($objResult->total_recipients > 0) {
 				$strLabel .= '<div style="padding: 1px 0;">' .
 					'<a href="contao/main.php?do=avisota_recipients&amp;showlist=' . $arrRow['id'] . '">' .
-					$this->generateImage('system/modules/Avisota/html/recipients.png', '') .
+					$this->generateImage('system/modules/Avisota2/html/recipients.png', '') .
 					' ' .
 					sprintf($GLOBALS['TL_LANG']['tl_avisota_mailing_list']['label_recipients'],
 					$objResult->total_recipients,

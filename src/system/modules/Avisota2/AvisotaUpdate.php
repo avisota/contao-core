@@ -110,7 +110,7 @@ class AvisotaUpdate extends BackendModule
 			exit;
 		}
 
-		$GLOBALS['TL_JAVASCRIPT']['avisota_update'] = 'system/modules/Avisota/html/avisota_update.js';
+		$GLOBALS['TL_JAVASCRIPT']['avisota_update'] = 'system/modules/Avisota2/html/avisota_update.js';
 
 		return parent::generate();
 	}

@@ -149,34 +149,34 @@ $GLOBALS['BE_MOD'] = array_merge(
 			(
 				'tables'     => array('tl_avisota_newsletter_category', 'tl_avisota_newsletter', 'tl_avisota_newsletter_content', 'tl_avisota_newsletter_create_from_draft'),
 				'send'       => array('Avisota', 'send'),
-				'icon'       => 'system/modules/Avisota/html/newsletter.png',
-				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+				'icon'       => 'system/modules/Avisota2/html/newsletter.png',
+				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 			),
 			'avisota_outbox'           => array
 			(
 				'callback'   => 'AvisotaOutbox',
-				'icon'       => 'system/modules/Avisota/html/outbox.png',
-				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+				'icon'       => 'system/modules/Avisota2/html/outbox.png',
+				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 			),
 			'avisota_tracking'         => array
 			(
 				'callback'   => 'AvisotaTracking',
 				'tables'     => array('tl_avisota_tracking_export'),
-				'icon'       => 'system/modules/Avisota/html/tracking.png',
-				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+				'icon'       => 'system/modules/Avisota2/html/tracking.png',
+				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 			),
 			'avisota_recipients'       => array
 				(
 				'tables'     => array('tl_avisota_recipient', 'tl_avisota_recipient_migrate', 'tl_avisota_recipient_import', 'tl_avisota_recipient_export', 'tl_avisota_recipient_remove', 'tl_avisota_recipient_notify'),
-				'icon'       => 'system/modules/Avisota/html/recipients.png',
-				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css',
-				'javascript' => 'system/modules/Avisota/html/backend.js'
+				'icon'       => 'system/modules/Avisota2/html/recipients.png',
+				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css',
+				'javascript' => 'system/modules/Avisota2/html/backend.js'
 			),
 			'avisota_mailing_list'     => array
 			(
 				'tables'     => array('tl_avisota_mailing_list'),
-				'icon'       => 'system/modules/Avisota/html/mailing_list.png',
-				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+				'icon'       => 'system/modules/Avisota2/html/mailing_list.png',
+				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 			)
 		)
 	),
@@ -191,8 +191,8 @@ $arrAvisotaBeMod = array(
 			'tables'     => array('tl_avisota_newsletter_draft', 'tl_avisota_newsletter_draft_content'),
 			'render'     => array('AvisotaBackend', 'renderDraft'),
 			'preview'    => array('AvisotaBackend', 'previewDraft'),
-			'icon'       => 'system/modules/Avisota/html/newsletter_draft.png',
-			'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+			'icon'       => 'system/modules/Avisota2/html/newsletter_draft.png',
+			'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 		)
 	)
 );
@@ -200,33 +200,33 @@ if ($blnAvisotaUpdate) {
 	$arrAvisotaBeMod['avisota_settings_group']['avisota_update'] = array
 	(
 		'callback'   => 'AvisotaUpdate',
-		'icon'       => 'system/modules/Avisota/html/update.png',
-		'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+		'icon'       => 'system/modules/Avisota2/html/update.png',
+		'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 	);
 }
 $arrAvisotaBeMod['avisota_settings_group']['avisota_settings']         = array
 (
 	'tables'     => array('tl_avisota_settings'),
-	'icon'       => 'system/modules/Avisota/html/settings.png',
-	'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+	'icon'       => 'system/modules/Avisota2/html/settings.png',
+	'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 );
 $arrAvisotaBeMod['avisota_settings_group']['avisota_theme']            = array
 (
 	'tables'     => array('tl_avisota_newsletter_theme'),
-	'icon'       => 'system/modules/Avisota/html/theme.png',
-	'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+	'icon'       => 'system/modules/Avisota2/html/theme.png',
+	'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 );
 $arrAvisotaBeMod['avisota_settings_group']['avisota_recipient_source'] = array
 (
 	'tables'     => array('tl_avisota_recipient_source'),
-	'icon'       => 'system/modules/Avisota/html/recipient_source.png',
-	'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+	'icon'       => 'system/modules/Avisota2/html/recipient_source.png',
+	'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 );
 $arrAvisotaBeMod['avisota_settings_group']['avisota_transport']        = array
 (
 	'tables'     => array('tl_avisota_transport'),
-	'icon'       => 'system/modules/Avisota/html/transport.png',
-	'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+	'icon'       => 'system/modules/Avisota2/html/transport.png',
+	'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 );
 
 $i                 = array_search('system', array_keys($GLOBALS['BE_MOD']));
@@ -382,7 +382,7 @@ if (($_GET['table'] == 'tl_avisota_recipient_import' || $_GET['table'] == 'tl_av
  * JavaScript inject
  */
 if (TL_MODE == 'BE' && $_GET['do'] == 'avisota_recipients') {
-	$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/Avisota/html/tl_avisota_recipient.js.php';
+	$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/Avisota2/html/tl_avisota_recipient.js.php';
 }
 
 
@@ -392,7 +392,7 @@ if (TL_MODE == 'BE' && $_GET['do'] == 'avisota_recipients') {
 if (version_compare(Database::getInstance()->query('SHOW VARIABLES WHERE Variable_name = \'version\'')->Value, '5', '<')) {
 	$objEnvironment = Environment::getInstance();
 	if ( // The update controller itself
-		strpos($objEnvironment->requestUri, 'system/modules/Avisota/AvisotaCompatibilityController.php') === false
+		strpos($objEnvironment->requestUri, 'system/modules/Avisota2/AvisotaCompatibilityController.php') === false
 		// Backend login
 		&& strpos($objEnvironment->requestUri, 'contao/index.php') === false
 		// Extension manager
@@ -400,7 +400,7 @@ if (version_compare(Database::getInstance()->query('SHOW VARIABLES WHERE Variabl
 		// Install Tool
 		&& strpos($objEnvironment->requestUri, 'contao/install.php') === false
 	) {
-		header('Location: ' . $objEnvironment->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/system/modules/Avisota/AvisotaCompatibilityController.php');
+		header('Location: ' . $objEnvironment->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/system/modules/Avisota2/AvisotaCompatibilityController.php');
 		exit;
 	}
 }

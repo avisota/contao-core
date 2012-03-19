@@ -1,10 +1,10 @@
 <?php
-$GLOBALS['TL_CSS'][] = 'system/modules/Avisota/mootools_slider/css/slider.css';
+$GLOBALS['TL_CSS'][] = 'system/modules/Avisota2/mootools_slider/css/slider.css';
 ?>
-<script type="text/javascript" src="system/modules/Avisota/mootools_slider/slider.js"></script>
+<script type="text/javascript" src="system/modules/Avisota2/mootools_slider/slider.js"></script>
 <div id="stats">
 	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['stats_legend']; ?></h3>
-	<div id="chart" style="position: relative; height: 420px; background: url(system/modules/Avisota/html/loading.gif) no-repeat center center;">
+	<div id="chart" style="position: relative; height: 420px; background: url(system/modules/Avisota2/html/loading.gif) no-repeat center center;">
 		<a href="contao/main.php?do=avisota_tracking&amp;chart=sends&amp;size=large" data-lightbox="chart 1024 768" title="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['stats_legend']); ?>">
 			<img id="newsletter_chart" src="contao/main.php?do=avisota_tracking&amp;chart=sends" width="690" height="420" onload="$(this).setStyle('opacity', 1);">
 		</a>
@@ -19,7 +19,7 @@ $GLOBALS['TL_CSS'][] = 'system/modules/Avisota/mootools_slider/css/slider.css';
 				<div id="newsletter_minmax_gutter_l" class="slider_gutter_item slider_gutter_l iconsprite_controls"></div>
 				<div id="newsletter_minmax_gutter_r" class="slider_gutter_item slider_gutter_r iconsprite_controls"></div>
 				<div id="newsletter_minmax_gutter_m" class="slider_gutter_item slider_gutter_m iconsprite_controls">
-					<?php echo $this->generateImage('system/modules/Avisota/mootools_slider/images/bkg_slider.gif', '', 'id="newsletter_slider_bkg_img" class="slider_bkg_img"') ?>
+					<?php echo $this->generateImage('system/modules/Avisota2/mootools_slider/images/bkg_slider.gif', '', 'id="newsletter_slider_bkg_img" class="slider_bkg_img"') ?>
 					<div id="newsletter_minmax_minKnobA" class="slider_knob slider_knob_l"></div>
 					<div id="newsletter_minmax_maxKnobA" class="slider_knob slider_knob_r"></div>
 				</div>
@@ -27,7 +27,7 @@ $GLOBALS['TL_CSS'][] = 'system/modules/Avisota/mootools_slider/css/slider.css';
 		</div>
 
 		<a href="contao/main.php?do=avisota_tracking&amp;chart=sends&amp;size=giant&amp;download=1" class="download" id="newsletter_chart_download">
-			<?php echo $this->generateImage('system/modules/Avisota/html/chart_save.png', '', 'style="vertical-align:middle"'); ?>
+			<?php echo $this->generateImage('system/modules/Avisota2/html/chart_save.png', '', 'style="vertical-align:middle"'); ?>
 			<?php echo $GLOBALS['TL_LANG']['avisota_tracking']['chart']['download']; ?>
 		</a>
 	</div>
@@ -71,7 +71,7 @@ $GLOBALS['TL_CSS'][] = 'system/modules/Avisota/mootools_slider/css/slider.css';
 
 <div id="links">
 	<h3><?php echo $GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['links_legend']; ?></h3>
-	<div id="chart_links" style="position: relative; min-height: 420px; background: url(system/modules/Avisota/html/loading.gif) no-repeat center center;">
+	<div id="chart_links" style="position: relative; min-height: 420px; background: url(system/modules/Avisota2/html/loading.gif) no-repeat center center;">
 		<a href="contao/main.php?do=avisota_tracking&amp;chart=links&amp;size=large" data-lightbox="chart 1074 768" title="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['links_legend']); ?>">
 			<img id="links_chart" src="contao/main.php?do=avisota_tracking&amp;chart=links" width="690" onload="$(this).setStyle('opacity', 1);">
 		</a>
@@ -86,7 +86,7 @@ $GLOBALS['TL_CSS'][] = 'system/modules/Avisota/mootools_slider/css/slider.css';
 				<div id="links_minmax_gutter_l" class="slider_gutter_item slider_gutter_l iconsprite_controls"></div>
 				<div id="links_minmax_gutter_r" class="slider_gutter_item slider_gutter_r iconsprite_controls"></div>
 				<div id="links_minmax_gutter_m" class="slider_gutter_item slider_gutter_m iconsprite_controls">
-					<?php echo $this->generateImage('system/modules/Avisota/mootools_slider/images/bkg_slider.gif', '', 'id="links_slider_bkg_img" class="slider_bkg_img"') ?>
+					<?php echo $this->generateImage('system/modules/Avisota2/mootools_slider/images/bkg_slider.gif', '', 'id="links_slider_bkg_img" class="slider_bkg_img"') ?>
 					<div id="links_minmax_minKnobA" class="slider_knob slider_knob_l"></div>
 					<div id="links_minmax_maxKnobA" class="slider_knob slider_knob_r"></div>
 				</div>
@@ -94,7 +94,7 @@ $GLOBALS['TL_CSS'][] = 'system/modules/Avisota/mootools_slider/css/slider.css';
 		</div>
 
 		<a href="contao/main.php?do=avisota_tracking&amp;chart=links&amp;size=giant&amp;download=1" class="download" id="links_chart_download">
-			<?php echo $this->generateImage('system/modules/Avisota/html/chart_save.png', '', 'style="vertical-align:middle"'); ?>
+			<?php echo $this->generateImage('system/modules/Avisota2/html/chart_save.png', '', 'style="vertical-align:middle"'); ?>
 			<?php echo $GLOBALS['TL_LANG']['avisota_tracking']['chart']['download']; ?>
 		</a>
 	</div>
@@ -138,7 +138,7 @@ $GLOBALS['TL_CSS'][] = 'system/modules/Avisota/mootools_slider/css/slider.css';
 			</tr>
 			<?php foreach ($this->newsletter_reads as $i=>$read): ?>
 			<tr onmouseover="Theme.hoverRow(this, 1);" onmouseout="Theme.hoverRow(this, 0);">
-				<td class="tl_file_list"><?php if ($read['readed']): ?><img src="system/modules/Avisota/html/outbox_sended.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['readed']); ?>" width="16" height="16" /><?php else: ?><img src="system/modules/Avisota/html/blank.gif" alt="" width="16" height="16" /><?php endif; ?></td>
+				<td class="tl_file_list"><?php if ($read['readed']): ?><img src="system/modules/Avisota2/html/outbox_sended.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_tracking'][$this->mode]['readed']); ?>" width="16" height="16" /><?php else: ?><img src="system/modules/Avisota2/html/blank.gif" alt="" width="16" height="16" /><?php endif; ?></td>
 				<td class="tl_file_list"><a href="contao/main.php?do=avisota_newsletter&table=tl_avisota_newsletter&key=send&id=<?php echo $read['id']; ?>"><?php echo $read['subject']; ?></a></td>
 			</tr>
 			<?php endforeach; ?>

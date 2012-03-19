@@ -43,7 +43,7 @@
 </div>
 </div>
 
-<form action="system/modules/Avisota/AvisotaPreview.php" id="tl_avisota_newsletter_preview" target="preview" class="tl_form" method="get">
+<form action="system/modules/Avisota2/AvisotaPreview.php" id="tl_avisota_newsletter_preview" target="preview" class="tl_form" method="get">
 <input name="id" value="<?php echo $this->id ?>" type="hidden">
 <div class="tl_formbody_edit preview">
 
@@ -73,11 +73,11 @@
 </div>
 </noscript>
 <iframe class="tl_avisota_newsletter_preview" id="preview" name="preview" scrolling="auto" width="100%" height="600"
-	src="system/modules/Avisota/AvisotaPreview.php?id=<?php echo $this->id ?>"></iframe>
+	src="system/modules/Avisota2/AvisotaPreview.php?id=<?php echo $this->id ?>"></iframe>
 </div>
 </form>
 
-<form action="system/modules/Avisota/AvisotaTransport.php" id="tl_avisota_newsletter_schedule" class="tl_form" method="post">
+<form action="system/modules/Avisota2/AvisotaTransport.php" id="tl_avisota_newsletter_schedule" class="tl_form" method="post">
 <input name="id" value="<?php echo $this->id ?>" type="hidden">
 <div class="tl_formbody_edit">
 
@@ -105,9 +105,9 @@
 <div class="tl_formbody_submit">
 
 <div class="tl_submit_container">
-<button id="btnPreview" name="action" class="tl_submit" accesskey="p" type="submit" value="preview"><img style="display: none;" src="system/modules/Avisota/html/loading.gif" alt="" /><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview'] ?></button>
+<button id="btnPreview" name="action" class="tl_submit" accesskey="p" type="submit" value="preview"><img style="display: none;" src="system/modules/Avisota2/html/loading.gif" alt="" /><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview'] ?></button>
 <?php if ($this->User->isAdmin || $this->User->hasAccess('send', 'avisota_newsletter_permissions')): ?>
-<button style="float:right" id="btnSchedule" name="action" class="tl_submit" accesskey="s" type="submit" value="schedule"><img style="display: none;" src="system/modules/Avisota/html/loading.gif" alt="" /><?php echo $GLOBALS['TL_LANG']['MSC']['schedule']; ?></button>
+<button style="float:right" id="btnSchedule" name="action" class="tl_submit" accesskey="s" type="submit" value="schedule"><img style="display: none;" src="system/modules/Avisota2/html/loading.gif" alt="" /><?php echo $GLOBALS['TL_LANG']['MSC']['schedule']; ?></button>
 <?php endif; ?>
 </div>
 

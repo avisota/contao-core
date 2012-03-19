@@ -125,7 +125,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['send'],
 				'href'                => 'key=send',
-				'icon'                => 'system/modules/Avisota/html/send.png',
+				'icon'                => 'system/modules/Avisota2/html/send.png',
 				'button_callback'     => array('tl_avisota_newsletter', 'sendNewsletter')
 			)
 		),

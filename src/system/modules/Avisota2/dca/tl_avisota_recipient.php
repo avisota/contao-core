@@ -155,14 +155,14 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['notify'],
 				'href'                => '',
-				'icon'                => 'system/modules/Avisota/html/notify.png',
+				'icon'                => 'system/modules/Avisota2/html/notify.png',
 				'button_callback'     => array('tl_avisota_recipient', 'notify')
 			),
 			'tracking'            => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['tracking'],
 				'href'                => '',
-				'icon'                => 'system/modules/Avisota/html/tracking.png',
+				'icon'                => 'system/modules/Avisota2/html/tracking.png',
 				'button_callback'     => array('tl_avisota_recipient', 'tracking')
 			)
 		),

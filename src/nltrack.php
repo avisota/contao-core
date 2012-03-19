@@ -68,7 +68,7 @@ class Tracking extends Frontend
 				->prepare("UPDATE tl_avisota_statistic_raw_recipient SET tstamp=?, readed=? WHERE readed='' AND id=?")
 				->execute(time(), '1', $intId);
 
-			$strFile = 'system/modules/Avisota/html/blank.gif';
+			$strFile = 'system/modules/Avisota2/html/blank.gif';
 			$objFile = new File($strFile);
 
 			// Open the "save as …" dialogue

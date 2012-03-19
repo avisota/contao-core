@@ -113,7 +113,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_draft'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft']['preview'],
 				'href'                => 'key=preview',
-				'icon'                => 'system/modules/Avisota/html/preview.png'
+				'icon'                => 'system/modules/Avisota2/html/preview.png'
 			)
 		),
 	),

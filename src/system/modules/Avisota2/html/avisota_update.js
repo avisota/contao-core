@@ -18,12 +18,12 @@ $(window).addEvent('domready', function() {
 				evalScripts: false,
 				onRequest: function() {
 					update = new Element('img')
-						.set('src', 'system/modules/Avisota/html/update.gif')
+						.set('src', 'system/modules/Avisota2/html/update.gif')
 						.replaces(update);
 				},
 				onSuccess: function(responseText, responseXML) {
 					update = new Element('img')
-						.set('src', 'system/modules/Avisota/html/updated.png')
+						.set('src', 'system/modules/Avisota2/html/updated.png')
 						.set('alt', responseText)
 						.set('title', responseText)
 						.replaces(update);
@@ -32,7 +32,7 @@ $(window).addEvent('domready', function() {
 				onFailure: function(xhr) {
 					console.log(arguments);
 					update = new Element('img')
-						.set('src', 'system/modules/Avisota/html/error.png')
+						.set('src', 'system/modules/Avisota2/html/error.png')
 						.set('alt', xhr.responseText)
 						.set('title', xhr.responseText)
 						.replaces(update);
