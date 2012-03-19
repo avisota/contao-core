@@ -145,24 +145,17 @@ $GLOBALS['BE_MOD'] = array_merge(
 	(
 		'avisota' => array
 		(
-			'avisota_mailing_list'     => array
-			(
-				'tables'     => array('tl_avisota_mailing_list'),
-				'icon'       => 'system/modules/Avisota/html/mailing_list.png',
-				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
-			),
-			'avisota_recipients'       => array
-			(
-				'tables'     => array('tl_avisota_recipient', 'tl_avisota_recipient_migrate', 'tl_avisota_recipient_import', 'tl_avisota_recipient_export', 'tl_avisota_recipient_remove', 'tl_avisota_recipient_notify'),
-				'icon'       => 'system/modules/Avisota/html/recipients.png',
-				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css',
-				'javascript' => 'system/modules/Avisota/html/backend.js'
-			),
 			'avisota_newsletter'       => array
 			(
 				'tables'     => array('tl_avisota_newsletter_category', 'tl_avisota_newsletter', 'tl_avisota_newsletter_content', 'tl_avisota_newsletter_create_from_draft'),
 				'send'       => array('Avisota', 'send'),
 				'icon'       => 'system/modules/Avisota/html/newsletter.png',
+				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
+			),
+			'avisota_outbox'           => array
+			(
+				'callback'   => 'AvisotaOutbox',
+				'icon'       => 'system/modules/Avisota/html/outbox.png',
 				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 			),
 			'avisota_tracking'         => array
@@ -172,10 +165,17 @@ $GLOBALS['BE_MOD'] = array_merge(
 				'icon'       => 'system/modules/Avisota/html/tracking.png',
 				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 			),
-			'avisota_outbox'           => array
+			'avisota_recipients'       => array
+				(
+				'tables'     => array('tl_avisota_recipient', 'tl_avisota_recipient_migrate', 'tl_avisota_recipient_import', 'tl_avisota_recipient_export', 'tl_avisota_recipient_remove', 'tl_avisota_recipient_notify'),
+				'icon'       => 'system/modules/Avisota/html/recipients.png',
+				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css',
+				'javascript' => 'system/modules/Avisota/html/backend.js'
+			),
+			'avisota_mailing_list'     => array
 			(
-				'callback'   => 'AvisotaOutbox',
-				'icon'       => 'system/modules/Avisota/html/outbox.png',
+				'tables'     => array('tl_avisota_mailing_list'),
+				'icon'       => 'system/modules/Avisota/html/mailing_list.png',
 				'stylesheet' => 'system/modules/Avisota/html/stylesheet.css'
 			)
 		)
