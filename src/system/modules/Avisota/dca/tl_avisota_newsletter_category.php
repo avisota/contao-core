@@ -26,9 +26,9 @@
  *
  * PHP version 5
  * @copyright  InfinitySoft 2010,2011,2012
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Avisota
- * @license    LGPL
+ * @author Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package Avisota
+ * @license LGPL
  * @filesource
  */
 
@@ -40,165 +40,189 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 (
 
 	// Config
-	'config' => array
+	'config'                => array
 	(
-		'dataContainer'               => 'Table',
-		'ctable'                      => array('tl_avisota_newsletter'),
-		'switchToEdit'                => true,
-		'enableVersioning'            => true,
-		'onload_callback' => array
+		'dataContainer'    => 'Table',
+		'ctable'           => array('tl_avisota_newsletter'),
+		'switchToEdit'     => true,
+		'enableVersioning' => true,
+		'onload_callback'  => array
 		(
 			array('tl_avisota_newsletter_category', 'checkPermission')
 		)
 	),
 
 	// List
-	'list' => array
+	'list'                  => array
 	(
-		'sorting' => array
+		'sorting'           => array
 		(
-			'mode'                    => 1,
-			'flag'                    => 1,
-			'fields'                  => array('title'),
-			'panelLayout'             => 'search,limit'
+			'mode'        => 1,
+			'flag'        => 1,
+			'fields'      => array('title'),
+			'panelLayout' => 'search,limit'
 		),
-		'label' => array
+		'label'             => array
 		(
-			'fields'                  => array('title'),
-			'format'                  => '%s'
+			'fields' => array('title'),
+			'format' => '%s'
 		),
 		'global_operations' => array
 		(
 			'all' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
-				'href'                => 'act=select',
-				'class'               => 'header_edit_all',
-				'attributes'          => 'onclick="Backend.getScrollOffset();" accesskey="e"'
+				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
+				'href'       => 'act=select',
+				'class'      => 'header_edit_all',
+				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
 			)
 		),
-		'operations' => array
+		'operations'        => array
 		(
-			'edit' => array
+			'edit'       => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['edit'],
-				'href'                => 'table=tl_avisota_newsletter',
-				'icon'                => 'edit.gif',
-				'attributes'          => 'class="contextmenu"'
+				'label'      => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['edit'],
+				'href'       => 'table=tl_avisota_newsletter',
+				'icon'       => 'edit.gif',
+				'attributes' => 'class="contextmenu"'
 			),
 			'editheader' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['editheader'],
-				'href'                => 'act=edit',
-				'icon'                => 'header.gif',
-				'button_callback'     => array('tl_avisota_newsletter_category', 'editHeader'),
-				'attributes'          => 'class="edit-header"'
+				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['editheader'],
+				'href'            => 'act=edit',
+				'icon'            => 'header.gif',
+				'button_callback' => array('tl_avisota_newsletter_category', 'editHeader'),
+				'attributes'      => 'class="edit-header"'
 			),
-			'copy' => array
+			'copy'       => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['copy'],
-				'href'                => 'act=copy',
-				'icon'                => 'copy.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"',
-				'button_callback'     => array('tl_avisota_newsletter_category', 'copyCategory')
+				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['copy'],
+				'href'            => 'act=copy',
+				'icon'            => 'copy.gif',
+				'attributes'      => 'onclick="Backend.getScrollOffset();"',
+				'button_callback' => array('tl_avisota_newsletter_category', 'copyCategory')
 			),
-			'delete' => array
+			'delete'     => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['delete'],
-				'href'                => 'act=delete',
-				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-				'button_callback'     => array('tl_avisota_newsletter_category', 'deleteCategory')
+				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['delete'],
+				'href'            => 'act=delete',
+				'icon'            => 'delete.gif',
+				'attributes'      => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
+				'button_callback' => array('tl_avisota_newsletter_category', 'deleteCategory')
 			),
-			'show' => array
+			'show'       => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['show'],
-				'href'                => 'act=show',
-				'icon'                => 'show.gif'
+				'label' => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['show'],
+				'href'  => 'act=show',
+				'icon'  => 'show.gif'
 			)
 		),
 	),
 
 	// Palettes
-	'metapalettes' => array
+	'metapalettes'          => array
 	(
-		'default'                     => array
+		'default' => array
 		(
-			'category' => array('title', 'alias'),
-			'defaults' => array('recipients', 'doNotAllowRecipientOverwrite'),
-			'expert'   => array(':hide', 'areas', 'viewOnlinePage'),
-			'template' => array(':hide', 'template_html', 'template_plain')
+			'category'   => array('title', 'alias'),
+			'recipients' => array('recipientsMode'),
+			'theme'      => array('themeMode'),
+			'expert'     => array('viewOnlinePage')
 		)
 	),
 
 	// Subpalettes
-	'metasubpalettes' => array
+	'metasubselectpalettes' => array
 	(
+		'recipientsMode' => array
+		(
+			'byCategory'             => array('recipients'),
+			'byNewsletterOrCategory' => array('recipients'),
+		),
+		'themeMode'      => array
+		(
+			'byCategory'             => array('theme'),
+			'byNewsletterOrCategory' => array('theme')
+		)
 	),
 
 	// Fields
-	'fields' => array
+	'fields'                => array
 	(
-		'title' => array
+		'title'          => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['title'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['title'],
+			'exclude'   => true,
+			'search'    => true,
+			'inputType' => 'text',
+			'eval'      => array('mandatory'=> true,
+			                     'maxlength'=> 255,
+			                     'tl_class' => 'w50')
 		),
-		'alias' => array
+		'alias'          => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['alias'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'alnum', 'unique'=>true, 'spaceToUnderscore'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
+			'label'         => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['alias'],
+			'exclude'       => true,
+			'search'        => true,
+			'inputType'     => 'text',
+			'eval'          => array('rgxp'             => 'alnum',
+			                         'unique'           => true,
+			                         'spaceToUnderscore'=> true,
+			                         'maxlength'        => 128,
+			                         'tl_class'         => 'w50'),
 			'save_callback' => array
 			(
 				array('tl_avisota_newsletter_category', 'generateAlias')
 			)
 		),
 
-		'areas' => array
+		'recipientsMode' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['areas'],
-			'exclude'                 => true,
-			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>false, 'rgxp'=>'extnd', 'nospace'=>true)
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipientsMode'],
+			'default'   => 'byCategory',
+			'inputType' => 'select',
+			'options'   => array('byCategory', 'byNewsletterOrCategory', 'byNewsletter'),
+			'reference' => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category'],
+			'eval'      => array('mandatory'     => true,
+			                     'submitOnChange'=> true,
+			                     'tl_class'      => 'w50')
+		),
+		'recipients'     => array
+		(
+			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipients'],
+			'inputType'        => 'checkbox',
+			'options_callback' => array('AvisotaBackend', 'getRecipients'),
+			'eval'             => array('mandatory'=> true,
+			                            'multiple' => true,
+			                            'tl_class' => 'clr')
+		),
+		'themeMode'      => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['themeMode'],
+			'default'   => 'byCategory',
+			'inputType' => 'select',
+			'options'   => array('byCategory', 'byNewsletterOrCategory', 'byNewsletter'),
+			'reference' => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category'],
+			'eval'      => array('mandatory'     => true,
+			                     'submitOnChange'=> true,
+			                     'tl_class'      => 'w50')
+		),
+		'theme'          => array
+		(
+			'label'      => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['theme'],
+			'inputType'  => 'select',
+			'foreignKey' => 'tl_avisota_newsletter_theme.title',
+			'eval'       => array('mandatory'=> true,
+			                      'tl_class' => 'w50')
 		),
 		'viewOnlinePage' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['viewOnlinePage'],
-			'exclude'                 => true,
-			'inputType'               => 'pageTree',
-			'eval'                    => array('fieldType'=>'radio')
-		),
-		'stylesheets' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['stylesheets'],
-			'inputType'               => 'checkbox',
-			'options_callback'        => array('tl_avisota_newsletter_category', 'getStylesheets'),
-			'eval'                    => array('tl_class'=>'clr', 'multiple'=>true)
-		),
-		'template_html' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['template_html'],
-			'default'                 => 'mail_html_default',
-			'exclude'                 => true,
-			'inputType'               => 'select',
-			'options'                 => $this->getTemplateGroup('mail_html_'),
-			'eval'                    => array('tl_class'=>'w50')
-		),
-		'template_plain' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['template_plain'],
-			'default'                 => 'mail_plain_default',
-			'exclude'                 => true,
-			'inputType'               => 'select',
-			'options'                 => $this->getTemplateGroup('mail_plain_'),
-			'eval'                    => array('tl_class'=>'w50')
-		),
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['viewOnlinePage'],
+			'exclude'   => true,
+			'inputType' => 'pageTree',
+			'eval'      => array('fieldType'=> 'radio',
+			                     'tl_class' => 'clr')
+		)
 	)
 );
 
@@ -219,14 +243,12 @@ class tl_avisota_newsletter_category extends Backend
 	 */
 	public function checkPermission()
 	{
-		if ($this->User->isAdmin)
-		{
+		if ($this->User->isAdmin) {
 			return;
 		}
 
 		// Set root IDs
-		if (!is_array($this->User->avisota_newsletter_categories) || count($this->User->avisota_newsletter_categories) < 1)
-		{
+		if (!is_array($this->User->avisota_newsletter_categories) || count($this->User->avisota_newsletter_categories) < 1) {
 			$root = array(0);
 		}
 		else
@@ -237,8 +259,7 @@ class tl_avisota_newsletter_category extends Backend
 		$GLOBALS['TL_DCA']['tl_avisota_newsletter_category']['list']['sorting']['root'] = $root;
 
 		// Check permissions to add channels
-		if (!$this->User->hasAccess('create', 'avisota_newsletter_category_permissions'))
-		{
+		if (!$this->User->hasAccess('create', 'avisota_newsletter_category_permissions')) {
 			$GLOBALS['TL_DCA']['tl_avisota_newsletter_category']['config']['closed'] = true;
 		}
 
@@ -252,28 +273,24 @@ class tl_avisota_newsletter_category extends Backend
 
 			case 'edit':
 				// Dynamically add the record to the user profile
-				if (!in_array($this->Input->get('id'), $root))
-				{
+				if (!in_array($this->Input->get('id'), $root)) {
 					$arrNew = $this->Session->get('new_records');
 
-					if (is_array($arrNew['tl_avisota_newsletter_category']) && in_array($this->Input->get('id'), $arrNew['tl_avisota_newsletter_category']))
-					{
+					if (is_array($arrNew['tl_avisota_newsletter_category']) && in_array($this->Input->get('id'), $arrNew['tl_avisota_newsletter_category'])) {
 						// Add permissions on user level
-						if ($this->User->inherit == 'custom' || !$this->User->groups[0])
-						{
+						if ($this->User->inherit == 'custom' || !$this->User->groups[0]) {
 							$objUser = $this->Database->prepare("SELECT avisota_newsletter_categories, avisota_newsletter_category_permissions FROM tl_user WHERE id=?")
-													   ->limit(1)
-													   ->execute($this->User->id);
+								->limit(1)
+								->execute($this->User->id);
 
 							$arrNewsletterCategoryPermissions = deserialize($objUser->avisota_newsletter_category_permissions);
 
-							if (is_array($arrNewsletterCategoryPermissions) && in_array('create', $arrNewsletterCategoryPermissions))
-							{
-								$arrNewsletterCategories = deserialize($objUser->avisota_newsletter_categories);
+							if (is_array($arrNewsletterCategoryPermissions) && in_array('create', $arrNewsletterCategoryPermissions)) {
+								$arrNewsletterCategories   = deserialize($objUser->avisota_newsletter_categories);
 								$arrNewsletterCategories[] = $this->Input->get('id');
 
 								$this->Database->prepare("UPDATE tl_user SET avisota_newsletter_categories=? WHERE id=?")
-											   ->execute(serialize($arrNewsletterCategories), $this->User->id);
+									->execute(serialize($arrNewsletterCategories), $this->User->id);
 							}
 						}
 
@@ -281,35 +298,33 @@ class tl_avisota_newsletter_category extends Backend
 						elseif ($this->User->groups[0] > 0)
 						{
 							$objGroup = $this->Database->prepare("SELECT avisota_newsletter_categories, avisota_newsletter_category_permissions FROM tl_user_group WHERE id=?")
-													   ->limit(1)
-													   ->execute($this->User->groups[0]);
+								->limit(1)
+								->execute($this->User->groups[0]);
 
 							$arrNewsletterCategoryPermissions = deserialize($objGroup->avisota_newsletter_category_permissions);
 
-							if (is_array($arrNewsletterCategoryPermissions) && in_array('create', $arrNewsletterCategoryPermissions))
-							{
-								$arrNewsletterCategories = deserialize($objGroup->avisota_newsletter_categories);
+							if (is_array($arrNewsletterCategoryPermissions) && in_array('create', $arrNewsletterCategoryPermissions)) {
+								$arrNewsletterCategories   = deserialize($objGroup->avisota_newsletter_categories);
 								$arrNewsletterCategories[] = $this->Input->get('id');
 
 								$this->Database->prepare("UPDATE tl_user_group SET avisota_newsletter_categories=? WHERE id=?")
-											   ->execute(serialize($arrNewsletterCategories), $this->User->groups[0]);
+									->execute(serialize($arrNewsletterCategories), $this->User->groups[0]);
 							}
 						}
 
 						// Add new element to the user object
-						$root[] = $this->Input->get('id');
+						$root[]                                    = $this->Input->get('id');
 						$this->User->avisota_newsletter_categories = $root;
 					}
 				}
-				// No break;
+			// No break;
 
 			case 'copy':
 			case 'paste':
 			case 'delete':
 			case 'show':
-				if (!in_array($this->Input->get('id'), $root) || ($this->Input->get('act') == 'delete' && !$this->User->hasAccess('delete', 'avisota_newsletter_category_permissions')))
-				{
-					$this->log('Not enough permissions to '.$this->Input->get('act').' avisota newsletter category ID "'.$this->Input->get('id').'"', 'tl_avisota_newsletter_category checkPermission', TL_ERROR);
+				if (!in_array($this->Input->get('id'), $root) || ($this->Input->get('act') == 'delete' && !$this->User->hasAccess('delete', 'avisota_newsletter_category_permissions'))) {
+					$this->log('Not enough permissions to ' . $this->Input->get('act') . ' avisota newsletter category ID "' . $this->Input->get('id') . '"', 'tl_avisota_newsletter_category checkPermission', TL_ERROR);
 					$this->redirect('contao/main.php?act=error');
 				}
 				break;
@@ -318,8 +333,7 @@ class tl_avisota_newsletter_category extends Backend
 			case 'deleteAll':
 			case 'overrideAll':
 				$session = $this->Session->getData();
-				if ($this->Input->get('act') == 'deleteAll' && !$this->User->hasAccess('delete', 'avisota_newsletter_category_permissions'))
-				{
+				if ($this->Input->get('act') == 'deleteAll' && !$this->User->hasAccess('delete', 'avisota_newsletter_category_permissions')) {
 					$session['CURRENT']['IDS'] = array();
 				}
 				else
@@ -330,9 +344,8 @@ class tl_avisota_newsletter_category extends Backend
 				break;
 
 			default:
-				if (strlen($this->Input->get('act')))
-				{
-					$this->log('Not enough permissions to '.$this->Input->get('act').' avisota newsletter categories', 'tl_avisota_newsletter_category checkPermission', TL_ERROR);
+				if (strlen($this->Input->get('act'))) {
+					$this->log('Not enough permissions to ' . $this->Input->get('act') . ' avisota newsletter categories', 'tl_avisota_newsletter_category checkPermission', TL_ERROR);
 					$this->redirect('contao/main.php?act=error');
 				}
 				break;
@@ -342,56 +355,64 @@ class tl_avisota_newsletter_category extends Backend
 
 	/**
 	 * Return the edit header button
+	 *
 	 * @param array
 	 * @param string
 	 * @param string
 	 * @param string
 	 * @param string
 	 * @param string
+	 *
 	 * @return string
 	 */
 	public function editHeader($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || count(preg_grep('/^tl_avisota_newsletter_category::/', $this->User->alexf)) > 0) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : '';
+		return ($this->User->isAdmin || count(preg_grep('/^tl_avisota_newsletter_category::/', $this->User->alexf)) > 0) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
 	}
 
 
 	/**
 	 * Return the copy channel button
+	 *
 	 * @param array
 	 * @param string
 	 * @param string
 	 * @param string
 	 * @param string
 	 * @param string
+	 *
 	 * @return string
 	 */
 	public function copyCategory($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || $this->User->hasAccess('create', 'avisota_newsletter_category_permissions')) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
+		return ($this->User->isAdmin || $this->User->hasAccess('create', 'avisota_newsletter_category_permissions')) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)) . ' ';
 	}
 
 
 	/**
 	 * Return the delete channel button
+	 *
 	 * @param array
 	 * @param string
 	 * @param string
 	 * @param string
 	 * @param string
 	 * @param string
+	 *
 	 * @return string
 	 */
 	public function deleteCategory($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || $this->User->hasAccess('delete', 'avisota_newsletter_category_permissions')) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
+		return ($this->User->isAdmin || $this->User->hasAccess('delete', 'avisota_newsletter_category_permissions')) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)) . ' ';
 	}
 
 
 	/**
 	 * Autogenerate a news alias if it has not been set yet
+	 *
 	 * @param mixed
 	 * @param object
+	 *
 	 * @return string
 	 */
 	public function generateAlias($varValue, DataContainer $dc)
@@ -399,24 +420,21 @@ class tl_avisota_newsletter_category extends Backend
 		$autoAlias = false;
 
 		// Generate alias if there is none
-		if (!strlen($varValue))
-		{
+		if (!strlen($varValue)) {
 			$autoAlias = true;
-			$varValue = standardize($dc->activeRecord->title);
+			$varValue  = standardize($dc->activeRecord->title);
 		}
 
 		$objAlias = $this->Database->prepare("SELECT id FROM tl_avisota_newsletter_category WHERE alias=?")
-								   ->execute($varValue);
+			->execute($varValue);
 
 		// Check whether the news alias exists
-		if ($objAlias->numRows > 1 && !$autoAlias)
-		{
+		if ($objAlias->numRows > 1 && !$autoAlias) {
 			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $varValue));
 		}
 
 		// Add ID to alias
-		if ($objAlias->numRows && $autoAlias)
-		{
+		if ($objAlias->numRows && $autoAlias) {
 			$varValue .= '-' . $dc->id;
 		}
 
@@ -426,8 +444,7 @@ class tl_avisota_newsletter_category extends Backend
 
 	public function getStylesheets($dc)
 	{
-		if (!in_array('layout_additional_sources', $this->Config->getActiveModules()))
-		{
+		if (!in_array('layout_additional_sources', $this->Config->getActiveModules())) {
 			return array();
 		}
 
@@ -450,11 +467,11 @@ class tl_avisota_newsletter_category extends Backend
 					OR  `type`='css_file'
 				ORDER BY
 					s.`sorting`")
-		   ->execute($intTheme);
+			->execute($intTheme);
 		while ($objAdditionalSource->next())
 		{
 			$strType = $objAdditionalSource->type;
-			$label = $objAdditionalSource->$strType;
+			$label   = $objAdditionalSource->$strType;
 
 			if ($objAdditionalSource->compress_yui) {
 				$label .= '<span style="color: #009;">.yui</span>';
@@ -476,31 +493,31 @@ class tl_avisota_newsletter_category extends Backend
 			}
 
 			switch ($objAdditionalSource->type) {
-			case 'js_file': case 'js_url':
-				$image = 'iconJS.gif';
-				break;
+				case 'js_file':
+				case 'js_url':
+					$image = 'iconJS.gif';
+					break;
 
-			case 'css_file': case 'css_url':
-				$image = 'iconCSS.gif';
-				break;
+				case 'css_file':
+				case 'css_url':
+					$image = 'iconCSS.gif';
+					break;
 
-			default:
-				$image = false;
-				if (isset($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']) && is_array($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']))
-				{
-					foreach ($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage'] as $callback)
-					{
-						$this->import($callback[0]);
-						$image = $this->$callback[0]->$callback[1]($row);
-						if ($image !== false) {
-							break;
+				default:
+					$image = false;
+					if (isset($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']) && is_array($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage'])) {
+						foreach ($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage'] as $callback)
+						{
+							$this->import($callback[0]);
+							$image = $this->$callback[0]->$callback[1]($row);
+							if ($image !== false) {
+								break;
+							}
 						}
 					}
-				}
 			}
 
-			if (!isset($arrAdditionalSource[$objAdditionalSource->name]))
-			{
+			if (!isset($arrAdditionalSource[$objAdditionalSource->name])) {
 				$arrAdditionalSource[$objAdditionalSource->name] = array();
 			}
 			$arrAdditionalSource[$objAdditionalSource->name][$objAdditionalSource->id] = ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . $label;

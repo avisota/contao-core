@@ -44,32 +44,28 @@
 interface AvisotaRecipientSource
 {
 	/**
-	 * List all recipient lists.
-	 * 
+	 * Get all selectable recipient options for this source.
+	 * Every option can be an individuell ID.
+	 *
+	 * @abstract
 	 * @return array
-	 * Assoziative array ID=>Name of the recipient lists.
 	 */
-	public function getLists();
-	
-	
+	public function getRecipientOptions();
+
 	/**
-	 * List all recipients.
-	 * 
-	 * @param mixed $varList
-	 * ID of the recipient list.
-	 * 
+	 * Get recipient IDs of a list of options.
+	 *
+	 * @abstract
+	 * @param array $varOption
 	 * @return array
-	 * List of all recipient emails.
 	 */
-	public function getRecipients($varList = null);
-	
+	public function getRecipients($arrOptions);
 	
 	/**
 	 * Get the recipient details.
 	 * 
-	 * @param string $strEmail
+	 * @param string $varId
 	 * @return array
-	 * Associative array of recipient details.
 	 */
-	public function getRecipientDetails($strEmail, $varList = null);
+	public function getRecipientDetails($varId);
 }

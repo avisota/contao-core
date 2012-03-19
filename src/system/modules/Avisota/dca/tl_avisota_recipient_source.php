@@ -40,7 +40,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 (
 
 	// Config
-	'config'          => array
+	'config'                => array
 	(
 		'dataContainer'               => 'Table',
 		'enableVersioning'            => true,
@@ -49,7 +49,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 	),
 
 	// List
-	'list'            => array
+	'list'                  => array
 	(
 		'sorting'           => array
 		(
@@ -110,43 +110,25 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 	),
 
 	// Palettes
-	'palettes'        => array(
-		'__selector__' => array('type', 'memberBy')
+	'palettes'              => array(
+		'__selector__' => array('type')
 	),
 
 	// Meta Palettes
-	'metapalettes'    => array
+	'metapalettes'          => array
 	(
 		'default'                      => array(
 			'source' => array('type')
 		),
 		'integrated'                   => array(
 			'source'     => array('title', 'type'),
-			'integrated' => array('integratedMailingLists', 'integratedAllowSingleSelection', 'integratedDetails'),
+			'integrated' => array('integratedBy', 'integratedDetails'),
 			'filter'     => array(':hide', 'filter'),
 			'expert'     => array('disable')
 		),
 		'member'                       => array(
 			'source'     => array('title', 'type'),
 			'member'     => array('memberBy'),
-			'filter'     => array(':hide', 'filter'),
-			'expert'     => array('disable')
-		),
-		'memberByMailingLists'         => array(
-			'source'     => array('title', 'type'),
-			'member'     => array('memberBy', 'memberAllowSingleMailingListSelection', 'memberMailingLists'),
-			'filter'     => array(':hide', 'filter'),
-			'expert'     => array('disable')
-		),
-		'memberByGroups'               => array(
-			'source'     => array('title', 'type'),
-			'member'     => array('memberBy', 'memberAllowSingleGroupSelection', 'memberGroups'),
-			'filter'     => array(':hide', 'filter'),
-			'expert'     => array('disable')
-		),
-		'memberByAll'                  => array(
-			'source'     => array('title', 'type'),
-			'member'     => array('memberBy', 'memberAllowSingleSelection'),
 			'filter'     => array(':hide', 'filter'),
 			'expert'     => array('disable')
 		),
@@ -157,15 +139,31 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 		)
 	),
 
-	'submetapalettes' => array
+	'metasubselectpalettes' => array
 	(
-
+		'integratedBy' => array
+		(
+			'integratedByMailingLists'    => array('integratedAllowSingleListSelection', 'integratedMailingLists'),
+			'integratedByAllMailingLists' => array('integratedAllowSingleListSelection'),
+			'integratedByRecipients'      => array('integratedAllowSingleSelection', 'integratedMailingLists'),
+			'integratedByAllRecipients'   => array('integratedAllowSingleSelection')
+		),
+		'memberBy'     => array
+		(
+			'memberByMailingLists'            => array('memberAllowSingleMailingListSelection', 'memberMailingLists'),
+			'memberByAllMailingLists'         => array('memberAllowSingleMailingListSelection'),
+			'memberByGroups'                  => array('memberAllowSingleGroupSelection', 'memberGroups'),
+			'memberByAllGroups'               => array('memberAllowSingleGroupSelection'),
+			'memberByMailingListMembers'      => array('memberAllowSingleSelection', 'memberMailingLists'),
+			'memberByGroupMembers'            => array('memberAllowSingleSelection', 'memberGroups'),
+			'memberByAllMembers'              => array('memberAllowSingleSelection')
+		)
 	),
 
 	// Fields
-	'fields'          => array
+	'fields'                => array
 	(
-		'type'                                                            => array
+		'type'                                                                          => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['type'],
 			'inputType'               => 'select',
@@ -176,31 +174,49 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 			                                   'includeBlankOption'=> true,
 			                                   'tl_class'          => 'w50')
 		),
-		'title'                                                           => array
+		'title'                                                                         => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['title'],
 			'inputType'               => 'text',
 			'eval'                    => array('mandatory'=> true,
+			                                   'unique'   => true,
 			                                   'maxlength'=> 255,
 			                                   'tl_class' => 'w50')
 		),
 
 		// integrated source
-		'integratedMailingLists'                                          => array
+		'integratedBy'                                                                  => array(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedBy'],
+			'inputType'               => 'select',
+			'options'                 => array('integratedByMailingLists', 'integratedByAllMailingLists', 'integratedByRecipients', 'integratedByAllRecipients'),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source'],
+			'eval'                    => array('mandatory'          => true,
+			                                   'includeBlankOption' => true,
+			                                   'submitOnChange'     => true,
+			                                   'tl_class'           => 'w50')
+		),
+		'integratedMailingLists'                                                        => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedMailingLists'],
 			'inputType'               => 'checkbox',
 			'foreignKey'              => 'tl_avisota_mailing_list.title',
 			'eval'                    => array('mandatory'=> true,
-			                                   'multiple' => true)
+			                                   'multiple' => true,
+			                                   'tl_class' => 'clr')
 		),
-		'integratedAllowSingleSelection'                                  => array
+		'integratedAllowSingleListSelection'                                            => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedAllowSingleListSelection'],
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class' => 'm12 w50')
+		),
+		'integratedAllowSingleSelection'                                                => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedAllowSingleSelection'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class' => 'm12 w50')
 		),
-		'integratedDetails'                                               => array
+		'integratedDetails'                                                             => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedDetails'],
 			'default'                 => 'integrated_details',
@@ -210,7 +226,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 			'eval'                    => array('mandatory'=> true,
 			                                   'tl_class' => 'w50')
 		),
-		'integratedFilterByColumns'                                       => array
+		'integratedFilterByColumns'                                                     => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedFilterByColumns'],
 			'inputType'               => 'multiColumnWizard',
@@ -255,23 +271,23 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 		),
 
 		// members
-		'memberBy'                                                        => array(
+		'memberBy'                                                                      => array(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberBy'],
 			'inputType'               => 'select',
-			'options'                 => array('memberByMailingLists', 'memberByGroups', 'memberByAll'),
+			'options'                 => array('memberByMailingLists', 'memberByAllMailingLists', 'memberByGroups', 'memberByAllGroups', 'memberByMailingListMembers', 'memberByGroupMembers', 'memberByAllMembers'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source'],
 			'eval'                    => array('mandatory'          => true,
 			                                   'includeBlankOption' => true,
 			                                   'submitOnChange'     => true,
 			                                   'tl_class'           => 'w50')
 		),
-		'memberAllowSingleMailingListSelection'                           => array
+		'memberAllowSingleMailingListSelection'                                         => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberAllowSingleMailingListSelection'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class' => 'm12 w50')
 		),
-		'memberMailingLists'                                              => array
+		'memberMailingLists'                                                            => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberMailingLists'],
 			'inputType'               => 'checkbox',
@@ -280,13 +296,13 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 			                                   'multiple' => true,
 			                                   'tl_class' => 'clr')
 		),
-		'memberAllowSingleGroupSelection'                                 => array
+		'memberAllowSingleGroupSelection'                                               => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberAllowSingleGroupSelection'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class' => 'm12 w50')
 		),
-		'memberGroups'                                                    => array
+		'memberGroups'                                                                  => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberGroups'],
 			'inputType'               => 'checkbox',
@@ -295,13 +311,13 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 			                                   'multiple' => true,
 			                                   'tl_class' => 'clr')
 		),
-		'memberAllowSingleSelection'                                      => array
+		'memberAllowSingleSelection'                                                    => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberAllowSingleSelection'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class' => 'm12 w50')
 		),
-		'memberFilterByColumns'                                           => array
+		'memberFilterByColumns'                                                         => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberFilterByColumns'],
 			'inputType'               => 'multiColumnWizard',
@@ -346,7 +362,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 		),
 
 		// csv source
-		'csvFileSrc'                                                      => array
+		'csvFileSrc'                                                                    => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['csvFileSrc'],
 			'inputType'               => 'fileTree',
@@ -356,7 +372,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 			                                   'extensions'=> 'csv',
 			                                   'fieldType' => 'radio')
 		),
-		'csvColumnAssignment'                                             => array
+		'csvColumnAssignment'                                                           => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['csvColumnAssignment'],
 			'inputType'               => 'multiColumnWizard',
@@ -379,7 +395,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 		),
 
 		// filter settings
-		'filter'                                                          => array
+		'filter'                                                                        => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['filter'],
 			'inputType'               => 'checkbox',
@@ -388,7 +404,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 		),
 
 		// expert settings
-		'disable'                                                         => array
+		'disable'                                                                       => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['disable'],
 			'inputType'               => 'checkbox',
@@ -434,9 +450,13 @@ class tl_avisota_recipient_source extends Backend
 
 	public function onsubmit_callback(DataContainer $dc)
 	{
-		$objSource = $this->Database->execute("SELECT MAX(sorting) as sorting FROM tl_avisota_recipient_source");
-		$this->Database->prepare("UPDATE tl_avisota_recipient_source SET sorting=? WHERE id=?")
-			->execute($objSource->next() && $objSource->sorting ? $objSource->sorting * 2 : 128, $dc->id);
+		if ($dc->activeRecord->sorting == 0) {
+			$objSource = $this->Database
+				->execute("SELECT MAX(sorting) as sorting FROM tl_avisota_recipient_source");
+			$this->Database
+				->prepare("UPDATE tl_avisota_recipient_source SET sorting=? WHERE id=?")
+				->execute($objSource->sorting > 0 ? $objSource->sorting * 2 : 128, $dc->id);
+		}
 	}
 
 

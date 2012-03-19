@@ -43,84 +43,181 @@
  */
 class MemberGroupRecipientSource extends Controller implements AvisotaRecipientSource
 {
-	private $arrConfig;
+	/**
+	 * @var array
+	 */
+	private $config;
 	
 	public function __construct($arrConfig)
 	{
 		$this->import('Database');
-		$this->arrConfig = $arrConfig;
+		$this->config = $arrConfig;
 	}
-	
-	
+
 	/**
-	 * List all recipient lists.
-	 * 
+	 * Get all selectable recipient options for this source.
+	 * Every option can be an individuell ID.
+	 *
 	 * @return array
-	 * Assoziative array ID=>Name of the recipient lists or <strong>null</strong> if this source does not have lists.
 	 */
-	public function getLists()
+	public function getRecipientOptions()
 	{
-		$arrLists = array();
-		$objMemberGroup = $this->Database->execute("
-				SELECT
-					*
-				FROM
-					tl_member_group
-				ORDER BY
-					name");
-		while ($objMemberGroup->next())
-		{
-			$arrLists[$objMemberGroup->id] = $objMemberGroup->name;
+		switch ($this->config['memberBy']) {
+			// members by mailing lists
+			case 'memberByMailingLists':
+				$arrIDs = array_filter(array_map('intval', deserialize($this->config['memberMailingLists'], true)));
+				if (!count($arrIDs)) {
+					$arrIDs[] = 0;
+				}
+				// fetch all selected mailing lists
+				$objMailingList = $this->Database
+					->execute('SELECT * FROM tl_avisota_mailing_list WHERE id IN (' . implode(',', $arrIDs) . ') ORDER BY title');
+				// continue with same logic as for all mailing lists
+			case 'memberByAllMailingLists':
+				// fetch mailing lists, if there are no result
+				if (!isset($objMailingList)) {
+					$objMailingList = $this->Database
+						->execute('SELECT * FROM tl_avisota_mailing_list ORDER BY title');
+				}
+
+				// if single selection is allowed, build an option for every mailing list
+				if ($this->config['memberAllowSingleMailingListSelection']) {
+					$arrOptions = array();
+					while ($objMailingList->next()) {
+						$arrOptions[$objMailingList->id] = $objMailingList->title;
+					}
+					return $arrOptions;
+				}
+
+				// build a wildcard option for non-single select
+				else {
+					return array(
+						'*' => implode(', ', $objMailingList->fetchEach('title'))
+					);
+				}
+				break;
+
+			// members by groups
+			case 'memberByGroups':
+				$arrIDs = array_filter(array_map('intval', deserialize($this->config['memberGroups'], true)));
+				if (!count($arrIDs)) {
+					$arrIDs[] = 0;
+				}
+				// fetch all selected mailing lists
+				$objGroup = $this->Database
+					->execute('SELECT * FROM tl_member_group WHERE id IN (' . implode(',', $arrIDs) . ') ORDER BY name');
+				// continue with same logic as for all mailing lists
+			case 'memberByAllGroups':
+				// fetch mailing lists, if there are no result
+				if (!isset($objGroup)) {
+					$objGroup = $this->Database
+						->execute('SELECT * FROM tl_member_group ORDER BY name');
+				}
+
+				// if single selection is allowed, build an option for every mailing list
+				if ($this->config['memberAllowSingleGroupSelection']) {
+					$arrOptions = array();
+					while ($objGroup->next()) {
+						$arrOptions[$objGroup->id] = $objGroup->name;
+					}
+					return $arrOptions;
+				}
+
+				// build a wildcard option for non-single select
+				else {
+					return array(
+						'*' => implode(', ', $objGroup->fetchEach('name'))
+					);
+				}
+				break;
+
+			// members as single
+			case 'memberByMailingListMembers':
+				$arrIDs = array_filter(array_map('intval', deserialize($this->config['memberMailingLists'], true)));
+				if (!count($arrIDs)) {
+					$arrIDs[] = 0;
+				}
+				$objMember = $this->Database
+					->execute('SELECT m.* FROM tl_member m
+							   INNER JOIN tl_member_to_mailing_list t ON t.member=m.id
+							   WHERE t.list IN (' . implode(',', $arrIDs) . ')
+							   ORDER BY IF(firstname, firstname, IF(lastname, lastname, email)), lastname');
+
+			case 'memberByGroupMembers':
+				if (!isset($objMember)) {
+					$arrIDs = array_filter(array_map('intval', deserialize($this->config['memberGroups'], true)));
+					if (!count($arrIDs)) {
+						$arrIDs[] = 0;
+					}
+					$objMember = $this->Database
+						->execute('SELECT m.* FROM tl_member m
+								   INNER JOIN tl_member_to_group t ON t.member_id=m.id
+								   WHERE t.group_id IN (' . implode(',', $arrIDs) . ')
+								   ORDER BY IF(firstname, firstname, IF(lastname, lastname, email)), lastname');
+				}
+
+			case 'memberByAllMembers':
+				if (!isset($objMember)) {
+					$objMember = $this->Database
+						->execute("SELECT * FROM tl_member ORDER BY IF(firstname, firstname, IF(lastname, lastname, email)), lastname");
+				}
+
+				$time = time();
+				$arrOptions = array();
+				while ($objMember->next()) {
+					$strName = trim($objMember->firstname . ' ' . $objMember->lastname);
+					if (!$strName && $objMember->login) {
+						$strName = $objMember->login;
+					}
+					$strEmail = $objMember->email ? $objMember->email : '?';
+					if ($strName) {
+						$strMember = sprintf('%s &lt;%s&gt;', $strName, $strEmail);
+					} else {
+						$strMember = $strEmail;
+					}
+					if ($objMember->disable ||
+						$objMember->start != '' && $objMember->start > $time ||
+						$objMember->stop != '' && $objMember->stop < $time) {
+						$strMember = '<span style="color:#A6A6A6">' . $strMember . '</span>';
+					}
+					$arrOptions[$objMember->id] = $strMember;
+				}
+
+				if ($this->config['memberAllowSingleSelection']) {
+					return $arrOptions;
+				} else {
+					return array(
+						'*' => implode(', ', $arrOptions)
+					);
+				}
+				break;
+
+			default:
+				$this->log('The member recipient source ID ' . $this->config['id'] . ' is not fully configured!', 'IntegratedAvisotaRecipientSource::getRecipientOptions()', TL_ERROR);
+				return array();
 		}
-		return $arrLists;
 	}
-	
-	
+
 	/**
-	 * List all recipients.
-	 * 
-	 * @param mixed $varList
-	 * ID of the recipient list.
-	 * 
+	 * Get recipient IDs of a list of options.
+	 *
+	 * @abstract
+	 * @param array $varOption
 	 * @return array
-	 * List of all recipient emails.
 	 */
-	public function getRecipients($varList = null)
+	public function getRecipients($arrOptions)
 	{
-		$objRecipient = $this->Database->prepare("
-				SELECT
-					email
-				FROM
-					tl_member
-				WHERE
-					pid=?")
-			->execute($varList);
-		return $objRecipient->fetchEach('email');
+
 	}
-	
-	
+
 	/**
 	 * Get the recipient details.
-	 * 
-	 * @param string $strEmail
+	 *
+	 * @param string $varId
 	 * @return array
-	 * Associative array of recipient details.
 	 */
-	public function getRecipientDetails($strEmail, $varList = null)
+	public function getRecipientDetails($varId)
 	{
-		$objRecipient = $this->Database->prepare("
-				SELECT
-					*
-				FROM
-					tl_member
-				WHERE
-					email=?")
-			->execute($strEmail);
-		if ($objRecipient->next())
-		{
-			return $objRecipient->fetchAssoc();
-		}
-		
-		return array('email'=>$strEmail);
+
 	}
 }

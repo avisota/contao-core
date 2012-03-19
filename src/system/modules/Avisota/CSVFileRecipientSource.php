@@ -49,50 +49,38 @@ class CSVFileRecipientSource extends Controller implements AvisotaRecipientSourc
 	{
 		$this->arrConfig = $arrConfig;
 	}
-	
-	
+
 	/**
-	 * List all recipient lists.
-	 * 
+	 * Get all selectable recipient options for this source.
+	 * Every option can be an individuell ID.
+	 *
 	 * @return array
-	 * Assoziative array ID=>Name of the recipient lists or <strong>null</strong> if this source does not have lists.
 	 */
-	public function getLists()
+	public function getRecipientOptions()
 	{
-		return array($this->arrConfig['csv_file_src']=>$this->arrConfig['csv_file_src']);
+		// TODO: Implement getRecipientOptions() method.
 	}
-	
-	
+
 	/**
-	 * List all recipients.
-	 * 
-	 * @param mixed $varList
-	 * ID of the recipient list.
-	 * 
+	 * Get recipient IDs of a list of options.
+	 *
+	 * @abstract
+	 * @param array $varOption
 	 * @return array
-	 * List of all recipient emails.
 	 */
-	public function getRecipients($varList = null)
+	public function getRecipients($arrOptions)
 	{
-		$strFile = $this->arrConfig['csv_file_src'];
-		if (file_exists(TL_ROOT . '/' . $strFile))
-		{
-			$objFile = new File($strFile);
-			
-		}
-		return array();
+
 	}
-	
-	
+
 	/**
 	 * Get the recipient details.
-	 * 
-	 * @param string $strEmail
+	 *
+	 * @param string $varId
 	 * @return array
-	 * Associative array of recipient details.
 	 */
-	public function getRecipientDetails($strEmail, $varList = null)
+	public function getRecipientDetails($varId)
 	{
-		
+
 	}
 }

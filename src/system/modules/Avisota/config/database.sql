@@ -92,7 +92,9 @@ CREATE TABLE `tl_avisota_recipient_source` (
   `type` varchar(255) NOT NULL default '',
   `title` varchar(255) NOT NULL default '',
 -- integraded recipients
+  `integratedBy` char(32) NOT NULL default '',
   `integratedMailingLists` blob NULL,
+  `integratedAllowSingleListSelection` char(1) NOT NULL default '',
   `integratedAllowSingleSelection` char(1) NOT NULL default '',
   `integratedDetails` varchar(255) NOT NULL default '',
   `integratedFilterByColumns` blob NULL,
@@ -143,6 +145,9 @@ CREATE TABLE `tl_avisota_newsletter_category` (
   `title` varchar(255) NOT NULL default '',
   `alias` varbinary(128) NOT NULL default '',
   `viewOnlinePage` int(10) unsigned NOT NULL default '0',
+  `recipientsMode` char(22) NOT NULL default '',
+  `recipients` blob NULL,
+  `themeMode` char(22) NOT NULL default '',
   `theme` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `alias` (`alias`)

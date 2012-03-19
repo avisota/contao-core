@@ -41,8 +41,11 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['title']   = array('Titel', '
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['filter']  = array('Filter aktivieren', 'Erlaubt die Abonnentenliste zu filtern. Die Filtermöglichkeiten hängen von der verwendeten Abonnentenquelle ab.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['disable'] = array('Deaktiviert', 'Hier können Sie die Abonnentenquelle deaktivieren, sie kann als Empfänger ausgewählt werden, jedoch wird sie beim Versand ignoriert.');
 // integrated recipients
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedBy']                        = array('Abonnenten auswählen&hellip;', 'Wählen Sie hier aus, wie die Abonnenten ausgewählt werden sollen.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedMailingLists']              = array('Verteilerlisten', 'Hier können Sie die Verteilerlisten auswählen.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedAllowSingleSelection']      = array('Einzelauswahl erlauben', 'Erlaubt dem Redakteur, die ausgewählten Verteiler einzeln als Empfänger auszuwählen, sonst wird die Abonnentenquelle nur als ganzes angezeigt und ist nur als ganzes auswählbar.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedMailingListsRecipients']    = array('Verteilerlisten', 'Wählen Sie einige Verteilerlisten, wenn Sie nur Abonnenten aus diesen Listen zur Auswahl geben möchten.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedAllowSingleListSelection']  = array('Einzelauswahl erlauben', 'Erlaubt dem Redakteur die Verteiler einzeln auszuwählen, sonst wird die Abonnentenquelle nur als ganzes angezeigt und ist nur als ganzes auswählbar.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedAllowSingleSelection']      = array('Einzelauswahl erlauben', 'Erlaubt dem Redakteur die Abonnenten einzeln auszuwählen, sonst wird die Abonnentenquelle nur als ganzes angezeigt und ist nur als ganzes auswählbar.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedDetails']                   = array('Details beziehen von', 'Hier können Sie auswählen, ob die Abonnentendetails aus der integrierten Abonnententabelle oder der Mitgliedertabelle gelesen werden sollen.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedFilterByColumns']           = array('Spalten-Filter', 'Filtern der Abonnentenliste nach Spalteninhalten.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedFilterByColumnsField']      = array('Spalte');
@@ -50,12 +53,12 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedFilterByColumnsCom
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedFilterByColumnsValue']      = array('Wert');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedFilterByColumnsNoEscape']   = array('SQL', 'Wert als nativen SQL Code betrachten (&rarr; nicht escapen).');
 // members
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberBy']                              = array('Mitglieder auswählen nach&hellip;', 'Wählen Sie hier aus, wie die Mitglieder ausgewählt werden sollen.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberBy']                              = array('Mitglieder auswählen&hellip;', 'Wählen Sie hier aus, wie die Mitglieder ausgewählt werden sollen.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberMailingLists']                    = array('Verteilerlisten', 'Hier können Sie die Verteilerlisten auswählen.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberAllowSingleMailingListSelection'] = array('Einzelauswahl erlauben', 'Erlaubt dem Redakteur, die ausgewählten Verteiler einzeln als Empfänger auszuwählen, sonst wird die Abonnentenquelle nur als ganzes angezeigt und ist nur als ganzes auswählbar.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberGroups']                          = array('Mitgliedergruppen', 'Hier können Sie die Mitgliedergruppen auswählen.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberAllowSingleGroupSelection']       = array('Einzelauswahl erlauben', 'Erlaubt dem Redakteur, die ausgewählten Mitgliedergruppen einzeln als Empfänger auszuwählen, sonst wird die Abonnentenquelle nur als ganzes angezeigt und ist nur als ganzes auswählbar.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberAllowSingleSelection']            = array('Einzelauswahl erlauben', 'Erlaubt dem Redakteur, die Mitglieder einzeln als Empfänger auszuwählen, sonst wird die Abonnentenquelle nur als ganzes angezeigt und ist nur als ganzes auswählbar.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberAllowSingleGroupSelection']       = array('Einzelauswahl erlauben', 'Erlaubt dem Redakteur die ausgewählten Mitgliedergruppen einzeln als Empfänger auszuwählen, sonst wird die Abonnentenquelle nur als ganzes angezeigt und ist nur als ganzes auswählbar.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberAllowSingleSelection']            = array('Einzelauswahl erlauben', 'Erlaubt dem Redakteur die Mitglieder einzeln als Empfänger auszuwählen, sonst wird die Abonnentenquelle nur als ganzes angezeigt und ist nur als ganzes auswählbar.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberFilterByColumns']                 = array('Spalten-Filter', 'Filtern der Mitgliederliste nach Spalteninhalten.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberFilterByColumnsField']            = array('Spalte');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberFilterByColumnsComparator']       = array('Vergleich');
@@ -82,17 +85,23 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient_source']['csvFile_legend']    = 'CSV D
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integrated']                = 'Integrierte Abonnenten';
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['member']                    = 'Mitglieder';
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['csv_file']                  = 'Abonnenten aus CSV Datei';
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integrated_details']        = 'Integrierte Abonnenten';
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['member_details']            = 'Mitglieder';
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integrated_member_details'] = 'Integrierte Abonnenten und Mitglieder';
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberByMailingLists']      = 'nach Mailingliste';
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberByGroups']            = 'nach Mitgliedergruppen';
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberByAll']               = 'alle Mitglieder';
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['duplicated_column']         = 'Spalten und Felder dürfen nicht doppelt verwendet werden!';
-$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['missing_email_column']      = 'Sie müssen eine Spalte dem Feld E-Mail zuweisen!';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integrated']                  = 'Integrierte Abonnenten';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['member']                      = 'Mitglieder';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['csv_file']                    = 'Abonnenten aus CSV Datei';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integrated_details']          = 'Integrierte Abonnenten';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['member_details']              = 'Mitglieder';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integrated_member_details']   = 'Integrierte Abonnenten und Mitglieder';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedByMailingLists']    = 'nach ausgewählten Mailingliste';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedByAllMailingLists'] = 'nach allen Mailingliste';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedByRecipients']      = 'nach Abonnenten aus ausgewählten Mailinglisten';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedByAllRecipients']   = 'nach allen Abonnenten';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberByMailingLists']        = 'nach ausgewählten Mailingliste';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberByAllMailingLists']     = 'nach Mailingliste';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberByGroups']              = 'nach ausgewählten Mitgliedergruppen';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberByAllGroups']           = 'nach allen Mitgliedergruppen';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberByAllMembers']          = 'nach allen Mitgliedern';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['duplicated_column']           = 'Spalten und Felder dürfen nicht doppelt verwendet werden!';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['missing_email_column']        = 'Sie müssen eine Spalte dem Feld E-Mail zuweisen!';
 
 
 /**

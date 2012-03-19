@@ -68,34 +68,24 @@ class AvisotaBackend extends Controller
 	{
 		$arrRecipients = array();
 
-		foreach ($GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE'] as $strSource=>$strClass)
-		{
-			$this->import($strClass);
-
-		}
-
-		$objList = $this->Database->execute("
-				SELECT
-					*
-				FROM
-					`tl_avisota_recipient_list`
-				ORDER BY
-					`title`");
-		while ($objList->next())
-		{
-			$arrRecipients[$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']]['list-' . $objList->id] = $objList->title;
-		}
-
-		$objMember = $this->Database->execute("
-				SELECT
-					*
-				FROM
-					`tl_member_group`
-				ORDER BY
-					`name`");
-		while ($objMember->next())
-		{
-			$arrRecipients[$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']]['mgroup-' . $objMember->id] = $objMember->name;
+		$objSource = $this->Database
+			->execute("SELECT * FROM tl_avisota_recipient_source WHERE disable='' ORDER BY sorting");
+		while ($objSource->next()) {
+			if (isset($GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE'][$objSource->type])) {
+				$strClass = $GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE'][$objSource->type];
+				$objInstance = new $strClass($objSource->row());
+				$arrOptions = $objInstance->getRecipientOptions();
+				if (count($arrOptions)) {
+					$arrSourceOptions = array();
+					foreach ($arrOptions as $k=>$v) {
+						$arrSourceOptions[$objSource->id . ':' . $k] = $v;
+					}
+					$arrRecipients[$objSource->title] = $arrSourceOptions;
+				}
+			} else {
+				$this->log('Recipient source "' . $objSource->type . '" type not found!', 'AvisotaBackend::getRecipients()', TL_ERROR);
+				$this->redirect('contao/main.php?act=error');
+			}
 		}
 
 		return $arrRecipients;
