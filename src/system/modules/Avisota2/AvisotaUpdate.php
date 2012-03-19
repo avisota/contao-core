@@ -47,12 +47,26 @@ class AvisotaUpdate extends BackendModule
 	 */
 	public static $updates = array
 	(
-		'0.4.5' => array('required'=>true)
+		'0.4.5' => array('required'=>true),
 		'1.5.0' => array('required'=>true),
 		'1.5.1' => array('required'=>true),
 		'2.0.0-u1' => array('required'=>true),
+		'2.0.0-u2' => array(),
+		'2.0.0-u3' => array()
 	);
 
+	/**
+	 * @var AvisotaUpdate
+	 */
+	protected static $objInstance = null;
+
+	public static function getInstance()
+	{
+		if (self::$objInstance === null) {
+			self::$objInstance = new AvisotaUpdate();
+		}
+		return self::$objInstance;
+	}
 
 	/**
 	 * @var Database
@@ -66,6 +80,16 @@ class AvisotaUpdate extends BackendModule
 	 */
 	protected $strTemplate = 'be_avisota_update';
 
+	public function hasUpdates()
+	{
+		foreach (self::$updates as $strVersion=>$arrUpdate) {
+			$strMethod = 'check' . preg_replace('#[^\w]#', '_', $strVersion);
+			if ($this->$strMethod()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Generate the backend module.
@@ -80,20 +104,11 @@ class AvisotaUpdate extends BackendModule
 		{
 			$strVersion = $this->Input->get('update');
 
-			if (in_array($strVersion, self::$updates))
+			if (isset(self::$updates[$strVersion]))
 			{
 				$strMethod = 'upgrade' . preg_replace('#[^\w]#', '_', $strVersion);
 				if ($this->$strMethod())
 				{
-					$this->Config->update("\$GLOBALS['TL_CONFIG']['avisota_update']['$strVersion']", true);
-
-					if (version_compare($strVersion,
-						isset($GLOBALS['TL_CONFIG']['avisota_version']) ? $GLOBALS['TL_CONFIG']['avisota_version'] : '0',
-						'>'))
-					{
-						$this->Config->update("\$GLOBALS['TL_CONFIG']['avisota_version']", $strVersion);
-					}
-
 					header('Content-Type: text/plain');
 					echo $GLOBALS['TL_LANG']['avisota_update']['updateSuccess'];
 					exit;
@@ -122,8 +137,33 @@ class AvisotaUpdate extends BackendModule
 	protected function compile()
 	{
 		$this->Template->updates = self::$updates;
+
+		$arrVersions = array();
+		$arrStatus = array();
+		foreach (self::$updates as $strVersion=>$arrUpdate) {
+			$strMethod = 'check' . preg_replace('#[^\w]#', '_', $strVersion);
+			$arrStatus[$strVersion] = $this->$strMethod();
+			$arrVersions[preg_replace('#^(\d+\.\d+\.\d+).*$#', '$1', $strVersion)] = $arrStatus[$strVersion];
+		}
+		$this->Template->status = $arrStatus;
+
+		uksort($arrVersions, 'version_compare');
+
+		$strLastVersion = '0.3.x';
+		foreach ($arrVersions as $strVersion=>$blnRequireUpdate) {
+			if ($blnRequireUpdate) {
+				$this->Template->previous = $strLastVersion;
+				break;
+			}
+			$strLastVersion = $strVersion;
+		}
 	}
 
+	protected function check0_4_5()
+	{
+		return $this->Database->tableExists('tl_avisota_newsletter_content')
+			&& !$this->Database->fieldExists('area', 'tl_avisota_newsletter_content');
+	}
 
 	/**
 	 * Database upgrade to 0.4.5
@@ -149,6 +189,20 @@ class AvisotaUpdate extends BackendModule
 		return true;
 	}
 
+	/**
+	 * Database upgrade to 1.5.0
+	 */
+	protected function check1_5_0()
+	{
+		return $this->Database->tableExists('tl_avisota_newsletter_outbox')
+			&& (!$this->Database->tableExists('tl_avisota_newsletter_outbox_recipient') ||
+				!$this->Database->fieldExists('tstamp', 'tl_avisota_newsletter_outbox') ||
+				$this->Database->fieldExists('token',  'tl_avisota_newsletter_outbox')
+				&& $this->Database->fieldExists('email',  'tl_avisota_newsletter_outbox')
+				&& $this->Database->fieldExists('send',   'tl_avisota_newsletter_outbox')
+				&& $this->Database->fieldExists('source', 'tl_avisota_newsletter_outbox')
+				&& $this->Database->fieldExists('failed', 'tl_avisota_newsletter_outbox'));
+	}
 
 	/**
 	 * Database upgrade to 1.5.0
@@ -294,6 +348,14 @@ class AvisotaUpdate extends BackendModule
 		return true;
 	}
 
+	protected function check1_5_1()
+	{
+		return $this->Database->tableExists('tl_avisota_statistic_raw_recipient_link')
+			&& !$this->Database->fieldExists('real_url', 'tl_avisota_statistic_raw_recipient_link')
+			&& $this->Database->executeUncached("SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE (real_url='' OR ISNULL(real_url)) AND url REGEXP 'email=[^…]' LIMIT 1")->numRows
+			|| $this->Database->tableExists('tl_avisota_statistic_raw_link')
+			&& $this->Database->execute("SELECT * FROM tl_avisota_statistic_raw_link WHERE url REGEXP '&#x?[0-9]+;' LIMIT 1")->numRows;
+	}
 
 	/**
 	 * Database upgrade to 1.5.1
@@ -487,16 +549,20 @@ class AvisotaUpdate extends BackendModule
 		return true;
 	}
 
-
-	/**
-	 * Database upgrade to 1.6.0
-	 */
-	protected function upgrade1_6_0()
+	protected function check2_0_0_u1()
 	{
-		// no update required
 		return true;
 	}
 
+	protected function check2_0_0_u2()
+	{
+		return true;
+	}
+
+	protected function check2_0_0_u3()
+	{
+		return true;
+	}
 
 	public function hookMysqlMultiTriggerCreate($strTriggerName, $objTrigger, $return)
 	{
