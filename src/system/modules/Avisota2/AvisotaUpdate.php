@@ -47,10 +47,10 @@ class AvisotaUpdate extends BackendModule
 	 */
 	public static $updates = array
 	(
-		'1.6.0',
-		'1.5.1',
-		'1.5.0',
-		'0.4.5'
+		'0.4.5' => array('required'=>true)
+		'1.5.0' => array('required'=>true),
+		'1.5.1' => array('required'=>true),
+		'2.0.0-u1' => array('required'=>true),
 	);
 
 
@@ -76,13 +76,13 @@ class AvisotaUpdate extends BackendModule
 	{
 		$this->loadLanguageFile('avisota_update');
 
-		if ($this->Input->get('isAjax'))
+		if ($this->Environment->isAjaxRequest)
 		{
 			$strVersion = $this->Input->get('update');
 
 			if (in_array($strVersion, self::$updates))
 			{
-				$strMethod = 'upgrade' . str_replace('.', '_', $strVersion);
+				$strMethod = 'upgrade' . preg_replace('#[^\w]#', '_', $strVersion);
 				if ($this->$strMethod())
 				{
 					$this->Config->update("\$GLOBALS['TL_CONFIG']['avisota_update']['$strVersion']", true);

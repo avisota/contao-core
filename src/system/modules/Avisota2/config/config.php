@@ -37,7 +37,8 @@
 /**
  * Constants
  */
-define('AVISOTA_VERSION', '1.6.0');
+define('AVISOTA_VERSION', '2.0.0');
+define('AVISOTA_RELEASE', 'alpha1');
 define('NL_HTML', 'html');
 define('NL_PLAIN', 'plain');
 
@@ -46,7 +47,7 @@ define('NL_PLAIN', 'plain');
  * Update check
  */
 $blnAvisotaUpdate = false;
-foreach (AvisotaUpdate::$updates as $strVersion)
+foreach (AvisotaUpdate::$updates as $strVersion=>$arrUpdate)
 {
 	$blnAvisotaUpdate = $blnAvisotaUpdate
 		|| !isset($GLOBALS['TL_CONFIG']['avisota_update'][$strVersion])
