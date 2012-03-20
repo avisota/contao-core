@@ -127,6 +127,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 			'category'   => array('title', 'alias'),
 			'recipients' => array('recipientsMode'),
 			'theme'      => array('themeMode'),
+			'transport'  => array('transportMode'),
 			'expert'     => array('viewOnlinePage')
 		)
 	),
@@ -143,6 +144,11 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 		(
 			'byCategory'             => array('theme'),
 			'byNewsletterOrCategory' => array('theme')
+		),
+		'transportMode'      => array
+		(
+			'byCategory'             => array('transport'),
+			'byNewsletterOrCategory' => array('transport')
 		)
 	),
 
@@ -212,6 +218,25 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 			'label'      => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['theme'],
 			'inputType'  => 'select',
 			'foreignKey' => 'tl_avisota_newsletter_theme.title',
+			'eval'       => array('mandatory'=> true,
+			                      'tl_class' => 'w50')
+		),
+		'transportMode'      => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transportMode'],
+			'default'   => 'byCategory',
+			'inputType' => 'select',
+			'options'   => array('byCategory', 'byNewsletterOrCategory', 'byNewsletter'),
+			'reference' => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category'],
+			'eval'      => array('mandatory'     => true,
+			                     'submitOnChange'=> true,
+			                     'tl_class'      => 'w50')
+		),
+		'transport'          => array
+		(
+			'label'      => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transport'],
+			'inputType'  => 'select',
+			'foreignKey' => 'tl_avisota_transport.title',
 			'eval'       => array('mandatory'=> true,
 			                      'tl_class' => 'w50')
 		),
