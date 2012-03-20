@@ -402,6 +402,7 @@ if (version_compare(Database::getInstance()->query('SHOW VARIABLES WHERE Variabl
  * Update script
  */
 else if (TL_MODE == 'BE') {
+	/*
 	$objEnvironment = Environment::getInstance();
 	if ($blnAvisotaUpdate
 		// The update controller itself
@@ -416,4 +417,5 @@ else if (TL_MODE == 'BE') {
 		header('Location: ' . $objEnvironment->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/contao/main.php?do=avisota_update');
 		exit;
 	}
+	*/
 }

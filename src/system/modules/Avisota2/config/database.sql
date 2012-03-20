@@ -16,7 +16,7 @@ CREATE TABLE `tl_avisota_mailing_list` (
   `tstamp` int(10) unsigned NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
   `alias` varbinary(128) NOT NULL default '',
-  `integratedRecipientManageSubscriptionPage` int(10) unsigned NOT NULL default '0',
+  `viewOnlinePage` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -60,7 +60,7 @@ CREATE TABLE `tl_avisota_recipient_to_mailing_list` (
   `reminderCount` int(1) unsigned NOT NULL default '0',
   `confirmed` char(1) NOT NULL default '',
   `token` char(8) NOT NULL default '',
-  PRIMARY KEY  (`recipient`, `list`),
+  PRIMARY KEY  (`recipient`, `list`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -149,6 +149,8 @@ CREATE TABLE `tl_avisota_newsletter_category` (
   `recipients` blob NULL,
   `themeMode` char(22) NOT NULL default '',
   `theme` int(10) unsigned NOT NULL default '0',
+  `transportMode` char(22) NOT NULL default '',
+  `transport` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `alias` (`alias`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

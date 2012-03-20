@@ -4,11 +4,19 @@
 	</a>
 </div>
 
-<?php echo $this->getMessages(); ?>
-
 <h2 class="sub_headline"><?php echo $GLOBALS['TL_LANG']['avisota_update']['headline']; ?></h2>
 
-<form id="avisota_update" action="contao/main.php?do=avisota_update" class="tl_form" method="get">
+<?php echo $this->getMessages(); ?>
+
+<?php
+$blnUpdates = false;
+$blnMandatoryUpdates = false;
+?>
+
+<form id="avisota_update" action="contao/main.php?do=avisota_update" class="tl_form" method="post">
+	<input type="hidden" name="FORM_SUBMIT" value="avisota_update">
+	<input type="hidden" name="REQUEST_TOKEN" value="<?php echo REQUEST_TOKEN; ?>">
+
 	<div class="tl_formbody_edit preview">
 
 		<div class="versions">
@@ -24,12 +32,16 @@
 
 		<div class="updates">
 			<?php foreach ($this->updates as $strVersion=>$arrUpdate): ?>
-				<h2>
+				<h2 data-version="<?php echo $strVersion; ?>" data-mandatory="<?php echo $arrUpdate['required'] ? 'yes' : 'no'; ?>" data-status="<?php echo $this->status[$strVersion] ? 'open' : 'done'; ?>">
 					<?php if (!$this->status[$strVersion]): ?>
 						<?php echo $this->generateImage('system/modules/Avisota2/html/updated.png', ''); ?>
 						<label><?php echo $GLOBALS['TL_LANG']['avisota_update']['update'][$strVersion][0]; ?></label>
 					<?php else: ?>
-						<input type="checkbox" name="update[]" value="<?php echo $strVersion; ?>" id="update_<?php echo $strVersion; ?>" checked="checked"<?php if (isset($arrUpdate['required']) && $arrUpdate['required']): ?> onchange="this.checked = true;"<?php endif; ?>>
+						<?php
+						$blnUpdates = true;
+						$blnMandatoryUpdates = $blnMandatoryUpdates || $arrUpdate['required'];
+						?>
+						<input type="checkbox" name="update[]" value="<?php echo $strVersion; ?>" id="update_<?php echo $strVersion; ?>"<?php if ($arrUpdate['required'] || !isset($_SESSION['AUTORUN_UPDATES']) || in_array($strVersion, $_SESSION['AUTORUN_UPDATES'])): ?> checked="checked"<?php endif; ?><?php if (isset($arrUpdate['required']) && $arrUpdate['required']): ?> onchange="this.checked = true;"<?php endif; ?>>
 						<label for="update_<?php echo $strVersion; ?>"><?php echo $GLOBALS['TL_LANG']['avisota_update']['update'][$strVersion][0]; ?><?php if (isset($arrUpdate['required']) && $arrUpdate['required']): ?><span class="mandatory">*</span><?php endif; ?></label>
 					<?php endif; ?>
 				</h2>
@@ -45,7 +57,8 @@
 
 	<div class="tl_formbody_submit">
 		<div class="tl_submit_container">
-			<input name="submit" class="tl_submit" accesskey="u" type="submit" value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_update']['doUpdate']); ?>">
+			<input name="doupdate" class="tl_submit" accesskey="u" type="submit" value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_update']['doUpdate']); ?>"<?php if (!$blnUpdates): ?> disabled="disabled"<?php endif; ?>>
+			<input name="dbupdate" class="tl_submit" accesskey="d" type="submit" value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_update']['doDatabaseUpdate']); ?>"<?php if ($blnMandatoryUpdates): ?> disabled="disabled"<?php endif; ?>>
 		</div>
 	</div>
 </form>

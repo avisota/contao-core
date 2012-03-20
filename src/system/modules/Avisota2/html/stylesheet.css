@@ -169,7 +169,7 @@ div.slidedownload {
 
 .versions {
 	overflow: hidden;
-	margin: 3px 50px 18px;
+	margin: 18px 50px 18px;
 }
 .versions .previous,
 .versions .installed {
@@ -208,6 +208,9 @@ fieldset.update legend img,
 fieldset.update legend input {
 	vertical-align: -4px;
 }
+.updates {
+	margin-bottom: 24px;
+}
 .updates h2 {
 	margin: 2px 0 0;
 	padding: 2px 6px 3px;
@@ -219,9 +222,10 @@ fieldset.update legend input {
 .updates h2 input {
 	vertical-align: -3px;
 }
+.updates h2 img {
+	margin: 0 2px;
+}
 .updates .description {
-	margin-bottom: 24px;
 	padding: 8px 6px;
-	border-bottom: 1px solid #E9E9E9;
 	background: white;
 }

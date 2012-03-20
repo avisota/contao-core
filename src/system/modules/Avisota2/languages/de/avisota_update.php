@@ -36,14 +36,16 @@
 /**
  * Avisota update
  */
-$GLOBALS['TL_LANG']['avisota_update']['headline'] = 'Avisota Update';
-$GLOBALS['TL_LANG']['avisota_update']['previousVersion'] = 'vorherige Version';
-$GLOBALS['TL_LANG']['avisota_update']['unknownVersion']  = 'unbekannt';
-$GLOBALS['TL_LANG']['avisota_update']['installedVersion'] = 'installierte Version';
+$GLOBALS['TL_LANG']['avisota_update']['headline']           = 'Avisota Update';
+$GLOBALS['TL_LANG']['avisota_update']['previousVersion']    = 'vorherige Version';
+$GLOBALS['TL_LANG']['avisota_update']['unknownVersion']     = 'unbekannt';
+$GLOBALS['TL_LANG']['avisota_update']['installedVersion']   = 'installierte Version';
 $GLOBALS['TL_LANG']['avisota_update']['moreVersionUpdates'] = 'Alle Informationen zum Update';
-$GLOBALS['TL_LANG']['avisota_update']['doUpdate'] = 'Aktualisierung durchführen';
-$GLOBALS['TL_LANG']['avisota_update']['updateSuccess'] = 'Aktualisierung erfolgreich';
-$GLOBALS['TL_LANG']['avisota_update']['updateFailed'] = 'Aktualisierung nicht erfolgreich, prüfen Sie das Systemlog für weitere Details';
+$GLOBALS['TL_LANG']['avisota_update']['doUpdate']           = 'Aktualisierung durchführen';
+$GLOBALS['TL_LANG']['avisota_update']['doDatabaseUpdate']   = 'Datenbank aktualisieren';
+$GLOBALS['TL_LANG']['avisota_update']['updateSuccess']      = 'Aktualisierung erfolgreich';
+$GLOBALS['TL_LANG']['avisota_update']['updateFailed']       = 'Aktualisierung nicht erfolgreich, prüfen Sie das Systemlog für weitere Details';
+$GLOBALS['TL_LANG']['avisota_update']['moreUpdates']        = 'Es sind weitere Aktualisierungen durchzuführen, klicken Sie <strong>Aktualisierung durchführen</strong> um fortzufahren.';
 
 /**
  * Update 0.4.5
