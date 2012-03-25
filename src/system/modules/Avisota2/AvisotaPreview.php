@@ -66,6 +66,15 @@ class AvisotaPreview extends Backend
 
 		// load default translations
 		$this->loadLanguageFile('default');
+
+		// HOTFIX Remove isotope frontend hook
+		if (isset($GLOBALS['TL_HOOKS']['parseTemplate']) && is_array($GLOBALS['TL_HOOKS']['parseTemplate'])) {
+			foreach ($GLOBALS['TL_HOOKS']['parseTemplate'] as $k=>$v) {
+				if ($v[0] == 'IsotopeFrontend') {
+					unset($GLOBALS['TL_HOOKS']['parseTemplate'][$k]);
+				}
+			}
+		}
 	}
 
 	public function run()
