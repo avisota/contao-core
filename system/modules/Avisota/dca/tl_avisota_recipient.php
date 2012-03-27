@@ -212,7 +212,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'sorting'                 => true,
 			'flag'                    => 1,
 			'inputType'               => 'select',
-			'options'                 => array_combine($GLOBALS['TL_CONFIG']['avisota_salutations'], $GLOBALS['TL_CONFIG']['avisota_salutations']),
+			'options_callback'        => array('tl_avisota_recipient', 'getSalutations'),
 			'eval'                    => array('maxlength'=>255, 'includeBlankOption'=>true, 'importable'=>true, 'exportable'=>true, 'feEditable'=>true, 'tl_class'=>'w50')
 		),
 		'title' => array
@@ -368,6 +368,26 @@ class tl_avisota_recipient extends Backend
 		$label .= ')</span>';
 
 		return sprintf('<div class="list_icon" style="background-image:url(\'system/themes/%s/images/%s.gif\');">%s</div>', $this->getTheme(), $icon, $label);
+	}
+
+
+	public function getSalutations()
+	{
+		$options = array_combine($GLOBALS['TL_CONFIG']['avisota_salutations'], $GLOBALS['TL_CONFIG']['avisota_salutations']);
+
+		if (TL_MODE == 'BE') {
+			return $options;
+		}
+
+		foreach ($options as $k=>$v) {
+			$options[$k] = str_replace(
+				array('{firstname}', '{lastname}', '{name}', '{fullname}', '{shortname}'),
+				array('Martin/-a', 'Musterfamilie', 'Martin/-a Musterfamilie', 'Prof. Dr. Martin/-a Musterfamilie', 'Martin/-a'),
+				$v
+			);
+		}
+
+		return $options;
 	}
 
 
