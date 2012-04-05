@@ -93,7 +93,8 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['edit'],
 				'href'                => 'table=tl_avisota_newsletter_content',
 				'icon'                => 'edit.gif',
-				'attributes'          => 'class="contextmenu"'
+				'attributes'          => 'class="contextmenu"',
+				'button_callback'     => array('tl_avisota_newsletter', 'editNewsletter')
 			),
 			'editheader' => array
 			(
@@ -307,6 +308,21 @@ class tl_avisota_newsletter extends Backend
 
 
 	/**
+	 * Return the edit button
+	 * @param array
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @return string
+	 */
+	public function editNewsletter($row, $href, $label, $title, $icon, $attributes)
+	{
+		return (!$row['sendOn'] && ($this->User->isAdmin || count(preg_grep('/^tl_avisota_newsletter::/', $this->User->alexf)) > 0)) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : '';
+	}
+
+	/**
 	 * Return the edit header button
 	 * @param array
 	 * @param string
@@ -318,7 +334,7 @@ class tl_avisota_newsletter extends Backend
 	 */
 	public function editHeader($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || count(preg_grep('/^tl_avisota_newsletter::/', $this->User->alexf)) > 0) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : '';
+		return (!$row['sendOn'] && ($this->User->isAdmin || count(preg_grep('/^tl_avisota_newsletter::/', $this->User->alexf)) > 0)) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : '';
 	}
 
 
