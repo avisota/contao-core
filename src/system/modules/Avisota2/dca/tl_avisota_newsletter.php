@@ -59,11 +59,15 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 		'sorting' => array
 		(
 			'mode'                    => 4,
-			'fields'                  => array('subject'),
+			'fields'                  => array('sendOn=\'\' DESC', 'sendOn DESC'),
 			'panelLayout'             => 'search,limit',
 			'headerFields'            => array('title', 'viewOnlinePage', 'unsubscribePage', 'tstamp', 'useSMTP', 'senderName', 'sender'),
 			'child_record_callback'   => array('tl_avisota_newsletter', 'addNewsletter'),
-			'child_record_class'      => 'no_padding'
+			'child_record_class'      => 'no_padding',
+		),
+		'label' => array
+		(
+			'group_callback'          => array('tl_avisota_newsletter', 'addGroup')
 		),
 		'global_operations' => array
 		(
@@ -200,7 +204,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['sendOn'],
 			'filter'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 8,
+			'flag'                    => 7,
 			'eval'                    => array('rgxp'=>'datim', 'doNotCopy'=>true, 'doNotShow'=>true)
 		)
 	)
@@ -390,6 +394,20 @@ class tl_avisota_newsletter extends Backend
 		return sprintf('<div class="list_icon" style="background-image:url(\'system/themes/%s/images/%s.gif\');">%s</div>', $this->getTheme(), $icon, $label);
 	}
 
+	public function addGroup($group, $mode, $field, $row, $dc)
+	{
+		if (!isset($GLOBALS['MAGIC_ADD_GROUP_INDEX'])) {
+			$GLOBALS['MAGIC_ADD_GROUP_INDEX'] = 0;
+		}
+		else {
+			$GLOBALS['MAGIC_ADD_GROUP_INDEX'] ++;
+		}
+
+		if ($row[$GLOBALS['MAGIC_ADD_GROUP_INDEX']]['sendOn'] > 0) {
+			return $this->parseDate('F Y', $row[$GLOBALS['MAGIC_ADD_GROUP_INDEX']]['sendOn']);
+		}
+		return $GLOBALS['TL_LANG']['tl_avisota_newsletter']['notSend'];
+	}
 
 	/**
 	 * Autogenerate a news alias if it has not been set yet
