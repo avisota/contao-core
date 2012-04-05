@@ -79,6 +79,7 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['online']         = 'Probleme mit d
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']           = 'Verteiler';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['member']         = 'Mitglieder';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']         = 'Mitgliedergruppe';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['notSend']        = 'noch nicht versendet';
 
 
 /**
