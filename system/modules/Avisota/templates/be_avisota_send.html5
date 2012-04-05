@@ -9,8 +9,10 @@
 <div class="tl_listing_container parent_view">
 <div class="tl_header" onmouseover="Theme.hoverDiv(this, 1);" onmouseout="Theme.hoverDiv(this, 0);">
 <div class="tl_content_right">
-<?php if ($this->User->isAdmin || count(preg_grep('/^tl_avisota_newsletter::/', $this->User->alexf)) > 0): ?><a href="<?php echo TL_PATH ?>/contao/main.php?do=avisota_newsletter&amp;table=tl_avisota_newsletter&amp;act=edit&amp;id=<?php echo $this->id ?>" accesskey="e" title="<?php echo specialchars(sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader'][1], $this->id)) ?>"><img src="<?php echo TL_PATH ?>/system/themes/<?php echo $this->User->backendTheme ? $this->User->backendTheme : 'default' ?>/images/header.gif" alt="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader'][0];?>"/></a><?php endif; ?>
+<?php if (!$this->sendOn && ($this->User->isAdmin || count(preg_grep('/^tl_avisota_newsletter::/', $this->User->alexf)) > 0)): ?>
+<a href="<?php echo TL_PATH ?>/contao/main.php?do=avisota_newsletter&amp;table=tl_avisota_newsletter&amp;act=edit&amp;id=<?php echo $this->id ?>" accesskey="e" title="<?php echo specialchars(sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader'][1], $this->id)) ?>"><img src="<?php echo TL_PATH ?>/system/themes/<?php echo $this->User->backendTheme ? $this->User->backendTheme : 'default' ?>/images/header.gif" alt="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader'][0];?>"/></a>
 <a href="<?php echo TL_PATH ?>/contao/main.php?do=avisota_newsletter&amp;table=tl_avisota_newsletter_content&amp;id=<?php echo $this->id ?>" accesskey="b" title="<?php echo specialchars(sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter']['edit'][1], $this->id)) ?>"> <img src="<?php echo TL_PATH ?>/system/themes/<?php echo $this->User->backendTheme ? $this->User->backendTheme : 'default' ?>/images/edit.gif" alt="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['edit'][0] ?>" /></a>
+<?php endif; ?>
 </div>
 <table class="tl_header_table" summary="" cellpadding="0" cellspacing="0">
   <tbody><tr class="row_0">
