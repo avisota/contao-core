@@ -88,6 +88,14 @@ class AvisotaTransport extends Backend
 				}
 			}
 		}
+		// HOTFIX Remove catalog frontend hook
+		if (isset($GLOBALS['TL_HOOKS']['parseFrontendTemplate']) && is_array($GLOBALS['TL_HOOKS']['parseFrontendTemplate'])) {
+			foreach ($GLOBALS['TL_HOOKS']['parseFrontendTemplate'] as $k=>$v) {
+				if ($v[0] == 'CatalogExt') {
+					unset($GLOBALS['TL_HOOKS']['parseFrontendTemplate'][$k]);
+				}
+			}
+		}
 	}
 
 	public function run()
