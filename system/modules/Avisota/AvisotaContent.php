@@ -216,7 +216,10 @@ class AvisotaContent extends Controller
 		}
 		$objTemplate->newsletter = $objNewsletter->row();
 		$objTemplate->category = $objCategory->row();
-		return $this->replaceAndExtendURLs($objTemplate->parse());
+
+		$strBuffer = $objTemplate->parse();
+		$strBuffer = $this->replaceInsertTags($strBuffer);
+		return $this->replaceAndExtendURLs($strBuffer);
 	}
 
 
@@ -238,7 +241,10 @@ class AvisotaContent extends Controller
 		}
 		$objTemplate->newsletter = $objNewsletter->row();
 		$objTemplate->category = $objCategory->row();
-		return $objTemplate->parse();
+
+		$strBuffer = $objTemplate->parse();
+		$strBuffer = $this->replaceInsertTags($strBuffer);
+		return $this->replaceAndExtendURLs($strBuffer);
 	}
 
 
