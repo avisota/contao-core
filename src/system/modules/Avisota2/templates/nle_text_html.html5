@@ -5,7 +5,7 @@
 			<?php if ($this->headline): ?>
 			<thead>
 				<tr class="<?php echo $this->class; ?>"<?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
-					<td valign="top">
+					<td valign="top"<?php if ($this->floating == 'left' || $this->floating == 'right'): ?> colspan="2"<?php endif; ?>>
 						<<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
 					</td>
 				</tr>
