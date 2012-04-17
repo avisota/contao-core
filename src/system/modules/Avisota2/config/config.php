@@ -60,13 +60,15 @@ if (!isset($_SERVER['REQUEST_TIME'])) {
 /**
  * Settings
  */
-$GLOBALS['TL_CONFIG']['avisota_max_send_time']      = ini_get('max_execution_time') > 0 ? floor(0.85 * ini_get('max_execution_time')) : 120;
-$GLOBALS['TL_CONFIG']['avisota_max_send_count']     = 100;
-$GLOBALS['TL_CONFIG']['avisota_max_send_timeout']   = 1;
-$GLOBALS['TL_CONFIG']['avisota_notification_time']  = 3;
-$GLOBALS['TL_CONFIG']['avisota_notification_count'] = 3;
-$GLOBALS['TL_CONFIG']['avisota_cleanup_time']       = 14;
-$GLOBALS['TL_CONFIG']['avisota_chart']              = 'jqplot';
+$GLOBALS['TL_CONFIG']['avisota_max_send_time']          = ini_get('max_execution_time') > 0 ? floor(0.85 * ini_get('max_execution_time')) : 120;
+$GLOBALS['TL_CONFIG']['avisota_max_send_count']         = 100;
+$GLOBALS['TL_CONFIG']['avisota_max_send_timeout']       = 1;
+$GLOBALS['TL_CONFIG']['avisota_notification_time']      = 3;
+$GLOBALS['TL_CONFIG']['avisota_notification_count']     = 3;
+$GLOBALS['TL_CONFIG']['avisota_cleanup_time']           = 14;
+$GLOBALS['TL_CONFIG']['avisota_chart']                  = 'jqplot';
+$GLOBALS['TL_CONFIG']['avisota_statistic']              = isset($GLOBALS['TL_CONFIG']['avisota_statistic']) ? $GLOBALS['TL_CONFIG']['avisota_statistic'] : true;
+$GLOBALS['TL_CONFIG']['avisota_statistic_personalized'] = 'with_aggrement';
 
 
 /**
