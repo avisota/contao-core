@@ -476,6 +476,9 @@ CREATE TABLE `tl_module` (
   `avisota_reader_template` varchar(64) NOT NULL default '',
   `avisota_list_template` varchar(64) NOT NULL default '',
   `avisota_view_page` int(10) NOT NULL default '0',
+  `avisota_form_target` int(10) NOT NULL default '0',
+  `avisota_template_subscribe` varchar(64) NOT NULL default '',
+  `avisota_template_unsubscribe` varchar(64) NOT NULL default '',
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

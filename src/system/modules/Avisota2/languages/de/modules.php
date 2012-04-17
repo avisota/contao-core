@@ -57,6 +57,8 @@ $GLOBALS['TL_LANG']['MOD']['avisota_transport']        = array('Transportmodule'
  * Front end modules
  */
 $GLOBALS['TL_LANG']['FMD']['avisota']              = 'Newslettersystem';
-$GLOBALS['TL_LANG']['FMD']['avisota_subscription'] = array('Abonnement verwalten', 'An- und Abmeldung zum Avisota Newslettersystem.');
-$GLOBALS['TL_LANG']['FMD']['avisota_list']         = array('Newsletter-Liste', 'List aller versendeten Newsletter.');
-$GLOBALS['TL_LANG']['FMD']['avisota_reader']       = array('Newsletter-Leser', 'Einen Newsletter innerhalb einer Seite anzeigen.');
+$GLOBALS['TL_LANG']['FMD']['avisota_subscribe']    = array('Newsletter Abonieren (Avisota)', 'Anmeldung zum Avisota Newslettersystem.');
+$GLOBALS['TL_LANG']['FMD']['avisota_unsubscribe']  = array('Newsletter Kündigen (Avisota)', 'Abmeldung vom Avisota Newslettersystem.');
+$GLOBALS['TL_LANG']['FMD']['avisota_subscription'] = array('Newsletter Abonnement verwalten (Avisota)', 'An- und Abmeldung zum Avisota Newslettersystem.');
+$GLOBALS['TL_LANG']['FMD']['avisota_list']         = array('Newsletter-Liste (Avisota)', 'List aller versendeten Newsletter.');
+$GLOBALS['TL_LANG']['FMD']['avisota_reader']       = array('Newsletter-Leser (Avisota)', 'Einen Newsletter innerhalb einer Seite anzeigen.');

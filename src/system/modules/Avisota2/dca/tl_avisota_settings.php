@@ -285,14 +285,15 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_mode'],
 			'inputType' => 'checkbox',
 			'eval'      => array('submitOnChange' => true,
-			                     'tl_class'       => 'clr')
+			                     'tl_class'       => 'clr m12 w50')
 		),
 		'avisota_developer_email'                          => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_email'],
 			'inputType' => 'text',
 			'eval'      => array('mandatory' => true,
-			                     'rgxp'      => 'email')
+			                     'rgxp'      => 'email',
+			                     'tl_class'  => 'w50')
 		)
 	)
 );

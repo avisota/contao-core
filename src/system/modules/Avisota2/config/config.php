@@ -238,6 +238,8 @@ $GLOBALS['BE_MOD'] = array_merge(
 /**
  * Front end modules
  */
+$GLOBALS['FE_MOD']['avisota']['avisota_subscribe']    = 'ModuleAvisotaSubscribe';
+$GLOBALS['FE_MOD']['avisota']['avisota_unsubscribe']  = 'ModuleAvisotaUnsubscribe';
 $GLOBALS['FE_MOD']['avisota']['avisota_subscription'] = 'ModuleAvisotaSubscription';
 $GLOBALS['FE_MOD']['avisota']['avisota_list']         = 'ModuleAvisotaList';
 $GLOBALS['FE_MOD']['avisota']['avisota_reader']       = 'ModuleAvisotaReader';
