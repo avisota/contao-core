@@ -233,6 +233,7 @@ $GLOBALS['BE_MOD'] = array_merge(
 	array_slice($GLOBALS['BE_MOD'], $i)
 );
 
+// TODO gray out outbox if nothink in there!
 
 /**
  * Front end modules
