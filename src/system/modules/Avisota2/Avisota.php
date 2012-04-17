@@ -221,4 +221,3 @@ class Avisota extends Backend
 		return $arrUser;
 	}
 }
-?>

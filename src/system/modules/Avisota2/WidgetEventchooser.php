@@ -213,5 +213,3 @@ class WidgetEventchooser extends Widget
 
 	}
 }
-
-?>

@@ -209,5 +209,3 @@ class tl_page_avisota extends tl_page
 
 // add hook
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('tl_page_avisota', 'alterDataContainer');
-
-?>

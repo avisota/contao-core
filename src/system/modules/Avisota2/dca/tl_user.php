@@ -100,5 +100,3 @@ $GLOBALS['TL_DCA']['tl_user']['fields']['avisota_newsletter_permissions'] = arra
 	'reference'               => &$GLOBALS['TL_LANG']['MSC'],
 	'eval'                    => array('multiple'=>true)
 );
-
-?>

@@ -56,5 +56,3 @@ class tl_article_avisota extends tl_article
 
 // add hook
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('tl_article_avisota', 'alterDataContainer');
-
-?>

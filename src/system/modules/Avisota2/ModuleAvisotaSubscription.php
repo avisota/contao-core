@@ -783,5 +783,3 @@ class ModuleAvisotaSubscription extends Module
 		$this->Template->hideForm = (count($arrMessages['confirmation'])>0 && count($arrMessages['error'])==0);
 	}
 }
-
-?>

@@ -59,5 +59,3 @@ $GLOBALS['TL_LANG']['NLE']['includes']  = 'Include-Elemente';
 $GLOBALS['TL_LANG']['NLE']['news']      = array('News', 'Inserts a news teaser.');
 $GLOBALS['TL_LANG']['NLE']['events']     = array('Events', 'Inserts an event teaser.');
 $GLOBALS['TL_LANG']['NLE']['article']   = array('Article', 'Inserts an article teaser.');
-
-?>

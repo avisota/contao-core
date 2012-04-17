@@ -101,5 +101,3 @@ class NewsletterText extends NewsletterElement
 		}
 	}
 }
-
-?>

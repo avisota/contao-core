@@ -95,5 +95,3 @@ class NewsletterImage extends NewsletterElement
 		$this->addImageToTemplate($this->Template, $this->arrData);
 	}
 }
-
-?>

@@ -112,5 +112,3 @@ Bitte übermitteln Sie folgende Meldung an den Entwickler.<br/>
 &mdash; via <a href="http://contao-forge.org/projects/avisota/issues" onclick="window.open(this.href); return false;">Contao Forge</a><br/>
 &mdash; via <a href="http://www.contao-community.de/forumdisplay.php?121-Avisota" onclick="window.open(this.href); return false;">Contao Community Forum</a><br/>
 &mdash; via <a href="mailto:info@infinitysoft.de">E-Mail</a>';
-
-?>

@@ -207,4 +207,3 @@ class AvisotaInsertTag extends Controller
 		return false;
 	}
 }
-?>

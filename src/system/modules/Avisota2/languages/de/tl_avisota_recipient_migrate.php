@@ -52,5 +52,3 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient_migrate']['edit']     = 'Abonnenten mi
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_avisota_recipient_migrate']['migrate_legend'] = 'Abonnenten migrieren';
-
-?>

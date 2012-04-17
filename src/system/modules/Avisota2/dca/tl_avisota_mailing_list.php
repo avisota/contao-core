@@ -388,5 +388,3 @@ class tl_avisota_mailing_list extends Backend
 		return $varValue;
 	}
 }
-
-?>

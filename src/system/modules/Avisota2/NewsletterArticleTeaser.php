@@ -150,5 +150,3 @@ class NewsletterArticleTeaser extends NewsletterElement
 		$this->Template->more = $GLOBALS['TL_LANG']['MSC']['more'];
 	}
 }
-
-?>

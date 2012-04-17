@@ -390,5 +390,3 @@ abstract class NewsletterElement extends AvisotaFrontend
 	 */
 	abstract protected function compile($mode);
 }
-
-?>

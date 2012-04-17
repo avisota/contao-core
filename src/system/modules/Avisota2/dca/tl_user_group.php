@@ -99,5 +99,3 @@ $GLOBALS['TL_DCA']['tl_user_group']['fields']['avisota_newsletter_permissions'] 
 	'reference'               => &$GLOBALS['TL_LANG']['MSC'],
 	'eval'                    => array('multiple'=>true)
 );
-
-?>

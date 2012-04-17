@@ -73,5 +73,3 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['copy']        = array('Co
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['delete']      = array('Delete Category', 'Delete category ID %s');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['edit']        = array('Edit Category', 'Edit category ID %s');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['editheader']  = array('Edit Category Header', 'Edit the header of category ID %s');
-
-?>

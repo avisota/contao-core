@@ -550,5 +550,3 @@ class tl_avisota_newsletter_category extends Backend
 		return $arrAdditionalSource;
 	}
 }
-
-?>

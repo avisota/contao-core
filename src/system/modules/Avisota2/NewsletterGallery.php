@@ -314,5 +314,3 @@ class NewsletterGallery extends NewsletterElement
 		$this->Template->images = $objTemplate->parse();
 	}
 }
-
-?>

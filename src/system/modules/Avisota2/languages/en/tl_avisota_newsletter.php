@@ -95,5 +95,3 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader']  = array('Edit Newsle
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous']['salutation'] = 'Dear/-r';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous']['name']       = 'Subscriber/-in';
-
-?>

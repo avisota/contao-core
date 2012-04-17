@@ -473,5 +473,3 @@ class tl_avisota_recipient_import extends Backend
 		}
 	}
 }
-
-?>

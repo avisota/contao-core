@@ -77,4 +77,3 @@ class PageAvisotaNewsletter extends Frontend
 		$this->redirect($this->generateFrontendUrl($this->getPageDetails($objPage->jumpBack ? $objPage->jumpBack : $objPage->pid)->row()));
 	}
 }
-?>

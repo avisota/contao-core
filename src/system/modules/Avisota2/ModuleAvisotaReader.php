@@ -116,5 +116,3 @@ class ModuleAvisotaReader extends Module
 		}
 	}
 }
-
-?>

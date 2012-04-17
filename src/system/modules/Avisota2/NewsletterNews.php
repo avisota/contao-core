@@ -83,5 +83,3 @@ class NewsletterNews extends NewsletterElement
 		$this->Template->news = $objNews->fetchAllAssoc();
 	}
 }
-
-?>

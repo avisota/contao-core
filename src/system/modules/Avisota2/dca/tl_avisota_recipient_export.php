@@ -335,5 +335,3 @@ class tl_avisota_recipient_export extends Backend
 		exit;
 	}
 }
-
-?>

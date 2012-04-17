@@ -130,5 +130,3 @@ class UploadField extends Widget implements uploadable
 						$this->getAttributes());
 	}
 }
-
-?>

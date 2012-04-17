@@ -108,4 +108,3 @@ class AvisotaEditorStyle extends Controller
 		return false;
 	}
 }
-?>

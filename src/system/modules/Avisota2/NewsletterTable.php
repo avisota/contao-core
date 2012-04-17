@@ -151,5 +151,3 @@ class NewsletterTable extends NewsletterElement
 		$this->Template->footer = $arrFooter;
 	}
 }
-
-?>

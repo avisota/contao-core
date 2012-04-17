@@ -949,5 +949,3 @@ class tl_avisota_newsletter_content extends Backend
 
 // add hook
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('tl_avisota_newsletter_content', 'myLoadDataContainer');
-
-?>

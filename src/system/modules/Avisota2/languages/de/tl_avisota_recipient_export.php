@@ -53,5 +53,3 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['edit']        = 'CSV-Export'
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['format_legend']    = 'CSV Format';
-
-?>

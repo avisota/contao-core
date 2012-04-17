@@ -133,5 +133,3 @@ class NewsletterHyperlink extends NewsletterElement
 		$this->Template->title = specialchars($this->linkTitle);
 	}
 }
-
-?>
