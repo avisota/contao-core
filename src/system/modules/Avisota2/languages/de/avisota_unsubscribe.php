@@ -33,6 +33,6 @@
  */
 
 
-$GLOBALS['TL_LANG']['avisota_subscribe']['submit']             = 'Abonnieren';
-$GLOBALS['TL_LANG']['avisota_subscribe']['subscribed']         = 'Vielen Dank für Ihr Interesse, Sie wurden zu unserem Newsletter angemeldet. Sie erhalten in Kürze eine E-Mail um Ihr Abonnement zu bestätigen.';
-$GLOBALS['TL_LANG']['avisota_subscribe']['allreadySubscribed'] = 'Vielen Dank für Ihr Interesse, aber Sie sind bereits an unserem Newsletter angemeldet.';
+$GLOBALS['TL_LANG']['avisota_unsubscribe']['submit']        = 'Abmelden';
+$GLOBALS['TL_LANG']['avisota_unsubscribe']['unsubscribed']  = 'Sie wurden aus unserem Newsletter abgemeldet.';
+$GLOBALS['TL_LANG']['avisota_unsubscribe']['notSubscribed'] = 'Sie haben unseren Newsletter leider nicht abonniert.';

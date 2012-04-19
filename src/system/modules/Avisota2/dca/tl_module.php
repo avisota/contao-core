@@ -47,7 +47,7 @@ $GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_unsubscribe'] = array
 (
 	'title'                => array('name', 'headline', 'type'),
 	'avisota_subscription' => array('avisota_show_lists', 'avisota_lists'),
-	'template'             => array('tableless', 'avisota_template_subscription'),
+	'template'             => array('tableless', 'avisota_template_unsubscribe'),
 	'protected'            => array(':hide', 'protected'),
 	'expert'               => array(':hide', 'avisota_form_target', 'jumpTo', 'guests', 'cssID', 'space')
 );

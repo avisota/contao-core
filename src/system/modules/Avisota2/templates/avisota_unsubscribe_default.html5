@@ -15,8 +15,8 @@
 			<tr class="<?php echo $this->rowLast; ?> row_last">
 				<td class="col_0 col_1 col_submit col_first col_last" colspan="2">
 					<div class="submit_container">
-						<input type="submit" name="subscribe"
-						       value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_subscribe']['submit']); ?>"/>
+						<input type="submit" name="unsubscribe"
+						       value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_unsubscribe']['submit']); ?>"/>
 					</div>
 				</td>
 			</tr>
@@ -27,8 +27,8 @@
 			<?php echo $this->fields; ?>
 		</div>
 		<div class="submit_container">
-			<input type="submit" name="subscribe"
-			       value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_subscribe']['submit']); ?>"/>
+			<input type="submit" name="unsubscribe"
+			       value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_unsubscribe']['submit']); ?>"/>
 		</div>
 		<?php endif; ?>
 

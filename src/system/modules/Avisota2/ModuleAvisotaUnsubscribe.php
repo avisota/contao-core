@@ -49,6 +49,13 @@ class ModuleAvisotaUnsubscribe extends ModuleAvisotaRecipientForm
 	 */
 	protected $strTemplate = 'mod_avisota_unsubscribe';
 
+	public function __construct(Database_Result $objModule)
+	{
+		parent::__construct($objModule);
+
+		$this->loadLanguageFile('avisota_unsubscribe');
+	}
+
 	/**
 	 * @return string
 	 */
@@ -82,6 +89,25 @@ class ModuleAvisotaUnsubscribe extends ModuleAvisotaRecipientForm
 
 	protected function submit(array $arrRecipient, array $arrMailingLists)
 	{
-		// TODO: Implement submit() method.
+		try {
+			// search for the recipient
+			$objRecipient = AvisotaIntegratedRecipient::byEmail($arrRecipient['email']);
+
+			// unsubscribe from lists
+			$arrUnsubscribedLists = $objRecipient->unsubscribe($arrMailingLists);
+
+			if ($arrUnsubscribedLists === false || !count($arrUnsubscribedLists)) {
+				return array('not_subscribed', $GLOBALS['TL_LANG']['avisota_unsubscribe']['notSubscribed']);
+			}
+
+			if ($this->jumpTo) {
+				$objJumpTo = $this->getPageDetails($this->jumpTo);
+				$this->redirect($this->generateFrontendUrl($objJumpTo->row()));
+			}
+
+			return array('unsubscribed', $GLOBALS['TL_LANG']['avisota_unsubscribe']['unsubscribed']);
+		} catch (AvisotaRecipientException $e) {
+			return array('not_subscribed', $GLOBALS['TL_LANG']['avisota_unsubscribe']['notSubscribed']);
+		}
 	}
 }
