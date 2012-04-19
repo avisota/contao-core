@@ -108,8 +108,12 @@ class AvisotaDCA extends Controller
 		return $arrOptions;
 	}
 
-	public function filterByMailingLists(DataContainer $dc)
+	public function filterByMailingLists(DataContainer $dc = null)
 	{
+		if (TL_MODE == 'FE') {
+			return;
+		}
+
 		switch ($dc->table) {
 			case 'tl_member':
 				$varId = $this->Input->get('avisota_showlist');
