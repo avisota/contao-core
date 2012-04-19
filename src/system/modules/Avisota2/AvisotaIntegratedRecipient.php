@@ -78,7 +78,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		$this->loadDataContainer('tl_avisota_recipient');
 	}
 
-	public function load()
+	public function load($blnUncached = false)
 	{
 		if (isset($this->arrData['id'])) {
 			$strField = 'id';
@@ -89,9 +89,19 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		} else {
 			throw new AvisotaRecipientException($this->arrData, 'The recipient has no ID or EMAIL that can identify him!');
 		}
+
+		// fetch existing data
 		$objRecipient = $this->Database
-			->prepare("SELECT * FROM tl_avisota_recipient WHERE $strField=?")
-			->execute($strValue);
+			->prepare("SELECT * FROM tl_avisota_recipient WHERE $strField=?");
+		// fetch uncached, e.g. if store is called before
+		if ($blnUncached) {
+			$objRecipient = $objRecipient->executeUncached($strValue);
+		}
+		// fetch cached result
+		else {
+			$objRecipient = $objRecipient->execute($strValue);
+		}
+
 		if ($objRecipient->next()) {
 			$arrRecipient = $objRecipient->row();
 
@@ -117,7 +127,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	 */
 	public function store()
 	{
-		self::validate($this->arrData);
+		$this->validate($this->arrData);
 
 		$arrData = $this->arrData;
 		$arrData['tstamp'] = time();
@@ -134,7 +144,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 				}
 			}
 
-			$arrSet[] = $k;
+			$arrSet[] = $k . '=?';
 			$arrArgs[] = trim($v);
 		}
 
@@ -142,7 +152,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			->prepare(sprintf('INSERT INTO tl_avisota_recipient SET %1$s ON DUPLICATE KEY UPDATE %1$s', implode(',', $arrSet)))
 			->execute(array_merge($arrArgs, $arrArgs));
 
-		$this->load();
+		$this->load(true);
 	}
 
 	/**
@@ -390,9 +400,10 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	 * or all unconfirmed mailing lists, the recipient has subscribed.
 	 *
 	 * @param array|null $arrLists
+	 * @param bool $blnResend
 	 * @throws AvisotaSubscriptionException
 	 */
-	public function sendSubscriptionConfirmation(array $arrLists = null)
+	public function sendSubscriptionConfirmation(array $arrLists = null, $blnResend = false)
 	{
 		if (!$this->id) {
 			throw new AvisotaSubscriptionException($this, 'This recipient has no ID!');
@@ -413,7 +424,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			->prepare("SELECT l.* FROM tl_avisota_recipient_to_mailing_list t
 					   INNER JOIN tl_avisota_mailing_list l
 					   ON l.id=t.list
-					   WHERE t.recipient=? AND t.confirmationSent=0"
+					   WHERE t.recipient=?" . ($blnResend ? " AND t.confirmationSent=0" : '')
 					   . ($arrLists !== null ? " AND t.list IN (" . implode(',', $arrLists) . ")" : '')
 					   . "ORDER BY l.title")
 			->execute($this->id);
@@ -430,7 +441,8 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			// set send time
 			$arrList['confirmationSent'] = $time;
 
-			$arrListsByPage[$objList->integratedRecipientManageSubscriptionPage][$objList->id] = $arrList;
+			$intPage = $objList->integratedRecipientManageSubscriptionPage ? $objList->integratedRecipientManageSubscriptionPage : $GLOBALS['objPage']->id;
+			$arrListsByPage[$intPage][$objList->id] = $arrList;
 		}
 
 		foreach ($arrListsByPage as $intPage=>$arrLists) {
@@ -541,7 +553,8 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			// set send time
 			$arrList['reminderSent'] = $time;
 
-			$arrListsByPage[$objList->integratedRecipientManageSubscriptionPage][$objList->id] = $arrList;
+			$intPage = $objList->integratedRecipientManageSubscriptionPage ? $objList->integratedRecipientManageSubscriptionPage : $GLOBALS['objPage']->id;
+			$arrListsByPage[$intPage][$objList->id] = $arrList;
 		}
 
 		foreach ($arrListsByPage as $intPage=>$arrLists) {
