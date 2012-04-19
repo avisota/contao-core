@@ -175,7 +175,8 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 		(
 			'recipient'    => array('email'),
 			'subscription' => array('lists', 'subscriptionAction'),
-			'personals'    => array('salutation', 'title', 'firstname', 'lastname', 'gender')
+			'personals'    => array('salutation', 'title', 'firstname', 'lastname', 'gender'),
+			'tracing'      => array('permitPersonalTracing')
 		)
 	),
 
@@ -301,6 +302,17 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			                                   'exportable'        => true,
 			                                   'feEditable'        => true,
 			                                   'tl_class'          => 'clr')
+		),
+		'permitPersonalTracing'             => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['permitPersonalTracing'],
+			'exclude'                 => true,
+			'filter'                  => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('importable'        => true,
+			                                   'exportable'        => true,
+			                                   'feEditable'        => true,
+			                                   'tl_class'          => 'clr m12')
 		),
 		'token'              => array
 		(
