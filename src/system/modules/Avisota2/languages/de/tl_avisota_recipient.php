@@ -98,5 +98,5 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['remove']              = array('CSV-
 /**
  * Exceptions
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['blacklist'] = 'Der Verteiler <strong>%s</strong> befindet sich in der Blacklist, wenn Sie die Blacklist ignorieren möchten, speichern Sie erneut!';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['blacklist']  = 'Der Verteiler <strong>%s</strong> befindet sich in der Blacklist, wenn Sie die Blacklist ignorieren möchten, speichern Sie erneut!';
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['blacklists'] = 'Die Verteiler <strong>%s</strong> befinden sich in der Blacklist, wenn Sie die Blacklist ignorieren möchten, speichern Sie erneut!';

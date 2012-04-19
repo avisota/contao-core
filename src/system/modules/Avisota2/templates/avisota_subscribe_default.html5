@@ -4,6 +4,10 @@
 		<input type="hidden" name="FORM_SUBMIT" value="<?php echo $this->formId; ?>"/>
 		<input type="hidden" name="REQUEST_TOKEN" value="{{request_token}}"/>
 
+		<?php if ($this->message): ?>
+		<p class="message <?php echo $this->message[0]; ?>"><?php echo $this->message[1]; ?></p>
+		<?php endif; ?>
+
 		<?php if (!$this->tableless): ?>
 		<table cellspacing="0" cellpadding="0" summary="">
 			<tbody>

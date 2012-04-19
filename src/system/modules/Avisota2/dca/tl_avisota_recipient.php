@@ -475,11 +475,13 @@ class tl_avisota_recipient extends Backend
 			$arrArgs[] = $time;
 
 			// execute query
-			$this->Database
-				->prepare("INSERT INTO tl_avisota_recipient_blacklist (tstamp, pid, email)
-						   VALUES " . implode(',', $arrValues) . "
-						   ON DUPLICATE KEY UPDATE tstamp=?")
-				->execute($arrArgs);
+			if (count($arrValues)) {
+				$this->Database
+					->prepare("INSERT INTO tl_avisota_recipient_blacklist (tstamp, pid, email)
+							   VALUES " . implode(',', $arrValues) . "
+							   ON DUPLICATE KEY UPDATE tstamp=?")
+					->execute($arrArgs);
+			}
 		}
 	}
 

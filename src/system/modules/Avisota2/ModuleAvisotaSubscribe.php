@@ -49,14 +49,20 @@ class ModuleAvisotaSubscribe extends ModuleAvisotaRecipientForm
 	 */
 	protected $strTemplate = 'mod_avisota_subscribe';
 
+	public function __construct(Database_Result $objModule)
+	{
+		parent::__construct($objModule);
+
+		$this->loadLanguageFile('avisota_subscribe');
+	}
+
 	/**
 	 * @return string
 	 */
 	public function generate()
 	{
-		if (TL_MODE == 'BE')
-		{
-			$objTemplate = new BackendTemplate('be_wildcard');
+		if (TL_MODE == 'BE') {
+			$objTemplate           = new BackendTemplate('be_wildcard');
 			$objTemplate->wildcard = '### Avisota subscribe module ###';
 			return $objTemplate->parse();
 		}
@@ -77,6 +83,56 @@ class ModuleAvisotaSubscribe extends ModuleAvisotaRecipientForm
 
 	protected function submit(array $arrRecipient, array $arrMailingLists)
 	{
-		// TODO: Implement submit() method.
+		try {
+			// load existing recipient
+			$objRecipeint = AvisotaIntegratedRecipient::byEmail($arrRecipient['email']);
+		} catch (AvisotaRecipientException $e) {
+			// create a new recipient
+			$objRecipeint = new AvisotaIntegratedRecipient($arrRecipient);
+			$objRecipeint->store();
+		}
+
+		// subscribe to mailing lists
+		$arrSubscribedMailingLists = $objRecipeint->subscribe($arrMailingLists, true);
+
+		// if subscription success...
+		if (is_array($arrSubscribedMailingLists) && count($arrSubscribedMailingLists)) {
+			// ...send confirmation mail...
+			$objRecipeint->sendSubscriptionConfirmation($arrSubscribedMailingLists);
+
+			// ...and redirect if jump to page is configured
+			if ($this->jumpTo) {
+				$objJumpTo = $this->getPageDetails($this->jumpTo);
+				$this->redirect($this->generateFrontendUrl($objJumpTo->row()));
+			}
+
+			return array('subscribed', $GLOBALS['TL_LANG']['avisota_subscribe']['subscribed']);
+		}
+
+		// ...or try to send reminder...
+		if ($GLOBALS['TL_CONFIG']['avisota_send_notification']) {
+			// resend subscriptions
+			$arrConfirmationSend = $objRecipeint->sendSubscriptionConfirmation($arrMailingLists, true);
+			$arrReminderSend     = array();
+		}
+		else {
+			// first send subscriptions if not allready done
+			$arrConfirmationSend = $objRecipeint->sendSubscriptionConfirmation($arrMailingLists);
+			// now send reminders
+			$arrReminderSend = $objRecipeint->sendRemind(array_diff($arrMailingLists, $arrConfirmationSend), true);
+		}
+
+		if (count($arrConfirmationSend) || count($arrReminderSend)) {
+			// ...and redirect if jump to page is configured
+			if ($this->jumpTo) {
+				$objJumpTo = $this->getPageDetails($this->jumpTo);
+				$this->redirect($this->generateFrontendUrl($objJumpTo->row()));
+			}
+
+			return array('reminder_sent', $GLOBALS['TL_LANG']['avisota_subscribe']['subscribed']);
+		}
+
+		// ...otherwise recipient allready subscribed
+		return array('allready_subscribed', $GLOBALS['TL_LANG']['avisota_subscribe']['allreadySubscribed']);
 	}
 }
