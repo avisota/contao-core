@@ -319,12 +319,12 @@ abstract class NewsletterElement extends Frontend
 
 		if (strlen($this->arrData['space'][0]))
 		{
-			$this->arrStyle[] = 'margin-top:'.$this->arrData['space'][0].'px;';
+			$this->arrStyle[] = 'padding-top:'.$this->arrData['space'][0].'px;';
 		}
 
 		if (strlen($this->arrData['space'][1]))
 		{
-			$this->arrStyle[] = 'margin-bottom:'.$this->arrData['space'][1].'px;';
+			$this->arrStyle[] = 'padding-bottom:'.$this->arrData['space'][1].'px;';
 		}
 
 		$this->Template = new FrontendTemplate($this->strTemplateHTML);
