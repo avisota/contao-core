@@ -64,8 +64,8 @@ $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_data_privacy_statement_page'
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_statistic_personalized']      = array('Statistische Daten personalisieren', 'Die statistisch Daten werden personalisiert erfasst. In manchen Ländern ist die Einwilligung zum erfassen personenbezogener Daten nicht erforderlich, wenn Sie bzw. Ihre Zielgruppe sich in einem derartigen Land befinden können Sie hiermit die Checkbox zur Einverständniserklärung deaktivieren. Beachten Sie, wenn Sie E-Mails ins Ausland verschicken, unterstehen Sie gemäß dem Grundsatz des "Marktortprinzip" grundsätzlich ausländischem Recht. Lesen Sie hierzu die Richtlinie für zulässiges Onlinemarketing, Stichwort: Marktortprinzip!');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_chart']                       = array('Chart Rendering', 'Wählen Sie eine Methode aus, wie die Graphen gerendert werden sollen.');
 // developer
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_mode']                    = array('Entwicklermodus', 'Aktiviert den Entwicklermodus.');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_email']                   = array('Entwickler E-Mail', 'Im Entwicklermodus werden alle E-Mails an diese Adresse umgeleitet.');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_mode']  = array('Entwicklermodus', 'Aktiviert den Entwicklermodus.');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_email'] = array('Entwickler E-Mail', 'Im Entwicklermodus werden alle E-Mails an diese Adresse umgeleitet.');
 
 
 /**
