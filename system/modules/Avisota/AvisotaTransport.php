@@ -591,6 +591,26 @@ class AvisotaTransport extends Backend
 		$objEmail->html = $html;
 		$objEmail->imageDir = TL_ROOT . '/';
 
+		// HOOK: add custom logic
+		if (isset($GLOBALS['TL_HOOKS']['sendNewsletter']) && is_array($GLOBALS['TL_HOOKS']['sendNewsletter']))
+		{
+			foreach ($GLOBALS['TL_HOOKS']['sendNewsletter'] as $callback)
+			{
+				$this->import($callback[0]);
+				if ($this->$callback[0]->$callback[1]($objEmail, $plain, $html, $arrRecipient, $personalized) !== null) {
+					// Rejected recipients
+					if (count($objEmail->failures))
+					{
+						$blnFailed = true;
+					}
+
+					$this->Static->resetRecipient();
+
+					return !$blnFailed;
+				}
+			}
+		}
+
 		$blnFailed = false;
 
 		// Deactivate invalid addresses
