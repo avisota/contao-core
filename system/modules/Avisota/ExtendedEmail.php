@@ -43,6 +43,15 @@
  */
 class ExtendedEmail extends Email
 {
+	public function __get($strKey)
+	{
+		switch ($strKey) {
+			case 'swiftMessage':
+				return $this->objMessage;
+		}
+
+		return parent::__get($strKey);
+	}
 	
 	/**
 	 * Get e-mail addresses from an array, string or unlimited number of arguments and send the e-mail
