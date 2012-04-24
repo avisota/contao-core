@@ -149,9 +149,17 @@ $GLOBALS['TL_DCA']['tl_avisota_mailing_list'] = array
 				array('tl_avisota_mailing_list', 'generateAlias')
 			)
 		),
-		'viewOnlinePage' => array
+		'viewOnlinePage'                            => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['viewOnlinePage'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['viewOnlinePage'],
+			'exclude'                 => true,
+			'inputType'               => 'pageTree',
+			'eval'                    => array('fieldType'=> 'radio',
+			                                   'mandatory'=> true)
+		),
+		'integratedRecipientManageSubscriptionPage' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['integratedRecipientManageSubscriptionPage'],
 			'exclude'                 => true,
 			'inputType'               => 'pageTree',
 			'eval'                    => array('fieldType'=> 'radio',
@@ -185,8 +193,7 @@ class tl_avisota_mailing_list extends Backend
 		if (!is_array($this->User->avisota_recipient_lists) || count($this->User->avisota_recipient_lists) < 1) {
 			$root = array(0);
 		}
-		else
-		{
+		else {
 			$root = $this->User->avisota_recipient_lists;
 		}
 
@@ -198,8 +205,7 @@ class tl_avisota_mailing_list extends Backend
 		}
 
 		// Check current action
-		switch ($this->Input->get('act'))
-		{
+		switch ($this->Input->get('act')) {
 			case 'create':
 			case 'select':
 				// Allow
@@ -229,8 +235,7 @@ class tl_avisota_mailing_list extends Backend
 						}
 
 						// Add permissions on group level
-						elseif ($this->User->groups[0] > 0)
-						{
+						elseif ($this->User->groups[0] > 0) {
 							$objGroup = $this->Database->prepare("SELECT avisota_recipient_lists, avisota_recipient_list_permissions FROM tl_user_group WHERE id=?")
 								->limit(1)
 								->execute($this->User->groups[0]);
@@ -269,8 +274,7 @@ class tl_avisota_mailing_list extends Backend
 				if ($this->Input->get('act') == 'deleteAll' && !$this->User->hasAccess('delete', 'avisota_recipient_list_permissions')) {
 					$session['CURRENT']['IDS'] = array();
 				}
-				else
-				{
+				else {
 					$session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'], $root);
 				}
 				$this->Session->setData($session);

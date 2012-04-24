@@ -53,6 +53,31 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		return $objRecipient;
 	}
 
+	public static function bySubscribeTokens($arrTokens)
+	{
+		$arrWhere = array();
+		foreach ($arrTokens as $strToken) {
+			$arrWhere[] = 'token=?';
+		}
+
+		$objRecipientID = Database::getInstance()
+			->prepare('SELECT DISTINCT recipient FROM tl_avisota_recipient_to_mailing_list WHERE ' . implode(' OR ', $arrWhere))
+			->execute($arrTokens);
+
+		if ($objRecipientID->numRows > 1) {
+			throw new AvisotaRecipientException('Illegal token list.');
+		}
+		else if ($objRecipientID->next()) {
+			$objRecipient = new AvisotaIntegratedRecipient();
+			$objRecipient->id = $objRecipientID->recipient;
+			$objRecipient->load();
+			return $objRecipient;
+		}
+		else {
+			return null;
+		}
+	}
+
 	public static function checkBlacklisted($strEmail, $arrLists)
 	{
 		$arrLists = array_map('intval', $arrLists);
@@ -148,9 +173,23 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			$arrArgs[] = trim($v);
 		}
 
+		$arrInsert = array();
+		// added on
+		$arrInsert[] = time();
+		// added by backend user
+		if (TL_MODE == 'BE') {
+			$objUser = BackendUser::getInstance();
+			$objUser->authenticate();
+			$arrInsert[] = $objUser->id;
+		}
+		// added by recipient itself
+		else {
+			$arrInsert[] = '0';
+		}
+
 		$this->Database
-			->prepare(sprintf('INSERT INTO tl_avisota_recipient SET %1$s ON DUPLICATE KEY UPDATE %1$s', implode(',', $arrSet)))
-			->execute(array_merge($arrArgs, $arrArgs));
+			->prepare(sprintf('INSERT INTO tl_avisota_recipient SET addedOn=?, addedBy=?, %1$s ON DUPLICATE KEY UPDATE %1$s', implode(',', $arrSet)))
+			->execute(array_merge($arrInsert, $arrArgs, $arrArgs));
 
 		$this->load(true);
 	}

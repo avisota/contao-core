@@ -76,8 +76,7 @@ abstract class ModuleAvisotaRecipientForm extends Module
 
 		// Call onload_callback (e.g. to check permissions)
 		if (is_array($GLOBALS['TL_DCA']['tl_avisota_recipient']['config']['onload_callback'])) {
-			foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['config']['onload_callback'] as $callback)
-			{
+			foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['config']['onload_callback'] as $callback) {
 				if (is_array($callback)) {
 					$this->import($callback[0]);
 					$this->$callback[0]->$callback[1](null);
@@ -92,7 +91,7 @@ abstract class ModuleAvisotaRecipientForm extends Module
 		else {
 			$objDataPrivacyStatementPage = $GLOBALS['objPage'];
 		}
-		$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['permitPersonalTracing']['label'] = $GLOBALS['TL_LANG']['tl_avisota_recipient']['permitPersonalTracingFE'];
+		$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['permitPersonalTracing']['label']    = $GLOBALS['TL_LANG']['tl_avisota_recipient']['permitPersonalTracingFE'];
 		$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['permitPersonalTracing']['label'][1] = sprintf(
 			$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['permitPersonalTracing']['label'][1],
 			$this->generateFrontendUrl($objDataPrivacyStatementPage->row())
@@ -103,6 +102,25 @@ abstract class ModuleAvisotaRecipientForm extends Module
 		$this->avisota_lists            = array_filter(array_map('intval', deserialize($this->avisota_lists, true)));
 
 		return parent::generate();
+	}
+
+	protected function handleSubscribeTokens()
+	{
+		try {
+			$strToken = $this->Input->get('subscribetoken');
+			$this->Input->setGet('subscribetoken', '');
+			if ($strToken) {
+				$arrTokens = explode(',', $strToken);
+
+				$objRecipient = AvisotaIntegratedRecipient::bySubscribeTokens($arrTokens);
+				if ($objRecipient !== null) {
+					return $objRecipient->confirmSubscription($arrTokens);
+				}
+			}
+		} catch (AvisotaRecipientException $e) {
+			$this->log($e->getMessage(), 'ModuleAvisotaRecipientForm::handleSubscribeTokens', 'TL_ERROR');
+		}
+		return false;
 	}
 
 	/**
@@ -156,8 +174,7 @@ abstract class ModuleAvisotaRecipientForm extends Module
 						id IN (" . implode(',', $this->avisota_lists) . ")" : '') . "
 					ORDER BY
 						title");
-			while ($objList->next())
-			{
+			while ($objList->next()) {
 				$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['lists']['options'][$objList->id] = $objList->title;
 			}
 		}
@@ -168,16 +185,14 @@ abstract class ModuleAvisotaRecipientForm extends Module
 		}
 
 		// or use all, if there are no lists selected
-		else
-		{
+		else {
 			$arrMailingLists = $this->Database
 				->query("SELECT id FROM tl_avisota_mailing_list")
 				->fetchEach('id');
 		}
 
 		// Build form
-		foreach ($arrEditable as $field)
-		{
+		foreach ($arrEditable as $field) {
 			$arrData = $GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$field];
 
 			// Map checkboxWizard to regular checkbox widget
@@ -232,16 +247,13 @@ abstract class ModuleAvisotaRecipientForm extends Module
 
 				// Save callback
 				if (is_array($arrData['save_callback'])) {
-					foreach ($arrData['save_callback'] as $callback)
-					{
+					foreach ($arrData['save_callback'] as $callback) {
 						$this->import($callback[0]);
 
-						try
-						{
+						try {
 							$varValue = $this->$callback[0]->$callback[1]($varValue, $this->User);
 						}
-						catch (Exception $e)
-						{
+						catch (Exception $e) {
 							$objWidget->class = 'error';
 							$objWidget->addError($e->getMessage());
 						}
@@ -278,19 +290,23 @@ abstract class ModuleAvisotaRecipientForm extends Module
 
 		$strMessageKey = 'MESSAGE_' . strtoupper(get_class($this)) . '_' . $this->id;
 		if ($this->Input->post('FORM_SUBMIT') == $this->strFormName && !$doNotSubmit) {
-			$_SESSION[$strMessageKey] = $this->submit($arrRecipient, $arrMailingLists);
+			$_SESSION[$strMessageKey] = $this->submit($arrRecipient, $arrMailingLists, $objTemplate);
 			$this->reload();
 		}
 		else if (!empty($_SESSION[$strMessageKey])) {
-			$objTemplate->message = $_SESSION[$strMessageKey];
+			list($strMessageClass, $strMessage, $blnHideForm) = $_SESSION[$strMessageKey];
+			$objTemplate->messageClass = $strMessageClass;
+			$objTemplate->message      = $strMessage;
+			$objTemplate->hideForm     = $blnHideForm;
 			unset($_SESSION[$strMessageKey]);
 		}
 
 		// Add fields
-		foreach ($arrFields as $k=> $v)
-		{
+		foreach ($arrFields as $k=> $v) {
 			$objTemplate->$k = $v;
 		}
+
+		$this->prepareForm($objTemplate);
 
 		$objTemplate->formId     = $this->strFormName;
 		$objTemplate->formAction = $this->avisota_form_target ? $this->generateFrontendUrl($this->getPageDetails($this->avisota_form_target)->row()) : $this->getIndexFreeRequest();
@@ -298,5 +314,10 @@ abstract class ModuleAvisotaRecipientForm extends Module
 		$this->Template->form = $objTemplate->parse();
 	}
 
-	protected abstract function submit(array $arrRecipient, array $arrMailingLists);
+	protected abstract function submit(array $arrRecipient, array $arrMailingLists, FrontendTemplate $objTemplate);
+
+	protected function prepareForm(FrontendTemplate $objTemplate)
+	{
+		// prepare the form
+	}
 }

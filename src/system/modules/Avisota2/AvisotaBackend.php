@@ -110,7 +110,7 @@ class AvisotaBackend extends Controller
 		$objResult = $this->Database
 			->prepare("SELECT
 				(SELECT COUNT(rl.recipient) FROM tl_avisota_recipient_to_mailing_list rl WHERE rl.list=?) as total_recipients,
-				(SELECT COUNT(rl.recipient) FROM tl_avisota_recipient_to_mailing_list rl INNER JOIN tl_avisota_recipient r ON r.id=rl.recipient WHERE r.confirmed=? AND rl.list=?) as disabled_recipients,
+				(SELECT COUNT(rl.recipient) FROM tl_avisota_recipient_to_mailing_list rl INNER JOIN tl_avisota_recipient r ON r.id=rl.recipient WHERE rl.confirmed=? AND rl.list=?) as disabled_recipients,
 				(SELECT COUNT(ml.member) FROM tl_member_to_mailing_list ml WHERE ml.list=?) as total_members,
 				(SELECT COUNT(ml.member) FROM tl_member_to_mailing_list ml INNER JOIN tl_member m ON m.id=ml.member WHERE m.disable=? AND ml.list=?) as disabled_members")
 			->execute($arrRow['id'], '', $arrRow['id'], $arrRow['id'], '1', $arrRow['id']);

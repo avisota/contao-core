@@ -81,7 +81,7 @@ class ModuleAvisotaSubscribe extends ModuleAvisotaRecipientForm
 		$this->addForm();
 	}
 
-	protected function submit(array $arrRecipient, array $arrMailingLists)
+	protected function submit(array $arrRecipient, array $arrMailingLists, FrontendTemplate $objTemplate)
 	{
 		try {
 			// load existing recipient
@@ -106,7 +106,7 @@ class ModuleAvisotaSubscribe extends ModuleAvisotaRecipientForm
 				$this->redirect($this->generateFrontendUrl($objJumpTo->row()));
 			}
 
-			return array('subscribed', $GLOBALS['TL_LANG']['avisota_subscribe']['subscribed']);
+			return array('subscribed', $GLOBALS['TL_LANG']['avisota_subscribe']['subscribed'], true);
 		}
 
 		// ...or try to send reminder...
@@ -129,10 +129,21 @@ class ModuleAvisotaSubscribe extends ModuleAvisotaRecipientForm
 				$this->redirect($this->generateFrontendUrl($objJumpTo->row()));
 			}
 
-			return array('reminder_sent', $GLOBALS['TL_LANG']['avisota_subscribe']['subscribed']);
+			return array('reminder_sent', $GLOBALS['TL_LANG']['avisota_subscribe']['subscribed'], true);
 		}
 
 		// ...otherwise recipient allready subscribed
-		return array('allready_subscribed', $GLOBALS['TL_LANG']['avisota_subscribe']['allreadySubscribed']);
+		return array('allready_subscribed', $GLOBALS['TL_LANG']['avisota_subscribe']['allreadySubscribed'], false);
+	}
+
+	protected function prepareForm(FrontendTemplate $objTemplate)
+	{
+		$arrLists = $this->handleSubscribeTokens();
+
+		if ($arrLists && count($arrLists)) {
+			$objTemplate->messageClass = 'confirm_subscription';
+			$objTemplate->message      = $GLOBALS['TL_LANG']['avisota_subscribe']['confirmSubscription'];
+			$objTemplate->hideForm     = true;
+		}
 	}
 }

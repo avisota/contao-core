@@ -17,6 +17,7 @@ CREATE TABLE `tl_avisota_mailing_list` (
   `title` varchar(255) NOT NULL default '',
   `alias` varbinary(128) NOT NULL default '',
   `viewOnlinePage` int(10) unsigned NOT NULL default '0',
+  `integratedRecipientManageSubscriptionPage` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -30,18 +31,14 @@ CREATE TABLE `tl_avisota_recipient` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `tstamp` int(10) unsigned NOT NULL default '0',
   `email` varchar(255) NOT NULL default '',
-  `confirmed` char(1) NOT NULL default '',
   `salutation` varchar(255) NOT NULL default '',
   `title` varchar(255) NOT NULL default '',
   `firstname` varchar(255) NOT NULL default '',
   `lastname` varchar(255) NOT NULL default '',
   `gender` varchar(32) NOT NULL default '',
-  `confirmed` char(1) NOT NULL default '',
   `permitPersonalTracing` char(32) NOT NULL default '',
   `addedOn` int(10) NOT NULL default '0',
   `addedBy` int(10) unsigned NOT NULL default '0',
-  `addedByModule` int(10) unsigned NOT NULL default '0',
-  `addedOnPage` int(10) unsigned NOT NULL default '0',
   `notification` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `email` (`email`)

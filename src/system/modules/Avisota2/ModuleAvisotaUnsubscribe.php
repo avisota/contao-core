@@ -87,7 +87,7 @@ class ModuleAvisotaUnsubscribe extends ModuleAvisotaRecipientForm
 		$this->addForm();
 	}
 
-	protected function submit(array $arrRecipient, array $arrMailingLists)
+	protected function submit(array $arrRecipient, array $arrMailingLists, FrontendTemplate $objTemplate)
 	{
 		try {
 			// search for the recipient
@@ -105,9 +105,22 @@ class ModuleAvisotaUnsubscribe extends ModuleAvisotaRecipientForm
 				$this->redirect($this->generateFrontendUrl($objJumpTo->row()));
 			}
 
+			$objTemplate->hideForm = true;
+
 			return array('unsubscribed', $GLOBALS['TL_LANG']['avisota_unsubscribe']['unsubscribed']);
 		} catch (AvisotaRecipientException $e) {
 			return array('not_subscribed', $GLOBALS['TL_LANG']['avisota_unsubscribe']['notSubscribed']);
+		}
+	}
+
+	protected function prepareForm(FrontendTemplate $objTemplate)
+	{
+		$arrLists = $this->handleSubscribeTokens();
+
+		if ($arrLists && count($arrLists)) {
+			$this->loadLanguageFile('avisota_subscribe');
+			$objTemplate->messageClass = 'confirm_subscription';
+			$objTemplate->message      = $GLOBALS['TL_LANG']['avisota_subscribe']['confirmSubscription'];
 		}
 	}
 }

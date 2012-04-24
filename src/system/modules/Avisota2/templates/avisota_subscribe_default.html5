@@ -5,32 +5,33 @@
 		<input type="hidden" name="REQUEST_TOKEN" value="{{request_token}}"/>
 
 		<?php if ($this->message): ?>
-		<p class="message <?php echo $this->message[0]; ?>"><?php echo $this->message[1]; ?></p>
+			<p class="message <?php echo $this->messageClass; ?>"><?php echo $this->message; ?></p>
 		<?php endif; ?>
 
-		<?php if (!$this->tableless): ?>
-		<table cellspacing="0" cellpadding="0" summary="">
-			<tbody>
+		<?php if (!$this->hideForm): ?>
+			<?php if (!$this->tableless): ?>
+			<table cellspacing="0" cellpadding="0" summary="">
+				<tbody>
+					<?php echo $this->fields; ?>
+				<tr class="<?php echo $this->rowLast; ?> row_last">
+					<td class="col_0 col_1 col_submit col_first col_last" colspan="2">
+						<div class="submit_container">
+							<input type="submit" name="subscribe"
+							       value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_subscribe']['submit']); ?>"/>
+						</div>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<?php else: ?>
+			<div class="fields">
 				<?php echo $this->fields; ?>
-			<tr class="<?php echo $this->rowLast; ?> row_last">
-				<td class="col_0 col_1 col_submit col_first col_last" colspan="2">
-					<div class="submit_container">
-						<input type="submit" name="subscribe"
-						       value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_subscribe']['submit']); ?>"/>
-					</div>
-				</td>
-			</tr>
-			</tbody>
-		</table>
-		<?php else: ?>
-		<div class="fields">
-			<?php echo $this->fields; ?>
-		</div>
-		<div class="submit_container">
-			<input type="submit" name="subscribe"
-			       value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_subscribe']['submit']); ?>"/>
-		</div>
+			</div>
+			<div class="submit_container">
+				<input type="submit" name="subscribe"
+				       value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_subscribe']['submit']); ?>"/>
+			</div>
+			<?php endif; ?>
 		<?php endif; ?>
-
 	</div>
 </form>
