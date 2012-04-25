@@ -380,7 +380,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			foreach ($arrLists as $arrList) {
 				$arrTitle[] = $arrList['title'];
 			}
-			$strUrl = $this->generateFrontendUrl($objPage);
+			$strUrl = $this->generateFrontendUrl($objPage->row());
 
 			$objPlain = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_unsubscribe_mail_plain']);
 			$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['unsubscribe']['plain'], implode(', ', $arrTitle), $strUrl);
@@ -463,10 +463,10 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			->prepare("SELECT l.* FROM tl_avisota_recipient_to_mailing_list t
 					   INNER JOIN tl_avisota_mailing_list l
 					   ON l.id=t.list
-					   WHERE t.recipient=?" . ($blnResend ? " AND t.confirmationSent=0" : '')
+					   WHERE t.recipient=? AND t.confirmed=?" . ($blnResend ? " AND t.confirmationSent=0" : '')
 					   . ($arrLists !== null ? " AND t.list IN (" . implode(',', $arrLists) . ")" : '')
 					   . "ORDER BY l.title")
-			->execute($this->id);
+			->execute($this->id, '');
 
 		$arrListsByPage = array();
 		while ($objList->next()) {

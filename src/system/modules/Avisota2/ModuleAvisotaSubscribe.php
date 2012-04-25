@@ -83,67 +83,6 @@ class ModuleAvisotaSubscribe extends ModuleAvisotaRecipientForm
 
 	protected function submit(array $arrRecipient, array $arrMailingLists, FrontendTemplate $objTemplate)
 	{
-		try {
-			// load existing recipient
-			$objRecipeint = AvisotaIntegratedRecipient::byEmail($arrRecipient['email']);
-		} catch (AvisotaRecipientException $e) {
-			// create a new recipient
-			$objRecipeint = new AvisotaIntegratedRecipient($arrRecipient);
-			$objRecipeint->store();
-		}
-
-		// subscribe to mailing lists
-		$arrSubscribedMailingLists = $objRecipeint->subscribe($arrMailingLists, true);
-
-		// if subscription success...
-		if (is_array($arrSubscribedMailingLists) && count($arrSubscribedMailingLists)) {
-			// ...send confirmation mail...
-			$objRecipeint->sendSubscriptionConfirmation($arrSubscribedMailingLists);
-
-			// ...and redirect if jump to page is configured
-			if ($this->jumpTo) {
-				$objJumpTo = $this->getPageDetails($this->jumpTo);
-				$this->redirect($this->generateFrontendUrl($objJumpTo->row()));
-			}
-
-			return array('subscribed', $GLOBALS['TL_LANG']['avisota_subscribe']['subscribed'], true);
-		}
-
-		// ...or try to send reminder...
-		if ($GLOBALS['TL_CONFIG']['avisota_send_notification']) {
-			// resend subscriptions
-			$arrConfirmationSend = $objRecipeint->sendSubscriptionConfirmation($arrMailingLists, true);
-			$arrReminderSend     = array();
-		}
-		else {
-			// first send subscriptions if not allready done
-			$arrConfirmationSend = $objRecipeint->sendSubscriptionConfirmation($arrMailingLists);
-			// now send reminders
-			$arrReminderSend = $objRecipeint->sendRemind(array_diff($arrMailingLists, $arrConfirmationSend), true);
-		}
-
-		if (count($arrConfirmationSend) || count($arrReminderSend)) {
-			// ...and redirect if jump to page is configured
-			if ($this->jumpTo) {
-				$objJumpTo = $this->getPageDetails($this->jumpTo);
-				$this->redirect($this->generateFrontendUrl($objJumpTo->row()));
-			}
-
-			return array('reminder_sent', $GLOBALS['TL_LANG']['avisota_subscribe']['subscribed'], true);
-		}
-
-		// ...otherwise recipient allready subscribed
-		return array('allready_subscribed', $GLOBALS['TL_LANG']['avisota_subscribe']['allreadySubscribed'], false);
-	}
-
-	protected function prepareForm(FrontendTemplate $objTemplate)
-	{
-		$arrLists = $this->handleSubscribeTokens();
-
-		if ($arrLists && count($arrLists)) {
-			$objTemplate->messageClass = 'confirm_subscription';
-			$objTemplate->message      = $GLOBALS['TL_LANG']['avisota_subscribe']['confirmSubscription'];
-			$objTemplate->hideForm     = true;
-		}
+		return $this->handleSubscribeSubmit($arrRecipient, $arrMailingLists, $objTemplate);
 	}
 }
