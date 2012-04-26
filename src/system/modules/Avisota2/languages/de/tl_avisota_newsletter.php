@@ -40,9 +40,12 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['subject']              = array('Be
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['alias']                = array('Newsletteralias', 'Der Newsletteralias ist eine eindeutige Referenz, die anstelle der numerischen Newsletter-Id aufgerufen werden kann.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['addFile']              = array('Dateien anhängen', 'Dem Newsletter eine oder mehrere Dateien anhängen.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['files']                = array('Dateianhänge', 'Bitte wählen Sie die anzuhängenden Dateien aus der Dateiübersicht.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_html']        = array('HTML E-Mail-Template', 'Hier können Sie das HTML E-Mail-Template auswählen.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_plain']       = array('Plain Text E-Mail-Template', 'Hier können Sie das Plain Text E-Mail-Template auswählen.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['setRecipients']        = array('Empfänger zuweisen', 'Wählen Sie für diesen Newsletter eine neue Liste von Empfängern aus.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipients']           = array('Empfänger', 'Wählen Sie hier die Empfänger aus.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['setTheme']             = array('Layout zuweisen', 'Wählen Sie für diesen Newsletter ein neues Layout aus.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['theme']                = array('Layout', 'Wählen Sie hier das Layouts aus.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['setTransport']         = array('Transportmodul zuweisen', 'Wählen Sie für diesen Newsletter ein neues Transportmodul aus.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['transport']            = array('Transportmodul', 'Wählen Sie hier das Transportmodul aus.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['tstamp']               = array('Änderungsdatum', 'Datum und Uhrzeit der letzten Änderung');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewToUser']    = array('Testsendung an Benutzer', 'Die Testsendung des Newsletters an diesen Benutzer versenden.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewToEmail']   = array('Testsendung an E-Mail', 'Die Testsendung des Newsletters an diese E-Mail-Adresse versenden. Geben Sie hier eine E-Mail Adresse an, wird der Versand an die Benutzerauswahl ignoriert.');
@@ -55,8 +58,9 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview_personalized'] = array('Pe
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['newsletter_legend'] = 'Newsletter';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipient_legend']  = 'Empfänger';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['theme_legend']      = 'Layout-Einstellungen';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['transport_legend']  = 'Transport-Einstellungen';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['attachment_legend'] = 'Dateianhänge';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['template_legend']   = 'Template-Einstellungen';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['headline']          = 'Newsletter ansehen und versenden';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['from']              = 'Absender';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['live']              = 'Vorschau aktualisieren';
@@ -69,19 +73,19 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_female'] = 'Sehr geehrt
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['created_from_draft'] = 'Newsletter wurde erstellt.';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view']               = array('Ansehen und Versenden', 'Den Newsletter ansehen und versenden.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view_only']          = array('Ansehen', 'Den Newsletter ansehen.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['send']               = array('Versenden', 'Den Newsletter versenden.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sended']             = 'versendet am %s';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirm']            = 'Der Newsletter wurde an alle Empfänger versendet.';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirmPreview']     = 'Die Testsendung wurde an %s versendet.';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['online']             = 'Probleme mit der Darstellung? Den Newsletter Online ansehen.';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']               = 'Verteiler';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['member']             = 'Mitglieder';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']             = 'Mitgliedergruppe';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['notSend']            = 'noch nicht versendet';
-
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['created_from_draft']  = 'Newsletter wurde erstellt.';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view']                = array('Ansehen und Versenden', 'Den Newsletter ansehen und versenden.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view_only']           = array('Ansehen', 'Den Newsletter ansehen.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['send']                = array('Versenden', 'Den Newsletter versenden.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sended']              = 'versendet am %s';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirm']             = 'Der Newsletter wurde an alle Empfänger versendet.';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirmPreview']      = 'Die Testsendung wurde an %s versendet.';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['online']              = 'Probleme mit der Darstellung? Den Newsletter Online ansehen.';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']                = 'Verteiler';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['member']              = 'Mitglieder';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']              = 'Mitgliedergruppe';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['notSend']             = 'noch nicht versendet';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['inheritFromCategory'] = '- von Kategorie übernehmen -';
 
 /**
  * Buttons
