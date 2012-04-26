@@ -51,9 +51,9 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['tstamp']         = array(
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['category_legend']   = 'Kategorie';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipients_legend'] = 'Empfänger';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['theme_legend']      = 'Layout';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['expert_legend']     = 'Experten-Einstellungen';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipients_legend'] = 'Empfänger-Einstellungen';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['theme_legend']      = 'Layout-Einstellungen';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transport_legend']  = 'Transport-Einstellungen';
 
 
 /**
