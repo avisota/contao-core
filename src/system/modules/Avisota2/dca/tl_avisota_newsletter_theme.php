@@ -173,7 +173,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 			'default'                 => 'mail_html_default',
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options'                 => array('tl_avisota_newsletter_theme', 'getHtmlTemplates'),
+			'options_callback'        => array('tl_avisota_newsletter_theme', 'getHtmlTemplates'),
 			'eval'                    => array('tl_class'=> 'w50')
 		),
 		'template_plain'      => array
@@ -182,7 +182,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 			'default'                 => 'mail_plain_default',
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options'                 => array('tl_avisota_newsletter_theme', 'getPlainTemplates'),
+			'options_callback'        => array('tl_avisota_newsletter_theme', 'getPlainTemplates'),
 			'eval'                    => array('tl_class'=> 'w50')
 		),
 		'templateDirectory'   => array
