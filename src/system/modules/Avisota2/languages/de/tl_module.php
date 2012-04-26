@@ -51,13 +51,15 @@ $GLOBALS['TL_LANG']['tl_module']['avisota_template_notification_mail_html']  = a
 $GLOBALS['TL_LANG']['tl_module']['avisota_do_cleanup']   = array('Unbestätige Abonnements löschen', 'Löscht unbestätigte Abonnements nach einigen Tagen.');
 $GLOBALS['TL_LANG']['tl_module']['avisota_cleanup_time'] = array('Tage bis zur Löschung', 'Anzahl Tage nach denen das Abonnement wieder gelöscht wird.');
 
-$GLOBALS['TL_LANG']['tl_module']['avisota_categories']           = array('Kategorien', 'Wählen Sie die Kategorien aus, aus denen die Newsletter angezeigt werden sollen.');
-$GLOBALS['TL_LANG']['tl_module']['avisota_reader_template']      = array('Leser-Template', 'Wählen Sie hier das Template für den Newsletter-Leser aus.');
-$GLOBALS['TL_LANG']['tl_module']['avisota_list_template']        = array('Listen-Template', 'Wählen Sie hier das Template für die Newsletter-Liste aus.');
-$GLOBALS['TL_LANG']['tl_module']['avisota_view_page']            = array('Ansichtsseite', 'Wählen Sie hier eine Seite aus, auf der die Newsletter angezeigt werden soll. Wird keine Seite ausgewählt, wird die in der Kategorie hinterlegte Seite zur Online-Ansicht verwendet.');
-$GLOBALS['TL_LANG']['tl_module']['avisota_form_target']          = array('Formular Zielseite', 'Wählen Sie hier eine Seite aus, an die das Formular die Daten schickt (action-Attribut).');
-$GLOBALS['TL_LANG']['tl_module']['avisota_template_subscribe']   = array('Form-Template', 'Wählen Sie hier das Template für das Anmelden-Formular aus.');
-$GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe'] = array('Form-Template', 'Wählen Sie hier das Template für das Abmelden-Formular aus.');
+$GLOBALS['TL_LANG']['tl_module']['avisota_categories']                    = array('Kategorien', 'Wählen Sie die Kategorien aus, aus denen die Newsletter angezeigt werden sollen.');
+$GLOBALS['TL_LANG']['tl_module']['avisota_reader_template']               = array('Leser-Template', 'Wählen Sie hier das Template für den Newsletter-Leser aus.');
+$GLOBALS['TL_LANG']['tl_module']['avisota_list_template']                 = array('Listen-Template', 'Wählen Sie hier das Template für die Newsletter-Liste aus.');
+$GLOBALS['TL_LANG']['tl_module']['avisota_view_page']                     = array('Ansichtsseite', 'Wählen Sie hier eine Seite aus, auf der die Newsletter angezeigt werden soll. Wird keine Seite ausgewählt, wird die in der Kategorie hinterlegte Seite zur Online-Ansicht verwendet.');
+$GLOBALS['TL_LANG']['tl_module']['avisota_form_target']                   = array('Formular Zielseite', 'Wählen Sie hier eine Seite aus, an die das Formular die Daten schickt (action-Attribut).');
+$GLOBALS['TL_LANG']['tl_module']['avisota_template_subscribe']            = array('Form-Template', 'Wählen Sie hier das Template für das Anmelden-Formular aus.');
+$GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe']          = array('Form-Template', 'Wählen Sie hier das Template für das Abmelden-Formular aus.');
+$GLOBALS['TL_LANG']['tl_module']['avisota_subscribe_confirmation_page']   = array('Weiterleitungsseite nach Anmeldung', 'Bitte wählen Sie die Seite aus, zu der Besucher nach erfolgreicher Anmeldung weitergeleitet wird.');
+$GLOBALS['TL_LANG']['tl_module']['avisota_unsubscribe_confirmation_page'] = array('Weiterleitungsseite nach Abmeldung', 'Bitte wählen Sie die Seite aus, zu der Besucher nach erfolgreicher Abmeldung weitergeleitet wird.');
 
 
 /**

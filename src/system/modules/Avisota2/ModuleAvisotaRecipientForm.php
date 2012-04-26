@@ -124,8 +124,8 @@ abstract class ModuleAvisotaRecipientForm extends Module
 			$objRecipeint->sendSubscriptionConfirmation($arrSubscribedMailingLists);
 
 			// ...and redirect if jump to page is configured
-			if ($this->jumpTo) {
-				$objJumpTo = $this->getPageDetails($this->jumpTo);
+			if ($this->avisota_subscribe_confirmation_page) {
+				$objJumpTo = $this->getPageDetails($this->avisota_subscribe_confirmation_page);
 				$this->redirect($this->generateFrontendUrl($objJumpTo->row()));
 			}
 
@@ -148,8 +148,8 @@ abstract class ModuleAvisotaRecipientForm extends Module
 		if (is_array($arrConfirmationSend) && count($arrConfirmationSend) ||
 			is_array($arrReminderSend) && count($arrReminderSend)) {
 			// ...and redirect if jump to page is configured
-			if ($this->jumpTo) {
-				$objJumpTo = $this->getPageDetails($this->jumpTo);
+			if ($this->avisota_subscribe_confirmation_page) {
+				$objJumpTo = $this->getPageDetails($this->avisota_subscribe_confirmation_page);
 				$this->redirect($this->generateFrontendUrl($objJumpTo->row()));
 			}
 
@@ -192,8 +192,8 @@ abstract class ModuleAvisotaRecipientForm extends Module
 				return array('not_subscribed', $GLOBALS['TL_LANG']['avisota_unsubscribe']['notSubscribed']);
 			}
 
-			if ($this->jumpTo) {
-				$objJumpTo = $this->getPageDetails($this->jumpTo);
+			if ($this->avisota_unsubscribe_confirmation_page) {
+				$objJumpTo = $this->getPageDetails($this->avisota_unsubscribe_confirmation_page);
 				$this->redirect($this->generateFrontendUrl($objJumpTo->row()));
 			}
 

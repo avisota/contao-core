@@ -468,6 +468,8 @@ CREATE TABLE `tl_module` (
   `avisota_notification_time` int(10) NOT NULL default '3',
   `avisota_template_notification_mail_plain` varchar(64) NOT NULL default '',
   `avisota_template_notification_mail_html` varchar(64) NOT NULL default '',
+  `avisota_subscribe_confirmation_page` int(10) NOT NULL default '0',
+  `avisota_unsubscribe_confirmation_page` int(10) NOT NULL default '0',
   `avisota_do_cleanup` char(1) NOT NULL default '',
   `avisota_cleanup_time` int(10) NOT NULL default '7',
   `avisota_categories` blob NULL,
