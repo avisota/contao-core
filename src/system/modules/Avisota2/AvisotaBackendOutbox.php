@@ -34,13 +34,13 @@
 
 
 /**
- * Class AvisotaOutbox
+ * Class AvisotaBackendOutbox
  *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class AvisotaOutbox extends BackendModule
+class AvisotaBackendOutbox extends BackendModule
 {
 	protected $strTemplate = 'be_avisota_outbox';
 

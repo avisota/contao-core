@@ -45,20 +45,20 @@ define('TL_PLUGINS_URL', '');
 include('../../initialize.php');
 
 /**
- * Class AvisotaPreview
+ * Class AvisotaNewsletterPreview
  *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class AvisotaPreview extends Backend
+class AvisotaNewsletterPreview extends Backend
 {
 	public function __construct()
 	{
 		$this->import('BackendUser', 'User');
 		parent::__construct();
 		$this->import('AvisotaBase', 'Base');
-		$this->import('AvisotaContent', 'Content');
+		$this->import('AvisotaNewsletterContent', 'Content');
 		$this->import('AvisotaStatic', 'Static');
 
 		// force all URLs absolute
@@ -177,8 +177,8 @@ class AvisotaPreview extends Backend
 }
 
 try {
-	$objAvisotaPreview = new AvisotaPreview();
-	$objAvisotaPreview->run();
+	$objAvisotaNewsletterPreview = new AvisotaNewsletterPreview();
+	$objAvisotaNewsletterPreview->run();
 } catch(Exception $e) {
 	header('HTTP/1.0 500 Internal Server Error');
 	header('Content-Type: text/plain');

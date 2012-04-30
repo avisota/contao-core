@@ -58,7 +58,6 @@ class AvisotaBackend extends Controller
 		$this->import('Database');
 	}
 
-
 	/**
 	 * Get options list of recipients.
 	 *
@@ -90,7 +89,6 @@ class AvisotaBackend extends Controller
 
 		return $arrRecipients;
 	}
-
 
 	public function hookOutputBackendTemplate($strContent, $strTemplate)
 	{

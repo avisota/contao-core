@@ -34,18 +34,18 @@
 
 
 /**
- * Class AvisotaContent
+ * Class AvisotaNewsletterContent
  *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class AvisotaContent extends Controller
+class AvisotaNewsletterContent extends Controller
 {
 	/**
 	 * Singleton instance.
 	 *
-	 * @var AvisotaContent
+	 * @var AvisotaNewsletterContent
 	 */
 	private static $objInstance = null;
 
@@ -57,7 +57,7 @@ class AvisotaContent extends Controller
 	{
 		if (self::$objInstance === null)
 		{
-			self::$objInstance = new AvisotaContent();
+			self::$objInstance = new AvisotaNewsletterContent();
 		}
 		return self::$objInstance;
 	}

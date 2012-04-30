@@ -544,7 +544,7 @@ class tl_avisota_newsletter_content extends Backend
 	{
 		parent::__construct();
 		$this->import('BackendUser', 'User');
-		$this->import('AvisotaContent', 'Content');
+		$this->import('AvisotaNewsletterContent', 'Content');
 	}
 
 

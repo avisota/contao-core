@@ -34,53 +34,38 @@
 
 
 /**
- * Class CSVFileRecipientSource
+ * Class AvisotaTransportSwiftTransport
  *
- * 
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class CSVFileRecipientSource extends Controller implements AvisotaRecipientSource
+class AvisotaTransportSwiftTransport extends AvisotaTransportMailerTransport
 {
-	private $arrConfig;
-	
-	public function __construct($arrConfig)
-	{
-		$this->arrConfig = $arrConfig;
-	}
-
 	/**
-	 * Get all selectable recipient options for this source.
-	 * Every option can be an individuell ID.
-	 *
-	 * @return array
+	 * @var string
 	 */
-	public function getRecipientOptions()
+	protected $mailerImplementation = 'swift';
+
+	protected function createMailerConfig()
 	{
-		// TODO: Implement getRecipientOptions() method.
-	}
+		$objMailerConfig = parent::createMailerConfig();
 
-	/**
-	 * Get recipient IDs of a list of options.
-	 *
-	 * @abstract
-	 * @param array $varOption
-	 * @return array
-	 */
-	public function getRecipients($arrOptions)
-	{
+		switch ($this->config->swiftUseSmtp) {
+			case 'swiftSmtpOn':
+				$objMailerConfig->setUseSMTP(true);
+				$objMailerConfig->setSmtpHost($this->config->swiftSmtpHost);
+				$objMailerConfig->setSmtpPort($this->config->swiftSmtpPort);
+				$objMailerConfig->setSmtpUser($this->config->swiftSmtpUser);
+				$objMailerConfig->setSmtpPassword($this->config->swiftSmtpPass);
+				$objMailerConfig->setSmtpEncryption($this->config->swiftSmtpEnc);
+				break;
 
-	}
+			case 'swiftSmtpOff':
+				$objMailerConfig->setUseSMTP(false);
+				break;
+		}
 
-	/**
-	 * Get the recipient details.
-	 *
-	 * @param string $varId
-	 * @return array
-	 */
-	public function getRecipientDetails($varId)
-	{
-
+		return $objMailerConfig;
 	}
 }

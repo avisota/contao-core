@@ -48,7 +48,7 @@ class Avisota extends Backend
 		$this->import('DomainLink');
 		$this->import('BackendUser', 'User');
 		$this->import('AvisotaBase', 'Base');
-		$this->import('AvisotaContent', 'Content');
+		$this->import('AvisotaNewsletterContent', 'Content');
 		$this->import('AvisotaStatic', 'Static');
 		$this->loadLanguageFile('tl_avisota_newsletter');
 	}
@@ -64,13 +64,14 @@ class Avisota extends Backend
 		$intId = $this->Input->get('id');
 
 		// get the newsletter
-		$objNewsletter = $this->Database->prepare("
+		$objNewsletter = $this->Database
+			->prepare('
 				SELECT
 					*
 				FROM
 					tl_avisota_newsletter
 				WHERE
-					id=?")
+					id=?')
 			->execute($intId);
 
 		if (!$objNewsletter->next())
@@ -140,43 +141,7 @@ class Avisota extends Backend
 		$objTemplate->from = $strFrom;
 
 		// add recipients
-		$arrRecipients = unserialize($objNewsletter->recipients);
-		$arrLists = array();
-		$arrMgroups = array();
-		foreach ($arrRecipients as $strRecipient)
-		{
-			if (preg_match('#^(list|mgroup)\-(\d+)$#', $strRecipient, $arrMatch))
-			{
-				switch ($arrMatch[1])
-				{
-				case 'list':
-					$intIdTmp = $arrMatch[2];
-					$objList = $this->Database->prepare("
-							SELECT
-								*
-							FROM
-								tl_avisota_mailing_list
-							WHERE
-								id=?")
-						->execute($intIdTmp);
-					$arrLists[$intIdTmp] = $objList->title;
-					break;
 
-				case 'mgroup':
-					$intIdTmp = $arrMatch[2];
-					$objMgroup = $this->Database->prepare("
-							SELECT
-								*
-							FROM
-								tl_member_group
-							WHERE
-								id=?")
-						->execute($intIdTmp);
-					$arrMgroups[$intIdTmp] = $objMgroup->name;
-					break;
-				}
-			}
-		}
 		$objTemplate->recipients_list = $arrLists;
 		$objTemplate->recipients_mgroup = $arrMgroups;
 

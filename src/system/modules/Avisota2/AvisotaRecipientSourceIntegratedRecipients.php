@@ -34,14 +34,14 @@
 
 
 /**
- * Class IntegratedAvisotaRecipientSource
+ * Class AvisotaRecipientSourceIntegratedRecipients
  *
  * 
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class IntegratedAvisotaRecipientSource extends Controller implements AvisotaRecipientSource
+class AvisotaRecipientSourceIntegratedRecipients extends Controller implements AvisotaRecipientSource
 {
 	/**
 	 * @var array
@@ -139,7 +139,7 @@ class IntegratedAvisotaRecipientSource extends Controller implements AvisotaReci
 				break;
 
 			default:
-				$this->log('The integrated recipient source ID ' . $this->config['id'] . ' is not fully configured!', 'IntegratedAvisotaRecipientSource::getRecipientOptions()', TL_ERROR);
+				$this->log('The integrated recipient source ID ' . $this->config['id'] . ' is not fully configured!', 'AvisotaRecipientSourceIntegratedRecipients::getRecipientOptions()', TL_ERROR);
 				return array();
 		}
 	}
@@ -163,7 +163,7 @@ class IntegratedAvisotaRecipientSource extends Controller implements AvisotaReci
 			case 'integratedByAllRecipients':
 				break;
 			default:
-				$this->log('The recipient source ID ' . $this->config['id'] . ' is not fully configured!', 'IntegratedAvisotaRecipientSource::getRecipientOptions()', TL_ERROR);
+				$this->log('The recipient source ID ' . $this->config['id'] . ' is not fully configured!', 'AvisotaRecipientSourceIntegratedRecipients::getRecipientOptions()', TL_ERROR);
 				return array();
 		}
 	}

@@ -34,14 +34,14 @@
 
 
 /**
- * Class AvisotaChartJqPlot
+ * Class AvisotaBackendChart
  *
  * Parent class for newsletter content elements.
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-interface AvisotaChart
+interface AvisotaBackendChart
 {
 	/**
 	 * @abstract

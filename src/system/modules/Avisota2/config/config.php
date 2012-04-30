@@ -151,7 +151,7 @@ $GLOBALS['BE_MOD'] = array_merge(
 			),
 			'avisota_outbox'           => array
 			(
-				'callback'   => 'AvisotaOutbox',
+				'callback'   => 'AvisotaBackendOutbox',
 				'icon'       => 'system/modules/Avisota2/html/outbox.png',
 				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 			),
@@ -288,15 +288,15 @@ $GLOBALS['BE_FFL']['newschooser']  = 'WidgetNewschooser';
 /**
  * Recipient sources
  */
-$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['integrated'] = 'IntegratedAvisotaRecipientSource';
-$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['member']     = 'MemberGroupRecipientSource';
-$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['csv_file']   = 'CSVFileRecipientSource';
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['integrated'] = 'AvisotaRecipientSourceIntegratedRecipients';
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['member']     = 'AvisotaRecipientSourceMemberGroup';
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['csv_file']   = 'AvisotaRecipientSourceCSVFile';
 
 
 /**
  * Transport modules
  */
-$GLOBALS['TL_AVISOTA_TRANSPORT']['swift'] = 'SwiftTransport';
+$GLOBALS['TL_AVISOTA_TRANSPORT']['swift'] = 'AvisotaTransportSwiftTransport';
 
 
 /**
@@ -304,7 +304,7 @@ $GLOBALS['TL_AVISOTA_TRANSPORT']['swift'] = 'SwiftTransport';
  */
 $GLOBALS['TL_HOOKS']['outputBackendTemplate'][]   = array('AvisotaBackend', 'hookOutputBackendTemplate');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][]       = array('AvisotaInsertTag', 'hookReplaceNewsletterInsertTags');
-$GLOBALS['TL_HOOKS']['getEditorStylesLayout'][]   = array('AvisotaEditorStyle', 'hookGetEditorStylesLayout');
+$GLOBALS['TL_HOOKS']['getEditorStylesLayout'][]   = array('AvisotaBackendEditorStyle', 'hookGetEditorStylesLayout');
 $GLOBALS['TL_HOOKS']['mysqlMultiTriggerCreate'][] = array('AvisotaUpdate', 'hookMysqlMultiTriggerCreate');
 $GLOBALS['TL_HOOKS']['createNewUser'][]           = array('AvisotaDCA', 'hookCreateNewUser');
 $GLOBALS['TL_HOOKS']['activateAccount'][]         = array('AvisotaDCA', 'hookActivateAccount');

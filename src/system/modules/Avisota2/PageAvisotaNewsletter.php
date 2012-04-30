@@ -44,7 +44,7 @@
 class PageAvisotaNewsletter extends Frontend
 {
 	/**
-	 * @var AvisotaContent
+	 * @var AvisotaNewsletterContent
 	 */
 	protected $Content;
 
@@ -59,7 +59,7 @@ class PageAvisotaNewsletter extends Frontend
 		define('TL_SCRIPT_URL', ($objPage->staticSystem != '' && !$GLOBALS['TL_CONFIG']['debugMode']) ? $objPage->staticSystem . TL_PATH . '/' : '');
 		define('TL_PLUGINS_URL', ($objPage->staticPlugins != '' && !$GLOBALS['TL_CONFIG']['debugMode']) ? $objPage->staticPlugins . TL_PATH . '/' : '');
 
-		$this->import('AvisotaContent', 'Content');
+		$this->import('AvisotaNewsletterContent', 'Content');
 
 		// force all URLs absolute
 		$GLOBALS['TL_CONFIG']['forceAbsoluteDomainLink'] = true;

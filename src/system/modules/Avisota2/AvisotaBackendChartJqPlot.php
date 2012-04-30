@@ -34,17 +34,17 @@
 
 
 /**
- * Class AvisotaChartJqPlot
+ * Class AvisotaBackendChartJqPlot
  *
  * Parent class for newsletter content elements.
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class AvisotaChartJqPlot extends Backend implements AvisotaChart
+class AvisotaBackendChartJqPlot extends Backend implements AvisotaBackendChart
 {
 	/**
-	 * @var AvisotaTrackingAjax
+	 * @var AvisotaBackendTrackingAjax
 	 */
 	protected $Ajax;
 
@@ -55,7 +55,7 @@ class AvisotaChartJqPlot extends Backend implements AvisotaChart
 	 */
 	public function handleAjax(Database_Result $objNewsletter, $strRecipient)
 	{
-		$this->import('AvisotaTrackingAjax', 'Ajax');
+		$this->import('AvisotaBackendTrackingAjax', 'Ajax');
 
 		if ($this->Input->get('data')) {
 			switch ($this->Input->get('data'))

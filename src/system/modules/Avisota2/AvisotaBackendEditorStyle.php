@@ -34,14 +34,14 @@
 
 
 /**
- * Class AvisotaEditorStyle
+ * Class AvisotaBackendEditorStyle
  *
  * InsertTag hook class.
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class AvisotaEditorStyle extends Controller
+class AvisotaBackendEditorStyle extends Controller
 {
 	public function __construct()
 	{

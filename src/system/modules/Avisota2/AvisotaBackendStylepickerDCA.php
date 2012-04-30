@@ -36,7 +36,7 @@
  * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  */
-class AvisotaStylepickerDCA extends tl_stylepicker4ward
+class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 {
 	public function __construct()
 	{
