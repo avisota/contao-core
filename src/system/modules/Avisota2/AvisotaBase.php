@@ -312,7 +312,7 @@ class AvisotaBase extends Controller
 	 * @return string
 	 * @throws Exception
 	 */
-	public function getTemplate($strTemplate)
+	public function getTemplate($strTemplate, $strFormat='html5')
 	{
 		$strTemplate = basename($strTemplate);
 		$strFilename = $strTemplate . '.html5';
