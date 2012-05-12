@@ -94,8 +94,29 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_import'] = array
 		'columns' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['columns'],
-			'inputType'               => 'multiSelectWizard',
-			'eval'                    => array('columnsCallback'=>array('tl_avisota_recipient_import', 'createFieldSelectorArray'), 'storeCallback'=>array('tl_avisota_recipient_import', 'storeFieldSelectorArray'), 'tl_class'=>'clr')
+			'inputType'               => 'multiColumnWizard',
+
+			// 'save_callback'			  => array('tl_avisota_recipient_import', 'storeFieldSelectorArray'),
+			'eval'                    => array
+			(
+				'columnFields' => array
+				(
+					'colnum' => array
+					(
+						'label' 			=> array($GLOBALS['TL_LANG']['tl_avisota_recipient_import']['colnum']),
+						'inputType' 		=> 'select',
+						'options' 			=> array('1','2','3','4','5','6','7','8','8','9','10','11','12','13','14','15','16','17'),
+						'eval'				=> array('style' => 'width:100px', 'chosen'=>'true')
+					),
+					'field' => array
+					(
+						'label' 			=> array($GLOBALS['TL_LANG']['tl_avisota_recipient_import']['field']),
+						'inputType'			=> 'select',
+						'options_callback'	=> array('tl_avisota_recipient_import', 'getImportableFields'),
+						'eval'				=> array('chosen'=>'true')
+					)
+				)
+			)
 		),
 		'overwrite' => array
 		(
@@ -125,37 +146,22 @@ class tl_avisota_recipient_import extends Backend
 
 	
 	/**
-	 * Create the columns definition array.
+	 * options_callback to find importable fields
 	 * 
 	 * @return array
 	 */
-	public function createFieldSelectorArray()
+	public function getImportableFields()
 	{
 		$this->loadLanguageFile('tl_avisota_recipient');
 		$this->loadDataContainer('tl_avisota_recipient');
 		
-		$arr = array
-		(
-			array
-			(
-				'key' => 'colnum',
-				'label' => $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['colnum'],
-				'source' => array(0=>1,1=>2,2=>3,3=>4,4=>5,5=>6,6=>7,7=>8,8=>9,9=>10,10=>11,11=>12,12=>13,13=>14,14=>15,15=>16,16=>17,17=>18,18=>19,19=>20),
-				'style' => 'width:100px'
-			),
-			array
-			(
-				'key' => 'field',
-				'label' => $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['field'],
-				'source' => array()
-			)
-		);
-		
+
+		$arr = array();
 		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $k=>$v)
 		{
 			if (isset($v['eval']) && isset($v['eval']['importable']) && $v['eval']['importable'])
 			{
-				$arr[1]['source'][$k] = $v['label'][0];
+				$arr[$k] = $v['label'][0];
 			}
 		}
 		
@@ -175,8 +181,8 @@ class tl_avisota_recipient_import extends Backend
 		
 		foreach ($varValue as $row)
 		{
-			$intColnum = $row['values']['colnum'];
-			$strField = $row['values']['field'];
+			$intColnum = $row['colnum'];
+			$strField = $row['field'];
 			
 			if (in_array($intColnum, $arrColnums))
 			{
@@ -222,10 +228,11 @@ class tl_avisota_recipient_import extends Backend
 	 * @param Widget $objWidget
 	 * @return void
 	 */
-	public function storeFieldSelectorArray(MultiSelectWizard $objWidget)
+	public function storeFieldSelectorArray()
 	{
 		// just do nothink
 		// prevent update the non-existing table
+		return '';
 	}
 	
 	
@@ -291,8 +298,9 @@ class tl_avisota_recipient_import extends Backend
 		}
 		
 		// Get columns
-		$arrColumnsRaw = $dc->getData('columns');
-		
+		$arrColumnsRaw = $this->Input->post('columns');
+
+
 		$blnOverwrite = $dc->getData('overwrite') ? true : false;
 		$blnForce = $dc->getData('force') ? true : false;
 		
@@ -307,7 +315,7 @@ class tl_avisota_recipient_import extends Backend
 			$arrColumns = array();
 			foreach ($arrColumnsRaw as $arrRow)
 			{
-				$arrColumns[$arrRow['values']['colnum']] = $arrRow['values']['field'];
+				$arrColumns[$arrRow['colnum']-1] = $arrRow['field'];
 			}
 			$time = time();
 			$intTotal = 0;
@@ -382,12 +390,12 @@ class tl_avisota_recipient_import extends Backend
 		$arrEmail = array();
 		$n = 0;
 
-		while(($arrRow = @fgetcsv($resFile, null, $strDelimiter, $strEnclosure)) !== false)
+		while(($arrRow = @fgetcsv($resFile, NULL, $strDelimiter, $strEnclosure)) !== false)
 		{
 			$arrRecipient = array();
 			foreach ($arrColumns as $intColnum=>$strField)
 			{
-				$arrRecipient[$strField] = $arrRow[$intColnum];
+				$arrRecipient[$strField] = trim($arrRow[$intColnum]);
 			}
 			
 			// Skip invalid entries
