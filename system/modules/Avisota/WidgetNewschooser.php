@@ -71,15 +71,16 @@ class WidgetNewschooser extends Widget
 	public function generate()
 	{
 		$this->import('Database');
+		$this->import('BackendUser', 'User');
 		$strClass = 'newschooser';
 		if(!is_array($this->value)) $this->value = array();
 
 		$objNews = $this->Database->prepare('SELECT n.id, n.headline, n.time, a.title AS archive
 												FROM tl_news AS n
 												LEFT JOIN tl_news_archive AS a ON(n.pid = a.id)
-												WHERE n.published="1"
+												WHERE n.published="1"  AND a.id IN (?)
 												ORDER BY a.title, n.time DESC')
-								  ->execute();
+								  ->execute(implode(",", $this->User->news));
 
 									
 		if($objNews->numRows < 1) {
