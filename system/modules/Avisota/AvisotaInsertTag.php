@@ -87,7 +87,7 @@ class AvisotaInsertTag extends Controller
 					$objPage = $this->Base->getViewOnlinePage($objCategory, $arrCurrentRecipient);
 					if ($objPage)
 					{
-						return $this->Base->extendURL($this->generateFrontendUrl($objPage->row(), '/item/' . ($objNewsletter->alias ? $objNewsletter->alias : $objNewsletter->id)), $objPage);
+						return $this->Base->extendURL($this->generateFrontendUrl($objPage->row(), '/items/' . ($objNewsletter->alias ? $objNewsletter->alias : $objNewsletter->id)), $objPage);
 					}
 					break;
 
@@ -189,7 +189,7 @@ class AvisotaInsertTag extends Controller
 					}
 					if ($objPage)
 					{
-						$strUrl = $this->Base->extendURL($this->generateFrontendUrl($objPage->row(), '/item/' . ($objNewsletter->alias ? $objNewsletter->alias : $objNewsletter->id)), $objPage);
+						$strUrl = $this->Base->extendURL($this->generateFrontendUrl($objPage->row(), '/items/' . ($objNewsletter->alias ? $objNewsletter->alias : $objNewsletter->id)), $objPage);
 						if ($strTag[0] == 'newsletter_latest_link')
 						{
 							$this->loadLanguageFile('avisota');
