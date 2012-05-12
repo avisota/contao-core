@@ -160,7 +160,7 @@ class tl_page_avisota extends tl_page
 	}
 	
 	
-	public function addIcon($row, $label, DataContainer $dc=null, $imageAttribute='', $blnReturnImage=false)
+	public function addIcon($row, $label, DataContainer $dc=null, $imageAttribute='', $blnReturnImage=false, $blnProtected=false)
 	{
 		if ($row['type'] == 'avisota')
 		{
