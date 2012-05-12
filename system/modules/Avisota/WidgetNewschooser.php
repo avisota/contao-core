@@ -80,7 +80,7 @@ class WidgetNewschooser extends Widget
 												LEFT JOIN tl_news_archive AS a ON(n.pid = a.id)
 												WHERE n.published="1"  AND a.id IN (?)
 												ORDER BY a.title, n.time DESC')
-								  ->execute(implode(",", $this->User->news));
+								  ->execute(count($this->User->news) ? implode(",", $this->User->news) : '0');
 
 									
 		if($objNews->numRows < 1) {
