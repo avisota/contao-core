@@ -162,7 +162,7 @@ abstract class NewsletterElement extends Frontend
 	public function replaceImage($arrMatch)
 	{
 		// insert alt or title text
-		return sprintf('%s<%s>', $arrMatch[3] ? $arrMatch[3] . ': ' : ($arrMatch[2] ? $arrMatch[2] . ': ' : ''), $this->extendURL($arrMatch[1]));
+		return sprintf('%s&lt;%s&gt;', $arrMatch[3] ? $arrMatch[3] . ': ' : ($arrMatch[2] ? $arrMatch[2] . ': ' : ''), $this->extendURL($arrMatch[1]));
 	}
 
 
@@ -173,7 +173,7 @@ abstract class NewsletterElement extends Frontend
 	public function replaceLink($arrMatch)
 	{
 		// insert title text
-		return sprintf('%s%s <%s>', $arrMatch[3], $arrMatch[2] ? ' (' . $arrMatch[2] . ')' : '', $this->extendURL($arrMatch[1]));
+		return sprintf('%s%s &lt;%s&gt;', $arrMatch[3], $arrMatch[2] ? ' (' . $arrMatch[2] . ')' : '', $this->extendURL($arrMatch[1]));
 	}
 
 
@@ -182,11 +182,14 @@ abstract class NewsletterElement extends Frontend
 	 */
 	public function getPlainFromHTML($strText)
 	{
+		// replace insert tags
+		$strText = $this->replaceInsertTags($strText);
+
 		// remove line breaks
 		$strText = str_replace
 		(
-			array("\r", "\n"),
-			'',
+			array("\r", "\n", '&nbsp;'),
+			' ',
 			$strText
 		);
 
@@ -226,7 +229,13 @@ abstract class NewsletterElement extends Frontend
 		$strText = strip_tags($strText);
 
 		// decode html entities
-		$strText = html_entity_decode($strText);
+		$strText = html_entity_decode($strText, null, 'UTF-8');
+
+		// double decode for xhtml style
+		$strText = html_entity_decode($strText, null, 'UTF-8');
+
+		// trim lines
+		$strText = implode("\n", trimsplit("\n", $strText));
 
 		// wrap the lines
 		$strText = wordwrap($strText);

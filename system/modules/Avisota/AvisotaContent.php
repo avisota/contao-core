@@ -219,6 +219,17 @@ class AvisotaContent extends Controller
 
 		$strBuffer = $objTemplate->parse();
 		$strBuffer = $this->replaceInsertTags($strBuffer);
+
+		// Convert into XHTML
+		$this->import('String');
+		$strBuffer = $this->String->toXhtml($strBuffer);
+
+		// Remove HTML5 elements
+		$strBuffer = preg_replace(
+			'#(</?)(article|section)#',
+			'$1div',
+			$strBuffer);
+
 		return $this->replaceAndExtendURLs($strBuffer);
 	}
 
@@ -456,5 +467,93 @@ class AvisotaContent extends Controller
 	protected function getNewsletterAreas(Database_Result $objCategory)
 	{
 		return array_unique(array_filter(array_merge(array('body'), trimsplit(',', $objCategory->areas))));
+	}
+
+	/**
+	 * Replace an image tag.
+	 * @param array $arrMatch
+	 */
+	public function replaceImage($arrMatch)
+	{
+		// insert alt or title text
+		return sprintf('%s&lt;%s&gt;', $arrMatch[3] ? $arrMatch[3] . ': ' : ($arrMatch[2] ? $arrMatch[2] . ': ' : ''), $this->extendURL($arrMatch[1]));
+	}
+
+
+	/**
+	 * Replace an link tag.
+	 * @param array $arrMatch
+	 */
+	public function replaceLink($arrMatch)
+	{
+		// insert title text
+		return sprintf('%s%s &lt;%s&gt;', $arrMatch[3], $arrMatch[2] ? ' (' . $arrMatch[2] . ')' : '', $this->extendURL($arrMatch[1]));
+	}
+
+
+	/**
+	 * Generate a plain text from html.
+	 */
+	public function getPlainFromHTML($strText)
+	{
+		// replace insert tags
+		$strText = $this->replaceInsertTags($strText);
+
+		// remove line breaks
+		$strText = str_replace
+		(
+			array("\r", "\n", '&nbsp;'),
+			' ',
+			$strText
+		);
+
+		// replace bold, italic and underlined text
+		$strText = preg_replace
+		(
+			array('#</?(b|strong)>#', '#</?(i|em)>#', '#</?u>#'),
+			array('*', '_', '+'),
+			$strText
+		);
+
+		// replace images
+		$strText = preg_replace_callback
+		(
+			'#<img[^>]+src="([^"]+)"[^>]*(?:alt="([^"])")?[^>]*(?:title="([^"])")?[^>]*>#U',
+			array(&$this, 'replaceImage'),
+			$strText
+		);
+
+		// replace links
+		$strText = preg_replace_callback
+		(
+			'#<a[^>]+href="([^"]+)"[^>]*(?:title="([^"])")?[^>]*>(.*?)</a>#',
+			array(&$this, 'replaceLink'),
+			$strText
+		);
+
+		// replace line breaks and paragraphs
+		$strText = str_replace
+		(
+			array('</div>', '</p>', '<br/>', '<br>'),
+			array("\n", "\n\n", "\n", "\n"),
+			$strText
+		);
+
+		// strip all remeaning tags
+		$strText = strip_tags($strText);
+
+		// decode html entities
+		$strText = html_entity_decode($strText, null, 'UTF-8');
+
+		// double decode for xhtml style
+		$strText = html_entity_decode($strText, null, 'UTF-8');
+
+		// trim lines
+		$strText = implode("\n", trimsplit("\n", $strText));
+
+		// wrap the lines
+		$strText = wordwrap($strText);
+
+		return $strText;
 	}
 }
