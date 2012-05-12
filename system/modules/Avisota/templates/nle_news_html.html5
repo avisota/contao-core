@@ -7,7 +7,7 @@
 		<?php foreach($this->news as $item): ?>
 			<li>
 				<?php echo $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'],$item['time']);?> - <b><a href="{{news_url::<?php echo $item['id'];?>}}"><?php echo $item['headline'];?></a></b>
-				<?php if(strlen($item['teaser'])):?><p><?php echo $item['teaser'];?></p><?php endif;?>
+				<?php if(strlen($item['teaser'])):?><p><?php echo $this->getPlainFromHTML($item['teaser']);?></p><?php endif;?>
 			</li>
 		<?php endforeach;?>
 		</ul>
