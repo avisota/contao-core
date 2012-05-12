@@ -2,7 +2,7 @@
 
 
 <?php foreach($this->events as $event): ?>
- * <?php echo date('d.m.Y',$event['startTime']);?> - *<?php echo $event['title'];?>* [<?php echo $event['href'];?>]
+ * <?php echo date('d.m.Y',$event['startTime']);?> - *<?php echo $event['title'];?>* [{{event_url::<?php echo $event['id'];?>}}]
    <?php if(strlen($event['teaser'])):?><?php echo $event['teaser'];?><?php endif;?>
     
 <?php endforeach;?>

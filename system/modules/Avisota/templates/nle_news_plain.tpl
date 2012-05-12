@@ -2,7 +2,7 @@
 
 
 <?php foreach($this->news as $item): ?>
- * <?php echo date('d.m.Y',$item['time']);?> - *<?php echo $item['headline'];?>* [<?php echo $item['href'];?>]
+ * <?php echo date('d.m.Y',$item['time']);?> - *<?php echo $item['headline'];?>* [{{news_url::<?php echo $item['id'];?>}}]
    <?php if(strlen($item['teaser'])):?><?php echo $item['teaser'];?><?php endif;?>
     
 <?php endforeach;?>
