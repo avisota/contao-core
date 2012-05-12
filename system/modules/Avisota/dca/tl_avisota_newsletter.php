@@ -152,7 +152,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'search'                  => true,
 			'flag'                    => 1,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50')
+			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50', 'decodeEntities'=>true)
 		),
 		'alias' => array
 		(
