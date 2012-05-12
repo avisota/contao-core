@@ -56,8 +56,6 @@ class NewsletterEvent extends NewsletterElement
 	 */
 	protected $arrObjJumpToPages = array();
 
-
-
 	/**
 	 * Generate content element
 	 * @param str $mode Compile either html or plaintext part
