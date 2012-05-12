@@ -65,6 +65,8 @@
   </select>
   <p class="tl_help tl_tip"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview_personalized'][1] ?></p>
 </div>
+
+<div class="clr"></div>
 </div>
 
 <noscript>
@@ -98,8 +100,10 @@
   <input name="recipient_email" id="ctrl_recipient_email" value="" class="tl_text" onfocus="Backend.getScrollOffset();" type="text" />
   <p class="tl_help tl_tip"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewToEmail'][1] ?></p>
 </div>
-</div>
 <?php endif; ?>
+
+<div class="clr"></div>
+</div>
 </div>
 
 <div class="tl_formbody_submit">
