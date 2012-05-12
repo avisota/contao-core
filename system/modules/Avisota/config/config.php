@@ -128,6 +128,10 @@ $GLOBALS['BE_MOD'] = array_merge(
 	array_slice($GLOBALS['BE_MOD'], $i)
 );
 
+// disable language editor in Contao 2.11
+if (version_compare(VERSION, '2.11', '>=')) {
+	unset($GLOBALS['BE_MOD']['avisota']['avisota_translation']);
+}
 
 /**
  * Front end modules
