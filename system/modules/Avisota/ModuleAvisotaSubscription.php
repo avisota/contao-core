@@ -305,7 +305,7 @@ class ModuleAvisotaSubscription extends Module
 		$objHtml->title = $GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['subject'];
 		$objHtml->content = sprintf($GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['html'], implode(', ', $arrList), $strUrl);
 
-		if ($this->sendMail('subscribe', $objPlain->parse(), $objHtml->parse(), $arrRecipient['email']))
+		if ($this->sendMail('subscribe', $this->replaceInsertTags($objPlain->parse()), $this->replaceInsertTags($objHtml->parse()), $arrRecipient['email']))
 		{
 			unset($arrRecipient['lists']);
 			$arrRecipient['tstamp'] = $time;
@@ -496,7 +496,7 @@ class ModuleAvisotaSubscription extends Module
 		$objHtml->title = $GLOBALS['TL_LANG']['avisota']['unsubscribe']['mail']['subject'];
 		$objHtml->content = sprintf($GLOBALS['TL_LANG']['avisota']['unsubscribe']['mail']['html'], implode(', ', $arrList), $strUrl);
 
-		$this->sendMail('unsubscribe', $objPlain->parse(), $objHtml->parse(), $strEmail);
+		$this->sendMail('unsubscribe', $this->replaceInsertTags($objPlain->parse()), $this->replaceInsertTags($objHtml->parse()), $strEmail);
 		$_SESSION['avisota_subscription'][] = sprintf($GLOBALS['TL_LANG']['avisota']['unsubscribe']['mail']['confirm'], $strEmail).'|confirmation';
 
 		$this->redirect(preg_replace('#&?unsubscribetoken=\w+#', '', $this->Environment->request));
