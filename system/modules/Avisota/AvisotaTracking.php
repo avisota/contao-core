@@ -405,7 +405,7 @@ class AvisotaTracking extends BackendModule
 					WHERE $strWhere=?
 					GROUP BY time")
 				->execute($objLink->id);
-			$this->json_output_array($objResultSet);
+			$this->json_output_array($objResultSet, $this->blnUseHighstock);
 			echo "\n" . '}';
 		}
 		echo "\n" . ']';
@@ -416,28 +416,27 @@ class AvisotaTracking extends BackendModule
 	protected function json_output(Database_Result $objResultSet)
 	{
 		header('Content-Type: application/json');
-		$this->json_output_array($objResultSet, !$this->blnUseHighstock);
+		$this->json_output_array($objResultSet, $this->blnUseHighstock);
 		exit;
 	}
 
-	protected function json_output_array(Database_Result $objResultSet, $blnReduceTime = false)
+	public function json_output_array(Database_Result $objResultSet, $blnHighstockMode = true)
 	{
 		// highstock require local time, jqplot use utc time
-		$intTimezoneOffset = $this->blnUseHighstock ? $this->parseDate('Z', time()) : 0;
+		$intTimezoneOffset = $blnHighstockMode ? -$this->parseDate('Z', time()) : 0;
 		echo '[' . "\n";
-		$n = 0;
-		$sum = 0;
+		$n    = 0;
+		$sum  = 0;
 		$time = -1;
-		if ($objResultSet->numRows)
-		{
+		$continued = false;
+		if ($objResultSet->numRows) {
 			while ($objResultSet->next())
 			{
 				$sum += $objResultSet->sum;
-				if ($blnReduceTime)
-				{
-					$temp = floor($objResultSet->time-($objResultSet->time%(60)));
-					if ($temp == $time)
-					{
+				if (!$blnHighstockMode) {
+					$temp = floor($objResultSet->time - ($objResultSet->time % (60)));
+					if ($temp == $time) {
+						$continued = true;
 						continue;
 					}
 					$time = $temp;
@@ -446,8 +445,14 @@ class AvisotaTracking extends BackendModule
 				{
 					$time = $objResultSet->time;
 				}
-				if ($n++ > 0)
-				{
+				if ($n++ > 0) {
+					echo ",\n";
+				}
+				echo '[' . (($time + $intTimezoneOffset) * 1000) . ',' . $sum . ']';
+				$continued = false;
+			}
+			if ($continued) {
+				if ($n++ > 0) {
 					echo ",\n";
 				}
 				echo '[' . (($time + $intTimezoneOffset) * 1000) . ',' . $sum . ']';
@@ -460,12 +465,11 @@ class AvisotaTracking extends BackendModule
 		echo "\n" . ']';
 	}
 
-	protected function search_intersect($a, $b)
+	public function search_intersect($a, $b)
 	{
 		foreach ($a as $e)
 		{
-			if (in_array($e, $b))
-			{
+			if (in_array($e, $b)) {
 				return true;
 			}
 		}
