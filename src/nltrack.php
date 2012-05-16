@@ -27,6 +27,7 @@
  * PHP version 5
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @author     Leo Unglaub <leo@leo-unglaub.net>
  * @package    Avisota
  * @license    LGPL
  * @filesource
