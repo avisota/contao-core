@@ -189,7 +189,7 @@ class ModuleAvisotaSubscription extends Module
 				->execute($arrListIds);
 		while ($objList->next())
 		{
-			$arrList[] = $objList->title;
+			$arrList[$objList->id] = $objList->title;
 		}
 
 		return $arrList;
