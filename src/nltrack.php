@@ -64,14 +64,22 @@ class Tracking extends Frontend
 		// newsletter read
 		if ($intId = $this->Input->get('read'))
 		{
-			$this->Database
-				->prepare("UPDATE tl_avisota_statistic_raw_recipient SET tstamp=?, readed=? WHERE readed='' AND id=?")
-				->execute(time(), '1', $intId);
+			// prepare the set array
+			$arrSet = array
+			(
+				'tstamp' => time(),
+				'readed' => 1
+			);
+
+			// mark the newsletter as read
+			$this->Database->prepare("UPDATE tl_avisota_statistic_raw_recipient %s WHERE readed='' AND id=?")
+						   ->set($arrSet)
+						   ->execute($intId);
 
 			$strFile = 'system/modules/Avisota2/html/blank.gif';
 			$objFile = new File($strFile);
 
-			// Open the "save as …" dialogue
+			// stream the file to the client
 			header('Content-Type: ' . $objFile->mime);
 			header('Content-Transfer-Encoding: binary');
 			header('Content-Length: ' . $objFile->filesize);
@@ -89,20 +97,38 @@ class Tracking extends Frontend
 		// newsletter link click
 		if ($intId = $this->Input->get('link'))
 		{
-			$objRecipientLink = $this->Database
-				->prepare("SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE id=?")
-				->execute($intId);
+			$objRecipientLink = $this->Database->prepare("SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE id=?")
+											   ->execute($intId);
+
 			if ($objRecipientLink->next())
 			{
+				// prepare the set values for the read state
+				$arrSetReadState = array
+				(
+					'tstamp' => time(),
+					'readed' => 1
+				);
+
 				// set read state
-				$this->Database
-					->prepare("UPDATE tl_avisota_statistic_raw_recipient SET tstamp=?, readed=? WHERE readed='' AND pid=? AND recipient=?")
-					->execute(time(), '1', $objRecipientLink->pid, $objRecipientLink->recipient);
+				$this->Database->prepare("UPDATE tl_avisota_statistic_raw_recipient %s WHERE readed='' AND pid=? AND recipient=?")
+							   ->set($arrSetReadState)
+							   ->execute($objRecipientLink->pid, $objRecipientLink->recipient);
+
+
+				// prepare the insert values for the hit counter
+				$arrSetHitCounter = array
+				(
+					'pid'				=> $objRecipientLink->pid,
+					'linkID'			=> $objRecipientLink->linkID,
+					'recipientLinkID'	=> $objRecipientLink->id,
+					'recipient'			=> $objRecipientLink->recipient,
+					'tstamp'			=> time()
+				);
 
 				// increase hit count
-				$this->Database
-					->prepare("INSERT INTO tl_avisota_statistic_raw_link_hit SET pid=?, linkID=?, recipientLinkID=?, recipient=?, tstamp=?")
-					->execute($objRecipientLink->pid, $objRecipientLink->linkID, $objRecipientLink->id, $objRecipientLink->recipient, time());
+				$this->Database->prepare("INSERT INTO tl_avisota_statistic_raw_link_hit %s")
+							   ->set($arrSetHitCounter)
+							   ->execute();
 
 				header('HTTP/1.1 303 See Other');
 				header('Location: ' . ($objRecipientLink->real_url ? $objRecipientLink->real_url : $objRecipientLink->url));
