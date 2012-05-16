@@ -326,7 +326,11 @@ class ModuleAvisotaSubscription extends Module
 			}
 
 			$_SESSION['avisota_subscription'][] = sprintf($GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['send'], $arrRecipient['email']).'|confirmation';
-			$this->log('Add new recipient ' . $arrRecipient['email'] . ' to ' . implode(', ', $arrList), 'ModuleAvisotaSubscription::subscribe', TL_INFO);
+
+			// Log activity
+			foreach ($arrList as $strList) {
+				$this->log('Recipient ' . $arrRecipient['email'] . ' subscribe ' . $strList, 'ModuleAvisotaSubscription::subscribe', TL_AVISOTA_SUBSCRIPTION);
+			}
 		}
 		else
 		{
@@ -383,6 +387,9 @@ class ModuleAvisotaSubscription extends Module
 								`id`=?")
 						->execute($objRecipient->id);
 					$_SESSION['avisota_subscription'][] = sprintf($GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['confirm'], $objRecipient->title).'|confirmation';
+
+					// Log activity
+					$this->log('Recipient ' . $objRecipient->email . ' confirmed subscription to ' . $objRecipient->title, 'ModuleAvisotaSubscription::subscribetoken', TL_AVISOTA_SUBSCRIPTION);
 
 					// HOOK: add custom logic
 					if (isset($GLOBALS['TL_HOOKS']['avisotaActivateSubscribtion']) && is_array($GLOBALS['TL_HOOKS']['avisotaActivateSubscribtion']))
@@ -478,16 +485,24 @@ class ModuleAvisotaSubscription extends Module
 					AND `pid` IN (" . implode(',', $arrListIds) . ")")
 			->execute($strEmail);
 
+		$arrList = $this->getListNames($arrListIds);
+
+		// Log activity
+		foreach ($arrList as $strList) {
+			$this->log('Recipient ' . $strEmail . ' unsubscribe ' . $strList, 'ModuleAvisotaSubscription::remove_subscription', TL_AVISOTA_SUBSCRIPTION);
+		}
+
 		// build blacklist
 		foreach ($arrListIds as $intId)
 		{
 			$this->Database->prepare("INSERT INTO tl_avisota_recipient_blacklist SET pid=?, tstamp=?, email=?")
 				->execute($intId, time(), md5($strEmail));
+
+			// Log activity
+			$this->log('Recipient ' . $strEmail . ' was added to blacklist of ' . $arrList[$intId], 'ModuleAvisotaSubscription::remove_subscription', TL_AVISOTA_SUBSCRIPTION);
 		}
 
 		$strUrl = $this->DomainLink->absolutizeUrl(preg_replace('#&?unsubscribetoken=\w+#', '', $this->Environment->request), $GLOBALS['objPage']);
-
-		$arrList = $this->getListNames($arrListIds);
 
 		$objPlain = new FrontendTemplate($this->avisota_template_unsubscribe_mail_plain);
 		$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota']['unsubscribe']['mail']['plain'], implode(', ', $arrList), $strUrl);

@@ -66,6 +66,7 @@ $GLOBALS['TL_CONFIG']['avisota_salutations'][] = 'Hallo {shortname}';
  */
 define('NL_HTML', 'html');
 define('NL_PLAIN', 'plain');
+define('TL_AVISOTA_SUBSCRIPTION', 'AVISOTA_SUBSCRIPTION');
 
 
 /**

@@ -193,7 +193,11 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'exclude'                 => true,
 			'filter'                  => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'w50 m12', 'importable'=>true, 'exportable'=>true)
+			'eval'                    => array('tl_class'=>'w50 m12', 'importable'=>true, 'exportable'=>true),
+			'save_callback'           => array
+			(
+				array('tl_avisota_recipient', 'logConfirmation')
+			)
 		),
 		'lists' => array
 		(
@@ -283,6 +287,8 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 
 class tl_avisota_recipient extends Backend
 {
+	protected $blnConfirmationChanged = false;
+
 	/**
 	 * Import the back end user object
 	 */
@@ -295,21 +301,46 @@ class tl_avisota_recipient extends Backend
 
 	public function onsubmit_callback($dc)
 	{
+		$objList = $this->Database
+			->prepare('SELECT * FROM tl_avisota_recipient_list WHERE id=?')
+			->execute($dc->activeRecord->pid);
+
+		if ($dc->activeRecord->tstamp == 0) {
+			// Log activity
+			$this->log('Recipient ' . $dc->activeRecord->email . ' was added to ' . $objList->title . ' by ' . $this->User->name . ' (' . $this->User->username . ')', 'ModuleAvisotaSubscription::remove_subscription', TL_AVISOTA_SUBSCRIPTION);
+		}
+
+		if ($this->blnConfirmationChanged) {
+			// Log activity
+			if ($dc->activeRecord->confirmed) {
+				$this->log('Recipient ' . $dc->activeRecord->email . ' confirmed subscription to ' . $objList->title . ' by ' . $this->User->name . ' (' . $this->User->username . ')', 'ModuleAvisotaSubscription::subscribetoken', TL_AVISOTA_SUBSCRIPTION);
+			}
+			else {
+				$this->log('Recipient ' . $dc->activeRecord->email . ' removed subscription confirmation to ' . $objList->title . ' by ' . $this->User->name . ' (' . $this->User->username . ')', 'ModuleAvisotaSubscription::subscribetoken', TL_AVISOTA_SUBSCRIPTION);
+			}
+		}
 	}
 
 
 	public function ondelete_callback($dc)
 	{
+		$objList = $this->Database
+			->prepare('SELECT * FROM tl_avisota_recipient_list WHERE id=?')
+			->execute($dc->activeRecord->pid);
+
 		if ($this->Input->get('blacklist') !== 'false')
 		{
 			$this->Database->prepare("INSERT INTO tl_avisota_recipient_blacklist %s")
 				->set(array('pid'=>$dc->activeRecord->pid, 'tstamp'=>time(), 'email'=>md5($dc->activeRecord->email)))
 				->execute();
 		}
+
+		// Log activity
+		$this->log('Recipient ' . $dc->activeRecord->email . ' unsubscribe ' . $objList->title . ' by ' . $this->User->name . ' (' . $this->User->username . ')', 'ModuleAvisotaSubscription::remove_subscription', TL_AVISOTA_SUBSCRIPTION);
 	}
 
 
-	public function validateBlacklist($strEmail)
+	public function validateBlacklist($strEmail, DataContainer $dc)
 	{
 		// do not check in frontend mode
 		if (TL_MODE == 'FE')
@@ -335,6 +366,14 @@ class tl_avisota_recipient extends Backend
 			}
 		}
 		return $strEmail;
+	}
+
+
+	public function logConfirmation($blnConfirmed, DataContainer $dc)
+	{
+		$this->blnConfirmationChanged = $blnConfirmed != $dc->activeRecord->confirmed;
+
+		return $blnConfirmed;
 	}
 
 
@@ -632,6 +671,22 @@ class tl_avisota_recipient extends Backend
 		// Update the database
 		$this->Database->prepare("UPDATE tl_avisota_recipient SET tstamp=". time() .", confirmed='" . ($blnVisible ? 1 : '') . "' WHERE id=?")
 					   ->execute($intId);
+
+		// Log activity
+		$objRecipient = $this->Database
+			->prepare('SELECT r.email, l.title
+					   FROM tl_avisota_recipient r
+					   INNER JOIN tl_avisota_recipient_list l
+					   ON l.id=r.pid
+					   WHERE r.id=?')
+			->execute($intId);
+
+		if ($blnVisible) {
+			$this->log('Recipient ' . $objRecipient->email . ' confirmed subscription to ' . $objRecipient->title . ' by ' . $this->User->name . ' (' . $this->User->username . ')', 'ModuleAvisotaSubscription::subscribetoken', TL_AVISOTA_SUBSCRIPTION);
+		}
+		else {
+			$this->log('Recipient ' . $objRecipient->email . ' removed subscription confirmation to ' . $objRecipient->title . ' by ' . $this->User->name . ' (' . $this->User->username . ')', 'ModuleAvisotaSubscription::subscribetoken', TL_AVISOTA_SUBSCRIPTION);
+		}
 
 		$this->createNewVersion('tl_avisota_recipient', $intId);
 	}
