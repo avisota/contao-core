@@ -3,7 +3,7 @@
 
 <?php foreach($this->news as $item): ?>
  * <?php echo date('d.m.Y',$item['time']);?> - *<?php echo $item['headline'];?>* [{{news_url::<?php echo $item['id'];?>}}]
-   <?php if(strlen($item['teaser'])):?><?php echo $this->getPlainFromHTML($item['teaser']);?><?php endif;?>
+   <?php if(strlen($item['teaser'])):?><?php echo AvisotaContent::getInstance()->getPlainFromHTML($item['teaser']);?><?php endif;?>
     
 <?php endforeach;?>
 
