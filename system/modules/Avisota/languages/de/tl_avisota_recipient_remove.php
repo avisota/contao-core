@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -36,9 +36,10 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['source'] = array('Quelle', 'Wählen Sie hier die Datei aus, welche die Empfänger enthält die Sie löschen möchten.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['upload'] = array('Upload', 'Laden Sie eine Datei hoch, welche die Empfänger enthält die Sie löschen möchten.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['emails'] = array('E-Mails', 'Tragen Sie hier die Empfänger ein die Sie löschen möchten.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['source']    = array('Quelle', 'Wählen Sie hier die Datei aus, welche die Empfänger enthält die Sie löschen möchten.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['upload']    = array('Upload', 'Laden Sie eine Datei hoch, welche die Empfänger enthält die Sie löschen möchten.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['emails']    = array('E-Mails', 'Tragen Sie hier die Empfänger ein die Sie löschen möchten.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['blacklist'] = array('Blacklist', 'Gelöschte Einträge in die Blacklist eintragen.');
 
 
 /**
@@ -51,6 +52,6 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['edit']    = 'Empfänger lös
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['remove_legend']    = 'Löschen';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['remove_legend'] = 'Löschen';
 
 ?>
