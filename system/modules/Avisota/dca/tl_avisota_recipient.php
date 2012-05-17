@@ -340,7 +340,7 @@ class tl_avisota_recipient extends Backend
 	}
 
 
-	public function validateBlacklist($strEmail, DataContainer $dc)
+	public function validateBlacklist($strEmail, $dc)
 	{
 		// do not check in frontend mode
 		if (TL_MODE == 'FE')
