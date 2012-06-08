@@ -100,10 +100,12 @@ select[disabled] {
 #transport_error {
 	padding: 0 18px 18px;
 }
-#transport_error pre {
+#transport_error pre.response {
 	border: 1px solid #008080;
 	background: #C0FFFF;
 	padding: 18px;
+	overflow: auto;
+	width: 652px;
 }
 #outbox {
 	padding: 0 18px 18px;
@@ -121,6 +123,9 @@ select[disabled] {
 }
 #outbox tbody td {
 	font-size: 16px;
+}
+#outbox tbody td.aborted {
+	color: #f00;
 }
 span.negative {
 	color: #00f;

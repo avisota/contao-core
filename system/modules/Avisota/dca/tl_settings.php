@@ -36,9 +36,11 @@
 /**
  * System configuration
  */
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'avisota_hold_on_errors';
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'avisota_developer_mode';
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'avisota_chart_highstock';
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{avisota_legend:hide},avisota_max_send_time,avisota_max_send_count,avisota_max_send_timeout,avisota_dont_disable_recipient_on_failure,avisota_dont_disable_member_on_failure,avisota_merge_member_details,avisota_chart_highstock,avisota_developer_mode';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{avisota_legend:hide},avisota_max_send_time,avisota_max_send_count,avisota_max_send_timeout,avisota_hold_on_errors,avisota_dont_disable_recipient_on_failure,avisota_dont_disable_member_on_failure,avisota_merge_member_details,avisota_chart_highstock,avisota_developer_mode';
+$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['avisota_hold_on_errors']  = 'avisota_max_send_error_count,avisota_max_send_error_rate';
 $GLOBALS['TL_DCA']['tl_settings']['subpalettes']['avisota_developer_mode']  = 'avisota_developer_email';
 $GLOBALS['TL_DCA']['tl_settings']['subpalettes']['avisota_chart_highstock'] = 'avisota_chart_highstock_confirmed';
 
@@ -59,6 +61,27 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_max_send_count'] = array
 $GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_max_send_timeout'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_timeout'],
+	'inputType'               => 'text',
+	'eval'                    => array('mandatory'=>true, 'rgxp'=>'digit', 'tl_class'=>'w50')
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_hold_on_errors'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['avisota_hold_on_errors'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('tl_class'=>'w50 clr', 'submitOnChange' => true)
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_max_send_error_count'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_error_count'],
+	'inputType'               => 'text',
+	'eval'                    => array('mandatory'=>true, 'rgxp'=>'digit', 'tl_class'=>'w50 clr')
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['avisota_max_send_error_rate'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_error_rate'],
 	'inputType'               => 'text',
 	'eval'                    => array('mandatory'=>true, 'rgxp'=>'digit', 'tl_class'=>'w50')
 );

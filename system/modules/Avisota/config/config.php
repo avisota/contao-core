@@ -49,6 +49,9 @@ if (!isset($_SERVER['REQUEST_TIME']))
 $GLOBALS['TL_CONFIG']['avisota_max_send_time']                = ini_get('max_execution_time') > 0 ? floor(0.85 * ini_get('max_execution_time')) : 120;
 $GLOBALS['TL_CONFIG']['avisota_max_send_count']               = 100;
 $GLOBALS['TL_CONFIG']['avisota_max_send_timeout']             = 1;
+$GLOBALS['TL_CONFIG']['avisota_hold_on_errors']               = true;
+$GLOBALS['TL_CONFIG']['avisota_max_send_error_count']         = 5;
+$GLOBALS['TL_CONFIG']['avisota_max_send_error_rate']          = .1;
 
 
 /**

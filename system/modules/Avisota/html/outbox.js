@@ -1,11 +1,15 @@
 var Outbox = new Class({
-	initialize: function(outbox, newsletter, cycleTime, cyclePause, expectedTime)
+	initialize: function(outbox, newsletter, cycleTime, cyclePause, expectedTime, holdOnErrors, maxErrorCount, maxErrorRate, messages)
 	{
 		this.outbox = outbox;
 		this.newsletter = newsletter;
 		this.cycleTimeSum = cycleTime/10;
 		this.cyclePause = cyclePause;
 		this.expectedTime = expectedTime;
+		this.holdOnErrors = holdOnErrors;
+		this.maxErrorCount = maxErrorCount;
+		this.maxErrorRate = maxErrorRate;
+		this.messages = messages;
 		
 		this.remeaningTime = 0;
 		this.cycleTimeCount = .1;
@@ -65,7 +69,8 @@ var Outbox = new Class({
 						this.outstanding -= responseJSON.success.length + responseJSON.failed.length;
 						this.sended += responseJSON.success.length;
 						this.failed += responseJSON.failed.length;
-						this.cycleCountSum += responseJSON.success.length + responseJSON.failed.length;
+						var total = responseJSON.success.length + responseJSON.failed.length;
+						this.cycleCountSum += total;
 						this.cycleCountCount ++;
 						
 						// time calculation
@@ -81,8 +86,22 @@ var Outbox = new Class({
 						this.logElement.getElement('td.sended').set('html', responseJSON.success.length.formatNumber());
 						this.logElement.getElement('td.failed').set('html', responseJSON.failed.length.formatNumber());
 						this.logElement.getElement('td.time').set('html', responseJSON.time.formatTime());
-						
-						this.request.post.delay(this.cyclePause, this.request, { id: this.outbox.id, action: 'send' });
+
+						if (!this.holdOnErrors
+							|| (responseJSON.failed.length < this.maxErrorCount
+								&& (total <= 2 * this.maxErrorCount
+									|| responseJSON.failed.length / total < this.maxErrorRate))
+							|| confirm(this.messages.toMuchErrorsConfirm)) {
+							this.request.post.delay(this.cyclePause, this.request, { id: this.outbox.id, action: 'send' });
+						}
+						else {
+							window.clearTimeout(timerTrigger);
+
+							new Element('tr')
+								.adopt(new Element('td', { 'colspan': 3, 'class': 'tl_file_list aborted', 'text': this.messages.aborted }))
+								.adopt(new Element('td', { 'class': 'tl_file_list', 'text': ' ' }))
+								.inject(this.logContainer, 'top');
+						}
 					}
 				}
 				// logged out
@@ -103,7 +122,9 @@ var Outbox = new Class({
 				
 				var e = $('transport_error');
 				e.setStyle('display', '');
-				e.getElement('pre.response').set('text', error);
+				e.getElement('pre.response').set('text', '');
+				new Element('div').set('text', error).inject(e.getElement('pre.response'));
+				new Element('div').set('html', text).inject(e.getElement('pre.response'));
 			}.bind(this)
 		});
 		

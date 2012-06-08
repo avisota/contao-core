@@ -409,6 +409,7 @@ class AvisotaTransport extends Backend
 		$intCount = $GLOBALS['TL_CONFIG']['avisota_max_send_count'];
 
 		// set counters
+		$intSended  = 0;
 		$arrSuccess = array();
 		$arrFailed = array();
 		$intStart = time();
@@ -444,7 +445,19 @@ class AvisotaTransport extends Backend
 
 			$intEndExecutionTime = $_SERVER['REQUEST_TIME'] + $GLOBALS['TL_CONFIG']['avisota_max_send_time'];
 
-			while ($intEndExecutionTime > time() && $objRecipients->next())
+			while (
+				// continue while not reach execution time
+				$intEndExecutionTime > time()
+				// contine while not reached recipients list end
+				&& $objRecipients->next()
+				// do not hold on errors
+				&& (!$GLOBALS['TL_CONFIG']['avisota_hold_on_errors']
+					|| (
+						// continue while error count is less than X
+						count($arrFailed) < $GLOBALS['TL_CONFIG']['avisota_max_send_error_count']
+						// continue while error rate is less than X-%
+						&& ($intSended <= 2 * $GLOBALS['TL_CONFIG']['avisota_max_send_error_count']
+							|| count($arrFailed) / $intSended < $GLOBALS['TL_CONFIG']['avisota_max_send_error_rate']))))
 			{
 				$arrRecipient = $objRecipients->row();
 
@@ -546,6 +559,8 @@ class AvisotaTransport extends Backend
 				$this->Database
 					->prepare("UPDATE tl_avisota_newsletter_outbox_recipient SET send=? WHERE id=?")
 					->execute(time(), $objRecipients->id);
+
+				$intSended ++;
 			}
 		}
 
@@ -649,8 +664,10 @@ class AvisotaTransport extends Backend
 				$objEmail->sendTo($arrRecipient['email']);
 			}
 		}
-		catch (Swift_RfcComplianceException $e)
+		catch (Exception $e)
 		{
+			$this->log('Failed to send newsletter ' . $this->objNewsletter->subject . ' to ' . $arrRecipient['email'] . ' with message: ' . $e->getMessage(),
+				'AvisotaTransport', TL_ERROR);
 			$blnFailed = true;
 		}
 
