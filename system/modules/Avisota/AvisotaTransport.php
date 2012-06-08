@@ -59,10 +59,34 @@ include('../../initialize.php');
  */
 class AvisotaTransport extends Backend
 {
+	/**
+	 * @var AvisotaBase
+	 */
+	protected $Base;
+
+	/**
+	 * @var AvisotaContent
+	 */
+	protected $Content;
+
+	/**
+	 * @var AvisotaStatic
+	 */
+	protected $Static;
+
+	/**
+	 * @var Database_Result
+	 */
 	protected $objNewsletter;
 
+	/**
+	 * @var Database_Result
+	 */
 	protected $objCategory;
 
+	/**
+	 * @var array
+	 */
 	protected $arrAttachments;
 
 	public function __construct()
