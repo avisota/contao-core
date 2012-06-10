@@ -666,7 +666,7 @@ class AvisotaTransport extends Backend
 		}
 		catch (Exception $e)
 		{
-			$this->log('Failed to send newsletter ' . $this->objNewsletter->subject . ' to ' . $arrRecipient['email'] . ' with message: ' . $e->getMessage(),
+			$this->log('Failed to send newsletter ' . $this->objNewsletter->subject . ' to ' . $arrRecipient['email'] . ' with message: ' . $e->getMessage() . "\n" . $e->getTraceAsString(),
 				'AvisotaTransport', TL_ERROR);
 			$blnFailed = true;
 		}
