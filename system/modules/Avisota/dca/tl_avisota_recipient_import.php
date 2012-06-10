@@ -472,8 +472,14 @@ class tl_avisota_recipient_import extends Backend
 			
 			if (!isset($arrExistingRecipients[$arrRecipient['email']]))
 			{
+				if (!empty($arrRecipient['addedOn'])) {
+					$addedOn = strtotime($arrRecipient['addedOn']);
+				} else {
+					$addedOn = $time;
+				}
+
 				$arrRecipient['pid']       = $this->Input->get('id');
-				$arrRecipient['addedOn']   = $time;
+				$arrRecipient['addedOn']   = $addedOn;
 				$arrRecipient['addedBy']   = $this->User->id;
 				$arrRecipient['confirmed'] = 1;
 				$this->Database->prepare("INSERT INTO tl_avisota_recipient %s")
