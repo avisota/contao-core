@@ -41,6 +41,7 @@ CREATE TABLE `tl_avisota_recipient` (
   `token` char(32) NOT NULL default '',
   `addedOn` int(10) NOT NULL default '0',
   `addedBy` int(10) unsigned NOT NULL default '0',
+  `addedNotice` varchar(255) NOT NULL default '',
   `addedByModule` int(10) unsigned NOT NULL default '0',
   `addedOnPage` int(10) unsigned NOT NULL default '0',
   `notification` char(1) NOT NULL default '',

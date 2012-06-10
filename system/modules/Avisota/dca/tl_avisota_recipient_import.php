@@ -58,7 +58,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_import'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{import_legend},source,upload;{format_legend:hide},delimiter,enclosure,columns,overwrite,force'
+		'default'                     => '{import_legend},source,upload;{format_legend},delimiter,enclosure,columns,overwrite,force;{added_legend},notice'
 	),
 	
 	// Fields
@@ -129,6 +129,12 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_import'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['force'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'w50 m12')
+		),
+		'notice' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['notice'],
+			'inputType'               => 'text',
+			'eval'                    => array('tl_class' => 'clr long', 'maxlength' => 255)
 		)
 	)
 );
@@ -303,6 +309,7 @@ class tl_avisota_recipient_import extends Backend
 
 		$blnOverwrite = $dc->getData('overwrite') ? true : false;
 		$blnForce = $dc->getData('force') ? true : false;
+		$strNotice = $dc->getData('notice');
 		
 		$this->Session->set('AVISOTA_IMPORT', array(
 			'delimiter' => $dc->getData('delimiter'),
@@ -335,7 +342,7 @@ class tl_avisota_recipient_import extends Backend
 						continue;
 					}
 					
-					$this->importRecipients($objFile->handle, $strDelimiter, $strEnclosure, $arrColumns, $blnOverwrite, $blnForce, $time, $intTotal, $intOverwrite, $intSkipped, $intInvalid);
+					$this->importRecipients($objFile->handle, $strDelimiter, $strEnclosure, $arrColumns, $blnOverwrite, $blnForce, $strNotice, $time, $intTotal, $intOverwrite, $intSkipped, $intInvalid);
 					$objFile->close();
 				}
 			}
@@ -343,7 +350,7 @@ class tl_avisota_recipient_import extends Backend
 			if ($arrUpload)
 			{
 				$resFile = fopen($arrUpload['tmp_name'], 'r');
-				$this->importRecipients($resFile, $strDelimiter, $strEnclosure, $arrColumns, $blnOverwrite, $blnForce, $time, $intTotal, $intOverwrite, $intSkipped, $intInvalid);
+				$this->importRecipients($resFile, $strDelimiter, $strEnclosure, $arrColumns, $blnOverwrite, $blnForce, $strNotice, $time, $intTotal, $intOverwrite, $intSkipped, $intInvalid);
 				fclose($resFile);
 			}
 	
@@ -384,7 +391,7 @@ class tl_avisota_recipient_import extends Backend
 	 * @param int $intTotal
 	 * @param int $intInvalid
 	 */
-	protected function importRecipients($resFile, $strDelimiter, $strEnclosure, $arrColumns, $blnOverwrite, $blnForce, $time, &$intTotal, &$intOverwrite, &$intSkipped, &$intInvalid)
+	protected function importRecipients($resFile, $strDelimiter, $strEnclosure, $arrColumns, $blnOverwrite, $blnForce, $strNotice, $time, &$intTotal, &$intOverwrite, &$intSkipped, &$intInvalid)
 	{
 		$arrRecipients = array();
 		$arrEmail = array();
@@ -450,6 +457,9 @@ class tl_avisota_recipient_import extends Backend
 				continue;
 			}
 
+			if ($strNotice) {
+				$arrRecipient['addedNotice'] = $strNotice;
+			}
 			$arrRecipient['tstamp']    = $time;
 			
 			if (!isset($arrExistingRecipients[$arrRecipient['email']]))

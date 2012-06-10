@@ -167,7 +167,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{recipient_legend},email,confirmed;{personals_legend},salutation,title,firstname,lastname,gender',
+		'default'                     => '{recipient_legend},email,confirmed;{personals_legend},salutation,title,firstname,lastname,gender;{added_legend:hide},addedOn,addedBy,addedNotice',
 	),
 
 	// Fields
@@ -270,7 +270,8 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'filter'                  => true,
 			'sorting'                 => true,
 			'flag'                    => 8,
-			'eval'                    => array('importable'=>true, 'exportable'=>true, 'doNotShow'=>true, 'doNotCopy'=>true)
+			'inputType'               => 'text',
+			'eval'                    => array('disabled' => true, 'tl_class' => 'w50', 'rgxp' => 'datim', 'importable'=>true, 'exportable'=>true, 'doNotShow'=>true, 'doNotCopy'=>true)
 		),
 		'addedBy' => array
 		(
@@ -279,8 +280,20 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'filter'                  => true,
 			'sorting'                 => true,
 			'flag'                    => 1,
+			'inputType'               => 'select',
 			'foreignKey'              => 'tl_user.name',
-			'eval'                    => array('importable'=>true, 'exportable'=>true, 'doNotShow'=>true, 'doNotCopy'=>true)
+			'eval'                    => array('disabled' => true, 'tl_class' => 'w50', 'includeBlankOption' => true, 'importable'=>true, 'exportable'=>true, 'doNotShow'=>true, 'doNotCopy'=>true)
+		),
+		'addedNotice' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedNotice'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'filter'                  => true,
+			'flag'                    => 1,
+			'inputType'               => 'text',
+			'eval'                    => array('tl_class'=>'clr long', 'maxlength'=>255, 'importable'=>true, 'exportable'=>true)
 		)
 	)
 );

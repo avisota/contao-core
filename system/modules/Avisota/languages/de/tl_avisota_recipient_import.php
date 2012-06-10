@@ -43,6 +43,7 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['enclosure']   = array('Textt
 $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['columns']     = array('Spaltenzuordnung', 'Wählen Sie hier, wie die Spalten zugeordnet werden sollen.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['overwrite']   = array('Bestehende Einträge überschreiben', 'Wählen Sie diese Option, um bestehende Einträge zu überschreiben/aktualisieren.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['force']       = array('Import erzwingen', 'Warnung: Sie sollten den Wunsch eines Abonnenten Ihren Newsletter nicht mehr erhalten zu wollen respektieren, es besteht die Möglichkeit dass Sie rechtliche Konsequenzen zu befürchten haben, lassen Sie sich diesbezüglich von einem Anwalt beraten! Nutzen Sie diese Option mit Bedacht und nur dann, wenn Sie wissen was Sie tun! Wählen Sie diese Option, wird die interne Blacklist ignoriert. Die Blacklist sorgt dafür, dass Abonnenten die sich abgemeldet haben nicht durch den Import wieder hinzugefügt werden.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['notice']      = array('Notiz', 'Geben Sie hier eine Notiz an, woher die zu importierenden Einträge kommen. Z.B. eine Messe auf der diese E-Mail gesammelt wurde. (Geben Sie dieses Feld nicht an, wenn Sie diese Notiz aus der CSV importieren möchten!)');
 
 
 /**
@@ -65,6 +66,7 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['edit']        = 'CSV-Import'
 $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['import_legend']    = 'Import';
 $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['format_legend']    = 'CSV Format';
 $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['personals_legend'] = 'Persönliche Daten';
+$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['added_legend']     = 'Registrierungsdetails';
 
 
 /**
