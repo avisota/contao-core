@@ -137,8 +137,17 @@ class AvisotaInsertTag extends Controller
 							return sprintf("%s\n[%s]", $GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe'], $strUrl);
 					}
 					break;
+
+				default:
+					$strKey = $strTag[1];
+					return $objNewsletter->$strKey;
 				}
 			}
+
+			if (TL_MODE == 'BE') {
+				return '{{' . implode('::', $strTag) . '}}';
+			}
+
 			return '';
 
 		case 'newsletter_latest_link':
