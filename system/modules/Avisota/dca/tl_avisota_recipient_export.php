@@ -58,7 +58,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_export'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{format_legend:hide},delimiter,enclosure,fields'
+		'default'                     => '{format_legend:hide},delimiter,enclosure,datim,fields'
 	),
 
 	// Fields
@@ -78,6 +78,12 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_export'] = array
 			'inputType'               => 'select',
 			'options'                 => array('double', 'single'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_export'],
+			'eval'                    => array('tl_class'=>'w50')
+		),
+		'datim' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['datim'],
+			'inputType'               => 'text',
 			'eval'                    => array('tl_class'=>'w50')
 		),
 		'fields' => array
@@ -131,6 +137,8 @@ class tl_avisota_recipient_export extends Backend
 	 */
 	public function onload_callback(DataContainer $dc)
 	{
+		$dc->setData('datim', $GLOBALS['TL_CONFIG']['datimFormat']);
+
 		$varData = $this->Session->get('AVISOTA_EXPORT');
 
 		if ($varData && is_array($varData))
@@ -182,6 +190,12 @@ class tl_avisota_recipient_export extends Backend
 				break;
 		}
 
+		// Get date time format
+		$strDatimFormat = $dc->getData('datim');
+		if (!$strDatimFormat) {
+			$strDatimFormat = $GLOBALS['TL_CONFIG']['datimFormat'];
+		}
+
 		// Get fields
 		$arrFields = $dc->getData('fields');
 
@@ -212,7 +226,8 @@ class tl_avisota_recipient_export extends Backend
 		$this->Session->set('AVISOTA_EXPORT', array(
 			'delimiter' => $dc->getData('delimiter'),
 			'enclosure' => $dc->getData('enclosure'),
-			'fields'    => $dc->getData('fields')
+			'fields'    => $dc->getData('fields'),
+			'datim'     => $strDatimFormat
 		));
 
 		// search for the list
@@ -253,6 +268,11 @@ class tl_avisota_recipient_export extends Backend
 				case 'statistic:links':
 					$intStatisticLinksIndex = count($arrRow);
 					$arrRow[] = '';
+					break;
+
+				case 'tstamp':
+				case 'addedOn':
+					$arrRow[] = $this->parseDate($strDatimFormat, $objRecipient->$strField);
 					break;
 
 				default:

@@ -38,6 +38,7 @@
  */
 $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['delimiter']       = array('Feldtrenner', 'Wählen Sie hier das Zeichen aus, nach dem die einzelnen Felder getrennt sind.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['enclosure']       = array('Texttrenner', 'Wählen Sie hier das Zeichen aus, nach dem der Text getrennt ist.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['datim']           = array('Datum/Zeit Format', 'Wählen Sie hier das Format, in dem Datum und Zeit exportiert werden sollen. (Zum Zurücksetzen auf den Standardwert lassen Sie das Feld einfach leer!)');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['fields']          = array('Felder', 'Wählen Sie hier, wie die Felder die exportiert werden sollen.');
 $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'] = array('Statistik - Links (nicht importierbar)', 'Angeklickte Links');
 
