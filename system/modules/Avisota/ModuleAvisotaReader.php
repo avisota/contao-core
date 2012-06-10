@@ -95,6 +95,12 @@ class ModuleAvisotaReader extends Module
 	 */
 	public function compile()
 	{
+		// Set the item from the auto_item parameter
+		if ($GLOBALS['TL_CONFIG']['useAutoItem'] && isset($_GET['auto_item']))
+		{
+			$this->Input->setGet('items', $this->Input->get('auto_item'));
+		}
+
 		$varId = $this->Input->get('items');
 
 		$objNewsletter = $this->Database

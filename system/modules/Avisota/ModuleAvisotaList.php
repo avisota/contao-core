@@ -130,7 +130,7 @@ class ModuleAvisotaList extends Module
 		{
 			$arrNewsletter = $objNewsletter->row();
 
-			$strParams = '/items/' . ($GLOBALS['TL_CONFIG']['disableAlias'] ? $arrNewsletter['id'] : $arrNewsletter['alias']);
+			$strParams = ($GLOBALS['TL_CONFIG']['useAutoItem'] ? '/' : '/items/') . ($GLOBALS['TL_CONFIG']['disableAlias'] ? $arrNewsletter['id'] : $arrNewsletter['alias']);
 
 			if ($objViewPage) {
 				$arrNewsletter['href'] = $this->generateFrontendUrl($objViewPage->row(), $strParams);
