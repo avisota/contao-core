@@ -192,10 +192,23 @@ class tl_avisota_recipient_remove extends Backend
 			$arrPlaceHolders[] = '?';
 		}
 
+		$objList = $this->Database
+			->prepare('SELECT * FROM tl_avisota_recipient_list WHERE id=?')
+			->execute($this->Input->get('id'));
+		if (!$objList->next()) {
+			$this->log('Recipient list ID ' . $this->Input->get('id') . ' not found!', 'tl_avisota_recipient_remove', TL_ERROR);
+			$this->redirect('contao/main.php?act=error');
+		}
+
 		if (count($arrParams)) {
 			// Check whether the e-mail address exists
 			$objDelete = $this->Database->prepare("DELETE FROM tl_avisota_recipient WHERE pid=? AND email IN (" . implode(',', $arrPlaceHolders) . ")")
 				->execute($arrParams);
+
+			// Log activity
+			foreach ($arrEmails as $strEmail) {
+				$this->log('Recipient ' . $strEmail . ' was removed from ' . $objList->title . ' by ' . $this->User->name . ' (' . $this->User->username . ')', 'tl_avisota_recipient_remove::removeRecipients', TL_AVISOTA_SUBSCRIPTION);
+			}
 
 			// make blacklist entry
 			if ($blnBlacklist) {
