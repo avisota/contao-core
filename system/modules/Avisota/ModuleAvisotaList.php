@@ -105,8 +105,6 @@ class ModuleAvisotaList extends Module
 	 */
 	public function compile()
 	{
-		$varId = $this->Input->get('items');
-
 		$intPage = $this->Input->get('page');
 		if (!$intPage) {
 			$intPage = 0;
