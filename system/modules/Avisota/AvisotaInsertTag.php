@@ -55,6 +55,27 @@ class AvisotaInsertTag extends Controller
 
 	public function hookReplaceNewsletterInsertTags($strTag)
 	{
+		$blnRemovePageObject = false;
+		if (!$GLOBALS['objPage']) {
+			$objCategory = $this->Static->getCategory();
+			if ($objCategory) {
+				// create the global page object
+				$GLOBALS['objPage'] = $this->getPageDetails($objCategory->viewOnlinePage);
+				$blnRemovePageObject = true;
+			}
+		}
+
+		$strResult = $this->innerReplaceNewsletterInsertTags($strTag);
+
+		if ($blnRemovePageObject) {
+			unset($GLOBALS['objPage']);
+		}
+
+		return $strResult;
+	}
+
+	protected function innerReplaceNewsletterInsertTags($strTag)
+	{
 		$strTag = explode('::', $strTag);
 		switch ($strTag[0])
 		{
