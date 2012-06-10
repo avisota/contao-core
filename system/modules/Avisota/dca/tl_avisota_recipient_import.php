@@ -407,6 +407,8 @@ class tl_avisota_recipient_import extends Backend
 			}
 			else
 			{
+				$arrRecipient['email'] = strtolower($arrRecipient['email']);
+
 				$arrRecipients[$n] = $arrRecipient;
 				$arrEmail[$n] = $arrRecipient['email'];
 				$n ++;
@@ -417,7 +419,7 @@ class tl_avisota_recipient_import extends Backend
 		$arrBlacklist = array();
 		if ($blnForce) {
 			$objBlacklist = $this->Database
-				->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid=? AND email IN (MD5('" . implode("'),MD5('", array_map('md5', $arrEmail)) . "'))")
+				->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid=? AND email IN ('" . implode("','", array_map('md5', $arrEmail)) . "')")
 				->execute($this->Input->get('id'));
 		} else {
 			$objBlacklist = $this->Database
@@ -428,7 +430,7 @@ class tl_avisota_recipient_import extends Backend
 				$arrBlacklist[$objBlacklist->email] = $objBlacklist->id;
 			}
 		}
-		
+
 		// Check whether the e-mail address exists
 		$arrExistingRecipients = array();
 		$objExistingRecipients = $this->Database
@@ -442,7 +444,7 @@ class tl_avisota_recipient_import extends Backend
 		foreach ($arrRecipients as $arrRecipient)
 		{
 			// check blacklist
-			if (!$blnForce && isset($arrBlacklist[$arrRecipient['email']]))
+			if (!$blnForce && isset($arrBlacklist[md5($arrRecipient['email'])]))
 			{
 				++$intSkipped;
 				continue;
