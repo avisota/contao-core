@@ -122,7 +122,7 @@ class ModuleAvisotaList extends Module
 		}
 		$objNewsletter = $objNewsletter->execute();
 
-		$objViewPage = $this->jumpTo ? $this->getPageDetails($this->avisota_view_page) : false;
+		$objViewPage = $this->avisota_view_page ? $this->getPageDetails($this->avisota_view_page) : false;
 		$arrViewOnlineCache = array();
 
 		$arrNewsletters = array();
