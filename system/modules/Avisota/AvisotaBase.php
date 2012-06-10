@@ -77,7 +77,6 @@ class AvisotaBase extends Controller
 		else
 		{
 			$this->import('BackendUser', 'User');
-			$this->User->authenticate();
 		}
 		$this->import('Database');
 		$this->import('DomainLink');
