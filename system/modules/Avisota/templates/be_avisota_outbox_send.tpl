@@ -79,7 +79,7 @@ window.addEvent('load', function() {
 		<?php echo json_encode($GLOBALS['TL_CONFIG']['avisota_hold_on_errors']); ?>,
 		<?php echo json_encode($GLOBALS['TL_CONFIG']['avisota_max_send_error_count']); ?>,
 		<?php echo json_encode($GLOBALS['TL_CONFIG']['avisota_max_send_error_rate']); ?>,
-		<?php$this->loadLanguageFile('tl_avisota_transport');
+		<?php $this->loadLanguageFile('tl_avisota_transport');
 			echo json_encode($GLOBALS['TL_LANG']['tl_avisota_transport']); ?>);
 });
 </script>
