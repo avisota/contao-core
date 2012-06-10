@@ -51,10 +51,15 @@ $GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['rejected']    = 'This email
 $GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['html']        = '<p>Dear Subscriber, we are pleased to welcome you to our Newsletter,  %1$s may be welcome.</p>
 <p>Please open the following link in your browser to confirm the subscription.<br/>
 <a href="%2$s">%2$s</a></p>
+<p>If you don\'t want to subscribe to our newsletter, you can remove your subscription by the following link.<br/>
+<a href="%3$s">%3$s</a></p>
 <p>Thank You!</p>';
 $GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['plain']       = 'Dear member, we would like to welcome you to our Newsletter %s.
 
 Please open the following link in your browser to confirm the subscription.
+%s
+
+If you don\'t want to subscribe to our newsletter, you can remove your subscription by the following link.
 %s
 
 Thank You!';

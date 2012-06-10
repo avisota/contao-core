@@ -160,6 +160,17 @@ class ModuleAvisotaSubscription extends Module
 		return $this->DomainLink->absolutizeUrl($this->generateFrontendUrl($GLOBALS['objPage']->row()) . '?subscribetoken=' . implode(',', $arrTokens), $GLOBALS['objPage']);
 	}
 
+	protected function generateUnsubscribeUrl($strEmail, $arrLists)
+	{
+		$objList = $this->Database
+			->query('SELECT * FROM tl_avisota_recipient_list WHERE id IN (' . implode(',', $arrLists) . ')');
+		$arrTokens = $objList->fetchEach('alias');
+
+		return $this->DomainLink->absolutizeUrl(
+			$this->generateFrontendUrl($GLOBALS['objPage']->row()) . '?email=' . rawurlencode($strEmail) . '&amp;unsubscribetoken=' . implode(',', $arrTokens),
+			$GLOBALS['objPage']
+		);
+	}
 
 	/**
 	 * Convert id list to name list.
@@ -295,15 +306,16 @@ class ModuleAvisotaSubscription extends Module
 		}
 
 		$strUrl = $this->generateSubscribeUrl($arrTokens);
+		$strUnsubscribeUrl = $this->generateUnsubscribeUrl($arrRecipient['email'], $arrRecipient['lists']);
 
 		$arrList = $this->getListNames($arrRecipient['lists']);
 
 		$objPlain = new FrontendTemplate($this->avisota_template_subscribe_mail_plain);
-		$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['plain'], implode(', ', $arrList), $strUrl);
+		$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['plain'], implode(', ', $arrList), $strUrl, $strUnsubscribeUrl);
 
 		$objHtml = new FrontendTemplate($this->avisota_template_subscribe_mail_html);
 		$objHtml->title = $GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['subject'];
-		$objHtml->content = sprintf($GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['html'], implode(', ', $arrList), $strUrl);
+		$objHtml->content = sprintf($GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['html'], implode(', ', $arrList), $strUrl, $strUnsubscribeUrl);
 
 		if ($this->sendMail('subscribe', $this->replaceInsertTags($objPlain->parse()), $this->replaceInsertTags($objHtml->parse()), $arrRecipient['email']))
 		{

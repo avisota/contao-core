@@ -56,10 +56,15 @@ $GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['rejected']    = 'Die E-Mail
 $GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['html']        = '<p>Sehr geehrter Interessent, wir freuen uns Sie als Abonnenten unseres Newsletters %1$s begrüßen zu dürfen.</p>
 <p>Bitte öffnen Sie die folgende Adresse in Ihrem Browser, um das Abonnement zu bestätigen.<br/>
 <a href="%2$s">%2$s</a></p>
+<p>Sollten Sie Ihr Abonnement nicht bestätigen wollen, können Sie es über die folgende Adresse auch wieder löschen.<br/>
+<a href="%3$s">%3$s</a></p>
 <p>Vielen Dank</p>';
 $GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['plain']       = 'Sehr geehrter Interessent, wir freuen uns Sie als Abonnenten unseres Newsletters %s begrüßen zu dürfen.
 
 Bitte öffnen Sie die folgende Adresse in Ihrem Browser, um das Abonnement zu bestätigen.
+%s
+
+Sollten Sie Ihr Abonnement nicht bestätigen wollen, können Sie es über die folgende Adresse auch wieder löschen.
 %s
 
 Vielen Dank';
