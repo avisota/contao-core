@@ -461,6 +461,14 @@ class tl_avisota_recipient_import extends Backend
 				$arrRecipient['addedNotice'] = $strNotice;
 			}
 			$arrRecipient['tstamp']    = $time;
+
+			$objList = $this->Database
+				->prepare('SELECT * FROM tl_avisota_recipient_list WHERE id=?')
+				->execute($this->Input->get('id'));
+			if (!$objList->next()) {
+				$this->log('Recipient list ID ' . $this->Input->get('id') . ' not found!', 'tl_avisota_recipient_import', TL_ERROR);
+				$this->redirect('contao/main.php?act=error');
+			}
 			
 			if (!isset($arrExistingRecipients[$arrRecipient['email']]))
 			{
@@ -472,6 +480,9 @@ class tl_avisota_recipient_import extends Backend
 					->set($arrRecipient)
 					->execute();
 
+				// Log activity
+				$this->log('Recipient ' . $arrRecipient['email'] . ' was imported to ' . $objList->title . ' by ' . $this->User->name . ' (' . $this->User->username . ')', 'tl_avisota_recipient_import::importRecipients', TL_AVISOTA_SUBSCRIPTION);
+
 				++$intTotal;
 			}
 			else if ($blnOverwrite)
@@ -479,7 +490,10 @@ class tl_avisota_recipient_import extends Backend
 				$this->Database->prepare("UPDATE tl_avisota_recipient %s WHERE pid=? AND email=?")
 					->set($arrRecipient)
 					->execute($this->Input->get('id'), $arrRecipient['email']);
-				
+
+				// Log activity
+				$this->log('Recipient ' . $arrRecipient['email'] . ' was updated in ' . $objList->title . ' by ' . $this->User->name . ' (' . $this->User->username . ')', 'tl_avisota_recipient_import::importRecipients', TL_AVISOTA_SUBSCRIPTION);
+
 				++$intOverwrite;
 			}
 			else
