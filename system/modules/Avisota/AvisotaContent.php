@@ -221,8 +221,10 @@ class AvisotaContent extends Controller
 		$strBuffer = $this->replaceInsertTags($strBuffer);
 
 		// Convert into XHTML
-		$this->import('String');
-		$strBuffer = $this->String->toXhtml($strBuffer);
+		if (version_compare(VERSION, '2.10', '>=')) {
+			$this->import('String');
+			$strBuffer = $this->String->toXhtml($strBuffer);
+		}
 
 		// Remove HTML5 elements
 		$strBuffer = preg_replace(
