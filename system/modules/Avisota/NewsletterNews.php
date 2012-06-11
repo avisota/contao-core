@@ -68,7 +68,7 @@ class NewsletterNews extends NewsletterElement
 		$newsIDs = unserialize($this->news);
 		if(!is_array($newsIDs))
 		{
-			$this->Template->events = array();
+			$this->Template->news = array();
 			return;
 		}
 
