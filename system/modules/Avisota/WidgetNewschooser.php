@@ -78,12 +78,15 @@ class WidgetNewschooser extends Widget
 		if (!is_array($this->value)) $this->value = array();
 
 		$objNews = $this->Database
-			->prepare('SELECT n.id, n.headline, n.time, a.title AS archive
-					   FROM tl_news AS n
-					   LEFT JOIN tl_news_archive AS a ON(n.pid = a.id)
-					   WHERE n.published="1" ' . ($this->User->isAdmin ? '' : ' AND a.id IN (?)') . '
-					   ORDER BY a.title, n.time DESC')
-			->execute(count($this->User->news) ? implode(",", $this->User->news) : '0');
+			->query('SELECT n.id, n.headline, n.time, a.title AS archive
+					 FROM tl_news AS n
+					 LEFT JOIN tl_news_archive AS a ON(n.pid = a.id)
+					 WHERE n.published="1"' . ($this->User->isAdmin ? '' : ' AND (
+					     a.id IN (' . (count($this->User->news) ? implode(',', $this->User->news) : '0'). ')
+					     OR
+					     n.id IN (' . (count($this->value) ? implode(',', $this->value) : '0') . ')
+					 )') . '
+					 ORDER BY a.title, n.time DESC');
 
 
 		if ($objNews->numRows < 1) {
