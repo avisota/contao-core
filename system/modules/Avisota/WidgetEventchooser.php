@@ -76,6 +76,7 @@ class WidgetEventchooser extends Widget
 		$strClass = 'eventchooser';
 		if (!is_array($this->value)) $this->value = array();
 
+		$this->import('BackendUser', 'User');
 		$arrEvents = $this->getAllEvents();
 
 		if (!count($arrEvents)) {
@@ -118,6 +119,11 @@ class WidgetEventchooser extends Widget
 		$intStart = time();
 		$intEnd   = $intStart + 360 * 3600 * 24;
 
+		$arrValue = $this->value;
+		foreach ($arrValue as $k => $v) {
+			$arrValue[$k] = preg_replace('#^(\d+)_\d+$#', '$1', $v);
+		}
+
 		// Get events of the current period
 		$objEvents = $this->Database
 			->prepare('SELECT e.startTime, e.endTime, e.id,e.title, e.recurring, e.recurrences, e.repeatEach, c.title AS calendar
@@ -129,10 +135,12 @@ class WidgetEventchooser extends Widget
 					   AND (   ' . /* all events in the period */ '
 					           startTime >= ?
 					       AND endTime <= ?
-					       ' . /* all recurring events which are not ending before intStart */ '
+					           ' . /* all recurring events which are not ending before intStart */ '
 					       OR  recurring=?
 					       AND (recurrences=0 OR repeatEnd>=?)
-					   )')
+					   )' . ($this->User->isAdmin ? '' : ('
+					   AND (   c.id IN (' . (count($this->User->calendars) ? implode(',', $this->User->calendars) : '0') . ')
+					       OR  e.id IN (' . (count($this->value) ? implode(',', $arrValue) : '0') . '))')))
 			->execute(1, $intStart, $intEnd, 1, $intStart);
 
 		if ($objEvents->numRows < 1) {
