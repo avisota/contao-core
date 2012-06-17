@@ -74,15 +74,15 @@ abstract class NewsletterElement extends AvisotaFrontend
 	 * @param object
 	 * @return string
 	 */
-	public function __construct(Database_Result $objElement)
+	public function __construct(array $arrElement)
 	{
 		parent::__construct();
 
-		$this->arrData = $objElement->row();
-		$this->space = deserialize($objElement->space);
-		$this->cssID = deserialize($objElement->cssID, true);
+		$this->arrData = $arrElement;
+		$this->space = deserialize($arrElement['space']);
+		$this->cssID = deserialize($arrElement['cssID'], true);
 
-		$arrHeadline = deserialize($objElement->headline);
+		$arrHeadline = deserialize($arrElement['headline']);
 		$this->headline = is_array($arrHeadline) ? $arrHeadline['value'] : $arrHeadline;
 		$this->hl = is_array($arrHeadline) ? $arrHeadline['unit'] : 'h1';
 	}
@@ -107,131 +107,6 @@ abstract class NewsletterElement extends AvisotaFrontend
 	public function __get($strKey)
 	{
 		return $this->arrData[$strKey];
-	}
-
-
-	/**
-	 * Extend the url to an absolute url.
-	 */
-	public function extendURL($strUrl)
-	{
-		$this->import('DomainLink');
-
-		$arrRow = null;
-
-		// get the newsletter category jump to page
-		$objCategory = $this->Database->prepare("
-				SELECT
-					c.*
-				FROM
-					`tl_avisota_newsletter_category` c
-				INNER JOIN
-					`tl_avisota_newsletter` n
-				ON
-					c.`id`=n.`pid`
-				WHERE
-					n.`id`=?")
-			->execute($this->pid);
-		if ($objCategory->next() && $objCategory->viewOnlinePage)
-		{
-			$objPage = $this->getPageDetails($objCategory->viewOnlinePage);
-		}
-		else
-		{
-			$objPage = null;
-		}
-
-		return $this->DomainLink->absolutizeUrl($strUrl, $objPage);
-	}
-
-
-	/**
-	 * Callback function for replaceAndExtendURLs(..)
-	 */
-	public function callbackReplaceAndExtendHref($m)
-	{
-		$strUrl = substr($m[1], 1, -1);
-		return 'href="' . $this->extendURL($strUrl) . '"';
-	}
-
-
-	/**
-	 * Replace an image tag.
-	 * @param array $arrMatch
-	 */
-	public function replaceImage($arrMatch)
-	{
-		// insert alt or title text
-		return sprintf('%s<%s>', $arrMatch[3] ? $arrMatch[3] . ': ' : ($arrMatch[2] ? $arrMatch[2] . ': ' : ''), $this->extendURL($arrMatch[1]));
-	}
-
-
-	/**
-	 * Replace an link tag.
-	 * @param array $arrMatch
-	 */
-	public function replaceLink($arrMatch)
-	{
-		// insert title text
-		return sprintf('%s%s <%s>', $arrMatch[3], $arrMatch[2] ? ' (' . $arrMatch[2] . ')' : '', $this->extendURL($arrMatch[1]));
-	}
-
-
-	/**
-	 * Generate a plain text from html.
-	 */
-	public function getPlainFromHTML($strText)
-	{
-		// remove line breaks
-		$strText = str_replace
-		(
-			array("\r", "\n"),
-			'',
-			$strText
-		);
-
-		// replace bold, italic and underlined text
-		$strText = preg_replace
-		(
-			array('#</?(b|strong)>#', '#</?(i|em)>#', '#</?u>#'),
-			array('*', '_', '+'),
-			$strText
-		);
-
-		// replace images
-		$strText = preg_replace_callback
-		(
-			'#<img[^>]+src="([^"]+)"[^>]*(?:alt="([^"])")?[^>]*(?:title="([^"])")?[^>]*>#U',
-			array(&$this, 'replaceImage'),
-			$strText
-		);
-
-		// replace links
-		$strText = preg_replace_callback
-		(
-			'#<a[^>]+href="([^"]+)"[^>]*(?:title="([^"])")?[^>]*>(.*?)</a>#',
-			array(&$this, 'replaceLink'),
-			$strText
-		);
-
-		// replace line breaks and paragraphs
-		$strText = str_replace
-		(
-			array('</div>', '</p>', '<br/>', '<br>'),
-			array("\n", "\n\n", "\n", "\n"),
-			$strText
-		);
-
-		// strip all remeaning tags
-		$strText = strip_tags($strText);
-
-		// decode html entities
-		$strText = html_entity_decode($strText);
-
-		// wrap the lines
-		$strText = wordwrap($strText);
-
-		return $strText;
 	}
 
 
@@ -327,7 +202,7 @@ abstract class NewsletterElement extends AvisotaFrontend
 			$this->arrStyle[] = 'margin-bottom:'.$this->arrData['space'][1].'px;';
 		}
 
-		$this->Template = new FrontendTemplate($this->strTemplateHTML);
+		$this->Template = new AvisotaNewsletterTemplate($this->strTemplateHTML);
 		$this->Template->setData($this->arrData);
 
 		$this->compile(NL_HTML);
@@ -363,7 +238,7 @@ abstract class NewsletterElement extends AvisotaFrontend
 
 		$this->arrStyle = array();
 
-		$this->Template = new FrontendTemplate($this->strTemplatePlain);
+		$this->Template = new AvisotaNewsletterTemplate($this->strTemplatePlain);
 		$this->Template->setData($this->arrData);
 
 		$this->compile(NL_PLAIN);

@@ -53,6 +53,21 @@ include('../../initialize.php');
  */
 class AvisotaNewsletterPreview extends Backend
 {
+	/**
+	 * @var AvisotaBase
+	 */
+	protected $Base;
+
+	/**
+	 * @var AvisotaNewsletterContent
+	 */
+	protected $Content;
+
+	/**
+	 * @var AvisotaStatic
+	 */
+	protected $Static;
+
 	public function __construct()
 	{
 		$this->import('BackendUser', 'User');
@@ -105,6 +120,7 @@ class AvisotaNewsletterPreview extends Backend
 			$arrSession['mode'] = NL_HTML;
 		}
 
+		/*
 		// get personalized state
 		if ($this->Input->get('personalized'))
 		{
@@ -116,6 +132,7 @@ class AvisotaNewsletterPreview extends Backend
 		{
 			$arrSession['personalized'] = 'anonymous';
 		}
+		*/
 
 		// store session data
 		$this->Session->set('AVISOTA_PREVIEW', $arrSession);
@@ -153,7 +170,7 @@ class AvisotaNewsletterPreview extends Backend
 		}
 
 		// build the recipient data array
-		$arrRecipient = $this->Base->getPreviewRecipient($arrSession['personalized']);
+		$arrRecipient = $this->Base->getPreviewRecipient();
 
 		$this->Static->set($objCategory, $objNewsletter, $arrRecipient);
 

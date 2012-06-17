@@ -66,6 +66,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'fields'                  => array('sendOn=\'\' DESC', 'sendOn DESC'),
 			'panelLayout'             => 'search,limit',
 			'headerFields'            => array('title'),
+			'header_callback'         => array('tl_avisota_newsletter', 'addHeader'),
 			'child_record_callback'   => array('tl_avisota_newsletter', 'addNewsletter'),
 			'child_record_class'      => 'no_padding',
 		),
@@ -146,6 +147,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 		'default'                     => array
 		(
 			'newsletter' => array('subject', 'alias'),
+			'meta'       => array('description', 'keywords'),
 			'recipient'  => array(),
 			'theme'      => array(),
 			'transport'  => array(),
@@ -192,6 +194,24 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			(
 				array('tl_avisota_newsletter', 'generateAlias')
 			)
+		),
+		'description'               => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['description'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=> 255,
+			                                   'tl_class' => 'w50')
+		),
+		'keywords'               => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['keywords'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=> 255,
+			                                   'tl_class' => 'w50')
 		),
 		'setRecipients'         => array
 		(
@@ -318,6 +338,39 @@ class tl_avisota_newsletter extends Backend
 
 					case 'byNewsletter':
 						$GLOBALS['TL_DCA']['tl_avisota_newsletter']['metapalettes']['default']['transport'][] = 'transport';
+						break;
+				}
+			}
+			else {
+				$this->redirect('contao/main.php?act=error');
+			}
+		}
+		else {
+			$objCategory = $this->Database
+				->prepare('SELECT c.*
+						   FROM tl_avisota_newsletter_category c
+						   WHERE c.id=?')
+				->execute($this->Input->get('id'));
+
+			if ($objCategory->next()) {
+				switch ($objCategory->recipientsMode) {
+					case 'byNewsletterOrCategory':
+					case 'byCategory':
+						$GLOBALS['TL_DCA']['tl_avisota_newsletter']['list']['sorting']['headerFields'][] = 'recipients';
+						break;
+				}
+
+				switch ($objCategory->themeMode) {
+					case 'byNewsletterOrCategory':
+					case 'byCategory':
+						$GLOBALS['TL_DCA']['tl_avisota_newsletter']['list']['sorting']['headerFields'][] = 'theme';
+						break;
+				}
+
+				switch ($objCategory->transportMode) {
+					case 'byNewsletterOrCategory':
+					case 'byCategory':
+						$GLOBALS['TL_DCA']['tl_avisota_newsletter']['list']['sorting']['headerFields'][] = 'transport';
 						break;
 				}
 			}
@@ -490,6 +543,46 @@ class tl_avisota_newsletter extends Backend
 		return '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ';
 	}
 
+	public function addHeader($add, $dc)
+	{
+		$key = $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipients'][0];
+		$add[$key] = array();
+
+		$objCategory = AvisotaNewsletterCategory::load($dc->id);
+
+		$blnFallback = $objCategory->recipientsMode == 'byNewsletterOrCategory';
+
+		$arrSelectedRecipients = $objCategory->getRecipients();
+
+		$arrRecipients = AvisotaBackend::getInstance()->getRecipients(true);
+
+		foreach ($arrRecipients as $strGroup => $arrLists) {
+			list($intSource, $strGroup) = explode(':', $strGroup, 2);
+			foreach ($arrLists as $strKey => $strList) {
+				if (in_array($strKey, $arrSelectedRecipients)) {
+					$add[$key][] = sprintf('<a href="contao/main.php?do=avisota_recipient_source&act=edit&id=%d">%s &raquo; %s</a>%s',
+						$intSource, $strGroup,  $strList, $blnFallback ? ' ' . $GLOBALS['TL_LANG']['tl_avisota_newsletter']['fallback'] : '');
+				}
+			}
+		}
+
+		$add[$key] = implode('<br>', $add[$key]);
+
+
+		if ($objCategory->themeMode == 'byNewsletterOrCategory') {
+			$key = $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['theme'][0];
+			$add[$key] .= ' ' . $GLOBALS['TL_LANG']['tl_avisota_newsletter']['fallback'];
+		}
+
+
+		if ($objCategory->transportMode == 'byNewsletterOrCategory') {
+			$key = $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transport'][0];
+			$add[$key] .= ' ' . $GLOBALS['TL_LANG']['tl_avisota_newsletter']['fallback'];
+		}
+
+
+		return $add;
+	}
 
 	/**
 	 * Add the recipient row.

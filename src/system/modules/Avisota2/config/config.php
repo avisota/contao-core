@@ -342,7 +342,7 @@ DELETE FROM tl_member_to_mailing_list WHERE list=OLD.id;';
  * Graphical text support.
  */
 if (in_array('graphicaltext', $this->getActiveModules())) {
-	$GLOBALS['TL_HOOKS']['parseFrontendTemplate'][] = array('FrontendGraphicalText', 'replaceGraphicalTextTag');
+	$GLOBALS['TL_HOOKS']['parseAvisotaNewsletterTemplate'][] = array('FrontendGraphicalText', 'replaceGraphicalTextTag');
 }
 
 

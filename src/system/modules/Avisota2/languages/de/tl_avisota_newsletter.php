@@ -86,6 +86,7 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['member']              = 'Mitgliede
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']              = 'Mitgliedergruppe';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['notSend']             = 'noch nicht versendet';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter']['inheritFromCategory'] = '- von Kategorie übernehmen -';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter']['fallback']            = '(fallback)';
 
 /**
  * Buttons

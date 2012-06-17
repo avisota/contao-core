@@ -42,8 +42,15 @@
  */
 class AvisotaBackend extends Controller
 {
+	/**
+	 * @var AvisotaBackend
+	 */
 	protected static $objInstance = null;
 
+	/**
+	 * @static
+	 * @return AvisotaBackend
+	 */
 	public static function getInstance()
 	{
 		if (self::$objInstance === null) {
@@ -63,7 +70,7 @@ class AvisotaBackend extends Controller
 	 *
 	 * @return array
 	 */
-	public function getRecipients()
+	public function getRecipients($blnPrefixSourceID = false)
 	{
 		$arrRecipients = array();
 
@@ -79,7 +86,7 @@ class AvisotaBackend extends Controller
 					foreach ($arrOptions as $k=>$v) {
 						$arrSourceOptions[$objSource->id . ':' . $k] = $v;
 					}
-					$arrRecipients[$objSource->title] = $arrSourceOptions;
+					$arrRecipients[($blnPrefixSourceID ? $objSource->id . ':' : '') . $objSource->title] = $arrSourceOptions;
 				}
 			} else {
 				$this->log('Recipient source "' . $objSource->type . '" type not found!', 'AvisotaBackend::getRecipients()', TL_ERROR);
@@ -204,10 +211,10 @@ class AvisotaBackend extends Controller
 
 				$arrList = $this->getListNames(explode(',', $objRecipient->lists));
 
-				$objPlain = new FrontendTemplate($objModule->avisota_template_notification_mail_plain);
+				$objPlain = new AvisotaNewsletterTemplate($objModule->avisota_template_notification_mail_plain);
 				$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota']['notification']['mail']['plain'], implode(', ', $arrList), $strUrl);
 
-				$objHtml = new FrontendTemplate($objModule->avisota_template_notification_mail_html);
+				$objHtml = new AvisotaNewsletterTemplate($objModule->avisota_template_notification_mail_html);
 				$objHtml->title = $GLOBALS['TL_LANG']['avisota']['notification']['mail']['subject'];
 				$objHtml->content = sprintf($GLOBALS['TL_LANG']['avisota']['notification']['mail']['html'], implode(', ', $arrList), $strUrl);
 

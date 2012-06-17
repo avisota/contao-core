@@ -382,10 +382,10 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			}
 			$strUrl = $this->generateFrontendUrl($objPage->row());
 
-			$objPlain = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_unsubscribe_mail_plain']);
+			$objPlain = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_unsubscribe_mail_plain']);
 			$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['unsubscribe']['plain'], implode(', ', $arrTitle), $strUrl);
 
-			$objHtml = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_unsubscribe_mail_html']);
+			$objHtml = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_unsubscribe_mail_html']);
 			$objHtml->title = $GLOBALS['TL_LANG']['avisota']['unsubscribe']['subject'];
 			$objHtml->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['unsubscribe']['html'], implode(', ', $arrTitle), $strUrl);
 
@@ -495,10 +495,10 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			}
 			$strUrl = $this->generateFrontendUrl($objPage->row()) . '?subscribetoken=' . implode(',', $arrToken);
 
-			$objPlain = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_subscribe_mail_plain']);
+			$objPlain = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_subscribe_mail_plain']);
 			$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['subscribe']['plain'], implode(', ', $arrTitle), $strUrl);
 
-			$objHtml = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_subscribe_mail_html']);
+			$objHtml = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_subscribe_mail_html']);
 			$objHtml->title = $GLOBALS['TL_LANG']['avisota']['subscribe']['subject'];
 			$objHtml->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['subscribe']['html'], implode(', ', $arrTitle), $strUrl);
 
@@ -607,10 +607,10 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			}
 			$strUrl = $this->generateFrontendUrl($objPage->row()) . '?subscribetoken=' . implode(',', $arrToken);
 
-			$objPlain = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_notification_mail_plain']);
+			$objPlain = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_notification_mail_plain']);
 			$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['notification']['plain'], implode(', ', $arrTitle), $strUrl);
 
-			$objHtml = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_notification_mail_html']);
+			$objHtml = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_notification_mail_html']);
 			$objHtml->title = $GLOBALS['TL_LANG']['avisota']['subscribe']['subject'];
 			$objHtml->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['notification']['html'], implode(', ', $arrTitle), $strUrl);
 

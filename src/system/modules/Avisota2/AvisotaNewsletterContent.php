@@ -89,159 +89,6 @@ class AvisotaNewsletterContent extends Controller
 		return $strContent;
 	}
 
-
-	/**
-	 * Generate an online view.
-	 */
-	public function generateOnlineNewsletter($strId)
-	{
-		// get the newsletter
-		$objNewsletter = $this->Database->prepare("
-				SELECT
-					*
-				FROM
-					tl_avisota_newsletter
-				WHERE
-						id=?
-					OR  alias=?")
-			->execute($strId, $strId);
-
-		if (!$objNewsletter->next())
-		{
-			return false;
-		}
-
-		// get the newsletter category
-		$objCategory = $this->Database->prepare("
-				SELECT
-					*
-				FROM
-					tl_avisota_newsletter_category
-				WHERE
-					id=?")
-			->execute($objNewsletter->pid);
-
-		if (!$objCategory->next())
-		{
-			return false;
-		}
-
-		$this->Static->setCategory($objCategory);
-		$this->Static->setNewsletter($objNewsletter);
-
-		$this->Static->setRecipient($this->Base->getPreviewRecipient('anonymous'));
-
-		$personalized = 'anonymous';
-
-		return $this->replaceInsertTags($this->generateHtml($objNewsletter, $objCategory, $personalized));
-	}
-
-
-	/**
-	 * Generate the newsletter content.
-	 *
-	 * @param Database_Result $objNewsletter
-	 * @param Database_Result $objCategory
-	 * @param array $arrRecipient
-	 * @param string $personalized
-	 * @param string $mode
-	 * @return string
-	 */
-	public function generateContent(Database_Result &$objNewsletter, Database_Result &$objCategory, $personalized, $mode, $area = false)
-	{
-		$strContent = '';
-
-		$objContent = $this->Database->prepare("
-				SELECT
-					*
-				FROM
-					tl_avisota_newsletter_content
-				WHERE
-						pid=?
-					AND invisible=''
-					AND area=?
-				ORDER BY
-					sorting")
-			->execute($objNewsletter->id, $area ? $area : 'body');
-
-		while ($objContent->next())
-		{
-			$strContent .= $this->generateNewsletterElement($objContent, $mode, $personalized);
-		}
-
-		return $strContent;
-	}
-
-
-	/**
-	 * Generate the html newsletter.
-	 *
-	 * @param Database_Result $objNewsletter
-	 * @param Database_Result $objCategory
-	 * @param array $arrRecipient
-	 * @param string $personalized
-	 * @return string
-	 */
-	public function generateHtml(Database_Result &$objNewsletter, Database_Result &$objCategory, $personalized)
-	{
-		$head = '';
-
-		// Add style sheet newsletter.css
-		if (file_exists(TL_ROOT . '/system/scripts/newsletter.css'))
-		{
-			$head .= '<style type="text/css">' . "\n" . $this->cleanCSS(file_get_contents(TL_ROOT . '/system/scripts/newsletter.css'), '/system/scripts/newsletter.css') . "\n" . '</style>' . "\n";
-		}
-		else if (file_exists(TL_ROOT . '/newsletter.css'))
-		{
-			$head .= '<style type="text/css">' . "\n" . $this->cleanCSS(file_get_contents(TL_ROOT . '/newsletter.css')) . "\n" . '</style>' . "\n";
-		}
-
-		if (in_array('layout_additional_sources', $this->Config->getActiveModules()))
-		{
-			$arrStylesheet = unserialize($objCategory->stylesheets);
-			if (is_array($arrStylesheet) && count($arrStylesheet))
-			{
-				$this->import('LayoutAdditionalSources');
-				$this->LayoutAdditionalSources->productive = true;
-				$head .= implode("\n", $this->LayoutAdditionalSources->generateIncludeHtml($arrStylesheet, true, $this->Base->getViewOnlinePage($objCategory)));
-			}
-		}
-
-		$objTemplate = new FrontendTemplate($objNewsletter->template_html ? $objNewsletter->template_html : $objCategory->template_html);
-		$objTemplate->title = $objNewsletter->subject;
-		$objTemplate->head = $head;
-		foreach ($this->getNewsletterAreas($objCategory) as $strArea)
-		{
-			$objTemplate->$strArea = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_HTML, $strArea);
-		}
-		$objTemplate->newsletter = $objNewsletter->row();
-		$objTemplate->category = $objCategory->row();
-		return $this->replaceAndExtendURLs($objTemplate->parse());
-	}
-
-
-	/**
-	 * Generate the plain text newsletter.
-	 *
-	 * @param Database_Result $objNewsletter
-	 * @param Database_Result $objCategory
-	 * @param array $arrRecipient
-	 * @param string $personalized
-	 * @return string
-	 */
-	public function generatePlain(Database_Result &$objNewsletter, Database_Result &$objCategory, $personalized)
-	{
-		$objTemplate = new FrontendTemplate($objNewsletter->template_plain ? $objNewsletter->template_plain : $objCategory->template_plain);
-		foreach ($this->getNewsletterAreas($objCategory) as $strArea)
-		{
-			$objTemplate->$strArea = $this->generateContent($objNewsletter, $objCategory, $personalized, NL_PLAIN, $strArea);
-		}
-		$objTemplate->newsletter = $objNewsletter->row();
-		$objTemplate->category = $objCategory->row();
-		return $objTemplate->parse();
-	}
-
-
 	/**
 	 * Clean up CSS Code.
 	 */
@@ -358,24 +205,26 @@ class AvisotaNewsletterContent extends Controller
 	 * @param integer
 	 * @return string
 	 */
-	public function generateNewsletterElement($objElement, $mode = NL_HTML, $personalized = '')
+	public function generateNewsletterElement($arrElement, $mode = NL_HTML)
 	{
-		if ($objElement->personalize == 'private' && $personalized != 'private')
+		/*
+		if ($arrElement['personalize'] == 'private' && $personalized != 'private')
 		{
 			return '';
 		}
+		 */
 
-		$strClass = $this->findNewsletterElement($objElement->type);
+		$strClass = $this->findNewsletterElement($arrElement['type']);
 
 		// Return if the class does not exist
 		if (!$this->classFileExists($strClass))
 		{
-			$this->log('Newsletter content element class "'.$strClass.'" (newsletter content element "'.$objElement->type.'") does not exist', 'Avisota getNewsletterElement()', TL_ERROR);
+			$this->log('Newsletter content element class "'.$strClass.'" (newsletter content element "'.$arrElement['type'].'") does not exist', 'Avisota getNewsletterElement()', TL_ERROR);
 			return '';
 		}
 
-		$objElement->typePrefix = 'nle_';
-		$objElement = new $strClass($objElement);
+		$arrElement['typePrefix'] = 'nle_';
+		$objElement = new $strClass($arrElement);
 		switch ($mode)
 		{
 		case NL_HTML:
@@ -450,5 +299,129 @@ class AvisotaNewsletterContent extends Controller
 	protected function getNewsletterAreas(Database_Result $objCategory)
 	{
 		return array_unique(array_filter(array_merge(array('body'), trimsplit(',', $objCategory->areas))));
+	}
+
+	/**
+	 * Extend the url to an absolute url.
+	 */
+	public function extendURL($strUrl)
+	{
+		$this->import('DomainLink');
+
+		$arrRow = null;
+
+		// get the newsletter category jump to page
+		$objCategory = $this->Database->prepare("
+				SELECT
+					c.*
+				FROM
+					`tl_avisota_newsletter_category` c
+				INNER JOIN
+					`tl_avisota_newsletter` n
+				ON
+					c.`id`=n.`pid`
+				WHERE
+					n.`id`=?")
+			->execute($this->pid);
+		if ($objCategory->next() && $objCategory->viewOnlinePage)
+		{
+			$objPage = $this->getPageDetails($objCategory->viewOnlinePage);
+		}
+		else
+		{
+			$objPage = null;
+		}
+
+		return $this->DomainLink->absolutizeUrl($strUrl, $objPage);
+	}
+
+
+	/**
+	 * Callback function for replaceAndExtendURLs(..)
+	 */
+	public function callbackReplaceAndExtendHref($m)
+	{
+		$strUrl = substr($m[1], 1, -1);
+		return 'href="' . $this->extendURL($strUrl) . '"';
+	}
+
+
+	/**
+	 * Replace an image tag.
+	 * @param array $arrMatch
+	 */
+	public function replaceImage($arrMatch)
+	{
+		// insert alt or title text
+		return sprintf('%s<%s>', $arrMatch[3] ? $arrMatch[3] . ': ' : ($arrMatch[2] ? $arrMatch[2] . ': ' : ''), $this->extendURL($arrMatch[1]));
+	}
+
+
+	/**
+	 * Replace an link tag.
+	 * @param array $arrMatch
+	 */
+	public function replaceLink($arrMatch)
+	{
+		// insert title text
+		return sprintf('%s%s <%s>', $arrMatch[3], $arrMatch[2] ? ' (' . $arrMatch[2] . ')' : '', $this->extendURL($arrMatch[1]));
+	}
+
+
+	/**
+	 * Generate a plain text from html.
+	 */
+	public function getPlainFromHTML($strText)
+	{
+		// remove line breaks
+		$strText = str_replace
+		(
+			array("\r", "\n"),
+			'',
+			$strText
+		);
+
+		// replace bold, italic and underlined text
+		$strText = preg_replace
+		(
+			array('#</?(b|strong)>#', '#</?(i|em)>#', '#</?u>#'),
+			array('*', '_', '+'),
+			$strText
+		);
+
+		// replace images
+		$strText = preg_replace_callback
+		(
+			'#<img[^>]+src="([^"]+)"[^>]*(?:alt="([^"])")?[^>]*(?:title="([^"])")?[^>]*>#U',
+			array(&$this, 'replaceImage'),
+			$strText
+		);
+
+		// replace links
+		$strText = preg_replace_callback
+		(
+			'#<a[^>]+href="([^"]+)"[^>]*(?:title="([^"])")?[^>]*>(.*?)</a>#',
+			array(&$this, 'replaceLink'),
+			$strText
+		);
+
+		// replace line breaks and paragraphs
+		$strText = str_replace
+		(
+			array('</div>', '</p>', '<br/>', '<br>'),
+			array("\n", "\n\n", "\n", "\n"),
+			$strText
+		);
+
+		// strip all remeaning tags
+		$strText = strip_tags($strText);
+
+		// decode html entities
+		$strText = html_entity_decode($strText);
+
+		// wrap the lines
+		$strText = wordwrap($strText);
+
+		return $strText;
 	}
 }

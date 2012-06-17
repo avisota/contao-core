@@ -42,17 +42,19 @@
  */
 class Avisota extends Backend
 {
+	/**
+	 * @var AvisotaBase
+	 */
+	protected $Base;
+
 	public function __construct()
 	{
 		parent::__construct();
 		$this->import('DomainLink');
 		$this->import('BackendUser', 'User');
 		$this->import('AvisotaBase', 'Base');
-		$this->import('AvisotaNewsletterContent', 'Content');
-		$this->import('AvisotaStatic', 'Static');
 		$this->loadLanguageFile('tl_avisota_newsletter');
 	}
-
 
 	/**
 	 * Show preview and send the Newsletter.
@@ -63,40 +65,22 @@ class Avisota extends Backend
 	{
 		$intId = $this->Input->get('id');
 
-		// get the newsletter
-		$objNewsletter = $this->Database
-			->prepare('
-				SELECT
-					*
-				FROM
-					tl_avisota_newsletter
-				WHERE
-					id=?')
-			->execute($intId);
+		$objNewsletter = AvisotaNewsletter::load($intId);
 
-		if (!$objNewsletter->next())
+		if (!$objNewsletter)
 		{
 			$this->redirect('contao/main.php?do=avisota_newsletter');
 		}
 
-		// get the newsletter category
-		$objCategory = $this->Database->prepare("
-				SELECT
-					*
-				FROM
-					tl_avisota_newsletter_category
-				WHERE
-					id=?")
-			->execute($objNewsletter->pid);
+		$objCategory = AvisotaNewsletterCategory::load($objNewsletter->pid);
 
-		if (!$objCategory->next())
+		if (!$objCategory)
 		{
 			$this->redirect('contao/main.php?do=avisota_newsletter');
 		}
 
 		if (!$this->User->isAdmin)
 		{
-			// Set root IDs
 			if (!is_array($this->User->avisota_newsletter_categories) || count($this->User->avisota_newsletter_categories) < 1)
 			{
 				$root = array(0);
@@ -112,41 +96,11 @@ class Avisota extends Backend
 			}
 		}
 
-		$this->Static->setCategory($objCategory);
-		$this->Static->setNewsletter($objNewsletter);
+		AvisotaStatic::pushCategory($objCategory);
+		AvisotaStatic::pushNewsletter($objNewsletter);
 
 		$objTemplate = new BackendTemplate('be_avisota_send');
 		$objTemplate->import('BackendUser', 'User');
-
-		// add category data to template
-		$objTemplate->setData($objCategory->row());
-
-		// add newsletter data to template
-		$objTemplate->setData($objNewsletter->row());
-
-		// add sender
-		$strFrom = '';
-		if ($objCategory->sender)
-		{
-			$strFrom = $objCategory->sender;
-		}
-		else
-		{
-			$strFrom = $GLOBALS['TL_CONFIG']['adminEmail'];
-		}
-		if ($objCategory->senderName)
-		{
-			$strFrom = sprintf('%s &lt;%s&gt;', $objCategory->senderName, $strFrom);
-		}
-		$objTemplate->from = $strFrom;
-
-		// add recipients
-
-		$objTemplate->recipients_list = $arrLists;
-		$objTemplate->recipients_mgroup = $arrMgroups;
-
-		// add token
-		$objTemplate->token = $strToken;
 
 		// allow backend sending
 		$objTemplate->beSend = $this->Base->allowBackendSending();

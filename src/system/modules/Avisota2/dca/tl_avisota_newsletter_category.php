@@ -236,7 +236,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 			'label'      => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transport'],
 			'inputType'  => 'select',
 			'foreignKey' => 'tl_avisota_transport.title',
-			'eval'       => array('mandatory'=> true,
+			'eval'       => array('includeBlankOption'=> true,
 			                      'tl_class' => 'w50')
 		)
 	)
