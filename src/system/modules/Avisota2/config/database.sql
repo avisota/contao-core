@@ -149,6 +149,8 @@ CREATE TABLE `tl_avisota_newsletter_category` (
   `theme` int(10) unsigned NOT NULL default '0',
   `transportMode` char(22) NOT NULL default '',
   `transport` int(10) unsigned NOT NULL default '0',
+  `showInMenu` char(1) NOT NULL default '',
+  `menuIcon` blob NULL,
   PRIMARY KEY  (`id`),
   KEY `alias` (`alias`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

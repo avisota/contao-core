@@ -571,6 +571,7 @@ class tl_avisota_newsletter_content extends Backend
 				// Check access to the article
 				if (!$this->checkAccessToElement(CURRENT_ID, true))
 				{
+					$this->log('Access to element ID ' . CURRENT_ID . ' denied!', 'tl_avisota_newsletter_content', TL_ERROR);
 					$this->redirect('contao/main.php?act=error');
 				}
 				break;
@@ -583,6 +584,7 @@ class tl_avisota_newsletter_content extends Backend
 				// Check access to the parent element if a content element is moved
 				if (($this->Input->get('act') == 'cutAll' || $this->Input->get('act') == 'copyAll') && !$this->checkAccessToElement($this->Input->get('pid'), ($this->Input->get('mode') == 2)))
 				{
+					$this->log('Access to element ID ' . $this->Input->get('pid') . ' denied!', 'tl_avisota_newsletter_content', TL_ERROR);
 					$this->redirect('contao/main.php?act=error');
 				}
 
@@ -599,6 +601,7 @@ class tl_avisota_newsletter_content extends Backend
 				// Check access to the parent element if a content element is moved
 				if (!$this->checkAccessToElement($this->Input->get('pid'), ($this->Input->get('mode') == 2)))
 				{
+					$this->log('Access to element ID ' . $this->Input->get('pid') . ' denied!', 'tl_avisota_newsletter_content', TL_ERROR);
 					$this->redirect('contao/main.php?act=error');
 				}
 				// NO BREAK STATEMENT HERE
@@ -607,6 +610,7 @@ class tl_avisota_newsletter_content extends Backend
 				// Check access to the content element
 				if (!$this->checkAccessToElement($this->Input->get('id')))
 				{
+					$this->log('Access to element ID ' . $this->Input->get('id') . ' denied!', 'tl_avisota_newsletter_content', TL_ERROR);
 					$this->redirect('contao/main.php?act=error');
 				}
 				break;

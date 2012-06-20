@@ -92,6 +92,7 @@ class Avisota extends Backend
 
 			if (!in_array($objCategory->id, $root))
 			{
+				$this->log('Not enough permissions to send newsletter from category ID ' . $objCategory->id, 'Avisota::send()', TL_ERROR);
 				$this->redirect('contao/main.php?act=error');
 			}
 		}

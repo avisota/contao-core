@@ -127,11 +127,18 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 			'category'   => array('title', 'alias'),
 			'recipients' => array('recipientsMode'),
 			'theme'      => array('themeMode'),
-			'transport'  => array('transportMode')
+			'transport'  => array('transportMode'),
+			'expert'     => array(':hide', 'showInMenu')
 		)
 	),
 
 	// Subpalettes
+	'metasubpalettes' => array
+	(
+		'showInMenu' => array('menuIcon')
+	),
+
+	// Subselectpalettes
 	'metasubselectpalettes' => array
 	(
 		'recipientsMode' => array
@@ -238,6 +245,22 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 			'foreignKey' => 'tl_avisota_transport.title',
 			'eval'       => array('includeBlankOption'=> true,
 			                      'tl_class' => 'w50')
+		),
+		'showInMenu'         => array
+		(
+			'label'      => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['showInMenu'],
+			'inputType'  => 'checkbox',
+			'eval'       => array('tl_class' => 'w50')
+		),
+		'menuIcon'         => array
+		(
+			'label'      => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['menuIcon'],
+			'inputType'  => 'fileTree',
+			'eval'       => array('tl_class' => 'clr',
+								  'files' => true,
+								  'filesOnly' => true,
+								  'fieldType' => 'radio',
+								  'extensions' => 'png,gif,jpg,jpeg')
 		)
 	)
 );

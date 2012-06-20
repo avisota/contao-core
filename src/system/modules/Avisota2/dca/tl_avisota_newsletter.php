@@ -342,9 +342,6 @@ class tl_avisota_newsletter extends Backend
 						break;
 				}
 			}
-			else {
-				$this->redirect('contao/main.php?act=error');
-			}
 		}
 		else {
 			$objCategory = $this->Database
@@ -374,9 +371,6 @@ class tl_avisota_newsletter extends Backend
 						$GLOBALS['TL_DCA']['tl_avisota_newsletter']['list']['sorting']['headerFields'][] = 'transport';
 						break;
 				}
-			}
-			else {
-				$this->redirect('contao/main.php?act=error');
 			}
 		}
 	}

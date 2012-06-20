@@ -151,6 +151,7 @@ class AvisotaNewsletterPreview extends Backend
 
 		if (!$objNewsletter->next())
 		{
+			$this->log('Newsletter ID ' . $intId . ' does not exists!', 'AvisotaNewsletterPreview', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
 
@@ -166,6 +167,7 @@ class AvisotaNewsletterPreview extends Backend
 
 		if (!$objCategory->next())
 		{
+			$this->log('Category ID ' . $objNewsletter->pid . ' does not exists!', 'AvisotaNewsletterPreview', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
 
@@ -188,6 +190,7 @@ class AvisotaNewsletterPreview extends Backend
 				exit(0);
 
 			default:
+				$this->log('Unsupported newsletter preview mode ' . var_export($arrSession['mode']) . '!', 'AvisotaNewsletterPreview', TL_ERROR);
 				$this->redirect('contao/main.php?act=error');
 		}
 	}

@@ -44,6 +44,8 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['themeMode']      = array(
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['theme']          = array('Layout', 'Wählen Sie hier das Layouts aus.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transportMode']  = array('Transportmodul Auswahl', 'Wählen Sie hier wie die Auswahl des Transportmoduls möglich sein soll.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transport']      = array('Transportmodul', 'Wählen Sie hier das Transportmodul aus.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['showInMenu']     = array('Im Menü anzeigen', 'Zeigt die Kategorie im Backend-Menü an.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['menuIcon']       = array('Eigenes Icon', 'Wählen Sie hier ein eigenes Menü-Icon aus.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['tstamp']         = array('Änderungsdatum', 'Datum und Uhrzeit der letzten Änderung');
 
 
