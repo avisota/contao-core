@@ -120,5 +120,3 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['pastenew']    = array('Cre
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['toggle']      = array('Visibility Change ',' Change the visibility of the content item ID %s');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['editalias']   = array('Source Edit Item ',' Edit source item ID %s');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['editarticle'] = array('Edit Article ',' Edit article ID %s');
-
-?>

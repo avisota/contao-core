@@ -306,7 +306,7 @@ class NewsletterGallery extends NewsletterElement
 			}
 		}
 
-		$objTemplate = new FrontendTemplate($strTemplate);
+		$objTemplate = new AvisotaNewsletterTemplate($strTemplate);
 
 		$objTemplate->body = $body;
 		$objTemplate->headline = $this->headline;
@@ -314,5 +314,3 @@ class NewsletterGallery extends NewsletterElement
 		$this->Template->images = $objTemplate->parse();
 	}
 }
-
-?>

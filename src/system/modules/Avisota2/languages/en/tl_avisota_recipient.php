@@ -66,4 +66,3 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['copy']        = array('Copy Subscri
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['delete']      = array('Delete Subscriber', 'Delete subscriber ID %s');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['edit']        = array('Edit Subscriber', 'Edit details of subscriber ID %s');
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['import']      = array('CSV Import', 'Import recipients from a CSV file');
-?>

@@ -72,5 +72,3 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['personals_legend'] = 'Persö
  */
 $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['emailMissing'] = 'Das Feld E-Mail ist obligatorisch!';
 $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['doubles']      = 'Jede Spalte und jedes Feld darf nur ein mal ausgewählt werden!';
-
-?>

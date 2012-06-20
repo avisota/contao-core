@@ -44,7 +44,7 @@
 class AvisotaTracking extends BackendModule
 {
 	/**
-	 * @var AvisotaTrackingAjax
+	 * @var AvisotaBackendTrackingAjax
 	 */
 	protected $Ajax;
 
@@ -64,7 +64,7 @@ class AvisotaTracking extends BackendModule
 			return $this->objDc->edit();
 		}
 
-		$this->import('AvisotaTrackingAjax', 'Ajax');
+		$this->import('AvisotaBackendTrackingAjax', 'Ajax');
 
 		return parent::generate();
 	}
@@ -77,21 +77,21 @@ class AvisotaTracking extends BackendModule
 		// generate chart
 		switch ($GLOBALS['TL_CONFIG']['avisota_chart']) {
 			case 'jqplot':
-				$objChart = new AvisotaChartJqPlot();
+				$objChart = new AvisotaBackendChartJqPlot();
 				break;
 			case 'highstock':
 				if (is_dir(TL_ROOT . '/system/modules/Avisota2/highstock') &&
 					!is_file(TL_ROOT . '/system/modules/Avisota2/highstock/js/highstock.js') &&
 					$GLOBALS['TL_CONFIG']['avisota_chart_highstock_confirm']
 				) {
-					$objChart = new AvisotaChartHighstock();
+					$objChart = new AvisotaBackendChartHighstock();
 				} else {
 					$this->log('Highstock.js is not installed or confirmed to licensed!', 'AvisotaTracking::compile()', TL_ERROR);
 					$this->redirect('contao/main.php?act=error');
 				}
 				break;
 			case 'pchart':
-				$objChart = new AvisotaChartPChart();
+				$objChart = new AvisotaBackendChartPChart();
 				break;
 			default:
 				$this->log('No chart renderer found.', 'AvisotaTracking::compile()', TL_ERROR);

@@ -67,5 +67,3 @@ $GLOBALS['TL_LANG']['NLE']['article']   = array('Artikel', 'Fügt einen Artikel-
 $GLOBALS['TL_LANG']['MSC']['delete_no_blacklist'] = 'Löschen ohne Blacklist-Eintrag';
 $GLOBALS['TL_LANG']['MSC']['schedule']            = 'Versand planen';
 $GLOBALS['TL_LANG']['MSC']['send']                = 'Versenden';
-
-?>

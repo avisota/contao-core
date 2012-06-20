@@ -15,9 +15,9 @@
  * License as published by the Free Software Foundation, either
  * version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that iCSVFileRecipientSourcet will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICUAvisotaRecipientSourceCSVFileLAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -34,14 +34,14 @@
 
 
 /**
- * Class MemberGroupRecipientSource
+ * Class AvisotaRecipientSourceMemberGroup
  *
  * 
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class MemberGroupRecipientSource extends Controller implements AvisotaRecipientSource
+class AvisotaRecipientSourceMemberGroup extends Controller implements AvisotaRecipientSource
 {
 	/**
 	 * @var array
@@ -193,7 +193,7 @@ class MemberGroupRecipientSource extends Controller implements AvisotaRecipientS
 				break;
 
 			default:
-				$this->log('The member recipient source ID ' . $this->config['id'] . ' is not fully configured!', 'IntegratedAvisotaRecipientSource::getRecipientOptions()', TL_ERROR);
+				$this->log('The member recipient source ID ' . $this->config['id'] . ' is not fully configured!', 'AvisotaRecipientSourceIntegratedRecipients::getRecipientOptions()', TL_ERROR);
 				return array();
 		}
 	}

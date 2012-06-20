@@ -44,5 +44,3 @@ $GLOBALS['TL_LANG']['tl_settings']['avisota_developer_email'] = array('Developer
  * Legend
  */
 $GLOBALS['TL_LANG']['tl_settings']['avisota_legend'] = 'Avisota Newsletter System';
-
-?>

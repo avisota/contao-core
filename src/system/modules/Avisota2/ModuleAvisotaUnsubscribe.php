@@ -34,28 +34,57 @@
 
 
 /**
- * Class AvisotaChartJqPlot
+ * Class ModuleAvisotaUnsubscribe
  *
- * Parent class for newsletter content elements.
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-interface AvisotaChart
+class ModuleAvisotaUnsubscribe extends ModuleAvisotaRecipientForm
 {
 	/**
-	 * @abstract
-	 *
-	 * @param Database_Result $objNewsletter
-	 * @param string $strRecipient
+	 * Template
+	 * @var string
 	 */
-	public function handleAjax(Database_Result $objNewsletter, $strRecipient);
+	protected $strTemplate = 'mod_avisota_unsubscribe';
+
+	public function __construct(Database_Result $objModule)
+	{
+		parent::__construct($objModule);
+
+		$this->loadLanguageFile('avisota_unsubscribe');
+	}
 
 	/**
-	 * @abstract
-	 *
-	 * @param Database_Result $objNewsletter
-	 * @param string $strRecipient
+	 * @return string
 	 */
-	public function generateChart(Database_Result $objNewsletter, $strRecipient);
+	public function generate()
+	{
+		if (TL_MODE == 'BE')
+		{
+			$objTemplate = new BackendTemplate('be_wildcard');
+			$objTemplate->wildcard = '### Avisota unsubscribe module ###';
+			return $objTemplate->parse();
+		}
+
+		$this->strFormTemplate = $this->avisota_template_unsubscribe;
+
+		$this->avisota_recipient_fields = '';
+
+		return parent::generate();
+	}
+
+	/**
+	 * Generate the content element
+	 */
+	public function compile()
+	{
+		$this->addForm();
+	}
+
+	protected function submit(array $arrRecipient, array $arrMailingLists, FrontendTemplate $objTemplate)
+	{
+		return $this->handleUnsubscribeSubmit($arrRecipient, $arrMailingLists, $objTemplate);
+	}
 }

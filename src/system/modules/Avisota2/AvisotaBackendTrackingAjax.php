@@ -34,14 +34,14 @@
 
 
 /**
- * Class AvisotaTrackingAjax
+ * Class AvisotaBackendTrackingAjax
  *
  * Parent class for newsletter content elements.
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class AvisotaTrackingAjax extends Backend
+class AvisotaBackendTrackingAjax extends Backend
 {
 	public function json_recipients($objNewsletter)
 	{

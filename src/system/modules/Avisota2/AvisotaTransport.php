@@ -72,11 +72,9 @@ abstract class AvisotaTransport extends Controller
 				return self::$arrTransportModules[$intTransportModule] = new $strClass($objTransportModule);
 			}
 
-			$this->log('Unsupported transport module TYPE ' . $strType, 'AvisotaTransmission::getTransportModule' . '!', TL_ERROR);
 			throw new AvisotaTransportException('Unsupported transport module TYPE ' . $strType . '!');
 		}
 
-		$this->log('Unknown transport module ID ' . $intTransportModule . '!', 'AvisotaTransmission::getTransportModule', TL_ERROR);
 		throw new AvisotaTransportException('Unknown transport module ID ' . $intTransportModule . '!');
 	}
 

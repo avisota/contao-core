@@ -44,9 +44,9 @@
 class ModuleAvisotaReader extends Module
 {
 	/**
-	 * @var AvisotaContent
+	 * @var AvisotaNewsletterContent
 	 */
-	protected $AvisotaContent;
+	protected $AvisotaNewsletterContent;
 
 	/**
 	 * Template
@@ -63,7 +63,7 @@ class ModuleAvisotaReader extends Module
 		parent::__construct($objModule);
 		$this->import('DomainLink');
 		$this->import('FrontendUser', 'User');
-		$this->import('AvisotaContent');
+		$this->import('AvisotaNewsletterContent');
 		$this->loadLanguageFile('avisota');
 	}
 
@@ -111,10 +111,8 @@ class ModuleAvisotaReader extends Module
 				$objNewsletter->template_html = $this->avisota_reader_template;
 
 				$this->Template->newsletter = $objNewsletter->row();
-				$this->Template->html = $this->AvisotaContent->generateHtml($objNewsletter, $objCategory, false);
+				$this->Template->html = $this->AvisotaNewsletterContent->generateHtml($objNewsletter, $objCategory, false);
 			}
 		}
 	}
 }
-
-?>

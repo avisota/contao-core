@@ -34,13 +34,13 @@
 
 
 /**
- * Class MailerTransport
+ * Class AvisotaTransportMailerTransport
  *
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-abstract class MailerTransport extends AvisotaTransport
+abstract class AvisotaTransportMailerTransport extends AvisotaTransport
 {
 	/**
 	 * @var string

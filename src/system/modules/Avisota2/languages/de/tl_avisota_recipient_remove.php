@@ -52,5 +52,3 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['edit']    = 'Empfänger lös
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['remove_legend']    = 'Löschen';
-
-?>

@@ -60,13 +60,15 @@ if (!isset($_SERVER['REQUEST_TIME'])) {
 /**
  * Settings
  */
-$GLOBALS['TL_CONFIG']['avisota_max_send_time']      = ini_get('max_execution_time') > 0 ? floor(0.85 * ini_get('max_execution_time')) : 120;
-$GLOBALS['TL_CONFIG']['avisota_max_send_count']     = 100;
-$GLOBALS['TL_CONFIG']['avisota_max_send_timeout']   = 1;
-$GLOBALS['TL_CONFIG']['avisota_notification_time']  = 3;
-$GLOBALS['TL_CONFIG']['avisota_notification_count'] = 3;
-$GLOBALS['TL_CONFIG']['avisota_cleanup_time']       = 14;
-$GLOBALS['TL_CONFIG']['avisota_chart']              = 'jqplot';
+$GLOBALS['TL_CONFIG']['avisota_max_send_time']          = ini_get('max_execution_time') > 0 ? floor(0.85 * ini_get('max_execution_time')) : 120;
+$GLOBALS['TL_CONFIG']['avisota_max_send_count']         = 100;
+$GLOBALS['TL_CONFIG']['avisota_max_send_timeout']       = 1;
+$GLOBALS['TL_CONFIG']['avisota_notification_time']      = 3;
+$GLOBALS['TL_CONFIG']['avisota_notification_count']     = 3;
+$GLOBALS['TL_CONFIG']['avisota_cleanup_time']           = 14;
+$GLOBALS['TL_CONFIG']['avisota_chart']                  = 'jqplot';
+$GLOBALS['TL_CONFIG']['avisota_statistic']              = isset($GLOBALS['TL_CONFIG']['avisota_statistic']) ? $GLOBALS['TL_CONFIG']['avisota_statistic'] : true;
+$GLOBALS['TL_CONFIG']['avisota_statistic_personalized'] = 'with_aggrement';
 
 
 /**
@@ -140,24 +142,24 @@ $GLOBALS['BE_MOD'] = array_merge(
 	(
 		'avisota' => array
 		(
-			'avisota_newsletter'       => array
-			(
-				'tables'     => array('tl_avisota_newsletter_category', 'tl_avisota_newsletter', 'tl_avisota_newsletter_content', 'tl_avisota_newsletter_create_from_draft'),
-				'send'       => array('Avisota', 'send'),
-				'icon'       => 'system/modules/Avisota2/html/newsletter.png',
-				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
-			),
-			'avisota_outbox'           => array
-			(
-				'callback'   => 'AvisotaOutbox',
-				'icon'       => 'system/modules/Avisota2/html/outbox.png',
-				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
-			),
 			'avisota_tracking'         => array
 			(
 				'callback'   => 'AvisotaTracking',
 				'tables'     => array('tl_avisota_tracking_export'),
 				'icon'       => 'system/modules/Avisota2/html/tracking.png',
+				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
+			),
+			'avisota_outbox'           => array
+			(
+				'callback'   => 'AvisotaBackendOutbox',
+				'icon'       => 'system/modules/Avisota2/html/outbox.png',
+				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
+			),
+			'avisota_newsletter'       => array
+			(
+				'tables'     => array('tl_avisota_newsletter_category', 'tl_avisota_newsletter', 'tl_avisota_newsletter_content', 'tl_avisota_newsletter_create_from_draft'),
+				'send'       => array('Avisota', 'send'),
+				'icon'       => 'system/modules/Avisota2/html/newsletter.png',
 				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 			),
 			'avisota_recipients'       => array
@@ -166,11 +168,64 @@ $GLOBALS['BE_MOD'] = array_merge(
 				'icon'       => 'system/modules/Avisota2/html/recipients.png',
 				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css',
 				'javascript' => 'system/modules/Avisota2/html/backend.js'
-			),
+			)
+		)
+	),
+	array_slice($GLOBALS['BE_MOD'], $i)
+);
+
+if (!$GLOBALS['TL_CONFIG']['avisota_statistic']) {
+	unset($GLOBALS['BE_MOD']['avisota']['avisota_tracking']);
+}
+
+$i                 = array_search('system', array_keys($GLOBALS['BE_MOD'])) + 1;
+$GLOBALS['BE_MOD'] = array_merge(
+	array_slice($GLOBALS['BE_MOD'], 0, $i),
+	array(
+		'avisota_settings_group' => array
+		(
 			'avisota_mailing_list'     => array
 			(
 				'tables'     => array('tl_avisota_mailing_list'),
 				'icon'       => 'system/modules/Avisota2/html/mailing_list.png',
+				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
+			),
+			'avisota_newsletter_draft' => array
+			(
+				'tables'     => array('tl_avisota_newsletter_draft', 'tl_avisota_newsletter_draft_content'),
+				'render'     => array('AvisotaBackend', 'renderDraft'),
+				'preview'    => array('AvisotaBackend', 'previewDraft'),
+				'icon'       => 'system/modules/Avisota2/html/newsletter_draft.png',
+				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
+			),
+			'avisota_settings'         => array
+			(
+				'tables'     => array('tl_avisota_settings'),
+				'icon'       => 'system/modules/Avisota2/html/settings.png',
+				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
+			),
+			'avisota_theme'            => array
+			(
+				'tables'     => array('tl_avisota_newsletter_theme'),
+				'icon'       => 'system/modules/Avisota2/html/theme.png',
+				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
+			),
+			'avisota_recipient_source' => array
+			(
+				'tables'     => array('tl_avisota_recipient_source'),
+				'icon'       => 'system/modules/Avisota2/html/recipient_source.png',
+				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
+			),
+			'avisota_transport'        => array
+			(
+				'tables'     => array('tl_avisota_transport'),
+				'icon'       => 'system/modules/Avisota2/html/transport.png',
+				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
+			),
+			'avisota_update'           => array
+			(
+				'callback'   => 'AvisotaUpdate',
+				'icon'       => 'system/modules/Avisota2/html/update.png',
 				'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 			)
 		)
@@ -178,61 +233,13 @@ $GLOBALS['BE_MOD'] = array_merge(
 	array_slice($GLOBALS['BE_MOD'], $i)
 );
 
-$arrAvisotaBeMod = array(
-	'avisota_settings_group' => array
-	(
-		'avisota_newsletter_draft' => array
-		(
-			'tables'     => array('tl_avisota_newsletter_draft', 'tl_avisota_newsletter_draft_content'),
-			'render'     => array('AvisotaBackend', 'renderDraft'),
-			'preview'    => array('AvisotaBackend', 'previewDraft'),
-			'icon'       => 'system/modules/Avisota2/html/newsletter_draft.png',
-			'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
-		),
-		'avisota_settings'         => array
-		(
-			'tables'     => array('tl_avisota_settings'),
-			'icon'       => 'system/modules/Avisota2/html/settings.png',
-			'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
-		),
-		'avisota_theme'            => array
-		(
-			'tables'     => array('tl_avisota_newsletter_theme'),
-			'icon'       => 'system/modules/Avisota2/html/theme.png',
-			'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
-		),
-		'avisota_recipient_source' => array
-		(
-			'tables'     => array('tl_avisota_recipient_source'),
-			'icon'       => 'system/modules/Avisota2/html/recipient_source.png',
-			'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
-		),
-		'avisota_transport'        => array
-		(
-			'tables'     => array('tl_avisota_transport'),
-			'icon'       => 'system/modules/Avisota2/html/transport.png',
-			'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
-		),
-		'avisota_update'           => array
-		(
-			'callback'   => 'AvisotaUpdate',
-			'icon'       => 'system/modules/Avisota2/html/update.png',
-			'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
-		)
-	)
-);
-
-$i                 = array_search('system', array_keys($GLOBALS['BE_MOD']));
-$GLOBALS['BE_MOD'] = array_merge(
-	array_slice($GLOBALS['BE_MOD'], 0, $i),
-	$arrAvisotaBeMod,
-	array_slice($GLOBALS['BE_MOD'], $i)
-);
-
+// TODO gray out outbox if nothink in there!
 
 /**
  * Front end modules
  */
+$GLOBALS['FE_MOD']['avisota']['avisota_subscribe']    = 'ModuleAvisotaSubscribe';
+$GLOBALS['FE_MOD']['avisota']['avisota_unsubscribe']  = 'ModuleAvisotaUnsubscribe';
 $GLOBALS['FE_MOD']['avisota']['avisota_subscription'] = 'ModuleAvisotaSubscription';
 $GLOBALS['FE_MOD']['avisota']['avisota_list']         = 'ModuleAvisotaList';
 $GLOBALS['FE_MOD']['avisota']['avisota_reader']       = 'ModuleAvisotaReader';
@@ -281,15 +288,15 @@ $GLOBALS['BE_FFL']['newschooser']  = 'WidgetNewschooser';
 /**
  * Recipient sources
  */
-$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['integrated'] = 'IntegratedAvisotaRecipientSource';
-$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['member']     = 'MemberGroupRecipientSource';
-$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['csv_file']   = 'CSVFileRecipientSource';
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['integrated'] = 'AvisotaRecipientSourceIntegratedRecipients';
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['member']     = 'AvisotaRecipientSourceMemberGroup';
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['csv_file']   = 'AvisotaRecipientSourceCSVFile';
 
 
 /**
  * Transport modules
  */
-$GLOBALS['TL_AVISOTA_TRANSPORT']['swift'] = 'SwiftTransport';
+$GLOBALS['TL_AVISOTA_TRANSPORT']['swift'] = 'AvisotaTransportSwiftTransport';
 
 
 /**
@@ -297,7 +304,7 @@ $GLOBALS['TL_AVISOTA_TRANSPORT']['swift'] = 'SwiftTransport';
  */
 $GLOBALS['TL_HOOKS']['outputBackendTemplate'][]   = array('AvisotaBackend', 'hookOutputBackendTemplate');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][]       = array('AvisotaInsertTag', 'hookReplaceNewsletterInsertTags');
-$GLOBALS['TL_HOOKS']['getEditorStylesLayout'][]   = array('AvisotaEditorStyle', 'hookGetEditorStylesLayout');
+$GLOBALS['TL_HOOKS']['getEditorStylesLayout'][]   = array('AvisotaBackendEditorStyle', 'hookGetEditorStylesLayout');
 $GLOBALS['TL_HOOKS']['mysqlMultiTriggerCreate'][] = array('AvisotaUpdate', 'hookMysqlMultiTriggerCreate');
 $GLOBALS['TL_HOOKS']['createNewUser'][]           = array('AvisotaDCA', 'hookCreateNewUser');
 $GLOBALS['TL_HOOKS']['activateAccount'][]         = array('AvisotaDCA', 'hookActivateAccount');
@@ -335,7 +342,7 @@ DELETE FROM tl_member_to_mailing_list WHERE list=OLD.id;';
  * Graphical text support.
  */
 if (in_array('graphicaltext', $this->getActiveModules())) {
-	$GLOBALS['TL_HOOKS']['parseFrontendTemplate'][] = array('FrontendGraphicalText', 'replaceGraphicalTextTag');
+	$GLOBALS['TL_HOOKS']['parseAvisotaNewsletterTemplate'][] = array('FrontendGraphicalText', 'replaceGraphicalTextTag');
 }
 
 

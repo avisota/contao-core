@@ -38,7 +38,6 @@
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['title']          = array('Titel', 'Hier können Sie den Titel der Kategorie angeben.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['alias']          = array('Kategoriealias', 'Der Kategoriealias ist eine eindeutige Referenz, die anstelle der numerischen Kategoriealias-Id aufgerufen werden kann.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['viewOnlinePage'] = array('Online-Ansehen Seite für Mitglieder', 'Bitte wählen Sie die Newsletterleser-Seite aus, zu der Besucher weitergeleitet werden, wenn Sie einen Newsletter online ansehen wollen.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipientsMode'] = array('Empfänger Auswahl', 'Wählen Sie hier wie die Auswahl der Empfänger möglich sein soll.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipients']     = array('Empfänger', 'Wählen Sie hier die Empfänger aus.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['themeMode']      = array('Layout Auswahl', 'Wählen Sie hier wie die Auswahl des Layouts möglich sein soll.');
@@ -52,9 +51,9 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['tstamp']         = array(
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['category_legend']   = 'Kategorie';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipients_legend'] = 'Empfänger';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['theme_legend']      = 'Layout';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['expert_legend']     = 'Experten-Einstellungen';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipients_legend'] = 'Empfänger-Einstellungen';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['theme_legend']      = 'Layout-Einstellungen';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transport_legend']  = 'Transport-Einstellungen';
 
 
 /**

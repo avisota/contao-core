@@ -51,13 +51,13 @@ include('../../initialize.php');
 #error_reporting(0);
 
 /**
- * Class AvisotaTransmission
+ * Class AvisotaNewsletterTransport
  *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class AvisotaTransmission extends Backend
+class AvisotaNewsletterTransport extends Backend
 {
 	protected $objNewsletter;
 
@@ -70,7 +70,7 @@ class AvisotaTransmission extends Backend
 		$this->import('BackendUser', 'User');
 		parent::__construct();
 		$this->import('AvisotaBase', 'Base');
-		$this->import('AvisotaContent', 'Content');
+		$this->import('AvisotaNewsletterContent', 'Content');
 		$this->import('AvisotaStatic', 'Static');
 		$this->import('Database');
 
@@ -85,6 +85,14 @@ class AvisotaTransmission extends Backend
 			foreach ($GLOBALS['TL_HOOKS']['parseTemplate'] as $k=>$v) {
 				if ($v[0] == 'IsotopeFrontend') {
 					unset($GLOBALS['TL_HOOKS']['parseTemplate'][$k]);
+				}
+			}
+		}
+		// HOTFIX Remove catalog frontend hook
+		if (isset($GLOBALS['TL_HOOKS']['parseFrontendTemplate']) && is_array($GLOBALS['TL_HOOKS']['parseFrontendTemplate'])) {
+			foreach ($GLOBALS['TL_HOOKS']['parseFrontendTemplate'] as $k=>$v) {
+				if ($v[0] == 'CatalogExt') {
+					unset($GLOBALS['TL_HOOKS']['parseFrontendTemplate'][$k]);
 				}
 			}
 		}
@@ -110,7 +118,7 @@ class AvisotaTransmission extends Backend
 		// user have to be the right to transport from this point
 		if (!$this->User->isAdmin && !$this->User->hasAccess('send', 'avisota_newsletter_permissions'))
 		{
-			$this->log('Not enough permissions to send avisota newsletter', 'AvisotaTransmission', TL_ERROR);
+			$this->log('Not enough permissions to send avisota newsletter', 'AvisotaNewsletterTransport', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
 
@@ -127,7 +135,7 @@ class AvisotaTransmission extends Backend
 		}
 
 		// no valid action to do
-		$this->log('No action given.', 'AvisotaTransmission', TL_ERROR);
+		$this->log('No action given.', 'AvisotaNewsletterTransport', TL_ERROR);
 		$this->redirect('contao/main.php?act=error');
 	}
 
@@ -143,7 +151,7 @@ class AvisotaTransmission extends Backend
 
 		if (!$this->objNewsletter->next())
 		{
-			$this->log('Could not find newsletter ID ' . $intId, 'AvisotaTransmission', TL_ERROR);
+			$this->log('Could not find newsletter ID ' . $intId, 'AvisotaNewsletterTransport', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
 
@@ -154,7 +162,7 @@ class AvisotaTransmission extends Backend
 
 		if (!$this->objCategory->next())
 		{
-			$this->log('Could not find newsletter category ID ' . $this->objNewsletter->pid, 'AvisotaTransmission', TL_ERROR);
+			$this->log('Could not find newsletter category ID ' . $this->objNewsletter->pid, 'AvisotaNewsletterTransport', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
 
@@ -364,7 +372,7 @@ class AvisotaTransmission extends Backend
 
 		if (!$objOutbox->next())
 		{
-			$this->log('Could not find outbox ID ' . $this->Input->get('id'), 'AvisotaTransmission', TL_ERROR);
+			$this->log('Could not find outbox ID ' . $this->Input->get('id'), 'AvisotaNewsletterTransport', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
 
@@ -494,7 +502,7 @@ class AvisotaTransmission extends Backend
 							$this->Database
 								->prepare("UPDATE tl_avisota_recipient SET confirmed='' WHERE id=?")
 								->execute($objRecipients->recipientID);
-							$this->log('Recipient address "' . $objRecipients->email . '" was rejected and has been deactivated', 'AvisotaTransmission', TL_ERROR);
+							$this->log('Recipient address "' . $objRecipients->email . '" was rejected and has been deactivated', 'AvisotaNewsletterTransport', TL_ERROR);
 						}
 					}
 
@@ -506,7 +514,7 @@ class AvisotaTransmission extends Backend
 							$this->Database
 								->prepare("UPDATE tl_member SET disable='1' WHERE id=?")
 								->execute($objRecipients->recipientID);
-							$this->log('Member address "' . $objRecipients->email . '" was rejected and has been disabled', 'AvisotaTransmission', TL_ERROR);
+							$this->log('Member address "' . $objRecipients->email . '" was rejected and has been disabled', 'AvisotaNewsletterTransport', TL_ERROR);
 						}
 					}
 				}
@@ -764,5 +772,5 @@ class PrepareTrackingHelper extends Controller
 	}
 }
 
-$objAvisotaTransmission = new AvisotaTransmission();
-$objAvisotaTransmission->run();
+$objAvisotaNewsletterTransport = new AvisotaNewsletterTransport();
+$objAvisotaNewsletterTransport->run();

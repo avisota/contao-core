@@ -87,5 +87,3 @@ class NewsletterList extends NewsletterElement
 		}
 	}
 }
-
-?>

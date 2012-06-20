@@ -34,13 +34,13 @@
 
 
 /**
- * Class SwiftTransport
+ * Class AvisotaTransportSwiftTransport
  *
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class SwiftTransport extends MailerTransport
+class AvisotaTransportSwiftTransport extends AvisotaTransportMailerTransport
 {
 	/**
 	 * @var string
@@ -60,8 +60,10 @@ class SwiftTransport extends MailerTransport
 				$objMailerConfig->setSmtpPassword($this->config->swiftSmtpPass);
 				$objMailerConfig->setSmtpEncryption($this->config->swiftSmtpEnc);
 				break;
+
 			case 'swiftSmtpOff':
 				$objMailerConfig->setUseSMTP(false);
+				break;
 		}
 
 		return $objMailerConfig;

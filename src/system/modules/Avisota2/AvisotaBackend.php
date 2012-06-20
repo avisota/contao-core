@@ -42,8 +42,15 @@
  */
 class AvisotaBackend extends Controller
 {
+	/**
+	 * @var AvisotaBackend
+	 */
 	protected static $objInstance = null;
 
+	/**
+	 * @static
+	 * @return AvisotaBackend
+	 */
 	public static function getInstance()
 	{
 		if (self::$objInstance === null) {
@@ -58,13 +65,12 @@ class AvisotaBackend extends Controller
 		$this->import('Database');
 	}
 
-
 	/**
 	 * Get options list of recipients.
 	 *
 	 * @return array
 	 */
-	public function getRecipients()
+	public function getRecipients($blnPrefixSourceID = false)
 	{
 		$arrRecipients = array();
 
@@ -80,7 +86,7 @@ class AvisotaBackend extends Controller
 					foreach ($arrOptions as $k=>$v) {
 						$arrSourceOptions[$objSource->id . ':' . $k] = $v;
 					}
-					$arrRecipients[$objSource->title] = $arrSourceOptions;
+					$arrRecipients[($blnPrefixSourceID ? $objSource->id . ':' : '') . $objSource->title] = $arrSourceOptions;
 				}
 			} else {
 				$this->log('Recipient source "' . $objSource->type . '" type not found!', 'AvisotaBackend::getRecipients()', TL_ERROR);
@@ -90,7 +96,6 @@ class AvisotaBackend extends Controller
 
 		return $arrRecipients;
 	}
-
 
 	public function hookOutputBackendTemplate($strContent, $strTemplate)
 	{
@@ -110,7 +115,7 @@ class AvisotaBackend extends Controller
 		$objResult = $this->Database
 			->prepare("SELECT
 				(SELECT COUNT(rl.recipient) FROM tl_avisota_recipient_to_mailing_list rl WHERE rl.list=?) as total_recipients,
-				(SELECT COUNT(rl.recipient) FROM tl_avisota_recipient_to_mailing_list rl INNER JOIN tl_avisota_recipient r ON r.id=rl.recipient WHERE r.confirmed=? AND rl.list=?) as disabled_recipients,
+				(SELECT COUNT(rl.recipient) FROM tl_avisota_recipient_to_mailing_list rl INNER JOIN tl_avisota_recipient r ON r.id=rl.recipient WHERE rl.confirmed=? AND rl.list=?) as disabled_recipients,
 				(SELECT COUNT(ml.member) FROM tl_member_to_mailing_list ml WHERE ml.list=?) as total_members,
 				(SELECT COUNT(ml.member) FROM tl_member_to_mailing_list ml INNER JOIN tl_member m ON m.id=ml.member WHERE m.disable=? AND ml.list=?) as disabled_members")
 			->execute($arrRow['id'], '', $arrRow['id'], $arrRow['id'], '1', $arrRow['id']);
@@ -206,10 +211,10 @@ class AvisotaBackend extends Controller
 
 				$arrList = $this->getListNames(explode(',', $objRecipient->lists));
 
-				$objPlain = new FrontendTemplate($objModule->avisota_template_notification_mail_plain);
+				$objPlain = new AvisotaNewsletterTemplate($objModule->avisota_template_notification_mail_plain);
 				$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota']['notification']['mail']['plain'], implode(', ', $arrList), $strUrl);
 
-				$objHtml = new FrontendTemplate($objModule->avisota_template_notification_mail_html);
+				$objHtml = new AvisotaNewsletterTemplate($objModule->avisota_template_notification_mail_html);
 				$objHtml->title = $GLOBALS['TL_LANG']['avisota']['notification']['mail']['subject'];
 				$objHtml->content = sprintf($GLOBALS['TL_LANG']['avisota']['notification']['mail']['html'], implode(', ', $arrList), $strUrl);
 

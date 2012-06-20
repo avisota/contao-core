@@ -36,18 +36,20 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['email']              = array('E-Mail', 'Hier können Sie die E-Mail Adresse des Abonnenten angeben.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['lists']              = array('Verteiler', 'Wählen Sie hier die zu abonnierenden Verteiler aus.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['subscriptionAction'] = array('Abonnementaktivierung', 'Wählen Sie hier wie die Aktivierung des Abonnements für neu ausgewählte Verteiler durchgeführt werden soll.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['salutation']         = array('Anrede', 'Hier können Sie die Anrede auswählen.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['title']              = array('Titel', 'Hier können Sie den Titel eingeben.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['firstname']          = array('Vorname', 'Hier können Sie den Vornamen eingeben.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['lastname']           = array('Nachname', 'Hier können Sie den Nachnamen eingeben.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['gender']             = array('Geschlecht', 'Bitte wählen Sie das Geschlecht.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmed']          = array('Bestätigt', 'Hier können Sie die E-Mail Adresse als bestätigt markieren.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['token']              = array('Token', 'Der Auth-Token wird für das Double-Opt-In Verfahren genutzt.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn']            = array('Eintragungszeitpunkt', 'Der Zeitpunkt, an dem das Abonnement hinzugefügt wurde.', 'hinzugefügt am %s');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy']            = array('Hinzugefügt von', 'Der Benutzer, der den Abonnenten hinzugefügt hat, falls dieser sich nicht selbst eingetragen hat.', ' von %s', 'einen gelöschten Benutzer');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmed']               = array('Bestätigt', 'Hier können Sie die E-Mail Adresse als bestätigt markieren.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['email']                   = array('E-Mail', 'Hier können Sie die E-Mail Adresse des Abonnenten angeben.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['lists']                   = array('Verteiler', 'Wählen Sie hier die zu abonnierenden Verteiler aus.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['subscriptionAction']      = array('Abonnementaktivierung', 'Wählen Sie hier wie die Aktivierung des Abonnements für neu ausgewählte Verteiler durchgeführt werden soll.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['salutation']              = array('Anrede', 'Hier können Sie die Anrede auswählen.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['title']                   = array('Titel', 'Hier können Sie den Titel eingeben.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['firstname']               = array('Vorname', 'Hier können Sie den Vornamen eingeben.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['lastname']                = array('Nachname', 'Hier können Sie den Nachnamen eingeben.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['gender']                  = array('Geschlecht', 'Bitte wählen Sie das Geschlecht.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['permitPersonalTracing']   = array('Personenbezogene Profilbildung', 'Der Abonnent hat seine Erlaubnis zur Erfassung eines personenbezogenen Profils erteilt.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['permitPersonalTracingFE'] = array('Datenschutz', 'Ja, ich willige der Erhebung, Verarbeitung und Nutzung meiner personenbezogenen Daten gemäß der <a href="%s" onclick="window.open(this.href); return false;">Datenschutzrichtlinie</a> ein.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['token']                   = array('Token', 'Der Auth-Token wird für das Double-Opt-In Verfahren genutzt.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn']                 = array('Eintragungszeitpunkt', 'Der Zeitpunkt, an dem das Abonnement hinzugefügt wurde.', 'hinzugefügt am %s');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy']                 = array('Hinzugefügt von', 'Der Benutzer, der den Abonnenten hinzugefügt hat, falls dieser sich nicht selbst eingetragen hat.', ' von %s', 'einen gelöschten Benutzer');
 
 
 /**
@@ -56,6 +58,7 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy']            = array('Hinzu
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['recipient_legend']    = 'Abonnent';
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['subscription_legend'] = 'Abonnement';
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['personals_legend']    = 'Persönliche Daten';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['tracing_legend']      = 'Nachverfolgung';
 
 
 /**
@@ -95,5 +98,5 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['remove']              = array('CSV-
 /**
  * Exceptions
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['blacklist'] = 'Der Verteiler <strong>%s</strong> befindet sich in der Blacklist, wenn Sie die Blacklist ignorieren möchten, speichern Sie erneut!';
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['blacklist']  = 'Der Verteiler <strong>%s</strong> befindet sich in der Blacklist, wenn Sie die Blacklist ignorieren möchten, speichern Sie erneut!';
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['blacklists'] = 'Die Verteiler <strong>%s</strong> befinden sich in der Blacklist, wenn Sie die Blacklist ignorieren möchten, speichern Sie erneut!';

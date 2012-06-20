@@ -127,8 +127,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 			'category'   => array('title', 'alias'),
 			'recipients' => array('recipientsMode'),
 			'theme'      => array('themeMode'),
-			'transport'  => array('transportMode'),
-			'expert'     => array('viewOnlinePage')
+			'transport'  => array('transportMode')
 		)
 	),
 
@@ -237,16 +236,8 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_category'] = array
 			'label'      => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transport'],
 			'inputType'  => 'select',
 			'foreignKey' => 'tl_avisota_transport.title',
-			'eval'       => array('mandatory'=> true,
+			'eval'       => array('includeBlankOption'=> true,
 			                      'tl_class' => 'w50')
-		),
-		'viewOnlinePage' => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['viewOnlinePage'],
-			'exclude'   => true,
-			'inputType' => 'pageTree',
-			'eval'      => array('fieldType'=> 'radio',
-			                     'tl_class' => 'clr')
 		)
 	)
 );
@@ -550,5 +541,3 @@ class tl_avisota_newsletter_category extends Backend
 		return $arrAdditionalSource;
 	}
 }
-
-?>

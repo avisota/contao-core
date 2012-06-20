@@ -174,5 +174,3 @@ class tl_avisota_recipient_migrate extends Backend
 		$this->reload();
 	}
 }
-
-?>

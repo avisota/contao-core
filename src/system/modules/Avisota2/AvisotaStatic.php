@@ -43,81 +43,45 @@
 class AvisotaStatic extends Frontend
 {
 	/**
-	 * Singelton instance.
-	 *
-	 * @var AvisotaStatic
-	 */
-	private static $objInstance = null;
-
-	/**
-	 * Get the singleton instance.
-	 */
-	public static function getInstance()
-	{
-		if (self::$objInstance === null)
-		{
-			self::$objInstance = new AvisotaStatic();
-		}
-		return self::$objInstance;
-	}
-
-
-	/**
 	 * The current category.
 	 *
-	 * @var Database_Result
+	 * @var array
 	 */
-	private static $objCategory;
+	private static $objCategory = array();
 
 
 	/**
 	 * The current newsletter.
 	 *
-	 * @var Database_Result
+	 * @var array
 	 */
-	private static $objNewsletter;
+	private static $objNewsletter = array();
 
 
 	/**
 	 * The current recipient.
 	 *
-	 * @var Database_Result
+	 * @var array
 	 */
-	private static $arrRecipient;
-
-
-	/**
-	 * Set complete current data.
-	 *
-	 * @param Database_Result $objCategory
-	 * @param Database_Result $objNewsletter
-	 * @param Database_Result $objRecipient
-	 */
-	public static function set($objCategory, $objNewsletter, $objRecipient)
-	{
-		self::$objCategory = $objCategory;
-		self::$objNewsletter = $objNewsletter;
-		self::$arrRecipient = $objRecipient;
-	}
-
+	private static $arrRecipient = array();
 
 	/**
 	 * Reset all data.
 	 */
 	public static function reset()
 	{
-		self::$objCategory = null;
-		self::$objNewsletter = null;
-		self::$arrRecipient = null;
+		self::$objCategory = array();
+		self::$objNewsletter = array();
+		self::$arrRecipient = array();
 	}
 
 
 	/**
 	 * Reset the current category.
 	 */
-	public static function resetCategory()
+	public static function popCategory()
 	{
-		self::$objCategory = null;
+		return array_shift(self::$objCategory);
 	}
 
 
@@ -126,9 +90,9 @@ class AvisotaStatic extends Frontend
 	 *
 	 * @param Database_Result $objCategory
 	 */
-	public static function setCategory($objCategory)
+	public static function pushCategory($objCategory)
 	{
-		self::$objCategory = $objCategory;
+		array_unshift(self::$objCategory, $objCategory);
 	}
 
 
@@ -139,71 +103,70 @@ class AvisotaStatic extends Frontend
 	 */
 	public static function getCategory()
 	{
-		return self::$objCategory;
+		return self::$objCategory[0];
 	}
 
 
 	/**
 	 * Reset the current newsletter.
 	 */
-	public static function resetNewsletter()
+	public static function popNewsletter()
 	{
-		self::$objNewsletter = null;
+		return array_shift(self::$objNewsletter);
 	}
 
 
 	/**
 	 * Set the current newsletter.
 	 *
-	 * @param Database_Result $objNewsletter
+	 * @param AvisotaNewsletter $objNewsletter
 	 */
-	public static function setNewsletter($objNewsletter)
+	public static function pushNewsletter(AvisotaNewsletter $objNewsletter)
 	{
-		self::$objNewsletter = $objNewsletter;
+		array_unshift(self::$objNewsletter, $objNewsletter);
 	}
 
 
 	/**
 	 * Get the current newsletter.
 	 *
-	 * @return Database_Result
+	 * @return AvisotaNewsletter
 	 */
 	public static function getNewsletter()
 	{
-		return self::$objNewsletter;
+		return self::$objNewsletter[0];
 	}
 
 
 	/**
 	 * Reset the current recipient.
 	 */
-	public static function resetRecipient()
+	public static function popRecipient()
 	{
-		self::$arrRecipient = null;
+		return array_shift(self::$arrRecipient);
 	}
 
 
 	/**
 	 * Set the current recipient.
 	 *
-	 * @param Database_Result $arrRecipient
+	 * @param AvisotaRecipient $arrRecipient
 	 */
-	public static function setRecipient($arrRecipient)
+	public static function pushRecipient(AvisotaRecipient $arrRecipient)
 	{
-		self::$arrRecipient = $arrRecipient;
+		array_unshift(self::$arrRecipient, $arrRecipient);
 	}
 
 
 	/**
 	 * Get the current recipient.
 	 *
-	 * @return Database_Result
+	 * @return AvisotaRecipient
 	 */
 	public static function getRecipient()
 	{
-		return self::$arrRecipient;
+		return self::$arrRecipient[0];
 	}
-
 
 	/**
 	 * Singleton

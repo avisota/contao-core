@@ -80,5 +80,3 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['details'] = array('View Det
 /**
  * Personalisation
  */
-
-?>

@@ -172,5 +172,3 @@ class ModuleAvisotaList extends Module
 		$this->Template->total = $objNewsletter->next() ? $objNewsletter->count : 0;
 	}
 }
-
-?>

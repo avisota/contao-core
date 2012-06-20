@@ -58,5 +58,3 @@ $GLOBALS['TL_LANG']['tl_avisota_mailing_list']['copy']        = array('Copy Dist
 $GLOBALS['TL_LANG']['tl_avisota_mailing_list']['delete']      = array('Delete Distribution', 'Delete distribution ID %s');
 $GLOBALS['TL_LANG']['tl_avisota_mailing_list']['edit']        = array('Edit Distribution', 'Edit details of distribution ID %s');
 $GLOBALS['TL_LANG']['tl_avisota_mailing_list']['editheader']  = array('Edit Header', 'Edit the header of distribution ID %s');
-
-?>

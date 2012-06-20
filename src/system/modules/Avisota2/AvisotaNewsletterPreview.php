@@ -45,20 +45,35 @@ define('TL_PLUGINS_URL', '');
 include('../../initialize.php');
 
 /**
- * Class AvisotaPreview
+ * Class AvisotaNewsletterPreview
  *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class AvisotaPreview extends Backend
+class AvisotaNewsletterPreview extends Backend
 {
+	/**
+	 * @var AvisotaBase
+	 */
+	protected $Base;
+
+	/**
+	 * @var AvisotaNewsletterContent
+	 */
+	protected $Content;
+
+	/**
+	 * @var AvisotaStatic
+	 */
+	protected $Static;
+
 	public function __construct()
 	{
 		$this->import('BackendUser', 'User');
 		parent::__construct();
 		$this->import('AvisotaBase', 'Base');
-		$this->import('AvisotaContent', 'Content');
+		$this->import('AvisotaNewsletterContent', 'Content');
 		$this->import('AvisotaStatic', 'Static');
 
 		// force all URLs absolute
@@ -72,6 +87,14 @@ class AvisotaPreview extends Backend
 			foreach ($GLOBALS['TL_HOOKS']['parseTemplate'] as $k=>$v) {
 				if ($v[0] == 'IsotopeFrontend') {
 					unset($GLOBALS['TL_HOOKS']['parseTemplate'][$k]);
+				}
+			}
+		}
+		// HOTFIX Remove catalog frontend hook
+		if (isset($GLOBALS['TL_HOOKS']['parseFrontendTemplate']) && is_array($GLOBALS['TL_HOOKS']['parseFrontendTemplate'])) {
+			foreach ($GLOBALS['TL_HOOKS']['parseFrontendTemplate'] as $k=>$v) {
+				if ($v[0] == 'CatalogExt') {
+					unset($GLOBALS['TL_HOOKS']['parseFrontendTemplate'][$k]);
 				}
 			}
 		}
@@ -97,6 +120,7 @@ class AvisotaPreview extends Backend
 			$arrSession['mode'] = NL_HTML;
 		}
 
+		/*
 		// get personalized state
 		if ($this->Input->get('personalized'))
 		{
@@ -108,6 +132,7 @@ class AvisotaPreview extends Backend
 		{
 			$arrSession['personalized'] = 'anonymous';
 		}
+		*/
 
 		// store session data
 		$this->Session->set('AVISOTA_PREVIEW', $arrSession);
@@ -145,7 +170,7 @@ class AvisotaPreview extends Backend
 		}
 
 		// build the recipient data array
-		$arrRecipient = $this->Base->getPreviewRecipient($arrSession['personalized']);
+		$arrRecipient = $this->Base->getPreviewRecipient();
 
 		$this->Static->set($objCategory, $objNewsletter, $arrRecipient);
 
@@ -169,8 +194,8 @@ class AvisotaPreview extends Backend
 }
 
 try {
-	$objAvisotaPreview = new AvisotaPreview();
-	$objAvisotaPreview->run();
+	$objAvisotaNewsletterPreview = new AvisotaNewsletterPreview();
+	$objAvisotaNewsletterPreview->run();
 } catch(Exception $e) {
 	header('HTTP/1.0 500 Internal Server Error');
 	header('Content-Type: text/plain');

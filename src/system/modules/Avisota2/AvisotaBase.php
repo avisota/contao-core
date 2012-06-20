@@ -162,48 +162,19 @@ class AvisotaBase extends Controller
 	/**
 	 * Get a dummy recipient array.
 	 */
-	public function getPreviewRecipient($personalized)
+	public function getPreviewRecipient()
 	{
 		$this->loadLanguageFile('tl_avisota_newsletter');
 
-		$arrRecipient = array();
-		if ($personalized == 'private')
-		{
-			$objMember = $this->Database->prepare("
-					SELECT
-						*
-					FROM
-						tl_member
-					WHERE
-							email=?
-						AND disable=''")
-				->execute($this->User->email);
-			if ($objMember->next())
-			{
-				$arrRecipient = $objMember->row();
-				$arrRecipient['name'] = $arrRecipient['firstname'] . ' ' . $arrRecipient['lastname'];
-				$arrRecipient['personalized'] = 'private';
-			}
-			else
-			{
-				$arrRecipient = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'];
-				$arrRecipient['email'] = $this->User->email;
-				list($arrRecipient['firstname'], $arrRecipient['lastname']) = $this->splitFriendlyName($arrRecipient['name']);
-				$arrRecipient['personalized'] = 'anonymous';
-			}
-		}
-		else
-		{
-			$arrRecipient = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'];
-			$arrRecipient['email'] = $this->User->email;
-			$arrRecipient['personalized'] = 'anonymous';
-		}
+		list($strFirstName, $strLastName) = $this->splitFriendlyName($this->User->name);
 
-		$arrRecipient['outbox_source'] = 'list:0';
+		$objRecipient            = new AvisotaRecipient();
+		$objRecipient->email     = $this->User->email;
+		$objRecipient->firstname = $strFirstName;
+		$objRecipient->lastname  = $strLastName;
+		$objRecipient->source    = '0';
 
-		$this->finalizeRecipientArray($arrRecipient);
-
-		return $arrRecipient;
+		return $objRecipient;
 	}
 
 
@@ -312,7 +283,7 @@ class AvisotaBase extends Controller
 	 * @return string
 	 * @throws Exception
 	 */
-	public function getTemplate($strTemplate)
+	public function getTemplate($strTemplate, $strFormat='html5')
 	{
 		$strTemplate = basename($strTemplate);
 		$strFilename = $strTemplate . '.html5';
@@ -322,7 +293,7 @@ class AvisotaBase extends Controller
 
 		// Check for a theme folder
 		if ($objNewsletter) {
-			$strTemplateGroup = $objNewsletter->getNewsletterTheme()->templateDirectory;
+			$strTemplateGroup = $objNewsletter->getTheme()->getTemplateDirectory();
 		} else {
 			$strTemplateGroup = '';
 		}
@@ -445,5 +416,26 @@ class AvisotaBase extends Controller
 		$arrTemplates = array_values(array_unique($arrTemplates));
 
 		return $arrTemplates;
+	}
+
+	public function getCurrentTransport()
+	{
+		$objNewsletter = AvisotaStatic::getNewsletter();
+		$objCategory = AvisotaStatic::getCategory();
+
+		if ($objCategory && $objCategory->transport && $objCategory->setTransport == 'category') {
+			$intId = $objCategory->transport;
+		}
+		else if ($objNewsletter && $objNewsletter->transport) {
+			$intId = $objNewsletter->transport;
+		}
+		else if ($objCategory && $objCategory->transport) {
+			$intId = $objCategory->transport;
+		}
+		else {
+			$intId = 0;
+		}
+
+		return AvisotaTransport::getTransportModule($intId);
 	}
 }

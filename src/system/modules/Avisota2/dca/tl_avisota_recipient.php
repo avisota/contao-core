@@ -175,7 +175,8 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 		(
 			'recipient'    => array('email'),
 			'subscription' => array('lists', 'subscriptionAction'),
-			'personals'    => array('salutation', 'title', 'firstname', 'lastname', 'gender')
+			'personals'    => array('salutation', 'title', 'firstname', 'lastname', 'gender'),
+			'tracing'      => array('permitPersonalTracing')
 		)
 	),
 
@@ -302,6 +303,17 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			                                   'feEditable'        => true,
 			                                   'tl_class'          => 'clr')
 		),
+		'permitPersonalTracing'             => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['permitPersonalTracing'],
+			'exclude'                 => true,
+			'filter'                  => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('importable'        => true,
+			                                   'exportable'        => true,
+			                                   'feEditable'        => true,
+			                                   'tl_class'          => 'clr m12')
+		),
 		'token'              => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['token']
@@ -403,6 +415,10 @@ class tl_avisota_recipient extends Backend
 
 	public function onload_callback($dc)
 	{
+		if (TL_MODE == 'FE') {
+			return;
+		}
+
 		if ($this->Input->get('act') == 'toggleConfirmation') {
 			$intRecipient = $this->Input->get('recipient');
 			$intList = $this->Input->get('list');
@@ -459,11 +475,13 @@ class tl_avisota_recipient extends Backend
 			$arrArgs[] = $time;
 
 			// execute query
-			$this->Database
-				->prepare("INSERT INTO tl_avisota_recipient_blacklist (tstamp, pid, email)
-						   VALUES " . implode(',', $arrValues) . "
-						   ON DUPLICATE KEY UPDATE tstamp=?")
-				->execute($arrArgs);
+			if (count($arrValues)) {
+				$this->Database
+					->prepare("INSERT INTO tl_avisota_recipient_blacklist (tstamp, pid, email)
+							   VALUES " . implode(',', $arrValues) . "
+							   ON DUPLICATE KEY UPDATE tstamp=?")
+					->execute($arrArgs);
+			}
 		}
 	}
 
@@ -523,6 +541,10 @@ class tl_avisota_recipient extends Backend
 
 	public function loadMailingLists($varValue, DataContainer $dc, $blnConfirmed = null)
 	{
+		if (TL_MODE == 'FE') {
+			return;
+		}
+
 		return $this->Database
 			->prepare("SELECT * FROM tl_avisota_recipient_to_mailing_list WHERE recipient=?"
 					  . ($blnConfirmed !== null ? ' AND confirmed=?' : ''))
@@ -532,12 +554,20 @@ class tl_avisota_recipient extends Backend
 
 	public function saveMailingLists($varValue)
 	{
+		if (TL_MODE == 'FE') {
+			return $varValue;
+		}
+
 		$_SESSION['avisotaMailingLists'] = $varValue;
 		return null;
 	}
 
 	public function saveSubscriptionAction($varValue)
 	{
+		if (TL_MODE == 'FE') {
+			return null;
+		}
+
 		$_SESSION['avisotaSubscriptionAction'] = $varValue;
 		return null;
 	}
@@ -547,6 +577,10 @@ class tl_avisota_recipient extends Backend
 	 */
 	public function checkPermission()
 	{
+		if (TL_MODE == 'FE') {
+			return;
+		}
+
 		if ($this->User->isAdmin) {
 			return;
 		}

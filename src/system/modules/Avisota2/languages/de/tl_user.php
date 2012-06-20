@@ -44,5 +44,3 @@ $GLOBALS['TL_LANG']['tl_user']['avisota_newsletter_permissions']          = arra
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_user']['avisota_legend'] = 'Avisota-Rechte';
-
-?>

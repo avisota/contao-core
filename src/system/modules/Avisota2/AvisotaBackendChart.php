@@ -34,53 +34,28 @@
 
 
 /**
- * Class CSVFileRecipientSource
+ * Class AvisotaBackendChart
  *
- * 
- * @copyright  InfinitySoft 2010
+ * Parent class for newsletter content elements.
+ * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class CSVFileRecipientSource extends Controller implements AvisotaRecipientSource
+interface AvisotaBackendChart
 {
-	private $arrConfig;
-	
-	public function __construct($arrConfig)
-	{
-		$this->arrConfig = $arrConfig;
-	}
-
 	/**
-	 * Get all selectable recipient options for this source.
-	 * Every option can be an individuell ID.
-	 *
-	 * @return array
-	 */
-	public function getRecipientOptions()
-	{
-		// TODO: Implement getRecipientOptions() method.
-	}
-
-	/**
-	 * Get recipient IDs of a list of options.
-	 *
 	 * @abstract
-	 * @param array $varOption
-	 * @return array
+	 *
+	 * @param Database_Result $objNewsletter
+	 * @param string $strRecipient
 	 */
-	public function getRecipients($arrOptions)
-	{
-
-	}
+	public function handleAjax(Database_Result $objNewsletter, $strRecipient);
 
 	/**
-	 * Get the recipient details.
+	 * @abstract
 	 *
-	 * @param string $varId
-	 * @return array
+	 * @param Database_Result $objNewsletter
+	 * @param string $strRecipient
 	 */
-	public function getRecipientDetails($varId)
-	{
-
-	}
+	public function generateChart(Database_Result $objNewsletter, $strRecipient);
 }

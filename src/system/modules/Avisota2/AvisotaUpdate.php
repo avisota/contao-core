@@ -571,7 +571,9 @@ class AvisotaUpdate extends BackendModule
 	{
 		return $this->Database->tableExists('tl_avisota_recipient_list')
 			&& !$this->Database->tableExists('tl_avisota_mailing_list')
-			|| $this->Database->execute("SELECT COUNT(id) AS c FROM tl_avisota_recipient_list")->c > 0
+			|| $this->Database->tableExists('tl_avisota_recipient_list')
+			&& $this->Database->tableExists('tl_avisota_mailing_list')
+			&& $this->Database->execute("SELECT COUNT(id) AS c FROM tl_avisota_recipient_list")->c > 0
 			&& $this->Database->execute("SELECT COUNT(id) AS c FROM tl_avisota_mailing_list")->c == 0;
 	}
 
@@ -618,6 +620,9 @@ class AvisotaUpdate extends BackendModule
 							   ORDER BY email,tstamp
 							   LIMIT 1000");
 				while ($objRecipient->next()) {
+					// convert email to lowercase
+					$objRecipient->email = strtolower($objRecipient->email);
+
 					// set first existence
 					if (!isset($arrRecipients[$objRecipient->email])) {
 						$arrRecipients[$objRecipient->email]         = $objRecipient->row();
@@ -673,7 +678,7 @@ class AvisotaUpdate extends BackendModule
 					// delete waste rows
 					$this->Database
 						->query("DELETE FROM tl_avisota_recipient
-								 WHERE id!=" . $arrRecipient['id'] . " AND id!=" . $arrRecipient['id'] . " AND id IN (" . implode(',', $arrRecipient['ids']) . ")");
+								 WHERE id!=" . $arrRecipient['id'] . " AND id IN (" . implode(',', $arrRecipient['ids']) . ")");
 
 					// unset fields that are just virtual
 					unset($arrRecipient['c'], $arrRecipient['ids'], $arrRecipient['pids']);

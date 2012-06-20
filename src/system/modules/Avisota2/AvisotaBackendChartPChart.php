@@ -34,14 +34,14 @@
 
 
 /**
- * Class AvisotaChartPChart
+ * Class AvisotaBackendChartPChart
  *
  * Parent class for newsletter content elements.
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  */
-class AvisotaChartPChart extends Backend implements AvisotaChart
+class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 {
 	/**
 	 *

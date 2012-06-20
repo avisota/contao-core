@@ -272,5 +272,3 @@ class tl_avisota_tracking_export extends Backend
 		exit;
 	}
 }
-
-?>

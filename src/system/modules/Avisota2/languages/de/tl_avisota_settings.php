@@ -58,10 +58,14 @@ $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_max_send_count']            
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_max_send_timeout']                  = array('Zyklenpause', 'Anzahl Sekunden die zwischen zwei Zyklen gewartet wird.');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_dont_disable_recipient_on_failure'] = array('Abonnent bei Fehlversand nicht deaktivieren', 'Deaktiviert die Deaktivierung von Abonnenten, wenn der Versand an sie fehlgeschlagen ist.');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_dont_disable_member_on_failure']    = array('Mitglied bei Fehlversand nicht deaktivieren', 'Deaktiviert die Deaktivierung von Mitgliedern, wenn der Versand an sie fehlgeschlagen ist.');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_chart']                             = array('Chart Rendering', 'Wählen Sie eine Methode aus, wie die Graphen gerendert werden sollen.');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_chart_highstock_confirmed']         = array('Ich/Wir bestätigen, dass dieses Newsletter-Projekt den Lizenzbestimmungen entspricht.', 'Beachten Sie die <a href="http://www.highcharts.com/license" onclick="window.open(this.href); return false;"><u>Lizenz</u></a> und <a href="http://www.highcharts.com/component/content/article/uncategorised/32-highstock-license-and-pricing" onclick="window.open(this.href); return false;"><u>Preisauszeichnung</u></a>. Hiermit bestätigen Sie dass dieses Newsletter-Projekt privat oder für nicht-kommerzielle Zwecke benutzt wird oder eine entsprechende Lizenz erworben wurde.');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_mode']                    = array('Entwicklermodus', 'Aktiviert den Entwicklermodus.');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_email']                   = array('Entwickler E-Mail', 'Im Entwicklermodus werden alle E-Mails an diese Adresse umgeleitet.');
+// statistics
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_statistic']                   = array('Statistische Daten erfassen', 'Statistische Daten erfassen.');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_data_privacy_statement_page'] = array('Seite zur Datenschutzvereinbarung', 'Wählen Sie hier die Seite mit der Datenschutzvereinbarung aus.');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_statistic_personalized']      = array('Statistische Daten personalisieren', 'Die statistisch Daten werden personalisiert erfasst. In manchen Ländern ist die Einwilligung zum erfassen personenbezogener Daten nicht erforderlich, wenn Sie bzw. Ihre Zielgruppe sich in einem derartigen Land befinden können Sie hiermit die Checkbox zur Einverständniserklärung deaktivieren. Beachten Sie, wenn Sie E-Mails ins Ausland verschicken, unterstehen Sie gemäß dem Grundsatz des "Marktortprinzip" grundsätzlich ausländischem Recht. Lesen Sie hierzu die Richtlinie für zulässiges Onlinemarketing, Stichwort: Marktortprinzip!');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_chart']                       = array('Chart Rendering', 'Wählen Sie eine Methode aus, wie die Graphen gerendert werden sollen.');
+// developer
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_mode']  = array('Entwicklermodus', 'Aktiviert den Entwicklermodus.');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_email'] = array('Entwickler E-Mail', 'Im Entwicklermodus werden alle E-Mails an diese Adresse umgeleitet.');
 
 
 /**
@@ -73,7 +77,7 @@ $GLOBALS['TL_LANG']['tl_avisota_settings']['subscription_legend']            = '
 $GLOBALS['TL_LANG']['tl_avisota_settings']['notification_legend']            = 'Erinnerung';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['cleanup_legend']                 = 'Aufräumen';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['transport_legend']               = 'Versand';
-$GLOBALS['TL_LANG']['tl_avisota_settings']['backend_legend']                 = 'Backend';
+$GLOBALS['TL_LANG']['tl_avisota_settings']['statistics_legend']              = 'Statistik und Tracking';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['developer_legend']               = 'Entwickler';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_salutation'] = array('Anrede');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_title']      = array('Titel');
@@ -84,6 +88,9 @@ $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_lastname']   = a
 /**
  * Reference
  */
+$GLOBALS['TL_LANG']['tl_avisota_settings']['unpersonalized']    = 'nicht personalisieren';
+$GLOBALS['TL_LANG']['tl_avisota_settings']['with_aggrement']    = 'Nach Einwilligung personalisieren';
+$GLOBALS['TL_LANG']['tl_avisota_settings']['without_aggrement'] = 'Ohne Einwilligung personalisieren';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['jqplot']            = 'jqPlot (JavaScript)';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['highstock']         = 'Highstock Charts (JavaScript)';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['pchart']            = 'pChart (PHP)';

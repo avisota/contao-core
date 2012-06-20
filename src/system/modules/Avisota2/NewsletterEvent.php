@@ -137,5 +137,3 @@ class NewsletterEvent extends NewsletterElement
 		$this->Template->events = $arrReturn;
 	}
 }
-
-?>

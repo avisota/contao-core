@@ -53,6 +53,31 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		return $objRecipient;
 	}
 
+	public static function bySubscribeTokens($arrTokens)
+	{
+		$arrWhere = array();
+		foreach ($arrTokens as $strToken) {
+			$arrWhere[] = 'token=?';
+		}
+
+		$objRecipientID = Database::getInstance()
+			->prepare('SELECT DISTINCT recipient FROM tl_avisota_recipient_to_mailing_list WHERE ' . implode(' OR ', $arrWhere))
+			->execute($arrTokens);
+
+		if ($objRecipientID->numRows > 1) {
+			throw new AvisotaRecipientException('Illegal token list.');
+		}
+		else if ($objRecipientID->next()) {
+			$objRecipient = new AvisotaIntegratedRecipient();
+			$objRecipient->id = $objRecipientID->recipient;
+			$objRecipient->load();
+			return $objRecipient;
+		}
+		else {
+			return null;
+		}
+	}
+
 	public static function checkBlacklisted($strEmail, $arrLists)
 	{
 		$arrLists = array_map('intval', $arrLists);
@@ -78,7 +103,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		$this->loadDataContainer('tl_avisota_recipient');
 	}
 
-	public function load()
+	public function load($blnUncached = false)
 	{
 		if (isset($this->arrData['id'])) {
 			$strField = 'id';
@@ -89,9 +114,19 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		} else {
 			throw new AvisotaRecipientException($this->arrData, 'The recipient has no ID or EMAIL that can identify him!');
 		}
+
+		// fetch existing data
 		$objRecipient = $this->Database
-			->prepare("SELECT * FROM tl_avisota_recipient WHERE $strField=?")
-			->execute($strValue);
+			->prepare("SELECT * FROM tl_avisota_recipient WHERE $strField=?");
+		// fetch uncached, e.g. if store is called before
+		if ($blnUncached) {
+			$objRecipient = $objRecipient->executeUncached($strValue);
+		}
+		// fetch cached result
+		else {
+			$objRecipient = $objRecipient->execute($strValue);
+		}
+
 		if ($objRecipient->next()) {
 			$arrRecipient = $objRecipient->row();
 
@@ -117,7 +152,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	 */
 	public function store()
 	{
-		self::validate($this->arrData);
+		$this->validate($this->arrData);
 
 		$arrData = $this->arrData;
 		$arrData['tstamp'] = time();
@@ -134,15 +169,29 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 				}
 			}
 
-			$arrSet[] = $k;
+			$arrSet[] = $k . '=?';
 			$arrArgs[] = trim($v);
 		}
 
-		$this->Database
-			->prepare(sprintf('INSERT INTO tl_avisota_recipient SET %1$s ON DUPLICATE KEY UPDATE %1$s', implode(',', $arrSet)))
-			->execute(array_merge($arrArgs, $arrArgs));
+		$arrInsert = array();
+		// added on
+		$arrInsert[] = time();
+		// added by backend user
+		if (TL_MODE == 'BE') {
+			$objUser = BackendUser::getInstance();
+			$objUser->authenticate();
+			$arrInsert[] = $objUser->id;
+		}
+		// added by recipient itself
+		else {
+			$arrInsert[] = '0';
+		}
 
-		$this->load();
+		$this->Database
+			->prepare(sprintf('INSERT INTO tl_avisota_recipient SET addedOn=?, addedBy=?, %1$s ON DUPLICATE KEY UPDATE %1$s', implode(',', $arrSet)))
+			->execute(array_merge($arrInsert, $arrArgs, $arrArgs));
+
+		$this->load(true);
 	}
 
 	/**
@@ -331,12 +380,12 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			foreach ($arrLists as $arrList) {
 				$arrTitle[] = $arrList['title'];
 			}
-			$strUrl = $this->generateFrontendUrl($objPage);
+			$strUrl = $this->generateFrontendUrl($objPage->row());
 
-			$objPlain = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_unsubscribe_mail_plain']);
+			$objPlain = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_unsubscribe_mail_plain']);
 			$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['unsubscribe']['plain'], implode(', ', $arrTitle), $strUrl);
 
-			$objHtml = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_unsubscribe_mail_html']);
+			$objHtml = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_unsubscribe_mail_html']);
 			$objHtml->title = $GLOBALS['TL_LANG']['avisota']['unsubscribe']['subject'];
 			$objHtml->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['unsubscribe']['html'], implode(', ', $arrTitle), $strUrl);
 
@@ -390,9 +439,10 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	 * or all unconfirmed mailing lists, the recipient has subscribed.
 	 *
 	 * @param array|null $arrLists
+	 * @param bool $blnResend
 	 * @throws AvisotaSubscriptionException
 	 */
-	public function sendSubscriptionConfirmation(array $arrLists = null)
+	public function sendSubscriptionConfirmation(array $arrLists = null, $blnResend = false)
 	{
 		if (!$this->id) {
 			throw new AvisotaSubscriptionException($this, 'This recipient has no ID!');
@@ -413,10 +463,10 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			->prepare("SELECT l.* FROM tl_avisota_recipient_to_mailing_list t
 					   INNER JOIN tl_avisota_mailing_list l
 					   ON l.id=t.list
-					   WHERE t.recipient=? AND t.confirmationSent=0"
+					   WHERE t.recipient=? AND t.confirmed=?" . ($blnResend ? " AND t.confirmationSent=0" : '')
 					   . ($arrLists !== null ? " AND t.list IN (" . implode(',', $arrLists) . ")" : '')
 					   . "ORDER BY l.title")
-			->execute($this->id);
+			->execute($this->id, '');
 
 		$arrListsByPage = array();
 		while ($objList->next()) {
@@ -430,7 +480,8 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			// set send time
 			$arrList['confirmationSent'] = $time;
 
-			$arrListsByPage[$objList->integratedRecipientManageSubscriptionPage][$objList->id] = $arrList;
+			$intPage = $objList->integratedRecipientManageSubscriptionPage ? $objList->integratedRecipientManageSubscriptionPage : $GLOBALS['objPage']->id;
+			$arrListsByPage[$intPage][$objList->id] = $arrList;
 		}
 
 		foreach ($arrListsByPage as $intPage=>$arrLists) {
@@ -444,10 +495,10 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			}
 			$strUrl = $this->generateFrontendUrl($objPage->row()) . '?subscribetoken=' . implode(',', $arrToken);
 
-			$objPlain = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_subscribe_mail_plain']);
+			$objPlain = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_subscribe_mail_plain']);
 			$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['subscribe']['plain'], implode(', ', $arrTitle), $strUrl);
 
-			$objHtml = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_subscribe_mail_html']);
+			$objHtml = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_subscribe_mail_html']);
 			$objHtml->title = $GLOBALS['TL_LANG']['avisota']['subscribe']['subject'];
 			$objHtml->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['subscribe']['html'], implode(', ', $arrTitle), $strUrl);
 
@@ -541,7 +592,8 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			// set send time
 			$arrList['reminderSent'] = $time;
 
-			$arrListsByPage[$objList->integratedRecipientManageSubscriptionPage][$objList->id] = $arrList;
+			$intPage = $objList->integratedRecipientManageSubscriptionPage ? $objList->integratedRecipientManageSubscriptionPage : $GLOBALS['objPage']->id;
+			$arrListsByPage[$intPage][$objList->id] = $arrList;
 		}
 
 		foreach ($arrListsByPage as $intPage=>$arrLists) {
@@ -555,10 +607,10 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			}
 			$strUrl = $this->generateFrontendUrl($objPage->row()) . '?subscribetoken=' . implode(',', $arrToken);
 
-			$objPlain = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_notification_mail_plain']);
+			$objPlain = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_notification_mail_plain']);
 			$objPlain->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['notification']['plain'], implode(', ', $arrTitle), $strUrl);
 
-			$objHtml = new FrontendTemplate($GLOBALS['TL_CONFIG']['avisota_template_notification_mail_html']);
+			$objHtml = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_notification_mail_html']);
 			$objHtml->title = $GLOBALS['TL_LANG']['avisota']['subscribe']['subject'];
 			$objHtml->content = sprintf($GLOBALS['TL_LANG']['avisota_subscription']['notification']['html'], implode(', ', $arrTitle), $strUrl);
 

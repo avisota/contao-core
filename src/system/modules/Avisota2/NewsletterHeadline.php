@@ -64,5 +64,3 @@ class NewsletterHeadline extends NewsletterElement
 	{
 	}
 }
-
-?>

@@ -110,5 +110,3 @@ class WidgetNewschooser extends Widget
 	}
 	
 }
-
-?>
