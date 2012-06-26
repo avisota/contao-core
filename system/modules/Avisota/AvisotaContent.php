@@ -49,6 +49,15 @@ class AvisotaContent extends Controller
 	 */
 	private static $objInstance = null;
 
+	/**
+	 * @var AvisotaBase
+	 */
+	protected $Base;
+
+	/**
+	 * @var AvisotaStatic
+	 */
+	protected $Static;
 
 	/**
 	 * Get singleton instance.
