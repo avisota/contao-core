@@ -478,7 +478,7 @@ class AvisotaContent extends Controller
 	public function replaceImage($arrMatch)
 	{
 		// insert alt or title text
-		return sprintf('%s&lt;%s&gt;', $arrMatch[3] ? $arrMatch[3] . ': ' : ($arrMatch[2] ? $arrMatch[2] . ': ' : ''), $this->extendURL($arrMatch[1]));
+		return sprintf('%s&lt;%s&gt;', $arrMatch[3] ? $arrMatch[3] . ': ' : ($arrMatch[2] ? $arrMatch[2] . ': ' : ''), $this->Base->extendURL($arrMatch[1]));
 	}
 
 
@@ -489,7 +489,7 @@ class AvisotaContent extends Controller
 	public function replaceLink($arrMatch)
 	{
 		// insert title text
-		return sprintf('%s%s &lt;%s&gt;', $arrMatch[3], $arrMatch[2] ? ' (' . $arrMatch[2] . ')' : '', $this->extendURL($arrMatch[1]));
+		return sprintf('%s%s &lt;%s&gt;', $arrMatch[3], $arrMatch[2] ? ' (' . $arrMatch[2] . ')' : '', $this->Base->extendURL($arrMatch[1]));
 	}
 
 
