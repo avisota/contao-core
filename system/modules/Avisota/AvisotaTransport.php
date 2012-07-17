@@ -357,7 +357,7 @@ class AvisotaTransport extends Backend
 		$this->findNewsletter($this->Input->post('id'));
 
 		$time = time();
-		$plannedTime = $this->Input->post('plannedTime') ? $this->Input->post('plannedTime') : time();
+		$plannedTime = $this->Input->post('plannedTime') ? strtotime($this->Input->post('plannedTime')) : time();
 
 		$intOutbox = $this->Database
 			->prepare("INSERT INTO tl_avisota_newsletter_outbox %s")
