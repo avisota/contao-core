@@ -357,10 +357,11 @@ class AvisotaTransport extends Backend
 		$this->findNewsletter($this->Input->post('id'));
 
 		$time = time();
+		$plannedTime = $this->Input->post('plannedTime') ? $this->Input->post('plannedTime') : time();
 
 		$intOutbox = $this->Database
 			->prepare("INSERT INTO tl_avisota_newsletter_outbox %s")
-			->set(array('pid'=>$this->objNewsletter->id, 'tstamp'=>$time))
+			->set(array('pid'=>$this->objNewsletter->id, 'tstamp'=>$time, 'plannedTime'=>$plannedTime))
 			->executeUncached()
 			->insertId;
 
