@@ -164,6 +164,52 @@ class AvisotaTransport extends Backend
 	}
 
 
+	public function runCron()
+	{
+		$objOutbox = $this->Database
+			->prepare('SELECT o.*,
+					       (
+					         SELECT id
+					         FROM tl_avisota_newsletter_outbox_recipient r
+					         WHERE o.id=r.pid AND send=0
+					         LIMIT 1
+					       ) AS recipient
+					   FROM tl_avisota_newsletter_outbox o
+					   WHERE o.plannedTime <= ?
+					   HAVING recipient > 0')
+			->executeUncached(time());
+
+		while ($objOutbox->next())
+		{
+			$this->log('Start sending of outbox ID ' . $objOutbox->id, 'AvisotaTransport', TL_INFO);
+
+			$intTotalSended = 0;
+			$intTotalFailed = 0;
+			$strErrors = '';
+			do {
+				list($intSended, $arrSuccess, $arrFailed) = $this->sendCycle($objOutbox->id);
+
+				if ($intSended > 0) {
+					$intTotalSended += $intSended;
+					$intTotalFailed += count($arrFailed);
+
+					$this->log('Send ' . $intSended . ' emails in this cycle' . (count($arrFailed) ? ', ' . count($arrFailed) . ' failed' : '') . '.', 'AvisotaTransport', TL_INFO);
+
+					$this->log('Cron cycle wait ' . $GLOBALS['TL_CONFIG']['avisota_max_send_timeout'] . ' seconds.', 'AvisotaTransport', TL_INFO);
+					sleep($GLOBALS['TL_CONFIG']['avisota_max_send_timeout']);
+				}
+			} while ($intSended > 0);
+
+			$strErrors = trim($strErrors);
+
+			$this->log('End sending of outbox ID ' . $objOutbox->id . ', '
+				. 'send ' . $intTotalSended . ' emails'
+				. ($intTotalFailed ? ', ' . $intTotalFailed . ' failed' : ''),
+				'AvisotaTransport', TL_INFO);
+		}
+	}
+
+
 	/**
 	 *
 	 */
@@ -171,7 +217,7 @@ class AvisotaTransport extends Backend
 	{
 		$this->objNewsletter = $this->Database
 			->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
-			->execute($intId);
+			->executeUncached($intId);
 
 		if (!$this->objNewsletter->next())
 		{
@@ -182,7 +228,7 @@ class AvisotaTransport extends Backend
 		// find the newsletter category
 		$this->objCategory = $this->Database
 			->prepare("SELECT * FROM tl_avisota_newsletter_category WHERE id=?")
-			->execute($this->objNewsletter->pid);
+			->executeUncached($this->objNewsletter->pid);
 
 		if (!$this->objCategory->next())
 		{
@@ -251,7 +297,7 @@ class AvisotaTransport extends Backend
 		}
 		else
 		{
-			$objUser = $this->Database->prepare("SELECT * FROM tl_user WHERE id=?")->execute($this->Input->post('recipient_user'));
+			$objUser = $this->Database->prepare("SELECT * FROM tl_user WHERE id=?")->executeUncached($this->Input->post('recipient_user'));
 			if ($objUser->next())
 			{
 				$arrRecipient = $objUser->row();
@@ -315,7 +361,7 @@ class AvisotaTransport extends Backend
 		$intOutbox = $this->Database
 			->prepare("INSERT INTO tl_avisota_newsletter_outbox %s")
 			->set(array('pid'=>$this->objNewsletter->id, 'tstamp'=>$time))
-			->execute()
+			->executeUncached()
 			->insertId;
 
 		// Insert list of recipients into outbox
@@ -347,7 +393,7 @@ class AvisotaTransport extends Backend
 									r.email NOT IN (SELECT email FROM tl_avisota_newsletter_outbox_recipient WHERE pid=?)
 								AND	r.pid=?
 								AND r.confirmed='1'")
-					   ->execute($intOutbox, $time, $intOutbox, $intIdTmp);
+					   ->executeUncached($intOutbox, $time, $intOutbox, $intIdTmp);
 					break;
 
 				case 'mgroup':
@@ -375,7 +421,7 @@ class AvisotaTransport extends Backend
 								AND	g.group_id=?
 								AND m.disable=''
 								AND m.email!=''")
-					   ->execute($intOutbox, $time, $intOutbox, $intIdTmp);
+					   ->executeUncached($intOutbox, $time, $intOutbox, $intIdTmp);
 					break;
 				}
 			}
@@ -390,9 +436,37 @@ class AvisotaTransport extends Backend
 	 */
 	protected function send()
 	{
+		ob_start();
+
+		list($intSended, $arrSuccess, $arrFailed) = $this->sendCycle($this->Input->post('id'));
+
+		$strError = '';
+		do
+		{
+			$strBuffer = ob_get_contents();
+			if ($strBuffer)
+			{
+				$strError .= $strBuffer . "\n";
+			}
+		}
+		while (ob_end_clean());
+
+		header('Content-Type: application/json');
+		echo json_encode(array(
+			'success' => $arrSuccess,
+			'failed'  => $arrFailed,
+			'time'    => time() - $_SERVER['REQUEST_TIME'],
+			'error'   => $strError
+		));
+		exit;
+	}
+
+
+	protected function sendCycle($intOutbox)
+	{
 		$objOutbox = $this->Database
 			->prepare("SELECT * FROM tl_avisota_newsletter_outbox WHERE id=?")
-			->execute($this->Input->post('id'));
+			->executeUncached($intOutbox);
 
 		if (!$objOutbox->next())
 		{
@@ -402,17 +476,13 @@ class AvisotaTransport extends Backend
 
 		$this->findNewsletter($objOutbox->pid);
 
-		ob_start();
-
-		// set timeout and count
-		$intTimeout = $GLOBALS['TL_CONFIG']['avisota_max_send_timeout'];
+		// set max count
 		$intCount = $GLOBALS['TL_CONFIG']['avisota_max_send_count'];
 
 		// set counters
 		$intSended  = 0;
 		$arrSuccess = array();
 		$arrFailed = array();
-		$intStart = time();
 
 		// get recipients
 		$objRecipients = $this->Database
@@ -426,7 +496,7 @@ class AvisotaTransport extends Backend
 				GROUP BY
 					domain")
 			->limit($intCount)
-			->execute($objOutbox->id);
+			->executeUncached($objOutbox->id);
 
 		// Send newsletter
 		if ($objRecipients->numRows > 0)
@@ -440,7 +510,7 @@ class AvisotaTransport extends Backend
 							sendOn=?
 						WHERE
 							id=?")
-					->execute(time(), $this->objNewsletter->id);
+					->executeUncached(time(), $this->objNewsletter->id);
 			}
 
 			$intEndExecutionTime = $_SERVER['REQUEST_TIME'] + $GLOBALS['TL_CONFIG']['avisota_max_send_time'];
@@ -466,7 +536,7 @@ class AvisotaTransport extends Backend
 				{
 					$objData = $this->Database
 						->prepare("SELECT * FROM tl_avisota_recipient WHERE id=?")
-						->execute($objRecipients->recipientID);
+						->executeUncached($objRecipients->recipientID);
 					if ($objData->next())
 					{
 						$this->Base->extendArray($objData->row(), $arrRecipient);
@@ -478,7 +548,7 @@ class AvisotaTransport extends Backend
 				{
 					$objData = $this->Database
 						->prepare("SELECT * FROM tl_member WHERE id=?")
-						->execute($objRecipients->recipientID);
+						->executeUncached($objRecipients->recipientID);
 					if ($objData->next())
 					{
 						$this->Base->extendArray($objData->row(), $arrRecipient);
@@ -489,7 +559,7 @@ class AvisotaTransport extends Backend
 				{
 					$objData = $this->Database
 						->prepare("SELECT * FROM tl_member WHERE email=?")
-						->execute($objRecipients->email);
+						->executeUncached($objRecipients->email);
 					if ($objData->next())
 					{
 						$this->Base->extendArray($objData->row(), $arrRecipient);
@@ -521,15 +591,25 @@ class AvisotaTransport extends Backend
 						$arrRecipient,
 						$personalized))
 				{
+					if (VERBOSE)
+					{
+						$this->log('Send newsletter "' . $this->objNewsletter->subject . '" to ' . $arrRecipient['email'] . '.', 'AvisotaTransport', TL_INFO);
+					}
+
 					$arrSuccess[] = $objRecipients->row();
 				}
 				else
 				{
+					if (VERBOSE)
+					{
+						$this->log('Send newsletter "' . $this->objNewsletter->subject . '" to ' . $arrRecipient['email'] . ' failed.', 'AvisotaTransport', TL_ERROR);
+					}
+
 					$arrFailed[] = $objRecipients->row();
 
 					$this->Database
 						->prepare("UPDATE tl_avisota_newsletter_outbox_recipient SET failed='1' WHERE id=?")
-						->execute($objRecipients->id);
+						->executeUncached($objRecipients->id);
 
 					// disable recipient from list
 					if ($objRecipients->source == 'list')
@@ -538,7 +618,7 @@ class AvisotaTransport extends Backend
 						{
 							$this->Database
 								->prepare("UPDATE tl_avisota_recipient SET confirmed='' WHERE id=?")
-								->execute($objRecipients->recipientID);
+								->executeUncached($objRecipients->recipientID);
 							$this->log('Recipient address "' . $objRecipients->email . '" was rejected and has been deactivated', 'AvisotaTransport', TL_ERROR);
 						}
 					}
@@ -550,7 +630,7 @@ class AvisotaTransport extends Backend
 						{
 							$this->Database
 								->prepare("UPDATE tl_member SET disable='1' WHERE id=?")
-								->execute($objRecipients->recipientID);
+								->executeUncached($objRecipients->recipientID);
 							$this->log('Member address "' . $objRecipients->email . '" was rejected and has been disabled', 'AvisotaTransport', TL_ERROR);
 						}
 					}
@@ -558,31 +638,13 @@ class AvisotaTransport extends Backend
 
 				$this->Database
 					->prepare("UPDATE tl_avisota_newsletter_outbox_recipient SET send=? WHERE id=?")
-					->execute(time(), $objRecipients->id);
+					->executeUncached(time(), $objRecipients->id);
 
 				$intSended ++;
 			}
 		}
 
-		$strError = '';
-		do
-		{
-			$strBuffer = ob_get_contents();
-			if ($strBuffer)
-			{
-				$strError .= $strBuffer . "\n";
-			}
-		}
-		while (ob_end_clean());
-
-		header('Content-Type: application/json');
-		echo json_encode(array(
-			'success' => $arrSuccess,
-			'failed'  => $arrFailed,
-			'time'    => time() - $intStart,
-			'error'   => $strError
-		));
-		exit;
+		return array($intSended, $arrSuccess, $arrFailed);
 	}
 
 
@@ -666,7 +728,7 @@ class AvisotaTransport extends Backend
 		}
 		catch (Exception $e)
 		{
-			$this->log('Failed to send newsletter ' . $this->objNewsletter->subject . ' to ' . $arrRecipient['email'] . ' with message: ' . $e->getMessage() . "\n" . $e->getTraceAsString(),
+			$this->log('Failed to send newsletter ' . $this->objNewsletter->subject . ' to ' . $arrRecipient['email'] . ' with message: ' . $e->getMessage(),
 				'AvisotaTransport', TL_ERROR);
 			$blnFailed = true;
 		}
@@ -703,7 +765,7 @@ class AvisotaTransport extends Backend
 		{
 			$objRead = $this->Database
 				->prepare("INSERT INTO tl_avisota_statistic_raw_recipient (pid,tstamp,recipient,recipientID,source,sourceID) VALUES (?, ?, ?, ?, ?, ?)")
-				->execute($objNewsletter->id, time(), $objRecipient->email, $objRecipient->recipientID, $objRecipient->source, $objRecipient->sourceID);
+				->executeUncached($objNewsletter->id, time(), $objRecipient->email, $objRecipient->recipientID, $objRecipient->source, $objRecipient->sourceID);
 			$intRead = $objRead->insertId;
 		}
 
@@ -801,7 +863,7 @@ class PrepareTrackingHelper extends Controller
 		{
 			$intLink = $this->Database
 				->prepare("INSERT INTO tl_avisota_statistic_raw_link (pid,tstamp,url) VALUES (?, ?, ?)")
-				->execute($this->objNewsletter->id, time(), $strUrl)
+				->executeUncached($this->objNewsletter->id, time(), $strUrl)
 				->insertId;
 		}
 
@@ -816,7 +878,7 @@ class PrepareTrackingHelper extends Controller
 		{
 			$intRecipientLink = $this->Database
 				->prepare("INSERT INTO tl_avisota_statistic_raw_recipient_link (pid,linkID,tstamp,url,real_url,recipient) VALUES (?, ?, ?, ?, ?, ?)")
-				->execute($this->objNewsletter->id, $intLink, time(), $strUrl, $strRealUrl, $this->objRecipient->email)
+				->executeUncached($this->objNewsletter->id, $intLink, time(), $strUrl, $strRealUrl, $this->objRecipient->email)
 				->insertId;
 		}
 
@@ -833,5 +895,84 @@ class PrepareTrackingHelper extends Controller
 	}
 }
 
-$objAvisotaTransport = new AvisotaTransport();
-$objAvisotaTransport->run();
+
+// Execution via cli -> cron
+if (PHP_SAPI === 'cli')
+{
+	define('VERBOSE', true);
+
+	// enable error reporting
+	error_reporting(E_ALL);
+
+	// hold on erros will not work in cron mode
+	$GLOBALS['TL_CONFIG']['avisota_hold_on_errors'] = false;
+
+	// lock the cron file to prevent multiple execution of this file
+	$file = fopen(__FILE__, 'r');
+	if (!flock($file, LOCK_EX | LOCK_NB))
+	{
+		fclose($file);
+		exit;
+	}
+
+	/**
+	 * class cron
+	 */
+	class cron extends Controller
+	{
+		protected static $objInstance = null;
+
+		public static function getInstance()
+		{
+			if (self::$objInstance === null) {
+				self::$objInstance = new cron();
+
+				$GLOBALS['TL_HOOKS']['addLogEntry'][] = array('cron', 'addLogEntry');
+			}
+			return self::$objInstance;
+		}
+
+		public function run()
+		{
+			try
+			{
+				// end all output buffers
+				while (ob_end_clean());
+
+				$objAvisotaTransport = new AvisotaTransport();
+				$objAvisotaTransport->runCron();
+			}
+			catch (Exception $e)
+			{
+				echo $e->getMessage() . "\n";
+				echo $e->getTraceAsString();
+			}
+
+			while (ob_end_flush());
+		}
+
+		public function addLogEntry($strText, $strFunction, $strAction)
+		{
+			printf("%s %-8s  %s\n",
+				$strAction,
+				$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], time()),
+				html_entity_decode($strText, ENT_QUOTES, 'UTF-8'));
+		}
+	}
+
+	$objCron = cron::getInstance();
+	$objCron->run();
+
+	// release the lock
+	flock($file, LOCK_UN);
+	fclose($file);
+}
+
+// execute via web
+else
+{
+	define('VERBOSE', false);
+
+	$objAvisotaTransport = new AvisotaTransport();
+	$objAvisotaTransport->run();
+}
