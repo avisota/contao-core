@@ -36,6 +36,7 @@
 /**
  * Fields
  */
+$GLOBALS['TL_LANG']['tl_settings']['avisota_backend_send']                      = array('Backend-Versand', 'Wählen Sie hier, ob der Versand über das Backend möglich sein soll.');
 $GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_time']                     = array('Versanddauer', 'Anzahl Sekunden die pro Zyklus vergehen dürfen, bevor ein neuer Zyklus getriggert wird.');
 $GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_count']                    = array('Versandanzahl', 'Anzahl E-Mails die pro Zyklus versendet werden, bevor ein neuer Zyklus getriggert wird.');
 $GLOBALS['TL_LANG']['tl_settings']['avisota_max_send_timeout']                  = array('Zyklenpause', 'Anzahl Sekunden die zwischen zwei Zyklen gewartet wird.');
@@ -56,4 +57,10 @@ $GLOBALS['TL_LANG']['tl_settings']['avisota_developer_email']                   
  */
 $GLOBALS['TL_LANG']['tl_settings']['avisota_legend'] = 'Avisota Newsletter System';
 
-?>
+
+/**
+ * Reference
+ */
+$GLOBALS['TL_LANG']['tl_settings']['avisota_backend_send_modes']['enabled']  = 'aktiviert';
+$GLOBALS['TL_LANG']['tl_settings']['avisota_backend_send_modes']['admin']    = 'nur Admins';
+$GLOBALS['TL_LANG']['tl_settings']['avisota_backend_send_modes']['disabled'] = 'deaktiviert';

@@ -259,6 +259,7 @@ class AvisotaOutbox extends BackendModule
 					o.id,
 					n.subject as newsletter,
 					o.tstamp,
+					o.plannedTime,
 					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE r.pid=o.id) as recipients,
 					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE r.pid=o.id AND r.send=0) as outstanding,
 					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE r.pid=o.id AND r.failed='1') as failed

@@ -11,6 +11,7 @@
 <table class="prev_header outbox" summary="" cellpadding="0" cellspacing="0" width="100%">
   <colgroup>
     <col width="120px" />
+    <?php if ($strGroup == 'open'): ?><col width="120px" /><?php endif; ?>
     <col />
     <col />
     <col width="1%" />
@@ -20,7 +21,8 @@
   </colgroup>
   <thead>
   <tr class="head_0">
-    <th class="col_1">&nbsp;<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['date'] ?>&nbsp;</th>
+    <th class="col_0">&nbsp;<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['date'] ?>&nbsp;</th>
+    <?php if ($strGroup == 'open'): ?><th class="col_1">&nbsp;<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['plannedTime'] ?>&nbsp;</th><?php endif; ?>
     <th class="col_1"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['newsletter'] ?>&nbsp;</th>
     <th class="col_2"><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['count'] ?>&nbsp;</th>
     <th class="col_2"><img src="system/modules/Avisota/html/outbox_outstanding.png" alt="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['outstanding'] ?>" title="<?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['outstanding'] ?>" /></th>
@@ -33,6 +35,7 @@
   <?php foreach ($this->outbox[$strGroup] as $k=>$outbox): ?>
   <tr class="row_<?php echo $k ?><?php if ($outbox['id'] == $this->Input->get('id')): ?> row_highlight<?php endif ?>">
     <td class="col_0"><?php echo $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $outbox['tstamp']) ?></td>
+    <?php if ($strGroup == 'open'): ?><td class="col_1"><?php echo $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $outbox['plannedTime']); ?></td><?php endif; ?>
     <td class="col_1"><?php echo $outbox['newsletter'] ?></td>
     <td class="col_1"><?php foreach ($outbox['sources'] as $source): ?>
     <?php echo $source['linkedTitle']; ?> (<?php echo number_format($source['recipients'], 0, ',', '.'); ?>)<br/>

@@ -38,6 +38,7 @@
  */
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['newsletter']  = 'Newsletter';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['date']        = 'Aufgegeben';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['plannedTime'] = 'Versand ab';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['count']       = 'Empfänger';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['state']       = 'Status';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['outstanding'] = 'ausstehend';

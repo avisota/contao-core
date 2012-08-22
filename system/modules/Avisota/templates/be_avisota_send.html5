@@ -113,7 +113,25 @@
 <div class="tl_submit_container">
 <button id="btnPreview" name="action" class="tl_submit" accesskey="p" type="submit" value="preview"><img style="display: none;" src="system/modules/Avisota/html/loading.gif" alt="" /><?php echo $GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview'] ?></button>
 <?php if ($this->User->isAdmin || $this->User->hasAccess('send', 'avisota_newsletter_permissions')): ?>
-<button style="float:right" id="btnSchedule" name="action" class="tl_submit" accesskey="s" type="submit" value="schedule"><img style="display: none;" src="system/modules/Avisota/html/loading.gif" alt="" /><?php echo $GLOBALS['TL_LANG']['MSC']['schedule']; ?></button>
+<span style="float:right">
+	<input type="text" id="ctrl_plannedTime" name="plannedTime" class="tl_text" style="width:100px" value="<?php echo $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat']); ?>"> <img src="plugins/datepicker/icon.gif" width="20" height="20" alt="" id="toggle_plannedTime" style="vertical-align:-6px">
+	<button id="btnSchedule" name="action" class="tl_submit" accesskey="s" type="submit" value="schedule"><img style="display: none;" src="system/modules/Avisota/html/loading.gif" alt="" /><?php echo $GLOBALS['TL_LANG']['MSC']['schedule']; ?></button>
+	<script>
+	window.addEvent("domready", function() {
+		new Picker.Date($$("#ctrl_plannedTime"), {
+			draggable:false,
+			toggle:$$("#toggle_plannedTime"),
+			format:"<?php echo Date::formatToJs($GLOBALS['TL_CONFIG']['datimFormat']); ?>",
+			positionOffset:{x:-197,y:-182},
+            timePicker:true,
+			pickerClass:"datepicker_dashboard",
+			useFadeInOut:!Browser.ie,
+			startDay:<?php echo $GLOBALS['TL_LANG']['MSC']['weekOffset']; ?>,
+			titleFormat:"<?php echo $GLOBALS['TL_LANG']['MSC']['titleFormat']; ?>"
+		});
+	});
+	</script>
+</span>
 <?php endif; ?>
 </div>
 

@@ -46,6 +46,7 @@ if (!isset($_SERVER['REQUEST_TIME']))
 /**
  * Settings
  */
+$GLOBALS['TL_CONFIG']['avisota_backend_send']                 = 'enabled';
 $GLOBALS['TL_CONFIG']['avisota_max_send_time']                = ini_get('max_execution_time') > 0 ? floor(0.85 * ini_get('max_execution_time')) : 120;
 $GLOBALS['TL_CONFIG']['avisota_max_send_count']               = 100;
 $GLOBALS['TL_CONFIG']['avisota_max_send_timeout']             = 1;
