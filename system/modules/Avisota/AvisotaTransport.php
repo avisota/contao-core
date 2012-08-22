@@ -166,9 +166,6 @@ class AvisotaTransport extends Backend
 
 	public function runCron()
 	{
-		// load language files
-		$this->loadLanguageFile('tl_avisota_newsletter');
-
 		$objOutbox = $this->Database
 			->prepare('SELECT o.*,
 					       (
@@ -184,13 +181,24 @@ class AvisotaTransport extends Backend
 
 		while ($objOutbox->next())
 		{
+            $this->findNewsletter($objOutbox->pid);
+
+            if ($this->objCategory->viewOnlinePage)
+            {
+                $objPage = $this->getPageDetails($this->objCategory->viewOnlinePage);
+                $GLOBALS['TL_LANGUAGE'] = $objPage->language;
+            }
+
+            // load language files
+            $this->loadLanguageFile('tl_avisota_newsletter');
+
 			$this->log('Start sending of outbox ID ' . $objOutbox->id, 'AvisotaTransport', TL_INFO);
 
 			$intTotalSended = 0;
 			$intTotalFailed = 0;
 			$strErrors = '';
 			do {
-				list($intSended, $arrSuccess, $arrFailed) = $this->sendCycle($objOutbox->id);
+				list($intSended, $arrSuccess, $arrFailed) = $this->sendCycle($objOutbox);
 
 				if ($intSended > 0) {
 					$intTotalSended += $intSended;
@@ -442,18 +450,32 @@ class AvisotaTransport extends Backend
 	{
 		ob_start();
 
-		list($intSended, $arrSuccess, $arrFailed) = $this->sendCycle($this->Input->post('id'));
+		$objOutbox = $this->Database
+			->prepare("SELECT * FROM tl_avisota_newsletter_outbox WHERE id=?")
+			->executeUncached($this->Input->post('id'));
 
-		$strError = '';
-		do
+		if (!$objOutbox->next())
 		{
-			$strBuffer = ob_get_contents();
-			if ($strBuffer)
-			{
-				$strError .= $strBuffer . "\n";
-			}
+			$this->log('Could not find outbox ID ' . $this->Input->get('id'), 'AvisotaTransport', TL_ERROR);
+			$strError = 'Could not find outbox ID ' . $this->Input->get('id');
 		}
-		while (ob_end_clean());
+        else
+        {
+            $this->findNewsletter($objOutbox->pid);
+
+            list($intSended, $arrSuccess, $arrFailed) = $this->sendCycle($objOutbox);
+
+            $strError = '';
+            do
+            {
+                $strBuffer = ob_get_contents();
+                if ($strBuffer)
+                {
+                    $strError .= $strBuffer . "\n";
+                }
+            }
+            while (ob_end_clean());
+        }
 
 		header('Content-Type: application/json');
 		echo json_encode(array(
@@ -466,20 +488,8 @@ class AvisotaTransport extends Backend
 	}
 
 
-	protected function sendCycle($intOutbox)
+	protected function sendCycle($objOutbox)
 	{
-		$objOutbox = $this->Database
-			->prepare("SELECT * FROM tl_avisota_newsletter_outbox WHERE id=?")
-			->executeUncached($intOutbox);
-
-		if (!$objOutbox->next())
-		{
-			$this->log('Could not find outbox ID ' . $this->Input->get('id'), 'AvisotaTransport', TL_ERROR);
-			$this->redirect('contao/main.php?act=error');
-		}
-
-		$this->findNewsletter($objOutbox->pid);
-
 		// set max count
 		$intCount = $GLOBALS['TL_CONFIG']['avisota_max_send_count'];
 
