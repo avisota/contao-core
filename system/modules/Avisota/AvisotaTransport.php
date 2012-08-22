@@ -166,6 +166,9 @@ class AvisotaTransport extends Backend
 
 	public function runCron()
 	{
+		// load language files
+		$this->loadLanguageFile('tl_avisota_newsletter');
+
 		$objOutbox = $this->Database
 			->prepare('SELECT o.*,
 					       (
