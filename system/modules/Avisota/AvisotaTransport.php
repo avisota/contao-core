@@ -179,6 +179,8 @@ class AvisotaTransport extends Backend
 					   HAVING recipient > 0')
 			->executeUncached(time());
 
+        $strLoadedLanguage = false;
+
 		while ($objOutbox->next())
 		{
             $this->findNewsletter($objOutbox->pid);
@@ -186,7 +188,22 @@ class AvisotaTransport extends Backend
             if ($this->objCategory->viewOnlinePage)
             {
                 $objPage = $this->getPageDetails($this->objCategory->viewOnlinePage);
+
+                if ($strLoadedLanguage !== false && $strLoadedLanguage != $objPage->language)
+                {
+                    // could not send newsletter in the target language, if another language was loaded before
+                    // send this newsletter in the next cron cycle!
+                    continue;
+                }
+
                 $GLOBALS['TL_LANGUAGE'] = $objPage->language;
+                $strLoadedLanguage = $objPage->language;
+            }
+            else if ($strLoadedLanguage !== false && $strLoadedLanguage != 'en')
+            {
+                // could not send newsletter in en, if another language was loaded before
+                // send this newsletter in the next cron cycle!
+                continue;
             }
 
             // load language files
