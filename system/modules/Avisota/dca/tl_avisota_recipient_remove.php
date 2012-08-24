@@ -86,7 +86,8 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_remove'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['blacklist'],
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=> 'm12')
+			'eval'                    => array('tl_class'=> 'm12'),
+			'default'		  => true // Set default
 		)
 	)
 );
@@ -116,7 +117,9 @@ class tl_avisota_recipient_remove extends Backend
 			$dc->setData('blacklist', $varData['blacklist']);
 		}
 		else {
-			$dc->setData('blacklist', true);
+			// Ask for Default 
+        		$blnBlacklist = $GLOBALS['TL_DCA']['tl_avisota_recipient_remove']['fields']['blacklist']['default'] ? true : false; 
+			$dc->setData('blacklist', $blnBlacklist);
 		}
 	}
 
