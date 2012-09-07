@@ -218,9 +218,9 @@ abstract class NewsletterElement extends Frontend
 		);
 
 		// replace line breaks and paragraphs
-		$strText = str_replace
+		$strText = preg_replace
 		(
-			array('</div>', '</p>', '<br/>', '<br>'),
+			array('#</div>#', '#</p>#', '#<br\s*/>#', '#<br>#'),
 			array("\n", "\n\n", "\n", "\n"),
 			$strText
 		);
