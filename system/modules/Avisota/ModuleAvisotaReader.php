@@ -44,6 +44,16 @@
 class ModuleAvisotaReader extends Module
 {
 	/**
+	 * @var AvisotaBase
+	 */
+	protected $Base;
+
+	/**
+	 * @var AvisotaStatic
+	 */
+	protected $Static;
+
+	/**
 	 * @var AvisotaContent
 	 */
 	protected $AvisotaContent;
@@ -63,6 +73,8 @@ class ModuleAvisotaReader extends Module
 		parent::__construct($objModule);
 		$this->import('DomainLink');
 		$this->import('FrontendUser', 'User');
+        $this->import('AvisotaBase', 'Base');
+        $this->import('AvisotaStatic', 'Static');
 		$this->import('AvisotaContent');
 		$this->loadLanguageFile('avisota');
 	}
@@ -114,6 +126,8 @@ class ModuleAvisotaReader extends Module
 				->execute($objNewsletter->pid);
 			if ($objCategory->next())
 			{
+                $this->Static->setRecipient($this->Base->getPreviewRecipient('anonymous'));
+
 				$objNewsletter->template_html = $this->avisota_reader_template;
 
 				$this->Template->newsletter = $objNewsletter->row();
