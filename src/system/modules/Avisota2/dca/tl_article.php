@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -35,14 +35,7 @@
 
 class tl_article_avisota extends tl_article
 {
-	public function alterDataContainer($strName)
-	{
-		if ($strName == 'tl_article')
-		{
-			$GLOBALS['TL_DCA']['tl_article']['list']['sorting']['paste_button_callback'][0] = 'tl_article_avisota';
-		}
-	}
-	
+
 	public function pasteArticle(DataContainer $dc, $row, $table, $cr, $arrClipboard=false)
 	{
 		if ($table == $GLOBALS['TL_DCA'][$dc->table]['config']['ptable'] && $row['type'] == 'avisota')
@@ -54,5 +47,5 @@ class tl_article_avisota extends tl_article
 	}
 }
 
-// add hook
-$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('tl_article_avisota', 'alterDataContainer');
+// Override callback
+$GLOBALS['TL_DCA']['tl_article']['list']['sorting']['paste_button_callback'][0] = 'tl_article_avisota';
