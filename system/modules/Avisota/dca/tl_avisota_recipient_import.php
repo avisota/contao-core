@@ -482,9 +482,13 @@ class tl_avisota_recipient_import extends Backend
 				$arrRecipient['addedOn']   = $addedOn;
 				$arrRecipient['addedBy']   = $this->User->id;
 				$arrRecipient['confirmed'] = 1;
-				$this->Database->prepare("INSERT INTO tl_avisota_recipient %s")
+				$id = $this->Database
+                    ->prepare("INSERT INTO tl_avisota_recipient %s")
 					->set($arrRecipient)
-					->execute();
+					->execute()
+                    ->insertId;
+
+                $arrExistingRecipients[$arrRecipient['email']] = $id;
 
 				// Log activity
 				$this->log('Recipient ' . $arrRecipient['email'] . ' was imported to ' . $objList->title . ' by ' . $this->User->name . ' (' . $this->User->username . ')', 'tl_avisota_recipient_import::importRecipients', TL_AVISOTA_SUBSCRIPTION);
