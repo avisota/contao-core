@@ -425,7 +425,7 @@ class tl_avisota_recipient_import extends Backend
 		
 		$arrBlacklist = array();
 		if ($blnForce) {
-			$objBlacklist = $this->Database
+			$this->Database
 				->prepare("DELETE FROM tl_avisota_recipient_blacklist WHERE pid=? AND email IN ('" . implode("','", array_map('md5', $arrEmail)) . "')")
 				->execute($this->Input->get('id'));
 		} else {
