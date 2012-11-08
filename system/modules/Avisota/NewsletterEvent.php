@@ -132,7 +132,7 @@ class NewsletterEvent extends NewsletterElement
 			}
 		}
 
-        usort($arrReturn, array($this, 'sortEvents'));
+        usort($arrReturn, array($this, $this->itemSorting == 'desc' ? 'rsortEvents' : 'sortEvents'));
 
 		$this->Template->events = $arrReturn;
 	}
@@ -140,6 +140,11 @@ class NewsletterEvent extends NewsletterElement
     public function sortEvents($a, $b)
     {
         return $a['startTime'] - $b['startTime'];
+    }
+
+    public function rsortEvents($a, $b)
+    {
+        return $b['startTime'] - $a['startTime'];
     }
 }
 

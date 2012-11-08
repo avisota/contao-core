@@ -77,7 +77,7 @@ class NewsletterNews extends NewsletterElement
 				FROM tl_news as n
 				LEFT JOIN tl_news_archive as a ON (n.pid = a.id)
 				WHERE n.id IN ('.implode(',',$newsIDs).')
-				ORDER BY n.time')
+				ORDER BY n.time ' . ($this->itemSorting == 'desc' ? 'DESC' : 'ASC'))
 			->execute();
 
 		$this->Template->news = $objNews->fetchAllAssoc();

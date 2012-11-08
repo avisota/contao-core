@@ -136,8 +136,8 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 		'hyperlink'                   => '{type_legend},type,area,headline;{link_legend},url,linkTitle,embed;{expert_legend:hide},cssID,space',
 		'image'                       => '{type_legend},type,area,headline;{source_legend},singleSRC;{image_legend},alt,size,imagemargin,imageUrl,caption;{expert_legend:hide},cssID,space',
 		'gallery'                     => '{type_legend},type,area,headline;{source_legend},multiSRC;{image_legend},size,imagemargin,perRow,sortBy;{template_legend:hide},galleryHtmlTpl,galleryPlainTpl;{expert_legend:hide},cssID,space',
-		'news'                        => '{type_legend},type,area,headline;{include_legend},news',
-		'events'                      => '{type_legend},type,area,headline;{events_legend},events;{expert_legend:hide},cssID,space',
+		'news'                        => '{type_legend},type,area,headline;{include_legend},news,itemSorting',
+		'events'                      => '{type_legend},type,area,headline;{events_legend},events,itemSorting;{expert_legend:hide},cssID,space',
 		'article'                     => '{type_legend},type,area,headline;{include_legend},articleAlias'
 	),
 
@@ -457,6 +457,15 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_content'] = array
 			'exclude'                 => true,
 			'inputType'               => 'newschooser',
 			'eval'                    => array('mandatory'=>true)
+		),
+		'itemSorting' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['itemSorting'],
+			'exclude'                 => true,
+			'inputType'               => 'select',
+            'options'                 => array('asc', 'desc'),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_content'],
+			'eval'                    => array('tl_class' => 'clr')
 		),
 		'articleAlias' => array
 		(

@@ -154,6 +154,7 @@ CREATE TABLE `tl_avisota_newsletter_content` (
   `linkTitle` varchar(255) NOT NULL default '',
   `events` blob NULL,
   `news` blob NULL,
+  `itemSorting` char(4) NOT NULL default 'asc',
   `articleAlias` int(10) unsigned NOT NULL default '0',
   `embed` varchar(255) NOT NULL default '',
   `multiSRC` blob NULL,

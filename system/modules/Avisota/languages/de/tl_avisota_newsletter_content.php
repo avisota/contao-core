@@ -73,6 +73,7 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['space']           = array(
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['source']          = array('Quelldateien', 'Bitte wählen Sie die zu importierenden CSV-Dateien aus der Dateiübersicht.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['events']   		= array('Events', 'Hier können Events gewählt werden, welche in den Newsletter eingebunden werden sollen.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['news']   			= array('Nachrichten', 'Hier können Nachrichten gewählt werden, welche in den Newsletter eingebunden werden sollen.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['itemSorting']   	= array('Sortierung', 'Wählen Sie hier die Sortierung der Elemente.');
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['articleAlias']    = array('Bezogener Artikel', 'Bitte wählen Sie den Artikel aus, den Sie einfügen möchten.');
 
 
@@ -105,6 +106,8 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['header'] = 'Kopfze
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['footer'] = 'Fußzeile';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['left']   = 'Linke Spalte';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area']['right']  = 'Rechte Spalte';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['asc']            = 'aufsteigend';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['desc']           = 'absteigend';
 
 
 /**
