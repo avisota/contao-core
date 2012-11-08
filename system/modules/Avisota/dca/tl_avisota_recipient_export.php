@@ -124,7 +124,17 @@ class tl_avisota_recipient_export extends Backend
 				$arrOptions[$strField] = empty($arrData['label'][0]) ? $strField : $arrData['label'][0] . ' [' . $strField . ']';
 			}
 		}
-		$arrOptions['statistic:links'] = &$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'][0];
+
+		$arrOptions['statistic:links'] = $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'][0];
+
+        $objCategory = $this->Database
+            ->query('SELECT * FROM tl_avisota_newsletter_category ORDER BY title');
+        while ($objCategory->next()) {
+		    $arrOptions['statistic:links::' . $objCategory->id] = sprintf(
+                $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:category'][0],
+                $objCategory->title
+            );
+        }
 
 		return $arrOptions;
 	}
@@ -203,10 +213,23 @@ class tl_avisota_recipient_export extends Backend
 		$arrLabels = array();
 		foreach ($arrFields as $strField)
 		{
-			switch ($strField)
+            $arrParts = explode('::', $strField);
+
+			switch ($arrParts[0])
 			{
 			case 'statistic:links':
-				$arrLabels[] = &$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'][1];
+                if (count($arrParts) == 2) {
+                    $objCategory = $this->Database
+                        ->prepare('SELECT * FROM tl_avisota_newsletter_category WHERE id=?')
+                        ->execute($arrParts[1]);
+                    $arrLabels[] = sprintf(
+                        $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:category'][1],
+                        $objCategory->title
+                    );
+                }
+                else {
+                    $arrLabels[] = $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'][1];
+                }
 				break;
 
 			default:
@@ -253,22 +276,32 @@ class tl_avisota_recipient_export extends Backend
 		// write the headline
 		fputcsv($objFile->handle, $arrLabels, $strDelimiter, $strEnclosure);
 
+        // collected rows
+        $rows = array();
+
 		// write recipient rows
 		$objRecipient = $this->Database
 			->prepare("SELECT * FROM tl_avisota_recipient WHERE pid=?")
 			->execute($this->Input->get('id'));
 		while ($objRecipient->next())
 		{
+            $arrStatisticLinksIndex = array();
 			$arrRow = array();
 			foreach ($arrFields as $strField)
 			{
-				$intStatisticLinksIndex = -1;
-				switch ($strField)
+                $arrParts = explode('::', $strField);
+
+				switch ($arrParts[0])
 				{
 				case 'statistic:links':
-					$intStatisticLinksIndex = count($arrRow);
-					$arrRow[] = '';
-					break;
+                    if (count($arrParts) == 2) {
+                        $arrStatisticLinksIndex[count($arrRow)] = $arrParts[1];
+                    }
+                    else {
+                        $arrStatisticLinksIndex[count($arrRow)] = 0;
+                    }
+                    $arrRow[] = '';
+                    break;
 
 				case 'tstamp':
 				case 'addedOn':
@@ -280,38 +313,74 @@ class tl_avisota_recipient_export extends Backend
 				}
 			}
 
-			if ($intStatisticLinksIndex)
-			{
-				$objLinks = $this->Database
-					->prepare("SELECT l.url
-						FROM tl_avisota_statistic_raw_recipient_link l
-						INNER JOIN tl_avisota_statistic_raw_link_hit h
-						ON h.recipientLinkID = l.id
-						WHERE l.recipient=?
-						GROUP BY l.url
-						ORDER BY l.url")
-					->execute($objRecipient->email);
+            // column count
+            $columns = count($arrRow);
 
-				if ($objLinks->numRows)
-				{
-					$arrEmptyRow = array();
-					for ($i=0; $i<count($arrRow); $i++)
-					{
-						$arrEmptyRow[] = '';
-					}
+            // remember the current row index
+            $intStartRow = count($rows);
 
-					while ($objLinks->next())
-					{
-						$arrRow[$intStatisticLinksIndex] = $objLinks->url;
-						fputcsv($objFile->handle, $arrRow, $strDelimiter, $strEnclosure);
-						$arrRow = $arrEmptyRow;
-					}
-					continue;
-				}
-			}
+            // add current row
+            $rows[] = $arrRow;
 
-			fputcsv($objFile->handle, $arrRow, $strDelimiter, $strEnclosure);
+            if (count($arrStatisticLinksIndex)) {
+                foreach ($arrStatisticLinksIndex as $intCol => $intCategory)
+                {
+                    $strWhere = '';
+
+                    if ($intCategory) {
+                        $strWhere = 'AND n.pid=?';
+                    }
+
+                    $objLinks = $this->Database
+                        ->prepare("SELECT l.url
+                            FROM tl_avisota_statistic_raw_recipient_link l
+                            INNER JOIN tl_avisota_statistic_raw_link_hit h
+                            ON h.recipientLinkID = l.id
+                            INNER JOIN tl_avisota_newsletter n
+                            ON n.id=l.pid
+                            WHERE l.recipient=? {$strWhere}
+                            GROUP BY l.url
+                            ORDER BY l.url")
+                        ->execute($objRecipient->email, $intCategory);
+
+                    if ($objLinks->numRows)
+                    {
+                        $intRow = $intStartRow;
+
+                        while ($objLinks->next())
+                        {
+                            // find the current row
+                            if (isset($rows[$intRow])) {
+                                // use already existing row
+                                $arrRow = $rows[$intRow];
+                            }
+                            else {
+                                // build an empty dummy row
+                                $arrRow = array();
+                                for ($i=0; $i<$columns; $i++)
+                                {
+                                    $arrRow[] = '';
+                                }
+                            }
+
+                            // set the link to the column
+                            $arrRow[$intCol] = $objLinks->url;
+
+                            // put the current row
+                            $rows[$intRow] = $arrRow;
+
+                            // go to next row
+                            $intRow ++;
+                        }
+                    }
+                }
+            }
 		}
+
+        // write rows
+        foreach ($rows as $row) {
+			fputcsv($objFile->handle, $row, $strDelimiter, $strEnclosure);
+        }
 
 		// close file handle
 		$objFile->close();
