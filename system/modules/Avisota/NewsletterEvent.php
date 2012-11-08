@@ -132,8 +132,15 @@ class NewsletterEvent extends NewsletterElement
 			}
 		}
 
+        usort($arrReturn, array($this, 'sortEvents'));
+
 		$this->Template->events = $arrReturn;
 	}
+
+    public function sortEvents($a, $b)
+    {
+        return $a['startTime'] - $b['startTime'];
+    }
 }
 
 ?>
