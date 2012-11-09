@@ -126,12 +126,17 @@ class tl_avisota_recipient_export extends Backend
 		}
 
 		$arrOptions['statistic:links'] = $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'][0];
+		$arrOptions['statistic:links:local'] = $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:local'][0];
 
         $objCategory = $this->Database
             ->query('SELECT * FROM tl_avisota_newsletter_category ORDER BY title');
         while ($objCategory->next()) {
 		    $arrOptions['statistic:links::' . $objCategory->id] = sprintf(
                 $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:category'][0],
+                $objCategory->title
+            );
+		    $arrOptions['statistic:links:local::' . $objCategory->id] = sprintf(
+                $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:local:category'][0],
                 $objCategory->title
             );
         }
@@ -209,6 +214,17 @@ class tl_avisota_recipient_export extends Backend
 		// Get fields
 		$arrFields = $dc->getData('fields');
 
+		// search for the list
+		$objList = $this->Database
+			->prepare("SELECT * FROM tl_avisota_recipient_list WHERE id=?")
+			->execute($this->Input->get('id'));
+
+		if (!$objList->next())
+		{
+			$this->log('The recipient list ID ' . $this->Input->get('id') . ' does not exists!', 'tl_avisota_recipient_export', TL_ERROR);
+			$this->redirect('contao/main.php?act=error');
+		}
+
 		// Get field labels
 		$arrLabels = array();
 		foreach ($arrFields as $strField)
@@ -229,6 +245,22 @@ class tl_avisota_recipient_export extends Backend
                 }
                 else {
                     $arrLabels[] = $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'][1];
+                }
+				break;
+
+			case 'statistic:links:local':
+                if (count($arrParts) == 2) {
+                    $objCategory = $this->Database
+                        ->prepare('SELECT * FROM tl_avisota_newsletter_category WHERE id=?')
+                        ->execute($arrParts[1]);
+                    $arrLabels[] = sprintf(
+                        $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:local:category'][1],
+                        $objList->title,
+                        $objCategory->title
+                    );
+                }
+                else {
+                    $arrLabels[] = sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:local'][1], $objList->title);
                 }
 				break;
 
@@ -253,17 +285,6 @@ class tl_avisota_recipient_export extends Backend
 			'datim'     => $strDatimFormat
 		));
 
-		// search for the list
-		$objList = $this->Database
-			->prepare("SELECT * FROM tl_avisota_recipient_list WHERE id=?")
-			->execute($this->Input->get('id'));
-
-		if (!$objList->next())
-		{
-			$this->log('The recipient list ID ' . $this->Input->get('id') . ' does not exists!', 'tl_avisota_recipient_export', TL_ERROR);
-			$this->redirect('contao/main.php?act=error');
-		}
-
 		// create temporary file
 		$strFile = substr(tempnam(TL_ROOT . '/system/tmp', 'recipients_export_') . '.csv', strlen(TL_ROOT) + 1);
 
@@ -286,6 +307,7 @@ class tl_avisota_recipient_export extends Backend
 		while ($objRecipient->next())
 		{
             $arrStatisticLinksIndex = array();
+            $arrStatisticLinksLocalIndex = array();
 			$arrRow = array();
 			foreach ($arrFields as $strField)
 			{
@@ -299,6 +321,16 @@ class tl_avisota_recipient_export extends Backend
                     }
                     else {
                         $arrStatisticLinksIndex[count($arrRow)] = 0;
+                    }
+                    $arrRow[] = '';
+                    break;
+
+				case 'statistic:links:local':
+                    if (count($arrParts) == 2) {
+                        $arrStatisticLinksLocalIndex[count($arrRow)] = $arrParts[1];
+                    }
+                    else {
+                        $arrStatisticLinksLocalIndex[count($arrRow)] = 0;
                     }
                     $arrRow[] = '';
                     break;
@@ -371,6 +403,77 @@ class tl_avisota_recipient_export extends Backend
 
                             // go to next row
                             $intRow ++;
+                        }
+                    }
+                }
+            }
+
+            if (count($arrStatisticLinksLocalIndex)) {
+                $k = 'list-' . $objList->id;
+                $arrNewsletters = array();
+                $objNewsletter = $this->Database
+                    ->prepare('SELECT *
+                               FROM tl_avisota_newsletter
+                               WHERE recipients LIKE ?')
+                    ->execute('%"' . $k . '"%');
+                while ($objNewsletter->next()) {
+                    $temp = deserialize($objNewsletter->recipients);
+                    if (in_array($k, $temp)) {
+                        $arrNewsletters[] = $objNewsletter->id;
+                    }
+                }
+                $strNewsletters = implode(',', $arrNewsletters);
+
+                if (count($arrNewsletters)) {
+                    foreach ($arrStatisticLinksLocalIndex as $intCol => $intCategory)
+                    {
+                        $strWhere = '';
+
+                        if ($intCategory) {
+                            $strWhere = 'AND n.pid=?';
+                        }
+
+                        $objLinks = $this->Database
+                            ->prepare("SELECT l.url
+                                FROM tl_avisota_statistic_raw_recipient_link l
+                                INNER JOIN tl_avisota_statistic_raw_link_hit h
+                                ON h.recipientLinkID = l.id
+                                INNER JOIN tl_avisota_newsletter n
+                                ON n.id=l.pid
+                                WHERE l.recipient=? AND n.id IN ($strNewsletters) {$strWhere}
+                                GROUP BY l.url
+                                ORDER BY l.url")
+                            ->execute($objRecipient->email, $intCategory);
+
+                        if ($objLinks->numRows)
+                        {
+                            $intRow = $intStartRow;
+
+                            while ($objLinks->next())
+                            {
+                                // find the current row
+                                if (isset($rows[$intRow])) {
+                                    // use already existing row
+                                    $arrRow = $rows[$intRow];
+                                }
+                                else {
+                                    // build an empty dummy row
+                                    $arrRow = array();
+                                    for ($i=0; $i<$columns; $i++)
+                                    {
+                                        $arrRow[] = '';
+                                    }
+                                }
+
+                                // set the link to the column
+                                $arrRow[$intCol] = $objLinks->url;
+
+                                // put the current row
+                                $rows[$intRow] = $arrRow;
+
+                                // go to next row
+                                $intRow ++;
+                            }
                         }
                     }
                 }
