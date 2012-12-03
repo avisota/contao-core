@@ -36,14 +36,16 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['delimiter']                      = array('Feldtrenner', 'Wählen Sie hier das Zeichen aus, nach dem die einzelnen Felder getrennt sind.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['enclosure']                      = array('Texttrenner', 'Wählen Sie hier das Zeichen aus, nach dem der Text getrennt ist.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['datim']                          = array('Datum/Zeit Format', 'Wählen Sie hier das Format, in dem Datum und Zeit exportiert werden sollen. (Zum Zurücksetzen auf den Standardwert lassen Sie das Feld einfach leer!)');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['fields']                         = array('Felder', 'Wählen Sie hier, wie die Felder die exportiert werden sollen.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links']                = array('Statistik - Links, übergreifend (nicht importierbar)', 'Angeklickte Links');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:local']          = array('Statistik - Links, dieser Verteiler (nicht importierbar)', 'Angeklickte Links von %s');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:category']       = array('Statistik - Links, übergreifend aus %s (nicht importierbar)', 'Angeklickte Links aus %s');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:local:category'] = array('Statistik - Links, dieser Verteiler aus %s (nicht importierbar)', 'Angeklickte Links von %s aus %s');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['delimiter']                        = array('Feldtrenner', 'Wählen Sie hier das Zeichen aus, nach dem die einzelnen Felder getrennt sind.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['enclosure']                        = array('Texttrenner', 'Wählen Sie hier das Zeichen aus, nach dem der Text getrennt ist.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['datim']                            = array('Datum/Zeit Format', 'Wählen Sie hier das Format, in dem Datum und Zeit exportiert werden sollen. (Zum Zurücksetzen auf den Standardwert lassen Sie das Feld einfach leer!)');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['fields']                           = array('Felder', 'Wählen Sie hier, wie die Felder die exportiert werden sollen. Statistische Daten können nicht wieder importiert werden!');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links']                  = array('Klick-Statistik, übergreifend', 'Angeklickte Links');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:local']            = array('Klick-Statistik, dieser Verteiler', 'Angeklickte Links von %s');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:category']         = array('Klick-Statistik, übergreifend aus Kategorie %s', 'Angeklickte Links aus Kategorie %s');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:local:category']   = array('Klick-Statistik, dieser Verteiler aus Kategorie %s', 'Angeklickte Links von %s aus Kategorie %s');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:newsletter']       = array('Klick-Statistik, übergreifend für Newsletter <em>%s</em> &raquo; %s [%s]', 'Angeklickte Links aus Newsletter %s [%s]');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:local:newsletter'] = array('Klick-Statistik, dieser Verteiler für Newsletter <em>%s</em> &raquo; %s [%s]', 'Angeklickte Links von %s aus Newsletter %s [%s]');
 
 /**
  * Reference

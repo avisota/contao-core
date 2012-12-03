@@ -131,13 +131,35 @@ class tl_avisota_recipient_export extends Backend
         $objCategory = $this->Database
             ->query('SELECT * FROM tl_avisota_newsletter_category ORDER BY title');
         while ($objCategory->next()) {
-		    $arrOptions['statistic:links::' . $objCategory->id] = sprintf(
+		    $arrOptions['statistic:links::category:' . $objCategory->id] = sprintf(
                 $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:category'][0],
                 $objCategory->title
             );
-		    $arrOptions['statistic:links:local::' . $objCategory->id] = sprintf(
+		    $arrOptions['statistic:links:local::category:' . $objCategory->id] = sprintf(
                 $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:local:category'][0],
                 $objCategory->title
+            );
+        }
+
+        $objNewsletter = $this->Database
+            ->query('SELECT n.*, c.title AS category
+                     FROM tl_avisota_newsletter n
+                     INNER JOIN tl_avisota_newsletter_category c
+                     ON c.id=n.pid
+                     WHERE sendOn>0
+                     ORDER BY c.title ASC, n.sendOn DESC');
+        while ($objNewsletter->next()) {
+		    $arrOptions['statistic:links::newsletter:' . $objNewsletter->id] = sprintf(
+                $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:newsletter'][0],
+                $objNewsletter->category,
+                $objNewsletter->subject,
+                $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $objNewsletter->sendOn)
+            );
+		    $arrOptions['statistic:links:local::newsletter:' . $objNewsletter->id] = sprintf(
+                $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:local:newsletter'][0],
+                $objNewsletter->category,
+                $objNewsletter->subject,
+                $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $objNewsletter->sendOn)
             );
         }
 
@@ -235,12 +257,16 @@ class tl_avisota_recipient_export extends Backend
 			{
 			case 'statistic:links':
                 if (count($arrParts) == 2) {
-                    $objCategory = $this->Database
-                        ->prepare('SELECT * FROM tl_avisota_newsletter_category WHERE id=?')
-                        ->execute($arrParts[1]);
+                    list($strType, $intId) = explode(':', $arrParts[1]);
+                    $strSelect = $strType == 'newsletter' ? 'subject AS title, sendOn AS time' : 'title, tstamp AS time';
+                    $strTable  = $strType == 'newsletter' ? 'tl_avisota_newsletter' : 'tl_avisota_newsletter_category';
+                    $objRecord = $this->Database
+                        ->prepare("SELECT $strSelect FROM $strTable WHERE id=?")
+                        ->execute($intId);
                     $arrLabels[] = sprintf(
-                        $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:category'][1],
-                        $objCategory->title
+                        $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:' . $strType][1],
+                        $objRecord->title,
+                        $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $objRecord->time)
                     );
                 }
                 else {
@@ -250,13 +276,17 @@ class tl_avisota_recipient_export extends Backend
 
 			case 'statistic:links:local':
                 if (count($arrParts) == 2) {
-                    $objCategory = $this->Database
-                        ->prepare('SELECT * FROM tl_avisota_newsletter_category WHERE id=?')
-                        ->execute($arrParts[1]);
+                    list($strType, $intId) = explode(':', $arrParts[1]);
+                    $strSelect = $strType == 'newsletter' ? 'subject AS title, sendOn AS time' : 'title, tstamp AS time';
+                    $strTable  = $strType == 'newsletter' ? 'tl_avisota_newsletter' : 'tl_avisota_newsletter_category';
+                    $objRecord = $this->Database
+                        ->prepare("SELECT $strSelect FROM $strTable WHERE id=?")
+                        ->execute($intId);
                     $arrLabels[] = sprintf(
-                        $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:local:category'][1],
+                        $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links:local:' . $strType][1],
                         $objList->title,
-                        $objCategory->title
+                        $objRecord->title,
+                        $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $objRecord->time)
                     );
                 }
                 else {
@@ -355,12 +385,17 @@ class tl_avisota_recipient_export extends Backend
             $rows[] = $arrRow;
 
             if (count($arrStatisticLinksIndex)) {
-                foreach ($arrStatisticLinksIndex as $intCol => $intCategory)
+                foreach ($arrStatisticLinksIndex as $intCol => $strId)
                 {
                     $strWhere = '';
 
-                    if ($intCategory) {
+                    if (preg_match('#category:(\d+)#', $strId, $match)) {
+                        $intId = $match[1];
                         $strWhere = 'AND n.pid=?';
+                    }
+                    else if (preg_match('#newsletter:(\d+)#', $strId, $match)) {
+                        $intId = $match[1];
+                        $strWhere = 'AND n.id=?';
                     }
 
                     $objLinks = $this->Database
@@ -373,7 +408,7 @@ class tl_avisota_recipient_export extends Backend
                             WHERE l.recipient=? {$strWhere}
                             GROUP BY l.url
                             ORDER BY l.url")
-                        ->execute($objRecipient->email, $intCategory);
+                        ->execute($objRecipient->email, $intId);
 
                     if ($objLinks->numRows)
                     {
@@ -425,12 +460,17 @@ class tl_avisota_recipient_export extends Backend
                 $strNewsletters = implode(',', $arrNewsletters);
 
                 if (count($arrNewsletters)) {
-                    foreach ($arrStatisticLinksLocalIndex as $intCol => $intCategory)
+                    foreach ($arrStatisticLinksLocalIndex as $intCol => $strId)
                     {
                         $strWhere = '';
 
-                        if ($intCategory) {
+                        if (preg_match('#category:(\d+)#', $strId, $match)) {
+                            $intId = $match[1];
                             $strWhere = 'AND n.pid=?';
+                        }
+                        else if (preg_match('#newsletter:(\d+)#', $strId, $match)) {
+                            $intId = $match[1];
+                            $strWhere = 'AND n.id=?';
                         }
 
                         $objLinks = $this->Database
@@ -443,7 +483,7 @@ class tl_avisota_recipient_export extends Backend
                                 WHERE l.recipient=? AND n.id IN ($strNewsletters) {$strWhere}
                                 GROUP BY l.url
                                 ORDER BY l.url")
-                            ->execute($objRecipient->email, $intCategory);
+                            ->execute($objRecipient->email, $intId);
 
                         if ($objLinks->numRows)
                         {
