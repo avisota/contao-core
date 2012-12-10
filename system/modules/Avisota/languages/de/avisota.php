@@ -51,7 +51,7 @@ $GLOBALS['TL_LANG']['avisota']['subscription']['empty']    = 'Sie sind bereits z
 $GLOBALS['TL_LANG']['avisota']['subscribe']['submit']              = 'Abonnieren';
 $GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['subject']     = 'Newsletter Abonnement bestätigen';
 $GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['send']        = 'Sie wurden erfolgreich zu unserem Newsletter angemeldet, Sie erhalten in Kürze eine Aktivierungsmail um Ihr Abonnent zu bestätigen.';
-$GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['confirm']     = 'Ihr Abonnent für %s wurde erfolgreich aktiviert.';
+$GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['confirm']     = 'Ihr Abonnement für %s wurde erfolgreich aktiviert.';
 $GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['rejected']    = 'Die E-Mail Adresse %s scheint ungültig und wurde abgewiesen.';
 $GLOBALS['TL_LANG']['avisota']['subscribe']['mail']['html']        = '<p>Sehr geehrter Interessent, wir freuen uns Sie als Abonnenten unseres Newsletters %1$s begrüßen zu dürfen.</p>
 <p>Bitte öffnen Sie die folgende Adresse in Ihrem Browser, um das Abonnement zu bestätigen.<br/>
