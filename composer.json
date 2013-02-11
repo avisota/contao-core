@@ -1,0 +1,43 @@
+{
+	"name":"bit3/contao-avisota",
+	"description":"Avisota newslettersystem for contao",
+	"version":"2.0.0-dev",
+	"keywords":["avisota", "email", "mail", "newsletter", "marketing"],
+	"type":"contao-module",
+	"homepage":"http://avisota.org",
+	"time":"YYYY-MM-DD HH:MM:SS",
+	"license":"LGPL-3.0+",
+	"authors":[
+		{
+			"name":"Tristan Lins",
+			"email":"tristan.lins@bit3.de",
+			"homepage":"http://bit3.de",
+			"role":"Developer"
+		}
+	],
+	"support":{
+		"email":"info@bit3.de",
+		"issues":"https://github.com/bit3/contao-avisota/issues",
+		"forum":"https://community.contao.org/de/forumdisplay.php?121-Avisota",
+		"wiki":"http://de.contaowiki.org/Kategorie:Avisota",
+		"irc":"irc://irc.freenode.org/contao.dev",
+		"source":"https://github.com/bit3/contao-avisota"
+	},
+	"require":{
+		"php":">=5.3"
+	},
+	"require-dev":{
+		"phpunit/phpunit":"3.7.*",
+		"squizlabs/php_codesniffer":"1.*",
+		"bit3/php-coding-standard":"@dev"
+	},
+	"autoload":{
+		"classmap":["src/"]
+	},
+	"repositories":[
+		{
+			"type":"vcs",
+			"url":"https://github.com/bit3/php-coding-standard"
+		}
+	]
+}
