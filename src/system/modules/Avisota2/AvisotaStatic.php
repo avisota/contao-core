@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -70,9 +71,9 @@ class AvisotaStatic extends Frontend
 	 */
 	public static function reset()
 	{
-		self::$objCategory = array();
+		self::$objCategory   = array();
 		self::$objNewsletter = array();
-		self::$arrRecipient = array();
+		self::$arrRecipient  = array();
 	}
 
 
@@ -171,5 +172,7 @@ class AvisotaStatic extends Frontend
 	/**
 	 * Singleton
 	 */
-	protected function __construct() {}
+	protected function __construct()
+	{
+	}
 }

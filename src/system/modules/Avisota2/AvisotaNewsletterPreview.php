@@ -1,4 +1,6 @@
-<?php if (defined('TL_ROOT')) die('You can not access this file via contao!');
+<?php if (defined('TL_ROOT')) {
+	die('You can not access this file via contao!');
+}
 
 /**
  * Avisota newsletter and mailing system
@@ -25,6 +27,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -84,15 +87,18 @@ class AvisotaNewsletterPreview extends Backend
 
 		// HOTFIX Remove isotope frontend hook
 		if (isset($GLOBALS['TL_HOOKS']['parseTemplate']) && is_array($GLOBALS['TL_HOOKS']['parseTemplate'])) {
-			foreach ($GLOBALS['TL_HOOKS']['parseTemplate'] as $k=>$v) {
+			foreach ($GLOBALS['TL_HOOKS']['parseTemplate'] as $k => $v) {
 				if ($v[0] == 'IsotopeFrontend') {
 					unset($GLOBALS['TL_HOOKS']['parseTemplate'][$k]);
 				}
 			}
 		}
 		// HOTFIX Remove catalog frontend hook
-		if (isset($GLOBALS['TL_HOOKS']['parseFrontendTemplate']) && is_array($GLOBALS['TL_HOOKS']['parseFrontendTemplate'])) {
-			foreach ($GLOBALS['TL_HOOKS']['parseFrontendTemplate'] as $k=>$v) {
+		if (isset($GLOBALS['TL_HOOKS']['parseFrontendTemplate']) && is_array(
+			$GLOBALS['TL_HOOKS']['parseFrontendTemplate']
+		)
+		) {
+			foreach ($GLOBALS['TL_HOOKS']['parseFrontendTemplate'] as $k => $v) {
 				if ($v[0] == 'CatalogExt') {
 					unset($GLOBALS['TL_HOOKS']['parseFrontendTemplate'][$k]);
 				}
@@ -109,14 +115,12 @@ class AvisotaNewsletterPreview extends Backend
 		$arrSession = $this->Session->get('AVISOTA_PREVIEW');
 
 		// get preview mode
-		if ($this->Input->get('mode'))
-		{
+		if ($this->Input->get('mode')) {
 			$arrSession['mode'] = $this->Input->get('mode');
 		}
 
 		// fallback preview mode
-		if (!$arrSession['mode'])
-		{
+		if (!$arrSession['mode']) {
 			$arrSession['mode'] = NL_HTML;
 		}
 
@@ -140,34 +144,42 @@ class AvisotaNewsletterPreview extends Backend
 		// find the newsletter
 		$intId = $this->Input->get('id');
 
-		$objNewsletter = $this->Database->prepare("
+		$objNewsletter = $this->Database
+			->prepare(
+			"
 						SELECT
 							*
 						FROM
 							tl_avisota_newsletter
 						WHERE
-							id=?")
-		->execute($intId);
+							id=?"
+		)
+			->execute($intId);
 
-		if (!$objNewsletter->next())
-		{
+		if (!$objNewsletter->next()) {
 			$this->log('Newsletter ID ' . $intId . ' does not exists!', 'AvisotaNewsletterPreview', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
 
 		// find the newsletter category
-		$objCategory = $this->Database->prepare("
+		$objCategory = $this->Database
+			->prepare(
+			"
 						SELECT
 							*
 						FROM
 							tl_avisota_newsletter_category
 						WHERE
-							id=?")
-		->execute($objNewsletter->pid);
+							id=?"
+		)
+			->execute($objNewsletter->pid);
 
-		if (!$objCategory->next())
-		{
-			$this->log('Category ID ' . $objNewsletter->pid . ' does not exists!', 'AvisotaNewsletterPreview', TL_ERROR);
+		if (!$objCategory->next()) {
+			$this->log(
+				'Category ID ' . $objNewsletter->pid . ' does not exists!',
+				'AvisotaNewsletterPreview',
+				TL_ERROR
+			);
 			$this->redirect('contao/main.php?act=error');
 		}
 
@@ -177,20 +189,31 @@ class AvisotaNewsletterPreview extends Backend
 		$this->Static->set($objCategory, $objNewsletter, $arrRecipient);
 
 		// generate the preview
-		switch ($arrSession['mode'])
-		{
+		switch ($arrSession['mode']) {
 			case NL_HTML:
 				header('Content-Type: text/html; charset=utf-8');
-				echo $this->replaceInsertTags($this->Content->prepareBeforeSending($this->Content->generateHtml($objNewsletter, $objCategory, $arrSession['personalized'])));
+				echo $this->replaceInsertTags(
+					$this->Content->prepareBeforeSending(
+						$this->Content->generateHtml($objNewsletter, $objCategory, $arrSession['personalized'])
+					)
+				);
 				exit(0);
 
 			case NL_PLAIN:
 				header('Content-Type: text/plain; charset=utf-8');
-				echo $this->replaceInsertTags($this->Content->prepareBeforeSending($this->Content->generatePlain($objNewsletter, $objCategory, $arrSession['personalized'])));
+				echo $this->replaceInsertTags(
+					$this->Content->prepareBeforeSending(
+						$this->Content->generatePlain($objNewsletter, $objCategory, $arrSession['personalized'])
+					)
+				);
 				exit(0);
 
 			default:
-				$this->log('Unsupported newsletter preview mode ' . var_export($arrSession['mode']) . '!', 'AvisotaNewsletterPreview', TL_ERROR);
+				$this->log(
+					'Unsupported newsletter preview mode ' . var_export($arrSession['mode']) . '!',
+					'AvisotaNewsletterPreview',
+					TL_ERROR
+				);
 				$this->redirect('contao/main.php?act=error');
 		}
 	}
@@ -199,7 +222,8 @@ class AvisotaNewsletterPreview extends Backend
 try {
 	$objAvisotaNewsletterPreview = new AvisotaNewsletterPreview();
 	$objAvisotaNewsletterPreview->run();
-} catch(Exception $e) {
+}
+catch (Exception $e) {
 	header('HTTP/1.0 500 Internal Server Error');
 	header('Content-Type: text/plain');
 	echo $e->getMessage();

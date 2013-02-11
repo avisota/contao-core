@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,9 +37,18 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_create_from_draft']['category'] = array('Kategorie', 'Wählen Sie hier, in welcher Kategorie der Newsletter erstellt werden soll.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_create_from_draft']['subject']  = array('Betreff', 'Bitte geben Sie den Betreff des Newsletters ein.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_create_from_draft']['draft']    = array('Vorlage', 'Wählen Sie hier die Vorlage aus.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_create_from_draft']['category'] = array(
+	'Kategorie',
+	'Wählen Sie hier, in welcher Kategorie der Newsletter erstellt werden soll.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_create_from_draft']['subject']  = array(
+	'Betreff',
+	'Bitte geben Sie den Betreff des Newsletters ein.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_create_from_draft']['draft']    = array(
+	'Vorlage',
+	'Wählen Sie hier die Vorlage aus.'
+);
 
 
 /**

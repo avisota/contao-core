@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -86,7 +87,9 @@ abstract class ModuleAvisotaRecipientForm extends Module
 
 		// Change the label of the permit personal tracing checkbox
 		if (isset($GLOBALS['TL_CONFIG']['avisota_data_privacy_statement_page'])) {
-			$objDataPrivacyStatementPage = $this->getPageDetails($GLOBALS['TL_CONFIG']['avisota_data_privacy_statement_page']);
+			$objDataPrivacyStatementPage = $this->getPageDetails(
+				$GLOBALS['TL_CONFIG']['avisota_data_privacy_statement_page']
+			);
 		}
 		else {
 			$objDataPrivacyStatementPage = $GLOBALS['objPage'];
@@ -109,7 +112,8 @@ abstract class ModuleAvisotaRecipientForm extends Module
 		try {
 			// load existing recipient
 			$objRecipeint = AvisotaIntegratedRecipient::byEmail($arrRecipient['email']);
-		} catch (AvisotaRecipientException $e) {
+		}
+		catch (AvisotaRecipientException $e) {
 			// create a new recipient
 			$objRecipeint = new AvisotaIntegratedRecipient($arrRecipient);
 			$objRecipeint->store();
@@ -146,7 +150,8 @@ abstract class ModuleAvisotaRecipientForm extends Module
 		}
 
 		if (is_array($arrConfirmationSend) && count($arrConfirmationSend) ||
-			is_array($arrReminderSend) && count($arrReminderSend)) {
+			is_array($arrReminderSend) && count($arrReminderSend)
+		) {
 			// ...and redirect if jump to page is configured
 			if ($this->avisota_subscribe_confirmation_page) {
 				$objJumpTo = $this->getPageDetails($this->avisota_subscribe_confirmation_page);
@@ -173,14 +178,18 @@ abstract class ModuleAvisotaRecipientForm extends Module
 					return $objRecipient->confirmSubscription($arrTokens);
 				}
 			}
-		} catch (AvisotaRecipientException $e) {
+		}
+		catch (AvisotaRecipientException $e) {
 			$this->log($e->getMessage(), 'ModuleAvisotaRecipientForm::handleSubscribeTokens', 'TL_ERROR');
 		}
 		return false;
 	}
 
-	protected function handleUnsubscribeSubmit(array $arrRecipient, array $arrMailingLists, FrontendTemplate $objTemplate)
-	{
+	protected function handleUnsubscribeSubmit(
+		array $arrRecipient,
+		array $arrMailingLists,
+		FrontendTemplate $objTemplate
+	) {
 		try {
 			// search for the recipient
 			$objRecipient = AvisotaIntegratedRecipient::byEmail($arrRecipient['email']);
@@ -200,7 +209,8 @@ abstract class ModuleAvisotaRecipientForm extends Module
 			$objTemplate->hideForm = true;
 
 			return array('unsubscribed', $GLOBALS['TL_LANG']['avisota_unsubscribe']['unsubscribed']);
-		} catch (AvisotaRecipientException $e) {
+		}
+		catch (AvisotaRecipientException $e) {
 			return array('not_subscribed', $GLOBALS['TL_LANG']['avisota_unsubscribe']['notSubscribed']);
 		}
 	}
@@ -248,14 +258,16 @@ abstract class ModuleAvisotaRecipientForm extends Module
 		// add the lists options
 		if ($this->avisota_show_lists) {
 			$objList = $this->Database
-				->execute("SELECT
+				->execute(
+				"SELECT
 						*
 					FROM
 						tl_avisota_mailing_list" . (count($this->avisota_lists) ? "
 					WHERE
 						id IN (" . implode(',', $this->avisota_lists) . ")" : '') . "
 					ORDER BY
-						title");
+						title"
+			);
 			while ($objList->next()) {
 				$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['lists']['options'][$objList->id] = $objList->title;
 			}
@@ -296,7 +308,8 @@ abstract class ModuleAvisotaRecipientForm extends Module
 			$objWidget = new $strClass($this->prepareForWidget($arrData, $field, $arrData['default']));
 
 			$objWidget->storeValues = true;
-			$objWidget->rowClass    = 'row_' . $i . (($i == 0) ? ' row_first' : '') . ((($i % 2) == 0) ? ' even' : ' odd');
+			$objWidget->rowClass    = 'row_' . $i . (($i == 0) ? ' row_first' : '') . ((($i % 2) == 0) ? ' even'
+				: ' odd');
 
 			// Increase the row count if its a password field
 			if ($objWidget instanceof FormPassword) {
@@ -318,12 +331,18 @@ abstract class ModuleAvisotaRecipientForm extends Module
 
 				// Make sure that unique fields are unique (check the eval setting first -> #3063)
 				if ($arrData['eval']['unique'] && $varValue != '') {
-					$objUnique = $this->Database->prepare("SELECT * FROM tl_avisota_recipient WHERE " . $field . "=?")
+					$objUnique = $this->Database
+						->prepare("SELECT * FROM tl_avisota_recipient WHERE " . $field . "=?")
 						->limit(1)
 						->execute($varValue);
 
 					if ($objUnique->numRows) {
-						$objWidget->addError(sprintf($GLOBALS['TL_LANG']['ERR']['unique'], (strlen($arrData['label'][0]) ? $arrData['label'][0] : $field)));
+						$objWidget->addError(
+							sprintf(
+								$GLOBALS['TL_LANG']['ERR']['unique'],
+								(strlen($arrData['label'][0]) ? $arrData['label'][0] : $field)
+							)
+						);
 					}
 				}
 
@@ -393,12 +412,16 @@ abstract class ModuleAvisotaRecipientForm extends Module
 		}
 
 		// Add fields
-		foreach ($arrFields as $k=> $v) {
+		foreach ($arrFields as $k => $v) {
 			$objTemplate->$k = $v;
 		}
 
 		$objTemplate->formId     = $this->strFormName;
-		$objTemplate->formAction = $this->avisota_form_target ? $this->generateFrontendUrl($this->getPageDetails($this->avisota_form_target)->row()) : $this->getIndexFreeRequest();
+		$objTemplate->formAction = $this->avisota_form_target ? $this->generateFrontendUrl(
+			$this
+				->getPageDetails($this->avisota_form_target)
+				->row()
+		) : $this->getIndexFreeRequest();
 
 		$this->Template->form = $objTemplate->parse();
 	}

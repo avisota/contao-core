@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -80,7 +81,7 @@ abstract class AvisotaTransportMailerTransport extends AvisotaTransport
 	 * Transport a mail.
 	 *
 	 * @param string $strRecipientEmail
-	 * @param Mail $objEmail
+	 * @param Mail   $objEmail
 	 *
 	 * @return void
 	 * @throws AvisotaTransportException
@@ -89,14 +90,15 @@ abstract class AvisotaTransportMailerTransport extends AvisotaTransport
 	{
 		global $objPage;
 
-		try
-		{
+		try {
 			// set sender email
 			if ($this->config->sender) {
 				$objEmail->setSender($this->config->sender);
-			} else if (isset($objPage) && strlen($objPage->adminEmail)) {
+			}
+			else if (isset($objPage) && strlen($objPage->adminEmail)) {
 				$objEmail->setSender($objPage->adminEmail);
-			} else {
+			}
+			else {
 				$objEmail->setSender($GLOBALS['TL_CONFIG']['adminEmail']);
 			}
 
@@ -117,8 +119,7 @@ abstract class AvisotaTransportMailerTransport extends AvisotaTransport
 
 			$this->mailer->send($objEmail, $varRecipient);
 		}
-		catch (Swift_RfcComplianceException $e)
-		{
+		catch (Swift_RfcComplianceException $e) {
 			throw new AvisotaTransportEmailException($varRecipient, $objEmail, $e->getMessage(), $e->getCode(), $e);
 		}
 	}

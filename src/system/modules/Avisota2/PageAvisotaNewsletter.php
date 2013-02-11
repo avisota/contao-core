@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -50,14 +51,18 @@ class PageAvisotaNewsletter extends Frontend
 
 	/**
 	 * Generate a newsletter
+	 *
 	 * @param object
 	 */
 	public function generate(Database_Result $objPage)
 	{
 		// Define the static URL constants
-		define('TL_FILES_URL', ($objPage->staticFiles != '' && !$GLOBALS['TL_CONFIG']['debugMode']) ? $objPage->staticFiles . TL_PATH . '/' : '');
-		define('TL_SCRIPT_URL', ($objPage->staticSystem != '' && !$GLOBALS['TL_CONFIG']['debugMode']) ? $objPage->staticSystem . TL_PATH . '/' : '');
-		define('TL_PLUGINS_URL', ($objPage->staticPlugins != '' && !$GLOBALS['TL_CONFIG']['debugMode']) ? $objPage->staticPlugins . TL_PATH . '/' : '');
+		define('TL_FILES_URL', ($objPage->staticFiles != '' && !$GLOBALS['TL_CONFIG']['debugMode'])
+			? $objPage->staticFiles . TL_PATH . '/' : '');
+		define('TL_SCRIPT_URL', ($objPage->staticSystem != '' && !$GLOBALS['TL_CONFIG']['debugMode'])
+			? $objPage->staticSystem . TL_PATH . '/' : '');
+		define('TL_PLUGINS_URL', ($objPage->staticPlugins != '' && !$GLOBALS['TL_CONFIG']['debugMode'])
+			? $objPage->staticPlugins . TL_PATH . '/' : '');
 
 		$this->import('AvisotaNewsletterContent', 'Content');
 
@@ -67,13 +72,18 @@ class PageAvisotaNewsletter extends Frontend
 		$strId = $this->Input->get('item') ? $this->Input->get('item') : $this->Input->get('items');
 		$strNewsletter = $this->Content->generateOnlineNewsletter($strId);
 
-		if ($strNewsletter)
-		{
+		if ($strNewsletter) {
 			header('Content-Type: text/html; charset=utf-8');
 			echo $strNewsletter;
 			exit;
 		}
 
-		$this->redirect($this->generateFrontendUrl($this->getPageDetails($objPage->jumpBack ? $objPage->jumpBack : $objPage->pid)->row()));
+		$this->redirect(
+			$this->generateFrontendUrl(
+				$this
+					->getPageDetails($objPage->jumpBack ? $objPage->jumpBack : $objPage->pid)
+					->row()
+			)
+		);
 	}
 }

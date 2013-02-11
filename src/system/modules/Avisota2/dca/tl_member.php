@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @author     Oliver Hoff <oliver@hofff.com>
@@ -48,20 +49,20 @@ $GLOBALS['TL_DCA']['tl_member']['fields']['avisota_lists'] = array
 	'save_callback'    => array(array('AvisotaDCA', 'convertToStringList')),
 	'eval'             => array
 	(
-		'multiple'     => true,
-		'feEditable'   => true,
-		'feGroup'      => 'newsletter'
+		'multiple'   => true,
+		'feEditable' => true,
+		'feGroup'    => 'newsletter'
 	)
 );
 
 $GLOBALS['TL_DCA']['tl_member']['fields']['avisota_subscribe'] = array
 (
-	'label'            => &$GLOBALS['TL_LANG']['tl_member']['avisota_subscribe'],
-	'inputType'        => 'checkbox',
-	'eval'             => array
+	'label'     => &$GLOBALS['TL_LANG']['tl_member']['avisota_subscribe'],
+	'inputType' => 'checkbox',
+	'eval'      => array
 	(
-		'feEditable'   => true,
-		'feGroup'      => 'newsletter'
+		'feEditable' => true,
+		'feGroup'    => 'newsletter'
 	)
 );
 
@@ -72,8 +73,8 @@ class tl_member_avisota extends Backend
 		// Hack, because ModulePersonalData does not call the load_callback for the avisota_lists field
 		// uncomment when https://github.com/contao/core/pull/4018 is merged
 		// if (TL_MODE == 'FE' && version_compare(VERSION . '.' . BUILD, '2.11.0', '<=')) {
-			$this->import('FrontendUser', 'User');
-			$this->User->avisota_lists = explode(',', $this->User->avisota_lists);
+		$this->import('FrontendUser', 'User');
+		$this->User->avisota_lists = explode(',', $this->User->avisota_lists);
 		// }
 	}
 

@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,7 +37,7 @@
 /**
  * Class AvisotaRecipientSource
  *
- * 
+ *
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -56,15 +57,18 @@ interface AvisotaRecipientSource
 	 * Get recipient IDs of a list of options.
 	 *
 	 * @abstract
+	 *
 	 * @param array $varOption
+	 *
 	 * @return array
 	 */
 	public function getRecipients($arrOptions);
-	
+
 	/**
 	 * Get the recipient details.
-	 * 
+	 *
 	 * @param string $varId
+	 *
 	 * @return array
 	 */
 	public function getRecipientDetails($varId);

@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -50,6 +51,7 @@ class ModuleAvisotaReader extends Module
 
 	/**
 	 * Template
+	 *
 	 * @var string
 	 */
 	protected $strTemplate = 'mod_avisota_reader';
@@ -73,15 +75,18 @@ class ModuleAvisotaReader extends Module
 	 */
 	public function generate()
 	{
-		if (TL_MODE == 'BE')
-		{
+		if (TL_MODE == 'BE') {
 			$objTemplate = new BackendTemplate('be_wildcard');
 			$objTemplate->wildcard = '### Avisota Newsletter Reader ###';
 			return $objTemplate->parse();
 		}
 
-		$this->avisota_categories = array_filter(array_map('intval',
-			deserialize($this->avisota_categories, true)));
+		$this->avisota_categories = array_filter(
+			array_map(
+				'intval',
+				deserialize($this->avisota_categories, true)
+			)
+		);
 		if (!count($this->avisota_categories)) {
 			$this->avisota_categories = array(0);
 		}
@@ -98,20 +103,27 @@ class ModuleAvisotaReader extends Module
 		$varId = $this->Input->get('items');
 
 		$objNewsletter = $this->Database
-			->prepare("SELECT * FROM tl_avisota_newsletter WHERE (id=? OR alias=?) AND pid IN (" . implode(',', $this->avisota_categories) . ")")
+			->prepare(
+			"SELECT * FROM tl_avisota_newsletter WHERE (id=? OR alias=?) AND pid IN (" . implode(
+				',',
+				$this->avisota_categories
+			) . ")"
+		)
 			->execute($varId, $varId);
 
-		if ($objNewsletter->next())
-		{
+		if ($objNewsletter->next()) {
 			$objCategory = $this->Database
 				->prepare("SELECT * FROM tl_avisota_newsletter_category WHERE id=?")
 				->execute($objNewsletter->pid);
-			if ($objCategory->next())
-			{
+			if ($objCategory->next()) {
 				$objNewsletter->template_html = $this->avisota_reader_template;
 
 				$this->Template->newsletter = $objNewsletter->row();
-				$this->Template->html = $this->AvisotaNewsletterContent->generateHtml($objNewsletter, $objCategory, false);
+				$this->Template->html       = $this->AvisotaNewsletterContent->generateHtml(
+					$objNewsletter,
+					$objCategory,
+					false
+				);
 			}
 		}
 	}

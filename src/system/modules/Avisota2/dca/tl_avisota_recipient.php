@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -42,132 +43,130 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 	// Config
 	'config'       => array
 	(
-		'dataContainer'               => 'Table',
-		'switchToEdit'                => true,
-		'enableVersioning'            => true,
-		'onload_callback'             => array
+		'dataContainer'     => 'Table',
+		'switchToEdit'      => true,
+		'enableVersioning'  => true,
+		'onload_callback'   => array
 		(
 			array('tl_avisota_recipient', 'checkPermission'),
 			array('AvisotaDCA', 'filterByMailingLists'),
 			array('tl_avisota_recipient', 'onload_callback')
 		),
-		'onsubmit_callback'           => array
+		'onsubmit_callback' => array
 		(
 			array('tl_avisota_recipient', 'onsubmit_callback')
 		),
-		'ondelete_callback'           => array
+		'ondelete_callback' => array
 		(
 			array('tl_avisota_recipient', 'ondelete_callback')
 		)
 	),
-
 	// List
 	'list'         => array
 	(
 		'sorting'           => array
 		(
-			'mode'                    => 2,
-			'fields'                  => array('email'),
-			'panelLayout'             => 'filter;sort,search,limit',
+			'mode'        => 2,
+			'fields'      => array('email'),
+			'panelLayout' => 'filter;sort,search,limit',
 		),
 		'label'             => array
 		(
-			'fields'                  => array('firstname', 'lastname', 'email'),
-			'format'                  => '%s %s &lt;%s&gt;',
-			'label_callback'          => array('tl_avisota_recipient', 'getLabel')
+			'fields'         => array('firstname', 'lastname', 'email'),
+			'format'         => '%s %s &lt;%s&gt;',
+			'label_callback' => array('tl_avisota_recipient', 'getLabel')
 		),
 		'global_operations' => array
 		(
 			'tools'   => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['tools'],
-				'class'               => 'header_recipient_tools',
-				'attributes'          => 'id="header_recipient_tools" onclick="Backend.getScrollOffset();"'
+				'label'      => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['tools'],
+				'class'      => 'header_recipient_tools',
+				'attributes' => 'id="header_recipient_tools" onclick="Backend.getScrollOffset();"'
 			),
 			'migrate' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['migrate'],
-				'href'                => 'table=tl_avisota_recipient_migrate&amp;act=edit',
-				'class'               => 'header_recipient_migrate recipient_tool',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+				'label'      => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['migrate'],
+				'href'       => 'table=tl_avisota_recipient_migrate&amp;act=edit',
+				'class'      => 'header_recipient_migrate recipient_tool',
+				'attributes' => 'onclick="Backend.getScrollOffset();"'
 			),
 			'import'  => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['import'],
-				'href'                => 'table=tl_avisota_recipient_import&amp;act=edit',
-				'class'               => 'header_recipient_import recipient_tool',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+				'label'      => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['import'],
+				'href'       => 'table=tl_avisota_recipient_import&amp;act=edit',
+				'class'      => 'header_recipient_import recipient_tool',
+				'attributes' => 'onclick="Backend.getScrollOffset();"'
 			),
 			'export'  => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['export'],
-				'href'                => 'table=tl_avisota_recipient_export&amp;act=edit',
-				'class'               => 'header_recipient_export recipient_tool',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+				'label'      => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['export'],
+				'href'       => 'table=tl_avisota_recipient_export&amp;act=edit',
+				'class'      => 'header_recipient_export recipient_tool',
+				'attributes' => 'onclick="Backend.getScrollOffset();"'
 			),
 			'remove'  => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['remove'],
-				'href'                => 'table=tl_avisota_recipient_remove&amp;act=edit',
-				'class'               => 'header_recipient_remove recipient_tool',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+				'label'      => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['remove'],
+				'href'       => 'table=tl_avisota_recipient_remove&amp;act=edit',
+				'class'      => 'header_recipient_remove recipient_tool',
+				'attributes' => 'onclick="Backend.getScrollOffset();"'
 			),
 			'all'     => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
-				'href'                => 'act=select',
-				'class'               => 'header_edit_all',
-				'attributes'          => 'onclick="Backend.getScrollOffset();" accesskey="e"'
+				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
+				'href'       => 'act=select',
+				'class'      => 'header_edit_all',
+				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
 			)
 		),
 		'operations'        => array
 		(
 			'edit'                => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['edit'],
-				'href'                => 'act=edit',
-				'icon'                => 'edit.gif',
-				'button_callback'     => array('tl_avisota_recipient', 'editRecipient')
+				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['edit'],
+				'href'            => 'act=edit',
+				'icon'            => 'edit.gif',
+				'button_callback' => array('tl_avisota_recipient', 'editRecipient')
 			),
 			'delete'              => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['delete'],
-				'href'                => 'act=delete',
-				'icon'                => 'delete.gif',
-				'attributes'          => 'class="contextmenu" onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-				'button_callback'     => array('tl_avisota_recipient', 'deleteRecipient')
+				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['delete'],
+				'href'            => 'act=delete',
+				'icon'            => 'delete.gif',
+				'attributes'      => 'class="contextmenu" onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
+				'button_callback' => array('tl_avisota_recipient', 'deleteRecipient')
 			),
 			'delete_no_blacklist' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['delete_no_blacklist'],
-				'href'                => 'act=delete&amp;blacklist=false',
-				'icon'                => 'delete.gif',
-				'attributes'          => 'class="edit-header" onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-				'button_callback'     => array('tl_avisota_recipient', 'deleteRecipientNoBlacklist')
+				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['delete_no_blacklist'],
+				'href'            => 'act=delete&amp;blacklist=false',
+				'icon'            => 'delete.gif',
+				'attributes'      => 'class="edit-header" onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
+				'button_callback' => array('tl_avisota_recipient', 'deleteRecipientNoBlacklist')
 			),
 			'show'                => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['show'],
-				'href'                => 'act=show',
-				'icon'                => 'show.gif'
+				'label' => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['show'],
+				'href'  => 'act=show',
+				'icon'  => 'show.gif'
 			),
-			'notify'            => array
+			'notify'              => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['notify'],
-				'href'                => '',
-				'icon'                => 'system/modules/Avisota2/html/notify.png',
-				'button_callback'     => array('tl_avisota_recipient', 'notify')
+				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['notify'],
+				'href'            => '',
+				'icon'            => 'system/modules/Avisota2/html/notify.png',
+				'button_callback' => array('tl_avisota_recipient', 'notify')
 			),
 			'tracking'            => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['tracking'],
-				'href'                => '',
-				'icon'                => 'system/modules/Avisota2/html/tracking.png',
-				'button_callback'     => array('tl_avisota_recipient', 'tracking')
+				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['tracking'],
+				'href'            => '',
+				'icon'            => 'system/modules/Avisota2/html/tracking.png',
+				'button_callback' => array('tl_avisota_recipient', 'tracking')
 			)
 		),
 	),
-
 	// Palettes
 	'metapalettes' => array
 	(
@@ -179,169 +178,191 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			'tracing'      => array('permitPersonalTracing')
 		)
 	),
-
 	// Fields
 	'fields'       => array
 	(
-		'email'              => array
+		'email'                 => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['email'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('tl_class'  => 'w50',
-			                                   'rgxp'      => 'email',
-			                                   'mandatory' => true,
-			                                   'maxlength' => 255,
-			                                   'importable'=> true,
-			                                   'exportable'=> true),
-			'save_callback'           => array
+			'label'         => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['email'],
+			'exclude'       => true,
+			'search'        => true,
+			'sorting'       => true,
+			'flag'          => 1,
+			'inputType'     => 'text',
+			'eval'          => array(
+				'tl_class'   => 'w50',
+				'rgxp'       => 'email',
+				'mandatory'  => true,
+				'maxlength'  => 255,
+				'importable' => true,
+				'exportable' => true
+			),
+			'save_callback' => array
 			(
 				array('tl_avisota_recipient', 'saveEmail')
 			)
 		),
-		'lists'              => array
+		'lists'                 => array
 		(
-			'label'                      => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['lists'],
-			'inputType'                  => 'checkbox',
-			'foreignKey'                 => 'tl_avisota_mailing_list.title',
-			'eval'                       => array('multiple'               => true,
-			                                      'doNotSaveEmpty'         => true,
-			                                      'doNotCopy'              => true,
-			                                      'doNotShow'              => true,
-			                                      'tl_class'               => 'clr'),
-			'load_callback'              => array(array('tl_avisota_recipient', 'loadMailingLists')),
-			'save_callback'              => array
+			'label'         => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['lists'],
+			'inputType'     => 'checkbox',
+			'foreignKey'    => 'tl_avisota_mailing_list.title',
+			'eval'          => array(
+				'multiple'       => true,
+				'doNotSaveEmpty' => true,
+				'doNotCopy'      => true,
+				'doNotShow'      => true,
+				'tl_class'       => 'clr'
+			),
+			'load_callback' => array(array('tl_avisota_recipient', 'loadMailingLists')),
+			'save_callback' => array
 			(
 				array('tl_avisota_recipient', 'validateBlacklist'),
 				array('tl_avisota_recipient', 'saveMailingLists')
 			)
 		),
-		'subscriptionAction' => array
+		'subscriptionAction'    => array
 		(
-			'label'                          => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['subscriptionAction'],
-			'inputType'                      => 'select',
-			'options'                        => array('sendConfirmation', 'activateSubscription', 'doNothink'),
-			'reference'                      => &$GLOBALS['TL_LANG']['tl_avisota_recipient'],
-			'eval'                           => array('doNotSaveEmpty'         => true,
-			                                          'doNotCopy'              => true,
-			                                          'doNotShow'              => true),
-			'save_callback'                  => array(array('tl_avisota_recipient', 'saveSubscriptionAction'))
+			'label'         => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['subscriptionAction'],
+			'inputType'     => 'select',
+			'options'       => array('sendConfirmation', 'activateSubscription', 'doNothink'),
+			'reference'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient'],
+			'eval'          => array(
+				'doNotSaveEmpty' => true,
+				'doNotCopy'      => true,
+				'doNotShow'      => true
+			),
+			'save_callback' => array(array('tl_avisota_recipient', 'saveSubscriptionAction'))
 		),
-		'salutation'         => array
+		'salutation'            => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['salutation'],
-			'exclude'                 => true,
-			'filter'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 1,
-			'inputType'               => 'select',
-			'options'                 => array(), //array_combine($GLOBALS['TL_CONFIG']['avisota_salutations'], $GLOBALS['TL_CONFIG']['avisota_salutations']),
-			'eval'                    => array('maxlength'         => 255,
-			                                   'includeBlankOption'=> true,
-			                                   'importable'        => true,
-			                                   'exportable'        => true,
-			                                   'feEditable'        => true,
-			                                   'tl_class'          => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['salutation'],
+			'exclude'   => true,
+			'filter'    => true,
+			'sorting'   => true,
+			'flag'      => 1,
+			'inputType' => 'select',
+			'options'   => array(),
+			//array_combine($GLOBALS['TL_CONFIG']['avisota_salutations'], $GLOBALS['TL_CONFIG']['avisota_salutations']),
+			'eval'      => array(
+				'maxlength'          => 255,
+				'includeBlankOption' => true,
+				'importable'         => true,
+				'exportable'         => true,
+				'feEditable'         => true,
+				'tl_class'           => 'w50'
+			)
 		),
-		'title'              => array
+		'title'                 => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['title'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength' => 255,
-			                                   'importable'=> true,
-			                                   'exportable'=> true,
-			                                   'feEditable'=> true,
-			                                   'tl_class'  => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['title'],
+			'exclude'   => true,
+			'search'    => true,
+			'sorting'   => true,
+			'flag'      => 1,
+			'inputType' => 'text',
+			'eval'      => array(
+				'maxlength'  => 255,
+				'importable' => true,
+				'exportable' => true,
+				'feEditable' => true,
+				'tl_class'   => 'w50'
+			)
 		),
-		'firstname'          => array
+		'firstname'             => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['firstname'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength' => 255,
-			                                   'importable'=> true,
-			                                   'exportable'=> true,
-			                                   'feEditable'=> true,
-			                                   'tl_class'  => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['firstname'],
+			'exclude'   => true,
+			'search'    => true,
+			'sorting'   => true,
+			'flag'      => 1,
+			'inputType' => 'text',
+			'eval'      => array(
+				'maxlength'  => 255,
+				'importable' => true,
+				'exportable' => true,
+				'feEditable' => true,
+				'tl_class'   => 'w50'
+			)
 		),
-		'lastname'           => array
+		'lastname'              => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['lastname'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength' => 255,
-			                                   'importable'=> true,
-			                                   'exportable'=> true,
-			                                   'feEditable'=> true,
-			                                   'tl_class'  => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['lastname'],
+			'exclude'   => true,
+			'search'    => true,
+			'sorting'   => true,
+			'flag'      => 1,
+			'inputType' => 'text',
+			'eval'      => array(
+				'maxlength'  => 255,
+				'importable' => true,
+				'exportable' => true,
+				'feEditable' => true,
+				'tl_class'   => 'w50'
+			)
 		),
-		'gender'             => array
+		'gender'                => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['gender'],
-			'exclude'                 => true,
-			'filter'                  => true,
-			'sorting'                 => true,
-			'inputType'               => 'select',
-			'options'                 => array('male', 'female'),
-			'reference'               => &$GLOBALS['TL_LANG']['MSC'],
-			'eval'                    => array('includeBlankOption'=> true,
-			                                   'importable'        => true,
-			                                   'exportable'        => true,
-			                                   'feEditable'        => true,
-			                                   'tl_class'          => 'clr')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['gender'],
+			'exclude'   => true,
+			'filter'    => true,
+			'sorting'   => true,
+			'inputType' => 'select',
+			'options'   => array('male', 'female'),
+			'reference' => &$GLOBALS['TL_LANG']['MSC'],
+			'eval'      => array(
+				'includeBlankOption' => true,
+				'importable'         => true,
+				'exportable'         => true,
+				'feEditable'         => true,
+				'tl_class'           => 'clr'
+			)
 		),
-		'permitPersonalTracing'             => array
+		'permitPersonalTracing' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['permitPersonalTracing'],
-			'exclude'                 => true,
-			'filter'                  => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('importable'        => true,
-			                                   'exportable'        => true,
-			                                   'feEditable'        => true,
-			                                   'tl_class'          => 'clr m12')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['permitPersonalTracing'],
+			'exclude'   => true,
+			'filter'    => true,
+			'inputType' => 'checkbox',
+			'eval'      => array(
+				'importable' => true,
+				'exportable' => true,
+				'feEditable' => true,
+				'tl_class'   => 'clr m12'
+			)
 		),
-		'token'              => array
+		'token'                 => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['token']
+			'label' => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['token']
 		),
-		'addedOn'            => array
+		'addedOn'               => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn'],
-			'default'                 => time(),
-			'filter'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 8,
-			'eval'                    => array('importable'=> true,
-			                                   'exportable'=> true,
-			                                   'doNotShow' => true,
-			                                   'doNotCopy' => true)
+			'label'   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn'],
+			'default' => time(),
+			'filter'  => true,
+			'sorting' => true,
+			'flag'    => 8,
+			'eval'    => array(
+				'importable' => true,
+				'exportable' => true,
+				'doNotShow'  => true,
+				'doNotCopy'  => true
+			)
 		),
-		'addedBy'            => array
+		'addedBy'               => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy'],
-			'default'                 => $this->User->id,
-			'filter'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 1,
-			'foreignKey'              => 'tl_user.name',
-			'eval'                    => array('importable'=> true,
-			                                   'exportable'=> true,
-			                                   'doNotShow' => true,
-			                                   'doNotCopy' => true)
+			'label'      => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy'],
+			'default'    => $this->User->id,
+			'filter'     => true,
+			'sorting'    => true,
+			'flag'       => 1,
+			'foreignKey' => 'tl_user.name',
+			'eval'       => array(
+				'importable' => true,
+				'exportable' => true,
+				'doNotShow'  => true,
+				'doNotCopy'  => true
+			)
 		)
 	)
 );
@@ -363,45 +384,69 @@ class tl_avisota_recipient extends Backend
 		if (strlen($strLabel)) {
 			$strLabel .= ' &lt;' . $arrRow['email'] . '&gt;';
 		}
-		else
-		{
+		else {
 			$strLabel = $arrRow['email'];
 		}
 
 		$strLabel .= ' <span style="color:#b3b3b3; padding-left:3px;">(';
-		$strLabel .= sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn'][2], $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $arrRow['addedOn']));
+		$strLabel .= sprintf(
+			$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn'][2],
+			$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $arrRow['addedOn'])
+		);
 		if ($arrRow['addedBy'] > 0) {
-			$objUser = $this->Database->prepare("SELECT * FROM tl_user WHERE id=?")
+			$objUser = $this->Database
+				->prepare("SELECT * FROM tl_user WHERE id=?")
 				->execute($arrRow['addedBy']);
-			$strLabel .= sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy'][2], $objUser->next() ? $objUser->name : $GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy'][3]);
+			$strLabel .= sprintf(
+				$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy'][2],
+				$objUser->next() ? $objUser->name : $GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy'][3]
+			);
 		}
 		$strLabel .= ')</span>';
 
 		$strLabel .= '<ul style="margin-top: 3px;">';
 
 		$objList = $this->Database
-			->prepare("SELECT ml.*, rtml.confirmed, rtml.confirmationSent, rtml.reminderSent, rtml.reminderCount FROM tl_avisota_mailing_list ml INNER JOIN tl_avisota_recipient_to_mailing_list rtml ON ml.id=rtml.list WHERE rtml.recipient=? ORDER BY ml.title")
+			->prepare(
+			"SELECT ml.*, rtml.confirmed, rtml.confirmationSent, rtml.reminderSent, rtml.reminderCount FROM tl_avisota_mailing_list ml INNER JOIN tl_avisota_recipient_to_mailing_list rtml ON ml.id=rtml.list WHERE rtml.recipient=? ORDER BY ml.title"
+		)
 			->execute($arrRow['id']);
 		while ($objList->next()) {
 			$strLabel .= '<li>';
-			$strLabel .= '<a href="javascript:void(0);" onclick="if ($(this).getProperty(\'data-confirmed\') || confirm(' . specialchars(json_encode($GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmManualActivation'])) . ')) Avisota.toggleConfirmation(this);" data-recipient="' . $arrRow['id'] . '" data-list="' . $objList->id . '" data-confirmed="' . ($objList->confirmed ? '1' : '') . '">';
-			$strLabel .= $this->generateImage(sprintf('system/themes/%s/images/%s.gif', $this->getTheme(), $objList->confirmed ? 'visible' : 'invisible'), '');
+			$strLabel .= '<a href="javascript:void(0);" onclick="if ($(this).getProperty(\'data-confirmed\') || confirm(' . specialchars(
+				json_encode($GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmManualActivation'])
+			) . ')) Avisota.toggleConfirmation(this);" data-recipient="' . $arrRow['id'] . '" data-list="' . $objList->id . '" data-confirmed="' . ($objList->confirmed
+				? '1' : '') . '">';
+			$strLabel .= $this->generateImage(
+				sprintf(
+					'system/themes/%s/images/%s.gif',
+					$this->getTheme(),
+					$objList->confirmed ? 'visible' : 'invisible'
+				),
+				''
+			);
 			$strLabel .= '</a> ';
 			$strLabel .= $objList->title;
 			if ($objList->confirmationSent || $objList->reminderSent) {
 				$strLabel .= ' <span style="color:#b3b3b3; padding-left:3px;">(';
 				if ($objList->reminderCount > 1) {
-					$strLabel .= sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['remindersSent'],
+					$strLabel .= sprintf(
+						$GLOBALS['TL_LANG']['tl_avisota_recipient']['remindersSent'],
 						$objList->reminderCount,
-						$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat']));
+						$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
+					);
 				}
 				else if ($objList->reminderSent > 0) {
-					$strLabel .= sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['reminderSent'],
-						$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat']));
+					$strLabel .= sprintf(
+						$GLOBALS['TL_LANG']['tl_avisota_recipient']['reminderSent'],
+						$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
+					);
 				}
 				else if ($objList->confirmationSent > 0) {
-					$strLabel .= sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmationSent'],
-						$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat']));
+					$strLabel .= sprintf(
+						$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmationSent'],
+						$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
+					);
 				}
 				$strLabel .= ')</span>';
 			}
@@ -421,16 +466,18 @@ class tl_avisota_recipient extends Backend
 
 		if ($this->Input->get('act') == 'toggleConfirmation') {
 			$intRecipient = $this->Input->get('recipient');
-			$intList = $this->Input->get('list');
+			$intList      = $this->Input->get('list');
 
 			$this->Database
 				->prepare("UPDATE tl_avisota_recipient_to_mailing_list SET confirmed=? WHERE recipient=? AND list=?")
 				->execute($this->Input->get('confirmed') ? '1' : '', $intRecipient, $intList);
 
 			header('Content-Type: application/javascript');
-			echo json_encode(array(
-				'confirmed' => $this->Input->get('confirmed') ? true : false
-			));
+			echo json_encode(
+				array(
+					'confirmed' => $this->Input->get('confirmed') ? true : false
+				)
+			);
 			exit;
 		}
 	}
@@ -455,20 +502,19 @@ class tl_avisota_recipient extends Backend
 
 	public function ondelete_callback($dc)
 	{
-		if ($this->Input->get('blacklist') !== 'false')
-		{
+		if ($this->Input->get('blacklist') !== 'false') {
 			$time = time();
 
 			$arrLists = $this->loadMailingLists('', $dc, true);
 
 			// build insert values
 			$arrValues = array();
-			$arrArgs = array();
+			$arrArgs   = array();
 			foreach ($arrLists as $intList) {
 				$arrValues[] = '(?, ?, ?)';
-				$arrArgs[] = $time;
-				$arrArgs[] = $intList;
-				$arrArgs[] = md5(strtolower($dc->activeRecord->email));
+				$arrArgs[]   = $time;
+				$arrArgs[]   = $intList;
+				$arrArgs[]   = md5(strtolower($dc->activeRecord->email));
 			}
 
 			// on duplicate key update tstamp
@@ -477,9 +523,11 @@ class tl_avisota_recipient extends Backend
 			// execute query
 			if (count($arrValues)) {
 				$this->Database
-					->prepare("INSERT INTO tl_avisota_recipient_blacklist (tstamp, pid, email)
+					->prepare(
+					"INSERT INTO tl_avisota_recipient_blacklist (tstamp, pid, email)
 							   VALUES " . implode(',', $arrValues) . "
-							   ON DUPLICATE KEY UPDATE tstamp=?")
+							   ON DUPLICATE KEY UPDATE tstamp=?"
+				)
 					->execute($arrArgs);
 			}
 		}
@@ -518,18 +566,19 @@ class tl_avisota_recipient extends Backend
 
 		if ($arrBlacklisted) {
 			$objBlacklist = $this->Database
-				->execute("SELECT * FROM tl_avisota_mailing_list
+				->execute(
+				"SELECT * FROM tl_avisota_mailing_list
 				           WHERE id IN (" . implode(',', $arrBlacklisted) . ")
-				           ORDER BY title");
-			if ($objBlacklist->numRows)
-			{
+				           ORDER BY title"
+			);
+			if ($objBlacklist->numRows) {
 				$k = 'AVISOTA_BLACKLIST_WARNING_' . md5(implode(',', $objBlacklist->fetchEach('id')));
-				if (!(isset($_SESSION[$k]) && time()-$_SESSION[$k]<60))
-				{
+				if (!(isset($_SESSION[$k]) && time() - $_SESSION[$k] < 60)) {
 					$_SESSION[$k] = time();
 					throw new Exception(
 						sprintf(
-							$GLOBALS['TL_LANG']['tl_avisota_recipient'][$objBlacklist->numRows > 1 ? 'blacklists' : 'blacklist'],
+							$GLOBALS['TL_LANG']['tl_avisota_recipient'][$objBlacklist->numRows > 1 ? 'blacklists'
+								: 'blacklist'],
 							implode(', ', $objBlacklist->fetchEach('title'))
 						)
 					);
@@ -546,8 +595,10 @@ class tl_avisota_recipient extends Backend
 		}
 
 		return $this->Database
-			->prepare("SELECT * FROM tl_avisota_recipient_to_mailing_list WHERE recipient=?"
-					  . ($blnConfirmed !== null ? ' AND confirmed=?' : ''))
+			->prepare(
+			"SELECT * FROM tl_avisota_recipient_to_mailing_list WHERE recipient=?"
+				. ($blnConfirmed !== null ? ' AND confirmed=?' : '')
+		)
 			->execute($dc->id, $blnConfirmed ? '1' : '')
 			->fetchEach('list');
 	}
@@ -589,8 +640,7 @@ class tl_avisota_recipient extends Backend
 		if (!is_array($this->User->avisota_recipient_lists) || count($this->User->avisota_recipient_lists) < 1) {
 			$root = array(0);
 		}
-		else
-		{
+		else {
 			$root = $this->User->avisota_recipient_lists;
 		}
 
@@ -613,18 +663,17 @@ class tl_avisota_recipient extends Backend
 				$GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['operations']['delete_no_blacklist']['attributes'] = str_replace(
 					'class="edit-header"',
 					'',
-					$GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['operations']['delete_no_blacklist']['attributes']);
+					$GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['operations']['delete_no_blacklist']['attributes']
+				);
 			}
-			else
-			{
+			else {
 				unset($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['operations']['delete_no_blacklist']);
 			}
 		}
 
 		// remove tools if there are no tools
 		$intTools = 0;
-		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['global_operations'] as $arrGlobalOperation)
-		{
+		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['global_operations'] as $arrGlobalOperation) {
 			if (strpos($arrGlobalOperation['class'], 'recipient_tool') !== false) {
 				$intTools++;
 			}
@@ -634,11 +683,20 @@ class tl_avisota_recipient extends Backend
 		}
 
 		// Check current action
-		switch ($this->Input->get('act'))
-		{
+		switch ($this->Input->get('act')) {
 			case 'create':
-				if (!strlen($this->Input->get('pid')) || !in_array($this->Input->get('pid'), $root) || !$this->User->hasAccess('create', 'avisota_recipient_permissions')) {
-					$this->log('Not enough permissions to create newsletters recipients in list ID "' . $this->Input->get('pid') . '"', 'tl_avisota_recipient checkPermission', TL_ERROR);
+				if (!strlen($this->Input->get('pid')) || !in_array(
+					$this->Input->get('pid'),
+					$root
+				) || !$this->User->hasAccess('create', 'avisota_recipient_permissions')
+				) {
+					$this->log(
+						'Not enough permissions to create newsletters recipients in list ID "' . $this->Input->get(
+							'pid'
+						) . '"',
+						'tl_avisota_recipient checkPermission',
+						TL_ERROR
+					);
 					$this->redirect('contao/main.php?act=error');
 				}
 				break;
@@ -649,17 +707,21 @@ class tl_avisota_recipient extends Backend
 			case 'paste':
 			case 'delete':
 			case 'toggle':
-				$objRecipient = $this->Database->prepare("SELECT pid FROM tl_avisota_recipient WHERE id=?")
+				$objRecipient = $this->Database
+					->prepare("SELECT pid FROM tl_avisota_recipient WHERE id=?")
 					->limit(1)
 					->execute($id);
 
 				if ($objRecipient->numRows < 1) {
-					$this->log('Invalid newsletter recipient ID "' . $id . '"', 'tl_avisota_recipient checkPermission', TL_ERROR);
+					$this->log(
+						'Invalid newsletter recipient ID "' . $id . '"',
+						'tl_avisota_recipient checkPermission',
+						TL_ERROR
+					);
 					$this->redirect('contao/main.php?act=error');
 				}
 
-				switch ($this->Input->get('act'))
-				{
+				switch ($this->Input->get('act')) {
 					case 'edit':
 					case 'toggle':
 						$blnHasAccess = (count(preg_grep('/^tl_avisota_recipient::/', $this->User->alexf)) > 0);
@@ -674,11 +736,20 @@ class tl_avisota_recipient extends Backend
 						break;
 
 					case 'delete':
-						$blnHasAccess = ($this->User->hasAccess($this->Input->get('blacklist') == 'false' ? 'delete_no_blacklist' : 'delete', 'avisota_recipient_permissions'));
+						$blnHasAccess = ($this->User->hasAccess(
+							$this->Input->get('blacklist') == 'false' ? 'delete_no_blacklist' : 'delete',
+							'avisota_recipient_permissions'
+						));
 						break;
 				}
 				if (!in_array($objRecipient->pid, $root) || !$blnHasAccess) {
-					$this->log('Not enough permissions to ' . $this->Input->get('act') . ' recipient ID "' . $id . '" of recipient list ID "' . $objRecipient->pid . '"', 'tl_avisota_recipient checkPermission', TL_ERROR);
+					$this->log(
+						'Not enough permissions to ' . $this->Input->get(
+							'act'
+						) . ' recipient ID "' . $id . '" of recipient list ID "' . $objRecipient->pid . '"',
+						'tl_avisota_recipient checkPermission',
+						TL_ERROR
+					);
 					$this->redirect('contao/main.php?act=error');
 				}
 				break;
@@ -687,8 +758,7 @@ class tl_avisota_recipient extends Backend
 			case 'editAll':
 			case 'deleteAll':
 			case 'overrideAll':
-				switch ($this->Input->get('act'))
-				{
+				switch ($this->Input->get('act')) {
 					case 'select':
 						$blnHasAccess = true;
 						break;
@@ -699,35 +769,57 @@ class tl_avisota_recipient extends Backend
 						break;
 
 					case 'deleteAll':
-						$blnHasAccess = ($this->User->hasAccess($this->Input->get('blacklist') == 'false' ? 'delete_no_blacklist' : 'delete', 'avisota_recipient_permissions'));
+						$blnHasAccess = ($this->User->hasAccess(
+							$this->Input->get('blacklist') == 'false' ? 'delete_no_blacklist' : 'delete',
+							'avisota_recipient_permissions'
+						));
 						break;
 				}
 				if (!in_array($id, $root) || !$blnHasAccess) {
-					$this->log('Not enough permissions to access recipient list ID "' . $id . '"', 'tl_avisota_recipient checkPermission', TL_ERROR);
+					$this->log(
+						'Not enough permissions to access recipient list ID "' . $id . '"',
+						'tl_avisota_recipient checkPermission',
+						TL_ERROR
+					);
 					$this->redirect('contao/main.php?act=error');
 				}
 
-				$objRecipient = $this->Database->prepare("SELECT id FROM tl_avisota_recipient WHERE pid=?")
+				$objRecipient = $this->Database
+					->prepare("SELECT id FROM tl_avisota_recipient WHERE pid=?")
 					->execute($id);
 
 				if ($objRecipient->numRows < 1) {
-					$this->log('Invalid newsletter recipient ID "' . $id . '"', 'tl_avisota_recipient checkPermission', TL_ERROR);
+					$this->log(
+						'Invalid newsletter recipient ID "' . $id . '"',
+						'tl_avisota_recipient checkPermission',
+						TL_ERROR
+					);
 					$this->redirect('contao/main.php?act=error');
 				}
 
 				$session                   = $this->Session->getData();
-				$session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'], $objRecipient->fetchEach('id'));
+				$session['CURRENT']['IDS'] = array_intersect(
+					$session['CURRENT']['IDS'],
+					$objRecipient->fetchEach('id')
+				);
 				$this->Session->setData($session);
 				break;
 
 			default:
 				if (strlen($this->Input->get('act'))) {
-					$this->log('Invalid command "' . $this->Input->get('act') . '"', 'tl_avisota_recipient checkPermission', TL_ERROR);
+					$this->log(
+						'Invalid command "' . $this->Input->get('act') . '"',
+						'tl_avisota_recipient checkPermission',
+						TL_ERROR
+					);
 					$this->redirect('contao/main.php?act=error');
 				}
-				elseif (!in_array($id, $root))
-				{
-					$this->log('Not enough permissions to access newsletter recipient ID "' . $id . '"', 'tl_avisota_recipient checkPermission', TL_ERROR);
+				elseif (!in_array($id, $root)) {
+					$this->log(
+						'Not enough permissions to access newsletter recipient ID "' . $id . '"',
+						'tl_avisota_recipient checkPermission',
+						TL_ERROR
+					);
 					$this->redirect('contao/main.php?act=error');
 				}
 				break;
@@ -749,7 +841,10 @@ class tl_avisota_recipient extends Backend
 	 */
 	public function editRecipient($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || count(preg_grep('/^tl_avisota_recipient::/', $this->User->alexf)) > 0) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
+		return ($this->User->isAdmin || count(preg_grep('/^tl_avisota_recipient::/', $this->User->alexf)) > 0)
+			? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
+				$title
+			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
 	}
 
 
@@ -767,7 +862,13 @@ class tl_avisota_recipient extends Backend
 	 */
 	public function copyRecipient($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || $this->User->hasAccess('create', 'avisota_recipient_permissions')) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)) . ' ';
+		return ($this->User->isAdmin || $this->User->hasAccess('create', 'avisota_recipient_permissions'))
+			? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
+				$title
+			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> '
+			: $this->generateImage(
+				preg_replace('/\.gif$/i', '_.gif', $icon)
+			) . ' ';
 	}
 
 
@@ -785,7 +886,13 @@ class tl_avisota_recipient extends Backend
 	 */
 	public function deleteRecipient($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || $this->User->hasAccess('delete', 'avisota_recipient_permissions')) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)) . ' ';
+		return ($this->User->isAdmin || $this->User->hasAccess('delete', 'avisota_recipient_permissions'))
+			? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
+				$title
+			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> '
+			: $this->generateImage(
+				preg_replace('/\.gif$/i', '_.gif', $icon)
+			) . ' ';
 	}
 
 
@@ -803,7 +910,13 @@ class tl_avisota_recipient extends Backend
 	 */
 	public function deleteRecipientNoBlacklist($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || $this->User->hasAccess('delete_no_blacklist', 'avisota_recipient_permissions')) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)) . ' ';
+		return ($this->User->isAdmin || $this->User->hasAccess('delete_no_blacklist', 'avisota_recipient_permissions'))
+			? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
+				$title
+			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> '
+			: $this->generateImage(
+				preg_replace('/\.gif$/i', '_.gif', $icon)
+			) . ' ';
 	}
 
 
@@ -821,7 +934,9 @@ class tl_avisota_recipient extends Backend
 	 */
 	public function notify($row, $href, $label, $title, $icon, $attributes)
 	{
-		return '<a href="contao/main.php?do=avisota_recipients&amp;table=tl_avisota_recipient_notify&amp;act=edit&amp;id=' . $row['id'] . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ';
+		return '<a href="contao/main.php?do=avisota_recipients&amp;table=tl_avisota_recipient_notify&amp;act=edit&amp;id=' . $row['id'] . '" title="' . specialchars(
+			$title
+		) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ';
 	}
 
 
@@ -839,6 +954,11 @@ class tl_avisota_recipient extends Backend
 	 */
 	public function tracking($row, $href, $label, $title, $icon, $attributes)
 	{
-		return '<a href="contao/main.php?do=avisota_tracking&amp;recipient=' . urlencode($row['email']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ';
+		return '<a href="contao/main.php?do=avisota_tracking&amp;recipient=' . urlencode(
+			$row['email']
+		) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage(
+			$icon,
+			$label
+		) . '</a> ';
 	}
 }

@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,10 +37,13 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['email']       = array('E-Mail', 'Specify email address.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmed']   = array('Activate','Un-Check to deactivate this subscriber.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['token']       = array('Token ','The auth token is the double opt-in method used.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn']     = array('Joined ', 'The date of the subscription.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['email']     = array('E-Mail', 'Specify email address.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmed'] = array('Activate', 'Un-Check to deactivate this subscriber.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['token']     = array(
+	'Token ',
+	'The auth token is the double opt-in method used.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn']   = array('Joined ', 'The date of the subscription.');
 
 
 /**
@@ -60,9 +64,12 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['invalid']    = '%s invalid entries 
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['new']         = array('New Subscriber ','Create a new subscriber');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['show']        = array('Subscriber Details ',' Details of the subscriber ID %s');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['copy']        = array('Copy Subscriber ','Copy subscriber ID %s');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['delete']      = array('Delete Subscriber', 'Delete subscriber ID %s');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['edit']        = array('Edit Subscriber', 'Edit details of subscriber ID %s');
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['import']      = array('CSV Import', 'Import recipients from a CSV file');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['new']    = array('New Subscriber ', 'Create a new subscriber');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['show']   = array(
+	'Subscriber Details ',
+	' Details of the subscriber ID %s'
+);
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['copy']   = array('Copy Subscriber ', 'Copy subscriber ID %s');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['delete'] = array('Delete Subscriber', 'Delete subscriber ID %s');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['edit']   = array('Edit Subscriber', 'Edit details of subscriber ID %s');
+$GLOBALS['TL_LANG']['tl_avisota_recipient']['import'] = array('CSV Import', 'Import recipients from a CSV file');

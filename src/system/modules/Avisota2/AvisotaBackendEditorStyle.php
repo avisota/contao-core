@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -37,6 +38,7 @@
  * Class AvisotaBackendEditorStyle
  *
  * InsertTag hook class.
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -53,14 +55,16 @@ class AvisotaBackendEditorStyle extends Controller
 
 	public function hookGetEditorStylesLayout($strEditor)
 	{
-		if (	$strEditor == 'newsletter'
-			&&	$this->Input->get('do') == 'avisota_newsletter'
-			&&	$this->Input->get('table') == 'tl_avisota_newsletter_content'
-			&&	$this->Input->get('act') == 'edit')
-		{
+		if ($strEditor == 'newsletter'
+			&& $this->Input->get('do') == 'avisota_newsletter'
+			&& $this->Input->get('table') == 'tl_avisota_newsletter_content'
+			&& $this->Input->get('act') == 'edit'
+		) {
 			$strId = $this->Input->get('id');
 
-			$objNewsletter = $this->Database->prepare("
+			$objNewsletter = $this->Database
+				->prepare(
+				"
 					SELECT
 						n.*
 					FROM
@@ -70,37 +74,41 @@ class AvisotaBackendEditorStyle extends Controller
 					ON
 						n.`id`=c.`pid`
 					WHERE
-						c.`id`=?")
+						c.`id`=?"
+			)
 				->execute($strId);
 
-			$objCategory = $this->Database->prepare("
+			$objCategory = $this->Database
+				->prepare(
+				"
 					SELECT
 						*
 					FROM
 						`tl_avisota_newsletter_category`
 					WHERE
-						`id`=?")
+						`id`=?"
+			)
 				->execute($objNewsletter->pid);
 
-			if ($objCategory->viewOnlinePage > 0 && 0)
-			{
+			if ($objCategory->viewOnlinePage > 0 && 0) {
 				// the "view online" page does not contains the option to set a layout, use parent page instead
-				$objViewOnlinePage = $this->Database->prepare("
+				$objViewOnlinePage = $this->Database
+					->prepare(
+					"
 						SELECT
 							*
 						FROM
 							`tl_page`
 						WHERE
-							`id`=?")
+							`id`=?"
+				)
 					->execute($objCategory->viewOnlinePage);
-				$objPage = $this->getPageDetails($objViewOnlinePage->pid);
+				$objPage           = $this->getPageDetails($objViewOnlinePage->pid);
 			}
-			elseif ($objCategory->subscriptionPage > 0)
-			{
+			elseif ($objCategory->subscriptionPage > 0) {
 				$objPage = $this->getPageDetails($objCategory->subscriptionPage);
 			}
-			else
-			{
+			else {
 				return false;
 			}
 			return $objPage->layout;

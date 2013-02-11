@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -72,9 +73,9 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['dateimsFormat'] = 'l -- F d
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['send']    = array('Send ',' Send the newsletter.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['remove']  = array('Delete Job ',' Delete the job.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['details'] = array('View Details ',' Details about the job.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['send']    = array('Send ', ' Send the newsletter.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['remove']  = array('Delete Job ', ' Delete the job.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['details'] = array('View Details ', ' Details about the job.');
 
 
 /**

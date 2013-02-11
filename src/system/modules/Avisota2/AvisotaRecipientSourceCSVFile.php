@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,7 +37,7 @@
 /**
  * Class AvisotaRecipientSourceCSVFile
  *
- * 
+ *
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -44,7 +45,7 @@
 class AvisotaRecipientSourceCSVFile extends Controller implements AvisotaRecipientSource
 {
 	private $arrConfig;
-	
+
 	public function __construct($arrConfig)
 	{
 		$this->arrConfig = $arrConfig;
@@ -65,7 +66,9 @@ class AvisotaRecipientSourceCSVFile extends Controller implements AvisotaRecipie
 	 * Get recipient IDs of a list of options.
 	 *
 	 * @abstract
+	 *
 	 * @param array $varOption
+	 *
 	 * @return array
 	 */
 	public function getRecipients($arrOptions)
@@ -77,6 +80,7 @@ class AvisotaRecipientSourceCSVFile extends Controller implements AvisotaRecipie
 	 * Get the recipient details.
 	 *
 	 * @param string $varId
+	 *
 	 * @return array
 	 */
 	public function getRecipientDetails($varId)

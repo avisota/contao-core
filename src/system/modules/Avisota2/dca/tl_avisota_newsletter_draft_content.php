@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -77,7 +78,7 @@ class tl_avisota_newsletter_draft_content extends tl_avisota_newsletter_content
 			0
 		);
 
-		foreach ($arrPalette as $k=>$v) {
+		foreach ($arrPalette as $k => $v) {
 			if ($k != '__selector__' && $k != 'default') {
 				$arrPalette[$k] .= ';{draft_legend:hide},unmodifiable,undeletable';
 			}
@@ -93,7 +94,7 @@ class tl_avisota_newsletter_draft_content extends tl_avisota_newsletter_content
 			0
 		);
 
-		foreach ($arrPalette as $k=>$v) {
+		foreach ($arrPalette as $k => $v) {
 			if ($k != '__selector__' && $k != 'default') {
 				$arrPalette[$k]['draft'] = array(':hide', 'unmodifiable', 'undeletable');
 			}
@@ -131,8 +132,7 @@ class tl_avisota_newsletter_draft_content extends tl_avisota_newsletter_content
 	 */
 	public function checkPermission()
 	{
-		if ($this->User->isAdmin)
-		{
+		if ($this->User->isAdmin) {
 			return;
 		}
 
@@ -200,112 +200,115 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_draft_content'] = array
 (
 
 	// Config
-	'config' => array
+	'config'          => array
 	(
-		'dataContainer'               => 'Table',
-		'ptable'                      => 'tl_avisota_newsletter_draft',
-		'enableVersioning'            => true,
-		'onload_callback' => array
+		'dataContainer'    => 'Table',
+		'ptable'           => 'tl_avisota_newsletter_draft',
+		'enableVersioning' => true,
+		'onload_callback'  => array
 		(
 			array('tl_avisota_newsletter_draft_content', 'checkPermission')
 		)
 	),
-
 	// List
-	'list' => array
+	'list'            => array
 	(
-		'sorting' => array
+		'sorting'           => array
 		(
-			'mode'                    => 4,
-			'fields'                  => array('sorting'),
-			'panelLayout'             => 'filter;search,limit',
-			'headerFields'            => array('title', 'description'),
-			'child_record_callback'   => array('tl_avisota_newsletter_draft_content', 'addElement')
+			'mode'                  => 4,
+			'fields'                => array('sorting'),
+			'panelLayout'           => 'filter;search,limit',
+			'headerFields'          => array('title', 'description'),
+			'child_record_callback' => array('tl_avisota_newsletter_draft_content', 'addElement')
 		),
 		'global_operations' => array
 		(
 			'preview' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['preview'],
-				'href'                => 'table=&amp;key=preview',
-				'class'               => 'header_preview'
+				'label' => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['preview'],
+				'href'  => 'table=&amp;key=preview',
+				'class' => 'header_preview'
 			),
-			'all' => array
+			'all'     => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
-				'href'                => 'act=select',
-				'class'               => 'header_edit_all',
-				'attributes'          => 'onclick="Backend.getScrollOffset();" accesskey="e"'
+				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
+				'href'       => 'act=select',
+				'class'      => 'header_edit_all',
+				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
 			)
 		),
-		'operations' => array
+		'operations'        => array
 		(
-			'edit' => array
+			'edit'   => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['edit'],
-				'href'                => 'act=edit',
-				'icon'                => 'edit.gif'
+				'label' => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['edit'],
+				'href'  => 'act=edit',
+				'icon'  => 'edit.gif'
 			),
-			'copy' => array
+			'copy'   => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['copy'],
-				'href'                => 'act=paste&amp;mode=copy',
-				'icon'                => 'copy.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+				'label'      => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['copy'],
+				'href'       => 'act=paste&amp;mode=copy',
+				'icon'       => 'copy.gif',
+				'attributes' => 'onclick="Backend.getScrollOffset();"'
 			),
-			'cut' => array
+			'cut'    => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['cut'],
-				'href'                => 'act=paste&amp;mode=cut',
-				'icon'                => 'cut.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+				'label'      => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['cut'],
+				'href'       => 'act=paste&amp;mode=cut',
+				'icon'       => 'cut.gif',
+				'attributes' => 'onclick="Backend.getScrollOffset();"'
 			),
 			'delete' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['delete'],
-				'href'                => 'act=delete',
-				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+				'label'      => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['delete'],
+				'href'       => 'act=delete',
+				'icon'       => 'delete.gif',
+				'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 			),
 			'toggle' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['toggle'],
-				'icon'                => 'visible.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
-				'button_callback'     => array('tl_avisota_newsletter_draft_content', 'toggleIcon')
+				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['toggle'],
+				'icon'            => 'visible.gif',
+				'attributes'      => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
+				'button_callback' => array('tl_avisota_newsletter_draft_content', 'toggleIcon')
 			),
-			'show' => array
+			'show'   => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['show'],
-				'href'                => 'act=show',
-				'icon'                => 'show.gif'
+				'label' => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['show'],
+				'href'  => 'act=show',
+				'icon'  => 'show.gif'
 			)
 		),
 	),
-
 	// Palettes
-	'palettes' => tl_avisota_newsletter_draft_content::getInstance()->getPalettes(),
-	'metapalettes' => tl_avisota_newsletter_draft_content::getInstance()->getMetaPalettes(),
-
+	'palettes'        => tl_avisota_newsletter_draft_content::getInstance()
+		->getPalettes(),
+	'metapalettes'    => tl_avisota_newsletter_draft_content::getInstance()
+		->getMetaPalettes(),
 	// Subpalettes
-	'subpalettes' => tl_avisota_newsletter_draft_content::getInstance()->getSubpalettes(),
-	'metasubpalettes' => tl_avisota_newsletter_draft_content::getInstance()->getMetaSubpalettes(),
-
+	'subpalettes'     => tl_avisota_newsletter_draft_content::getInstance()
+		->getSubpalettes(),
+	'metasubpalettes' => tl_avisota_newsletter_draft_content::getInstance()
+		->getMetaSubpalettes(),
 	// Fields
-	'fields' => tl_avisota_newsletter_draft_content::getInstance()->getFields(array(
-		'unmodifiable' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['unmodifiable'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'w50 clr')
-		),
-		'undeletable' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['undeletable'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'w50')
+	'fields'          => tl_avisota_newsletter_draft_content::getInstance()
+		->getFields(
+		array(
+			'unmodifiable' => array
+			(
+				'label'     => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['unmodifiable'],
+				'exclude'   => true,
+				'inputType' => 'checkbox',
+				'eval'      => array('tl_class' => 'w50 clr')
+			),
+			'undeletable'  => array
+			(
+				'label'     => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['undeletable'],
+				'exclude'   => true,
+				'inputType' => 'checkbox',
+				'eval'      => array('tl_class' => 'w50')
+			)
 		)
-	))
+	)
 );

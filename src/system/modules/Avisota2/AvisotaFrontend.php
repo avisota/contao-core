@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -46,19 +47,23 @@ class AvisotaFrontend extends Frontend
 	 * Find a particular template file and return its path
 	 *
 	 * @author     Leo Feyer <http://www.contao.org>
-	 * @see Controll::getTemplate in Contao OpenSource CMS
+	 * @see        Controll::getTemplate in Contao OpenSource CMS
+	 *
 	 * @param string
 	 * @param string
+	 *
 	 * @return string
 	 * @throws Exception
 	 */
 	public function getTemplate($strTemplate)
 	{
-		return AvisotaBase::getInstance()->getTemplate($strTemplate);
+		return AvisotaBase::getInstance()
+			->getTemplate($strTemplate);
 	}
 
 	protected function getTemplateGroup($strPrefix, $intTheme = 0)
 	{
-		return AvisotaBase::getInstance()->getTemplateGroup($strPrefix, $intTheme);
+		return AvisotaBase::getInstance()
+			->getTemplateGroup($strPrefix, $intTheme);
 	}
 }

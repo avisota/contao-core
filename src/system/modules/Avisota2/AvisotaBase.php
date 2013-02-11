@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -55,8 +56,7 @@ class AvisotaBase extends Controller
 	 */
 	public static function getInstance()
 	{
-		if (self::$objInstance === null)
-		{
+		if (self::$objInstance === null) {
 			self::$objInstance = new AvisotaBase();
 		}
 		return self::$objInstance;
@@ -70,12 +70,10 @@ class AvisotaBase extends Controller
 	{
 		parent::__construct();
 		$this->import('AvisotaStatic', 'Static');
-		if (TL_MODE == 'FE')
-		{
+		if (TL_MODE == 'FE') {
 			$this->import('FrontendUser', 'User');
 		}
-		else
-		{
+		else {
 			$this->import('BackendUser', 'User');
 			$this->User->authenticate();
 		}
@@ -86,38 +84,35 @@ class AvisotaBase extends Controller
 
 	public function getViewOnlinePage($objCategory = null, $arrRecipient = null)
 	{
-		if (is_null($objCategory))
-		{
+		if (is_null($objCategory)) {
 			$objCategory = $this->Static->getCategory();
 		}
 
-		if (is_null($arrRecipient))
-		{
+		if (is_null($arrRecipient)) {
 			$arrRecipient = $this->Static->getRecipient();
 		}
 
-		if ($arrRecipient && preg_match('#^list:(\d+)$#', $arrRecipient['outbox_source'], $arrMatch))
-		{
+		if ($arrRecipient && preg_match('#^list:(\d+)$#', $arrRecipient['outbox_source'], $arrMatch)) {
 			// the dummy list, used on preview
-			if ($arrMatch[1] > 0)
-			{
-				$objRecipientList = $this->Database->prepare("
+			if ($arrMatch[1] > 0) {
+				$objRecipientList = $this->Database
+					->prepare(
+					"
 						SELECT
 							*
 						FROM
 							`tl_avisota_mailing_list`
 						WHERE
-							`id`=?")
+							`id`=?"
+				)
 					->execute($arrMatch[1]);
-				if ($objRecipientList->next())
-				{
+				if ($objRecipientList->next()) {
 					return $this->getPageDetails($objRecipientList->viewOnlinePage);
 				}
 			}
 		}
 
-		if ($objCategory->viewOnlinePage > 0)
-		{
+		if ($objCategory->viewOnlinePage > 0) {
 			return $this->getPageDetails($objCategory->viewOnlinePage);
 		}
 
@@ -130,14 +125,11 @@ class AvisotaBase extends Controller
 	 */
 	public function allowBackendSending()
 	{
-		if ($GLOBALS['TL_CONFIG']['avisota_backend_send'])
-		{
-			if ($GLOBALS['TL_CONFIG']['avisota_backend_send'] == 'disabled')
-			{
+		if ($GLOBALS['TL_CONFIG']['avisota_backend_send']) {
+			if ($GLOBALS['TL_CONFIG']['avisota_backend_send'] == 'disabled') {
 				return false;
 			}
-			if ($GLOBALS['TL_CONFIG']['avisota_disable_backend_send'] == 'admin' && !$this->User->admin)
-			{
+			if ($GLOBALS['TL_CONFIG']['avisota_disable_backend_send'] == 'admin' && !$this->User->admin) {
 				return false;
 			}
 		}
@@ -150,8 +142,7 @@ class AvisotaBase extends Controller
 	 */
 	public function extendURL($strUrl, $objPage = null, $objCategory = null, $arrRecipient = null)
 	{
-		if ($objPage == null)
-		{
+		if ($objPage == null) {
 			$objPage = $this->getViewOnlinePage($objCategory, $arrRecipient);
 		}
 
@@ -182,41 +173,36 @@ class AvisotaBase extends Controller
 	 * Update missing informations to the recipient array.
 	 *
 	 * @param array $arrRecipient
+	 *
 	 * @return string The personalized state.
 	 */
 	public function finalizeRecipientArray(&$arrRecipient)
 	{
 		// set the firstname and lastname field if missing
-		if (empty($arrRecipient['firstname']) && empty($arrRecipient['lastname']) && !empty($arrRecipient['name']))
-		{
+		if (empty($arrRecipient['firstname']) && empty($arrRecipient['lastname']) && !empty($arrRecipient['name'])) {
 			list($arrRecipient['firstname'], $arrRecipient['lastname']) = explode(' ', $arrRecipient['name'], 2);
 		}
 
 		// set the name field, if missing
-		if (empty($arrRecipient['name']) && !(empty($arrRecipient['firstname']) && empty($arrRecipient['lastname'])))
-		{
+		if (empty($arrRecipient['name']) && !(empty($arrRecipient['firstname']) && empty($arrRecipient['lastname']))) {
 			$arrRecipient['name'] = trim($arrRecipient['firstname'] . ' ' . $arrRecipient['lastname']);
 		}
 
 		// set the fullname field, if missing
-		if (empty($arrRecipient['fullname']) && !empty($arrRecipient['name']))
-		{
+		if (empty($arrRecipient['fullname']) && !empty($arrRecipient['name'])) {
 			$arrRecipient['fullname'] = trim($arrRecipient['title'] . ' ' . $arrRecipient['name']);
 		}
 
 		// set the shortname field, if missing
-		if (empty($arrRecipient['shortname']) && !empty($arrRecipient['firstname']))
-		{
+		if (empty($arrRecipient['shortname']) && !empty($arrRecipient['firstname'])) {
 			$arrRecipient['shortname'] = $arrRecipient['firstname'];
 		}
 
 		// a recipient is anonymous, if he has no name
-		if (!empty($arrRecipient['name']))
-		{
+		if (!empty($arrRecipient['name'])) {
 			$personalized = 'private';
 		}
-		else
-		{
+		else {
 			$personalized = 'anonymous';
 		}
 
@@ -224,22 +210,18 @@ class AvisotaBase extends Controller
 		$this->extendArray($GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'], $arrRecipient);
 
 		// update salutation
-		if (empty($arrRecipient['salutation']))
-		{
-			if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrRecipient['gender']]))
-			{
+		if (empty($arrRecipient['salutation'])) {
+			if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrRecipient['gender']])) {
 				$arrRecipient['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrRecipient['gender']];
 			}
-			else
-			{
+			else {
 				$arrRecipient['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation'];
 			}
 		}
 
 		// replace placeholders in salutation
 		preg_match_all('#\{([^\}]+)\}#U', $arrRecipient['salutation'], $matches, PREG_SET_ORDER);
-		foreach ($matches as $match)
-		{
+		foreach ($matches as $match) {
 			$arrRecipient['salutation'] = str_replace($match[0], $arrRecipient[$match[1]], $arrRecipient['salutation']);
 		}
 
@@ -255,18 +237,27 @@ class AvisotaBase extends Controller
 	 */
 	public function extendArray($arrSource, &$arrTarget)
 	{
-		if (is_array($arrSource))
-		{
-			foreach ($arrSource as $k=>$v)
-			{
-				if (   !empty($v)
+		if (is_array($arrSource)) {
+			foreach ($arrSource as $k => $v) {
+				if (!empty($v)
 					&& empty($arrTarget[$k])
-					&& !in_array($k, array(
-						// tl_avisota_recipient fields
-						'id', 'pid', 'tstamp', 'confirmed', 'token', 'addedOn', 'addedBy',
-						// tl_member fields
-						'password', 'session')))
-				{
+					&& !in_array(
+						$k,
+						array(
+							// tl_avisota_recipient fields
+							'id',
+							'pid',
+							'tstamp',
+							'confirmed',
+							'token',
+							'addedOn',
+							'addedBy',
+							// tl_member fields
+							'password',
+							'session'
+						)
+					)
+				) {
 					$arrTarget[$k] = $v;
 				}
 			}
@@ -277,13 +268,15 @@ class AvisotaBase extends Controller
 	 * Find a particular template file and return its path
 	 *
 	 * @author     Leo Feyer <http://www.contao.org>
-	 * @see Controll::getTemplate in Contao OpenSource CMS
+	 * @see        Controll::getTemplate in Contao OpenSource CMS
+	 *
 	 * @param string
 	 * @param string
+	 *
 	 * @return string
 	 * @throws Exception
 	 */
-	public function getTemplate($strTemplate, $strFormat='html5')
+	public function getTemplate($strTemplate, $strFormat = 'html5')
 	{
 		$strTemplate = basename($strTemplate);
 		$strFilename = $strTemplate . '.html5';
@@ -293,28 +286,28 @@ class AvisotaBase extends Controller
 
 		// Check for a theme folder
 		if ($objNewsletter) {
-			$strTemplateGroup = $objNewsletter->getTheme()->getTemplateDirectory();
-		} else {
+			$strTemplateGroup = $objNewsletter
+				->getTheme()
+				->getTemplateDirectory();
+		}
+		else {
 			$strTemplateGroup = '';
 		}
 
 		$strPath = TL_ROOT . '/templates';
 
 		// Check the theme folder first
-		if (TL_MODE == 'FE' && $strTemplateGroup != '')
-		{
+		if (TL_MODE == 'FE' && $strTemplateGroup != '') {
 			$strFile = $strPath . '/' . $strTemplateGroup . '/' . $strFilename;
 
-			if (file_exists($strFile))
-			{
+			if (file_exists($strFile)) {
 				return $strFile;
 			}
 
 			// Also check for .tpl files (backwards compatibility)
 			$strFile = $strPath . '/' . $strTemplateGroup . '/' . $strTemplate . '.tpl';
 
-			if (file_exists($strFile))
-			{
+			if (file_exists($strFile)) {
 				return $strFile;
 			}
 		}
@@ -322,34 +315,29 @@ class AvisotaBase extends Controller
 		// Then check the global templates directory
 		$strFile = $strPath . '/' . $strFilename;
 
-		if (file_exists($strFile))
-		{
+		if (file_exists($strFile)) {
 			return $strFile;
 		}
 
 		// Also check for .tpl files (backwards compatibility)
 		$strFile = $strPath . '/' . $strTemplate . '.tpl';
 
-		if (file_exists($strFile))
-		{
+		if (file_exists($strFile)) {
 			return $strFile;
 		}
 
 		// At last browse all module folders in reverse order
-		foreach (array_reverse($this->Config->getActiveModules()) as $strModule)
-		{
+		foreach (array_reverse($this->Config->getActiveModules()) as $strModule) {
 			$strFile = TL_ROOT . '/system/modules/' . $strModule . '/templates/' . $strFilename;
 
-			if (file_exists($strFile))
-			{
+			if (file_exists($strFile)) {
 				return $strFile;
 			}
 
 			// Also check for .tpl files (backwards compatibility)
 			$strFile = TL_ROOT . '/system/modules/' . $strModule . '/templates/' . $strTemplate . '.tpl';
 
-			if (file_exists($strFile))
-			{
+			if (file_exists($strFile)) {
 				return $strFile;
 			}
 		}
@@ -362,52 +350,49 @@ class AvisotaBase extends Controller
 	 * Return all template files of a particular group as array
 	 *
 	 * @author     Leo Feyer <http://www.contao.org>
-	 * @see Controll::getTemplate in Contao OpenSource CMS
+	 * @see        Controll::getTemplate in Contao OpenSource CMS
+	 *
 	 * @param string
 	 * @param integer
+	 *
 	 * @return array
 	 * @throws Exception
 	 */
-	protected function getTemplateGroup($strPrefix, $intTheme=0)
+	protected function getTemplateGroup($strPrefix, $intTheme = 0)
 	{
-		$arrFolders = array();
+		$arrFolders   = array();
 		$arrTemplates = array();
 
 		// Add the templates root directory
 		$arrFolders[] = TL_ROOT . '/templates';
 
 		// Add the theme templates folder
-		if ($intTheme > 0)
-		{
-			$objTheme = $this->Database->prepare("SELECT * FROM tl_avisota_newsletter_theme WHERE id=?")
-									   ->limit(1)
-									   ->execute($intTheme);
+		if ($intTheme > 0) {
+			$objTheme = $this->Database
+				->prepare("SELECT * FROM tl_avisota_newsletter_theme WHERE id=?")
+				->limit(1)
+				->execute($intTheme);
 
-			if ($objTheme->numRows > 0 && $objTheme->templateDirectory != '')
-			{
-				$arrFolders[] = TL_ROOT .'/'. $objTheme->templateDirectory;
+			if ($objTheme->numRows > 0 && $objTheme->templateDirectory != '') {
+				$arrFolders[] = TL_ROOT . '/' . $objTheme->templateDirectory;
 			}
 		}
 
 		// Add the module templates folders if they exist
-		foreach ($this->Config->getActiveModules() as $strModule)
-		{
+		foreach ($this->Config->getActiveModules() as $strModule) {
 			$strFolder = TL_ROOT . '/system/modules/' . $strModule . '/templates';
 
-			if (is_dir($strFolder))
-			{
+			if (is_dir($strFolder)) {
 				$arrFolders[] = $strFolder;
 			}
 		}
 
 		// Find all matching templates
-		foreach ($arrFolders as $strFolder)
-		{
-			$arrFiles = preg_grep('/^' . preg_quote($strPrefix, '/') . '/i',  scan($strFolder));
+		foreach ($arrFolders as $strFolder) {
+			$arrFiles = preg_grep('/^' . preg_quote($strPrefix, '/') . '/i', scan($strFolder));
 
-			foreach ($arrFiles as $strTemplate)
-			{
-				$strName = basename($strTemplate);
+			foreach ($arrFiles as $strTemplate) {
+				$strName        = basename($strTemplate);
 				$arrTemplates[] = substr($strName, 0, strrpos($strName, '.'));
 			}
 		}
@@ -421,7 +406,7 @@ class AvisotaBase extends Controller
 	public function getCurrentTransport()
 	{
 		$objNewsletter = AvisotaStatic::getNewsletter();
-		$objCategory = AvisotaStatic::getCategory();
+		$objCategory   = AvisotaStatic::getCategory();
 
 		if ($objCategory && $objCategory->transport && $objCategory->setTransport == 'category') {
 			$intId = $objCategory->transport;

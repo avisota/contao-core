@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  4ward.media 2011
  * @copyright  InfinitySoft 2011
  * @author     Christoph Wiechert <christoph.wiechert@4wardmedia.de>
@@ -40,18 +41,21 @@ class NewsletterNews extends NewsletterElement
 
 	/**
 	 * HTML Template
+	 *
 	 * @var string
 	 */
 	protected $strTemplateHTML = 'nle_news_html';
 
 	/**
 	 * Plain text Template
+	 *
 	 * @var string
 	 */
 	protected $strTemplatePlain = 'nle_news_plain';
 
 	/**
 	 * Caching var for jumpTo-pages
+	 *
 	 * @var mixed tl_page-rows
 	 */
 	protected $arrObjJumpToPages = array();
@@ -59,6 +63,7 @@ class NewsletterNews extends NewsletterElement
 
 	/**
 	 * Generate content element
+	 *
 	 * @param str $mode Compile either html or plaintext part
 	 */
 	protected function compile($mode)
@@ -66,18 +71,19 @@ class NewsletterNews extends NewsletterElement
 		$this->import('DomainLink');
 
 		$newsIDs = unserialize($this->news);
-		if(!is_array($newsIDs))
-		{
+		if (!is_array($newsIDs)) {
 			$this->Template->events = array();
 			return;
 		}
 
 		$objNews = $this->Database
-			->prepare('SELECT n.*,a.jumpTo,a.title AS section
+			->prepare(
+			'SELECT n.*,a.jumpTo,a.title AS section
 				FROM tl_news as n
 				LEFT JOIN tl_news_archive as a ON (n.pid = a.id)
-				WHERE n.id IN ('.implode(',',$newsIDs).')
-				ORDER BY n.time')
+				WHERE n.id IN (' . implode(',', $newsIDs) . ')
+				ORDER BY n.time'
+		)
 			->execute();
 
 		$this->Template->news = $objNews->fetchAllAssoc();

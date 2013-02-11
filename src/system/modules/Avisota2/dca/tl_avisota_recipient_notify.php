@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -25,13 +25,13 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  * @license    LGPL
  * @filesource
  */
-
 
 
 /**
@@ -41,20 +41,19 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_notify'] = array
 (
 
 	// Config
-	'config' => array
+	'config'       => array
 	(
-		'dataContainer'               => 'Memory',
-		'closed'                      => true,
-		'onload_callback'             => array
+		'dataContainer'     => 'Memory',
+		'closed'            => true,
+		'onload_callback'   => array
 		(
 			array('tl_avisota_recipient_notify', 'onload_callback'),
 		),
-		'onsubmit_callback'           => array
+		'onsubmit_callback' => array
 		(
 			array('tl_avisota_recipient_notify', 'onsubmit_callback'),
 		)
 	),
-
 	// Palettes
 	'metapalettes' => array
 	(
@@ -63,37 +62,36 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_notify'] = array
 			'notify' => array('recipient', 'confirmations', 'notifications', 'overdue')
 		)
 	),
-	
 	// Fields
-	'fields' => array
+	'fields'       => array
 	(
-		'recipient' => array
+		'recipient'     => array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['recipient'],
 			'inputType'        => 'select',
 			'options_callback' => array('tl_avisota_recipient_notify', 'getRecipients'),
-			'eval'             => array('submitOnChange'=>true)
+			'eval'             => array('submitOnChange' => true)
 		),
 		'confirmations' => array
 		(
-			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['confirmations'],
-			'inputType'        => 'checkbox',
-			'options'          => array(),
-			'eval'             => array('multiple'=>true)
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['confirmations'],
+			'inputType' => 'checkbox',
+			'options'   => array(),
+			'eval'      => array('multiple' => true)
 		),
 		'notifications' => array
 		(
-			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['notifications'],
-			'inputType'        => 'checkbox',
-			'options'          => array(),
-			'eval'             => array('multiple'=>true)
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['notifications'],
+			'inputType' => 'checkbox',
+			'options'   => array(),
+			'eval'      => array('multiple' => true)
 		),
-		'overdue' => array
+		'overdue'       => array
 		(
-			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['overdue'],
-			'inputType'        => 'checkbox',
-			'options'          => array(),
-			'eval'             => array('multiple'=>true)
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['overdue'],
+			'inputType' => 'checkbox',
+			'options'   => array(),
+			'eval'      => array('multiple' => true)
 		)
 	)
 );
@@ -120,10 +118,12 @@ class tl_avisota_recipient_notify extends Backend
 		$dc->setData('recipient', $this->Input->get('id'));
 
 		$objLists = $this->Database
-			->prepare("SELECT t.confirmationSent, t.reminderSent, t.reminderCount, m.* FROM tl_avisota_recipient_to_mailing_list t
+			->prepare(
+			"SELECT t.confirmationSent, t.reminderSent, t.reminderCount, m.* FROM tl_avisota_recipient_to_mailing_list t
 					   INNER JOIN tl_avisota_mailing_list m ON m.id=t.list
 					   WHERE t.recipient=? AND t.confirmed=?
-					   ORDER BY m.title")
+					   ORDER BY m.title"
+		)
 			->execute($this->Input->get('id'), '');
 		while ($objLists->next()) {
 			$strLabel = $objLists->title;
@@ -132,18 +132,23 @@ class tl_avisota_recipient_notify extends Backend
 				$strLabel .= ' (' . sprintf(
 					$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['reminderSent'],
 					$objLists->reminderCount,
-					$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $objLists->reminderSent)) . ')';
-			} else if ($objLists->confirmationSent > 0) {
+					$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $objLists->reminderSent)
+				) . ')';
+			}
+			else if ($objLists->confirmationSent > 0) {
 				$strLabel .= ' (' . sprintf(
 					$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['confirmationSent'],
-					$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $objLists->confirmationSent)) . ')';
+					$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $objLists->confirmationSent)
+				) . ')';
 			}
 
 			if ($objLists->confirmationSent == 0) {
 				$strField = 'confirmations';
-			} else if ($GLOBALS['TL_CONFIG']['avisota_send_notification'] && $objLists->reminderCount < $GLOBALS['TL_CONFIG']['avisota_notification_count']) {
+			}
+			else if ($GLOBALS['TL_CONFIG']['avisota_send_notification'] && $objLists->reminderCount < $GLOBALS['TL_CONFIG']['avisota_notification_count']) {
 				$strField = 'notifications';
-			} else {
+			}
+			else {
 				$strField = 'overdue';
 			}
 
@@ -154,7 +159,7 @@ class tl_avisota_recipient_notify extends Backend
 
 	/**
 	 * Do the import.
-	 * 
+	 *
 	 * @param DataContainer $dc
 	 */
 	public function onsubmit_callback(DataContainer $dc)
@@ -162,14 +167,16 @@ class tl_avisota_recipient_notify extends Backend
 		$intRecipient = $dc->getData('recipient');
 
 		if ($intRecipient != $this->Input->get('id')) {
-			$this->redirect('contao/main.php?do=avisota_recipient&amp;table=tl_avisota_recipient_notify&amp;act=edit&amp;id=' . $intRecipient);
+			$this->redirect(
+				'contao/main.php?do=avisota_recipient&amp;table=tl_avisota_recipient_notify&amp;act=edit&amp;id=' . $intRecipient
+			);
 		}
 
 		$arrConfirmations = $dc->getData('confirmations');
 		$arrNotifications = $dc->getData('notifications');
 		$arrOverdue       = $dc->getData('overdue');
 
-		$objRecipient = new AvisotaIntegratedRecipient(array('id'=>$intRecipient));
+		$objRecipient = new AvisotaIntegratedRecipient(array('id' => $intRecipient));
 		$objRecipient->load();
 
 		if (is_array($arrConfirmations) && count($arrConfirmations)) {
@@ -184,18 +191,17 @@ class tl_avisota_recipient_notify extends Backend
 			$objRecipient->sendRemind($arrOverdue, true);
 		}
 	}
-	
+
 	public function getRecipients()
 	{
-		$arrOptions = array();
+		$arrOptions   = array();
 		$objRecipient = $this->Database->execute("SELECT * FROM tl_avisota_recipient ORDER BY email");
 		while ($objRecipient->next()) {
 			$strLabel = trim($objRecipient->firstname . ' ' . $objRecipient->lastname);
 			if (strlen($strLabel)) {
 				$strLabel .= ' &lt;' . $objRecipient->email . '&gt;';
 			}
-			else
-			{
+			else {
 				$strLabel = $objRecipient->email;
 			}
 

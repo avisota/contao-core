@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -45,6 +46,7 @@ class ModuleAvisotaSubscribe extends ModuleAvisotaRecipientForm
 {
 	/**
 	 * Template
+	 *
 	 * @var string
 	 */
 	protected $strTemplate = 'mod_avisota_subscribe';

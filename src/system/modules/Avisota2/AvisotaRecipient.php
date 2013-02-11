@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -62,7 +63,7 @@ class AvisotaRecipient extends Controller
 
 	public function setData($arrData)
 	{
-		foreach ($arrData as $k=>$v) {
+		foreach ($arrData as $k => $v) {
 			$this->$k = $v;
 		}
 	}
@@ -100,7 +101,9 @@ class AvisotaRecipient extends Controller
 	 * Validate the recipient object.
 	 *
 	 * @static
+	 *
 	 * @param array $arrData
+	 *
 	 * @throws AvisotaRecipientException
 	 */
 	public function validate(array $arrData)
@@ -118,7 +121,8 @@ class AvisotaRecipient extends Controller
 		try {
 			$this->validate($this->arrData);
 			return true;
-		} catch (AvisotaRecipientException $e) {
+		}
+		catch (AvisotaRecipientException $e) {
 			return false;
 		}
 	}
@@ -134,7 +138,8 @@ class AvisotaRecipient extends Controller
 	 * Throws an exception, if the recipient is in the blacklist.
 	 *
 	 * @param array $arrLists
-	 * @param bool $blnIgnoreBlacklist
+	 * @param bool  $blnIgnoreBlacklist
+	 *
 	 * @throws AvisotaSubscriptionException
 	 * @throws AvisotaBlacklistException
 	 */
@@ -148,6 +153,7 @@ class AvisotaRecipient extends Controller
 	 * Confirm the subscription of the mailing lists.
 	 *
 	 * @param array $arrToken
+	 *
 	 * @throws AvisotaSubscriptionException
 	 */
 	public function confirmSubscription(array $arrToken)
@@ -159,7 +165,8 @@ class AvisotaRecipient extends Controller
 	 * Remove the subscription to the mailing lists.
 	 *
 	 * @param array $arrLists
-	 * @param bool $blnDoNotBlacklist
+	 * @param bool  $blnDoNotBlacklist
+	 *
 	 * @throws AvisotaSubscriptionException
 	 */
 	public function unsubscribe(array $arrLists, $blnDoNotBlacklist = false)
@@ -172,6 +179,7 @@ class AvisotaRecipient extends Controller
 	 * or all unconfirmed mailing lists, the recipient has subscribed.
 	 *
 	 * @param array|null $arrLists
+	 *
 	 * @throws AvisotaSubscriptionException
 	 */
 	public function sendSubscriptionConfirmation(array $arrLists = null)
@@ -184,6 +192,7 @@ class AvisotaRecipient extends Controller
 	 * or all unconfirmed, not reminded mailing lists, the recipient has subscribed.
 	 *
 	 * @param array|null $arrLists
+	 *
 	 * @throws AvisotaSubscriptionException
 	 */
 	public function sendRemind(array $arrLists = null)

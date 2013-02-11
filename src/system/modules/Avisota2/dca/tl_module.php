@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @author     Oliver Hoff <oliver@hofff.com>
@@ -35,21 +36,35 @@
 
 $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array('tl_module_avisota', 'onload_callback');
 
-$GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_subscribe'] = array
+$GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_subscribe']    = array
 (
 	'title'                => array('name', 'headline', 'type'),
 	'avisota_subscription' => array('avisota_show_lists', 'avisota_lists', 'avisota_recipient_fields'),
 	'template'             => array('tableless', 'avisota_template_subscribe'),
 	'protected'            => array(':hide', 'protected'),
-	'expert'               => array(':hide', 'avisota_form_target', 'avisota_subscribe_confirmation_page', 'guests', 'cssID', 'space')
+	'expert'               => array(
+		':hide',
+		'avisota_form_target',
+		'avisota_subscribe_confirmation_page',
+		'guests',
+		'cssID',
+		'space'
+	)
 );
-$GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_unsubscribe'] = array
+$GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_unsubscribe']  = array
 (
 	'title'                => array('name', 'headline', 'type'),
 	'avisota_subscription' => array('avisota_show_lists', 'avisota_lists'),
 	'template'             => array('tableless', 'avisota_template_unsubscribe'),
 	'protected'            => array(':hide', 'protected'),
-	'expert'               => array(':hide', 'avisota_form_target', 'avisota_unsubscribe_confirmation_page', 'guests', 'cssID', 'space')
+	'expert'               => array(
+		':hide',
+		'avisota_form_target',
+		'avisota_unsubscribe_confirmation_page',
+		'guests',
+		'cssID',
+		'space'
+	)
 );
 $GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_subscription'] = array
 (
@@ -57,9 +72,17 @@ $GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_subscription'] = array
 	'avisota_subscription' => array('avisota_show_lists', 'avisota_lists', 'avisota_recipient_fields'),
 	'template'             => array('tableless', 'avisota_template_subscription'),
 	'protected'            => array(':hide', 'protected'),
-	'expert'               => array(':hide', 'avisota_form_target', 'avisota_subscribe_confirmation_page', 'avisota_unsubscribe_confirmation_page', 'guests', 'cssID', 'space')
+	'expert'               => array(
+		':hide',
+		'avisota_form_target',
+		'avisota_subscribe_confirmation_page',
+		'avisota_unsubscribe_confirmation_page',
+		'guests',
+		'cssID',
+		'space'
+	)
 );
-$GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_reader'] = array
+$GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_reader']       = array
 (
 	'title'          => array('name', 'headline', 'type'),
 	'avisota_reader' => array('avisota_categories'),
@@ -67,7 +90,7 @@ $GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_reader'] = array
 	'protected'      => array(':hide', 'protected'),
 	'expert'         => array(':hide', 'guests', 'cssID', 'space')
 );
-$GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_list'] = array
+$GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_list']         = array
 (
 	'title'        => array('name', 'headline', 'type'),
 	'avisota_list' => array('avisota_categories', 'perPage'),
@@ -79,157 +102,159 @@ $GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_list'] = array
 
 $GLOBALS['TL_DCA']['tl_module']['metasubpalettes']['avisota_send_notification'] = array
 (
-	'avisota_notification_time', 'avisota_template_notification_mail_plain', 'avisota_template_notification_mail_html'
+	'avisota_notification_time',
+	'avisota_template_notification_mail_plain',
+	'avisota_template_notification_mail_html'
 );
-$GLOBALS['TL_DCA']['tl_module']['metasubpalettes']['avisota_do_cleanup'] = array
+$GLOBALS['TL_DCA']['tl_module']['metasubpalettes']['avisota_do_cleanup']        = array
 (
 	'avisota_cleanup_time'
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_recipient_fields'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_recipient_fields'],
-	'exclude'                 => true,
-	'inputType'               => 'checkboxWizard',
-	'options_callback'        => array('tl_module_avisota', 'getEditableRecipientProperties'),
-	'eval'                    => array('multiple'=>true)
+	'exclude'          => true,
+	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_recipient_fields'],
+	'exclude'          => true,
+	'inputType'        => 'checkboxWizard',
+	'options_callback' => array('tl_module_avisota', 'getEditableRecipientProperties'),
+	'eval'             => array('multiple' => true)
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_subscription_sender_name'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_subscription_sender_name'],
-	'inputType'               => 'text',
-	'eval'                    => array('tl_class'=>'w50')
+	'exclude'   => true,
+	'label'     => &$GLOBALS['TL_LANG']['tl_module']['avisota_subscription_sender_name'],
+	'inputType' => 'text',
+	'eval'      => array('tl_class' => 'w50')
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_subscription_sender'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_subscription_sender'],
-	'inputType'               => 'text',
-	'eval'                    => array('rgxp'=>'email', 'tl_class'=>'w50')
+	'exclude'   => true,
+	'label'     => &$GLOBALS['TL_LANG']['tl_module']['avisota_subscription_sender'],
+	'inputType' => 'text',
+	'eval'      => array('rgxp' => 'email', 'tl_class' => 'w50')
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_show_lists'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_show_lists'],
-	'inputType'               => 'checkbox',
-	'eval'                    => array()
+	'exclude'   => true,
+	'label'     => &$GLOBALS['TL_LANG']['tl_module']['avisota_show_lists'],
+	'inputType' => 'checkbox',
+	'eval'      => array()
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_lists'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_lists'],
-	'inputType'               => 'checkbox',
-	'options_callback'        => array('tl_module_avisota', 'getLists'),
-	'eval'                    => array('multiple'=>true)
+	'exclude'          => true,
+	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_lists'],
+	'inputType'        => 'checkbox',
+	'options_callback' => array('tl_module_avisota', 'getLists'),
+	'eval'             => array('multiple' => true)
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_subscribe_confirmation_page'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_subscribe_confirmation_page'],
-	'inputType'               => 'pageTree',
-	'eval'                    => array('fieldType'=>'radio')
+	'exclude'   => true,
+	'label'     => &$GLOBALS['TL_LANG']['tl_module']['avisota_subscribe_confirmation_page'],
+	'inputType' => 'pageTree',
+	'eval'      => array('fieldType' => 'radio')
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_unsubscribe_confirmation_page'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_unsubscribe_confirmation_page'],
-	'inputType'               => 'pageTree',
-	'eval'                    => array('fieldType'=>'radio')
+	'exclude'   => true,
+	'label'     => &$GLOBALS['TL_LANG']['tl_module']['avisota_unsubscribe_confirmation_page'],
+	'inputType' => 'pageTree',
+	'eval'      => array('fieldType' => 'radio')
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_subscribe'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_subscribe'],
-	'inputType'               => 'select',
-	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
-	'eval'                    => array('tl_class' => 'w50')
+	'exclude'          => true,
+	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_subscribe'],
+	'inputType'        => 'select',
+	'options_callback' => array('tl_module_avisota', 'getTemplates'),
+	'eval'             => array('tl_class' => 'w50')
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_unsubscribe'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe'],
-	'inputType'               => 'select',
-	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
-	'eval'                    => array('tl_class' => 'w50')
+	'exclude'          => true,
+	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe'],
+	'inputType'        => 'select',
+	'options_callback' => array('tl_module_avisota', 'getTemplates'),
+	'eval'             => array('tl_class' => 'w50')
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_subscription'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_subscription'],
-	'inputType'               => 'select',
-	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
-	'eval'                    => array('tl_class' => 'w50')
+	'exclude'          => true,
+	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_subscription'],
+	'inputType'        => 'select',
+	'options_callback' => array('tl_module_avisota', 'getTemplates'),
+	'eval'             => array('tl_class' => 'w50')
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_categories'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_categories'],
-	'inputType'               => 'checkbox',
-	'options_callback'        => array('tl_module_avisota', 'getCategories'),
-	'eval'                    => array('mandatory'=>true, 'multiple'=>true)
+	'exclude'          => true,
+	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_categories'],
+	'inputType'        => 'checkbox',
+	'options_callback' => array('tl_module_avisota', 'getCategories'),
+	'eval'             => array('mandatory' => true, 'multiple' => true)
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_reader_template'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_reader_template'],
-	'inputType'               => 'select',
-	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
-	'eval'                    => array('mandatory'=>true, 'tl_class'=>'w50')
+	'exclude'          => true,
+	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_reader_template'],
+	'inputType'        => 'select',
+	'options_callback' => array('tl_module_avisota', 'getTemplates'),
+	'eval'             => array('mandatory' => true, 'tl_class' => 'w50')
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_list_template'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_list_template'],
-	'inputType'               => 'select',
-	'options_callback'        => array('tl_module_avisota', 'getTemplates'),
-	'eval'                    => array('mandatory'=>true, 'tl_class'=>'w50')
+	'exclude'          => true,
+	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_list_template'],
+	'inputType'        => 'select',
+	'options_callback' => array('tl_module_avisota', 'getTemplates'),
+	'eval'             => array('mandatory' => true, 'tl_class' => 'w50')
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_view_page'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_view_page'],
-	'inputType'               => 'pageTree',
-	'eval'                    => array('fieldType'=>'radio')
+	'exclude'   => true,
+	'label'     => &$GLOBALS['TL_LANG']['tl_module']['avisota_view_page'],
+	'inputType' => 'pageTree',
+	'eval'      => array('fieldType' => 'radio')
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_selectable_lists'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_selectable_lists'],
-	'inputType'               => 'checkbox',
-	'options_callback'        => array('tl_module_avisota', 'getLists'),
-	'eval'                    => array('multiple'=>true)
+	'exclude'          => true,
+	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_selectable_lists'],
+	'inputType'        => 'checkbox',
+	'options_callback' => array('tl_module_avisota', 'getLists'),
+	'eval'             => array('multiple' => true)
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_confirm_on_activate'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_confirm_on_activate'],
-	'inputType'               => 'checkbox',
-	'eval'                    => array()
+	'exclude'   => true,
+	'label'     => &$GLOBALS['TL_LANG']['tl_module']['avisota_confirm_on_activate'],
+	'inputType' => 'checkbox',
+	'eval'      => array()
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_form_target'] = array
 (
-	'exclude'                 => true,
-	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['avisota_form_target'],
-	'inputType'               => 'pageTree',
-	'eval'                    => array('fieldType'=>'radio')
+	'exclude'   => true,
+	'label'     => &$GLOBALS['TL_LANG']['tl_module']['avisota_form_target'],
+	'inputType' => 'pageTree',
+	'eval'      => array('fieldType' => 'radio')
 );
 
 
@@ -258,9 +283,8 @@ class tl_module_avisota extends Backend
 	{
 		$objCategory = $this->Database
 			->execute("SELECT * FROM tl_avisota_newsletter_category ORDER BY title");
-		$arrList = array();
-		while ($objCategory->next())
-		{
+		$arrList     = array();
+		while ($objCategory->next()) {
 			$arrList[$objCategory->id] = $objCategory->title;
 		}
 		return $arrList;
@@ -273,16 +297,17 @@ class tl_module_avisota extends Backend
 	 */
 	public function getLists()
 	{
-		$objList = $this->Database->execute("
+		$objList = $this->Database->execute(
+			"
 				SELECT
 					*
 				FROM
 					`tl_avisota_mailing_list`
 				ORDER BY
-					`title`");
+					`title`"
+		);
 		$arrList = array();
-		while ($objList->next())
-		{
+		while ($objList->next()) {
 			$arrList[$objList->id] = $objList->title;
 		}
 		return $arrList;
@@ -291,8 +316,7 @@ class tl_module_avisota extends Backend
 	public function getTemplates(DataContainer $dc)
 	{
 		// Return all templates
-		switch ($dc->field)
-		{
+		switch ($dc->field) {
 			case 'avisota_reader_template':
 				$strTemplatePrefix = 'avisota_reader_';
 				break;
@@ -327,10 +351,8 @@ class tl_module_avisota extends Backend
 		$this->loadLanguageFile('tl_avisota_recipient');
 		$this->loadDataContainer('tl_avisota_recipient');
 
-		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $k=>$v)
-		{
-			if ($v['eval']['feEditable'])
-			{
+		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $k => $v) {
+			if ($v['eval']['feEditable']) {
 				$return[$k] = $GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$k]['label'][0];
 			}
 		}
@@ -341,15 +363,16 @@ class tl_module_avisota extends Backend
 
 	/**
 	 * Return all subscription templates as array
+	 *
 	 * @param object
+	 *
 	 * @return array
 	 */
 	public function getSubscriptionTemplates(DataContainer $dc)
 	{
 		$intPid = $dc->activeRecord->pid;
 
-		if ($this->Input->get('act') == 'overrideAll')
-		{
+		if ($this->Input->get('act') == 'overrideAll') {
 			$intPid = $this->Input->get('id');
 		}
 

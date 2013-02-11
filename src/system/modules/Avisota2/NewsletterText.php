@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -46,12 +47,14 @@ class NewsletterText extends NewsletterElement
 
 	/**
 	 * HTML Template
+	 *
 	 * @var string
 	 */
 	protected $strTemplateHTML = 'nle_text_html';
 
 	/**
 	 * Plain text Template
+	 *
 	 * @var string
 	 */
 	protected $strTemplatePlain = 'nle_text_plain';
@@ -63,39 +66,34 @@ class NewsletterText extends NewsletterElement
 	{
 		$this->import('String');
 
-		switch ($mode)
-		{
-		case NL_HTML:
-			// Clean RTE output
-			$this->Template->text = str_ireplace
-			(
-				array('<u>', '</u>', '</p>', '<br /><br />', ' target="_self"'),
-				array('<span style="text-decoration:underline;">', '</span>', "</p>\n", "<br /><br />\n", ''),
-				$this->String->encodeEmail($this->text)
-			);
-			break;
+		switch ($mode) {
+			case NL_HTML:
+				// Clean RTE output
+				$this->Template->text = str_ireplace
+				(
+					array('<u>', '</u>', '</p>', '<br /><br />', ' target="_self"'),
+					array('<span style="text-decoration:underline;">', '</span>', "</p>\n", "<br /><br />\n", ''),
+					$this->String->encodeEmail($this->text)
+				);
+				break;
 
-		case NL_PLAIN:
-			if ($this->plain)
-			{
-				$this->Template->text = $this->plain;
-			}
-			else
-			{
-				$this->Template->text = $this->getPlainFromHTML($this->text);
-			}
+			case NL_PLAIN:
+				if ($this->plain) {
+					$this->Template->text = $this->plain;
+				}
+				else {
+					$this->Template->text = $this->getPlainFromHTML($this->text);
+				}
 		}
 
 		$this->Template->addImage = false;
 
 		// Add image
-		if ($this->addImage && strlen($this->singleSRC) && is_file(TL_ROOT . '/' . $this->singleSRC))
-		{
+		if ($this->addImage && strlen($this->singleSRC) && is_file(TL_ROOT . '/' . $this->singleSRC)) {
 			$this->addImageToTemplate($this->Template, $this->arrData);
 
 			$this->Template->src = $this->extendURL($this->Template->src);
-			if ($this->Template->href)
-			{
+			if ($this->Template->href) {
 				$this->Template->href = $this->extendURL($this->Template->href);
 			}
 		}

@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @author     Oliver Hoff <oliver@hofff.com>
@@ -37,7 +38,10 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_member']['avisota_lists']     = array(TL_MODE == 'FE' ? 'Newsletter' : 'Avisota Verteiler', 'Wählen Sie hier die Verteiler, die der Abonnent erhalten soll.');
+$GLOBALS['TL_LANG']['tl_member']['avisota_lists']     = array(
+	TL_MODE == 'FE' ? 'Newsletter' : 'Avisota Verteiler',
+	'Wählen Sie hier die Verteiler, die der Abonnent erhalten soll.'
+);
 $GLOBALS['TL_LANG']['tl_member']['avisota_subscribe'] = array('Newsletter abonnieren', '');
 
 

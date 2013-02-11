@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -42,14 +43,20 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content'] = array_slice(
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['unmodifiable']    = array('Nicht veränderbar', 'Das Element als nicht veränderbar markieren. Das Element kann später im Newsletter nicht mehr verändert werden.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['undeletable']     = array('Nicht löschbar', 'Das Element als nicht löschbar markieren. Das Element kann später nicht aus dem Newsletter gelöscht werden.');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['unmodifiable'] = array(
+	'Nicht veränderbar',
+	'Das Element als nicht veränderbar markieren. Das Element kann später im Newsletter nicht mehr verändert werden.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['undeletable']  = array(
+	'Nicht löschbar',
+	'Das Element als nicht löschbar markieren. Das Element kann später nicht aus dem Newsletter gelöscht werden.'
+);
 
 
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['draft_legend']    = 'Vorlage-Einstellungen';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['draft_legend'] = 'Vorlage-Einstellungen';
 
 
 /**
@@ -67,15 +74,51 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['area']['right']  = '
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['new']         = array('Neues Element', 'Ein neues Element erstellen');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['show']        = array('Elementdetails', 'Details des Inhaltselements ID %s anzeigen');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['cut']         = array('Element verschieben', 'Inhaltselement ID %s verschieben');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['copy']        = array('Element duplizieren', 'Inhaltselement ID %s duplizieren');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['delete']      = array('Element löschen', 'Inhaltselement ID %s löschen');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['edit']        = array('Element bearbeiten', 'Inhaltselement ID %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['pasteafter']  = array('Oben einfügen', 'Nach dem Inhaltselement ID %s einfügen');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['pastenew']    = array('Neues Element oben erstellen', 'Neues Element nach dem Inhaltselement ID %s erstellen');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['toggle']      = array('Sichtbarkeit ändern', 'Die Sichtbarkeit des Inhaltselements ID %s ändern');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['editalias']   = array('Quellelement bearbeiten', 'Das Quellelement ID %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['editarticle'] = array('Artikel bearbeiten', 'Artikel ID %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['preview']     = array('Vorlage ansehen', 'Die Vorlage ansehen');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['new']         = array(
+	'Neues Element',
+	'Ein neues Element erstellen'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['show']        = array(
+	'Elementdetails',
+	'Details des Inhaltselements ID %s anzeigen'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['cut']         = array(
+	'Element verschieben',
+	'Inhaltselement ID %s verschieben'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['copy']        = array(
+	'Element duplizieren',
+	'Inhaltselement ID %s duplizieren'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['delete']      = array(
+	'Element löschen',
+	'Inhaltselement ID %s löschen'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['edit']        = array(
+	'Element bearbeiten',
+	'Inhaltselement ID %s bearbeiten'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['pasteafter']  = array(
+	'Oben einfügen',
+	'Nach dem Inhaltselement ID %s einfügen'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['pastenew']    = array(
+	'Neues Element oben erstellen',
+	'Neues Element nach dem Inhaltselement ID %s erstellen'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['toggle']      = array(
+	'Sichtbarkeit ändern',
+	'Die Sichtbarkeit des Inhaltselements ID %s ändern'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['editalias']   = array(
+	'Quellelement bearbeiten',
+	'Das Quellelement ID %s bearbeiten'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['editarticle'] = array(
+	'Artikel bearbeiten',
+	'Artikel ID %s bearbeiten'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_draft_content']['preview']     = array(
+	'Vorlage ansehen',
+	'Die Vorlage ansehen'
+);

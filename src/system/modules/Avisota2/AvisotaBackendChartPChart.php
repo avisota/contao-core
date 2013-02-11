@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -37,6 +38,7 @@
  * Class AvisotaBackendChartPChart
  *
  * Parent class for newsletter content elements.
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -46,7 +48,7 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 	/**
 	 *
 	 * @param Database_Result $objNewsletter
-	 * @param string $strRecipient
+	 * @param string          $strRecipient
 	 */
 	public function handleAjax(Database_Result $objNewsletter, $strRecipient)
 	{
@@ -55,7 +57,7 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 	/**
 	 *
 	 * @param Database_Result $objNewsletter
-	 * @param string $strRecipient
+	 * @param string          $strRecipient
 	 */
 	public function generateChart(Database_Result $objNewsletter, $strRecipient)
 	{
@@ -74,20 +76,23 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 		if ($strRecipient) {
 			// total number of recived newsletters
 			$objSends = $this->Database
-				->prepare("SELECT COUNT(r.send) as sum
+				->prepare(
+				"SELECT COUNT(r.send) as sum
 						   FROM tl_avisota_newsletter_outbox_recipient r
-						   WHERE r.email=? AND r.send>0")
+						   WHERE r.email=? AND r.send>0"
+			)
 				->execute($strRecipient);
 		}
-		else
-		{
+		else {
 			// total number of recipients for this newsletter
 			$objSends = $this->Database
-				->prepare("SELECT COUNT(r.send) as sum
+				->prepare(
+				"SELECT COUNT(r.send) as sum
 						   FROM tl_avisota_newsletter_outbox_recipient r
 						   INNER JOIN tl_avisota_newsletter_outbox o
 						   ON r.pid=o.id
-						   WHERE o.pid=? AND r.send>0")
+						   WHERE o.pid=? AND r.send>0"
+			)
 				->execute($objNewsletter->id);
 		}
 
@@ -95,18 +100,21 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 		if ($strRecipient) {
 			// total number of readed newsletters
 			$objReads = $this->Database
-				->prepare("SELECT COUNT(tstamp) as sum
+				->prepare(
+				"SELECT COUNT(tstamp) as sum
 						   FROM tl_avisota_statistic_raw_recipient
-						   WHERE recipient=? AND readed=?")
+						   WHERE recipient=? AND readed=?"
+			)
 				->execute($strRecipient, 1);
 		}
-		else
-		{
+		else {
 			// total number of recipients that reads this newsletter
 			$objReads = $this->Database
-				->prepare("SELECT COUNT(tstamp) as sum
+				->prepare(
+				"SELECT COUNT(tstamp) as sum
 						   FROM tl_avisota_statistic_raw_recipient
-						   WHERE pid=? AND readed=?")
+						   WHERE pid=? AND readed=?"
+			)
 				->execute($objNewsletter->id, 1);
 		}
 
@@ -114,72 +122,78 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 		if ($strRecipient) {
 			// total number of newsletters the recipients reacts on (clicked a link)
 			$objReacts = $this->Database
-				->prepare("SELECT SUM(sum) as sum
+				->prepare(
+				"SELECT SUM(sum) as sum
 						   FROM (
 						       SELECT MIN(tstamp) as time, 1 as sum
 							   FROM tl_avisota_statistic_raw_link_hit
 							   WHERE recipient=?
 							   GROUP BY recipient
-						   ) t")
+						   ) t"
+			)
 				->execute($strRecipient);
 		}
-		else
-		{
+		else {
 			// total number ov recipients that reacts on this newsletter (clicked a link)
 			$objReacts = $this->Database
-				->prepare("SELECT SUM(sum) as sum
+				->prepare(
+				"SELECT SUM(sum) as sum
 						   FROM (
 							   SELECT MIN(tstamp) as time, 1 as sum
 							   FROM tl_avisota_statistic_raw_link_hit
 							   WHERE pid=?
 							   GROUP BY linkID,recipientLinkID
-						   ) t")
+						   ) t"
+			)
 				->execute($objNewsletter->id);
 		}
 
 		# collect links hits
 		if ($strRecipient) {
 			$objLink = $this->Database
-				->prepare("SELECT url, (SELECT COUNT(id) FROM tl_avisota_statistic_raw_link_hit h WHERE l.id=h.recipientLinkID) as hits
+				->prepare(
+				"SELECT url, (SELECT COUNT(id) FROM tl_avisota_statistic_raw_link_hit h WHERE l.id=h.recipientLinkID) as hits
 						   FROM tl_avisota_statistic_raw_recipient_link l
 						   WHERE pid=? AND recipient=?
-						   ORDER BY hits DESC")
+						   ORDER BY hits DESC"
+			)
 				->execute($objNewsletter->id, $strRecipient);
 		}
-		else
-		{
+		else {
 			$objLink = $this->Database
-				->prepare("SELECT url, SUM(hits) as hits FROM
+				->prepare(
+				"SELECT url, SUM(hits) as hits FROM
 						   (
 						       SELECT url, (SELECT COUNT(id) FROM tl_avisota_statistic_raw_link_hit h WHERE l.id=h.linkID) as hits
 						       FROM tl_avisota_statistic_raw_link l
 						       WHERE pid=?
 						   ) t
 						   GROUP BY url
-						   ORDER BY hits DESC")
+						   ORDER BY hits DESC"
+			)
 				->execute($objNewsletter->id);
 		}
 		$arrLinks = $objLink->fetchAllAssoc();
 
 		$intHits = array_sum($objLink->fetchEach('hits'));
-		for ($i = 0; $i < count($arrLinks); $i++)
-		{
+		for ($i = 0; $i < count($arrLinks); $i++) {
 			$arrLinks[$i]['percent'] = $intHits > 0 ? intval($arrLinks[$i]['hits'] / $intHits * 100) : 0;
 		}
 		$objTemplate->links = $arrLinks;
 
 		if ($strRecipient) {
 			$objRead                       = $this->Database
-				->prepare("SELECT n.id, n.subject, r.readed
+				->prepare(
+				"SELECT n.id, n.subject, r.readed
 						   FROM tl_avisota_statistic_raw_recipient r
 						   INNER JOIN tl_avisota_newsletter n
 						   ON n.id=r.pid
-						   WHERE r.recipient=? AND r.readed=?")
+						   WHERE r.recipient=? AND r.readed=?"
+			)
 				->execute($strRecipient, 1);
 			$objTemplate->newsletter_reads = $objRead->fetchAllAssoc();
 		}
-		else
-		{
+		else {
 			$objTemplate->newsletter_reads = false;
 		}
 
@@ -200,7 +214,8 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 	{
 		if ($strRecipient) {
 			$tstamp = $this->Database
-				->prepare("SELECT MIN(tstamp) as `min`, MAX(tstamp) as `max` FROM
+				->prepare(
+				"SELECT MIN(tstamp) as `min`, MAX(tstamp) as `max` FROM
 						   (
 						       SELECT tstamp
 							   FROM tl_avisota_newsletter_outbox_recipient r
@@ -213,12 +228,15 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 						       SELECT tstamp
 							   FROM tl_avisota_statistic_raw_link_hit
 							   WHERE recipient=?
-						   ) t")
+						   ) t"
+			)
 				->execute($strRecipient, $strRecipient, 1, $strRecipient)
 				->fetchAssoc();
-		} else {
+		}
+		else {
 			$tstamp = $this->Database
-				->prepare("SELECT MIN(tstamp) as `min`, MAX(tstamp) as `max` FROM
+				->prepare(
+				"SELECT MIN(tstamp) as `min`, MAX(tstamp) as `max` FROM
 						   (
 						       SELECT r.tstamp
 						       FROM tl_avisota_newsletter_outbox_recipient r
@@ -234,7 +252,8 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 						       FROM tl_avisota_statistic_raw_link_hit
 						       WHERE pid=?
 						       GROUP BY recipient
-						   ) t")
+						   ) t"
+			)
 				->execute($objNewsletter->id, $objNewsletter->id, 1, $objNewsletter->id)
 				->fetchAssoc();
 		}
@@ -250,12 +269,12 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 	protected function getUpScale()
 	{
 		$args = func_get_args();
-		$max = 0;
+		$max  = 0;
 		foreach ($args as $arg) {
 			$max = max($max, $arg);
 		}
 		$length = strlen($max);
-		$div = pow(10, $length-1);
+		$div    = pow(10, $length - 1);
 		return ceil($max / $div) * $div;
 	}
 
@@ -310,21 +329,27 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 		$until = $this->Input->get('until') ? $this->Input->get('until') : $tstamp['max'];
 		if ($since >= $tstamp['min'] && $since < $tstamp['max'] && $since < $until) {
 			$tstamp['min'] = $since;
-		} else {
+		}
+		else {
 			$since = $tstamp['min'];
 		}
 		if ($until > $tstamp['min'] && $until <= $tstamp['max'] && $since < $until) {
 			$tstamp['max'] = $until;
-		} else {
+		}
+		else {
 			$until = $tstamp['max'];
 		}
 
-		$strFile = TL_ROOT . '/system/html/chart-sends-' . $objNewsletter->id . ($strRecipient ? '-' . substr(md5($strRecipient), 0, 8) : '') . '-' . $tstamp['min'] . '-' . $tstamp['max'] . '-' . $intWidth . 'x' . $intHeight . '.png';
+		$strFile = TL_ROOT . '/system/html/chart-sends-' . $objNewsletter->id . ($strRecipient ? '-' . substr(
+			md5($strRecipient),
+			0,
+			8
+		) : '') . '-' . $tstamp['min'] . '-' . $tstamp['max'] . '-' . $intWidth . 'x' . $intHeight . '.png';
 
 		if (!file_exists($strFile)) {
 			$xticks   = floor(($intWidth - 150) / 80);
 			$timespan = $tstamp['max'] - $tstamp['min'];
-			$timemod  = round($timespan / (3*$xticks));
+			$timemod  = round($timespan / (3 * $xticks));
 
 			$this->loadLanguageFile('avisota_tracking');
 
@@ -332,7 +357,7 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 			require_once(TL_ROOT . '/plugins/pchart/pChart/pChart.php');
 
 			$arrSeries = array();
-			for ($i=$tstamp['min']-($tstamp['min'] % $timemod); $i<$tstamp['max']; $i+=$timemod) {
+			for ($i = $tstamp['min'] - ($tstamp['min'] % $timemod); $i < $tstamp['max']; $i += $timemod) {
 				$arrSeries[$i] = array(
 					'sends'  => '',
 					'reads'  => '',
@@ -343,24 +368,27 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 			if ($strRecipient) {
 				// total number of recived newsletters
 				$objResultSet = $this->Database
-					->prepare("SELECT r.send as time, COUNT(r.id) as sum
+					->prepare(
+					"SELECT r.send as time, COUNT(r.id) as sum
 							   FROM tl_avisota_newsletter_outbox_recipient r
 							   WHERE r.email=? AND r.send>0
 							   GROUP BY time
-							   ORDER BY time")
+							   ORDER BY time"
+				)
 					->execute($strRecipient);
 			}
-			else
-			{
+			else {
 				// total number of recipients for this newsletter
 				$objResultSet = $this->Database
-					->prepare("SELECT r.send as time, COUNT(r.id) as sum
+					->prepare(
+					"SELECT r.send as time, COUNT(r.id) as sum
 							   FROM tl_avisota_newsletter_outbox_recipient r
 							   INNER JOIN tl_avisota_newsletter_outbox o
 							   ON r.pid=o.id
 							   WHERE o.pid=? AND r.send>0
 							   GROUP BY time
-							   ORDER BY time")
+							   ORDER BY time"
+				)
 					->execute($objNewsletter->id);
 			}
 			$this->addSeries($arrSeries, $objResultSet, 'sends', $timemod);
@@ -369,22 +397,25 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 			if ($strRecipient) {
 				// total number of readed newsletters
 				$objResultSet = $this->Database
-					->prepare("SELECT tstamp as time, COUNT(id) as sum
+					->prepare(
+					"SELECT tstamp as time, COUNT(id) as sum
 							   FROM tl_avisota_statistic_raw_recipient
 							   WHERE recipient=? AND readed=?
 							   GROUP BY time
-							   ORDER BY time")
+							   ORDER BY time"
+				)
 					->execute($strRecipient, 1);
 			}
-			else
-			{
+			else {
 				// total number of recipients that reads this newsletter
 				$objResultSet = $this->Database
-					->prepare("SELECT tstamp as time, COUNT(id) as sum
+					->prepare(
+					"SELECT tstamp as time, COUNT(id) as sum
 							   FROM tl_avisota_statistic_raw_recipient
 							   WHERE pid=? AND readed=?
 							   GROUP BY time
-							   ORDER BY time")
+							   ORDER BY time"
+				)
 					->execute($objNewsletter->id, 1);
 			}
 			$this->addSeries($arrSeries, $objResultSet, 'reads', $timemod);
@@ -392,28 +423,31 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 			if ($strRecipient) {
 				// total number of newsletters the recipients reacts on (clicked a link)
 				$objResultSet = $this->Database
-					->prepare("SELECT time, SUM(sum) as sum
+					->prepare(
+					"SELECT time, SUM(sum) as sum
 							   FROM (
 								   SELECT MIN(tstamp) as time, 1 as sum
 								   FROM tl_avisota_statistic_raw_link_hit
 								   WHERE recipient=?
 								   GROUP BY recipient
 							   ) t
-							   GROUP BY time")
+							   GROUP BY time"
+				)
 					->execute($strRecipient);
 			}
-			else
-			{
+			else {
 				// total number ov recipients that reacts on this newsletter (clicked a link)
 				$objResultSet = $this->Database
-					->prepare("SELECT time, SUM(sum) as sum
+					->prepare(
+					"SELECT time, SUM(sum) as sum
 							   FROM (
 								   SELECT MIN(tstamp) as time, 1 as sum
 								   FROM tl_avisota_statistic_raw_link_hit
 								   WHERE pid=?
 								   GROUP BY linkID,recipientLinkID
 							   ) t
-							   GROUP BY time")
+							   GROUP BY time"
+				)
 					->execute($objNewsletter->id);
 			}
 			$this->addSeries($arrSeries, $objResultSet, 'reacts', $timemod);
@@ -432,8 +466,8 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 				$intLastReadSum  = empty($temp['reads']) ? $intLastReadSum : $temp['reads'];
 				$intLastReactSum = empty($temp['reacts']) ? $intLastReactSum : $temp['reacts'];
 				if ($datetime >= $since && $datetime <= $until) {
-					$arrSerieSends[]  =  $intLastSendSum;
-					$arrSerieReads[]  =  $intLastReadSum;
+					$arrSerieSends[]  = $intLastSendSum;
+					$arrSerieReads[]  = $intLastReadSum;
 					$arrSerieReacts[] = $intLastReactSum;
 					$arrDateTimes[]   = $datetime;
 				}
@@ -480,8 +514,18 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 			$objChart->setFontProperties(TL_ROOT . '/plugins/pchart/Fonts/tahoma.ttf', 9);
 			$objChart->setGraphArea(85, 30, $intWidth - 50, $intHeight - 70);
 			$objChart->drawGraphArea(252, 252, 252);
-			$objChart->drawScale($objDataSet->GetData(), $objDataSet->GetDataDescription(), SCALE_NORMAL, 150, 150, 150, TRUE, 45, 2);
-			$objChart->drawGrid(4, TRUE, 230, 230, 230, 255);
+			$objChart->drawScale(
+				$objDataSet->GetData(),
+				$objDataSet->GetDataDescription(),
+				SCALE_NORMAL,
+				150,
+				150,
+				150,
+				true,
+				45,
+				2
+			);
+			$objChart->drawGrid(4, true, 230, 230, 230, 255);
 
 			// Draw the line graph
 			$objChart->drawLineGraph($objDataSet->GetData(), $objDataSet->GetDataDescription());
@@ -490,20 +534,34 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 			$objChart->setFontProperties(TL_ROOT . '/plugins/pchart/Fonts/tahoma.ttf', 8);
 			$objChart->drawLegend(95, 35, $objDataSet->GetDataDescription(), 255, 255, 255);
 			$objChart->setFontProperties(TL_ROOT . '/plugins/pchart/Fonts/tahoma.ttf', 10);
-			$objChart->drawTitle(85, 22, sprintf($GLOBALS['TL_LANG']['avisota_tracking']['chart']['headline'],
+			$objChart->drawTitle(
+				85,
+				22,
+				sprintf(
+					$GLOBALS['TL_LANG']['avisota_tracking']['chart']['headline'],
+					$GLOBALS['TL_LANG']['avisota_tracking'][($strRecipient) ? 'recipient'
+						: 'newsletter']['stats_legend'],
+					$objNewsletter->subject,
+					$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['min']),
+					$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['max'])
+				),
+				50,
+				50,
+				50
+			);
+			$objChart->Render($strFile);
+		}
+
+		$this->output(
+			$strFile,
+			sprintf(
+				$GLOBALS['TL_LANG']['avisota_tracking']['chart']['headline'],
 				$GLOBALS['TL_LANG']['avisota_tracking'][($strRecipient) ? 'recipient' : 'newsletter']['stats_legend'],
 				$objNewsletter->subject,
 				$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['min']),
 				$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['max'])
-			), 50, 50, 50);
-			$objChart->Render($strFile);
-		}
-
-		$this->output($strFile, sprintf($GLOBALS['TL_LANG']['avisota_tracking']['chart']['headline'],
-			$GLOBALS['TL_LANG']['avisota_tracking'][($strRecipient) ? 'recipient' : 'newsletter']['stats_legend'],
-			$objNewsletter->subject,
-			$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['min']),
-			$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['max'])));
+			)
+		);
 	}
 
 	protected function chartLinks($objNewsletter, $strRecipient)
@@ -530,21 +588,27 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 		$until = $this->Input->get('until') ? $this->Input->get('until') : $tstamp['max'];
 		if ($since >= $tstamp['min'] && $since < $tstamp['max'] && $since < $until) {
 			$tstamp['min'] = $since;
-		} else {
+		}
+		else {
 			$since = $tstamp['min'];
 		}
 		if ($until > $tstamp['min'] && $until <= $tstamp['max'] && $since < $until) {
 			$tstamp['max'] = $until;
-		} else {
+		}
+		else {
 			$until = $tstamp['max'];
 		}
 
-		$strFile = TL_ROOT . '/system/html/chart-links-' . $objNewsletter->id . ($strRecipient ? '-' . substr(md5($strRecipient), 0, 8) : '') . '-' . $tstamp['min'] . '-' . $tstamp['max'] . '-' . $intWidth . 'x' . $intHeight . '.png';
+		$strFile = TL_ROOT . '/system/html/chart-links-' . $objNewsletter->id . ($strRecipient ? '-' . substr(
+			md5($strRecipient),
+			0,
+			8
+		) : '') . '-' . $tstamp['min'] . '-' . $tstamp['max'] . '-' . $intWidth . 'x' . $intHeight . '.png';
 
 		if (!file_exists($strFile)) {
 			$xticks   = floor(($intWidth - 150) / 80);
 			$timespan = $tstamp['max'] - $tstamp['min'];
-			$timemod  = round($timespan / (3*$xticks));
+			$timemod  = round($timespan / (3 * $xticks));
 
 			$this->loadLanguageFile('avisota_tracking');
 
@@ -552,7 +616,7 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 			require_once(TL_ROOT . '/plugins/pchart/pChart/pChart.php');
 
 			$arrSeries = array();
-			for ($i=$tstamp['min']-($tstamp['min'] % $timemod); $i<$tstamp['max']; $i+=$timemod) {
+			for ($i = $tstamp['min'] - ($tstamp['min'] % $timemod); $i < $tstamp['max']; $i += $timemod) {
 				$arrSeries[$i] = array();
 			}
 
@@ -564,8 +628,7 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 					->execute($objNewsletter->id, $strRecipient);
 				$strWhere = 'recipientLinkId';
 			}
-			else
-			{
+			else {
 				// total number ov recipients that reacts on this newsletter (clicked a link)
 				$objLink  = $this->Database
 					->prepare("SELECT id,url FROM tl_avisota_statistic_raw_link WHERE pid=?")
@@ -574,15 +637,16 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 			}
 
 			$arrLinks = array();
-			while ($objLink->next())
-			{
+			while ($objLink->next()) {
 				$arrLinks[] = $objLink->url;
 
 				$objResultSet = $this->Database
-					->prepare("SELECT tstamp as time,COUNT(tstamp) as sum
+					->prepare(
+					"SELECT tstamp as time,COUNT(tstamp) as sum
 						FROM tl_avisota_statistic_raw_link_hit
 						WHERE $strWhere=?
-						GROUP BY time")
+						GROUP BY time"
+				)
 					->execute($objLink->id);
 				$this->addSeries($arrSeries, $objResultSet, $objLink->url, $timemod);
 			}
@@ -591,7 +655,7 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 
 			$arrSeriesLast  = array();
 			$arrSeriesLinks = array();
-			$arrDateTimes = array();
+			$arrDateTimes   = array();
 			foreach ($arrSeries as $datetime => $array) {
 				foreach ($arrLinks as $link) {
 					if (!isset($arrSeriesLinks[$link])) {
@@ -618,7 +682,7 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 			// Dataset definition
 			$objDataSet = new pData;
 
-			foreach ($arrSeriesLinks as $link=>$data) {
+			foreach ($arrSeriesLinks as $link => $data) {
 				$objDataSet->AddPoint($data, $link);
 				$objDataSet->AddSerie($link);
 				$objDataSet->SetSerieName($link, $link);
@@ -634,8 +698,18 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 			$objChart->setFontProperties(TL_ROOT . '/plugins/pchart/Fonts/tahoma.ttf', 9);
 			$objChart->setGraphArea(85, 30, $intWidth - 50, $intHeight - 70);
 			$objChart->drawGraphArea(252, 252, 252);
-			$objChart->drawScale($objDataSet->GetData(), $objDataSet->GetDataDescription(), SCALE_NORMAL, 150, 150, 150, TRUE, 45, 2);
-			$objChart->drawGrid(4, TRUE, 230, 230, 230, 255);
+			$objChart->drawScale(
+				$objDataSet->GetData(),
+				$objDataSet->GetDataDescription(),
+				SCALE_NORMAL,
+				150,
+				150,
+				150,
+				true,
+				45,
+				2
+			);
+			$objChart->drawGrid(4, true, 230, 230, 230, 255);
 
 			// Draw the line graph
 			$objChart->drawLineGraph($objDataSet->GetData(), $objDataSet->GetDataDescription());
@@ -644,27 +718,43 @@ class AvisotaBackendChartPChart extends Backend implements AvisotaBackendChart
 			$objChart->setFontProperties(TL_ROOT . '/plugins/pchart/Fonts/tahoma.ttf', 8);
 			$objChart->drawLegend(85, $intHeight + 8, $objDataSet->GetDataDescription(), 245, 245, 245);
 			$objChart->setFontProperties(TL_ROOT . '/plugins/pchart/Fonts/tahoma.ttf', 10);
-			$objChart->drawTitle(85, 22, sprintf($GLOBALS['TL_LANG']['avisota_tracking']['chart']['headline'],
+			$objChart->drawTitle(
+				85,
+				22,
+				sprintf(
+					$GLOBALS['TL_LANG']['avisota_tracking']['chart']['headline'],
+					$GLOBALS['TL_LANG']['avisota_tracking'][($strRecipient) ? 'recipient'
+						: 'newsletter']['links_legend'],
+					$objNewsletter->subject,
+					$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['min']),
+					$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['max'])
+				),
+				50,
+				50,
+				50
+			);
+			$objChart->Render($strFile);
+		}
+
+		$this->output(
+			$strFile,
+			sprintf(
+				$GLOBALS['TL_LANG']['avisota_tracking']['chart']['headline'],
 				$GLOBALS['TL_LANG']['avisota_tracking'][($strRecipient) ? 'recipient' : 'newsletter']['links_legend'],
 				$objNewsletter->subject,
 				$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['min']),
 				$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['max'])
-			), 50, 50, 50);
-			$objChart->Render($strFile);
-		}
-
-		$this->output($strFile, sprintf($GLOBALS['TL_LANG']['avisota_tracking']['chart']['headline'],
-			$GLOBALS['TL_LANG']['avisota_tracking'][($strRecipient) ? 'recipient' : 'newsletter']['links_legend'],
-			$objNewsletter->subject,
-			$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['min']),
-			$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $tstamp['max'])));
+			)
+		);
 	}
 
 	protected function output($strFile, $strName)
 	{
 		// Make sure no output buffer is active
 		// @see http://ch2.php.net/manual/en/function.fpassthru.php#74080
-		while (@ob_end_clean());
+		while (@ob_end_clean()) {
+			;
+		}
 
 		// Prevent session locking (see #2804)
 		session_write_close();

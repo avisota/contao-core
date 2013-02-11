@@ -63,19 +63,18 @@ class Tracking extends Frontend
 	public function run()
 	{
 		// newsletter read
-		if ($intId = $this->Input->get('read'))
-		{
+		if ($intId = $this->Input->get('read')) {
 			// prepare the set array
-			$arrSet = array
-			(
+			$arrSet = array(
 				'tstamp' => time(),
 				'readed' => 1
 			);
 
 			// mark the newsletter as read
-			$this->Database->prepare("UPDATE tl_avisota_statistic_raw_recipient %s WHERE readed='' AND id=?")
-						   ->set($arrSet)
-						   ->execute($intId);
+			$this->Database
+				->prepare("UPDATE tl_avisota_statistic_raw_recipient %s WHERE readed='' AND id=?")
+				->set($arrSet)
+				->execute($intId);
 
 			$strFile = 'system/modules/Avisota2/html/blank.gif';
 			$objFile = new File($strFile);
@@ -96,13 +95,12 @@ class Tracking extends Frontend
 		}
 
 		// newsletter link click
-		if ($intId = $this->Input->get('link'))
-		{
-			$objRecipientLink = $this->Database->prepare("SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE id=?")
-											   ->execute($intId);
+		if ($intId = $this->Input->get('link')) {
+			$objRecipientLink = $this->Database
+				->prepare("SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE id=?")
+				->execute($intId);
 
-			if ($objRecipientLink->next())
-			{
+			if ($objRecipientLink->next()) {
 				// prepare the set values for the read state
 				$arrSetReadState = array
 				(
@@ -111,28 +109,32 @@ class Tracking extends Frontend
 				);
 
 				// set read state
-				$this->Database->prepare("UPDATE tl_avisota_statistic_raw_recipient %s WHERE readed='' AND pid=? AND recipient=?")
-							   ->set($arrSetReadState)
-							   ->execute($objRecipientLink->pid, $objRecipientLink->recipient);
+				$this->Database
+					->prepare("UPDATE tl_avisota_statistic_raw_recipient %s WHERE readed='' AND pid=? AND recipient=?")
+					->set($arrSetReadState)
+					->execute($objRecipientLink->pid, $objRecipientLink->recipient);
 
 
 				// prepare the insert values for the hit counter
 				$arrSetHitCounter = array
 				(
-					'pid'				=> $objRecipientLink->pid,
-					'linkID'			=> $objRecipientLink->linkID,
-					'recipientLinkID'	=> $objRecipientLink->id,
-					'recipient'			=> $objRecipientLink->recipient,
-					'tstamp'			=> time()
+					'pid'             => $objRecipientLink->pid,
+					'linkID'          => $objRecipientLink->linkID,
+					'recipientLinkID' => $objRecipientLink->id,
+					'recipient'       => $objRecipientLink->recipient,
+					'tstamp'          => time()
 				);
 
 				// increase hit count
-				$this->Database->prepare("INSERT INTO tl_avisota_statistic_raw_link_hit %s")
-							   ->set($arrSetHitCounter)
-							   ->execute();
+				$this->Database
+					->prepare("INSERT INTO tl_avisota_statistic_raw_link_hit %s")
+					->set($arrSetHitCounter)
+					->execute();
 
 				header('HTTP/1.1 303 See Other');
-				header('Location: ' . ($objRecipientLink->real_url ? $objRecipientLink->real_url : $objRecipientLink->url));
+				header(
+					'Location: ' . ($objRecipientLink->real_url ? $objRecipientLink->real_url : $objRecipientLink->url)
+				);
 				exit;
 			}
 

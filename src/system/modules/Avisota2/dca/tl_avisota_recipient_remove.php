@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -25,13 +25,13 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  * @license    LGPL
  * @filesource
  */
-
 
 
 /**
@@ -41,16 +41,15 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_remove'] = array
 (
 
 	// Config
-	'config' => array
+	'config'       => array
 	(
-		'dataContainer'               => 'Memory',
-		'closed'                      => true,
-		'onsubmit_callback'           => array
+		'dataContainer'     => 'Memory',
+		'closed'            => true,
+		'onsubmit_callback' => array
 		(
 			array('tl_avisota_recipient_remove', 'onsubmit_callback'),
 		)
 	),
-
 	// Palettes
 	'metapalettes' => array
 	(
@@ -59,25 +58,24 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_remove'] = array
 			'remove' => array('source', 'upload', 'emails')
 		)
 	),
-	
 	// Fields
-	'fields' => array
+	'fields'       => array
 	(
 		'source' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['source'],
-			'inputType'               => 'fileTree',
-			'eval'                    => array('fieldType'=>'checkbox', 'files'=>true, 'filesOnly'=>true, 'extensions'=>'csv')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['source'],
+			'inputType' => 'fileTree',
+			'eval'      => array('fieldType' => 'checkbox', 'files' => true, 'filesOnly' => true, 'extensions' => 'csv')
 		),
 		'upload' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['upload'],
-			'inputType'               => 'upload'
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['upload'],
+			'inputType' => 'upload'
 		),
 		'emails' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['emails'],
-			'inputType'               => 'textarea'
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['emails'],
+			'inputType' => 'textarea'
 		)
 	)
 );
@@ -92,11 +90,11 @@ class tl_avisota_recipient_remove extends Backend
 		parent::__construct();
 		$this->import('BackendUser', 'User');
 	}
-	
-	
+
+
 	/**
 	 * Do the import.
-	 * 
+	 *
 	 * @param DataContainer $dc
 	 */
 	public function onsubmit_callback(DataContainer $dc)
@@ -104,72 +102,67 @@ class tl_avisota_recipient_remove extends Backend
 		$arrSource = $dc->getData('source');
 		$arrUpload = $dc->getData('upload');
 		$strEmails = $dc->getData('emails');
-		
-		$time = time();
+
+		$time     = time();
 		$intTotal = 0;
-		
-		if (is_array($arrSource))
-		{
-			foreach ($arrSource as $strCsvFile)
-			{
+
+		if (is_array($arrSource)) {
+			foreach ($arrSource as $strCsvFile) {
 				$objFile = new File($strCsvFile);
 				$this->removeRecipients($objFile->getContent(), $intTotal);
 			}
 		}
-		
-		if ($arrUpload)
-		{
+
+		if ($arrUpload) {
 			$this->removeRecipients(file_get_contents($arrUpload['tmp_name']), $intTotal);
 		}
-		
-		if ($strEmails)
-		{
+
+		if ($strEmails) {
 			$this->removeRecipients($strEmails, $intTotal);
 		}
 
 		$_SESSION['TL_CONFIRM'][] = sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['confirm'], $intTotal);
-	
+
 		setcookie('BE_PAGE_OFFSET', 0, 0, '/');
 		$this->reload();
 	}
-	
-	
+
+
 	/**
 	 * Remove recipients.
-	 * 
+	 *
 	 * @param string $strEmails
-	 * @param int $intTotal
+	 * @param int    $intTotal
 	 */
 	protected function removeRecipients($strEmails, &$intTotal)
 	{
 		$arrEmails = preg_split('#[\s,;]#u', $strEmails, -1, PREG_SPLIT_NO_EMPTY);
 		$arrEmails = array_filter(array_unique($arrEmails));
-		
-		$arrParams = array($this->Input->get('id'));
+
+		$arrParams       = array($this->Input->get('id'));
 		$arrPlaceHolders = array();
-		foreach ($arrEmails as $strEmail)
-		{
-			if (preg_match('#^".*"$#', $strEmail) || preg_match("#^'.*'$#", $strEmail))
-			{
+		foreach ($arrEmails as $strEmail) {
+			if (preg_match('#^".*"$#', $strEmail) || preg_match("#^'.*'$#", $strEmail)) {
 				$strEmail = substr($strEmail, 1, -1);
 			}
-			
+
 			// Skip invalid entries
-			if (!$this->isValidEmailAddress($strEmail))
-			{
+			if (!$this->isValidEmailAddress($strEmail)) {
 				continue;
 			}
-			
-			$arrParams[] = $strEmail;
+
+			$arrParams[]       = $strEmail;
 			$arrPlaceHolders[] = '?';
 		}
-		
-		if (count($arrParams))
-		{
+
+		if (count($arrParams)) {
 			// Check whether the e-mail address exists
-			$objDelete = $this->Database->prepare("DELETE FROM tl_avisota_recipient WHERE pid=? AND email IN (" . implode(',', $arrPlaceHolders) . ")")
-										->execute($arrParams);
-	
+			$objDelete = $this->Database
+				->prepare(
+				"DELETE FROM tl_avisota_recipient WHERE pid=? AND email IN (" . implode(',', $arrPlaceHolders) . ")"
+			)
+				->execute($arrParams);
+
 			$intTotal += $objDelete->affectedRows;
 		}
 	}

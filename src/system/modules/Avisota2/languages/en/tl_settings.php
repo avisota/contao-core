@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,8 +37,11 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_mode']  = array('Developer Mode ',' Enables developer mode.');
-$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_email'] = array('Developer E-mail ','Send emails to this address for developer mode.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_mode'] = array('Developer Mode ', ' Enables developer mode.');
+$GLOBALS['TL_LANG']['tl_settings']['avisota_developer_email'] = array(
+	'Developer E-mail ',
+	'Send emails to this address for developer mode.'
+);
 
 
 /**

@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -55,16 +56,15 @@ class AvisotaBackendOutbox extends BackendModule
 
 	/**
 	 * (non-PHPdoc)
+	 *
 	 * @see BackendModule::generate()
 	 */
 	public function generate()
 	{
-		if ($this->Input->get('act') == 'details')
-		{
+		if ($this->Input->get('act') == 'details') {
 			$this->strTemplate = 'be_avisota_outbox_details';
 		}
-		if ($this->Input->get('act') == 'send')
-		{
+		if ($this->Input->get('act') == 'send') {
 			$this->strTemplate = 'be_avisota_outbox_send';
 		}
 
@@ -74,12 +74,12 @@ class AvisotaBackendOutbox extends BackendModule
 
 	/**
 	 * (non-PHPdoc)
+	 *
 	 * @see BackendModule::compile()
 	 */
 	protected function compile()
 	{
-		if (!$this->User->isAdmin && !$this->User->hasAccess('send', 'avisota_newsletter_permissions'))
-		{
+		if (!$this->User->isAdmin && !$this->User->hasAccess('send', 'avisota_newsletter_permissions')) {
 			$this->log('Not enough permissions to send avisota newsletter', 'Avisota outbox', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
@@ -87,20 +87,17 @@ class AvisotaBackendOutbox extends BackendModule
 		$this->loadLanguageFile('tl_avisota_newsletter_outbox');
 		$this->loadLanguageFile('tl_avisota_newsletter');
 
-		if ($this->Input->get('act') == 'details')
-		{
+		if ($this->Input->get('act') == 'details') {
 			$this->details();
 			return;
 		}
 
-		if ($this->Input->get('act') == 'remove')
-		{
+		if ($this->Input->get('act') == 'remove') {
 			$this->remove();
 			return;
 		}
 
-		if ($this->Input->get('act') == 'send')
-		{
+		if ($this->Input->get('act') == 'send') {
 			$this->send();
 			return;
 		}
@@ -110,50 +107,44 @@ class AvisotaBackendOutbox extends BackendModule
 
 	protected function details()
 	{
-		$objOutbox = $this->getOutbox();
+		$objOutbox     = $this->getOutbox();
 		$objNewsletter = $this->getNewsletter($objOutbox);
 
-		$this->Template->outbox = $objOutbox->row();
+		$this->Template->outbox     = $objOutbox->row();
 		$this->Template->newsletter = $objNewsletter->row();
 
 		$arrSession = $this->Session->get('AVISOTA_OUTBOX');
 
-		if (!isset($arrSession['state']))
-		{
+		if (!isset($arrSession['state'])) {
 			$arrSession['state'] = '';
 		}
-		if (!isset($arrSession['offset']) || $arrSession['offset']>$objOutbox->recipients)
-		{
+		if (!isset($arrSession['offset']) || $arrSession['offset'] > $objOutbox->recipients) {
 			$arrSession['offset'] = 0;
 		}
-		if (!isset($arrSession['limit']))
-		{
+		if (!isset($arrSession['limit'])) {
 			$arrSession['limit'] = 30;
 		}
-		if ($this->Input->post('FORM_SUBMIT') == 'tl_filters')
-		{
+		if ($this->Input->post('FORM_SUBMIT') == 'tl_filters') {
 			// set new state
-			$arrSession['state'] = in_array($this->Input->post('state'), array('outstanding', 'sended', 'failed')) ? $this->Input->post('state') : '';
+			$arrSession['state'] = in_array($this->Input->post('state'), array('outstanding', 'sended', 'failed'))
+				? $this->Input->post('state') : '';
 
 			// filter all
-			if ($this->Input->post('tl_filter') == 'all')
-			{
+			if ($this->Input->post('tl_filter') == 'all') {
 				$arrSession['offset'] = 0;
-				$arrSession['limit'] = 500;
+				$arrSession['limit']  = 500;
 			}
 
 			// filter limit
-			else if (preg_match('#^(\d+),(\d+)$#', $this->Input->post('tl_filter'), $m))
-			{
+			else if (preg_match('#^(\d+),(\d+)$#', $this->Input->post('tl_filter'), $m)) {
 				$arrSession['offset'] = intval($m[1]);
-				$arrSession['limit'] = intval($m[2]);
+				$arrSession['limit']  = intval($m[2]);
 			}
 
 			// filter default
-			else
-			{
+			else {
 				$arrSession['offset'] = 0;
-				$arrSession['limit'] = 30;
+				$arrSession['limit']  = 30;
 			}
 
 			// store session ...
@@ -164,48 +155,45 @@ class AvisotaBackendOutbox extends BackendModule
 		}
 
 		$this->Session->set('AVISOTA_OUTBOX', $arrSession);
-		$this->Template->state = $arrSession['state'];
+		$this->Template->state  = $arrSession['state'];
 		$this->Template->offset = $arrSession['offset'];
-		$this->Template->limit = $arrSession['limit'];
+		$this->Template->limit  = $arrSession['limit'];
 
-		switch ($arrSession['state'])
-		{
-		case 'outstanding':
-			$strWhere = "AND send=0";
-			break;
+		switch ($arrSession['state']) {
+			case 'outstanding':
+				$strWhere = "AND send=0";
+				break;
 
-		case 'sended':
-			$strWhere = "AND send>0 AND failed=''";
-			break;
+			case 'sended':
+				$strWhere = "AND send>0 AND failed=''";
+				break;
 
-		case 'failed':
-			$strWhere = "AND send>0 AND failed='1'";
-			break;
+			case 'failed':
+				$strWhere = "AND send>0 AND failed='1'";
+				break;
 
-		default:
-			$strWhere = '';
+			default:
+				$strWhere = '';
 		}
 		$arrRecipients = array();
 		$objRecipients = $this->Database
 			->prepare("SELECT * FROM tl_avisota_newsletter_outbox_recipient WHERE pid=? $strWhere ORDER BY email")
 			->limit($arrSession['limit'], $arrSession['offset'])
 			->execute($objOutbox->id);
-		while ($objRecipients->next())
-		{
-			$arrSource = $this->getSource($objRecipients);
+		while ($objRecipients->next()) {
+			$arrSource    = $this->getSource($objRecipients);
 			$arrRecipient = $objRecipients->row();
-			switch ($objRecipients->source)
-			{
-			case 'list':
-				$arrRecipient['linkedEmail'] = '<a href="contao/main.php?do=avisota_recipients&table=tl_avisota_recipient&act=edit&id=' . $arrRecipient['recipientID'] . '">' . $arrRecipient['email'] . '</a>';
-				break;
+			switch ($objRecipients->source) {
+				case 'list':
+					$arrRecipient['linkedEmail'] = '<a href="contao/main.php?do=avisota_recipients&table=tl_avisota_recipient&act=edit&id=' . $arrRecipient['recipientID'] . '">' . $arrRecipient['email'] . '</a>';
+					break;
 
-			case 'mgroup':
-				$arrRecipient['linkedEmail'] = '<a href="contao/main.php?do=member&act=edit&id=' . $arrRecipient['recipientID'] . '">' . $arrRecipient['email'] . '</a>';
-				break;
+				case 'mgroup':
+					$arrRecipient['linkedEmail'] = '<a href="contao/main.php?do=member&act=edit&id=' . $arrRecipient['recipientID'] . '">' . $arrRecipient['email'] . '</a>';
+					break;
 			}
 			$arrRecipient['source'] = $arrSource;
-			$arrRecipients[] = $arrRecipient;
+			$arrRecipients[]        = $arrRecipient;
 		}
 		$this->Template->recipients = $arrRecipients;
 	}
@@ -227,19 +215,18 @@ class AvisotaBackendOutbox extends BackendModule
 
 	protected function send()
 	{
-		if (!$this->Base->allowBackendSending())
-		{
+		if (!$this->Base->allowBackendSending()) {
 			$this->redirect($referer);
 		}
 
-		$objOutbox = $this->getOutbox();
+		$objOutbox     = $this->getOutbox();
 		$objNewsletter = $this->getNewsletter($objOutbox);
 
-		$this->Template->outbox = $objOutbox->row();
-		$this->Template->newsletter = $objNewsletter->row();
+		$this->Template->outbox       = $objOutbox->row();
+		$this->Template->newsletter   = $objNewsletter->row();
 		$this->Template->cycleTimeout = $GLOBALS['TL_CONFIG']['avisota_max_send_time'];
-		$this->Template->sendTimeout = $GLOBALS['TL_CONFIG']['avisota_max_send_timeout']*1000;
-		$this->Template->expectedTime = ($objOutbox->outstanding / $GLOBALS['TL_CONFIG']['avisota_max_send_count']) * ($GLOBALS['TL_CONFIG']['avisota_max_send_time'] + $GLOBALS['TL_CONFIG']['avisota_max_send_timeout']*1000);
+		$this->Template->sendTimeout  = $GLOBALS['TL_CONFIG']['avisota_max_send_timeout'] * 1000;
+		$this->Template->expectedTime = ($objOutbox->outstanding / $GLOBALS['TL_CONFIG']['avisota_max_send_count']) * ($GLOBALS['TL_CONFIG']['avisota_max_send_time'] + $GLOBALS['TL_CONFIG']['avisota_max_send_timeout'] * 1000);
 	}
 
 
@@ -250,11 +237,12 @@ class AvisotaBackendOutbox extends BackendModule
 
 		$arrOutbox = array
 		(
-			'open' => array(),
+			'open'       => array(),
 			'incomplete' => array(),
-			'complete' => array()
+			'complete'   => array()
 		);
-		$objOutbox = $this->Database->execute("
+		$objOutbox = $this->Database->execute(
+			"
 				SELECT
 					o.id,
 					n.subject as newsletter,
@@ -270,49 +258,43 @@ class AvisotaBackendOutbox extends BackendModule
 					n.id=o.pid
 				ORDER BY
 					o.tstamp DESC,
-					n.subject ASC");
-		while ($objOutbox->next())
-		{
+					n.subject ASC"
+		);
+		while ($objOutbox->next()) {
 
 			// show source-list-names
 			$objSource = $this->Database
-				->prepare('SELECT source, sourceID, COUNT(id) as recipients FROM tl_avisota_newsletter_outbox_recipient WHERE pid=? GROUP BY source')
+				->prepare(
+				'SELECT source, sourceID, COUNT(id) as recipients FROM tl_avisota_newsletter_outbox_recipient WHERE pid=? GROUP BY source'
+			)
 				->execute($objOutbox->id);
 
 			$arrSources = array();
-			while($objSource->next())
-			{
+			while ($objSource->next()) {
 				$arrSource = $this->getSource($objSource);
-				if ($arrSource)
-				{
+				if ($arrSource) {
 					$arrSources[] = array_merge($arrSource, $objSource->row());
 				}
 			}
 			$objOutbox->sources = $arrSources;
 
-			if ($objOutbox->outstanding == $objOutbox->recipients)
-			{
+			if ($objOutbox->outstanding == $objOutbox->recipients) {
 				$arrOutbox['open'][] = $objOutbox->row();
 			}
-			elseif ($objOutbox->outstanding > 0)
-			{
+			elseif ($objOutbox->outstanding > 0) {
 				$arrOutbox['incomplete'][] = $objOutbox->row();
 			}
-			else
-			{
+			else {
 				$arrOutbox['complete'][] = $objOutbox->row();
 			}
-			if ($objOutbox->failed > 0)
-			{
+			if ($objOutbox->failed > 0) {
 				$this->Template->display_failed = true;
 			}
 		}
-		if (count($arrOutbox['open']) || count($arrOutbox[incomplete]) || count($arrOutbox['complete']))
-		{
+		if (count($arrOutbox['open']) || count($arrOutbox[incomplete]) || count($arrOutbox['complete'])) {
 			$this->Template->outbox = $arrOutbox;
 		}
-		else
-		{
+		else {
 			$this->Template->outbox = false;
 		}
 
@@ -325,31 +307,45 @@ class AvisotaBackendOutbox extends BackendModule
 	 */
 	protected function getSource($objRecipient)
 	{
-		switch ($objRecipient->source)
-		{
-		case 'list':
-			$objList = $this->Database
-				->prepare("SELECT * FROM tl_avisota_mailing_list WHERE id=?")
-				->execute($objRecipient->sourceID);
-			if ($objList->next())
-			{
-				$arrSource = $objList->row();
-				$arrSource['title'] = sprintf('%s: %s', $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['recipient_list'], $objList->title);
-				$arrSource['linkedTitle'] = sprintf('%s: <a href="contao/main.php?do=avisota_recipients&table=tl_avisota_recipient&id=%d">%s</a>', $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['recipient_list'], $objList->id, $objList->title);
-				return $arrSource;
-			}
+		switch ($objRecipient->source) {
+			case 'list':
+				$objList = $this->Database
+					->prepare("SELECT * FROM tl_avisota_mailing_list WHERE id=?")
+					->execute($objRecipient->sourceID);
+				if ($objList->next()) {
+					$arrSource                = $objList->row();
+					$arrSource['title']       = sprintf(
+						'%s: %s',
+						$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['recipient_list'],
+						$objList->title
+					);
+					$arrSource['linkedTitle'] = sprintf(
+						'%s: <a href="contao/main.php?do=avisota_recipients&table=tl_avisota_recipient&id=%d">%s</a>',
+						$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['recipient_list'],
+						$objList->id,
+						$objList->title
+					);
+					return $arrSource;
+				}
 
-		case 'mgroup':
-			$objMgroup = $this->Database
-				->prepare("SELECT * FROM tl_member_group WHERE id=?")
-				->execute($objRecipient->sourceID);
-			if ($objMgroup->next())
-			{
-				$arrSource = $objMgroup->row();
-				$arrSource['title'] = sprintf('%s: %s', $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['mgroup'], $objMgroup->name);
-				$arrSource['linkedTitle'] = sprintf('%s: <a href="contao/main.php?do=member">%s</a>', $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['mgroup'], $objMgroup->name);
-				return $arrSource;
-			}
+			case 'mgroup':
+				$objMgroup = $this->Database
+					->prepare("SELECT * FROM tl_member_group WHERE id=?")
+					->execute($objRecipient->sourceID);
+				if ($objMgroup->next()) {
+					$arrSource                = $objMgroup->row();
+					$arrSource['title']       = sprintf(
+						'%s: %s',
+						$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['mgroup'],
+						$objMgroup->name
+					);
+					$arrSource['linkedTitle'] = sprintf(
+						'%s: <a href="contao/main.php?do=member">%s</a>',
+						$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['mgroup'],
+						$objMgroup->name
+					);
+					return $arrSource;
+				}
 		}
 		return false;
 	}
@@ -358,7 +354,8 @@ class AvisotaBackendOutbox extends BackendModule
 	{
 		// get the outbox
 		$objOutbox = $this->Database
-			->prepare("SELECT
+			->prepare(
+			"SELECT
 					*,
 					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE o.id=r.pid) as recipients,
 					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE o.id=r.pid AND r.send=0) as outstanding,
@@ -366,11 +363,11 @@ class AvisotaBackendOutbox extends BackendModule
 				FROM
 					tl_avisota_newsletter_outbox o
 				WHERE
-					id=?")
+					id=?"
+		)
 			->execute($this->Input->get('id'));
 
-		if (!$objOutbox->next())
-		{
+		if (!$objOutbox->next()) {
 			$this->redirect('contao/main.php?do=avisota_outbox');
 		}
 
@@ -383,8 +380,7 @@ class AvisotaBackendOutbox extends BackendModule
 			->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
 			->execute($objOutbox->pid);
 
-		if (!$objNewsletter->next())
-		{
+		if (!$objNewsletter->next()) {
 			$this->redirect('contao/main.php?do=avisota_outbox');
 		}
 

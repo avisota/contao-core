@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -40,222 +41,249 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 (
 
 	// Config
-	'config'          => array
+	'config'       => array
 	(
-		'dataContainer'               => 'Table',
-		'enableVersioning'            => true,
-		'onload_callback'             => array(array('tl_avisota_transport', 'onload_callback')),
-		'onsubmit_callback'           => array(array('tl_avisota_transport', 'onsubmit_callback'))
+		'dataContainer'     => 'Table',
+		'enableVersioning'  => true,
+		'onload_callback'   => array(array('tl_avisota_transport', 'onload_callback')),
+		'onsubmit_callback' => array(array('tl_avisota_transport', 'onsubmit_callback'))
 	),
-
 	// List
-	'list'            => array
+	'list'         => array
 	(
 		'sorting'           => array
 		(
-			'mode'                    => 1,
-			'flag'                    => 11,
-			'fields'                  => array('type', 'title')
+			'mode'   => 1,
+			'flag'   => 11,
+			'fields' => array('type', 'title')
 		),
 		'label'             => array
 		(
-			'fields'                  => array('title', 'type'),
-			'format'                  => '%s <span style="color:#b3b3b3; padding-left:3px;">(%s)</span>'
+			'fields' => array('title', 'type'),
+			'format' => '%s <span style="color:#b3b3b3; padding-left:3px;">(%s)</span>'
 		),
 		'global_operations' => array
 		(
 			'all' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
-				'href'                => 'act=select',
-				'class'               => 'header_edit_all',
-				'attributes'          => 'onclick="Backend.getScrollOffset();" accesskey="e"'
+				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
+				'href'       => 'act=select',
+				'class'      => 'header_edit_all',
+				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
 			)
 		),
 		'operations'        => array
 		(
 			'edit'   => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_transport']['edit'],
-				'href'                => 'act=edit',
-				'icon'                => 'edit.gif'
+				'label' => &$GLOBALS['TL_LANG']['tl_avisota_transport']['edit'],
+				'href'  => 'act=edit',
+				'icon'  => 'edit.gif'
 			),
 			'delete' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_transport']['delete'],
-				'href'                => 'act=delete',
-				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+				'label'      => &$GLOBALS['TL_LANG']['tl_avisota_transport']['delete'],
+				'href'       => 'act=delete',
+				'icon'       => 'delete.gif',
+				'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 			),
 			'show'   => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_transport']['show'],
-				'href'                => 'act=show',
-				'icon'                => 'show.gif'
+				'label' => &$GLOBALS['TL_LANG']['tl_avisota_transport']['show'],
+				'href'  => 'act=show',
+				'icon'  => 'show.gif'
 			)
 		),
 	),
-
 	// Palettes
-	'palettes'        => array(
+	'palettes'     => array(
 		'__selector__' => array('type', 'swiftUseSmtp')
 	),
-
 	// Meta Palettes
-	'metapalettes'    => array
+	'metapalettes' => array
 	(
-		'default'            => array(
+		'default'          => array(
 			'transport' => array('type')
 		),
-		'swift'              => array(
+		'swift'            => array(
 			'transport' => array('title', 'type'),
 			'sender'    => array('sender', 'senderName'),
 			'swift'     => array('swiftUseSmtp')
 		),
-		'swiftswiftSmtpOn'   => array(
+		'swiftswiftSmtpOn' => array(
 			'transport' => array('title', 'type'),
 			'sender'    => array('sender', 'senderName'),
-			'swift'     => array('swiftUseSmtp', 'swiftSmtpHost', 'swiftSmtpUser', 'swiftSmtpPass', 'swiftSmtpEnc', 'swiftSmtpPort')
+			'swift'     => array(
+				'swiftUseSmtp',
+				'swiftSmtpHost',
+				'swiftSmtpUser',
+				'swiftSmtpPass',
+				'swiftSmtpEnc',
+				'swiftSmtpPort'
+			)
 		)
 	),
-
 	// Fields
-	'fields'          => array
+	'fields'       => array
 	(
-		'type'           => array
+		'type'          => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['type'],
-			'inputType'               => 'select',
-			'options'                 => array_keys($GLOBALS['TL_AVISOTA_TRANSPORT']),
-			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_transport'],
-			'eval'                    => array('mandatory'         => true,
-			                                   'submitOnChange'    => true,
-			                                   'includeBlankOption'=> true,
-			                                   'tl_class'          => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_transport']['type'],
+			'inputType' => 'select',
+			'options'   => array_keys($GLOBALS['TL_AVISOTA_TRANSPORT']),
+			'reference' => &$GLOBALS['TL_LANG']['tl_avisota_transport'],
+			'eval'      => array(
+				'mandatory'          => true,
+				'submitOnChange'     => true,
+				'includeBlankOption' => true,
+				'tl_class'           => 'w50'
+			)
 		),
-		'title'          => array
+		'title'         => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['title'],
-			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=> true,
-			                                   'maxlength'=> 255,
-			                                   'tl_class' => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_transport']['title'],
+			'inputType' => 'text',
+			'eval'      => array(
+				'mandatory' => true,
+				'maxlength' => 255,
+				'tl_class'  => 'w50'
+			)
 		),
-
-		'sender'         => array
+		'sender'        => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['sender'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'filter'                  => true,
-			'inputType'               => 'text',
-			'eval'                    => array('rgxp'          => 'email',
-			                                   'maxlength'     => 128,
-			                                   'decodeEntities'=> true,
-			                                   'tl_class'      => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_transport']['sender'],
+			'exclude'   => true,
+			'search'    => true,
+			'filter'    => true,
+			'inputType' => 'text',
+			'eval'      => array(
+				'rgxp'           => 'email',
+				'maxlength'      => 128,
+				'decodeEntities' => true,
+				'tl_class'       => 'w50'
+			)
 		),
-		'senderName'     => array
+		'senderName'    => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['senderName'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 11,
-			'inputType'               => 'text',
-			'eval'                    => array('decodeEntities'=> true,
-			                                   'maxlength'     => 128,
-			                                   'tl_class'      => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_transport']['senderName'],
+			'exclude'   => true,
+			'search'    => true,
+			'sorting'   => true,
+			'flag'      => 11,
+			'inputType' => 'text',
+			'eval'      => array(
+				'decodeEntities' => true,
+				'maxlength'      => 128,
+				'tl_class'       => 'w50'
+			)
 		),
-		'replyTo'        => array
+		'replyTo'       => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['replyTo'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'filter'                  => true,
-			'inputType'               => 'text',
-			'eval'                    => array('rgxp'          => 'email',
-			                                   'maxlength'     => 128,
-			                                   'decodeEntities'=> true,
-			                                   'tl_class'      => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_transport']['replyTo'],
+			'exclude'   => true,
+			'search'    => true,
+			'filter'    => true,
+			'inputType' => 'text',
+			'eval'      => array(
+				'rgxp'           => 'email',
+				'maxlength'      => 128,
+				'decodeEntities' => true,
+				'tl_class'       => 'w50'
+			)
 		),
-		'replyToName'    => array
+		'replyToName'   => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['replyToName'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 11,
-			'inputType'               => 'text',
-			'eval'                    => array('decodeEntities'=> true,
-			                                   'maxlength'     => 128,
-			                                   'tl_class'      => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_transport']['replyToName'],
+			'exclude'   => true,
+			'search'    => true,
+			'sorting'   => true,
+			'flag'      => 11,
+			'inputType' => 'text',
+			'eval'      => array(
+				'decodeEntities' => true,
+				'maxlength'      => 128,
+				'tl_class'       => 'w50'
+			)
 		),
-
 		// swift mailer
-		'swiftUseSmtp'   => array
+		'swiftUseSmtp'  => array
 		(
-			'label'                       => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftUseSmtp'],
-			'default'                     => 'swiftSmtpSystemSettings',
-			'exclude'                     => true,
-			'inputType'                   => 'select',
-			'options'                     => array('swiftSmtpSystemSettings', 'swiftSmtpOn', 'swiftSmtpOff'),
-			'reference'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport'],
-			'eval'                        => array('submitOnChange'=> true,
-			                                       'tl_class'      => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftUseSmtp'],
+			'default'   => 'swiftSmtpSystemSettings',
+			'exclude'   => true,
+			'inputType' => 'select',
+			'options'   => array('swiftSmtpSystemSettings', 'swiftSmtpOn', 'swiftSmtpOff'),
+			'reference' => &$GLOBALS['TL_LANG']['tl_avisota_transport'],
+			'eval'      => array(
+				'submitOnChange' => true,
+				'tl_class'       => 'w50'
+			)
 		),
-		'swiftSmtpHost'  => array
+		'swiftSmtpHost' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpHost'],
-			'exclude'                 => true,
-			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=> true,
-			                                   'maxlength'=> 64,
-			                                   'nospace'  => true,
-			                                   'doNotShow'=> true,
-			                                   'tl_class' => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpHost'],
+			'exclude'   => true,
+			'inputType' => 'text',
+			'eval'      => array(
+				'mandatory' => true,
+				'maxlength' => 64,
+				'nospace'   => true,
+				'doNotShow' => true,
+				'tl_class'  => 'w50'
+			)
 		),
-		'swiftSmtpUser'  => array
+		'swiftSmtpUser' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpUser'],
-			'exclude'                 => true,
-			'inputType'               => 'text',
-			'eval'                    => array('decodeEntities'=> true,
-			                                   'maxlength'     => 128,
-			                                   'doNotShow'     => true,
-			                                   'tl_class'      => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpUser'],
+			'exclude'   => true,
+			'inputType' => 'text',
+			'eval'      => array(
+				'decodeEntities' => true,
+				'maxlength'      => 128,
+				'doNotShow'      => true,
+				'tl_class'       => 'w50'
+			)
 		),
-		'swiftSmtpPass'  => array
+		'swiftSmtpPass' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpPass'],
-			'exclude'                 => true,
-			'inputType'               => 'textStore',
-			'eval'                    => array('decodeEntities'=> true,
-			                                   'maxlength'     => 32,
-			                                   'doNotShow'     => true,
-			                                   'tl_class'      => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpPass'],
+			'exclude'   => true,
+			'inputType' => 'textStore',
+			'eval'      => array(
+				'decodeEntities' => true,
+				'maxlength'      => 32,
+				'doNotShow'      => true,
+				'tl_class'       => 'w50'
+			)
 		),
-		'swiftSmtpEnc'   => array
+		'swiftSmtpEnc'  => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpEnc'],
-			'exclude'                 => true,
-			'inputType'               => 'select',
-			'options'                 => array('ssl'=> 'SSL',
-			                                   'tls'=> 'TLS'),
-			'eval'                    => array('includeBlankOption' => true,
-			                                   'doNotShow'          => true,
-			                                   'tl_class'           => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpEnc'],
+			'exclude'   => true,
+			'inputType' => 'select',
+			'options'   => array(
+				'ssl' => 'SSL',
+				'tls' => 'TLS'
+			),
+			'eval'      => array(
+				'includeBlankOption' => true,
+				'doNotShow'          => true,
+				'tl_class'           => 'w50'
+			)
 		),
-		'swiftSmtpPort'  => array
+		'swiftSmtpPort' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpPort'],
-			'default'                 => 25,
-			'exclude'                 => true,
-			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=> true,
-			                                   'rgxp'     => 'digit',
-			                                   'nospace'  => true,
-			                                   'doNotShow'=> true,
-			                                   'tl_class' => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_transport']['swiftSmtpPort'],
+			'default'   => 25,
+			'exclude'   => true,
+			'inputType' => 'text',
+			'eval'      => array(
+				'mandatory' => true,
+				'rgxp'      => 'digit',
+				'nospace'   => true,
+				'doNotShow' => true,
+				'tl_class'  => 'w50'
+			)
 		),
 	)
 );

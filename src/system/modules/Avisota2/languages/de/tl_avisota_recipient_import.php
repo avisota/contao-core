@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,13 +37,34 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['source']      = array('Import-Quelle', 'Wählen Sie hier die Datei aus, die Sie importieren möchten.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['upload']      = array('Import-Upload', 'Laden Sie eine Datei hoch, die Sie importieren möchten.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['delimiter']   = array('Feldtrenner', 'Wählen Sie hier das Zeichen aus, nach dem die einzelnen Felder getrennt sind.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['enclosure']   = array('Texttrenner', 'Wählen Sie hier das Zeichen aus, nach dem der Text getrennt ist.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['columns']     = array('Spaltenzuordnung', 'Wählen Sie hier, wie die Spalten zugeordnet werden sollen.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['overwrite']   = array('Bestehende Einträge überschreiben', 'Wählen Sie diese Option, um bestehende Einträge zu überschreiben/aktualisieren.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['force']       = array('Import erzwingen', 'Warnung: Sie sollten den Wunsch eines Abonnenten Ihren Newsletter nicht mehr erhalten zu wollen respektieren, es besteht die Möglichkeit dass Sie rechtliche Konsequenzen zu befürchten haben, lassen Sie sich diesbezüglich von einem Anwalt beraten! Nutzen Sie diese Option mit Bedacht und nur dann, wenn Sie wissen was Sie tun! Wählen Sie diese Option, wird die interne Blacklist ignoriert. Die Blacklist sorgt dafür, dass Abonnenten die sich abgemeldet haben nicht durch den Import wieder hinzugefügt werden.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['source']    = array(
+	'Import-Quelle',
+	'Wählen Sie hier die Datei aus, die Sie importieren möchten.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['upload']    = array(
+	'Import-Upload',
+	'Laden Sie eine Datei hoch, die Sie importieren möchten.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['delimiter'] = array(
+	'Feldtrenner',
+	'Wählen Sie hier das Zeichen aus, nach dem die einzelnen Felder getrennt sind.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['enclosure'] = array(
+	'Texttrenner',
+	'Wählen Sie hier das Zeichen aus, nach dem der Text getrennt ist.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['columns']   = array(
+	'Spaltenzuordnung',
+	'Wählen Sie hier, wie die Spalten zugeordnet werden sollen.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['overwrite'] = array(
+	'Bestehende Einträge überschreiben',
+	'Wählen Sie diese Option, um bestehende Einträge zu überschreiben/aktualisieren.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['force']     = array(
+	'Import erzwingen',
+	'Warnung: Sie sollten den Wunsch eines Abonnenten Ihren Newsletter nicht mehr erhalten zu wollen respektieren, es besteht die Möglichkeit dass Sie rechtliche Konsequenzen zu befürchten haben, lassen Sie sich diesbezüglich von einem Anwalt beraten! Nutzen Sie diese Option mit Bedacht und nur dann, wenn Sie wissen was Sie tun! Wählen Sie diese Option, wird die interne Blacklist ignoriert. Die Blacklist sorgt dafür, dass Abonnenten die sich abgemeldet haben nicht durch den Import wieder hinzugefügt werden.'
+);
 
 
 /**

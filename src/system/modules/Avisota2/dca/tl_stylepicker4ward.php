@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -40,7 +41,7 @@ class tl_stylepicker4ward_avisota_callback
 	{
 		if ($strName == 'tl_stylepicker4ward') {
 			$GLOBALS['TL_DCA']['tl_stylepicker4ward']['palettes']['default'] .= ';{Avisota_legend},_AvisotaNewsletterCEs,_AvisotaNewsletterCE_Row';
-			$GLOBALS['TL_DCA']['tl_stylepicker4ward']['fields']['_AvisotaNewsletterCEs'] = array
+			$GLOBALS['TL_DCA']['tl_stylepicker4ward']['fields']['_AvisotaNewsletterCEs']    = array
 			(
 				'label'            => &$GLOBALS['TL_LANG']['tl_stylepicker4ward']['_AvisotaNewsletterCEs'],
 				'inputType'        => 'checkbox',
@@ -48,9 +49,11 @@ class tl_stylepicker4ward_avisota_callback
 				'load_callback'    => array(array('AvisotaBackendStylepickerDCA', 'loadAvisotaNewsletterCEs')),
 				'save_callback'    => array(array('AvisotaBackendStylepickerDCA', 'saveAvisotaNewsletterCEs')),
 				'reference'        => &$GLOBALS['TL_LANG']['NLE'],
-				'eval'             => array('multiple'      => true,
-				                            'doNotSaveEmpty'=> true,
-				                            'tl_class'      => 'w50" style="height:auto;')
+				'eval'             => array(
+					'multiple'       => true,
+					'doNotSaveEmpty' => true,
+					'tl_class'       => 'w50" style="height:auto;'
+				)
 			);
 			$GLOBALS['TL_DCA']['tl_stylepicker4ward']['fields']['_AvisotaNewsletterCE_Row'] = array
 			(
@@ -60,9 +63,11 @@ class tl_stylepicker4ward_avisota_callback
 				'load_callback'    => array(array('AvisotaBackendStylepickerDCA', 'loadAvisotaNewsletterCE_Rows')),
 				'save_callback'    => array(array('AvisotaBackendStylepickerDCA', 'doNothing')),
 				'reference'        => &$GLOBALS['TL_LANG']['tl_article'],
-				'eval'             => array('multiple'      => true,
-				                            'doNotSaveEmpty'=> true,
-				                            'tl_class'      => 'w50" style="height:auto;')
+				'eval'             => array(
+					'multiple'       => true,
+					'doNotSaveEmpty' => true,
+					'tl_class'       => 'w50" style="height:auto;'
+				)
 			);
 		}
 	}

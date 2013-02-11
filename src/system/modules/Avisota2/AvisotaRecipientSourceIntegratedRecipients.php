@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,7 +37,7 @@
 /**
  * Class AvisotaRecipientSourceIntegratedRecipients
  *
- * 
+ *
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -47,7 +48,7 @@ class AvisotaRecipientSourceIntegratedRecipients extends Controller implements A
 	 * @var array
 	 */
 	private $config;
-	
+
 	public function __construct($arrConfig)
 	{
 		$this->import('Database');
@@ -70,10 +71,12 @@ class AvisotaRecipientSourceIntegratedRecipients extends Controller implements A
 				}
 				// fetch all selected mailing lists
 				$objMailingList = $this->Database
-					->execute('SELECT * FROM tl_avisota_mailing_list
+					->execute(
+					'SELECT * FROM tl_avisota_mailing_list
 							   WHERE id IN (' . implode(',', $arrIDs) . ')
-							   ORDER BY title');
-				// continue with same logic as for all mailing lists
+							   ORDER BY title'
+				);
+			// continue with same logic as for all mailing lists
 			case 'integratedByAllMailingLists':
 				// fetch mailing lists, if there are no result
 				if (!isset($objMailingList)) {
@@ -104,23 +107,28 @@ class AvisotaRecipientSourceIntegratedRecipients extends Controller implements A
 					$arrIDs[] = 0;
 				}
 				$objRecipient = $this->Database
-					->prepare('SELECT r.*, (SELECT t2.confirmed FROM tl_avisota_recipient_to_mailing_list t2 WHERE t2.recipient=r.id AND confirmed=? LIMIT 1) as confirmed
+					->prepare(
+					'SELECT r.*, (SELECT t2.confirmed FROM tl_avisota_recipient_to_mailing_list t2 WHERE t2.recipient=r.id AND confirmed=? LIMIT 1) as confirmed
 							   FROM tl_avisota_recipient r
 							   INNER JOIN tl_avisota_recipient_to_mailing_list t ON t.recipient=r.id
 							   WHERE t.list IN (' . implode(',', $arrIDs) . ')
-							   ORDER BY email')
+							   ORDER BY email'
+				)
 					->execute(1);
 			case 'integratedByAllRecipients':
 				if (!isset($objRecipient)) {
 					$objRecipient = $this->Database
-						->execute("SELECT *, 1 AS confirmed FROM tl_avisota_recipient
-								   ORDER BY email");
+						->execute(
+						"SELECT *, 1 AS confirmed FROM tl_avisota_recipient
+								   ORDER BY email"
+					);
 				}
 
 				$arrOptions = array();
 				while ($objRecipient->next()) {
 					$strName = trim($objRecipient->firstname . ' ' . $objRecipient->lastname);
-					$strName = $strName ? sprintf('%s &lt;%s&gt;', $strName, $objRecipient->email) : $objRecipient->email;
+					$strName = $strName ? sprintf('%s &lt;%s&gt;', $strName, $objRecipient->email)
+						: $objRecipient->email;
 					if (!$objRecipient->confirmed) {
 						$strName = '<span style="color:#A6A6A6">' . $strName . '</span>';
 					}
@@ -139,7 +147,11 @@ class AvisotaRecipientSourceIntegratedRecipients extends Controller implements A
 				break;
 
 			default:
-				$this->log('The integrated recipient source ID ' . $this->config['id'] . ' is not fully configured!', 'AvisotaRecipientSourceIntegratedRecipients::getRecipientOptions()', TL_ERROR);
+				$this->log(
+					'The integrated recipient source ID ' . $this->config['id'] . ' is not fully configured!',
+					'AvisotaRecipientSourceIntegratedRecipients::getRecipientOptions()',
+					TL_ERROR
+				);
 				return array();
 		}
 	}
@@ -148,7 +160,9 @@ class AvisotaRecipientSourceIntegratedRecipients extends Controller implements A
 	 * Get recipient IDs of a list of options.
 	 *
 	 * @abstract
+	 *
 	 * @param array $varOption
+	 *
 	 * @return array
 	 */
 	public function getRecipients($arrOptions)
@@ -163,7 +177,11 @@ class AvisotaRecipientSourceIntegratedRecipients extends Controller implements A
 			case 'integratedByAllRecipients':
 				break;
 			default:
-				$this->log('The recipient source ID ' . $this->config['id'] . ' is not fully configured!', 'AvisotaRecipientSourceIntegratedRecipients::getRecipientOptions()', TL_ERROR);
+				$this->log(
+					'The recipient source ID ' . $this->config['id'] . ' is not fully configured!',
+					'AvisotaRecipientSourceIntegratedRecipients::getRecipientOptions()',
+					TL_ERROR
+				);
 				return array();
 		}
 	}
@@ -172,6 +190,7 @@ class AvisotaRecipientSourceIntegratedRecipients extends Controller implements A
 	 * Get the recipient details.
 	 *
 	 * @param string $varId
+	 *
 	 * @return array
 	 */
 	public function getRecipientDetails($varId)

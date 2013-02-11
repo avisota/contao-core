@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,14 +37,14 @@
 /**
  * Avisota update
  */
-$GLOBALS['TL_LANG']['avisota_update']['headline'] = 'Avisota Update';
-$GLOBALS['TL_LANG']['avisota_update']['previousVersion'] = 'previous version';
-$GLOBALS['TL_LANG']['avisota_update']['unknownVersion']  = 'unknown';
-$GLOBALS['TL_LANG']['avisota_update']['installedVersion'] = 'installed version';
+$GLOBALS['TL_LANG']['avisota_update']['headline']           = 'Avisota Update';
+$GLOBALS['TL_LANG']['avisota_update']['previousVersion']    = 'previous version';
+$GLOBALS['TL_LANG']['avisota_update']['unknownVersion']     = 'unknown';
+$GLOBALS['TL_LANG']['avisota_update']['installedVersion']   = 'installed version';
 $GLOBALS['TL_LANG']['avisota_update']['moreVersionUpdates'] = 'More information about the update';
-$GLOBALS['TL_LANG']['avisota_update']['doUpdate'] = 'do update';
-$GLOBALS['TL_LANG']['avisota_update']['updateSuccess'] = 'Update successfull';
-$GLOBALS['TL_LANG']['avisota_update']['updateFailed'] = 'Update failed, please check system log for more details';
+$GLOBALS['TL_LANG']['avisota_update']['doUpdate']           = 'do update';
+$GLOBALS['TL_LANG']['avisota_update']['updateSuccess']      = 'Update successfull';
+$GLOBALS['TL_LANG']['avisota_update']['updateFailed']       = 'Update failed, please check system log for more details';
 
 /**
  * Update 1.6.0

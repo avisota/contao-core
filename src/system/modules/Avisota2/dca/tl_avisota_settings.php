@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -49,35 +50,50 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 			array('tl_avisota_settings', 'onload_callback')
 		)
 	),
-
 	// Palettes
 	'palettes'              => array
 	(
 		'__selector__' => array(),
 	),
-
 	'metapalettes'          => array
 	(
 		'default' => array(
-			'recipients'   => array('avisota_salutations', 'avisota_dont_disable_recipient_on_failure', 'avisota_dont_disable_member_on_failure'),
-			'subscription' => array('avisota_template_subscribe_mail_plain', 'avisota_template_subscribe_mail_html', 'avisota_template_unsubscribe_mail_plain', 'avisota_template_unsubscribe_mail_html'),
+			'recipients'   => array(
+				'avisota_salutations',
+				'avisota_dont_disable_recipient_on_failure',
+				'avisota_dont_disable_member_on_failure'
+			),
+			'subscription' => array(
+				'avisota_template_subscribe_mail_plain',
+				'avisota_template_subscribe_mail_html',
+				'avisota_template_unsubscribe_mail_plain',
+				'avisota_template_unsubscribe_mail_html'
+			),
 			'notification' => array(':hide', 'avisota_send_notification'),
 			'cleanup'      => array(':hide', 'avisota_do_cleanup'),
-			'transport'    => array('avisota_default_transport', 'avisota_max_send_time', 'avisota_max_send_count', 'avisota_max_send_timeout'),
+			'transport'    => array(
+				'avisota_default_transport',
+				'avisota_max_send_time',
+				'avisota_max_send_count',
+				'avisota_max_send_timeout'
+			),
 			'statistics'   => array(':hide', 'avisota_statistic'),
 			'developer'    => array(':hide', 'avisota_developer_mode')
 		)
 	),
-
 	// Subpalettes
 	'metasubpalettes'       => array
 	(
-		'avisota_send_notification'      => array('avisota_notification_time', 'avisota_notification_count', 'avisota_template_notification_mail_plain', 'avisota_template_notification_mail_html'),
-		'avisota_do_cleanup'             => array('avisota_cleanup_time'),
-		'avisota_developer_mode'         => array('avisota_developer_email'),
-		'avisota_statistic'              => array('avisota_statistic_personalized', 'avisota_chart')
+		'avisota_send_notification' => array(
+			'avisota_notification_time',
+			'avisota_notification_count',
+			'avisota_template_notification_mail_plain',
+			'avisota_template_notification_mail_html'
+		),
+		'avisota_do_cleanup'        => array('avisota_cleanup_time'),
+		'avisota_developer_mode'    => array('avisota_developer_email'),
+		'avisota_statistic'         => array('avisota_statistic_personalized', 'avisota_chart')
 	),
-
 	'metasubselectpalettes' => array
 	(
 		'avisota_chart'                  => array
@@ -89,23 +105,22 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 			'with_aggrement' => array('avisota_data_privacy_statement_page')
 		)
 	),
-
 	// Fields
 	'fields'                => array
 	(
-		'avisota_dont_disable_recipient_on_failure'                          => array
+		'avisota_dont_disable_recipient_on_failure' => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_dont_disable_recipient_on_failure'],
 			'inputType' => 'checkbox',
 			'eval'      => array('tl_class' => 'w50 clr')
 		),
-		'avisota_dont_disable_member_on_failure'                             => array
+		'avisota_dont_disable_member_on_failure'    => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_dont_disable_member_on_failure'],
 			'inputType' => 'checkbox',
 			'eval'      => array('tl_class' => 'w50')
 		),
-		'avisota_salutations'                                                => array
+		'avisota_salutations'                       => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations'],
 			'inputType' => 'multiColumnWizard',
@@ -134,7 +149,7 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 				)
 			)
 		),
-		'avisota_template_subscribe_mail_plain'                              => array
+		'avisota_template_subscribe_mail_plain'     => array
 		(
 			'exclude'          => true,
 			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_subscribe_mail_plain'],
@@ -142,7 +157,7 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 			'options_callback' => array('tl_avisota_settings', 'getTemplates'),
 			'eval'             => array('tl_class' => 'w50 clr')
 		),
-		'avisota_template_subscribe_mail_html'                               => array
+		'avisota_template_subscribe_mail_html'      => array
 		(
 			'exclude'          => true,
 			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_subscribe_mail_html'],
@@ -150,7 +165,7 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 			'options_callback' => array('tl_avisota_settings', 'getTemplates'),
 			'eval'             => array('tl_class' => 'w50')
 		),
-		'avisota_template_unsubscribe_mail_plain'                            => array
+		'avisota_template_unsubscribe_mail_plain'   => array
 		(
 			'exclude'          => true,
 			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_unsubscribe_mail_plain'],
@@ -158,7 +173,7 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 			'options_callback' => array('tl_avisota_settings', 'getTemplates'),
 			'eval'             => array('tl_class' => 'w50')
 		),
-		'avisota_template_unsubscribe_mail_html'                             => array
+		'avisota_template_unsubscribe_mail_html'    => array
 		(
 			'exclude'          => true,
 			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_unsubscribe_mail_html'],
@@ -166,33 +181,39 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 			'options_callback' => array('tl_avisota_settings', 'getTemplates'),
 			'eval'             => array('tl_class' => 'w50')
 		),
-		'avisota_send_notification'                                          => array
+		'avisota_send_notification'                 => array
 		(
 			'exclude'   => true,
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_send_notification'],
 			'inputType' => 'checkbox',
-			'eval'      => array('submitOnChange' => true,
-			                     'tl_class'       => 'clr')
+			'eval'      => array(
+				'submitOnChange' => true,
+				'tl_class'       => 'clr'
+			)
 		),
-		'avisota_notification_time'                                          => array
+		'avisota_notification_time'                 => array
 		(
 			'exclude'   => true,
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_notification_time'],
 			'inputType' => 'text',
-			'eval'      => array('mandatory' => true,
-			                     'rgxp'      => 'digit',
-			                     'tl_class'  => 'w50')
+			'eval'      => array(
+				'mandatory' => true,
+				'rgxp'      => 'digit',
+				'tl_class'  => 'w50'
+			)
 		),
-		'avisota_notification_count'                                         => array
+		'avisota_notification_count'                => array
 		(
 			'exclude'   => true,
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_notification_count'],
 			'inputType' => 'text',
-			'eval'      => array('mandatory' => true,
-			                     'rgxp'      => 'digit',
-			                     'tl_class'  => 'w50')
+			'eval'      => array(
+				'mandatory' => true,
+				'rgxp'      => 'digit',
+				'tl_class'  => 'w50'
+			)
 		),
-		'avisota_template_notification_mail_plain'                           => array
+		'avisota_template_notification_mail_plain'  => array
 		(
 			'exclude'          => true,
 			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_notification_mail_plain'],
@@ -200,7 +221,7 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 			'options_callback' => array('tl_avisota_settings', 'getTemplates'),
 			'eval'             => array('tl_class' => 'w50')
 		),
-		'avisota_template_notification_mail_html'                            => array
+		'avisota_template_notification_mail_html'   => array
 		(
 			'exclude'          => true,
 			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_template_notification_mail_html'],
@@ -208,105 +229,129 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 			'options_callback' => array('tl_avisota_settings', 'getTemplates'),
 			'eval'             => array('tl_class' => 'w50')
 		),
-		'avisota_do_cleanup'                                                 => array
+		'avisota_do_cleanup'                        => array
 		(
 			'exclude'   => true,
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_do_cleanup'],
 			'inputType' => 'checkbox',
-			'eval'      => array('submitOnChange' => true,
-			                     'tl_class'       => 'w50 clr')
+			'eval'      => array(
+				'submitOnChange' => true,
+				'tl_class'       => 'w50 clr'
+			)
 		),
-		'avisota_cleanup_time'                                               => array
+		'avisota_cleanup_time'                      => array
 		(
 			'exclude'   => true,
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_cleanup_time'],
 			'default'   => 7,
 			'inputType' => 'text',
-			'eval'      => array('mandatory' => true,
-			                     'rgxp'      => 'digit',
-			                     'tl_class'  => 'w50')
+			'eval'      => array(
+				'mandatory' => true,
+				'rgxp'      => 'digit',
+				'tl_class'  => 'w50'
+			)
 		),
-		'avisota_default_transport'                                          => array
+		'avisota_default_transport'                 => array
 		(
 			'label'      => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_default_transport'],
 			'inputType'  => 'select',
 			'foreignKey' => 'tl_avisota_transport.title',
-			'eval'       => array('mandatory' => true,
-			                      'tl_class'  => 'w50')
+			'eval'       => array(
+				'mandatory' => true,
+				'tl_class'  => 'w50'
+			)
 		),
-		'avisota_max_send_time'                                              => array
+		'avisota_max_send_time'                     => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_max_send_time'],
 			'inputType' => 'text',
-			'eval'      => array('mandatory' => true,
-			                     'rgxp'      => 'digit',
-			                     'tl_class'  => 'w50')
+			'eval'      => array(
+				'mandatory' => true,
+				'rgxp'      => 'digit',
+				'tl_class'  => 'w50'
+			)
 		),
-		'avisota_max_send_count'                                             => array
+		'avisota_max_send_count'                    => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_max_send_count'],
 			'inputType' => 'text',
-			'eval'      => array('mandatory' => true,
-			                     'rgxp'      => 'digit',
-			                     'tl_class'  => 'w50')
+			'eval'      => array(
+				'mandatory' => true,
+				'rgxp'      => 'digit',
+				'tl_class'  => 'w50'
+			)
 		),
-		'avisota_max_send_timeout'                                           => array
+		'avisota_max_send_timeout'                  => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_max_send_timeout'],
 			'inputType' => 'text',
-			'eval'      => array('mandatory' => true,
-			                     'rgxp'      => 'digit',
-			                     'tl_class'  => 'w50')
+			'eval'      => array(
+				'mandatory' => true,
+				'rgxp'      => 'digit',
+				'tl_class'  => 'w50'
+			)
 		),
-		'avisota_statistic'                                                  => array
+		'avisota_statistic'                         => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_statistic'],
 			'inputType' => 'checkbox',
-			'eval'      => array('submitOnChange' => true,
-			                     'tl_class'       => 'clr')
+			'eval'      => array(
+				'submitOnChange' => true,
+				'tl_class'       => 'clr'
+			)
 		),
-		'avisota_statistic_personalized'                                     => array
+		'avisota_statistic_personalized'            => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_statistic_personalized'],
 			'inputType' => 'radio',
 			'options'   => array('with_aggrement', 'without_aggrement'),
 			'reference' => &$GLOBALS['TL_LANG']['tl_avisota_settings'],
-			'eval'      => array('tl_class'           => 'clr',
-			                     'submitOnChange'     => true,
-			                     'includeBlankOption' => true,
-			                     'blankOptionLabel'   => $GLOBALS['TL_LANG']['tl_avisota_settings']['unpersonalized'])
+			'eval'      => array(
+				'tl_class'           => 'clr',
+				'submitOnChange'     => true,
+				'includeBlankOption' => true,
+				'blankOptionLabel'   => $GLOBALS['TL_LANG']['tl_avisota_settings']['unpersonalized']
+			)
 		),
-		'avisota_data_privacy_statement_page'                                => array
+		'avisota_data_privacy_statement_page'       => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_data_privacy_statement_page'],
 			'inputType' => 'pageTree',
-			'eval'      => array('mandatory' => true,
-			                     'fieldType' => 'radio',
-			                     'tl_class'  => 'clr')
+			'eval'      => array(
+				'mandatory' => true,
+				'fieldType' => 'radio',
+				'tl_class'  => 'clr'
+			)
 		),
-		'avisota_chart'                                                      => array
+		'avisota_chart'                             => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_chart'],
 			'inputType' => 'select',
 			'options'   => array('jqplot', 'highstock', 'pchart'),
 			'reference' => &$GLOBALS['TL_LANG']['tl_avisota_settings'],
-			'eval'      => array('submitOnChange' => true,
-			                     'tl_class'       => 'clr')
+			'eval'      => array(
+				'submitOnChange' => true,
+				'tl_class'       => 'clr'
+			)
 		),
-		'avisota_developer_mode'                                             => array
+		'avisota_developer_mode'                    => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_mode'],
 			'inputType' => 'checkbox',
-			'eval'      => array('submitOnChange' => true,
-			                     'tl_class'       => 'clr m12 w50')
+			'eval'      => array(
+				'submitOnChange' => true,
+				'tl_class'       => 'clr m12 w50'
+			)
 		),
-		'avisota_developer_email'                                            => array
+		'avisota_developer_email'                   => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_email'],
 			'inputType' => 'text',
-			'eval'      => array('mandatory' => true,
-			                     'rgxp'      => 'email',
-			                     'tl_class'  => 'w50')
+			'eval'      => array(
+				'mandatory' => true,
+				'rgxp'      => 'email',
+				'tl_class'  => 'w50'
+			)
 		)
 	)
 );
@@ -318,7 +363,10 @@ class tl_avisota_settings extends Backend
 		if (!is_dir(TL_ROOT . '/system/modules/Avisota2/highstock')
 			|| !is_file(TL_ROOT . '/system/modules/Avisota2/highstock/js/highstock.js')
 		) {
-			$GLOBALS['TL_DCA']['tl_avisota_settings']['fields']['avisota_chart_highstock_confirm']['input_field_callback'] = array('tl_avisota_settings', 'renderMissingHighstockField');
+			$GLOBALS['TL_DCA']['tl_avisota_settings']['fields']['avisota_chart_highstock_confirm']['input_field_callback'] = array(
+				'tl_avisota_settings',
+				'renderMissingHighstockField'
+			);
 		}
 	}
 
@@ -330,8 +378,7 @@ class tl_avisota_settings extends Backend
 	public function getTemplates(DataContainer $dc)
 	{
 		// Return all templates
-		switch ($dc->field)
-		{
+		switch ($dc->field) {
 			case 'avisota_template_subscribe_mail_plain':
 				$strTemplatePrefix = 'mail_subscribe_plain_';
 				break;

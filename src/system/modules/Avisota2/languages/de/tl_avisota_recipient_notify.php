@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,10 +37,22 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['recipient']     = array('Abonnent', 'Wählen Sie hier den Abonnenten aus.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['confirmations'] = array('Bestätigungen versenden', 'Noch nicht versendete Bestätiungsmails versenden.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['notifications'] = array('Erinnerungen versenden', 'Erinnerungen für noch nicht bestätigte Abonnements versenden.');
-$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['overdue']       = array('Überfällig', 'Überfällige Abonnements, für die eine Bestätigung- und alle Erinnerungen versendet wurden.');
+$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['recipient']     = array(
+	'Abonnent',
+	'Wählen Sie hier den Abonnenten aus.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['confirmations'] = array(
+	'Bestätigungen versenden',
+	'Noch nicht versendete Bestätiungsmails versenden.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['notifications'] = array(
+	'Erinnerungen versenden',
+	'Erinnerungen für noch nicht bestätigte Abonnements versenden.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_recipient_notify']['overdue']       = array(
+	'Überfällig',
+	'Überfällige Abonnements, für die eine Bestätigung- und alle Erinnerungen versendet wurden.'
+);
 
 
 /**

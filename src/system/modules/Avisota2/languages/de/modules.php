@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @author     Oliver Hoff <oliver@hofff.com>
@@ -42,14 +43,20 @@ $GLOBALS['TL_LANG']['MOD']['avisota_mailing_list'] = array('Verteiler', 'Newslet
 $GLOBALS['TL_LANG']['MOD']['avisota_recipients']   = array('Abonnenten', 'Newsletter Abonnenten verwalten.');
 $GLOBALS['TL_LANG']['MOD']['avisota_newsletter']   = array('Newsletter', 'Newsletter verwalten und versenden.');
 $GLOBALS['TL_LANG']['MOD']['avisota_tracking']     = array('Analytics', 'Lese und Reaktionsverhalten analysieren.');
-$GLOBALS['TL_LANG']['MOD']['avisota_outbox']       = array('Postausgang', 'Postausgang einsehen und Newsletter versenden.');
+$GLOBALS['TL_LANG']['MOD']['avisota_outbox']       = array(
+	'Postausgang',
+	'Postausgang einsehen und Newsletter versenden.'
+);
 
 $GLOBALS['TL_LANG']['MOD']['avisota_settings_group']   = 'Newslettersystem';
 $GLOBALS['TL_LANG']['MOD']['avisota_newsletter_draft'] = array('Vorlagen', 'Vorlagen verwalten.');
 $GLOBALS['TL_LANG']['MOD']['avisota_update']           = array('Update', 'Avisota Newslettersystem aktualisieren.');
 $GLOBALS['TL_LANG']['MOD']['avisota_settings']         = array('Einstellungen', 'Einstellungen verwalten.');
 $GLOBALS['TL_LANG']['MOD']['avisota_theme']            = array('Layouts', 'Newsletter Layouts verwalten.');
-$GLOBALS['TL_LANG']['MOD']['avisota_recipient_source'] = array('Abonnentenquellen', 'Quellen für Newsletter Abonnenten verwalten.');
+$GLOBALS['TL_LANG']['MOD']['avisota_recipient_source'] = array(
+	'Abonnentenquellen',
+	'Quellen für Newsletter Abonnenten verwalten.'
+);
 $GLOBALS['TL_LANG']['MOD']['avisota_transport']        = array('Transportmodule', 'Transportmodule verwalten.');
 
 
@@ -57,8 +64,23 @@ $GLOBALS['TL_LANG']['MOD']['avisota_transport']        = array('Transportmodule'
  * Front end modules
  */
 $GLOBALS['TL_LANG']['FMD']['avisota']              = 'Newslettersystem';
-$GLOBALS['TL_LANG']['FMD']['avisota_subscribe']    = array('Newsletter Abonieren (Avisota)', 'Anmeldung zum Avisota Newslettersystem.');
-$GLOBALS['TL_LANG']['FMD']['avisota_unsubscribe']  = array('Newsletter Kündigen (Avisota)', 'Abmeldung vom Avisota Newslettersystem.');
-$GLOBALS['TL_LANG']['FMD']['avisota_subscription'] = array('Newsletter Abonnement verwalten (Avisota)', 'An- und Abmeldung zum Avisota Newslettersystem.');
-$GLOBALS['TL_LANG']['FMD']['avisota_list']         = array('Newsletter-Liste (Avisota)', 'List aller versendeten Newsletter.');
-$GLOBALS['TL_LANG']['FMD']['avisota_reader']       = array('Newsletter-Leser (Avisota)', 'Einen Newsletter innerhalb einer Seite anzeigen.');
+$GLOBALS['TL_LANG']['FMD']['avisota_subscribe']    = array(
+	'Newsletter Abonieren (Avisota)',
+	'Anmeldung zum Avisota Newslettersystem.'
+);
+$GLOBALS['TL_LANG']['FMD']['avisota_unsubscribe']  = array(
+	'Newsletter Kündigen (Avisota)',
+	'Abmeldung vom Avisota Newslettersystem.'
+);
+$GLOBALS['TL_LANG']['FMD']['avisota_subscription'] = array(
+	'Newsletter Abonnement verwalten (Avisota)',
+	'An- und Abmeldung zum Avisota Newslettersystem.'
+);
+$GLOBALS['TL_LANG']['FMD']['avisota_list']         = array(
+	'Newsletter-Liste (Avisota)',
+	'List aller versendeten Newsletter.'
+);
+$GLOBALS['TL_LANG']['FMD']['avisota_reader']       = array(
+	'Newsletter-Leser (Avisota)',
+	'Einen Newsletter innerhalb einer Seite anzeigen.'
+);

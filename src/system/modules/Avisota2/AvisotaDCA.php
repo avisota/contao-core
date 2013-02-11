@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -90,7 +91,8 @@ class AvisotaDCA extends Controller
 		$strSql = 'SELECT * FROM tl_avisota_mailing_list';
 		if ($varContainer instanceof ModuleRegistration) {
 			$arrLists = array_filter(
-				array_map('intval',
+				array_map(
+					'intval',
 					deserialize($varContainer->avisota_selectable_lists, true)
 				)
 			);
@@ -164,7 +166,9 @@ class AvisotaDCA extends Controller
 	public function hookActivateAccount($objMember, $objModuleRegistration)
 	{
 		if ($objModuleRegistration->avisota_confirm_on_activate) {
-			$arrLists = array_filter(array_map('intval', deserialize($objModuleRegistration->avisota_selectable_lists, true)));
+			$arrLists = array_filter(
+				array_map('intval', deserialize($objModuleRegistration->avisota_selectable_lists, true))
+			);
 
 		}
 	}
@@ -174,25 +178,52 @@ class AvisotaDCA extends Controller
 		// Hack, because ModulePersonalData does not call the onsubmit_callback
 		// uncomment when https://github.com/contao/core/pull/4018 is merged
 		// if (version_compare(VERSION . '.' . BUILD, '2.11.0', '<=') && isset($arrFormData['avisota_lists'])) {
-			$arrLists = deserialize($arrFormData['avisota_lists'], true);
-			if (empty($arrLists)) {
-				$this->import('Database');
-				$this->Database
-					->prepare("UPDATE tl_member SET avisota_subscribe=? WHERE id=?")
-					->execute('', $objUser->id);
-			}
+		$arrLists = deserialize($arrFormData['avisota_lists'], true);
+		if (empty($arrLists)) {
+			$this->import('Database');
+			$this->Database
+				->prepare("UPDATE tl_member SET avisota_subscribe=? WHERE id=?")
+				->execute('', $objUser->id);
+		}
 		// }
 
 		if (isset($arrFormData['avisota_subscribe'])) {
 			if ($arrFormData['avisota_subscribe']) {
-				$arrLists = array_unique(array_merge(
-					array_filter(array_map('intval', is_array($objUser->avisota_lists) ? $objUser->avisota_lists : explode(',', $objUser->avisota_lists))),
-					array_filter(array_map('intval', deserialize($objModulePersonalData->avisota_selectable_lists, true)))
-				));
-			} else {
+				$arrLists = array_unique(
+					array_merge(
+						array_filter(
+							array_map(
+								'intval',
+								is_array($objUser->avisota_lists)
+									? $objUser->avisota_lists
+									: explode(
+									',',
+									$objUser->avisota_lists
+								)
+							)
+						),
+						array_filter(
+							array_map('intval', deserialize($objModulePersonalData->avisota_selectable_lists, true))
+						)
+					)
+				);
+			}
+			else {
 				$arrLists = array_diff(
-					array_filter(array_map('intval', is_array($objUser->avisota_lists) ? $objUser->avisota_lists : explode(',', $objUser->avisota_lists))),
-					array_filter(array_map('intval', deserialize($objModulePersonalData->avisota_selectable_lists, true)))
+					array_filter(
+						array_map(
+							'intval',
+							is_array($objUser->avisota_lists)
+								? $objUser->avisota_lists
+								: explode(
+								',',
+								$objUser->avisota_lists
+							)
+						)
+					),
+					array_filter(
+						array_map('intval', deserialize($objModulePersonalData->avisota_selectable_lists, true))
+					)
 				);
 			}
 

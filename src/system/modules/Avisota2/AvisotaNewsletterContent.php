@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -55,8 +56,7 @@ class AvisotaNewsletterContent extends Controller
 	 */
 	public static function getInstance()
 	{
-		if (self::$objInstance === null)
-		{
+		if (self::$objInstance === null) {
 			self::$objInstance = new AvisotaNewsletterContent();
 		}
 		return self::$objInstance;
@@ -79,6 +79,7 @@ class AvisotaNewsletterContent extends Controller
 	 * Prepare the html body code before sending.
 	 *
 	 * @param string
+	 *
 	 * @return string
 	 */
 	public function prepareBeforeSending($strContent)
@@ -94,8 +95,7 @@ class AvisotaNewsletterContent extends Controller
 	 */
 	public function cleanCSS($css, $source = '')
 	{
-		if ($source)
-		{
+		if ($source) {
 			$source = dirname($source);
 		}
 
@@ -103,11 +103,9 @@ class AvisotaNewsletterContent extends Controller
 		$css = trim(preg_replace('@/\*\*.*\*/@Us', '', $css));
 
 		// handle @charset
-		if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $css, $arrMatch))
-		{
+		if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $css, $arrMatch)) {
 			// convert character encoding to utf-8
-			if (strtoupper($arrMatch[1]) != 'UTF-8')
-			{
+			if (strtoupper($arrMatch[1]) != 'UTF-8') {
 				$css = iconv(strtoupper($arrMatch[1]), 'UTF-8', $css);
 			}
 			// remove @charset tag
@@ -115,24 +113,19 @@ class AvisotaNewsletterContent extends Controller
 		}
 
 		// extends css urls
-		if (preg_match_all('#url\((.+)\)#U', $css, $arrMatches, PREG_SET_ORDER))
-		{
-			foreach ($arrMatches as $arrMatch)
-			{
+		if (preg_match_all('#url\((.+)\)#U', $css, $arrMatches, PREG_SET_ORDER)) {
+			foreach ($arrMatches as $arrMatch) {
 				$path = $source;
 
 				$strUrl = $arrMatch[1];
-				if (preg_match('#^".*"$#', $strUrl) || preg_match("#^'.*'$#", $strUrl))
-				{
+				if (preg_match('#^".*"$#', $strUrl) || preg_match("#^'.*'$#", $strUrl)) {
 					$strUrl = substr($strUrl, 1, -1);
 				}
-				while (preg_match('#^\.\./#', $strUrl))
-				{
+				while (preg_match('#^\.\./#', $strUrl)) {
 					$path = dirname($path);
 					$strUrl = substr($strUrl, 3);
 				}
-				if (!preg_match('#^\w+:#', $strUrl) && $strUrl[0] != '/')
-				{
+				if (!preg_match('#^\w+:#', $strUrl) && $strUrl[0] != '/') {
 					$strUrl = ($path ? $path . '/' : '') . $strUrl;
 				}
 
@@ -146,47 +139,56 @@ class AvisotaNewsletterContent extends Controller
 
 	/**
 	 * Generate a content element return it as plain text string
+	 *
 	 * @param integer
+	 *
 	 * @return string
 	 */
 	public function getNewsletterElement($intId, $mode = NL_HTML)
 	{
-		if (!strlen($intId) || $intId < 1)
-		{
+		if (!strlen($intId) || $intId < 1) {
 			return '';
 		}
 
-		$objElement = $this->Database->prepare("
+		$objElement = $this->Database
+			->prepare(
+			"
 				SELECT
 					*
 				FROM
 					tl_avisota_newsletter_content
 				WHERE
-					id=?")
+					id=?"
+		)
 			->limit(1)
 			->execute($intId);
 
-		if ($objElement->numRows < 1)
-		{
+		if ($objElement->numRows < 1) {
 			return '';
 		}
 
-		$objNewsletter = $this->Database->prepare("
+		$objNewsletter = $this->Database
+			->prepare(
+			"
 				SELECT
 					*
 				FROM
 					tl_avisota_newsletter
 				WHERE
-					id=?")
+					id=?"
+		)
 			->execute($objElement->pid);
 
-		$objCategory = $this->Database->prepare("
+		$objCategory = $this->Database
+			->prepare(
+			"
 				SELECT
 					*
 				FROM
 					tl_avisota_newsletter_category
 				WHERE
-					id=?")
+					id=?"
+		)
 			->execute($objNewsletter->pid);
 
 		$this->Static->setRecipient($this->Base->getPreviewRecipient($objElement->personalize));
@@ -202,7 +204,9 @@ class AvisotaNewsletterContent extends Controller
 
 	/**
 	 * Generate a content element return it as plain text string
+	 *
 	 * @param integer
+	 *
 	 * @return string
 	 */
 	public function generateNewsletterElement($arrElement, $mode = NL_HTML)
@@ -217,30 +221,33 @@ class AvisotaNewsletterContent extends Controller
 		$strClass = $this->findNewsletterElement($arrElement['type']);
 
 		// Return if the class does not exist
-		if (!$this->classFileExists($strClass))
-		{
-			$this->log('Newsletter content element class "'.$strClass.'" (newsletter content element "'.$arrElement['type'].'") does not exist', 'Avisota getNewsletterElement()', TL_ERROR);
+		if (!$this->classFileExists($strClass)) {
+			$this->log(
+				'Newsletter content element class "' . $strClass . '" (newsletter content element "' . $arrElement['type'] . '") does not exist',
+				'Avisota getNewsletterElement()',
+				TL_ERROR
+			);
 			return '';
 		}
 
 		$arrElement['typePrefix'] = 'nle_';
-		$objElement = new $strClass($arrElement);
-		switch ($mode)
-		{
-		case NL_HTML:
-			$strBuffer = $objElement->generateHTML();
-			break;
+		$objElement               = new $strClass($arrElement);
+		switch ($mode) {
+			case NL_HTML:
+				$strBuffer = $objElement->generateHTML();
+				break;
 
-		case NL_PLAIN:
-			$strBuffer = $objElement->generatePlain();
-			break;
+			case NL_PLAIN:
+				$strBuffer = $objElement->generatePlain();
+				break;
 		}
 
 		// HOOK: add custom logic
-		if (isset($GLOBALS['TL_HOOKS']['getNewsletterElement']) && is_array($GLOBALS['TL_HOOKS']['getNewsletterElement']))
-		{
-			foreach ($GLOBALS['TL_HOOKS']['getNewsletterElement'] as $callback)
-			{
+		if (isset($GLOBALS['TL_HOOKS']['getNewsletterElement']) && is_array(
+			$GLOBALS['TL_HOOKS']['getNewsletterElement']
+		)
+		) {
+			foreach ($GLOBALS['TL_HOOKS']['getNewsletterElement'] as $callback) {
 				$this->import($callback[0]);
 				$strBuffer = $this->$callback[0]->$callback[1]($objElement, $strBuffer, $mode);
 			}
@@ -252,17 +259,16 @@ class AvisotaNewsletterContent extends Controller
 
 	/**
 	 * Find a newsletter content element in the TL_NLE array and return its value
+	 *
 	 * @param string
+	 *
 	 * @return mixed
 	 */
 	public function findNewsletterElement($strName)
 	{
-		foreach ($GLOBALS['TL_NLE'] as $v)
-		{
-			foreach ($v as $kk=>$vv)
-			{
-				if ($kk == $strName)
-				{
+		foreach ($GLOBALS['TL_NLE'] as $v) {
+			foreach ($v as $kk => $vv) {
+				if ($kk == $strName) {
 					return $vv;
 				}
 			}
@@ -311,7 +317,9 @@ class AvisotaNewsletterContent extends Controller
 		$arrRow = null;
 
 		// get the newsletter category jump to page
-		$objCategory = $this->Database->prepare("
+		$objCategory = $this->Database
+			->prepare(
+			"
 				SELECT
 					c.*
 				FROM
@@ -321,14 +329,13 @@ class AvisotaNewsletterContent extends Controller
 				ON
 					c.`id`=n.`pid`
 				WHERE
-					n.`id`=?")
+					n.`id`=?"
+		)
 			->execute($this->pid);
-		if ($objCategory->next() && $objCategory->viewOnlinePage)
-		{
+		if ($objCategory->next() && $objCategory->viewOnlinePage) {
 			$objPage = $this->getPageDetails($objCategory->viewOnlinePage);
 		}
-		else
-		{
+		else {
 			$objPage = null;
 		}
 
@@ -348,23 +355,34 @@ class AvisotaNewsletterContent extends Controller
 
 	/**
 	 * Replace an image tag.
+	 *
 	 * @param array $arrMatch
 	 */
 	public function replaceImage($arrMatch)
 	{
 		// insert alt or title text
-		return sprintf('%s<%s>', $arrMatch[3] ? $arrMatch[3] . ': ' : ($arrMatch[2] ? $arrMatch[2] . ': ' : ''), $this->extendURL($arrMatch[1]));
+		return sprintf(
+			'%s<%s>',
+			$arrMatch[3] ? $arrMatch[3] . ': ' : ($arrMatch[2] ? $arrMatch[2] . ': ' : ''),
+			$this->extendURL($arrMatch[1])
+		);
 	}
 
 
 	/**
 	 * Replace an link tag.
+	 *
 	 * @param array $arrMatch
 	 */
 	public function replaceLink($arrMatch)
 	{
 		// insert title text
-		return sprintf('%s%s <%s>', $arrMatch[3], $arrMatch[2] ? ' (' . $arrMatch[2] . ')' : '', $this->extendURL($arrMatch[1]));
+		return sprintf(
+			'%s%s <%s>',
+			$arrMatch[3],
+			$arrMatch[2] ? ' (' . $arrMatch[2] . ')' : '',
+			$this->extendURL($arrMatch[1])
+		);
 	}
 
 

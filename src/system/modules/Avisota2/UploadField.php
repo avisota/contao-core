@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -37,6 +38,7 @@
  * Class UploadField
  *
  * Provide methods to handle upload fields.
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -45,18 +47,21 @@ class UploadField extends Widget implements uploadable
 {
 	/**
 	 * Submit user input
+	 *
 	 * @var boolean
 	 */
 	protected $blnSubmitInput = true;
 
 	/**
 	 * Template
+	 *
 	 * @var string
 	 */
 	protected $strTemplate = 'be_widget';
 
 	/**
 	 * Contents
+	 *
 	 * @var array
 	 */
 	protected $arrContents = array();
@@ -64,13 +69,13 @@ class UploadField extends Widget implements uploadable
 
 	/**
 	 * Add specific attributes
+	 *
 	 * @param string
 	 * @param mixed
 	 */
 	public function __set($strKey, $varValue)
 	{
-		switch ($strKey)
-		{
+		switch ($strKey) {
 			case 'mandatory':
 				$this->arrConfiguration['mandatory'] = $varValue ? true : false;
 				break;
@@ -87,46 +92,43 @@ class UploadField extends Widget implements uploadable
 	 */
 	public function validate()
 	{
-		if (isset($_FILES[$this->strName]) && is_uploaded_file($_FILES[$this->strName]['tmp_name']))
-		{
+		if (isset($_FILES[$this->strName]) && is_uploaded_file($_FILES[$this->strName]['tmp_name'])) {
 			$varValue = $_FILES[$this->strName];
 		}
-		else
-		{
+		else {
 			$varValue = false;
 		}
-		
-		if ($this->mandatory && !$varValue)
-		{
-			if ($this->strLabel == '')
-			{
+
+		if ($this->mandatory && !$varValue) {
+			if ($this->strLabel == '') {
 				$this->addError($GLOBALS['TL_LANG']['ERR']['mdtryNoLabel']);
 			}
-			else
-			{
+			else {
 				$this->addError(sprintf($GLOBALS['TL_LANG']['ERR']['mandatory'], $this->strLabel));
 			}
 		}
 
-		if ($this->hasErrors())
-		{
+		if ($this->hasErrors()) {
 			$this->class = 'error';
 		}
 
 		$this->varValue = $varValue;
 	}
-	
+
 
 	/**
 	 * Generate the widget and return it as string
+	 *
 	 * @return string
 	 */
 	public function generate()
 	{
-		return sprintf('<input type="file" name="%s" id="ctrl_%s" class="tl_upload%s" %s onfocus="Backend.getScrollOffset();" />',
-						$this->strName,
-						$this->strId,
-						(strlen($this->strClass) ? ' ' . $this->strClass : ''),
-						$this->getAttributes());
+		return sprintf(
+			'<input type="file" name="%s" id="ctrl_%s" class="tl_upload%s" %s onfocus="Backend.getScrollOffset();" />',
+			$this->strName,
+			$this->strId,
+			(strlen($this->strClass) ? ' ' . $this->strClass : ''),
+			$this->getAttributes()
+		);
 	}
 }

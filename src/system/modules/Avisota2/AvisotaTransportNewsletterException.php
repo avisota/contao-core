@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -47,8 +48,13 @@ class AvisotaTransportNewsletterException extends Exception
 
 	protected $newsletter;
 
-	public function __construct(AvisotaRecipient $objRecipient, AvisotaNewsletter $objNewsletter, $message = '', $code = 0, $previous = null)
-	{
+	public function __construct(
+		AvisotaRecipient $objRecipient,
+		AvisotaNewsletter $objNewsletter,
+		$message = '',
+		$code = 0,
+		$previous = null
+	) {
 		parent::__construct($message, $code, $previous);
 		$this->recipient = $objRecipient;
 		$this->newsletter = $objNewsletter;

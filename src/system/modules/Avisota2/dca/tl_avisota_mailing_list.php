@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -42,74 +43,72 @@ $GLOBALS['TL_DCA']['tl_avisota_mailing_list'] = array
 	// Config
 	'config'       => array
 	(
-		'dataContainer'               => 'Table',
-		'enableVersioning'            => true,
-		'onload_callback'             => array
+		'dataContainer'    => 'Table',
+		'enableVersioning' => true,
+		'onload_callback'  => array
 		(
 			array('tl_avisota_mailing_list', 'checkPermission')
 		)
 	),
-
 	// List
 	'list'         => array
 	(
 		'sorting'           => array
 		(
-			'mode'                    => 1,
-			'flag'                    => 1,
-			'fields'                  => array('title'),
-			'panelLayout'             => 'search,limit'
+			'mode'        => 1,
+			'flag'        => 1,
+			'fields'      => array('title'),
+			'panelLayout' => 'search,limit'
 		),
 		'label'             => array
 		(
-			'fields'                  => array('title'),
-			'format'                  => '%s',
-			'label_callback'          => array('tl_avisota_mailing_list', 'getLabel')
+			'fields'         => array('title'),
+			'format'         => '%s',
+			'label_callback' => array('tl_avisota_mailing_list', 'getLabel')
 		),
 		'global_operations' => array
 		(
 			'all' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
-				'href'                => 'act=select',
-				'class'               => 'header_edit_all',
-				'attributes'          => 'onclick="Backend.getScrollOffset();" accesskey="e"'
+				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
+				'href'       => 'act=select',
+				'class'      => 'header_edit_all',
+				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
 			)
 		),
 		'operations'        => array
 		(
 			'edit'   => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['edit'],
-				'href'                => 'act=edit',
-				'icon'                => 'edit.gif',
-				'button_callback'     => array('tl_avisota_mailing_list', 'editList')
+				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['edit'],
+				'href'            => 'act=edit',
+				'icon'            => 'edit.gif',
+				'button_callback' => array('tl_avisota_mailing_list', 'editList')
 			),
 			'copy'   => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['copy'],
-				'href'                => 'act=copy',
-				'icon'                => 'copy.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"',
-				'button_callback'     => array('tl_avisota_mailing_list', 'copyCategory')
+				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['copy'],
+				'href'            => 'act=copy',
+				'icon'            => 'copy.gif',
+				'attributes'      => 'onclick="Backend.getScrollOffset();"',
+				'button_callback' => array('tl_avisota_mailing_list', 'copyCategory')
 			),
 			'delete' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['delete'],
-				'href'                => 'act=delete',
-				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-				'button_callback'     => array('tl_avisota_mailing_list', 'deleteCategory')
+				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['delete'],
+				'href'            => 'act=delete',
+				'icon'            => 'delete.gif',
+				'attributes'      => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
+				'button_callback' => array('tl_avisota_mailing_list', 'deleteCategory')
 			),
 			'show'   => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['show'],
-				'href'                => 'act=show',
-				'icon'                => 'show.gif'
+				'label' => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['show'],
+				'href'  => 'act=show',
+				'icon'  => 'show.gif'
 			)
 		),
 	),
-
 	// Palettes
 	'metapalettes' => array
 	(
@@ -119,51 +118,58 @@ $GLOBALS['TL_DCA']['tl_avisota_mailing_list'] = array
 			'expert' => array('integratedRecipientManageSubscriptionPage')
 		)
 	),
-
 	// Fields
 	'fields'       => array
 	(
 		'title'                                     => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['title'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=> true,
-			                                   'maxlength'=> 255,
-			                                   'tl_class' => 'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['title'],
+			'exclude'   => true,
+			'search'    => true,
+			'inputType' => 'text',
+			'eval'      => array(
+				'mandatory' => true,
+				'maxlength' => 255,
+				'tl_class'  => 'w50'
+			)
 		),
 		'alias'                                     => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['alias'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'inputType'               => 'text',
-			'eval'                    => array('rgxp'             => 'alnum',
-			                                   'unique'           => true,
-			                                   'spaceToUnderscore'=> true,
-			                                   'maxlength'        => 128,
-			                                   'tl_class'         => 'w50'),
-			'save_callback'           => array
+			'label'         => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['alias'],
+			'exclude'       => true,
+			'search'        => true,
+			'inputType'     => 'text',
+			'eval'          => array(
+				'rgxp'              => 'alnum',
+				'unique'            => true,
+				'spaceToUnderscore' => true,
+				'maxlength'         => 128,
+				'tl_class'          => 'w50'
+			),
+			'save_callback' => array
 			(
 				array('tl_avisota_mailing_list', 'generateAlias')
 			)
 		),
 		'viewOnlinePage'                            => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['viewOnlinePage'],
-			'exclude'                 => true,
-			'inputType'               => 'pageTree',
-			'eval'                    => array('fieldType'=> 'radio',
-			                                   'mandatory'=> true)
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['viewOnlinePage'],
+			'exclude'   => true,
+			'inputType' => 'pageTree',
+			'eval'      => array(
+				'fieldType' => 'radio',
+				'mandatory' => true
+			)
 		),
 		'integratedRecipientManageSubscriptionPage' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['integratedRecipientManageSubscriptionPage'],
-			'exclude'                 => true,
-			'inputType'               => 'pageTree',
-			'eval'                    => array('fieldType'=> 'radio',
-			                                   'mandatory'=> true)
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['integratedRecipientManageSubscriptionPage'],
+			'exclude'   => true,
+			'inputType' => 'pageTree',
+			'eval'      => array(
+				'fieldType' => 'radio',
+				'mandatory' => true
+			)
 		)
 	)
 );
@@ -216,37 +222,61 @@ class tl_avisota_mailing_list extends Backend
 				if (!in_array($this->Input->get('id'), $root)) {
 					$arrNew = $this->Session->get('new_records');
 
-					if (is_array($arrNew['tl_avisota_mailing_list']) && in_array($this->Input->get('id'), $arrNew['tl_avisota_mailing_list'])) {
+					if (is_array($arrNew['tl_avisota_mailing_list']) && in_array(
+						$this->Input->get('id'),
+						$arrNew['tl_avisota_mailing_list']
+					)
+					) {
 						// Add permissions on user level
 						if ($this->User->inherit == 'custom' || !$this->User->groups[0]) {
-							$objUser = $this->Database->prepare("SELECT avisota_recipient_lists, avisota_recipient_list_permissions FROM tl_user WHERE id=?")
+							$objUser = $this->Database
+								->prepare(
+								"SELECT avisota_recipient_lists, avisota_recipient_list_permissions FROM tl_user WHERE id=?"
+							)
 								->limit(1)
 								->execute($this->User->id);
 
-							$arrNewsletterCategoryPermissions = deserialize($objUser->avisota_recipient_list_permissions);
+							$arrNewsletterCategoryPermissions = deserialize(
+								$objUser->avisota_recipient_list_permissions
+							);
 
-							if (is_array($arrNewsletterCategoryPermissions) && in_array('create', $arrNewsletterCategoryPermissions)) {
+							if (is_array($arrNewsletterCategoryPermissions) && in_array(
+								'create',
+								$arrNewsletterCategoryPermissions
+							)
+							) {
 								$arrNewsletterCategories   = deserialize($objUser->avisota_recipient_lists);
 								$arrNewsletterCategories[] = $this->Input->get('id');
 
-								$this->Database->prepare("UPDATE tl_user SET avisota_recipient_lists=? WHERE id=?")
+								$this->Database
+									->prepare("UPDATE tl_user SET avisota_recipient_lists=? WHERE id=?")
 									->execute(serialize($arrNewsletterCategories), $this->User->id);
 							}
 						}
 
 						// Add permissions on group level
 						elseif ($this->User->groups[0] > 0) {
-							$objGroup = $this->Database->prepare("SELECT avisota_recipient_lists, avisota_recipient_list_permissions FROM tl_user_group WHERE id=?")
+							$objGroup = $this->Database
+								->prepare(
+								"SELECT avisota_recipient_lists, avisota_recipient_list_permissions FROM tl_user_group WHERE id=?"
+							)
 								->limit(1)
 								->execute($this->User->groups[0]);
 
-							$arrNewsletterCategoryPermissions = deserialize($objGroup->avisota_recipient_list_permissions);
+							$arrNewsletterCategoryPermissions = deserialize(
+								$objGroup->avisota_recipient_list_permissions
+							);
 
-							if (is_array($arrNewsletterCategoryPermissions) && in_array('create', $arrNewsletterCategoryPermissions)) {
+							if (is_array($arrNewsletterCategoryPermissions) && in_array(
+								'create',
+								$arrNewsletterCategoryPermissions
+							)
+							) {
 								$arrNewsletterCategories   = deserialize($objGroup->avisota_recipient_lists);
 								$arrNewsletterCategories[] = $this->Input->get('id');
 
-								$this->Database->prepare("UPDATE tl_user_group SET avisota_recipient_lists=? WHERE id=?")
+								$this->Database
+									->prepare("UPDATE tl_user_group SET avisota_recipient_lists=? WHERE id=?")
 									->execute(serialize($arrNewsletterCategories), $this->User->groups[0]);
 							}
 						}
@@ -261,8 +291,17 @@ class tl_avisota_mailing_list extends Backend
 			case 'copy':
 			case 'delete':
 			case 'show':
-				if (!in_array($this->Input->get('id'), $root) || ($this->Input->get('act') == 'delete' && !$this->User->hasAccess('delete', 'avisota_recipient_list_permissions'))) {
-					$this->log('Not enough permissions to ' . $this->Input->get('act') . ' avisota newsletter category ID "' . $this->Input->get('id') . '"', 'tl_avisota_mailing_list checkPermission', TL_ERROR);
+				if (!in_array($this->Input->get('id'), $root) || ($this->Input->get(
+					'act'
+				) == 'delete' && !$this->User->hasAccess('delete', 'avisota_recipient_list_permissions'))
+				) {
+					$this->log(
+						'Not enough permissions to ' . $this->Input->get(
+							'act'
+						) . ' avisota newsletter category ID "' . $this->Input->get('id') . '"',
+						'tl_avisota_mailing_list checkPermission',
+						TL_ERROR
+					);
 					$this->redirect('contao/main.php?act=error');
 				}
 				break;
@@ -271,7 +310,11 @@ class tl_avisota_mailing_list extends Backend
 			case 'deleteAll':
 			case 'overrideAll':
 				$session = $this->Session->getData();
-				if ($this->Input->get('act') == 'deleteAll' && !$this->User->hasAccess('delete', 'avisota_recipient_list_permissions')) {
+				if ($this->Input->get('act') == 'deleteAll' && !$this->User->hasAccess(
+					'delete',
+					'avisota_recipient_list_permissions'
+				)
+				) {
 					$session['CURRENT']['IDS'] = array();
 				}
 				else {
@@ -282,7 +325,11 @@ class tl_avisota_mailing_list extends Backend
 
 			default:
 				if (strlen($this->Input->get('act'))) {
-					$this->log('Not enough permissions to ' . $this->Input->get('act') . ' avisota newsletter categories', 'tl_avisota_mailing_list checkPermission', TL_ERROR);
+					$this->log(
+						'Not enough permissions to ' . $this->Input->get('act') . ' avisota newsletter categories',
+						'tl_avisota_mailing_list checkPermission',
+						TL_ERROR
+					);
 					$this->redirect('contao/main.php?act=error');
 				}
 				break;
@@ -294,7 +341,10 @@ class tl_avisota_mailing_list extends Backend
 	{
 		$strLabel = '<div style="padding: 3px 0;"><strong>' . $strLabel . '</strong></div>';
 
-		if (isset($GLOBALS['TL_HOOKS']['avisotaMailingListLabel']) && is_array($GLOBALS['TL_HOOKS']['avisotaMailingListLabel'])) {
+		if (isset($GLOBALS['TL_HOOKS']['avisotaMailingListLabel']) && is_array(
+			$GLOBALS['TL_HOOKS']['avisotaMailingListLabel']
+		)
+		) {
 			foreach ($GLOBALS['TL_HOOKS']['avisotaMailingListLabel'] as $callback) {
 				$this->import($callback[0]);
 				$strLabel = $this->$callback[0]->$callback[1]($arrRow, $strLabel, $dc);
@@ -318,7 +368,10 @@ class tl_avisota_mailing_list extends Backend
 	 */
 	public function editList($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || count(preg_grep('/^tl_avisota_mailing_list::/', $this->User->alexf)) > 0) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
+		return ($this->User->isAdmin || count(preg_grep('/^tl_avisota_mailing_list::/', $this->User->alexf)) > 0)
+			? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
+				$title
+			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
 	}
 
 
@@ -336,7 +389,13 @@ class tl_avisota_mailing_list extends Backend
 	 */
 	public function copyCategory($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || $this->User->hasAccess('create', 'avisota_recipient_list_permissions')) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)) . ' ';
+		return ($this->User->isAdmin || $this->User->hasAccess('create', 'avisota_recipient_list_permissions'))
+			? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
+				$title
+			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> '
+			: $this->generateImage(
+				preg_replace('/\.gif$/i', '_.gif', $icon)
+			) . ' ';
 	}
 
 
@@ -354,7 +413,13 @@ class tl_avisota_mailing_list extends Backend
 	 */
 	public function deleteCategory($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || $this->User->hasAccess('delete', 'avisota_recipient_list_permissions')) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)) . ' ';
+		return ($this->User->isAdmin || $this->User->hasAccess('delete', 'avisota_recipient_list_permissions'))
+			? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
+				$title
+			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> '
+			: $this->generateImage(
+				preg_replace('/\.gif$/i', '_.gif', $icon)
+			) . ' ';
 	}
 
 
@@ -376,7 +441,8 @@ class tl_avisota_mailing_list extends Backend
 			$varValue  = standardize($dc->activeRecord->title);
 		}
 
-		$objAlias = $this->Database->prepare("SELECT id FROM tl_avisota_mailing_list WHERE alias=?")
+		$objAlias = $this->Database
+			->prepare("SELECT id FROM tl_avisota_mailing_list WHERE alias=?")
 			->execute($varValue);
 
 		// Check whether the news alias exists

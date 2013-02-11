@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -49,13 +50,14 @@ class AvisotaNewsletterCategory
 		}
 
 		$objResult = Database::getInstance()
-			->prepare('SELECT *
+			->prepare(
+			'SELECT *
 					   FROM tl_avisota_newsletter_category
-					   WHERE id=? OR alias=?')
+					   WHERE id=? OR alias=?'
+		)
 			->execute($varId, $varId);
 
-		if (!$objResult->next())
-		{
+		if (!$objResult->next()) {
 			return null;
 		}
 
@@ -110,9 +112,11 @@ class AvisotaNewsletterCategory
 				break;
 
 			case 'recipients':
-				$this->setRecipients(is_array($value)
-					? $value
-					: deserialize($value, true));
+				$this->setRecipients(
+					is_array($value)
+						? $value
+						: deserialize($value, true)
+				);
 				break;
 
 			case 'theme':

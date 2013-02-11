@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,10 +37,9 @@
 class tl_article_avisota extends tl_article
 {
 
-	public function pasteArticle(DataContainer $dc, $row, $table, $cr, $arrClipboard=false)
+	public function pasteArticle(DataContainer $dc, $row, $table, $cr, $arrClipboard = false)
 	{
-		if ($table == $GLOBALS['TL_DCA'][$dc->table]['config']['ptable'] && $row['type'] == 'avisota')
-		{
+		if ($table == $GLOBALS['TL_DCA'][$dc->table]['config']['ptable'] && $row['type'] == 'avisota') {
 			return $this->generateImage('pasteinto_.gif', '', 'class="blink"');
 		}
 

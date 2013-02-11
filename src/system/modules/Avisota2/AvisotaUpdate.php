@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -47,10 +48,10 @@ class AvisotaUpdate extends BackendModule
 	 */
 	public static $updates = array
 	(
-		'0.4.5'    => array('required'=> true),
-		'1.5.0'    => array('required'=> true),
-		'1.5.1'    => array('required'=> true),
-		'2.0.0-u1' => array('required'=> true),
+		'0.4.5'    => array('required' => true),
+		'1.5.0'    => array('required' => true),
+		'1.5.1'    => array('required' => true),
+		'2.0.0-u1' => array('required' => true),
 		'2.0.0-u2' => array(),
 		'2.0.0-u3' => array()
 	);
@@ -76,13 +77,14 @@ class AvisotaUpdate extends BackendModule
 
 	/**
 	 * Template file
+	 *
 	 * @var string
 	 */
 	protected $strTemplate = 'be_avisota_update';
 
 	public function hasUpdates()
 	{
-		foreach (self::$updates as $strVersion=> $arrUpdate) {
+		foreach (self::$updates as $strVersion => $arrUpdate) {
 			$strMethod = 'check' . preg_replace('#[^\w]#', '_', $strVersion);
 			if ($this->$strMethod()) {
 				return true;
@@ -109,7 +111,7 @@ class AvisotaUpdate extends BackendModule
 			// check for updates
 			if ($this->Input->post('update')) {
 				$arrVersions = $this->Input->post('update');
-				$strVersion = array_shift($arrVersions);
+				$strVersion  = array_shift($arrVersions);
 
 				try {
 					if ($this->runUpdate($strVersion)) {
@@ -120,13 +122,14 @@ class AvisotaUpdate extends BackendModule
 						array_unshift($arrVersions, $strVersion);
 						$_SESSION['TL_ERROR'][] = $GLOBALS['TL_LANG']['avisota_update']['updateFailed'];
 					}
-				} catch(Exception $e) {
+				}
+				catch (Exception $e) {
 					array_unshift($arrVersions, $strVersion);
 					$_SESSION['TL_ERROR'][] = $e->getMessage();
 				}
 
 				if (count($arrVersions)) {
-					$_SESSION['TL_INFO'][] = $GLOBALS['TL_LANG']['avisota_update']['moreUpdates'];
+					$_SESSION['TL_INFO'][]       = $GLOBALS['TL_LANG']['avisota_update']['moreUpdates'];
 					$_SESSION['AUTORUN_UPDATES'] = $arrVersions;
 				}
 
@@ -168,19 +171,20 @@ class AvisotaUpdate extends BackendModule
 
 		$arrVersions = array();
 		$arrStatus   = array();
-		foreach (self::$updates as $strVersion=> $arrUpdate) {
+		foreach (self::$updates as $strVersion => $arrUpdate) {
 			$strMethod              = 'check' . preg_replace('#[^\w]#', '_', $strVersion);
 			$arrStatus[$strVersion] = $this->$strMethod();
 
 			$strShort               = preg_replace('#^(\d+\.\d+\.\d+).*$#', '$1', $strVersion);
-			$arrVersions[$strShort] = (isset($arrVersions[$strShort]) ? $arrVersions[$strShort] : false) || $arrStatus[$strVersion];
+			$arrVersions[$strShort] = (isset($arrVersions[$strShort]) ? $arrVersions[$strShort]
+				: false) || $arrStatus[$strVersion];
 		}
 		$this->Template->status = $arrStatus;
 
 		uksort($arrVersions, 'version_compare');
 
 		$strLastVersion = '0.3.x';
-		foreach ($arrVersions as $strVersion=> $blnRequireUpdate) {
+		foreach ($arrVersions as $strVersion => $blnRequireUpdate) {
 			if ($blnRequireUpdate) {
 				break;
 			}
@@ -219,9 +223,11 @@ class AvisotaUpdate extends BackendModule
 				}
 
 				$this->Database
-					->prepare("UPDATE tl_avisota_newsletter_content SET area=? WHERE area=?")->execute('body', '');
+					->prepare("UPDATE tl_avisota_newsletter_content SET area=? WHERE area=?")
+					->execute('body', '');
 			}
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'AvisotaRunonce::upgrade_0_4_5', TL_ERROR);
 			return false;
 		}
@@ -252,7 +258,8 @@ class AvisotaUpdate extends BackendModule
 			if ($this->Database->tableExists('tl_avisota_newsletter_outbox')) {
 				if (!$this->Database->tableExists('tl_avisota_newsletter_outbox_recipient')) {
 					// create outbox recipient table
-					$this->Database->execute("CREATE TABLE `tl_avisota_newsletter_outbox_recipient` (
+					$this->Database->execute(
+						"CREATE TABLE `tl_avisota_newsletter_outbox_recipient` (
 					  `id` int(10) unsigned NOT NULL auto_increment,
 					  `pid` int(10) unsigned NOT NULL default '0',
 					  `tstamp` int(10) unsigned NOT NULL default '0',
@@ -271,13 +278,16 @@ class AvisotaUpdate extends BackendModule
 					  KEY `send` (`send`),
 					  KEY `source` (`source`),
 					  KEY `sourceID` (`sourceID`)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8;"
+					);
 				}
 
 				// make sure the tstamp field exists
 				if (!$this->Database->fieldExists('tstamp', 'tl_avisota_newsletter_outbox')) {
 					$this->Database
-						->execute("ALTER TABLE tl_avisota_newsletter_outbox ADD tstamp int(10) unsigned NOT NULL default '0'");
+						->execute(
+						"ALTER TABLE tl_avisota_newsletter_outbox ADD tstamp int(10) unsigned NOT NULL default '0'"
+					);
 				}
 
 				// split the outbox table data
@@ -295,11 +305,12 @@ class AvisotaUpdate extends BackendModule
 						$arrOutboxes = array();
 
 						// create the outboxes
-						foreach ($arrNewsletters as $arrRow)
-						{
+						foreach ($arrNewsletters as $arrRow) {
 							if ($arrRow['token']) {
 								$time = $this->Database
-									->prepare("SELECT IF (tstamp, tstamp, send) as time FROM (SELECT MIN(tstamp) as tstamp, MIN(send) as send FROM tl_avisota_newsletter_outbox WHERE token=? GROUP BY token) t")
+									->prepare(
+									"SELECT IF (tstamp, tstamp, send) as time FROM (SELECT MIN(tstamp) as tstamp, MIN(send) as send FROM tl_avisota_newsletter_outbox WHERE token=? GROUP BY token) t"
+								)
 									->execute($arrRow['token'])
 									->time;
 
@@ -311,10 +322,10 @@ class AvisotaUpdate extends BackendModule
 						}
 
 						// move the recipients
-						foreach ($arrOutboxes as $strToken=> $intOutbox)
-						{
+						foreach ($arrOutboxes as $strToken => $intOutbox) {
 							$this->Database
-								->prepare("INSERT INTO tl_avisota_newsletter_outbox_recipient (pid,tstamp,email,domain,send,source,sourceID,failed)
+								->prepare(
+								"INSERT INTO tl_avisota_newsletter_outbox_recipient (pid,tstamp,email,domain,send,source,sourceID,failed)
 									SELECT
 										?,
 										tstamp,
@@ -325,17 +336,16 @@ class AvisotaUpdate extends BackendModule
 										SUBSTRING(source, LOCATE(':', source)+1) as sourceID,
 										failed
 									FROM tl_avisota_newsletter_outbox
-									WHERE token=?")
+									WHERE token=?"
+							)
 								->execute($intOutbox, $strToken);
 						}
 
 						// update recipientID
 						$objRecipient = $this->Database
 							->execute("SELECT * FROM tl_avisota_newsletter_outbox_recipient WHERE recipientID=0");
-						while ($objRecipient->next())
-						{
-							switch ($objRecipient->source)
-							{
+						while ($objRecipient->next()) {
+							switch ($objRecipient->source) {
 								case 'list':
 									$objResult = $this->Database
 										->prepare("SELECT id FROM tl_avisota_recipient WHERE email=? AND pid=?")
@@ -354,18 +364,24 @@ class AvisotaUpdate extends BackendModule
 
 							if ($objResult->next()) {
 								$this->Database
-									->prepare("UPDATE tl_avisota_newsletter_outbox_recipient SET recipientID=? WHERE id=?")
+									->prepare(
+									"UPDATE tl_avisota_newsletter_outbox_recipient SET recipientID=? WHERE id=?"
+								)
 									->execute($objResult->id, $objRecipient->id);
 							}
 						}
 
 						// delete old entries from outbox
 						$this->Database
-							->execute("DELETE FROM tl_avisota_newsletter_outbox WHERE id NOT IN (" . implode(',', $arrOutboxes) . ")");
+							->execute(
+							"DELETE FROM tl_avisota_newsletter_outbox WHERE id NOT IN (" . implode(
+								',',
+								$arrOutboxes
+							) . ")"
+						);
 
 						// delete old fields
-						foreach (array('token', 'email', 'send', 'source', 'failed') as $strField)
-						{
+						foreach (array('token', 'email', 'send', 'source', 'failed') as $strField) {
 							if ($this->Database->fieldExists($strField, 'tl_avisota_newsletter_outbox')) {
 								$this->Database->execute('ALTER TABLE tl_avisota_newsletter_outbox DROP ' . $strField);
 							}
@@ -373,7 +389,8 @@ class AvisotaUpdate extends BackendModule
 					}
 				}
 			}
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'AvisotaRunonce::upgrade_1_5_0', TL_ERROR);
 			return false;
 		}
@@ -384,9 +401,13 @@ class AvisotaUpdate extends BackendModule
 	{
 		return $this->Database->tableExists('tl_avisota_statistic_raw_recipient_link')
 			&& !$this->Database->fieldExists('real_url', 'tl_avisota_statistic_raw_recipient_link')
-			&& $this->Database->executeUncached("SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE (real_url='' OR ISNULL(real_url)) AND url REGEXP 'email=[^…]' LIMIT 1")->numRows
+			&& $this->Database->executeUncached(
+				"SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE (real_url='' OR ISNULL(real_url)) AND url REGEXP 'email=[^…]' LIMIT 1"
+			)->numRows
 			|| $this->Database->tableExists('tl_avisota_statistic_raw_link')
-				&& $this->Database->execute("SELECT * FROM tl_avisota_statistic_raw_link WHERE url REGEXP '&#x?[0-9]+;' LIMIT 1")->numRows;
+				&& $this->Database->execute(
+					"SELECT * FROM tl_avisota_statistic_raw_link WHERE url REGEXP '&#x?[0-9]+;' LIMIT 1"
+				)->numRows;
 	}
 
 	/**
@@ -413,9 +434,10 @@ class AvisotaUpdate extends BackendModule
 				$arrLinks = array();
 
 				$objLink = $this->Database
-					->executeUncached("SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE (real_url='' OR ISNULL(real_url)) AND url REGEXP 'email=[^…]'");
-				while ($objLink->next())
-				{
+					->executeUncached(
+					"SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE (real_url='' OR ISNULL(real_url)) AND url REGEXP 'email=[^…]'"
+				);
+				while ($objLink->next()) {
 					$objNewsletter     = false;
 					$objCategory       = false;
 					$strUnsubscribeUrl = false;
@@ -423,16 +445,14 @@ class AvisotaUpdate extends BackendModule
 					if (isset($arrNewsletterCache[$objLink->pid])) {
 						$objNewsletter = $arrNewsletterCache[$objLink->pid];
 					}
-					else
-					{
+					else {
 						$objNewsletter = $this->Database
 							->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
 							->execute($objLink->pid);
 						if ($objNewsletter->next()) {
 							$objNewsletter = $arrNewsletterCache[$objLink->pid] = (object) $objNewsletter->row();
 						}
-						else
-						{
+						else {
 							$objNewsletter = $arrNewsletterCache[$objLink->pid] = false;
 						}
 					}
@@ -441,16 +461,14 @@ class AvisotaUpdate extends BackendModule
 						if (isset($objCategoryCache[$objNewsletter->pid])) {
 							$objCategory = $objCategoryCache[$objNewsletter->pid];
 						}
-						else
-						{
+						else {
 							$objCategory = $this->Database
 								->prepare("SELECT * FROM tl_avisota_newsletter_category WHERE id=?")
 								->execute($objNewsletter->pid);
 							if ($objCategory->next()) {
 								$objCategory = $objCategoryCache[$objNewsletter->pid] = (object) $objCategory->row();
 							}
-							else
-							{
+							else {
 								$objCategory = $objCategoryCache[$objNewsletter->pid] = false;
 							}
 						}
@@ -460,11 +478,12 @@ class AvisotaUpdate extends BackendModule
 						if (isset($arrUnsubscribeCache[$objLink->recipient])) {
 							$strUnsubscribeUrl = $arrUnsubscribeCache[$objLink->recipient];
 						}
-						else
-						{
+						else {
 							$arrRecipient = array('email' => $objLink->recipient);
 							$this->Static->set($objCategory, $objNewsletter, $arrRecipient);
-							$strUnsubscribeUrl = $arrUnsubscribeCache[$objLink->recipient] = $this->replaceInsertTags('{{newsletter::unsubscribe_url}}');
+							$strUnsubscribeUrl = $arrUnsubscribeCache[$objLink->recipient] = $this->replaceInsertTags(
+								'{{newsletter::unsubscribe_url}}'
+							);
 						}
 					}
 
@@ -482,8 +501,7 @@ class AvisotaUpdate extends BackendModule
 						}
 
 						// or delete if there is allready a link with this url
-						else
-						{
+						else {
 							$this->Database
 								->prepare("DELETE FROM tl_avisota_statistic_raw_link WHERE id=?")
 								->execute($objLink->linkID);
@@ -491,17 +509,22 @@ class AvisotaUpdate extends BackendModule
 
 						// update the recipient-link
 						$this->Database
-							->prepare("UPDATE tl_avisota_statistic_raw_recipient_link SET linkID=?, url=?, real_url=? WHERE id=?")
+							->prepare(
+							"UPDATE tl_avisota_statistic_raw_recipient_link SET linkID=?, url=?, real_url=? WHERE id=?"
+						)
 							->execute($arrLinks[$strUrl], $strUrl, $strRealUrl, $objLink->id);
 
 						// update link hit
 						$this->Database
-							->prepare("UPDATE tl_avisota_statistic_raw_link_hit SET linkID=? WHERE linkID=? AND recipientLinkID=?")
+							->prepare(
+							"UPDATE tl_avisota_statistic_raw_link_hit SET linkID=? WHERE linkID=? AND recipientLinkID=?"
+						)
 							->execute($arrLinks[$strUrl], $objLink->linkID, $objLink->id);
 					}
 				}
 			}
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'AvisotaRunonce::upgrade_1_5_1()', TL_ERROR);
 			return false;
 		}
@@ -512,9 +535,10 @@ class AvisotaUpdate extends BackendModule
 				$arrCache = array();
 
 				// find and clean html entities encoded urls
-				$objLink = $this->Database->execute("SELECT * FROM tl_avisota_statistic_raw_link WHERE url REGEXP '&#x?[0-9]+;'");
-				while ($objLink->next())
-				{
+				$objLink = $this->Database->execute(
+					"SELECT * FROM tl_avisota_statistic_raw_link WHERE url REGEXP '&#x?[0-9]+;'"
+				);
+				while ($objLink->next()) {
 					// decorde url
 					$strUrl = html_entity_decode($objLink->url);
 
@@ -524,8 +548,7 @@ class AvisotaUpdate extends BackendModule
 					}
 
 					// or search existing record
-					else
-					{
+					else {
 						$objExistingLink = $this->Database
 							->prepare("SELECT * FROM tl_avisota_statistic_raw_link WHERE pid=? AND url=?")
 							->executeUncached($objLink->pid, $strUrl);
@@ -534,8 +557,7 @@ class AvisotaUpdate extends BackendModule
 							// use existing record
 							$intId = $objExistingLink->id;
 						}
-						else
-						{
+						else {
 							// insert new record
 							$intId = $this->Database
 								->prepare("INSERT INTO tl_avisota_statistic_raw_link (pid,tstamp,url) VALUES (?, ?, ?)")
@@ -560,7 +582,8 @@ class AvisotaUpdate extends BackendModule
 					$this->log('Cleaned html encoded url "' . $strUrl . '"', 'AvisotaRunonce::upgrade1_5_1()', TL_INFO);
 				}
 			}
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'AvisotaRunonce::upgrade1_5_1()', TL_ERROR);
 			return false;
 		}
@@ -572,26 +595,29 @@ class AvisotaUpdate extends BackendModule
 		return $this->Database->tableExists('tl_avisota_recipient_list')
 			&& !$this->Database->tableExists('tl_avisota_mailing_list')
 			|| $this->Database->tableExists('tl_avisota_recipient_list')
-			&& $this->Database->tableExists('tl_avisota_mailing_list')
-			&& $this->Database->execute("SELECT COUNT(id) AS c FROM tl_avisota_recipient_list")->c > 0
-			&& $this->Database->execute("SELECT COUNT(id) AS c FROM tl_avisota_mailing_list")->c == 0;
+				&& $this->Database->tableExists('tl_avisota_mailing_list')
+				&& $this->Database->execute("SELECT COUNT(id) AS c FROM tl_avisota_recipient_list")->c > 0
+				&& $this->Database->execute("SELECT COUNT(id) AS c FROM tl_avisota_mailing_list")->c == 0;
 	}
 
 	protected function upgrade2_0_0_u1()
 	{
 		try {
 			if (!$this->Database->tableExists('tl_avisota_mailing_list')) {
-				$this->Database->query("CREATE TABLE `tl_avisota_mailing_list` (
+				$this->Database->query(
+					"CREATE TABLE `tl_avisota_mailing_list` (
 					  `id` int(10) unsigned NOT NULL auto_increment,
 					  `tstamp` int(10) unsigned NOT NULL default '0',
 					  `title` varchar(255) NOT NULL default '',
 					  `alias` varbinary(128) NOT NULL default '',
 					  `viewOnlinePage` int(10) unsigned NOT NULL default '0',
 					  PRIMARY KEY  (`id`)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8"
+				);
 			}
 			if (!$this->Database->tableExists('tl_avisota_recipient_to_mailing_list')) {
-				$this->Database->query("CREATE TABLE `tl_avisota_recipient_to_mailing_list` (
+				$this->Database->query(
+					"CREATE TABLE `tl_avisota_recipient_to_mailing_list` (
 					  `recipient` int(10) unsigned NOT NULL default '0',
 					  `list` int(10) unsigned NOT NULL default '0',
 					  `confirmationSent` int(10) unsigned NOT NULL default '0',
@@ -600,25 +626,32 @@ class AvisotaUpdate extends BackendModule
 					  `confirmed` char(1) NOT NULL default '',
 					  `token` char(8) NOT NULL default '',
 					  PRIMARY KEY  (`recipient`, `list`)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8"
+				);
 			}
 			if ($this->Database->tableExists('tl_avisota_recipient_list')) {
 				// create mailing lists from recipient lists
-				$this->Database->query("INSERT INTO tl_avisota_mailing_list (id, tstamp, title, alias, viewOnlinePage)
-										SELECT id, tstamp, title, alias, viewOnlinePage FROM tl_avisota_recipient_list");
+				$this->Database->query(
+					"INSERT INTO tl_avisota_mailing_list (id, tstamp, title, alias, viewOnlinePage)
+										SELECT id, tstamp, title, alias, viewOnlinePage FROM tl_avisota_recipient_list"
+				);
 
 				// insert subscriptions into relation table
-				$this->Database->query("INSERT INTO tl_avisota_recipient_to_mailing_list (recipient, list, confirmed, confirmationSent, reminderSent, reminderCount, token)
-										SELECT id, pid, confirmed, addedOn, 0, IF(notification, notification, 0), token FROM tl_avisota_recipient");
+				$this->Database->query(
+					"INSERT INTO tl_avisota_recipient_to_mailing_list (recipient, list, confirmed, confirmationSent, reminderSent, reminderCount, token)
+										SELECT id, pid, confirmed, addedOn, 0, IF(notification, notification, 0), token FROM tl_avisota_recipient"
+				);
 
 				// fetch recipients that are multiple
 				$arrRecipients = array();
 				$objRecipient  = $this->Database
-					->execute("SELECT (SELECT COUNT(email) FROM tl_avisota_recipient r2 WHERE r1.email=r2.email) AS c, r1.*
+					->execute(
+					"SELECT (SELECT COUNT(email) FROM tl_avisota_recipient r2 WHERE r1.email=r2.email) AS c, r1.*
 							   FROM tl_avisota_recipient r1
 							   HAVING c>1
 							   ORDER BY email,tstamp
-							   LIMIT 1000");
+							   LIMIT 1000"
+				);
 				while ($objRecipient->next()) {
 					// convert email to lowercase
 					$objRecipient->email = strtolower($objRecipient->email);
@@ -632,19 +665,20 @@ class AvisotaUpdate extends BackendModule
 
 					// update fields
 					else {
-						$arrRecipient          = &$arrRecipients[$objRecipient->email];
+						$arrRecipient = & $arrRecipients[$objRecipient->email];
 
 						// delete duplicate recipient, but use its data
 						if (in_array($objRecipient->pid, $arrRecipients[$objRecipient->email]['pids'])) {
 							$this->Database
 								->prepare("DELETE FROM tl_avisota_recipient WHERE id=?")
 								->execute($objRecipient->id);
-						} else {
-							$arrRecipient['ids'][] = $objRecipient->id;
+						}
+						else {
+							$arrRecipient['ids'][]  = $objRecipient->id;
 							$arrRecipient['pids'][] = $objRecipient->pid;
 						}
 
-						foreach ($objRecipient->row() as $field=> $value) {
+						foreach ($objRecipient->row() as $field => $value) {
 							// skip some fields
 							if ($field == 'id' || $field == 'pid' || $field == 'tstamp' || $field == 'email' || $field == 'confirmed' || $field == 'token' || $field == 'notification') {
 								continue;
@@ -671,14 +705,21 @@ class AvisotaUpdate extends BackendModule
 				foreach ($arrRecipients as &$arrRecipient) {
 					// update subscription
 					$this->Database
-						->query("UPDATE tl_avisota_recipient_to_mailing_list
+						->query(
+						"UPDATE tl_avisota_recipient_to_mailing_list
 								 SET recipient=" . $arrRecipient['id'] . "
-								 WHERE recipient IN (" . implode(',', $arrRecipient['ids']) . ")");
+								 WHERE recipient IN (" . implode(',', $arrRecipient['ids']) . ")"
+					);
 
 					// delete waste rows
 					$this->Database
-						->query("DELETE FROM tl_avisota_recipient
-								 WHERE id!=" . $arrRecipient['id'] . " AND id IN (" . implode(',', $arrRecipient['ids']) . ")");
+						->query(
+						"DELETE FROM tl_avisota_recipient
+								 WHERE id!=" . $arrRecipient['id'] . " AND id IN (" . implode(
+							',',
+							$arrRecipient['ids']
+						) . ")"
+					);
 
 					// unset fields that are just virtual
 					unset($arrRecipient['c'], $arrRecipient['ids'], $arrRecipient['pids']);
@@ -695,7 +736,8 @@ class AvisotaUpdate extends BackendModule
 					$this->reload();
 				}
 			}
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'AvisotaRunonce::upgrade2_0_0_u1()', TL_ERROR);
 			return false;
 		}
@@ -707,7 +749,9 @@ class AvisotaUpdate extends BackendModule
 		return $this->Database->tableExists('tl_avisota_newsletter_category')
 			&& (!$this->Database->tableExists('tl_avisota_transport')
 				|| !$this->Database->fieldExists('transportMode', 'tl_avisota_newsletter_category')
-				|| $this->Database->execute("SELECT COUNT(id) AS c FROM tl_avisota_newsletter_category WHERE transportMode=''")->c > 0);
+				|| $this->Database->execute(
+					"SELECT COUNT(id) AS c FROM tl_avisota_newsletter_category WHERE transportMode=''"
+				)->c > 0);
 	}
 
 	protected function upgrade2_0_0_u2()
@@ -715,7 +759,8 @@ class AvisotaUpdate extends BackendModule
 		try {
 			if ($this->Database->tableExists('tl_avisota_newsletter_category')) {
 				if (!$this->Database->tableExists('tl_avisota_transport')) {
-					$this->Database->query("CREATE TABLE `tl_avisota_transport` (
+					$this->Database->query(
+						"CREATE TABLE `tl_avisota_transport` (
 					  `id` int(10) unsigned NOT NULL auto_increment,
 					  `tstamp` int(10) unsigned NOT NULL default '0',
 					  `type` varchar(255) NOT NULL default '',
@@ -731,29 +776,38 @@ class AvisotaUpdate extends BackendModule
 					  `swiftSmtpEnc` char(3) NOT NULL default '',
 					  `swiftSmtpPort` int(5) unsigned NOT NULL default '25',
 					  PRIMARY KEY  (`id`)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8"
+					);
 				}
 
 				if (!$this->Database->fieldExists('transportMode', 'tl_avisota_newsletter_category')) {
-					$this->Database->query("ALTER TABLE `tl_avisota_newsletter_category` ADD `transportMode` char(22) NOT NULL default ''");
+					$this->Database->query(
+						"ALTER TABLE `tl_avisota_newsletter_category` ADD `transportMode` char(22) NOT NULL default ''"
+					);
 				}
 
 				if (!$this->Database->fieldExists('transport', 'tl_avisota_newsletter_category')) {
-					$this->Database->query("ALTER TABLE `tl_avisota_newsletter_category` ADD `transport` int(10) unsigned NOT NULL default '0'");
+					$this->Database->query(
+						"ALTER TABLE `tl_avisota_newsletter_category` ADD `transport` int(10) unsigned NOT NULL default '0'"
+					);
 				}
 
 				if ($this->Database->fieldExists('useSMTP', 'tl_avisota_newsletter_category')) {
 					$objCategory = $this->Database
-						->execute("SELECT GROUP_CONCAT(id) AS ids, useSMTP, smtpHost, smtpUser, smtpPass, smtpPort, smtpEnc, sender, senderName
+						->execute(
+						"SELECT GROUP_CONCAT(id) AS ids, useSMTP, smtpHost, smtpUser, smtpPass, smtpPort, smtpEnc, sender, senderName
 								   FROM tl_avisota_newsletter_category
 								   WHERE transportMode=''
-								   GROUP BY useSMTP, smtpHost, smtpUser, smtpPass, smtpPort, smtpEnc, sender, senderName");
+								   GROUP BY useSMTP, smtpHost, smtpUser, smtpPass, smtpPort, smtpEnc, sender, senderName"
+					);
 
 					while ($objCategory->next()) {
 						$arrTransport = array(
 							'tstamp'        => time(),
 							'type'          => 'swift',
-							'title'         => 'Swift Transport' . ($objCategory->useSMTP ? (' (' . ($objCategory->smtpUser ? $objCategory->smtpUser . '@' : '') . $objCategory->smtpHost . ')') : ''),
+							'title'         => 'Swift Transport' . ($objCategory->useSMTP
+								? (' (' . ($objCategory->smtpUser
+									? $objCategory->smtpUser . '@' : '') . $objCategory->smtpHost . ')') : ''),
 							'swiftUseSmtp'  => $objCategory->useSMTP ? 'swiftSmtpOn' : 'swiftSmtpSystemSettings',
 							'swiftSmtpHost' => $objCategory->smtpHost,
 							'swiftSmtpUser' => $objCategory->smtpUser,
@@ -772,11 +826,14 @@ class AvisotaUpdate extends BackendModule
 
 						// update categories to use the transport
 						$this->Database
-							->query("UPDATE tl_avisota_newsletter_category SET transportMode='byCategory', transport=" . $intId . " WHERE id IN (" . $objCategory->ids . ")");
+							->query(
+							"UPDATE tl_avisota_newsletter_category SET transportMode='byCategory', transport=" . $intId . " WHERE id IN (" . $objCategory->ids . ")"
+						);
 					}
 				}
 			}
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'AvisotaRunonce::upgrade2_0_0_u2()', TL_ERROR);
 			return false;
 		}
@@ -786,7 +843,9 @@ class AvisotaUpdate extends BackendModule
 	protected function check2_0_0_u3()
 	{
 		return $this->Database->tableExists('tl_avisota_newsletter') &&
-			$this->Database->execute("SELECT COUNT(id) AS c FROM tl_avisota_newsletter WHERE recipients LIKE '%list-%' OR recipients LIKE '%mgroup-%'")->c > 0;
+			$this->Database->execute(
+				"SELECT COUNT(id) AS c FROM tl_avisota_newsletter WHERE recipients LIKE '%list-%' OR recipients LIKE '%mgroup-%'"
+			)->c > 0;
 	}
 
 	protected function upgrade2_0_0_u3()
@@ -794,7 +853,8 @@ class AvisotaUpdate extends BackendModule
 		try {
 			if ($this->Database->tableExists('tl_avisota_recipient_list')) {
 				if (!$this->Database->tableExists('tl_avisota_recipient_source')) {
-					$this->Database->query("CREATE TABLE `tl_avisota_recipient_source` (
+					$this->Database->query(
+						"CREATE TABLE `tl_avisota_recipient_source` (
 					  `id` int(10) unsigned NOT NULL auto_increment,
 					  `sorting` int(10) unsigned NOT NULL default '0',
 					  `tstamp` int(10) unsigned NOT NULL default '0',
@@ -816,29 +876,35 @@ class AvisotaUpdate extends BackendModule
 					  `filter` char(1) NOT NULL default '',
 					  `disable` char(1) NOT NULL default '',
 					  PRIMARY KEY  (`id`)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8"
+					);
 				}
 
 				if (!$this->Database->fieldExists('recipientsMode', 'tl_avisota_newsletter_category')) {
-					$this->Database->query("ALTER TABLE `tl_avisota_newsletter_category` ADD `recipientsMode` char(22) NOT NULL default ''");
+					$this->Database->query(
+						"ALTER TABLE `tl_avisota_newsletter_category` ADD `recipientsMode` char(22) NOT NULL default ''"
+					);
 				}
 				if (!$this->Database->fieldExists('recipients', 'tl_avisota_newsletter_category')) {
 					$this->Database->query("ALTER TABLE `tl_avisota_newsletter_category` ADD `recipients` blob NULL");
 				}
 
-				$arrSources = array();
-				$arrSourcesByNewsletter = array();
+				$arrSources               = array();
+				$arrSourcesByNewsletter   = array();
 				$arrNewslettersByCategory = array();
-				$arrSourcesByCategory   = array();
+				$arrSourcesByCategory     = array();
 
 				$objNewsletter = $this->Database
-					->execute("SELECT id, pid, recipients
+					->execute(
+					"SELECT id, pid, recipients
 							   FROM tl_avisota_newsletter
-							   WHERE recipients LIKE '%list-%' OR recipients LIKE '%mgroup-%'");
+							   WHERE recipients LIKE '%list-%' OR recipients LIKE '%mgroup-%'"
+				);
 				while ($objNewsletter->next()) {
 					if (!isset($arrNewslettersByCategory[$objNewsletter->pid])) {
 						$arrNewslettersByCategory[$objNewsletter->pid] = array($objNewsletter->id);
-					} else {
+					}
+					else {
 						$arrNewslettersByCategory[$objNewsletter->pid][] = $objNewsletter->id;
 					}
 
@@ -855,15 +921,20 @@ class AvisotaUpdate extends BackendModule
 										->prepare("SELECT title FROM tl_avisota_recipient_list WHERE id=?")
 										->execute($id);
 									if (!$objList->next()) {
-										$this->log('Recipient list ID ' . $id . ' does not exists (anymore), skipping while convert into recipient source!', 'AvisotaUpdate::update2_0_0_u3()', TL_ERROR);
+										$this->log(
+											'Recipient list ID ' . $id . ' does not exists (anymore), skipping while convert into recipient source!',
+											'AvisotaUpdate::update2_0_0_u3()',
+											TL_ERROR
+										);
 										continue;
 									}
 									$arrSource = array(
-										'type' => 'integrated',
-										'title' => $objList->title,
-										'integratedBy' => 'integratedByMailingLists',
+										'type'                   => 'integrated',
+										'title'                  => $objList->title,
+										'integratedBy'           => 'integratedByMailingLists',
 										'integratedMailingLists' => serialize(array($id)),
-										'integratedDetails' => $GLOBALS['TL_CONFIG']['avisota_merge_member_details'] ? 'integrated_member_details' : 'integrated_details'
+										'integratedDetails'      => $GLOBALS['TL_CONFIG']['avisota_merge_member_details']
+											? 'integrated_member_details' : 'integrated_details'
 									);
 									break;
 
@@ -872,19 +943,27 @@ class AvisotaUpdate extends BackendModule
 										->prepare("SELECT name FROM tl_member_group WHERE id=?")
 										->execute($id);
 									if (!$objGroup->next()) {
-										$this->log('Member group ID ' . $id . ' does not exists (anymore), skipping while convert into recipient source!', 'AvisotaUpdate::update2_0_0_u3()', TL_ERROR);
+										$this->log(
+											'Member group ID ' . $id . ' does not exists (anymore), skipping while convert into recipient source!',
+											'AvisotaUpdate::update2_0_0_u3()',
+											TL_ERROR
+										);
 										continue;
 									}
 									$arrSource = array(
-										'type' => 'member',
-										'title' => $objGroup->name,
-										'memberBy' => 'memberByGroups',
+										'type'         => 'member',
+										'title'        => $objGroup->name,
+										'memberBy'     => 'memberByGroups',
 										'memberGroups' => serialize(array($id))
 									);
 									break;
 
 								default:
-									$this->log('Unknown recipient type "' . $type . '", could not convert into recipient source!', 'AvisotaUpdate::update2_0_0_u3()', TL_ERROR);
+									$this->log(
+										'Unknown recipient type "' . $type . '", could not convert into recipient source!',
+										'AvisotaUpdate::update2_0_0_u3()',
+										TL_ERROR
+									);
 									continue;
 							}
 
@@ -892,7 +971,7 @@ class AvisotaUpdate extends BackendModule
 								->executeUncached('SELECT MAX(sorting) AS sorting FROM tl_avisota_recipient_source')
 								->sorting;
 							$arrSource['sorting'] = $arrSource['sorting'] ? $arrSource['sorting'] * 2 : 128;
-							$arrSource['tstamp'] = time();
+							$arrSource['tstamp']  = time();
 
 							$intId = $this->Database
 								->prepare("INSERT INTO tl_avisota_recipient_source %s")
@@ -909,14 +988,15 @@ class AvisotaUpdate extends BackendModule
 						// remember which newsletter use which source
 						if (!isset($arrSourcesByNewsletter[$objNewsletter->id])) {
 							$arrSourcesByNewsletter[$objNewsletter->id] = array($intId);
-						} else {
+						}
+						else {
 							$arrSourcesByNewsletter[$objNewsletter->id][] = $intId;
 						}
 					}
 				}
 
 				// break down newsletter sources to category
-				foreach ($arrNewslettersByCategory as $intCategoryId=>$arrNewsletterIds) {
+				foreach ($arrNewslettersByCategory as $intCategoryId => $arrNewsletterIds) {
 					$arrSourcesByCategory[$intCategoryId] = array();
 
 					foreach ($arrNewsletterIds as $intNewsletterId) {
@@ -930,15 +1010,22 @@ class AvisotaUpdate extends BackendModule
 					// all newsletters use the same sources
 					if (count($arrSourcesByCategory[$intCategoryId]) == 1) {
 						$tmp = explode(',', array_shift($arrSourcesByCategory[$intCategoryId]));
-						foreach ($tmp as $k=>$v) {
+						foreach ($tmp as $k => $v) {
 							$tmp[$k] = $v . ':*';
 						}
 						$this->Database
-							->prepare("UPDATE tl_avisota_newsletter_category SET recipientsMode=?, recipients=? WHERE id=?")
+							->prepare(
+							"UPDATE tl_avisota_newsletter_category SET recipientsMode=?, recipients=? WHERE id=?"
+						)
 							->execute('byCategory', serialize($tmp), $intCategoryId);
 
 						$this->Database
-							->query("UPDATE tl_avisota_newsletter SET recipients='' WHERE id IN (" . implode(',', $arrNewsletterIds) . ")");
+							->query(
+							"UPDATE tl_avisota_newsletter SET recipients='' WHERE id IN (" . implode(
+								',',
+								$arrNewsletterIds
+							) . ")"
+						);
 					}
 
 					// every newsletter use its own source
@@ -950,7 +1037,7 @@ class AvisotaUpdate extends BackendModule
 						// update each newsletter
 						foreach ($arrNewsletterIds as $intNewsletterId) {
 							$tmp = $arrSourcesByNewsletter[$intNewsletterId];
-							foreach ($tmp as $k=>$v) {
+							foreach ($tmp as $k => $v) {
 								$tmp[$k] = $v . ':*';
 							}
 							$this->Database
@@ -960,7 +1047,8 @@ class AvisotaUpdate extends BackendModule
 					}
 				}
 			}
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'AvisotaRunonce::upgrade2_0_0_u3()', TL_ERROR);
 			return false;
 		}

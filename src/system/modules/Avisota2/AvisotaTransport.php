@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,7 +37,7 @@
 /**
  * Class AvisotaTransportModule
  *
- * 
+ *
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -47,7 +48,9 @@ abstract class AvisotaTransport extends Controller
 
 	/**
 	 * @static
+	 *
 	 * @param int $intTransportModule
+	 *
 	 * @return AvisotaTransportModule
 	 * @throws AvisotaTransportException
 	 */
@@ -96,12 +99,13 @@ abstract class AvisotaTransport extends Controller
 	public function initialiseTransport()
 	{
 	}
-	
+
 	/**
 	 * Transport a specific newsletter.
 	 *
 	 * @abstract
-	 * @param AvisotaRecipient $objRecipient
+	 *
+	 * @param AvisotaRecipient  $objRecipient
 	 * @param AvisotaNewsletter $objNewsletter
 	 *
 	 * @return void
@@ -116,7 +120,7 @@ abstract class AvisotaTransport extends Controller
 	 * Transport a mail.
 	 *
 	 * @param string $strRecipientEmail
-	 * @param Mail $objEmail
+	 * @param Mail   $objEmail
 	 *
 	 * @return void
 	 * @throws AvisotaTransportException

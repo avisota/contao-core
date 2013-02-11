@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  4ward.media 2010
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Christoph Wiechert <christoph.wiechert@4wardmedia.de>
@@ -40,26 +41,29 @@ class NewsletterEvent extends NewsletterElement
 
 	/**
 	 * HTML Template
+	 *
 	 * @var string
 	 */
 	protected $strTemplateHTML = 'nle_events_html';
 
 	/**
 	 * Plain text Template
+	 *
 	 * @var string
 	 */
 	protected $strTemplatePlain = 'nle_events_plain';
 
 	/**
 	 * Caching var for jumpTo-pages
+	 *
 	 * @var mixed tl_page-rows
 	 */
 	protected $arrObjJumpToPages = array();
 
 
-
 	/**
 	 * Generate content element
+	 *
 	 * @param str $mode Compile either html or plaintext part
 	 */
 	protected function compile($mode)
@@ -67,69 +71,64 @@ class NewsletterEvent extends NewsletterElement
 		$this->import('DomainLink');
 
 		$events = unserialize($this->events);
-		if(!is_array($events))
-		{
+		if (!is_array($events)) {
 			$this->Template->events = array();
 			return;
 		}
 
 		// split ID and startTime
-		$eventIds = array();
+		$eventIds        = array();
 		$eventStartTimes = array();
-		foreach($events as $event)
-		{
-			$tmp = explode('_',$event);
-			$eventIds[] = $tmp[0];
+		foreach ($events as $event) {
+			$tmp               = explode('_', $event);
+			$eventIds[]        = $tmp[0];
 			$eventStartTimes[] = $tmp[1];
 		}
 
-		$objEvents = $this->Database->prepare('SELECT e.*,c.jumpTo,c.title AS section
+		$objEvents = $this->Database
+			->prepare(
+			'SELECT e.*,c.jumpTo,c.title AS section
 												FROM tl_calendar_events as e
 												LEFT JOIN tl_calendar as c ON (e.pid = c.id)
-												WHERE e.id IN ('.implode(',',$eventIds).')
-												ORDER BY e.startDate')->execute();
+												WHERE e.id IN (' . implode(',', $eventIds) . ')
+												ORDER BY e.startDate'
+		)
+			->execute();
 
 		$arrEvents = array();
-		while($objEvents->next())
-		{
+		while ($objEvents->next()) {
 			$arrEvents[$objEvents->id] = $objEvents->row();
 		}
 
 		$arrReturn = array();
-		foreach($eventIds as $k=>$id)
-		{
+		foreach ($eventIds as $k => $id) {
 			// adjust startTime for recurring events
-			if($arrEvents[$id]['recurring'])
-			{
-				$event = $arrEvents[$id];
-				$count = 0;
+			if ($arrEvents[$id]['recurring']) {
+				$event     = $arrEvents[$id];
+				$count     = 0;
 				$arrRepeat = deserialize($event['repeatEach']);
 
-				while ($event['recurrences'] <= $count || ($event['recurrences']!=0 && $event['startTime'] < $event['repeatEnd']))
-				{
-					if($event['startTime'] == $eventStartTimes[$k])
-					{
+				while ($event['recurrences'] <= $count || ($event['recurrences'] != 0 && $event['startTime'] < $event['repeatEnd'])) {
+					if ($event['startTime'] == $eventStartTimes[$k]) {
 						$arrReturn[] = $event;
 						break;
 					}
 
-					$arg = $arrRepeat['value'];
+					$arg  = $arrRepeat['value'];
 					$unit = $arrRepeat['unit'];
 
-					if ($arg < 1)
-					{
+					if ($arg < 1) {
 						break;
 					}
 
 					$strtotime = '+ ' . $arg . ' ' . $unit;
 
 					$event['startTime'] = strtotime($strtotime, $event['startTime']);
-					$event['endTime'] = strtotime($strtotime, $event['endTime']);
+					$event['endTime']   = strtotime($strtotime, $event['endTime']);
 
 				}
 			}
-			else
-			{
+			else {
 				$arrReturn[] = $arrEvents[$id];
 			}
 		}

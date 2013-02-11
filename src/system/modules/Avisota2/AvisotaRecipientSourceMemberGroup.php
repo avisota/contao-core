@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,7 +37,7 @@
 /**
  * Class AvisotaRecipientSourceMemberGroup
  *
- * 
+ *
  * @copyright  InfinitySoft 2010
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -47,7 +48,7 @@ class AvisotaRecipientSourceMemberGroup extends Controller implements AvisotaRec
 	 * @var array
 	 */
 	private $config;
-	
+
 	public function __construct($arrConfig)
 	{
 		$this->import('Database');
@@ -71,8 +72,10 @@ class AvisotaRecipientSourceMemberGroup extends Controller implements AvisotaRec
 				}
 				// fetch all selected mailing lists
 				$objMailingList = $this->Database
-					->execute('SELECT * FROM tl_avisota_mailing_list WHERE id IN (' . implode(',', $arrIDs) . ') ORDER BY title');
-				// continue with same logic as for all mailing lists
+					->execute(
+					'SELECT * FROM tl_avisota_mailing_list WHERE id IN (' . implode(',', $arrIDs) . ') ORDER BY title'
+				);
+			// continue with same logic as for all mailing lists
 			case 'memberByAllMailingLists':
 				// fetch mailing lists, if there are no result
 				if (!isset($objMailingList)) {
@@ -105,8 +108,10 @@ class AvisotaRecipientSourceMemberGroup extends Controller implements AvisotaRec
 				}
 				// fetch all selected mailing lists
 				$objGroup = $this->Database
-					->execute('SELECT * FROM tl_member_group WHERE id IN (' . implode(',', $arrIDs) . ') ORDER BY name');
-				// continue with same logic as for all mailing lists
+					->execute(
+					'SELECT * FROM tl_member_group WHERE id IN (' . implode(',', $arrIDs) . ') ORDER BY name'
+				);
+			// continue with same logic as for all mailing lists
 			case 'memberByAllGroups':
 				// fetch mailing lists, if there are no result
 				if (!isset($objGroup)) {
@@ -138,10 +143,12 @@ class AvisotaRecipientSourceMemberGroup extends Controller implements AvisotaRec
 					$arrIDs[] = 0;
 				}
 				$objMember = $this->Database
-					->execute('SELECT m.* FROM tl_member m
+					->execute(
+					'SELECT m.* FROM tl_member m
 							   INNER JOIN tl_member_to_mailing_list t ON t.member=m.id
 							   WHERE t.list IN (' . implode(',', $arrIDs) . ')
-							   ORDER BY IF(firstname, firstname, IF(lastname, lastname, email)), lastname');
+							   ORDER BY IF(firstname, firstname, IF(lastname, lastname, email)), lastname'
+				);
 
 			case 'memberByGroupMembers':
 				if (!isset($objMember)) {
@@ -150,16 +157,20 @@ class AvisotaRecipientSourceMemberGroup extends Controller implements AvisotaRec
 						$arrIDs[] = 0;
 					}
 					$objMember = $this->Database
-						->execute('SELECT m.* FROM tl_member m
+						->execute(
+						'SELECT m.* FROM tl_member m
 								   INNER JOIN tl_member_to_group t ON t.member_id=m.id
 								   WHERE t.group_id IN (' . implode(',', $arrIDs) . ')
-								   ORDER BY IF(firstname, firstname, IF(lastname, lastname, email)), lastname');
+								   ORDER BY IF(firstname, firstname, IF(lastname, lastname, email)), lastname'
+					);
 				}
 
 			case 'memberByAllMembers':
 				if (!isset($objMember)) {
 					$objMember = $this->Database
-						->execute("SELECT * FROM tl_member ORDER BY IF(firstname, firstname, IF(lastname, lastname, email)), lastname");
+						->execute(
+						"SELECT * FROM tl_member ORDER BY IF(firstname, firstname, IF(lastname, lastname, email)), lastname"
+					);
 				}
 
 				$time = time();
@@ -172,12 +183,14 @@ class AvisotaRecipientSourceMemberGroup extends Controller implements AvisotaRec
 					$strEmail = $objMember->email ? $objMember->email : '?';
 					if ($strName) {
 						$strMember = sprintf('%s &lt;%s&gt;', $strName, $strEmail);
-					} else {
+					}
+					else {
 						$strMember = $strEmail;
 					}
 					if ($objMember->disable ||
 						$objMember->start != '' && $objMember->start > $time ||
-						$objMember->stop != '' && $objMember->stop < $time) {
+						$objMember->stop != '' && $objMember->stop < $time
+					) {
 						$strMember = '<span style="color:#A6A6A6">' . $strMember . '</span>';
 					}
 					$arrOptions[$objMember->id] = $strMember;
@@ -185,7 +198,8 @@ class AvisotaRecipientSourceMemberGroup extends Controller implements AvisotaRec
 
 				if ($this->config['memberAllowSingleSelection']) {
 					return $arrOptions;
-				} else {
+				}
+				else {
 					return array(
 						'*' => implode(', ', $arrOptions)
 					);
@@ -193,7 +207,11 @@ class AvisotaRecipientSourceMemberGroup extends Controller implements AvisotaRec
 				break;
 
 			default:
-				$this->log('The member recipient source ID ' . $this->config['id'] . ' is not fully configured!', 'AvisotaRecipientSourceIntegratedRecipients::getRecipientOptions()', TL_ERROR);
+				$this->log(
+					'The member recipient source ID ' . $this->config['id'] . ' is not fully configured!',
+					'AvisotaRecipientSourceIntegratedRecipients::getRecipientOptions()',
+					TL_ERROR
+				);
 				return array();
 		}
 	}
@@ -202,7 +220,9 @@ class AvisotaRecipientSourceMemberGroup extends Controller implements AvisotaRec
 	 * Get recipient IDs of a list of options.
 	 *
 	 * @abstract
+	 *
 	 * @param array $varOption
+	 *
 	 * @return array
 	 */
 	public function getRecipients($arrOptions)
@@ -214,6 +234,7 @@ class AvisotaRecipientSourceMemberGroup extends Controller implements AvisotaRec
 	 * Get the recipient details.
 	 *
 	 * @param string $varId
+	 *
 	 * @return array
 	 */
 	public function getRecipientDetails($varId)

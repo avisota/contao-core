@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -49,13 +50,14 @@ class AvisotaNewsletter
 		}
 
 		$objResult = Database::getInstance()
-			->prepare('SELECT *
+			->prepare(
+			'SELECT *
 					   FROM tl_avisota_newsletter
-					   WHERE id=? OR alias=?')
+					   WHERE id=? OR alias=?'
+		)
 			->execute($varId, $varId);
 
-		if (!$objResult->next())
-		{
+		if (!$objResult->next()) {
 			return null;
 		}
 
@@ -407,7 +409,8 @@ class AvisotaNewsletter
 
 			if ($blnContinue && file_exists(TL_ROOT . '/' . $strStylesheet)) {
 				$objFile = new File($strStylesheet);
-				$strStylesheets .= AvisotaNewsletterContent::getInstance()->cleanCSS($objFile->getContent(), $strStylesheet);
+				$strStylesheets .= AvisotaNewsletterContent::getInstance()
+					->cleanCSS($objFile->getContent(), $strStylesheet);
 				$objFile->close();
 			}
 		}
@@ -424,7 +427,7 @@ class AvisotaNewsletter
 		}
 		$objTemplate->newsletter = $this;
 
-		$strBuffer =  $this->replaceAndExtendURLs($objTemplate->parse());
+		$strBuffer = $this->replaceAndExtendURLs($objTemplate->parse());
 
 		// reset static information
 		AvisotaStatic::popNewsletter();
@@ -448,7 +451,8 @@ class AvisotaNewsletter
 		$strContent = '';
 		if (isset($this->contentArray[$area])) {
 			foreach ($this->contentArray[$area] as $element) {
-				$strContent .= AvisotaNewsletterContent::getInstance()->generateNewsletterElement($element, NL_HTML);
+				$strContent .= AvisotaNewsletterContent::getInstance()
+					->generateNewsletterElement($element, NL_HTML);
 			}
 		}
 
@@ -503,7 +507,8 @@ class AvisotaNewsletter
 		$strContent = '';
 		if (isset($this->contentArray[$area])) {
 			foreach ($this->contentArray[$area] as $element) {
-				$strContent .= AvisotaNewsletterContent::getInstance()->generateNewsletterElement($element, NL_PLAIN);
+				$strContent .= AvisotaNewsletterContent::getInstance()
+					->generateNewsletterElement($element, NL_PLAIN);
 			}
 		}
 

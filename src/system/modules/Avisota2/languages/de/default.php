@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,7 +37,10 @@
 /**
  * Page types
  */
-$GLOBALS['TL_LANG']['PTY']['avisota']   = array('Online Newsletter', 'Zeigt einen beliebigen Online-Newsletter aus dem Newslettersystem an.');
+$GLOBALS['TL_LANG']['PTY']['avisota'] = array(
+	'Online Newsletter',
+	'Zeigt einen beliebigen Online-Newsletter aus dem Newslettersystem an.'
+);
 
 
 /**

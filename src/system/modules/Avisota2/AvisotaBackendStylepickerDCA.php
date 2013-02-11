@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -43,8 +44,9 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 		parent::__construct();
 		$this->import('Database');
 	}
+
 	/**
-	 * @param mixed $val
+	 * @param mixed         $val
 	 * @param DataContainer $dc
 	 *
 	 * @return string
@@ -58,14 +60,13 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 		if (is_array($vals)) {
 			// get sections
 			$secs = $this->Input->post('_AvisotaNewsletterCE_Row');
-			if (!is_array($secs) || !count($secs))
+			if (!is_array($secs) || !count($secs)) {
 				return '';
+			}
 
 			// save CEs foreach section
-			foreach ($secs as $sec)
-			{
-				foreach ($vals as $val)
-				{
+			foreach ($secs as $sec) {
+				foreach ($vals as $val) {
 					$this->saveTarget($dc->id, 'tl_avisota_newsletter_content', 'cssID', $sec, $val);
 				}
 			}
@@ -74,7 +75,7 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 	}
 
 	/**
-	 * @param mixed $val
+	 * @param mixed         $val
 	 * @param DataContainer $dc
 	 *
 	 * @return string
@@ -85,8 +86,7 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 		$objTargets = $this->Database
 			->prepare('SELECT DISTINCT(cond) FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=?')
 			->execute($dc->id, 'tl_avisota_newsletter_content');
-		while ($objTargets->next())
-		{
+		while ($objTargets->next()) {
 			$arrReturn[] = $objTargets->cond;
 		}
 		return serialize($arrReturn);
@@ -98,8 +98,7 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 		$objTargets = $this->Database
 			->prepare('SELECT DISTINCT(sec) FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=?')
 			->execute($dc->id, 'tl_avisota_newsletter_content');
-		while ($objTargets->next())
-		{
+		while ($objTargets->next()) {
 			$arrReturn[] = $objTargets->sec;
 		}
 		return serialize($arrReturn);
@@ -113,10 +112,8 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 	public function getAvisotaNewsletterContentElements()
 	{
 		$arrCEs = array();
-		foreach ($GLOBALS['TL_NLE'] as $key => $arr)
-		{
-			foreach ($arr as $elementName => $val)
-			{
+		foreach ($GLOBALS['TL_NLE'] as $key => $arr) {
+			foreach ($arr as $elementName => $val) {
 				array_push($arrCEs, $elementName);
 			}
 		}

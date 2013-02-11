@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -37,6 +38,7 @@
  * Class AvisotaBackendTrackingAjax
  *
  * Parent class for newsletter content elements.
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -46,23 +48,28 @@ class AvisotaBackendTrackingAjax extends Backend
 	public function json_recipients($objNewsletter)
 	{
 		$objResultSet = $this->Database
-			->prepare("SELECT recipient
+			->prepare(
+			"SELECT recipient
 				FROM tl_avisota_statistic_raw_recipient
 				WHERE pid=? AND recipient LIKE ?
-				ORDER BY recipient")
+				ORDER BY recipient"
+		)
 			->limit($this->Input->get('limit') ? $this->Input->get('limit') : 20)
 			->execute($objNewsletter->id, '%' . $this->Input->get('q') . '%');
 
 		header('Content-Type: application/json');
 		echo '[' . "\n";
 		$n = 0;
-		while ($objResultSet->next())
-		{
+		while ($objResultSet->next()) {
 			if ($n++ > 0) {
 				echo ",\n";
 			}
-			echo json_encode(array('value' => $objResultSet->recipient,
-			                       'text'  => $objResultSet->recipient));
+			echo json_encode(
+				array(
+					'value' => $objResultSet->recipient,
+					'text'  => $objResultSet->recipient
+				)
+			);
 		}
 		echo "\n" . ']';
 		exit;
@@ -76,15 +83,19 @@ class AvisotaBackendTrackingAjax extends Backend
 		header('Content-Type: application/json');
 		echo '[' . "\n";
 		$n = 0;
-		while ($objResultSet->next())
-		{
+		while ($objResultSet->next()) {
 			if ($n++ > 0) {
 				echo ",\n";
 			}
 			echo '{' . "\n";
 			echo '"x": ' . ($objResultSet->sendOn * 1000) . ",\n";
 			echo '"title": "N",' . "\n";
-			echo '"text": ' . json_encode('<b>' . $objResultSet->subject . '</b> ' . $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $objResultSet->sendOn)) . "\n";
+			echo '"text": ' . json_encode(
+				'<b>' . $objResultSet->subject . '</b> ' . $this->parseDate(
+					$GLOBALS['TL_CONFIG']['datimFormat'],
+					$objResultSet->sendOn
+				)
+			) . "\n";
 			echo '}' . "\n";
 		}
 		echo "\n" . ']';
@@ -98,24 +109,27 @@ class AvisotaBackendTrackingAjax extends Backend
 		if ($strRecipient) {
 			// total number of recived newsletters
 			$objResultSet = $this->Database
-				->prepare("SELECT r.send as time, COUNT(r.id) as sum
+				->prepare(
+				"SELECT r.send as time, COUNT(r.id) as sum
 					FROM tl_avisota_newsletter_outbox_recipient r
 					WHERE r.email=? AND r.send>0
 					GROUP BY time
-					ORDER BY time")
+					ORDER BY time"
+			)
 				->execute($strRecipient);
 		}
-		else
-		{
+		else {
 			// total number of recipients for this newsletter
 			$objResultSet = $this->Database
-				->prepare("SELECT r.send as time, COUNT(r.id) as sum
+				->prepare(
+				"SELECT r.send as time, COUNT(r.id) as sum
 					FROM tl_avisota_newsletter_outbox_recipient r
 					INNER JOIN tl_avisota_newsletter_outbox o
 					ON r.pid=o.id
 					WHERE o.pid=? AND r.send>0
 					GROUP BY time
-					ORDER BY time")
+					ORDER BY time"
+			)
 				->execute($objNewsletter->id);
 		}
 		$this->json_output($objResultSet, $blnHighstockMode);
@@ -127,22 +141,25 @@ class AvisotaBackendTrackingAjax extends Backend
 		if ($strRecipient) {
 			// total number of readed newsletters
 			$objResultSet = $this->Database
-				->prepare("SELECT tstamp as time, COUNT(id) as sum
+				->prepare(
+				"SELECT tstamp as time, COUNT(id) as sum
 					FROM tl_avisota_statistic_raw_recipient
 					WHERE recipient=? AND readed=?
 					GROUP BY time
-					ORDER BY time")
+					ORDER BY time"
+			)
 				->execute($strRecipient, 1);
 		}
-		else
-		{
+		else {
 			// total number of recipients that reads this newsletter
 			$objResultSet = $this->Database
-				->prepare("SELECT tstamp as time, COUNT(id) as sum
+				->prepare(
+				"SELECT tstamp as time, COUNT(id) as sum
 					FROM tl_avisota_statistic_raw_recipient
 					WHERE pid=? AND readed=?
 					GROUP BY time
-					ORDER BY time")
+					ORDER BY time"
+			)
 				->execute($objNewsletter->id, 1);
 		}
 		$this->json_output($objResultSet, $blnHighstockMode);
@@ -154,28 +171,31 @@ class AvisotaBackendTrackingAjax extends Backend
 		if ($strRecipient) {
 			// total number of newsletters the recipients reacts on (clicked a link)
 			$objResultSet = $this->Database
-				->prepare("SELECT time, SUM(sum) as sum
+				->prepare(
+				"SELECT time, SUM(sum) as sum
 					FROM (
 						SELECT MIN(tstamp) as time, 1 as sum
 						FROM tl_avisota_statistic_raw_link_hit
 						WHERE recipient=?
 						GROUP BY recipient
 					) t
-					GROUP BY time")
+					GROUP BY time"
+			)
 				->execute($strRecipient);
 		}
-		else
-		{
+		else {
 			// total number ov recipients that reacts on this newsletter (clicked a link)
 			$objResultSet = $this->Database
-				->prepare("SELECT time, SUM(sum) as sum
+				->prepare(
+				"SELECT time, SUM(sum) as sum
 					FROM (
 						SELECT MIN(tstamp) as time, 1 as sum
 						FROM tl_avisota_statistic_raw_link_hit
 						WHERE pid=?
 						GROUP BY linkID,recipientLinkID
 					) t
-					GROUP BY time")
+					GROUP BY time"
+			)
 				->execute($objNewsletter->id);
 		}
 		$this->json_output($objResultSet, $blnHighstockMode);
@@ -191,8 +211,7 @@ class AvisotaBackendTrackingAjax extends Backend
 				->execute($objNewsletter->id, $strRecipient);
 			$strWhere = 'recipientLinkId';
 		}
-		else
-		{
+		else {
 			// total number ov recipients that reacts on this newsletter (clicked a link)
 			$objLink  = $this->Database
 				->prepare("SELECT id,url FROM tl_avisota_statistic_raw_link WHERE pid=?")
@@ -203,8 +222,7 @@ class AvisotaBackendTrackingAjax extends Backend
 		header('Content-Type: application/json');
 		$n = 0;
 		echo '[' . "\n";
-		while ($objLink->next())
-		{
+		while ($objLink->next()) {
 			if ($n++ > 0) {
 				echo ',' . "\n";
 			}
@@ -212,10 +230,12 @@ class AvisotaBackendTrackingAjax extends Backend
 			echo '"name": ' . json_encode($objLink->url) . ',' . "\n";
 			echo '"data": ';
 			$objResultSet = $this->Database
-				->prepare("SELECT tstamp as time,COUNT(tstamp) as sum
+				->prepare(
+				"SELECT tstamp as time,COUNT(tstamp) as sum
 					FROM tl_avisota_statistic_raw_link_hit
 					WHERE $strWhere=?
-					GROUP BY time")
+					GROUP BY time"
+			)
 				->execute($objLink->id);
 			$this->json_output_array($objResultSet, $blnHighstockMode);
 			echo "\n" . '}';
@@ -237,13 +257,12 @@ class AvisotaBackendTrackingAjax extends Backend
 		// highstock require local time, jqplot use utc time
 		$intTimezoneOffset = $blnHighstockMode ? -$this->parseDate('Z', time()) : 0;
 		echo '[' . "\n";
-		$n    = 0;
-		$sum  = 0;
-		$time = -1;
+		$n         = 0;
+		$sum       = 0;
+		$time      = -1;
 		$continued = false;
 		if ($objResultSet->numRows) {
-			while ($objResultSet->next())
-			{
+			while ($objResultSet->next()) {
 				$sum += $objResultSet->sum;
 				if (!$blnHighstockMode) {
 					$temp = floor($objResultSet->time - ($objResultSet->time % (60)));
@@ -253,8 +272,7 @@ class AvisotaBackendTrackingAjax extends Backend
 					}
 					$time = $temp;
 				}
-				else
-				{
+				else {
 					$time = $objResultSet->time;
 				}
 				if ($n++ > 0) {
@@ -270,8 +288,7 @@ class AvisotaBackendTrackingAjax extends Backend
 				echo '[' . (($time + $intTimezoneOffset) * 1000) . ',' . $sum . ']';
 			}
 		}
-		else
-		{
+		else {
 			echo '[' . (time() * 1000) . ',0]';
 		}
 		echo "\n" . ']';
@@ -279,8 +296,7 @@ class AvisotaBackendTrackingAjax extends Backend
 
 	public function search_intersect($a, $b)
 	{
-		foreach ($a as $e)
-		{
+		foreach ($a as $e) {
 			if (in_array($e, $b)) {
 				return true;
 			}

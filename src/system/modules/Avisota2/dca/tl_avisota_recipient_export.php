@@ -25,13 +25,13 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  * @license    LGPL
  * @filesource
  */
-
 
 
 /**
@@ -41,20 +41,19 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_export'] = array
 (
 
 	// Config
-	'config' => array
+	'config'       => array
 	(
-		'dataContainer'               => 'Memory',
-		'closed'                      => true,
-		'onload_callback'           => array
+		'dataContainer'     => 'Memory',
+		'closed'            => true,
+		'onload_callback'   => array
 		(
 			array('tl_avisota_recipient_export', 'onload_callback'),
 		),
-		'onsubmit_callback'           => array
+		'onsubmit_callback' => array
 		(
 			array('tl_avisota_recipient_export', 'onsubmit_callback'),
 		)
 	),
-
 	// Palettes
 	'metapalettes' => array
 	(
@@ -63,32 +62,31 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_export'] = array
 			'format' => array(':hide', 'delimiter', 'enclosure', 'fields')
 		)
 	),
-
 	// Fields
-	'fields' => array
+	'fields'       => array
 	(
 		'delimiter' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['delimiter'],
-			'inputType'               => 'select',
-			'options'                 => array('comma', 'semicolon', 'tabulator', 'linebreak'),
-			'reference'               => &$GLOBALS['TL_LANG']['MSC'],
-			'eval'                    => array('mandatory'=>true, 'tl_class'=>'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['delimiter'],
+			'inputType' => 'select',
+			'options'   => array('comma', 'semicolon', 'tabulator', 'linebreak'),
+			'reference' => &$GLOBALS['TL_LANG']['MSC'],
+			'eval'      => array('mandatory' => true, 'tl_class' => 'w50')
 		),
 		'enclosure' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['enclosure'],
-			'inputType'               => 'select',
-			'options'                 => array('double', 'single'),
-			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_recipient_export'],
-			'eval'                    => array('tl_class'=>'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['enclosure'],
+			'inputType' => 'select',
+			'options'   => array('double', 'single'),
+			'reference' => &$GLOBALS['TL_LANG']['tl_avisota_recipient_export'],
+			'eval'      => array('tl_class' => 'w50')
 		),
-		'fields' => array
+		'fields'    => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['fields'],
-			'inputType'               => 'checkboxWizard',
-			'options_callback'        => array('tl_avisota_recipient_export', 'getFields'),
-			'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
+			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['fields'],
+			'inputType'        => 'checkboxWizard',
+			'options_callback' => array('tl_avisota_recipient_export', 'getFields'),
+			'eval'             => array('multiple' => true, 'tl_class' => 'clr')
 		)
 	)
 );
@@ -114,14 +112,13 @@ class tl_avisota_recipient_export extends Backend
 	public function getFields()
 	{
 		$arrOptions = array();
-		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $strField => $arrData)
-		{
-			if (isset($arrData['eval']) && isset($arrData['eval']['exportable']) && $arrData['eval']['exportable'])
-			{
-				$arrOptions[$strField] = empty($arrData['label'][0]) ? $strField : $arrData['label'][0] . ' [' . $strField . ']';
+		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $strField => $arrData) {
+			if (isset($arrData['eval']) && isset($arrData['eval']['exportable']) && $arrData['eval']['exportable']) {
+				$arrOptions[$strField] = empty($arrData['label'][0]) ? $strField
+					: $arrData['label'][0] . ' [' . $strField . ']';
 			}
 		}
-		$arrOptions['statistic:links'] = &$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'][0];
+		$arrOptions['statistic:links'] = & $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'][0];
 
 		return $arrOptions;
 	}
@@ -136,10 +133,8 @@ class tl_avisota_recipient_export extends Backend
 	{
 		$varData = $this->Session->get('AVISOTA_EXPORT');
 
-		if ($varData && is_array($varData))
-		{
-			foreach ($varData as $k=>$v)
-			{
+		if ($varData && is_array($varData)) {
+			foreach ($varData as $k => $v) {
 				$dc->setData($k, $v);
 			}
 		}
@@ -154,8 +149,7 @@ class tl_avisota_recipient_export extends Backend
 	public function onsubmit_callback(DataContainer $dc)
 	{
 		// Get delimiter
-		switch ($dc->getData('delimiter'))
-		{
+		switch ($dc->getData('delimiter')) {
 			case 'semicolon':
 				$strDelimiter = ';';
 				break;
@@ -174,8 +168,7 @@ class tl_avisota_recipient_export extends Backend
 		}
 
 		// Get enclosure
-		switch ($dc->getData('enclosure'))
-		{
+		switch ($dc->getData('enclosure')) {
 			case 'single':
 				$strEnclosure = '\'';
 				break;
@@ -190,42 +183,44 @@ class tl_avisota_recipient_export extends Backend
 
 		// Get field labels
 		$arrLabels = array();
-		foreach ($arrFields as $strField)
-		{
-			switch ($strField)
-			{
-			case 'statistic:links':
-				$arrLabels[] = &$GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'][1];
-				break;
+		foreach ($arrFields as $strField) {
+			switch ($strField) {
+				case 'statistic:links':
+					$arrLabels[] = & $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'][1];
+					break;
 
-			default:
-				$arrData = $GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$strField];
-				if (empty($arrData['label'][0]))
-				{
-					$arrLabels[] = $strField;
-				}
-				else
-				{
-					$arrLabels[] = $arrData['label'][0] . ' [' . $strField . ']';
-				}
-				break;
+				default:
+					$arrData = $GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$strField];
+					if (empty($arrData['label'][0])) {
+						$arrLabels[] = $strField;
+					}
+					else {
+						$arrLabels[] = $arrData['label'][0] . ' [' . $strField . ']';
+					}
+					break;
 			}
 		}
 
-		$this->Session->set('AVISOTA_EXPORT', array(
-			'delimiter' => $dc->getData('delimiter'),
-			'enclosure' => $dc->getData('enclosure'),
-			'fields'    => $dc->getData('fields')
-		));
+		$this->Session->set(
+			'AVISOTA_EXPORT',
+			array(
+				'delimiter' => $dc->getData('delimiter'),
+				'enclosure' => $dc->getData('enclosure'),
+				'fields'    => $dc->getData('fields')
+			)
+		);
 
 		// search for the list
 		$objList = $this->Database
 			->prepare("SELECT * FROM tl_avisota_mailing_list WHERE id=?")
 			->execute($this->Input->get('id'));
 
-		if (!$objList->next())
-		{
-			$this->log('The recipient list ID ' . $this->Input->get('id') . ' does not exists!', 'tl_avisota_recipient_export', TL_ERROR);
+		if (!$objList->next()) {
+			$this->log(
+				'The recipient list ID ' . $this->Input->get('id') . ' does not exists!',
+				'tl_avisota_recipient_export',
+				TL_ERROR
+			);
 			$this->redirect('contao/main.php?act=error');
 		}
 
@@ -245,46 +240,41 @@ class tl_avisota_recipient_export extends Backend
 		$objRecipient = $this->Database
 			->prepare("SELECT * FROM tl_avisota_recipient WHERE pid=?")
 			->execute($this->Input->get('id'));
-		while ($objRecipient->next())
-		{
+		while ($objRecipient->next()) {
 			$arrRow = array();
-			foreach ($arrFields as $strField)
-			{
+			foreach ($arrFields as $strField) {
 				$intStatisticLinksIndex = -1;
-				switch ($strField)
-				{
-				case 'statistic:links':
-					$intStatisticLinksIndex = count($arrRow);
-					$arrRow[] = '';
-					break;
+				switch ($strField) {
+					case 'statistic:links':
+						$intStatisticLinksIndex = count($arrRow);
+						$arrRow[]               = '';
+						break;
 
-				default:
-					$arrRow[] = $objRecipient->$strField;
+					default:
+						$arrRow[] = $objRecipient->$strField;
 				}
 			}
 
-			if ($intStatisticLinksIndex)
-			{
+			if ($intStatisticLinksIndex) {
 				$objLinks = $this->Database
-					->prepare("SELECT l.url
+					->prepare(
+					"SELECT l.url
 						FROM tl_avisota_statistic_raw_recipient_link l
 						INNER JOIN tl_avisota_statistic_raw_link_hit h
 						ON h.recipientLinkID = l.id
 						WHERE l.recipient=?
 						GROUP BY l.url
-						ORDER BY l.url")
+						ORDER BY l.url"
+				)
 					->execute($objRecipient->email);
 
-				if ($objLinks->numRows)
-				{
+				if ($objLinks->numRows) {
 					$arrEmptyRow = array();
-					for ($i=0; $i<count($arrRow); $i++)
-					{
+					for ($i = 0; $i < count($arrRow); $i++) {
 						$arrEmptyRow[] = '';
 					}
 
-					while ($objLinks->next())
-					{
+					while ($objLinks->next()) {
 						$arrRow[$intStatisticLinksIndex] = $objLinks->url;
 						fputcsv($objFile->handle, $arrRow, $strDelimiter, $strEnclosure);
 						$arrRow = $arrEmptyRow;
@@ -315,18 +305,18 @@ class tl_avisota_recipient_export extends Backend
 		$objZip = new File($strZip);
 
 		// Open the "save as â€¦" dialogue
-        header('Content-Type: ' . $objZip->mime);
-        header('Content-Transfer-Encoding: binary');
-        header('Content-Disposition: attachment; filename="' . $objList->title . '.zip"');
-        header('Content-Length: ' . $objZip->filesize);
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Pragma: public');
-        header('Expires: 0');
+		header('Content-Type: ' . $objZip->mime);
+		header('Content-Transfer-Encoding: binary');
+		header('Content-Disposition: attachment; filename="' . $objList->title . '.zip"');
+		header('Content-Length: ' . $objZip->filesize);
+		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		header('Pragma: public');
+		header('Expires: 0');
 
- 		// send the zip file
-        $resFile = fopen(TL_ROOT . '/' . $strZip, 'rb');
-        fpassthru($resFile);
-        fclose($resFile);
+		// send the zip file
+		$resFile = fopen(TL_ROOT . '/' . $strZip, 'rb');
+		fpassthru($resFile);
+		fclose($resFile);
 
 		// delete temporary files
 		$objFile->delete();

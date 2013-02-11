@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -33,5 +34,11 @@
  */
 
 $GLOBALS['TL_LANG']['tl_stylepicker4ward']['Avisota_legend']           = 'Avisota Newslettersystem';
-$GLOBALS['TL_LANG']['tl_stylepicker4ward']['_AvisotaNewsletterCEs']    = array('Newsletter Inhaltselemente', 'Diese Styledefinition kann auf diese Inhaltselemente angewandt werden.');
-$GLOBALS['TL_LANG']['tl_stylepicker4ward']['_AvisotaNewsletterCE_Row'] = array('Spalten', 'Das Inhaltselement muss in diesen Spalten liegen.');
+$GLOBALS['TL_LANG']['tl_stylepicker4ward']['_AvisotaNewsletterCEs']    = array(
+	'Newsletter Inhaltselemente',
+	'Diese Styledefinition kann auf diese Inhaltselemente angewandt werden.'
+);
+$GLOBALS['TL_LANG']['tl_stylepicker4ward']['_AvisotaNewsletterCE_Row'] = array(
+	'Spalten',
+	'Das Inhaltselement muss in diesen Spalten liegen.'
+);

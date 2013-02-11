@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,7 +37,7 @@
 /**
  * Page types
  */
-$GLOBALS['TL_LANG']['PTY']['avisota']   = array('Newsletter', 'Displays any newsletter from the Newsletter System.');
+$GLOBALS['TL_LANG']['PTY']['avisota'] = array('Newsletter', 'Displays any newsletter from the Newsletter System.');
 
 
 /**
@@ -57,5 +58,5 @@ $GLOBALS['TL_LANG']['NLE']['download']  = array('Download', 'Creates a link to a
 $GLOBALS['TL_LANG']['NLE']['downloads'] = array('Downloads', 'Creates links for multiple download files.');
 $GLOBALS['TL_LANG']['NLE']['includes']  = 'Include-Elemente';
 $GLOBALS['TL_LANG']['NLE']['news']      = array('News', 'Inserts a news teaser.');
-$GLOBALS['TL_LANG']['NLE']['events']     = array('Events', 'Inserts an event teaser.');
+$GLOBALS['TL_LANG']['NLE']['events']    = array('Events', 'Inserts an event teaser.');
 $GLOBALS['TL_LANG']['NLE']['article']   = array('Article', 'Inserts an article teaser.');

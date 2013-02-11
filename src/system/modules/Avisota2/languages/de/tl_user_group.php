@@ -1,4 +1,6 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php if (!defined('TL_ROOT')) {
+	die('You cannot access this file directly!');
+}
 
 /**
  * Avisota newsletter and mailing system
@@ -7,7 +9,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -25,6 +27,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,12 +39,30 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_user_group']['avisota_recipient_lists']                 = array('Erlaubte Abonnentenlisten', 'Hier können Sie den Zugriff auf einen oder mehrere Abonnentenlisten erlauben.');
-$GLOBALS['TL_LANG']['tl_user_group']['avisota_recipient_list_permissions']      = array('Abonnentenlisten-Rechte', 'Hier können Sie die Abonnentenlisten-Rechte festlegen.');
-$GLOBALS['TL_LANG']['tl_user_group']['avisota_recipient_permissions']           = array('Abonnenten-Rechte', 'Hier können Sie die Abonnenten-Rechte festlegen.');
-$GLOBALS['TL_LANG']['tl_user_group']['avisota_newsletter_categories']           = array('Erlaubte Newsletterkategorien', 'Hier können Sie den Zugriff auf einen oder mehrere Newsletterkategorien erlauben.');
-$GLOBALS['TL_LANG']['tl_user_group']['avisota_newsletter_category_permissions'] = array('Newsletterkategory-Rechte', 'Hier können Sie die Newsletterkategory-Rechte festlegen.');
-$GLOBALS['TL_LANG']['tl_user_group']['avisota_newsletter_permissions']          = array('Newsletter-Rechte', 'Hier können Sie die Newsletter-Rechte festlegen.');
+$GLOBALS['TL_LANG']['tl_user_group']['avisota_recipient_lists']                 = array(
+	'Erlaubte Abonnentenlisten',
+	'Hier können Sie den Zugriff auf einen oder mehrere Abonnentenlisten erlauben.'
+);
+$GLOBALS['TL_LANG']['tl_user_group']['avisota_recipient_list_permissions']      = array(
+	'Abonnentenlisten-Rechte',
+	'Hier können Sie die Abonnentenlisten-Rechte festlegen.'
+);
+$GLOBALS['TL_LANG']['tl_user_group']['avisota_recipient_permissions']           = array(
+	'Abonnenten-Rechte',
+	'Hier können Sie die Abonnenten-Rechte festlegen.'
+);
+$GLOBALS['TL_LANG']['tl_user_group']['avisota_newsletter_categories']           = array(
+	'Erlaubte Newsletterkategorien',
+	'Hier können Sie den Zugriff auf einen oder mehrere Newsletterkategorien erlauben.'
+);
+$GLOBALS['TL_LANG']['tl_user_group']['avisota_newsletter_category_permissions'] = array(
+	'Newsletterkategory-Rechte',
+	'Hier können Sie die Newsletterkategory-Rechte festlegen.'
+);
+$GLOBALS['TL_LANG']['tl_user_group']['avisota_newsletter_permissions']          = array(
+	'Newsletter-Rechte',
+	'Hier können Sie die Newsletter-Rechte festlegen.'
+);
 
 
 /**

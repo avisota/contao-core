@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -37,6 +38,7 @@
  * Class Avisota
  *
  * Parent class for newsletter content elements.
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -50,6 +52,7 @@ class AvisotaTracking extends BackendModule
 
 	/**
 	 * Template
+	 *
 	 * @var string
 	 */
 	protected $strTemplate = 'be_avisota_tracking';
@@ -85,8 +88,13 @@ class AvisotaTracking extends BackendModule
 					$GLOBALS['TL_CONFIG']['avisota_chart_highstock_confirm']
 				) {
 					$objChart = new AvisotaBackendChartHighstock();
-				} else {
-					$this->log('Highstock.js is not installed or confirmed to licensed!', 'AvisotaTracking::compile()', TL_ERROR);
+				}
+				else {
+					$this->log(
+						'Highstock.js is not installed or confirmed to licensed!',
+						'AvisotaTracking::compile()',
+						TL_ERROR
+					);
 					$this->redirect('contao/main.php?act=error');
 				}
 				break;
@@ -102,11 +110,10 @@ class AvisotaTracking extends BackendModule
 			$objNewsletter = $this->Database
 				->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
 				->execute($this->Input->get('newsletter'));
-			$strRecipient = $this->Input->get('recipient');
+			$strRecipient  = $this->Input->get('recipient');
 
 			if ($objNewsletter->next()) {
-				switch ($this->Input->get('data'))
-				{
+				switch ($this->Input->get('data')) {
 					case 'recipients':
 						$this->Ajax->json_recipients($objNewsletter);
 				}
@@ -115,7 +122,7 @@ class AvisotaTracking extends BackendModule
 			}
 
 			header('Content-Type: application/json');
-			echo json_encode(array('error'=>'Invalid newsletter ID.'));
+			echo json_encode(array('error' => 'Invalid newsletter ID.'));
 			exit;
 		}
 
@@ -124,10 +131,13 @@ class AvisotaTracking extends BackendModule
 
 		# evaluate the post and get parameters
 		if ($this->Input->post('FORM_SUBMIT') == 'tl_filters') {
-			$this->Session->set('AVISOTA_TRACKING', array(
-				$this->Input->post('newsletter'),
-				urldecode($this->Input->post('recipient'))
-			));
+			$this->Session->set(
+				'AVISOTA_TRACKING',
+				array(
+					$this->Input->post('newsletter'),
+					urldecode($this->Input->post('recipient'))
+				)
+			);
 			$this->redirect('contao/main.php?do=avisota_tracking');
 		}
 
@@ -150,14 +160,12 @@ class AvisotaTracking extends BackendModule
 			}
 
 			# collect read state and build where statement for a specific recipient
-			else
-			{
+			else {
 				$arrIds = $objRecipient->fetchEach('pid');
 				if (count($arrIds)) {
 					$strWhere = ' AND id IN (' . implode(',', $arrIds) . ')';
 				}
-				else
-				{
+				else {
 					$strWhere = ' AND id=0';
 				}
 			}
@@ -165,10 +173,14 @@ class AvisotaTracking extends BackendModule
 
 		# read all available newsletters (if set, only for a specific recipient)
 		$arrNewsletters = array();
-		$objNewsletters = $this->Database->execute("SELECT * FROM tl_avisota_newsletter WHERE sendOn!='' $strWhere ORDER BY sendOn DESC");
-		while ($objNewsletters->next())
-		{
-			$arrNewsletters[$objNewsletters->id] = $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $objNewsletters->sendOn) . ' ' . $objNewsletters->subject;
+		$objNewsletters = $this->Database->execute(
+			"SELECT * FROM tl_avisota_newsletter WHERE sendOn!='' $strWhere ORDER BY sendOn DESC"
+		);
+		while ($objNewsletters->next()) {
+			$arrNewsletters[$objNewsletters->id] = $this->parseDate(
+				$GLOBALS['TL_CONFIG']['dateFormat'],
+				$objNewsletters->sendOn
+			) . ' ' . $objNewsletters->subject;
 		}
 
 		// cancel, if no newsletters

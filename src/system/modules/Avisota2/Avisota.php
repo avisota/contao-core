@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -67,32 +68,33 @@ class Avisota extends Backend
 
 		$objNewsletter = AvisotaNewsletter::load($intId);
 
-		if (!$objNewsletter)
-		{
+		if (!$objNewsletter) {
 			$this->redirect('contao/main.php?do=avisota_newsletter');
 		}
 
 		$objCategory = AvisotaNewsletterCategory::load($objNewsletter->pid);
 
-		if (!$objCategory)
-		{
+		if (!$objCategory) {
 			$this->redirect('contao/main.php?do=avisota_newsletter');
 		}
 
-		if (!$this->User->isAdmin)
-		{
-			if (!is_array($this->User->avisota_newsletter_categories) || count($this->User->avisota_newsletter_categories) < 1)
-			{
+		if (!$this->User->isAdmin) {
+			if (!is_array($this->User->avisota_newsletter_categories) || count(
+				$this->User->avisota_newsletter_categories
+			) < 1
+			) {
 				$root = array(0);
 			}
-			else
-			{
+			else {
 				$root = $this->User->avisota_newsletter_categories;
 			}
 
-			if (!in_array($objCategory->id, $root))
-			{
-				$this->log('Not enough permissions to send newsletter from category ID ' . $objCategory->id, 'Avisota::send()', TL_ERROR);
+			if (!in_array($objCategory->id, $root)) {
+				$this->log(
+					'Not enough permissions to send newsletter from category ID ' . $objCategory->id,
+					'Avisota::send()',
+					TL_ERROR
+				);
 				$this->redirect('contao/main.php?act=error');
 			}
 		}
@@ -108,11 +110,10 @@ class Avisota extends Backend
 
 		// Store the current referer
 		$session = $this->Session->get('referer');
-		if ($session['current'] != $this->Environment->requestUri)
-		{
+		if ($session['current'] != $this->Environment->requestUri) {
 			$session['tl_avisota_newsletter'] = $this->Environment->requestUri;
-			$session['last'] = $session['current'];
-			$session['current'] = $this->Environment->requestUri;
+			$session['last']                  = $session['current'];
+			$session['current']               = $this->Environment->requestUri;
 			$this->Session->set('referer', $session);
 		}
 
@@ -126,13 +127,10 @@ class Avisota extends Backend
 	{
 		$arrUser = array();
 		$objUser = $this->Database->execute("SELECT * FROM tl_user ORDER BY name,email");
-		while ($objUser->next())
-		{
-			if (!$objUser->admin && !$this->User->isAdmin)
-			{
+		while ($objUser->next()) {
+			if (!$objUser->admin && !$this->User->isAdmin) {
 				$arrGroups = array_intersect($this->User->groups, deserialize($objUser->groups, true));
-				if (!count($arrGroups))
-				{
+				if (!count($arrGroups)) {
 					continue;
 				}
 			}

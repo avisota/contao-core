@@ -25,13 +25,13 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
  * @license    LGPL
  * @filesource
  */
-
 
 
 /**
@@ -41,20 +41,19 @@ $GLOBALS['TL_DCA']['tl_avisota_tracking_export'] = array
 (
 
 	// Config
-	'config' => array
+	'config'       => array
 	(
-		'dataContainer'               => 'Memory',
-		'closed'                      => true,
-		'onload_callback'           => array
+		'dataContainer'     => 'Memory',
+		'closed'            => true,
+		'onload_callback'   => array
 		(
 			array('tl_avisota_tracking_export', 'onload_callback'),
 		),
-		'onsubmit_callback'           => array
+		'onsubmit_callback' => array
 		(
 			array('tl_avisota_tracking_export', 'onsubmit_callback'),
 		)
 	),
-
 	// Palettes
 	'metapalettes' => array
 	(
@@ -63,25 +62,24 @@ $GLOBALS['TL_DCA']['tl_avisota_tracking_export'] = array
 			'format' => array(':hide', 'delimiter', 'enclosure')
 		)
 	),
-
 	// Fields
-	'fields' => array
+	'fields'       => array
 	(
 		'delimiter' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_tracking_export']['delimiter'],
-			'inputType'               => 'select',
-			'options'                 => array('comma', 'semicolon', 'tabulator', 'linebreak'),
-			'reference'               => &$GLOBALS['TL_LANG']['MSC'],
-			'eval'                    => array('mandatory'=>true, 'tl_class'=>'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_tracking_export']['delimiter'],
+			'inputType' => 'select',
+			'options'   => array('comma', 'semicolon', 'tabulator', 'linebreak'),
+			'reference' => &$GLOBALS['TL_LANG']['MSC'],
+			'eval'      => array('mandatory' => true, 'tl_class' => 'w50')
 		),
 		'enclosure' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_avisota_tracking_export']['enclosure'],
-			'inputType'               => 'select',
-			'options'                 => array('double', 'single'),
-			'reference'               => &$GLOBALS['TL_LANG']['tl_avisota_tracking_export'],
-			'eval'                    => array('tl_class'=>'w50')
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_tracking_export']['enclosure'],
+			'inputType' => 'select',
+			'options'   => array('double', 'single'),
+			'reference' => &$GLOBALS['TL_LANG']['tl_avisota_tracking_export'],
+			'eval'      => array('tl_class' => 'w50')
 		)
 	)
 );
@@ -107,10 +105,8 @@ class tl_avisota_tracking_export extends Backend
 	{
 		$varData = $this->Session->get('AVISOTA_TRACKING_EXPORT');
 
-		if ($varData && is_array($varData))
-		{
-			foreach ($varData as $k=>$v)
-			{
+		if ($varData && is_array($varData)) {
+			foreach ($varData as $k => $v) {
 				$dc->setData($k, $v);
 			}
 		}
@@ -125,8 +121,7 @@ class tl_avisota_tracking_export extends Backend
 	public function onsubmit_callback(DataContainer $dc)
 	{
 		// Get delimiter
-		switch ($dc->getData('delimiter'))
-		{
+		switch ($dc->getData('delimiter')) {
 			case 'semicolon':
 				$strDelimiter = ';';
 				break;
@@ -145,8 +140,7 @@ class tl_avisota_tracking_export extends Backend
 		}
 
 		// Get enclosure
-		switch ($dc->getData('enclosure'))
-		{
+		switch ($dc->getData('enclosure')) {
 			case 'single':
 				$strEnclosure = '\'';
 				break;
@@ -156,10 +150,13 @@ class tl_avisota_tracking_export extends Backend
 				break;
 		}
 
-		$this->Session->set('AVISOTA_TRACKING_EXPORT', array(
-			'delimiter' => $dc->getData('delimiter'),
-			'enclosure' => $dc->getData('enclosure')
-		));
+		$this->Session->set(
+			'AVISOTA_TRACKING_EXPORT',
+			array(
+				'delimiter' => $dc->getData('delimiter'),
+				'enclosure' => $dc->getData('enclosure')
+			)
+		);
 
 		// build labels
 		$arrLabels = array
@@ -188,35 +185,40 @@ class tl_avisota_tracking_export extends Backend
 		// write rows
 		$objNewsletter = $this->Database
 			->execute("SELECT * FROM tl_avisota_newsletter WHERE sendOn>0 ORDER BY sendOn DESC");
-		while ($objNewsletter->next())
-		{
+		while ($objNewsletter->next()) {
 			$objResultSet = $this->Database
-				->prepare("SELECT COUNT(r.id) as sum
+				->prepare(
+				"SELECT COUNT(r.id) as sum
 					FROM tl_avisota_newsletter_outbox_recipient r
 					INNER JOIN tl_avisota_newsletter_outbox o
-					WHERE o.pid=? AND r.send>0")
+					WHERE o.pid=? AND r.send>0"
+			)
 				->execute($objNewsletter->id);
-			$intTotal = $objResultSet->sum;
+			$intTotal     = $objResultSet->sum;
 
 			$objResultSet = $this->Database
-				->prepare("SELECT COUNT(id) as sum
+				->prepare(
+				"SELECT COUNT(id) as sum
 					FROM tl_avisota_statistic_raw_recipient
-					WHERE pid=? AND readed=?")
+					WHERE pid=? AND readed=?"
+			)
 				->execute($objNewsletter->id, 1);
-			$intReads = $objResultSet->sum;
+			$intReads     = $objResultSet->sum;
 
 			$objResultSet = $this->Database
-				->prepare("SELECT COUNT(id) as sum
+				->prepare(
+				"SELECT COUNT(id) as sum
 					FROM (
 						SELECT id
 						FROM tl_avisota_statistic_raw_link_hit
 						WHERE pid=?
 						GROUP BY linkID,recipientLinkID
-					) t")
+					) t"
+			)
 				->execute($objNewsletter->id);
-			$intReacts = $objResultSet->sum;
+			$intReacts    = $objResultSet->sum;
 
-			$intReadsPercent = $intTotal > 0 ? round($intReads / $intTotal * 100) : 0;
+			$intReadsPercent  = $intTotal > 0 ? round($intReads / $intTotal * 100) : 0;
 			$intReactsPercent = $intReads > 0 ? round($intReacts / $intReads * 100) : 0;
 
 			$arrRow = array
@@ -243,7 +245,10 @@ class tl_avisota_tracking_export extends Backend
 		$objZip = new ZipWriter($strZip);
 
 		// add the temporary csv
-		$objZip->addFile($strFile, 'Newsletter Statistics - ' . $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], time()) . '.csv');
+		$objZip->addFile(
+			$strFile,
+			'Newsletter Statistics - ' . $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], time()) . '.csv'
+		);
 
 		// close the zip
 		$objZip->close();
@@ -252,18 +257,23 @@ class tl_avisota_tracking_export extends Backend
 		$objZip = new File($strZip);
 
 		// Open the "save as â€¦" dialogue
-        header('Content-Type: ' . $objZip->mime);
-        header('Content-Transfer-Encoding: binary');
-        header('Content-Disposition: attachment; filename="Newsletter Statistics - ' . $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], time()) . '.zip"');
-        header('Content-Length: ' . $objZip->filesize);
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Pragma: public');
-        header('Expires: 0');
+		header('Content-Type: ' . $objZip->mime);
+		header('Content-Transfer-Encoding: binary');
+		header(
+			'Content-Disposition: attachment; filename="Newsletter Statistics - ' . $this->parseDate(
+				$GLOBALS['TL_CONFIG']['dateFormat'],
+				time()
+			) . '.zip"'
+		);
+		header('Content-Length: ' . $objZip->filesize);
+		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		header('Pragma: public');
+		header('Expires: 0');
 
- 		// send the zip file
-        $resFile = fopen(TL_ROOT . '/' . $strZip, 'rb');
-        fpassthru($resFile);
-        fclose($resFile);
+		// send the zip file
+		$resFile = fopen(TL_ROOT . '/' . $strZip, 'rb');
+		fpassthru($resFile);
+		fclose($resFile);
 
 		// delete temporary files
 		$objFile->delete();

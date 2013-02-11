@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -40,7 +41,10 @@ $GLOBALS['TL_LANG']['MOD']['avisota']             = 'Newsletter';
 $GLOBALS['TL_LANG']['MOD']['avisota_recipients']  = array('Subscribers', 'Manage Newsletter Subscribers');
 $GLOBALS['TL_LANG']['MOD']['avisota_newsletter']  = array('Newsletter', 'Manage and send newsletters to outbox.');
 $GLOBALS['TL_LANG']['MOD']['avisota_outbox']      = array('Outbox', 'View outbox and send newsletters to recipients');
-$GLOBALS['TL_LANG']['MOD']['avisota_translation'] = array('Language Variables', 'Change the language variables for the newsletter.');
+$GLOBALS['TL_LANG']['MOD']['avisota_translation'] = array(
+	'Language Variables',
+	'Change the language variables for the newsletter.'
+);
 $GLOBALS['TL_LANG']['MOD']['avisota_update']      = array('Update', 'Update the Avisota newsletter system.');
 
 
@@ -48,6 +52,12 @@ $GLOBALS['TL_LANG']['MOD']['avisota_update']      = array('Update', 'Update the 
  * Front end modules
  */
 $GLOBALS['TL_LANG']['FMD']['avisota']              = 'Newsletter';
-$GLOBALS['TL_LANG']['FMD']['avisota_list']         = array('Newsletter list', 'Navigation list of all sended newsletters.');
+$GLOBALS['TL_LANG']['FMD']['avisota_list']         = array(
+	'Newsletter list',
+	'Navigation list of all sended newsletters.'
+);
 $GLOBALS['TL_LANG']['FMD']['avisota_reader']       = array('Newsletter reader', 'Show a newsletter in a regular page.');
-$GLOBALS['TL_LANG']['FMD']['avisota_subscription'] = array('Manage Subscriptions', 'Login and Logout of the Newsletter System.');
+$GLOBALS['TL_LANG']['FMD']['avisota_subscription'] = array(
+	'Manage Subscriptions',
+	'Login and Logout of the Newsletter System.'
+);

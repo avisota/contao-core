@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -69,7 +70,7 @@ class AvisotaCompatibilityController extends Backend
 
 		// disable Avisota
 		if ($this->Input->get('disable')) {
-			$arrInactiveModules = deserialize($GLOBALS['TL_CONFIG']['inactiveModules'], true);
+			$arrInactiveModules   = deserialize($GLOBALS['TL_CONFIG']['inactiveModules'], true);
 			$arrInactiveModules[] = 'Avisota';
 			$this->Config->update("\$GLOBALS['TL_CONFIG']['inactiveModules']", serialize($arrInactiveModules));
 			$this->Config->save();
@@ -77,14 +78,14 @@ class AvisotaCompatibilityController extends Backend
 			$this->redirect('contao/main.php');
 		}
 
-		$objTemplate = new BackendTemplate('be_avisota_compatibility_controller');
-		$objTemplate->theme = $this->getTheme();
-		$objTemplate->base = $this->Environment->base;
-		$objTemplate->language = $GLOBALS['TL_LANGUAGE'];
-		$objTemplate->title = $GLOBALS['TL_CONFIG']['websiteTitle'];
-		$objTemplate->charset = $GLOBALS['TL_CONFIG']['characterSet'];
-		$objTemplate->request = ampersand($this->Environment->request);
-		$objTemplate->top = $GLOBALS['TL_LANG']['MSC']['backToTop'];
+		$objTemplate               = new BackendTemplate('be_avisota_compatibility_controller');
+		$objTemplate->theme        = $this->getTheme();
+		$objTemplate->base         = $this->Environment->base;
+		$objTemplate->language     = $GLOBALS['TL_LANGUAGE'];
+		$objTemplate->title        = $GLOBALS['TL_CONFIG']['websiteTitle'];
+		$objTemplate->charset      = $GLOBALS['TL_CONFIG']['characterSet'];
+		$objTemplate->request      = ampersand($this->Environment->request);
+		$objTemplate->top          = $GLOBALS['TL_LANG']['MSC']['backToTop'];
 		$objTemplate->mysqlVersion = $this->Database->query('SHOW VARIABLES WHERE Variable_name = \'version\'')->Value;
 		$objTemplate->output();
 	}

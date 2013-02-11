@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,7 +37,7 @@
 /**
  * Class NewsletterHeadline
  *
- * 
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -46,16 +47,18 @@ class NewsletterHeadline extends NewsletterElement
 
 	/**
 	 * HTML Template
+	 *
 	 * @var string
 	 */
 	protected $strTemplateHTML = 'nle_headline_html';
 
 	/**
 	 * Plain text Template
+	 *
 	 * @var string
 	 */
 	protected $strTemplatePlain = 'nle_headline_plain';
-	
+
 
 	/**
 	 * Compile the current element

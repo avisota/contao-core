@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @author     Oliver Hoff <oliver@hofff.com>
@@ -46,7 +47,8 @@ define('NL_PLAIN', 'plain');
 /**
  * Update check
  */
-$blnAvisotaUpdate = AvisotaUpdate::getInstance()->hasUpdates();
+$blnAvisotaUpdate = AvisotaUpdate::getInstance()
+	->hasUpdates();
 
 
 /**
@@ -60,14 +62,17 @@ if (!isset($_SERVER['REQUEST_TIME'])) {
 /**
  * Settings
  */
-$GLOBALS['TL_CONFIG']['avisota_max_send_time']          = ini_get('max_execution_time') > 0 ? floor(0.85 * ini_get('max_execution_time')) : 120;
+$GLOBALS['TL_CONFIG']['avisota_max_send_time']          = ini_get('max_execution_time') > 0 ? floor(
+	0.85 * ini_get('max_execution_time')
+) : 120;
 $GLOBALS['TL_CONFIG']['avisota_max_send_count']         = 100;
 $GLOBALS['TL_CONFIG']['avisota_max_send_timeout']       = 1;
 $GLOBALS['TL_CONFIG']['avisota_notification_time']      = 3;
 $GLOBALS['TL_CONFIG']['avisota_notification_count']     = 3;
 $GLOBALS['TL_CONFIG']['avisota_cleanup_time']           = 14;
 $GLOBALS['TL_CONFIG']['avisota_chart']                  = 'jqplot';
-$GLOBALS['TL_CONFIG']['avisota_statistic']              = isset($GLOBALS['TL_CONFIG']['avisota_statistic']) ? $GLOBALS['TL_CONFIG']['avisota_statistic'] : true;
+$GLOBALS['TL_CONFIG']['avisota_statistic']              = isset($GLOBALS['TL_CONFIG']['avisota_statistic'])
+	? $GLOBALS['TL_CONFIG']['avisota_statistic'] : true;
 $GLOBALS['TL_CONFIG']['avisota_statistic_personalized'] = 'with_aggrement';
 
 
@@ -75,47 +80,68 @@ $GLOBALS['TL_CONFIG']['avisota_statistic_personalized'] = 'with_aggrement';
  * Salutation
  */
 if (!isset($GLOBALS['TL_CONFIG']['avisota_salutations'])) {
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrter Herr',
-	                                                       'title'      => true,
-	                                                       'firstname'  => true,
-	                                                       'lastname'   => true);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte Frau',
-	                                                       'title'      => true,
-	                                                       'firstname'  => true,
-	                                                       'lastname'   => true);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte/-r Herr/Frau',
-	                                                       'title'      => true,
-	                                                       'firstname'  => true,
-	                                                       'lastname'   => true);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrter Herr',
-	                                                       'title'      => false,
-	                                                       'firstname'  => true,
-	                                                       'lastname'   => true);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte Frau',
-	                                                       'title'      => false,
-	                                                       'firstname'  => true,
-	                                                       'lastname'   => true);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte/-r Herr/Frau',
-	                                                       'title'      => false,
-	                                                       'firstname'  => true,
-	                                                       'lastname'   => true);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrter',
-	                                                       'title'      => false,
-	                                                       'firstname'  => true,
-	                                                       'lastname'   => true);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte',
-	                                                       'title'      => false,
-	                                                       'firstname'  => true,
-	                                                       'lastname'   => true);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Sehr geehrte/-r',
-	                                                       'title'      => false,
-	                                                       'firstname'  => true,
-	                                                       'lastname'   => true);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array('salutation' => 'Hallo',
-	                                                       'title'      => false,
-	                                                       'firstname'  => true,
-	                                                       'lastname'   => false);
-} else if (is_string($GLOBALS['TL_CONFIG']['avisota_salutations'])) {
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
+		'salutation' => 'Sehr geehrter Herr',
+		'title'      => true,
+		'firstname'  => true,
+		'lastname'   => true
+	);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
+		'salutation' => 'Sehr geehrte Frau',
+		'title'      => true,
+		'firstname'  => true,
+		'lastname'   => true
+	);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
+		'salutation' => 'Sehr geehrte/-r Herr/Frau',
+		'title'      => true,
+		'firstname'  => true,
+		'lastname'   => true
+	);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
+		'salutation' => 'Sehr geehrter Herr',
+		'title'      => false,
+		'firstname'  => true,
+		'lastname'   => true
+	);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
+		'salutation' => 'Sehr geehrte Frau',
+		'title'      => false,
+		'firstname'  => true,
+		'lastname'   => true
+	);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
+		'salutation' => 'Sehr geehrte/-r Herr/Frau',
+		'title'      => false,
+		'firstname'  => true,
+		'lastname'   => true
+	);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
+		'salutation' => 'Sehr geehrter',
+		'title'      => false,
+		'firstname'  => true,
+		'lastname'   => true
+	);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
+		'salutation' => 'Sehr geehrte',
+		'title'      => false,
+		'firstname'  => true,
+		'lastname'   => true
+	);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
+		'salutation' => 'Sehr geehrte/-r',
+		'title'      => false,
+		'firstname'  => true,
+		'lastname'   => true
+	);
+	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
+		'salutation' => 'Hallo',
+		'title'      => false,
+		'firstname'  => true,
+		'lastname'   => false
+	);
+}
+else if (is_string($GLOBALS['TL_CONFIG']['avisota_salutations'])) {
 	$GLOBALS['TL_CONFIG']['avisota_salutations'] = deserialize($GLOBALS['TL_CONFIG']['avisota_salutations'], true);
 }
 
@@ -135,16 +161,24 @@ $GLOBALS['BE_FFL']['columnAssignmentWizard'] = 'ColumnAssignmentWizard';
  * Build custom back end modules
  */
 $arrCustomModules = array();
-$objUser = BackendUser::getInstance();
-$objDatabase = Database::getInstance();
+$objUser          = BackendUser::getInstance();
+$objDatabase      = Database::getInstance();
 if ($objDatabase->fieldExists('showInMenu', 'tl_avisota_newsletter_category')) {
-	$objCategory = $objDatabase->query('SELECT * FROM tl_avisota_newsletter_category WHERE showInMenu=\'1\' ORDER BY title');
+	$objCategory = $objDatabase->query(
+		'SELECT * FROM tl_avisota_newsletter_category WHERE showInMenu=\'1\' ORDER BY title'
+	);
 	while ($objCategory->next()) {
-		$arrCustomModules['avisota_newsletter_' . $objCategory->id] = array(
+		$arrCustomModules['avisota_newsletter_' . $objCategory->id]          = array(
 			'href'       => 'table=tl_avisota_newsletter&amp;id=' . $objCategory->id,
-			'tables'     => array('tl_avisota_newsletter_category', 'tl_avisota_newsletter', 'tl_avisota_newsletter_content', 'tl_avisota_newsletter_create_from_draft'),
+			'tables'     => array(
+				'tl_avisota_newsletter_category',
+				'tl_avisota_newsletter',
+				'tl_avisota_newsletter_content',
+				'tl_avisota_newsletter_create_from_draft'
+			),
 			'send'       => array('Avisota', 'send'),
-			'icon'       => $objCategory->menuIcon ? $objCategory->menuIcon : 'system/modules/Avisota2/html/newsletter.png',
+			'icon'       => $objCategory->menuIcon ? $objCategory->menuIcon
+				: 'system/modules/Avisota2/html/newsletter.png',
 			'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 		);
 		$GLOBALS['TL_LANG']['MOD']['avisota_newsletter_' . $objCategory->id] = array($objCategory->title, '');
@@ -162,14 +196,14 @@ $GLOBALS['BE_MOD'] = array_merge(
 		'avisota' => array_merge
 		(
 			array(
-				'avisota_tracking'         => array
+				'avisota_tracking' => array
 				(
 					'callback'   => 'AvisotaTracking',
 					'tables'     => array('tl_avisota_tracking_export'),
 					'icon'       => 'system/modules/Avisota2/html/tracking.png',
 					'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 				),
-				'avisota_outbox'           => array
+				'avisota_outbox'   => array
 				(
 					'callback'   => 'AvisotaBackendOutbox',
 					'icon'       => 'system/modules/Avisota2/html/outbox.png',
@@ -178,16 +212,28 @@ $GLOBALS['BE_MOD'] = array_merge(
 			),
 			$arrCustomModules,
 			array(
-				'avisota_newsletter'       => array
+				'avisota_newsletter' => array
 				(
-					'tables'     => array('tl_avisota_newsletter_category', 'tl_avisota_newsletter', 'tl_avisota_newsletter_content', 'tl_avisota_newsletter_create_from_draft'),
+					'tables'     => array(
+						'tl_avisota_newsletter_category',
+						'tl_avisota_newsletter',
+						'tl_avisota_newsletter_content',
+						'tl_avisota_newsletter_create_from_draft'
+					),
 					'send'       => array('Avisota', 'send'),
 					'icon'       => 'system/modules/Avisota2/html/newsletter.png',
 					'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 				),
-				'avisota_recipients'       => array
+				'avisota_recipients' => array
 				(
-					'tables'     => array('tl_avisota_recipient', 'tl_avisota_recipient_migrate', 'tl_avisota_recipient_import', 'tl_avisota_recipient_export', 'tl_avisota_recipient_remove', 'tl_avisota_recipient_notify'),
+					'tables'     => array(
+						'tl_avisota_recipient',
+						'tl_avisota_recipient_migrate',
+						'tl_avisota_recipient_import',
+						'tl_avisota_recipient_export',
+						'tl_avisota_recipient_remove',
+						'tl_avisota_recipient_notify'
+					),
 					'icon'       => 'system/modules/Avisota2/html/recipients.png',
 					'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css',
 					'javascript' => 'system/modules/Avisota2/html/backend.js'
@@ -277,10 +323,10 @@ $GLOBALS['TL_NLE'] = array_merge_recursive(
 	(
 		'texts'    => array
 		(
-			'headline'  => 'NewsletterHeadline',
-			'text'      => 'NewsletterText',
-			'list'      => 'NewsletterList',
-			'table'     => 'NewsletterTable'
+			'headline' => 'NewsletterHeadline',
+			'text'     => 'NewsletterText',
+			'list'     => 'NewsletterList',
+			'table'    => 'NewsletterTable'
 		),
 		'links'    => array
 		(
@@ -288,14 +334,14 @@ $GLOBALS['TL_NLE'] = array_merge_recursive(
 		),
 		'images'   => array
 		(
-			'image'     => 'NewsletterImage',
-			'gallery'   => 'NewsletterGallery'
+			'image'   => 'NewsletterImage',
+			'gallery' => 'NewsletterGallery'
 		),
 		'includes' => array
 		(
-			'news'      => 'NewsletterNews',
-			'events'    => 'NewsletterEvent',
-			'article'   => 'NewsletterArticleTeaser'
+			'news'    => 'NewsletterNews',
+			'events'  => 'NewsletterEvent',
+			'article' => 'NewsletterArticleTeaser'
 		)
 	),
 	is_array($GLOBALS['TL_NLE']) ? $GLOBALS['TL_NLE'] : array()
@@ -367,7 +413,10 @@ DELETE FROM tl_member_to_mailing_list WHERE list=OLD.id;';
  * Graphical text support.
  */
 if (in_array('graphicaltext', $this->getActiveModules())) {
-	$GLOBALS['TL_HOOKS']['parseAvisotaNewsletterTemplate'][] = array('FrontendGraphicalText', 'replaceGraphicalTextTag');
+	$GLOBALS['TL_HOOKS']['parseAvisotaNewsletterTemplate'][] = array(
+		'FrontendGraphicalText',
+		'replaceGraphicalTextTag'
+	);
 }
 
 
@@ -414,7 +463,13 @@ if (TL_MODE == 'BE' && $_GET['do'] == 'avisota_recipients') {
 /**
  * Compatibility check
  */
-if (version_compare(Database::getInstance()->query('SHOW VARIABLES WHERE Variable_name = \'version\'')->Value, '5', '<')) {
+if (version_compare(
+	Database::getInstance()
+		->query('SHOW VARIABLES WHERE Variable_name = \'version\'')->Value,
+	'5',
+	'<'
+)
+) {
 	$objEnvironment = Environment::getInstance();
 	if ( // The update controller itself
 		strpos($objEnvironment->requestUri, 'system/modules/Avisota2/AvisotaCompatibilityController.php') === false
@@ -425,7 +480,9 @@ if (version_compare(Database::getInstance()->query('SHOW VARIABLES WHERE Variabl
 		// Install Tool
 		&& strpos($objEnvironment->requestUri, 'contao/install.php') === false
 	) {
-		header('Location: ' . $objEnvironment->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/system/modules/Avisota2/AvisotaCompatibilityController.php');
+		header(
+			'Location: ' . $objEnvironment->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/system/modules/Avisota2/AvisotaCompatibilityController.php'
+		);
 		exit;
 	}
 }

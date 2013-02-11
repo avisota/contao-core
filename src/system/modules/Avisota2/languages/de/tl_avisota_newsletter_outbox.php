@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -73,8 +74,15 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['dateimsFormat'] = 'd.m.Y h:
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['send']    = array('Versenden', 'Newsletter an ausstehende Empfänger versenden.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['remove']  = array('Auftrag löschen', 'Den Auftrag löschen.', 'Soll der Auftrag wirklich gelöscht werden?');
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['send']    = array(
+	'Versenden',
+	'Newsletter an ausstehende Empfänger versenden.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['remove']  = array(
+	'Auftrag löschen',
+	'Den Auftrag löschen.',
+	'Soll der Auftrag wirklich gelöscht werden?'
+);
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['details'] = array('Details', 'Details über den Auftrag anzeigen.');
 
 

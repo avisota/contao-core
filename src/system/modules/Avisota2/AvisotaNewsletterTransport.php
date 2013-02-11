@@ -1,4 +1,6 @@
-<?php if (defined('TL_ROOT')) die('You can not access this file via contao!');
+<?php if (defined('TL_ROOT')) {
+	die('You can not access this file via contao!');
+}
 
 /**
  * Avisota newsletter and mailing system
@@ -25,6 +27,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -82,15 +85,18 @@ class AvisotaNewsletterTransport extends Backend
 
 		// HOTFIX Remove isotope frontend hook
 		if (isset($GLOBALS['TL_HOOKS']['parseTemplate']) && is_array($GLOBALS['TL_HOOKS']['parseTemplate'])) {
-			foreach ($GLOBALS['TL_HOOKS']['parseTemplate'] as $k=>$v) {
+			foreach ($GLOBALS['TL_HOOKS']['parseTemplate'] as $k => $v) {
 				if ($v[0] == 'IsotopeFrontend') {
 					unset($GLOBALS['TL_HOOKS']['parseTemplate'][$k]);
 				}
 			}
 		}
 		// HOTFIX Remove catalog frontend hook
-		if (isset($GLOBALS['TL_HOOKS']['parseFrontendTemplate']) && is_array($GLOBALS['TL_HOOKS']['parseFrontendTemplate'])) {
-			foreach ($GLOBALS['TL_HOOKS']['parseFrontendTemplate'] as $k=>$v) {
+		if (isset($GLOBALS['TL_HOOKS']['parseFrontendTemplate']) && is_array(
+			$GLOBALS['TL_HOOKS']['parseFrontendTemplate']
+		)
+		) {
+			foreach ($GLOBALS['TL_HOOKS']['parseFrontendTemplate'] as $k => $v) {
 				if ($v[0] == 'CatalogExt') {
 					unset($GLOBALS['TL_HOOKS']['parseFrontendTemplate'][$k]);
 				}
@@ -110,27 +116,23 @@ class AvisotaNewsletterTransport extends Backend
 		$strAction = $this->Input->post('action');
 
 		// preview a newsletter
-		if ($strAction == 'preview')
-		{
+		if ($strAction == 'preview') {
 			$this->preview();
 		}
 
 		// user have to be the right to transport from this point
-		if (!$this->User->isAdmin && !$this->User->hasAccess('send', 'avisota_newsletter_permissions'))
-		{
+		if (!$this->User->isAdmin && !$this->User->hasAccess('send', 'avisota_newsletter_permissions')) {
 			$this->log('Not enough permissions to send avisota newsletter', 'AvisotaNewsletterTransport', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
 
 		// schedule a newsletter
-		if ($strAction == 'schedule')
-		{
+		if ($strAction == 'schedule') {
 			$this->schedule();
 		}
 
 		// send a newsletter
-		if ($strAction == 'send')
-		{
+		if ($strAction == 'send') {
 			$this->send();
 		}
 
@@ -149,8 +151,7 @@ class AvisotaNewsletterTransport extends Backend
 			->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
 			->execute($intId);
 
-		if (!$this->objNewsletter->next())
-		{
+		if (!$this->objNewsletter->next()) {
 			$this->log('Could not find newsletter ID ' . $intId, 'AvisotaNewsletterTransport', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
@@ -160,9 +161,12 @@ class AvisotaNewsletterTransport extends Backend
 			->prepare("SELECT * FROM tl_avisota_newsletter_category WHERE id=?")
 			->execute($this->objNewsletter->pid);
 
-		if (!$this->objCategory->next())
-		{
-			$this->log('Could not find newsletter category ID ' . $this->objNewsletter->pid, 'AvisotaNewsletterTransport', TL_ERROR);
+		if (!$this->objCategory->next()) {
+			$this->log(
+				'Could not find newsletter category ID ' . $this->objNewsletter->pid,
+				'AvisotaNewsletterTransport',
+				TL_ERROR
+			);
 			$this->redirect('contao/main.php?act=error');
 		}
 
@@ -171,8 +175,7 @@ class AvisotaNewsletterTransport extends Backend
 		$this->Static->setCategory($this->objCategory);
 
 		// Overwrite the SMTP configuration
-		if ($this->objCategory->useSMTP)
-		{
+		if ($this->objCategory->useSMTP) {
 			$GLOBALS['TL_CONFIG']['useSMTP'] = true;
 
 			$GLOBALS['TL_CONFIG']['smtpHost'] = $this->objCategory->smtpHost;
@@ -183,24 +186,21 @@ class AvisotaNewsletterTransport extends Backend
 		}
 
 		// Add default sender address
-		if (!strlen($this->objCategory->sender))
-		{
-			list($this->objCategory->senderName, $this->objCategory->sender) = $this->splitFriendlyName($GLOBALS['TL_CONFIG']['adminEmail']);
+		if (!strlen($this->objCategory->sender)) {
+			list($this->objCategory->senderName, $this->objCategory->sender) = $this->splitFriendlyName(
+				$GLOBALS['TL_CONFIG']['adminEmail']
+			);
 		}
 
 		$this->arrAttachments = array();
 
 		// Add attachments
-		if ($this->objNewsletter->addFile)
-		{
+		if ($this->objNewsletter->addFile) {
 			$files = deserialize($this->objNewsletter->files);
 
-			if (is_array($files) && count($files) > 0)
-			{
-				foreach ($files as $file)
-				{
-					if (is_file(TL_ROOT . '/' . $file))
-					{
+			if (is_array($files) && count($files) > 0) {
+				foreach ($files as $file) {
+					if (is_file(TL_ROOT . '/' . $file)) {
 						$this->arrAttachments[] = $file;
 					}
 				}
@@ -218,26 +218,23 @@ class AvisotaNewsletterTransport extends Backend
 
 		// get the email address
 		$strEmail = false;
-		if ($this->Input->post('recipient_email'))
-		{
-			if ($this->User->isAdmin || $this->User->hasAccess('send', 'avisota_newsletter_permissions'))
-			{
+		if ($this->Input->post('recipient_email')) {
+			if ($this->User->isAdmin || $this->User->hasAccess('send', 'avisota_newsletter_permissions')) {
 				$strEmail = urldecode($this->Input->post('recipient_email', true));
 			}
 		}
-		else
-		{
-			$objUser = $this->Database->prepare("SELECT * FROM tl_user WHERE id=?")->execute($this->Input->post('recipient_user'));
-			if ($objUser->next())
-			{
+		else {
+			$objUser = $this->Database
+				->prepare("SELECT * FROM tl_user WHERE id=?")
+				->execute($this->Input->post('recipient_user'));
+			if ($objUser->next()) {
 				$arrRecipient = $objUser->row();
-				$strEmail = $objUser->email;
+				$strEmail     = $objUser->email;
 			}
 		}
 
 		// validate the email address
-		if (!$strEmail || !$this->isValidEmailAddress($strEmail))
-		{
+		if (!$strEmail || !$this->isValidEmailAddress($strEmail)) {
 			$_SESSION['TL_PREVIEW_ERROR'] = true;
 			return;
 		}
@@ -246,9 +243,8 @@ class AvisotaNewsletterTransport extends Backend
 		$arrSession = $this->Session->get('AVISOTA_PREVIEW');
 
 		// create the recipient object
-		if (empty($arrRecipient))
-		{
-			$arrRecipient = $this->Base->getPreviewRecipient($arrSession['personalized']);
+		if (empty($arrRecipient)) {
+			$arrRecipient          = $this->Base->getPreviewRecipient($arrSession['personalized']);
 			$arrRecipient['email'] = $strEmail;
 		}
 		$personalized = $this->Base->finalizeRecipientArray($arrRecipient);
@@ -258,7 +254,7 @@ class AvisotaNewsletterTransport extends Backend
 
 		// create the contents
 		$plain = $this->Content->generatePlain($this->objNewsletter, $this->objCategory, $personalized);
-		$html = $this->Content->generateHtml($this->objNewsletter, $this->objCategory, $personalized);
+		$html  = $this->Content->generateHtml($this->objNewsletter, $this->objCategory, $personalized);
 
 		// prepare content for sending, e.a. replace specific insert tags
 		$plain = $this->Content->prepareBeforeSending($plain);
@@ -275,7 +271,9 @@ class AvisotaNewsletterTransport extends Backend
 		// Redirect
 		$_SESSION['TL_CONFIRM'][] = sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirmPreview'], $strEmail);
 
-		$this->redirect('contao/main.php?do=avisota_newsletter&table=tl_avisota_newsletter&key=send&id=' . $this->objNewsletter->id);
+		$this->redirect(
+			'contao/main.php?do=avisota_newsletter&table=tl_avisota_newsletter&key=send&id=' . $this->objNewsletter->id
+		);
 	}
 
 
@@ -290,22 +288,21 @@ class AvisotaNewsletterTransport extends Backend
 
 		$intOutbox = $this->Database
 			->prepare("INSERT INTO tl_avisota_newsletter_outbox %s")
-			->set(array('pid'=>$this->objNewsletter->id, 'tstamp'=>$time))
+			->set(array('pid' => $this->objNewsletter->id, 'tstamp' => $time))
 			->execute()
 			->insertId;
 
 		// Insert list of recipients into outbox
 		$arrRecipients = unserialize($this->objNewsletter->recipients);
-		$arrMgroups = array();
-		foreach ($arrRecipients as $strRecipient)
-		{
-			if (preg_match('#^(list|mgroup)\-(\d+)$#', $strRecipient, $arrMatch))
-			{
-				switch ($arrMatch[1])
-				{
-				case 'list':
-					$intIdTmp = $arrMatch[2];
-					$this->Database->prepare("
+		$arrMgroups    = array();
+		foreach ($arrRecipients as $strRecipient) {
+			if (preg_match('#^(list|mgroup)\-(\d+)$#', $strRecipient, $arrMatch)) {
+				switch ($arrMatch[1]) {
+					case 'list':
+						$intIdTmp = $arrMatch[2];
+						$this->Database
+							->prepare(
+							"
 							INSERT INTO
 								tl_avisota_newsletter_outbox_recipient
 								(pid, tstamp, email, domain, recipientID, source, sourceID)
@@ -322,13 +319,16 @@ class AvisotaNewsletterTransport extends Backend
 							WHERE
 									r.email NOT IN (SELECT email FROM tl_avisota_newsletter_outbox_recipient WHERE pid=?)
 								AND	r.pid=?
-								AND r.confirmed='1'")
-					   ->execute($intOutbox, $time, $intOutbox, $intIdTmp);
-					break;
+								AND r.confirmed='1'"
+						)
+							->execute($intOutbox, $time, $intOutbox, $intIdTmp);
+						break;
 
-				case 'mgroup':
-					$intIdTmp = $arrMatch[2];
-					$this->Database->prepare("
+					case 'mgroup':
+						$intIdTmp = $arrMatch[2];
+						$this->Database
+							->prepare(
+							"
 							INSERT INTO
 								tl_avisota_newsletter_outbox_recipient
 								(pid, tstamp, email, domain, recipientID, source, sourceID)
@@ -350,9 +350,10 @@ class AvisotaNewsletterTransport extends Backend
 									m.email NOT IN (SELECT email FROM tl_avisota_newsletter_outbox_recipient WHERE pid=?)
 								AND	g.group_id=?
 								AND m.disable=''
-								AND m.email!=''")
-					   ->execute($intOutbox, $time, $intOutbox, $intIdTmp);
-					break;
+								AND m.email!=''"
+						)
+							->execute($intOutbox, $time, $intOutbox, $intIdTmp);
+						break;
 				}
 			}
 		}
@@ -370,8 +371,7 @@ class AvisotaNewsletterTransport extends Backend
 			->prepare("SELECT * FROM tl_avisota_newsletter_outbox WHERE id=?")
 			->execute($this->Input->post('id'));
 
-		if (!$objOutbox->next())
-		{
+		if (!$objOutbox->next()) {
 			$this->log('Could not find outbox ID ' . $this->Input->get('id'), 'AvisotaNewsletterTransport', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
@@ -382,16 +382,17 @@ class AvisotaNewsletterTransport extends Backend
 
 		// set timeout and count
 		$intTimeout = $GLOBALS['TL_CONFIG']['avisota_max_send_timeout'];
-		$intCount = $GLOBALS['TL_CONFIG']['avisota_max_send_count'];
+		$intCount   = $GLOBALS['TL_CONFIG']['avisota_max_send_count'];
 
 		// set counters
 		$arrSuccess = array();
-		$arrFailed = array();
-		$intStart = time();
+		$arrFailed  = array();
+		$intStart   = time();
 
 		// get recipients
 		$objRecipients = $this->Database
-			->prepare("SELECT
+			->prepare(
+			"SELECT
 					*
 				FROM
 					tl_avisota_newsletter_outbox_recipient
@@ -399,62 +400,57 @@ class AvisotaNewsletterTransport extends Backend
 						pid=?
 					AND send=0
 				GROUP BY
-					domain")
+					domain"
+		)
 			->limit($intCount)
 			->execute($objOutbox->id);
 
 		// Send newsletter
-		if ($objRecipients->numRows > 0)
-		{
-			if (!$this->objNewsletter->sendOn)
-			{
-				$this->Database->prepare("
+		if ($objRecipients->numRows > 0) {
+			if (!$this->objNewsletter->sendOn) {
+				$this->Database
+					->prepare(
+					"
 						UPDATE
 							tl_avisota_newsletter
 						SET
 							sendOn=?
 						WHERE
-							id=?")
+							id=?"
+				)
 					->execute(time(), $this->objNewsletter->id);
 			}
 
 			$intEndExecutionTime = $_SERVER['REQUEST_TIME'] + $GLOBALS['TL_CONFIG']['avisota_max_send_time'];
 
-			while ($intEndExecutionTime > time() && $objRecipients->next())
-			{
+			while ($intEndExecutionTime > time() && $objRecipients->next()) {
 				$arrRecipient = $objRecipients->row();
 
 				// add recipient details
-				if ($objRecipients->source == 'list')
-				{
+				if ($objRecipients->source == 'list') {
 					$objData = $this->Database
 						->prepare("SELECT * FROM tl_avisota_recipient WHERE id=?")
 						->execute($objRecipients->recipientID);
-					if ($objData->next())
-					{
+					if ($objData->next()) {
 						$this->Base->extendArray($objData->row(), $arrRecipient);
 					}
 				}
 
 				// add member details
-				if ($objRecipients->source == 'mgroup')
-				{
+				if ($objRecipients->source == 'mgroup') {
 					$objData = $this->Database
 						->prepare("SELECT * FROM tl_member WHERE id=?")
 						->execute($objRecipients->recipientID);
-					if ($objData->next())
-					{
+					if ($objData->next()) {
 						$this->Base->extendArray($objData->row(), $arrRecipient);
 					}
 				}
 				// merge member details
-				else if ($GLOBALS['TL_CONFIG']['avisota_merge_member_details'])
-				{
+				else if ($GLOBALS['TL_CONFIG']['avisota_merge_member_details']) {
 					$objData = $this->Database
 						->prepare("SELECT * FROM tl_member WHERE email=?")
 						->execute($objRecipients->email);
-					if ($objData->next())
-					{
+					if ($objData->next()) {
 						$this->Base->extendArray($objData->row(), $arrRecipient);
 					}
 				}
@@ -465,7 +461,7 @@ class AvisotaNewsletterTransport extends Backend
 
 				// create the contents
 				$plain = $this->Content->generatePlain($this->objNewsletter, $this->objCategory, $personalized);
-				$html = $this->Content->generateHtml($this->objNewsletter, $this->objCategory, $personalized);
+				$html  = $this->Content->generateHtml($this->objNewsletter, $this->objCategory, $personalized);
 
 				// prepare content for sending, e.a. replace specific insert tags
 				$plain = $this->Content->prepareBeforeSending($plain);
@@ -478,16 +474,16 @@ class AvisotaNewsletterTransport extends Backend
 				// Send
 				$objEmail = $this->generateEmailObject();
 				if ($this->sendNewsletter(
-						$objEmail,
-						$this->prepareTrackingPlain($this->objNewsletter, $this->objCategory, $objRecipients, $plain),
-						$this->prepareTrackingHtml($this->objNewsletter, $this->objCategory, $objRecipients, $html),
-						$arrRecipient,
-						$personalized))
-				{
+					$objEmail,
+					$this->prepareTrackingPlain($this->objNewsletter, $this->objCategory, $objRecipients, $plain),
+					$this->prepareTrackingHtml($this->objNewsletter, $this->objCategory, $objRecipients, $html),
+					$arrRecipient,
+					$personalized
+				)
+				) {
 					$arrSuccess[] = $objRecipients->row();
 				}
-				else
-				{
+				else {
 					$arrFailed[] = $objRecipients->row();
 
 					$this->Database
@@ -495,26 +491,30 @@ class AvisotaNewsletterTransport extends Backend
 						->execute($objRecipients->id);
 
 					// disable recipient from list
-					if ($objRecipients->source == 'list')
-					{
-						if (!$GLOBALS['TL_CONFIG']['avisota_dont_disable_recipient_on_failure'])
-						{
+					if ($objRecipients->source == 'list') {
+						if (!$GLOBALS['TL_CONFIG']['avisota_dont_disable_recipient_on_failure']) {
 							$this->Database
 								->prepare("UPDATE tl_avisota_recipient SET confirmed='' WHERE id=?")
 								->execute($objRecipients->recipientID);
-							$this->log('Recipient address "' . $objRecipients->email . '" was rejected and has been deactivated', 'AvisotaNewsletterTransport', TL_ERROR);
+							$this->log(
+								'Recipient address "' . $objRecipients->email . '" was rejected and has been deactivated',
+								'AvisotaNewsletterTransport',
+								TL_ERROR
+							);
 						}
 					}
 
 					// disable member
-					else if ($objRecipients->source == 'mgroup')
-					{
-						if (!$GLOBALS['TL_CONFIG']['avisota_dont_disable_member_on_failure'])
-						{
+					else if ($objRecipients->source == 'mgroup') {
+						if (!$GLOBALS['TL_CONFIG']['avisota_dont_disable_member_on_failure']) {
 							$this->Database
 								->prepare("UPDATE tl_member SET disable='1' WHERE id=?")
 								->execute($objRecipients->recipientID);
-							$this->log('Member address "' . $objRecipients->email . '" was rejected and has been disabled', 'AvisotaNewsletterTransport', TL_ERROR);
+							$this->log(
+								'Member address "' . $objRecipients->email . '" was rejected and has been disabled',
+								'AvisotaNewsletterTransport',
+								TL_ERROR
+							);
 						}
 					}
 				}
@@ -526,51 +526,48 @@ class AvisotaNewsletterTransport extends Backend
 		}
 
 		$strError = '';
-		do
-		{
+		do {
 			$strBuffer = ob_get_contents();
-			if ($strBuffer)
-			{
+			if ($strBuffer) {
 				$strError .= $strBuffer . "\n";
 			}
-		}
-		while (ob_end_clean());
+		} while (ob_end_clean());
 
 		header('Content-Type: application/json');
-		echo json_encode(array(
-			'success' => $arrSuccess,
-			'failed'  => $arrFailed,
-			'time'    => time() - $intStart,
-			'error'   => $strError
-		));
+		echo json_encode(
+			array(
+				'success' => $arrSuccess,
+				'failed'  => $arrFailed,
+				'time'    => time() - $intStart,
+				'error'   => $strError
+			)
+		);
 		exit;
 	}
 
 
 	/**
 	 * Generate the e-mail object and return it
+	 *
 	 * @return object
 	 */
 	protected function generateEmailObject()
 	{
 		$objEmail = new BasicEmail();
 
-		$objEmail->from = $this->objCategory->sender;
+		$objEmail->from    = $this->objCategory->sender;
 		$objEmail->subject = $this->objNewsletter->subject;
 
 		// Add sender name
-		if (strlen($this->objCategory->senderName))
-		{
+		if (strlen($this->objCategory->senderName)) {
 			$objEmail->fromName = $this->objCategory->senderName;
 		}
 
 		$objEmail->logFile = 'newsletter_' . $this->objNewsletter->id . '.log';
 
 		// Attachments
-		if (is_array($this->arrAttachments) && count($this->arrAttachments) > 0)
-		{
-			foreach ($this->arrAttachments as $strAttachment)
-			{
+		if (is_array($this->arrAttachments) && count($this->arrAttachments) > 0) {
+			foreach ($this->arrAttachments as $strAttachment) {
 				$objEmail->attachFile(TL_ROOT . '/' . $strAttachment);
 			}
 		}
@@ -588,31 +585,26 @@ class AvisotaNewsletterTransport extends Backend
 		$objEmail->text = $plain;
 
 		// Prepare html content
-		$objEmail->html = $html;
+		$objEmail->html     = $html;
 		$objEmail->imageDir = TL_ROOT . '/';
 
 		$blnFailed = false;
 
 		// Deactivate invalid addresses
-		try
-		{
-			if ($GLOBALS['TL_CONFIG']['avisota_developer_mode'])
-			{
+		try {
+			if ($GLOBALS['TL_CONFIG']['avisota_developer_mode']) {
 				$objEmail->sendTo($GLOBALS['TL_CONFIG']['avisota_developer_email']);
 			}
-			else
-			{
+			else {
 				$objEmail->sendTo($arrRecipient['email']);
 			}
 		}
-		catch (Swift_RfcComplianceException $e)
-		{
+		catch (Swift_RfcComplianceException $e) {
 			$blnFailed = true;
 		}
 
 		// Rejected recipients
-		if (count($objEmail->failures))
-		{
+		if (count($objEmail->failures)) {
 			$blnFailed = true;
 		}
 
@@ -629,24 +621,44 @@ class AvisotaNewsletterTransport extends Backend
 		$strHtml = $strHtml;
 
 		$objPrepareTrackingHelper = new PrepareTrackingHelper($objNewsletter, $objCategory, $objRecipient);
-		$strHtml = preg_replace_callback('#(<a[^>]*)href=["\']((http|ftp)s?:\/\/.+)["\']#U', array(&$objPrepareTrackingHelper, 'replaceHtml'), $strHtml);
+		$strHtml                  = preg_replace_callback(
+			'#(<a[^>]*)href=["\']((http|ftp)s?:\/\/.+)["\']#U',
+			array(&$objPrepareTrackingHelper, 'replaceHtml'),
+			$strHtml
+		);
 
 		$objRead = $this->Database
 			->prepare("SELECT * FROM tl_avisota_statistic_raw_recipient WHERE pid=? AND recipient=?")
 			->executeUncached($objNewsletter->id, $objRecipient->email);
-		if ($objRead->next())
-		{
+		if ($objRead->next()) {
 			$intRead = $objRead->id;
 		}
-		else
-		{
+		else {
 			$objRead = $this->Database
-				->prepare("INSERT INTO tl_avisota_statistic_raw_recipient (pid,tstamp,recipient,recipientID,source,sourceID) VALUES (?, ?, ?, ?, ?, ?)")
-				->execute($objNewsletter->id, time(), $objRecipient->email, $objRecipient->recipientID, $objRecipient->source, $objRecipient->sourceID);
+				->prepare(
+				"INSERT INTO tl_avisota_statistic_raw_recipient (pid,tstamp,recipient,recipientID,source,sourceID) VALUES (?, ?, ?, ?, ?, ?)"
+			)
+				->execute(
+				$objNewsletter->id,
+				time(),
+				$objRecipient->email,
+				$objRecipient->recipientID,
+				$objRecipient->source,
+				$objRecipient->sourceID
+			);
 			$intRead = $objRead->insertId;
 		}
 
-		$strHtml = str_replace('</body>', '<img src="' . $this->Base->extendURL('nltrack.php?read=' . $intRead, null, $objCategory, $objRecipient->row()) . '" alt="" width="1" height="1" />', $strHtml);
+		$strHtml = str_replace(
+			'</body>',
+			'<img src="' . $this->Base->extendURL(
+				'nltrack.php?read=' . $intRead,
+				null,
+				$objCategory,
+				$objRecipient->row()
+			) . '" alt="" width="1" height="1" />',
+			$strHtml
+		);
 		return $strHtml;
 	}
 
@@ -659,7 +671,11 @@ class AvisotaNewsletterTransport extends Backend
 		$strPlain = $strPlain;
 
 		$objPrepareTrackingHelper = new PrepareTrackingHelper($objNewsletter, $objCategory, $objRecipient);
-		return preg_replace_callback('#<((http|ftp)s?:\/\/.+)>#U', array(&$objPrepareTrackingHelper, 'replacePlain'), $strPlain);
+		return preg_replace_callback(
+			'#<((http|ftp)s?:\/\/.+)>#U',
+			array(&$objPrepareTrackingHelper, 'replacePlain'),
+			$strPlain
+		);
 	}
 }
 
@@ -683,10 +699,10 @@ class PrepareTrackingHelper extends Controller
 		$this->import('DomainLink');
 		$this->import('AvisotaStatic', 'Static');
 		$this->objNewsletter = $objNewsletter;
-		$this->objCategory = $objCategory;
-		$this->objRecipient = $objRecipient;
+		$this->objCategory   = $objCategory;
+		$this->objRecipient  = $objRecipient;
 
-		$arrRecipeient = $this->Static->getRecipient();
+		$arrRecipeient                    = $this->Static->getRecipient();
 		$this->strRecipientUnsubscribeUrl = $this->replaceInsertTags('{{newsletter::unsubscribe_url}}');
 	}
 
@@ -694,8 +710,7 @@ class PrepareTrackingHelper extends Controller
 	{
 		$strUrl = $this->replace($m[2]);
 
-		if ($strUrl)
-		{
+		if ($strUrl) {
 			return $m[1] . 'href="' . specialchars($strUrl) . '"';
 		}
 		return $m[0];
@@ -705,8 +720,7 @@ class PrepareTrackingHelper extends Controller
 	{
 		$strUrl = $this->replace($m[1]);
 
-		if ($strUrl)
-		{
+		if ($strUrl) {
 			return '<' . specialchars($strUrl) . '>';
 		}
 		return $m[0];
@@ -716,28 +730,25 @@ class PrepareTrackingHelper extends Controller
 	{
 
 		// do not track ...
-		if (// images
-			preg_match('#\.(jpe?g|png|gif)#i', $strUrl))
-		{
+		if ( // images
+			preg_match('#\.(jpe?g|png|gif)#i', $strUrl)
+		) {
 			return false;
 		}
 
 		$strRealUrl = '';
-		if ($this->strRecipientUnsubscribeUrl == $strUrl)
-		{
+		if ($this->strRecipientUnsubscribeUrl == $strUrl) {
 			$strRealUrl = $strUrl;
-			$strUrl = preg_replace('#email=[^&]*#', 'email=…', $strUrl);
+			$strUrl     = preg_replace('#email=[^&]*#', 'email=…', $strUrl);
 		}
 
 		$objLink = $this->Database
 			->prepare("SELECT * FROM tl_avisota_statistic_raw_link WHERE pid=? AND url=?")
 			->executeUncached($this->objNewsletter->id, $strUrl);
-		if ($objLink->next())
-		{
+		if ($objLink->next()) {
 			$intLink = $objLink->id;
 		}
-		else
-		{
+		else {
 			$intLink = $this->Database
 				->prepare("INSERT INTO tl_avisota_statistic_raw_link (pid,tstamp,url) VALUES (?, ?, ?)")
 				->execute($this->objNewsletter->id, time(), $strUrl)
@@ -745,26 +756,26 @@ class PrepareTrackingHelper extends Controller
 		}
 
 		$objRecipientLink = $this->Database
-			->prepare("SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE pid=? AND linkID=? AND url=? AND recipient=?")
+			->prepare(
+			"SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE pid=? AND linkID=? AND url=? AND recipient=?"
+		)
 			->executeUncached($this->objNewsletter->id, $intLink, $strUrl, $this->objRecipient->email);
-		if ($objLink->next())
-		{
+		if ($objLink->next()) {
 			$intRecipientLink = $objRecipientLink->id;
 		}
-		else
-		{
+		else {
 			$intRecipientLink = $this->Database
-				->prepare("INSERT INTO tl_avisota_statistic_raw_recipient_link (pid,linkID,tstamp,url,real_url,recipient) VALUES (?, ?, ?, ?, ?, ?)")
+				->prepare(
+				"INSERT INTO tl_avisota_statistic_raw_recipient_link (pid,linkID,tstamp,url,real_url,recipient) VALUES (?, ?, ?, ?, ?, ?)"
+			)
 				->execute($this->objNewsletter->id, $intLink, time(), $strUrl, $strRealUrl, $this->objRecipient->email)
 				->insertId;
 		}
 
-		if ($this->objCategory->viewOnlinePage)
-		{
+		if ($this->objCategory->viewOnlinePage) {
 			$objPage = $this->getPageDetails($this->objCategory->viewOnlinePage);
 		}
-		else
-		{
+		else {
 			$objPage = null;
 		}
 

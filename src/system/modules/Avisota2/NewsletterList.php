@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,7 +37,7 @@
 /**
  * Class NewsletterList
  *
- * 
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -46,16 +47,18 @@ class NewsletterList extends NewsletterElement
 
 	/**
 	 * HTML Template
+	 *
 	 * @var string
 	 */
 	protected $strTemplateHTML = 'nle_list_html';
 
 	/**
 	 * Plain text Template
+	 *
 	 * @var string
 	 */
 	protected $strTemplatePlain = 'nle_list_plain';
-	
+
 
 	/**
 	 * Compile the current element
@@ -63,26 +66,23 @@ class NewsletterList extends NewsletterElement
 	protected function compile($mode)
 	{
 		$arrItems = array();
-		$items = deserialize($this->listitems);
+		$items    = deserialize($this->listitems);
 
-		if ($mode == NL_HTML)
-		{
+		if ($mode == NL_HTML) {
 			$limit = count($items) - 1;
-		
-			for ($i=0; $i<count($items); $i++)
-			{
+
+			for ($i = 0; $i < count($items); $i++) {
 				$arrItems[] = array
 				(
-					'class' => (($i == 0) ? 'first' : (($i == $limit) ? 'last' : '')),
+					'class'   => (($i == 0) ? 'first' : (($i == $limit) ? 'last' : '')),
 					'content' => $items[$i]
 				);
 			}
-	
+
 			$this->Template->items = $arrItems;
-			$this->Template->tag = ($this->listtype == 'ordered') ? 'ol' : 'ul';
+			$this->Template->tag   = ($this->listtype == 'ordered') ? 'ol' : 'ul';
 		}
-		else
-		{
+		else {
 			$this->Template->items = $items;
 		}
 	}

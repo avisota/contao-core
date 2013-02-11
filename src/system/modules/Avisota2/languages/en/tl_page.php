@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,4 +37,7 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_page']['jumpBack'] = array('Main ', ' Please select the page that you will be redirected to. If you do not select a target page, you will be automatically forwarded to the parent page.');
+$GLOBALS['TL_LANG']['tl_page']['jumpBack'] = array(
+	'Main ',
+	' Please select the page that you will be redirected to. If you do not select a target page, you will be automatically forwarded to the parent page.'
+);

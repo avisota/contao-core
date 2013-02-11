@@ -25,6 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
+ *
  * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Avisota
@@ -36,15 +37,21 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_tracking_export']['delimiter']     = array('Feldtrenner', 'Wählen Sie hier das Zeichen aus, nach dem die einzelnen Felder getrennt sind.');
-$GLOBALS['TL_LANG']['tl_avisota_tracking_export']['enclosure']     = array('Texttrenner', 'Wählen Sie hier das Zeichen aus, nach dem der Text getrennt ist.');
+$GLOBALS['TL_LANG']['tl_avisota_tracking_export']['delimiter'] = array(
+	'Feldtrenner',
+	'Wählen Sie hier das Zeichen aus, nach dem die einzelnen Felder getrennt sind.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_tracking_export']['enclosure'] = array(
+	'Texttrenner',
+	'Wählen Sie hier das Zeichen aus, nach dem der Text getrennt ist.'
+);
 
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_avisota_tracking_export']['double']        = 'Doppelte Anführungszeichen "';
-$GLOBALS['TL_LANG']['tl_avisota_tracking_export']['single']        = 'Einfache Anführungszeichen \'';
-$GLOBALS['TL_LANG']['tl_avisota_tracking_export']['edit']          = 'CSV-Export';
+$GLOBALS['TL_LANG']['tl_avisota_tracking_export']['double'] = 'Doppelte Anführungszeichen "';
+$GLOBALS['TL_LANG']['tl_avisota_tracking_export']['single'] = 'Einfache Anführungszeichen \'';
+$GLOBALS['TL_LANG']['tl_avisota_tracking_export']['edit']   = 'CSV-Export';
 
 
 /**
