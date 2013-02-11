@@ -1,0 +1,12 @@
+branches:
+    only:
+        - master
+php:
+    - "5.4"
+    - "5.3"
+    - "5.2"
+install: ant
+before_script:
+    - composer require --dev bit3/php-coding-standard:@dev
+    - composer require --dev squizlabs/php_codesniffer:1.*
+script: ant build
