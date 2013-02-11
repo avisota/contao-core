@@ -48,7 +48,7 @@ class AvisotaBase extends Controller
 	 *
 	 * @var AvisotaBase
 	 */
-	private static $objInstance = null;
+	private static $instance = null;
 
 
 	/**
@@ -56,10 +56,10 @@ class AvisotaBase extends Controller
 	 */
 	public static function getInstance()
 	{
-		if (self::$objInstance === null) {
-			self::$objInstance = new AvisotaBase();
+		if (self::$instance === null) {
+			self::$instance = new AvisotaBase();
 		}
-		return self::$objInstance;
+		return self::$instance;
 	}
 
 
@@ -82,20 +82,20 @@ class AvisotaBase extends Controller
 	}
 
 
-	public function getViewOnlinePage($objCategory = null, $arrRecipient = null)
+	public function getViewOnlinePage($category = null, $recipients = null)
 	{
-		if (is_null($objCategory)) {
-			$objCategory = $this->Static->getCategory();
+		if (is_null($category)) {
+			$category = $this->Static->getCategory();
 		}
 
-		if (is_null($arrRecipient)) {
-			$arrRecipient = $this->Static->getRecipient();
+		if (is_null($recipients)) {
+			$recipients = $this->Static->getRecipient();
 		}
 
-		if ($arrRecipient && preg_match('#^list:(\d+)$#', $arrRecipient['outbox_source'], $arrMatch)) {
+		if ($recipients && preg_match('#^list:(\d+)$#', $recipients['outbox_source'], $matches)) {
 			// the dummy list, used on preview
-			if ($arrMatch[1] > 0) {
-				$objRecipientList = $this->Database
+			if ($matches[1] > 0) {
+				$recipientList = $this->Database
 					->prepare(
 					"
 						SELECT
@@ -105,15 +105,15 @@ class AvisotaBase extends Controller
 						WHERE
 							`id`=?"
 				)
-					->execute($arrMatch[1]);
-				if ($objRecipientList->next()) {
-					return $this->getPageDetails($objRecipientList->viewOnlinePage);
+					->execute($matches[1]);
+				if ($recipientList->next()) {
+					return $this->getPageDetails($recipientList->viewOnlinePage);
 				}
 			}
 		}
 
-		if ($objCategory->viewOnlinePage > 0) {
-			return $this->getPageDetails($objCategory->viewOnlinePage);
+		if ($category->viewOnlinePage > 0) {
+			return $this->getPageDetails($category->viewOnlinePage);
 		}
 
 		return null;
@@ -140,13 +140,13 @@ class AvisotaBase extends Controller
 	/**
 	 * Extend the url to an absolute url.
 	 */
-	public function extendURL($strUrl, $objPage = null, $objCategory = null, $arrRecipient = null)
+	public function extendURL($url, $page = null, $category = null, $recipients = null)
 	{
-		if ($objPage == null) {
-			$objPage = $this->getViewOnlinePage($objCategory, $arrRecipient);
+		if ($page == null) {
+			$page = $this->getViewOnlinePage($category, $recipients);
 		}
 
-		return $this->DomainLink->absolutizeUrl($strUrl, $objPage);
+		return $this->DomainLink->absolutizeUrl($url, $page);
 	}
 
 
@@ -157,49 +157,49 @@ class AvisotaBase extends Controller
 	{
 		$this->loadLanguageFile('tl_avisota_newsletter');
 
-		list($strFirstName, $strLastName) = $this->splitFriendlyName($this->User->name);
+		list($firstName, $lastName) = $this->splitFriendlyName($this->User->name);
 
-		$objRecipient            = new AvisotaRecipient();
-		$objRecipient->email     = $this->User->email;
-		$objRecipient->firstname = $strFirstName;
-		$objRecipient->lastname  = $strLastName;
-		$objRecipient->source    = '0';
+		$recipient            = new AvisotaRecipient();
+		$recipient->email     = $this->User->email;
+		$recipient->firstname = $firstName;
+		$recipient->lastname  = $lastName;
+		$recipient->source    = '0';
 
-		return $objRecipient;
+		return $recipient;
 	}
 
 
 	/**
 	 * Update missing informations to the recipient array.
 	 *
-	 * @param array $arrRecipient
+	 * @param array $recipientData
 	 *
 	 * @return string The personalized state.
 	 */
-	public function finalizeRecipientArray(&$arrRecipient)
+	public function finalizeRecipientArray(&$recipientData)
 	{
 		// set the firstname and lastname field if missing
-		if (empty($arrRecipient['firstname']) && empty($arrRecipient['lastname']) && !empty($arrRecipient['name'])) {
-			list($arrRecipient['firstname'], $arrRecipient['lastname']) = explode(' ', $arrRecipient['name'], 2);
+		if (empty($recipientData['firstname']) && empty($recipientData['lastname']) && !empty($recipientData['name'])) {
+			list($recipientData['firstname'], $recipientData['lastname']) = explode(' ', $recipientData['name'], 2);
 		}
 
 		// set the name field, if missing
-		if (empty($arrRecipient['name']) && !(empty($arrRecipient['firstname']) && empty($arrRecipient['lastname']))) {
-			$arrRecipient['name'] = trim($arrRecipient['firstname'] . ' ' . $arrRecipient['lastname']);
+		if (empty($recipientData['name']) && !(empty($recipientData['firstname']) && empty($recipientData['lastname']))) {
+			$recipientData['name'] = trim($recipientData['firstname'] . ' ' . $recipientData['lastname']);
 		}
 
 		// set the fullname field, if missing
-		if (empty($arrRecipient['fullname']) && !empty($arrRecipient['name'])) {
-			$arrRecipient['fullname'] = trim($arrRecipient['title'] . ' ' . $arrRecipient['name']);
+		if (empty($recipientData['fullname']) && !empty($recipientData['name'])) {
+			$recipientData['fullname'] = trim($recipientData['title'] . ' ' . $recipientData['name']);
 		}
 
 		// set the shortname field, if missing
-		if (empty($arrRecipient['shortname']) && !empty($arrRecipient['firstname'])) {
-			$arrRecipient['shortname'] = $arrRecipient['firstname'];
+		if (empty($recipientData['shortname']) && !empty($recipientData['firstname'])) {
+			$recipientData['shortname'] = $recipientData['firstname'];
 		}
 
 		// a recipient is anonymous, if he has no name
-		if (!empty($arrRecipient['name'])) {
+		if (!empty($recipientData['name'])) {
 			$personalized = 'private';
 		}
 		else {
@@ -207,22 +207,22 @@ class AvisotaBase extends Controller
 		}
 
 		// extend with maybe missing anonymous informations
-		$this->extendArray($GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'], $arrRecipient);
+		$this->extendArray($GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'], $recipientData);
 
 		// update salutation
-		if (empty($arrRecipient['salutation'])) {
-			if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrRecipient['gender']])) {
-				$arrRecipient['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $arrRecipient['gender']];
+		if (empty($recipientData['salutation'])) {
+			if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $recipientData['gender']])) {
+				$recipientData['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $recipientData['gender']];
 			}
 			else {
-				$arrRecipient['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation'];
+				$recipientData['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation'];
 			}
 		}
 
 		// replace placeholders in salutation
-		preg_match_all('#\{([^\}]+)\}#U', $arrRecipient['salutation'], $matches, PREG_SET_ORDER);
+		preg_match_all('#\{([^\}]+)\}#U', $recipientData['salutation'], $matches, PREG_SET_ORDER);
 		foreach ($matches as $match) {
-			$arrRecipient['salutation'] = str_replace($match[0], $arrRecipient[$match[1]], $arrRecipient['salutation']);
+			$recipientData['salutation'] = str_replace($match[0], $recipientData[$match[1]], $recipientData['salutation']);
 		}
 
 		return $personalized;
@@ -232,15 +232,15 @@ class AvisotaBase extends Controller
 	/**
 	 * Extend the target array with missing fields from the source array.
 	 *
-	 * @param array $arrSource
-	 * @param array $arrTarget
+	 * @param array $source
+	 * @param array $target
 	 */
-	public function extendArray($arrSource, &$arrTarget)
+	public function extendArray($source, &$target)
 	{
-		if (is_array($arrSource)) {
-			foreach ($arrSource as $k => $v) {
+		if (is_array($source)) {
+			foreach ($source as $k => $v) {
 				if (!empty($v)
-					&& empty($arrTarget[$k])
+					&& empty($target[$k])
 					&& !in_array(
 						$k,
 						array(
@@ -258,7 +258,7 @@ class AvisotaBase extends Controller
 						)
 					)
 				) {
-					$arrTarget[$k] = $v;
+					$target[$k] = $v;
 				}
 			}
 		}
@@ -276,73 +276,73 @@ class AvisotaBase extends Controller
 	 * @return string
 	 * @throws Exception
 	 */
-	public function getTemplate($strTemplate, $strFormat = 'html5')
+	public function getTemplate($template, $format = 'html5')
 	{
-		$strTemplate = basename($strTemplate);
-		$strFilename = $strTemplate . '.html5';
+		$template = basename($template);
+		$filename = $template . '.html5';
 
-		/** @var AvisotaNewsletter $objNewsletter */
-		global $objNewsletter;
+		/** @var AvisotaNewsletter $newsletter */
+		global $newsletter;
 
 		// Check for a theme folder
-		if ($objNewsletter) {
-			$strTemplateGroup = $objNewsletter
+		if ($newsletter) {
+			$templateGroup = $newsletter
 				->getTheme()
 				->getTemplateDirectory();
 		}
 		else {
-			$strTemplateGroup = '';
+			$templateGroup = '';
 		}
 
-		$strPath = TL_ROOT . '/templates';
+		$path = TL_ROOT . '/templates';
 
 		// Check the theme folder first
-		if (TL_MODE == 'FE' && $strTemplateGroup != '') {
-			$strFile = $strPath . '/' . $strTemplateGroup . '/' . $strFilename;
+		if (TL_MODE == 'FE' && $templateGroup != '') {
+			$pathname = $path . '/' . $templateGroup . '/' . $filename;
 
-			if (file_exists($strFile)) {
-				return $strFile;
+			if (file_exists($pathname)) {
+				return $pathname;
 			}
 
 			// Also check for .tpl files (backwards compatibility)
-			$strFile = $strPath . '/' . $strTemplateGroup . '/' . $strTemplate . '.tpl';
+			$pathname = $path . '/' . $templateGroup . '/' . $template . '.tpl';
 
-			if (file_exists($strFile)) {
-				return $strFile;
+			if (file_exists($pathname)) {
+				return $pathname;
 			}
 		}
 
 		// Then check the global templates directory
-		$strFile = $strPath . '/' . $strFilename;
+		$pathname = $path . '/' . $filename;
 
-		if (file_exists($strFile)) {
-			return $strFile;
+		if (file_exists($pathname)) {
+			return $pathname;
 		}
 
 		// Also check for .tpl files (backwards compatibility)
-		$strFile = $strPath . '/' . $strTemplate . '.tpl';
+		$pathname = $path . '/' . $template . '.tpl';
 
-		if (file_exists($strFile)) {
-			return $strFile;
+		if (file_exists($pathname)) {
+			return $pathname;
 		}
 
 		// At last browse all module folders in reverse order
-		foreach (array_reverse($this->Config->getActiveModules()) as $strModule) {
-			$strFile = TL_ROOT . '/system/modules/' . $strModule . '/templates/' . $strFilename;
+		foreach (array_reverse($this->Config->getActiveModules()) as $module) {
+			$pathname = TL_ROOT . '/system/modules/' . $module . '/templates/' . $filename;
 
-			if (file_exists($strFile)) {
-				return $strFile;
+			if (file_exists($pathname)) {
+				return $pathname;
 			}
 
 			// Also check for .tpl files (backwards compatibility)
-			$strFile = TL_ROOT . '/system/modules/' . $strModule . '/templates/' . $strTemplate . '.tpl';
+			$pathname = TL_ROOT . '/system/modules/' . $module . '/templates/' . $template . '.tpl';
 
-			if (file_exists($strFile)) {
-				return $strFile;
+			if (file_exists($pathname)) {
+				return $pathname;
 			}
 		}
 
-		throw new Exception('Could not find template file "' . $strFilename . '"');
+		throw new Exception('Could not find template file "' . $filename . '"');
 	}
 
 
@@ -358,69 +358,69 @@ class AvisotaBase extends Controller
 	 * @return array
 	 * @throws Exception
 	 */
-	protected function getTemplateGroup($strPrefix, $intTheme = 0)
+	public function getTemplateGroup($prefix, $themeId = 0)
 	{
-		$arrFolders   = array();
-		$arrTemplates = array();
+		$folders   = array();
+		$templates = array();
 
 		// Add the templates root directory
-		$arrFolders[] = TL_ROOT . '/templates';
+		$folders[] = TL_ROOT . '/templates';
 
 		// Add the theme templates folder
-		if ($intTheme > 0) {
-			$objTheme = $this->Database
+		if ($themeId > 0) {
+			$theme = $this->Database
 				->prepare("SELECT * FROM tl_avisota_newsletter_theme WHERE id=?")
 				->limit(1)
-				->execute($intTheme);
+				->execute($themeId);
 
-			if ($objTheme->numRows > 0 && $objTheme->templateDirectory != '') {
-				$arrFolders[] = TL_ROOT . '/' . $objTheme->templateDirectory;
+			if ($theme->numRows > 0 && $theme->templateDirectory != '') {
+				$folders[] = TL_ROOT . '/' . $theme->templateDirectory;
 			}
 		}
 
 		// Add the module templates folders if they exist
-		foreach ($this->Config->getActiveModules() as $strModule) {
-			$strFolder = TL_ROOT . '/system/modules/' . $strModule . '/templates';
+		foreach ($this->Config->getActiveModules() as $moduleName) {
+			$folder = TL_ROOT . '/system/modules/' . $moduleName . '/templates';
 
-			if (is_dir($strFolder)) {
-				$arrFolders[] = $strFolder;
+			if (is_dir($folder)) {
+				$folders[] = $folder;
 			}
 		}
 
 		// Find all matching templates
-		foreach ($arrFolders as $strFolder) {
-			$arrFiles = preg_grep('/^' . preg_quote($strPrefix, '/') . '/i', scan($strFolder));
+		foreach ($folders as $folder) {
+			$files = preg_grep('/^' . preg_quote($prefix, '/') . '/i', scan($folder));
 
-			foreach ($arrFiles as $strTemplate) {
-				$strName        = basename($strTemplate);
-				$arrTemplates[] = substr($strName, 0, strrpos($strName, '.'));
+			foreach ($files as $pathname) {
+				$filename        = basename($pathname);
+				$templates[] = substr($filename, 0, strrpos($filename, '.'));
 			}
 		}
 
-		natcasesort($arrTemplates);
-		$arrTemplates = array_values(array_unique($arrTemplates));
+		natcasesort($templates);
+		$templates = array_values(array_unique($templates));
 
-		return $arrTemplates;
+		return $templates;
 	}
 
 	public function getCurrentTransport()
 	{
-		$objNewsletter = AvisotaStatic::getNewsletter();
-		$objCategory   = AvisotaStatic::getCategory();
+		$newsletter = AvisotaStatic::getNewsletter();
+		$category   = AvisotaStatic::getCategory();
 
-		if ($objCategory && $objCategory->transport && $objCategory->setTransport == 'category') {
-			$intId = $objCategory->transport;
+		if ($category && $category->transport && $category->setTransport == 'category') {
+			$transportModuleId = $category->transport;
 		}
-		else if ($objNewsletter && $objNewsletter->transport) {
-			$intId = $objNewsletter->transport;
+		else if ($newsletter && $newsletter->transport) {
+			$transportModuleId = $newsletter->transport;
 		}
-		else if ($objCategory && $objCategory->transport) {
-			$intId = $objCategory->transport;
+		else if ($category && $category->transport) {
+			$transportModuleId = $category->transport;
 		}
 		else {
-			$intId = 0;
+			$transportModuleId = 0;
 		}
 
-		return AvisotaTransport::getTransportModule($intId);
+		return AvisotaTransport::getTransportModule($transportModuleId);
 	}
 }

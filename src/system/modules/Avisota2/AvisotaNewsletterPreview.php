@@ -112,16 +112,16 @@ class AvisotaNewsletterPreview extends Backend
 		$this->User->authenticate();
 
 		// read session data
-		$arrSession = $this->Session->get('AVISOTA_PREVIEW');
+		$sessionData = $this->Session->get('AVISOTA_PREVIEW');
 
 		// get preview mode
 		if ($this->Input->get('mode')) {
-			$arrSession['mode'] = $this->Input->get('mode');
+			$sessionData['mode'] = $this->Input->get('mode');
 		}
 
 		// fallback preview mode
-		if (!$arrSession['mode']) {
-			$arrSession['mode'] = NL_HTML;
+		if (!$sessionData['mode']) {
+			$sessionData['mode'] = NL_HTML;
 		}
 
 		/*
@@ -139,12 +139,12 @@ class AvisotaNewsletterPreview extends Backend
 		*/
 
 		// store session data
-		$this->Session->set('AVISOTA_PREVIEW', $arrSession);
+		$this->Session->set('AVISOTA_PREVIEW', $sessionData);
 
 		// find the newsletter
-		$intId = $this->Input->get('id');
+		$id = $this->Input->get('id');
 
-		$objNewsletter = $this->Database
+		$newsletter = $this->Database
 			->prepare(
 			"
 						SELECT
@@ -154,15 +154,15 @@ class AvisotaNewsletterPreview extends Backend
 						WHERE
 							id=?"
 		)
-			->execute($intId);
+			->execute($id);
 
-		if (!$objNewsletter->next()) {
-			$this->log('Newsletter ID ' . $intId . ' does not exists!', 'AvisotaNewsletterPreview', TL_ERROR);
+		if (!$newsletter->next()) {
+			$this->log('Newsletter ID ' . $id . ' does not exists!', 'AvisotaNewsletterPreview', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
 
 		// find the newsletter category
-		$objCategory = $this->Database
+		$category = $this->Database
 			->prepare(
 			"
 						SELECT
@@ -172,11 +172,11 @@ class AvisotaNewsletterPreview extends Backend
 						WHERE
 							id=?"
 		)
-			->execute($objNewsletter->pid);
+			->execute($newsletter->pid);
 
-		if (!$objCategory->next()) {
+		if (!$category->next()) {
 			$this->log(
-				'Category ID ' . $objNewsletter->pid . ' does not exists!',
+				'Category ID ' . $newsletter->pid . ' does not exists!',
 				'AvisotaNewsletterPreview',
 				TL_ERROR
 			);
@@ -184,17 +184,17 @@ class AvisotaNewsletterPreview extends Backend
 		}
 
 		// build the recipient data array
-		$arrRecipient = $this->Base->getPreviewRecipient();
+		$recipientData = $this->Base->getPreviewRecipient();
 
-		$this->Static->set($objCategory, $objNewsletter, $arrRecipient);
+		$this->Static->set($category, $newsletter, $recipientData);
 
 		// generate the preview
-		switch ($arrSession['mode']) {
+		switch ($sessionData['mode']) {
 			case NL_HTML:
 				header('Content-Type: text/html; charset=utf-8');
 				echo $this->replaceInsertTags(
 					$this->Content->prepareBeforeSending(
-						$this->Content->generateHtml($objNewsletter, $objCategory, $arrSession['personalized'])
+						$this->Content->generateHtml($newsletter, $category, $sessionData['personalized'])
 					)
 				);
 				exit(0);
@@ -203,14 +203,14 @@ class AvisotaNewsletterPreview extends Backend
 				header('Content-Type: text/plain; charset=utf-8');
 				echo $this->replaceInsertTags(
 					$this->Content->prepareBeforeSending(
-						$this->Content->generatePlain($objNewsletter, $objCategory, $arrSession['personalized'])
+						$this->Content->generatePlain($newsletter, $category, $sessionData['personalized'])
 					)
 				);
 				exit(0);
 
 			default:
 				$this->log(
-					'Unsupported newsletter preview mode ' . var_export($arrSession['mode']) . '!',
+					'Unsupported newsletter preview mode ' . var_export($sessionData['mode']) . '!',
 					'AvisotaNewsletterPreview',
 					TL_ERROR
 				);
@@ -220,8 +220,8 @@ class AvisotaNewsletterPreview extends Backend
 }
 
 try {
-	$objAvisotaNewsletterPreview = new AvisotaNewsletterPreview();
-	$objAvisotaNewsletterPreview->run();
+	$avisotaNewsletterPreview = new AvisotaNewsletterPreview();
+	$avisotaNewsletterPreview->run();
 }
 catch (Exception $e) {
 	header('HTTP/1.0 500 Internal Server Error');

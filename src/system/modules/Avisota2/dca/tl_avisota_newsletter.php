@@ -318,7 +318,7 @@ class tl_avisota_newsletter extends Backend
 	public function updatePalette()
 	{
 		if ($this->Input->get('act') == 'edit') {
-			$objCategory = $this->Database
+			$category = $this->Database
 				->prepare(
 				'SELECT c.*
 						   FROM tl_avisota_newsletter_category c
@@ -328,8 +328,8 @@ class tl_avisota_newsletter extends Backend
 			)
 				->execute($this->Input->get('id'));
 
-			if ($objCategory->next()) {
-				switch ($objCategory->recipientsMode) {
+			if ($category->next()) {
+				switch ($category->recipientsMode) {
 					case 'byNewsletterOrCategory':
 						$GLOBALS['TL_DCA']['tl_avisota_newsletter']['metapalettes']['default']['recipient'][] = 'setRecipients';
 						break;
@@ -339,7 +339,7 @@ class tl_avisota_newsletter extends Backend
 						break;
 				}
 
-				switch ($objCategory->themeMode) {
+				switch ($category->themeMode) {
 					case 'byNewsletterOrCategory':
 						$GLOBALS['TL_DCA']['tl_avisota_newsletter']['metapalettes']['default']['theme'][] = 'setTheme';
 						break;
@@ -349,7 +349,7 @@ class tl_avisota_newsletter extends Backend
 						break;
 				}
 
-				switch ($objCategory->transportMode) {
+				switch ($category->transportMode) {
 					case 'byNewsletterOrCategory':
 						$GLOBALS['TL_DCA']['tl_avisota_newsletter']['metapalettes']['default']['transport'][] = 'setTransport';
 						break;
@@ -361,7 +361,7 @@ class tl_avisota_newsletter extends Backend
 			}
 		}
 		else {
-			$objCategory = $this->Database
+			$category = $this->Database
 				->prepare(
 				'SELECT c.*
 						   FROM tl_avisota_newsletter_category c
@@ -369,22 +369,22 @@ class tl_avisota_newsletter extends Backend
 			)
 				->execute($this->Input->get('id'));
 
-			if ($objCategory->next()) {
-				switch ($objCategory->recipientsMode) {
+			if ($category->next()) {
+				switch ($category->recipientsMode) {
 					case 'byNewsletterOrCategory':
 					case 'byCategory':
 						$GLOBALS['TL_DCA']['tl_avisota_newsletter']['list']['sorting']['headerFields'][] = 'recipients';
 						break;
 				}
 
-				switch ($objCategory->themeMode) {
+				switch ($category->themeMode) {
 					case 'byNewsletterOrCategory':
 					case 'byCategory':
 						$GLOBALS['TL_DCA']['tl_avisota_newsletter']['list']['sorting']['headerFields'][] = 'theme';
 						break;
 				}
 
-				switch ($objCategory->transportMode) {
+				switch ($category->transportMode) {
 					case 'byNewsletterOrCategory':
 					case 'byCategory':
 						$GLOBALS['TL_DCA']['tl_avisota_newsletter']['list']['sorting']['headerFields'][] = 'transport';
@@ -431,16 +431,16 @@ class tl_avisota_newsletter extends Backend
 			case 'paste':
 			case 'delete':
 			case 'show':
-				$intPid = -1;
+				$pid = -1;
 				if ($this->Input->get('id')) {
-					$objNewsletter = $this->Database
+					$newsletter = $this->Database
 						->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
 						->execute($this->Input->get('id'));
-					if ($objNewsletter->next()) {
-						$intPid = $objNewsletter->pid;
+					if ($newsletter->next()) {
+						$pid = $newsletter->pid;
 					}
 				}
-				if (!in_array($intPid, $root) || ($this->Input->get('act') == 'delete' && !$this->User->hasAccess(
+				if (!in_array($pid, $root) || ($this->Input->get('act') == 'delete' && !$this->User->hasAccess(
 					'delete',
 					'avisota_newsletter_permissions'
 				))
@@ -605,25 +605,25 @@ class tl_avisota_newsletter extends Backend
 		$key       = $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipients'][0];
 		$add[$key] = array();
 
-		$objCategory = AvisotaNewsletterCategory::load($dc->id);
+		$category = AvisotaNewsletterCategory::load($dc->id);
 
-		$blnFallback = $objCategory->recipientsMode == 'byNewsletterOrCategory';
+		$fallback = $category->recipientsMode == 'byNewsletterOrCategory';
 
-		$arrSelectedRecipients = $objCategory->getRecipients();
+		$selectedRecipients = $category->getRecipients();
 
-		$arrRecipients = AvisotaBackend::getInstance()
+		$recipients = AvisotaBackend::getInstance()
 			->getRecipients(true);
 
-		foreach ($arrRecipients as $strGroup => $arrLists) {
-			list($intSource, $strGroup) = explode(':', $strGroup, 2);
-			foreach ($arrLists as $strKey => $strList) {
-				if (in_array($strKey, $arrSelectedRecipients)) {
+		foreach ($recipients as $group => $lists) {
+			list($source, $group) = explode(':', $group, 2);
+			foreach ($lists as $listKey => $list) {
+				if (in_array($listKey, $selectedRecipients)) {
 					$add[$key][] = sprintf(
 						'<a href="contao/main.php?do=avisota_recipient_source&act=edit&id=%d">%s &raquo; %s</a>%s',
-						$intSource,
-						$strGroup,
-						$strList,
-						$blnFallback ? ' ' . $GLOBALS['TL_LANG']['tl_avisota_newsletter']['fallback'] : ''
+						$source,
+						$group,
+						$list,
+						$fallback ? ' ' . $GLOBALS['TL_LANG']['tl_avisota_newsletter']['fallback'] : ''
 					);
 				}
 			}
@@ -632,13 +632,13 @@ class tl_avisota_newsletter extends Backend
 		$add[$key] = implode('<br>', $add[$key]);
 
 
-		if ($objCategory->themeMode == 'byNewsletterOrCategory') {
+		if ($category->themeMode == 'byNewsletterOrCategory') {
 			$key = $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['theme'][0];
 			$add[$key] .= ' ' . $GLOBALS['TL_LANG']['tl_avisota_newsletter']['fallback'];
 		}
 
 
-		if ($objCategory->transportMode == 'byNewsletterOrCategory') {
+		if ($category->transportMode == 'byNewsletterOrCategory') {
 			$key = $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transport'][0];
 			$add[$key] .= ' ' . $GLOBALS['TL_LANG']['tl_avisota_newsletter']['fallback'];
 		}
@@ -652,11 +652,11 @@ class tl_avisota_newsletter extends Backend
 	 *
 	 * @param array
 	 */
-	public function addNewsletter($arrRow)
+	public function addNewsletter($newsletterData)
 	{
-		$icon = $arrRow['sendOn'] ? 'visible' : 'invisible';
+		$icon = $newsletterData['sendOn'] ? 'visible' : 'invisible';
 
-		$label = $arrRow['subject'];
+		$label = $newsletterData['subject'];
 
 		if ($row['sendOn']) {
 			$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(' . sprintf(
@@ -696,31 +696,31 @@ class tl_avisota_newsletter extends Backend
 	 *
 	 * @return string
 	 */
-	public function generateAlias($varValue, DataContainer $dc)
+	public function generateAlias($value, DataContainer $dc)
 	{
 		$autoAlias = false;
 
 		// Generate alias if there is none
-		if (!strlen($varValue)) {
+		if (!strlen($value)) {
 			$autoAlias = true;
-			$varValue  = standardize($dc->activeRecord->subject);
+			$value  = standardize($dc->activeRecord->subject);
 		}
 
-		$objAlias = $this->Database
+		$aliasResultSet = $this->Database
 			->prepare("SELECT id FROM tl_avisota_newsletter WHERE alias=?")
-			->execute($varValue);
+			->execute($value);
 
 		// Check whether the news alias exists
-		if ($objAlias->numRows > 1 && !$autoAlias) {
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $varValue));
+		if ($aliasResultSet->numRows > 1 && !$autoAlias) {
+			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $value));
 		}
 
 		// Add ID to alias
-		if ($objAlias->numRows && $autoAlias) {
-			$varValue .= '-' . $dc->id;
+		if ($aliasResultSet->numRows && $autoAlias) {
+			$value .= '-' . $dc->id;
 		}
 
-		return $varValue;
+		return $value;
 	}
 }
 

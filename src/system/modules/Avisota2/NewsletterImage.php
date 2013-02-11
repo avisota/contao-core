@@ -50,14 +50,14 @@ class NewsletterImage extends NewsletterElement
 	 *
 	 * @var string
 	 */
-	protected $strTemplateHTML = 'nle_image_html';
+	protected $templateHTML = 'nle_image_html';
 
 	/**
 	 * Plain text Template
 	 *
 	 * @var string
 	 */
-	protected $strTemplatePlain = 'nle_image_plain';
+	protected $templatePlain = 'nle_image_plain';
 
 
 	/**
@@ -95,6 +95,6 @@ class NewsletterImage extends NewsletterElement
 	 */
 	protected function compile($mode)
 	{
-		$this->addImageToTemplate($this->Template, $this->arrData);
+		$this->addImageToTemplate($this->Template, $this->currentRecordData);
 	}
 }

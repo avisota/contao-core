@@ -46,10 +46,10 @@ class AvisotaRecipientException extends Exception
 {
 	protected $recipient;
 
-	public function __construct(array $arrRecipient = null, $message = '', $code = 0, $previous = null)
+	public function __construct(array $recipientData = null, $message = '', $code = 0, $previous = null)
 	{
 		parent::__construct($message, $code, $previous);
-		$this->recipient = $arrRecipient;
+		$this->recipient = $recipientData;
 	}
 
 	public function getRecipient()

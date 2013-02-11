@@ -51,9 +51,9 @@ class ModuleAvisotaSubscription extends ModuleAvisotaRecipientForm
 	 */
 	protected $strTemplate = 'mod_avisota_subscription';
 
-	public function __construct(Database_Result $objModule)
+	public function __construct(Database_Result $module)
 	{
-		parent::__construct($objModule);
+		parent::__construct($module);
 
 		$this->loadLanguageFile('avisota_subscribe');
 		$this->loadLanguageFile('avisota_unsubscribe');
@@ -65,12 +65,12 @@ class ModuleAvisotaSubscription extends ModuleAvisotaRecipientForm
 	public function generate()
 	{
 		if (TL_MODE == 'BE') {
-			$objTemplate           = new BackendTemplate('be_wildcard');
-			$objTemplate->wildcard = '### Avisota subscription module ###';
-			return $objTemplate->parse();
+			$template           = new BackendTemplate('be_wildcard');
+			$template->wildcard = '### Avisota subscription module ###';
+			return $template->parse();
 		}
 
-		$this->strFormTemplate = $this->avisota_template_subscription;
+		$this->formTemplate = $this->avisota_template_subscription;
 
 		return parent::generate();
 	}
@@ -80,20 +80,20 @@ class ModuleAvisotaSubscription extends ModuleAvisotaRecipientForm
 	 */
 	public function compile()
 	{
-		if ($this->Input->post('FORM_SUBMIT') == $this->strFormName) {
+		if ($this->Input->post('FORM_SUBMIT') == $this->formName) {
 			$this->avisota_recipient_fields = array();
 		}
 
 		$this->addForm();
 	}
 
-	protected function submit(array $arrRecipient, array $arrMailingLists, FrontendTemplate $objTemplate)
+	protected function submit(array $recipientData, array $mailingLists, FrontendTemplate $template)
 	{
 		if ($this->Input->post('subscribe')) {
-			return $this->handleSubscribeSubmit($arrRecipient, $arrMailingLists, $objTemplate);
+			return $this->handleSubscribeSubmit($recipientData, $mailingLists, $template);
 		}
 		if ($this->Input->post('unsubscribe')) {
-			return $this->handleUnsubscribeSubmit($arrRecipient, $arrMailingLists, $objTemplate);
+			return $this->handleUnsubscribeSubmit($recipientData, $mailingLists, $template);
 		}
 		return null;
 	}

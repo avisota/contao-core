@@ -59,14 +59,14 @@ class AvisotaUpdate extends BackendModule
 	/**
 	 * @var AvisotaUpdate
 	 */
-	protected static $objInstance = null;
+	protected static $instance = null;
 
 	public static function getInstance()
 	{
-		if (self::$objInstance === null) {
-			self::$objInstance = new AvisotaUpdate();
+		if (self::$instance === null) {
+			self::$instance = new AvisotaUpdate();
 		}
-		return self::$objInstance;
+		return self::$instance;
 	}
 
 	/**
@@ -84,9 +84,9 @@ class AvisotaUpdate extends BackendModule
 
 	public function hasUpdates()
 	{
-		foreach (self::$updates as $strVersion => $arrUpdate) {
-			$strMethod = 'check' . preg_replace('#[^\w]#', '_', $strVersion);
-			if ($this->$strMethod()) {
+		foreach (self::$updates as $version => $updates) {
+			$methodName = 'check' . preg_replace('#[^\w]#', '_', $version);
+			if ($this->$methodName()) {
 				return true;
 			}
 		}
@@ -110,27 +110,27 @@ class AvisotaUpdate extends BackendModule
 
 			// check for updates
 			if ($this->Input->post('update')) {
-				$arrVersions = $this->Input->post('update');
-				$strVersion  = array_shift($arrVersions);
+				$versions = $this->Input->post('update');
+				$version  = array_shift($versions);
 
 				try {
-					if ($this->runUpdate($strVersion)) {
+					if ($this->runUpdate($version)) {
 						$_SESSION['TL_INFO'][] = $GLOBALS['TL_LANG']['avisota_update']['updateSuccess'];
 					}
 
 					else {
-						array_unshift($arrVersions, $strVersion);
+						array_unshift($versions, $version);
 						$_SESSION['TL_ERROR'][] = $GLOBALS['TL_LANG']['avisota_update']['updateFailed'];
 					}
 				}
 				catch (Exception $e) {
-					array_unshift($arrVersions, $strVersion);
+					array_unshift($versions, $version);
 					$_SESSION['TL_ERROR'][] = $e->getMessage();
 				}
 
-				if (count($arrVersions)) {
+				if (count($versions)) {
 					$_SESSION['TL_INFO'][]       = $GLOBALS['TL_LANG']['avisota_update']['moreUpdates'];
-					$_SESSION['AUTORUN_UPDATES'] = $arrVersions;
+					$_SESSION['AUTORUN_UPDATES'] = $versions;
 				}
 
 				else {
@@ -142,9 +142,9 @@ class AvisotaUpdate extends BackendModule
 		}
 
 		if ($this->Environment->isAjaxRequest) {
-			$strVersion = $this->Input->get('update');
+			$version = $this->Input->get('update');
 
-			if ($this->runUpdate($strVersion)) {
+			if ($this->runUpdate($version)) {
 				header('Content-Type: text/plain');
 				echo $GLOBALS['TL_LANG']['avisota_update']['updateSuccess'];
 				exit;
@@ -169,39 +169,39 @@ class AvisotaUpdate extends BackendModule
 	{
 		$this->Template->updates = self::$updates;
 
-		$arrVersions = array();
-		$arrStatus   = array();
-		foreach (self::$updates as $strVersion => $arrUpdate) {
-			$strMethod              = 'check' . preg_replace('#[^\w]#', '_', $strVersion);
-			$arrStatus[$strVersion] = $this->$strMethod();
+		$versions = array();
+		$statuses   = array();
+		foreach (self::$updates as $version => $updates) {
+			$methodName              = 'check' . preg_replace('#[^\w]#', '_', $version);
+			$statuses[$version] = $this->$methodName();
 
-			$strShort               = preg_replace('#^(\d+\.\d+\.\d+).*$#', '$1', $strVersion);
-			$arrVersions[$strShort] = (isset($arrVersions[$strShort]) ? $arrVersions[$strShort]
-				: false) || $arrStatus[$strVersion];
+			$shortVersion               = preg_replace('#^(\d+\.\d+\.\d+).*$#', '$1', $version);
+			$versions[$shortVersion] = (isset($versions[$shortVersion]) ? $versions[$shortVersion]
+				: false) || $statuses[$version];
 		}
-		$this->Template->status = $arrStatus;
+		$this->Template->status = $statuses;
 
-		uksort($arrVersions, 'version_compare');
+		uksort($versions, 'version_compare');
 
-		$strLastVersion = '0.3.x';
-		foreach ($arrVersions as $strVersion => $blnRequireUpdate) {
-			if ($blnRequireUpdate) {
+		$lastVersion = '0.3.x';
+		foreach ($versions as $version => $requireUpdate) {
+			if ($requireUpdate) {
 				break;
 			}
-			$strLastVersion = $strVersion;
+			$lastVersion = $version;
 		}
-		$this->Template->previous = $strLastVersion;
+		$this->Template->previous = $lastVersion;
 	}
 
-	protected function runUpdate($strVersion)
+	protected function runUpdate($version)
 	{
-		if (isset(self::$updates[$strVersion])) {
-			$strMethod = 'upgrade' . preg_replace('#[^\w]#', '_', $strVersion);
-			return $this->$strMethod();
+		if (isset(self::$updates[$version])) {
+			$methodName = 'upgrade' . preg_replace('#[^\w]#', '_', $version);
+			return $this->$methodName();
 		}
 
-		$this->log('Try to run illegal update to version ' . $strVersion . '!', 'AvisotaUpdate::update', TL_ERROR);
-		throw new Exception('Try to run illegal update to version ' . $strVersion . '!');
+		$this->log('Try to run illegal update to version ' . $version . '!', 'AvisotaUpdate::update', TL_ERROR);
+		throw new Exception('Try to run illegal update to version ' . $version . '!');
 	}
 
 	protected function check0_4_5()
@@ -297,32 +297,32 @@ class AvisotaUpdate extends BackendModule
 					&& $this->Database->fieldExists('source', 'tl_avisota_newsletter_outbox')
 					&& $this->Database->fieldExists('failed', 'tl_avisota_newsletter_outbox')
 				) {
-					$objOutbox      = $this->Database
+					$outbox      = $this->Database
 						->execute("SELECT DISTINCT pid,token FROM tl_avisota_newsletter_outbox");
-					$arrNewsletters = $objOutbox->fetchAllAssoc();
+					$newsletterDataSets = $outbox->fetchAllAssoc();
 
-					if (count($arrNewsletters)) {
-						$arrOutboxes = array();
+					if (count($newsletterDataSets)) {
+						$outboxeIds = array();
 
 						// create the outboxes
-						foreach ($arrNewsletters as $arrRow) {
-							if ($arrRow['token']) {
+						foreach ($newsletterDataSets as $newsletterData) {
+							if ($newsletterData['token']) {
 								$time = $this->Database
 									->prepare(
 									"SELECT IF (tstamp, tstamp, send) as time FROM (SELECT MIN(tstamp) as tstamp, MIN(send) as send FROM tl_avisota_newsletter_outbox WHERE token=? GROUP BY token) t"
 								)
-									->execute($arrRow['token'])
+									->execute($newsletterData['token'])
 									->time;
 
-								$arrOutboxes[$arrRow['token']] = $this->Database
+								$outboxeIds[$newsletterData['token']] = $this->Database
 									->prepare("INSERT INTO tl_avisota_newsletter_outbox SET pid=?, tstamp=?")
-									->execute($arrRow['pid'], $time)
+									->execute($newsletterData['pid'], $time)
 									->insertId;
 							}
 						}
 
 						// move the recipients
-						foreach ($arrOutboxes as $strToken => $intOutbox) {
+						foreach ($outboxeIds as $token => $outboxId) {
 							$this->Database
 								->prepare(
 								"INSERT INTO tl_avisota_newsletter_outbox_recipient (pid,tstamp,email,domain,send,source,sourceID,failed)
@@ -338,36 +338,36 @@ class AvisotaUpdate extends BackendModule
 									FROM tl_avisota_newsletter_outbox
 									WHERE token=?"
 							)
-								->execute($intOutbox, $strToken);
+								->execute($outboxId, $token);
 						}
 
 						// update recipientID
-						$objRecipient = $this->Database
+						$recipient = $this->Database
 							->execute("SELECT * FROM tl_avisota_newsletter_outbox_recipient WHERE recipientID=0");
-						while ($objRecipient->next()) {
-							switch ($objRecipient->source) {
+						while ($recipient->next()) {
+							switch ($recipient->source) {
 								case 'list':
-									$objResult = $this->Database
+									$resultSet = $this->Database
 										->prepare("SELECT id FROM tl_avisota_recipient WHERE email=? AND pid=?")
-										->execute($objRecipient->email, $objRecipient->sourceID);
+										->execute($recipient->email, $recipient->sourceID);
 									break;
 
 								case 'mgroup':
-									$objResult = $this->Database
+									$resultSet = $this->Database
 										->prepare("SELECT id FROM tl_member WHERE email=?")
-										->execute($objRecipient->email);
+										->execute($recipient->email);
 									break;
 
 								default:
 									continue;
 							}
 
-							if ($objResult->next()) {
+							if ($resultSet->next()) {
 								$this->Database
 									->prepare(
 									"UPDATE tl_avisota_newsletter_outbox_recipient SET recipientID=? WHERE id=?"
 								)
-									->execute($objResult->id, $objRecipient->id);
+									->execute($resultSet->id, $recipient->id);
 							}
 						}
 
@@ -376,14 +376,14 @@ class AvisotaUpdate extends BackendModule
 							->execute(
 							"DELETE FROM tl_avisota_newsletter_outbox WHERE id NOT IN (" . implode(
 								',',
-								$arrOutboxes
+								$outboxeIds
 							) . ")"
 						);
 
 						// delete old fields
-						foreach (array('token', 'email', 'send', 'source', 'failed') as $strField) {
-							if ($this->Database->fieldExists($strField, 'tl_avisota_newsletter_outbox')) {
-								$this->Database->execute('ALTER TABLE tl_avisota_newsletter_outbox DROP ' . $strField);
+						foreach (array('token', 'email', 'send', 'source', 'failed') as $fieldName) {
+							if ($this->Database->fieldExists($fieldName, 'tl_avisota_newsletter_outbox')) {
+								$this->Database->execute('ALTER TABLE tl_avisota_newsletter_outbox DROP ' . $fieldName);
 							}
 						}
 					}
@@ -426,85 +426,85 @@ class AvisotaUpdate extends BackendModule
 				}
 
 				// temporary caches
-				$arrNewsletterCache  = array();
-				$arrCategoryCache    = array();
-				$arrUnsubscribeCache = array();
+				$newsletterCache  = array();
+				$categoryCache    = array();
+				$unsubscribeCache = array();
 
 				// links that are reduced
-				$arrLinks = array();
+				$links = array();
 
-				$objLink = $this->Database
+				$link = $this->Database
 					->executeUncached(
 					"SELECT * FROM tl_avisota_statistic_raw_recipient_link WHERE (real_url='' OR ISNULL(real_url)) AND url REGEXP 'email=[^…]'"
 				);
-				while ($objLink->next()) {
-					$objNewsletter     = false;
-					$objCategory       = false;
-					$strUnsubscribeUrl = false;
+				while ($link->next()) {
+					$newsletter     = false;
+					$category       = false;
+					$unsubscribeUrl = false;
 
-					if (isset($arrNewsletterCache[$objLink->pid])) {
-						$objNewsletter = $arrNewsletterCache[$objLink->pid];
+					if (isset($newsletterCache[$link->pid])) {
+						$newsletter = $newsletterCache[$link->pid];
 					}
 					else {
-						$objNewsletter = $this->Database
+						$newsletter = $this->Database
 							->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
-							->execute($objLink->pid);
-						if ($objNewsletter->next()) {
-							$objNewsletter = $arrNewsletterCache[$objLink->pid] = (object) $objNewsletter->row();
+							->execute($link->pid);
+						if ($newsletter->next()) {
+							$newsletter = $newsletterCache[$link->pid] = (object) $newsletter->row();
 						}
 						else {
-							$objNewsletter = $arrNewsletterCache[$objLink->pid] = false;
+							$newsletter = $newsletterCache[$link->pid] = false;
 						}
 					}
 
-					if ($objNewsletter) {
-						if (isset($objCategoryCache[$objNewsletter->pid])) {
-							$objCategory = $objCategoryCache[$objNewsletter->pid];
+					if ($newsletter) {
+						if (isset($categoryCache[$newsletter->pid])) {
+							$category = $categoryCache[$newsletter->pid];
 						}
 						else {
-							$objCategory = $this->Database
+							$category = $this->Database
 								->prepare("SELECT * FROM tl_avisota_newsletter_category WHERE id=?")
-								->execute($objNewsletter->pid);
-							if ($objCategory->next()) {
-								$objCategory = $objCategoryCache[$objNewsletter->pid] = (object) $objCategory->row();
+								->execute($newsletter->pid);
+							if ($category->next()) {
+								$category = $categoryCache[$newsletter->pid] = (object) $category->row();
 							}
 							else {
-								$objCategory = $objCategoryCache[$objNewsletter->pid] = false;
+								$category = $categoryCache[$newsletter->pid] = false;
 							}
 						}
 					}
 
-					if ($objCategory) {
-						if (isset($arrUnsubscribeCache[$objLink->recipient])) {
-							$strUnsubscribeUrl = $arrUnsubscribeCache[$objLink->recipient];
+					if ($category) {
+						if (isset($unsubscribeCache[$link->recipient])) {
+							$unsubscribeUrl = $unsubscribeCache[$link->recipient];
 						}
 						else {
-							$arrRecipient = array('email' => $objLink->recipient);
-							$this->Static->set($objCategory, $objNewsletter, $arrRecipient);
-							$strUnsubscribeUrl = $arrUnsubscribeCache[$objLink->recipient] = $this->replaceInsertTags(
+							$recipientData = array('email' => $link->recipient);
+							$this->Static->set($category, $newsletter, $recipientData);
+							$unsubscribeUrl = $unsubscribeCache[$link->recipient] = $this->replaceInsertTags(
 								'{{newsletter::unsubscribe_url}}'
 							);
 						}
 					}
 
-					if ($strUnsubscribeUrl && $strUnsubscribeUrl == $objLink->url) {
+					if ($unsubscribeUrl && $unsubscribeUrl == $link->url) {
 						// create a new (real) url
-						$strRealUrl = $objLink->url;
-						$strUrl     = preg_replace('#email=[^&]*#', 'email=…', $objLink->url);
+						$realUrl = $link->url;
+						$url     = preg_replace('#email=[^&]*#', 'email=…', $link->url);
 
 						// update the recipient-less-link
-						if (!$arrLinks[$strUrl]) {
+						if (!$links[$url]) {
 							$this->Database
 								->prepare("UPDATE tl_avisota_statistic_raw_link SET url=? WHERE id=?")
-								->execute($strUrl, $objLink->linkID);
-							$arrLinks[$strUrl] = $objLink->linkID;
+								->execute($url, $link->linkID);
+							$links[$url] = $link->linkID;
 						}
 
 						// or delete if there is allready a link with this url
 						else {
 							$this->Database
 								->prepare("DELETE FROM tl_avisota_statistic_raw_link WHERE id=?")
-								->execute($objLink->linkID);
+								->execute($link->linkID);
 						}
 
 						// update the recipient-link
@@ -512,14 +512,14 @@ class AvisotaUpdate extends BackendModule
 							->prepare(
 							"UPDATE tl_avisota_statistic_raw_recipient_link SET linkID=?, url=?, real_url=? WHERE id=?"
 						)
-							->execute($arrLinks[$strUrl], $strUrl, $strRealUrl, $objLink->id);
+							->execute($links[$url], $url, $realUrl, $link->id);
 
 						// update link hit
 						$this->Database
 							->prepare(
 							"UPDATE tl_avisota_statistic_raw_link_hit SET linkID=? WHERE linkID=? AND recipientLinkID=?"
 						)
-							->execute($arrLinks[$strUrl], $objLink->linkID, $objLink->id);
+							->execute($links[$url], $link->linkID, $link->id);
 					}
 				}
 			}
@@ -532,54 +532,54 @@ class AvisotaUpdate extends BackendModule
 		try {
 			if ($this->Database->tableExists('tl_avisota_statistic_raw_link')) {
 				// cache url->id
-				$arrCache = array();
+				$cache = array();
 
 				// find and clean html entities encoded urls
-				$objLink = $this->Database->execute(
+				$link = $this->Database->execute(
 					"SELECT * FROM tl_avisota_statistic_raw_link WHERE url REGEXP '&#x?[0-9]+;'"
 				);
-				while ($objLink->next()) {
+				while ($link->next()) {
 					// decorde url
-					$strUrl = html_entity_decode($objLink->url);
+					$url = html_entity_decode($link->url);
 
 					// search cache
-					if (isset($arrCache[$objLink->pid][$strUrl])) {
-						$intId = $arrCache[$objLink->pid][$strUrl];
+					if (isset($cache[$link->pid][$url])) {
+						$linkId = $cache[$link->pid][$url];
 					}
 
 					// or search existing record
 					else {
-						$objExistingLink = $this->Database
+						$existingLink = $this->Database
 							->prepare("SELECT * FROM tl_avisota_statistic_raw_link WHERE pid=? AND url=?")
-							->executeUncached($objLink->pid, $strUrl);
+							->executeUncached($link->pid, $url);
 
-						if ($objExistingLink->next()) {
+						if ($existingLink->next()) {
 							// use existing record
-							$intId = $objExistingLink->id;
+							$linkId = $existingLink->id;
 						}
 						else {
 							// insert new record
-							$intId = $this->Database
+							$linkId = $this->Database
 								->prepare("INSERT INTO tl_avisota_statistic_raw_link (pid,tstamp,url) VALUES (?, ?, ?)")
-								->executeUncached($objLink->pid, $objLink->tstamp, $strUrl)
+								->executeUncached($link->pid, $link->tstamp, $url)
 								->insertId;
 						}
 
 						// set cache
-						$arrCache[$objLink->pid][$strUrl] = $intId;
+						$cache[$link->pid][$url] = $linkId;
 					}
 
 					// update recipient link
 					$this->Database
 						->prepare("UPDATE tl_avisota_statistic_raw_recipient_link SET linkId=? WHERE linkId=?")
-						->execute($intId, $objLink->id);
+						->execute($linkId, $link->id);
 
 					// delete old record
 					$this->Database
 						->prepare("DELETE FROM tl_avisota_statistic_raw_link WHERE id=?")
-						->execute($objLink->id);
+						->execute($link->id);
 
-					$this->log('Cleaned html encoded url "' . $strUrl . '"', 'AvisotaRunonce::upgrade1_5_1()', TL_INFO);
+					$this->log('Cleaned html encoded url "' . $url . '"', 'AvisotaRunonce::upgrade1_5_1()', TL_INFO);
 				}
 			}
 		}
@@ -643,8 +643,8 @@ class AvisotaUpdate extends BackendModule
 				);
 
 				// fetch recipients that are multiple
-				$arrRecipients = array();
-				$objRecipient  = $this->Database
+				$recipientDataSets = array();
+				$recipient  = $this->Database
 					->execute(
 					"SELECT (SELECT COUNT(email) FROM tl_avisota_recipient r2 WHERE r1.email=r2.email) AS c, r1.*
 							   FROM tl_avisota_recipient r1
@@ -652,33 +652,33 @@ class AvisotaUpdate extends BackendModule
 							   ORDER BY email,tstamp
 							   LIMIT 1000"
 				);
-				while ($objRecipient->next()) {
+				while ($recipient->next()) {
 					// convert email to lowercase
-					$objRecipient->email = strtolower($objRecipient->email);
+					$recipient->email = strtolower($recipient->email);
 
 					// set first existence
-					if (!isset($arrRecipients[$objRecipient->email])) {
-						$arrRecipients[$objRecipient->email]         = $objRecipient->row();
-						$arrRecipients[$objRecipient->email]['ids']  = array($objRecipient->id);
-						$arrRecipients[$objRecipient->email]['pids'] = array($objRecipient->pid);
+					if (!isset($recipientDataSets[$recipient->email])) {
+						$recipientDataSets[$recipient->email]         = $recipient->row();
+						$recipientDataSets[$recipient->email]['ids']  = array($recipient->id);
+						$recipientDataSets[$recipient->email]['pids'] = array($recipient->pid);
 					}
 
 					// update fields
 					else {
-						$arrRecipient = & $arrRecipients[$objRecipient->email];
+						$recipientData = & $recipientDataSets[$recipient->email];
 
 						// delete duplicate recipient, but use its data
-						if (in_array($objRecipient->pid, $arrRecipients[$objRecipient->email]['pids'])) {
+						if (in_array($recipient->pid, $recipientDataSets[$recipient->email]['pids'])) {
 							$this->Database
 								->prepare("DELETE FROM tl_avisota_recipient WHERE id=?")
-								->execute($objRecipient->id);
+								->execute($recipient->id);
 						}
 						else {
-							$arrRecipient['ids'][]  = $objRecipient->id;
-							$arrRecipient['pids'][] = $objRecipient->pid;
+							$recipientData['ids'][]  = $recipient->id;
+							$recipientData['pids'][] = $recipient->pid;
 						}
 
-						foreach ($objRecipient->row() as $field => $value) {
+						foreach ($recipient->row() as $field => $value) {
 							// skip some fields
 							if ($field == 'id' || $field == 'pid' || $field == 'tstamp' || $field == 'email' || $field == 'confirmed' || $field == 'token' || $field == 'notification') {
 								continue;
@@ -686,53 +686,53 @@ class AvisotaUpdate extends BackendModule
 
 							// use the lowest value of addedOn
 							else if ($field == 'addedOn') {
-								if ($arrRecipient['addedOn'] > $value && $value > 0 || $arrRecipient['addedOn'] == 0) {
-									$arrRecipient['addedOn'] = $value;
+								if ($recipientData['addedOn'] > $value && $value > 0 || $recipientData['addedOn'] == 0) {
+									$recipientData['addedOn'] = $value;
 								}
 							}
 
 							// update value if previous value is empty or current value is newer
-							else if (!empty($value) && (empty($arrRecipient[$field]) || $arrRecipient['tstamp'] < $objRecipient->tstamp)) {
-								$arrRecipient[$field] = $value;
+							else if (!empty($value) && (empty($recipientData[$field]) || $recipientData['tstamp'] < $recipient->tstamp)) {
+								$recipientData[$field] = $value;
 							}
 						}
 
-						if ($arrRecipient['tstamp'] < $objRecipient->tstamp) {
-							$arrRecipient['tstamp'] = $objRecipient->tstamp;
+						if ($recipientData['tstamp'] < $recipient->tstamp) {
+							$recipientData['tstamp'] = $recipient->tstamp;
 						}
 					}
 				}
-				foreach ($arrRecipients as &$arrRecipient) {
+				foreach ($recipientDataSets as &$recipientData) {
 					// update subscription
 					$this->Database
 						->query(
 						"UPDATE tl_avisota_recipient_to_mailing_list
-								 SET recipient=" . $arrRecipient['id'] . "
-								 WHERE recipient IN (" . implode(',', $arrRecipient['ids']) . ")"
+								 SET recipient=" . $recipientData['id'] . "
+								 WHERE recipient IN (" . implode(',', $recipientData['ids']) . ")"
 					);
 
 					// delete waste rows
 					$this->Database
 						->query(
 						"DELETE FROM tl_avisota_recipient
-								 WHERE id!=" . $arrRecipient['id'] . " AND id IN (" . implode(
+								 WHERE id!=" . $recipientData['id'] . " AND id IN (" . implode(
 							',',
-							$arrRecipient['ids']
+							$recipientData['ids']
 						) . ")"
 					);
 
 					// unset fields that are just virtual
-					unset($arrRecipient['c'], $arrRecipient['ids'], $arrRecipient['pids']);
+					unset($recipientData['c'], $recipientData['ids'], $recipientData['pids']);
 
 					// update row
 					$this->Database
 						->prepare("UPDATE tl_avisota_recipient %s WHERE id=?")
-						->set($arrRecipient)
-						->execute($arrRecipient['id']);
+						->set($recipientData)
+						->execute($recipientData['id']);
 				}
 
 				// reload if there are more
-				if ($objRecipient->numRows == 1000) {
+				if ($recipient->numRows == 1000) {
 					$this->reload();
 				}
 			}
@@ -793,7 +793,7 @@ class AvisotaUpdate extends BackendModule
 				}
 
 				if ($this->Database->fieldExists('useSMTP', 'tl_avisota_newsletter_category')) {
-					$objCategory = $this->Database
+					$category = $this->Database
 						->execute(
 						"SELECT GROUP_CONCAT(id) AS ids, useSMTP, smtpHost, smtpUser, smtpPass, smtpPort, smtpEnc, sender, senderName
 								   FROM tl_avisota_newsletter_category
@@ -801,33 +801,33 @@ class AvisotaUpdate extends BackendModule
 								   GROUP BY useSMTP, smtpHost, smtpUser, smtpPass, smtpPort, smtpEnc, sender, senderName"
 					);
 
-					while ($objCategory->next()) {
-						$arrTransport = array(
+					while ($category->next()) {
+						$transport = array(
 							'tstamp'        => time(),
 							'type'          => 'swift',
-							'title'         => 'Swift Transport' . ($objCategory->useSMTP
-								? (' (' . ($objCategory->smtpUser
-									? $objCategory->smtpUser . '@' : '') . $objCategory->smtpHost . ')') : ''),
-							'swiftUseSmtp'  => $objCategory->useSMTP ? 'swiftSmtpOn' : 'swiftSmtpSystemSettings',
-							'swiftSmtpHost' => $objCategory->smtpHost,
-							'swiftSmtpUser' => $objCategory->smtpUser,
-							'swiftSmtpPass' => $objCategory->smtpPass,
-							'swiftSmtpEnc'  => $objCategory->smtpEnc,
-							'sender'        => $objCategory->sender,
-							'senderName'    => $objCategory->senderName
+							'title'         => 'Swift Transport' . ($category->useSMTP
+								? (' (' . ($category->smtpUser
+									? $category->smtpUser . '@' : '') . $category->smtpHost . ')') : ''),
+							'swiftUseSmtp'  => $category->useSMTP ? 'swiftSmtpOn' : 'swiftSmtpSystemSettings',
+							'swiftSmtpHost' => $category->smtpHost,
+							'swiftSmtpUser' => $category->smtpUser,
+							'swiftSmtpPass' => $category->smtpPass,
+							'swiftSmtpEnc'  => $category->smtpEnc,
+							'sender'        => $category->sender,
+							'senderName'    => $category->senderName
 						);
 
 						// create new transport
-						$intId = $this->Database
+						$transportId = $this->Database
 							->prepare("INSERT INTO tl_avisota_transport %s")
-							->set($arrTransport)
+							->set($transport)
 							->execute()
 							->insertId;
 
 						// update categories to use the transport
 						$this->Database
 							->query(
-							"UPDATE tl_avisota_newsletter_category SET transportMode='byCategory', transport=" . $intId . " WHERE id IN (" . $objCategory->ids . ")"
+							"UPDATE tl_avisota_newsletter_category SET transportMode='byCategory', transport=" . $transportId . " WHERE id IN (" . $category->ids . ")"
 						);
 					}
 				}
@@ -889,38 +889,38 @@ class AvisotaUpdate extends BackendModule
 					$this->Database->query("ALTER TABLE `tl_avisota_newsletter_category` ADD `recipients` blob NULL");
 				}
 
-				$arrSources               = array();
-				$arrSourcesByNewsletter   = array();
-				$arrNewslettersByCategory = array();
-				$arrSourcesByCategory     = array();
+				$sources               = array();
+				$sourcesByNewsletter   = array();
+				$newslettersByCategory = array();
+				$sourcesByCategory     = array();
 
-				$objNewsletter = $this->Database
+				$newsletter = $this->Database
 					->execute(
 					"SELECT id, pid, recipients
 							   FROM tl_avisota_newsletter
 							   WHERE recipients LIKE '%list-%' OR recipients LIKE '%mgroup-%'"
 				);
-				while ($objNewsletter->next()) {
-					if (!isset($arrNewslettersByCategory[$objNewsletter->pid])) {
-						$arrNewslettersByCategory[$objNewsletter->pid] = array($objNewsletter->id);
+				while ($newsletter->next()) {
+					if (!isset($newslettersByCategory[$newsletter->pid])) {
+						$newslettersByCategory[$newsletter->pid] = array($newsletter->id);
 					}
 					else {
-						$arrNewslettersByCategory[$objNewsletter->pid][] = $objNewsletter->id;
+						$newslettersByCategory[$newsletter->pid][] = $newsletter->id;
 					}
 
-					$arrRecipients = deserialize($objNewsletter->recipients, true);
+					$recipients = deserialize($newsletter->recipients, true);
 
-					foreach ($arrRecipients as $strRecipient) {
+					foreach ($recipients as $recipientIdentifier) {
 						// create a new source, if none exists for this
-						if (!isset($arrSources[$strRecipient])) {
-							list($type, $id) = explode('-', $strRecipient, 2);
+						if (!isset($sources[$recipientIdentifier])) {
+							list($type, $id) = explode('-', $recipientIdentifier, 2);
 
 							switch ($type) {
 								case 'list':
-									$objList = $this->Database
+									$list = $this->Database
 										->prepare("SELECT title FROM tl_avisota_recipient_list WHERE id=?")
 										->execute($id);
-									if (!$objList->next()) {
+									if (!$list->next()) {
 										$this->log(
 											'Recipient list ID ' . $id . ' does not exists (anymore), skipping while convert into recipient source!',
 											'AvisotaUpdate::update2_0_0_u3()',
@@ -928,9 +928,9 @@ class AvisotaUpdate extends BackendModule
 										);
 										continue;
 									}
-									$arrSource = array(
+									$sourceData = array(
 										'type'                   => 'integrated',
-										'title'                  => $objList->title,
+										'title'                  => $list->title,
 										'integratedBy'           => 'integratedByMailingLists',
 										'integratedMailingLists' => serialize(array($id)),
 										'integratedDetails'      => $GLOBALS['TL_CONFIG']['avisota_merge_member_details']
@@ -939,10 +939,10 @@ class AvisotaUpdate extends BackendModule
 									break;
 
 								case 'mgroup':
-									$objGroup = $this->Database
+									$group = $this->Database
 										->prepare("SELECT name FROM tl_member_group WHERE id=?")
 										->execute($id);
-									if (!$objGroup->next()) {
+									if (!$group->next()) {
 										$this->log(
 											'Member group ID ' . $id . ' does not exists (anymore), skipping while convert into recipient source!',
 											'AvisotaUpdate::update2_0_0_u3()',
@@ -950,9 +950,9 @@ class AvisotaUpdate extends BackendModule
 										);
 										continue;
 									}
-									$arrSource = array(
+									$sourceData = array(
 										'type'         => 'member',
-										'title'        => $objGroup->name,
+										'title'        => $group->name,
 										'memberBy'     => 'memberByGroups',
 										'memberGroups' => serialize(array($id))
 									);
@@ -967,49 +967,49 @@ class AvisotaUpdate extends BackendModule
 									continue;
 							}
 
-							$arrSource['sorting'] = $this->Database
+							$sourceData['sorting'] = $this->Database
 								->executeUncached('SELECT MAX(sorting) AS sorting FROM tl_avisota_recipient_source')
 								->sorting;
-							$arrSource['sorting'] = $arrSource['sorting'] ? $arrSource['sorting'] * 2 : 128;
-							$arrSource['tstamp']  = time();
+							$sourceData['sorting'] = $sourceData['sorting'] ? $sourceData['sorting'] * 2 : 128;
+							$sourceData['tstamp']  = time();
 
-							$intId = $this->Database
+							$sourceId = $this->Database
 								->prepare("INSERT INTO tl_avisota_recipient_source %s")
-								->set($arrSource)
+								->set($sourceData)
 								->execute()
 								->insertId;
 
-							$arrSources[$strRecipient] = $intId;
+							$sources[$recipientIdentifier] = $sourceId;
 						}
 						else {
-							$intId = $arrSources[$strRecipient];
+							$sourceId = $sources[$recipientIdentifier];
 						}
 
 						// remember which newsletter use which source
-						if (!isset($arrSourcesByNewsletter[$objNewsletter->id])) {
-							$arrSourcesByNewsletter[$objNewsletter->id] = array($intId);
+						if (!isset($sourcesByNewsletter[$newsletter->id])) {
+							$sourcesByNewsletter[$newsletter->id] = array($sourceId);
 						}
 						else {
-							$arrSourcesByNewsletter[$objNewsletter->id][] = $intId;
+							$sourcesByNewsletter[$newsletter->id][] = $sourceId;
 						}
 					}
 				}
 
 				// break down newsletter sources to category
-				foreach ($arrNewslettersByCategory as $intCategoryId => $arrNewsletterIds) {
-					$arrSourcesByCategory[$intCategoryId] = array();
+				foreach ($newslettersByCategory as $categoryId => $newsletterIds) {
+					$sourcesByCategory[$categoryId] = array();
 
-					foreach ($arrNewsletterIds as $intNewsletterId) {
-						$tmp = $arrSourcesByNewsletter[$intNewsletterId];
+					foreach ($newsletterIds as $newsletterId) {
+						$tmp = $sourcesByNewsletter[$newsletterId];
 						sort($tmp);
-						$arrSourcesByCategory[$intCategoryId][] = implode(',', $tmp);
+						$sourcesByCategory[$categoryId][] = implode(',', $tmp);
 					}
 
-					$arrSourcesByCategory[$intCategoryId] = array_unique($arrSourcesByCategory[$intCategoryId]);
+					$sourcesByCategory[$categoryId] = array_unique($sourcesByCategory[$categoryId]);
 
 					// all newsletters use the same sources
-					if (count($arrSourcesByCategory[$intCategoryId]) == 1) {
-						$tmp = explode(',', array_shift($arrSourcesByCategory[$intCategoryId]));
+					if (count($sourcesByCategory[$categoryId]) == 1) {
+						$tmp = explode(',', array_shift($sourcesByCategory[$categoryId]));
 						foreach ($tmp as $k => $v) {
 							$tmp[$k] = $v . ':*';
 						}
@@ -1017,13 +1017,13 @@ class AvisotaUpdate extends BackendModule
 							->prepare(
 							"UPDATE tl_avisota_newsletter_category SET recipientsMode=?, recipients=? WHERE id=?"
 						)
-							->execute('byCategory', serialize($tmp), $intCategoryId);
+							->execute('byCategory', serialize($tmp), $categoryId);
 
 						$this->Database
 							->query(
 							"UPDATE tl_avisota_newsletter SET recipients='' WHERE id IN (" . implode(
 								',',
-								$arrNewsletterIds
+								$newsletterIds
 							) . ")"
 						);
 					}
@@ -1032,17 +1032,17 @@ class AvisotaUpdate extends BackendModule
 					else {
 						$this->Database
 							->prepare("UPDATE tl_avisota_newsletter_category SET recipientsMode=? WHERE id=?")
-							->execute('byNewsletter', $intCategoryId);
+							->execute('byNewsletter', $categoryId);
 
 						// update each newsletter
-						foreach ($arrNewsletterIds as $intNewsletterId) {
-							$tmp = $arrSourcesByNewsletter[$intNewsletterId];
+						foreach ($newsletterIds as $newsletterId) {
+							$tmp = $sourcesByNewsletter[$newsletterId];
 							foreach ($tmp as $k => $v) {
 								$tmp[$k] = $v . ':*';
 							}
 							$this->Database
 								->prepare("UPDATE tl_avisota_newsletter SET recipients=? WHERE id=?")
-								->execute(serialize($tmp), $intNewsletterId);
+								->execute(serialize($tmp), $newsletterId);
 						}
 					}
 				}
@@ -1055,14 +1055,14 @@ class AvisotaUpdate extends BackendModule
 		return true;
 	}
 
-	public function hookMysqlMultiTriggerCreate($strTriggerName, $objTrigger, $return)
+	public function hookMysqlMultiTriggerCreate($triggerName, $trigger, $return)
 	{
-		if ($objTrigger->table == 'tl_avisota_recipient') {
+		if ($trigger->table == 'tl_avisota_recipient') {
 			$return['ALTER_CHANGE'][] = 'DELETE FROM tl_avisota_recipient_to_mailing_list';
 			$return['ALTER_CHANGE'][] = 'INSERT INTO tl_avisota_recipient_to_mailing_list (recipient, list) SELECT r.id, l.id FROM tl_avisota_recipient r INNER JOIN tl_avisota_mailing_list l ON FIND_IN_SET(l.id, r.lists)';
 		}
 
-		if ($objTrigger->table == 'tl_member') {
+		if ($trigger->table == 'tl_member') {
 			$return['ALTER_CHANGE'][] = 'DELETE FROM tl_member_to_mailing_list';
 			$return['ALTER_CHANGE'][] = 'INSERT INTO tl_member_to_mailing_list (member, list) SELECT m.id, l.id FROM tl_member m INNER JOIN tl_avisota_mailing_list l ON FIND_IN_SET(l.id, m.avisota_lists)';
 		}

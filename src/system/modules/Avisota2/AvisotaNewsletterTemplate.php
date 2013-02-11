@@ -51,7 +51,7 @@ class AvisotaNewsletterTemplate extends Template
 	 */
 	public function parse()
 	{
-		$strBuffer = parent::parse();
+		$buffer = parent::parse();
 
 		// HOOK: add custom parse filters
 		if (isset($GLOBALS['TL_HOOKS']['parseAvisotaNewsletterTemplate']) && is_array(
@@ -60,11 +60,11 @@ class AvisotaNewsletterTemplate extends Template
 		) {
 			foreach ($GLOBALS['TL_HOOKS']['parseAvisotaNewsletterTemplate'] as $callback) {
 				$this->import($callback[0]);
-				$strBuffer = $this->$callback[0]->$callback[1]($strBuffer, $this->strTemplate);
+				$buffer = $this->$callback[0]->$callback[1]($buffer, $this->strTemplate);
 			}
 		}
 
-		return $strBuffer;
+		return $buffer;
 	}
 
 
@@ -73,10 +73,8 @@ class AvisotaNewsletterTemplate extends Template
 	 */
 	public function output()
 	{
-		global $objPage;
-
 		// Parse the template
-		$strBuffer = str_replace(' & ', ' &amp; ', $this->parse());
+		$buffer = str_replace(' & ', ' &amp; ', $this->parse());
 
 		// HOOK: add custom output filters
 		if (isset($GLOBALS['TL_HOOKS']['outputAvisotaNewsletterTemplate']) && is_array(
@@ -85,11 +83,11 @@ class AvisotaNewsletterTemplate extends Template
 		) {
 			foreach ($GLOBALS['TL_HOOKS']['outputAvisotaNewsletterTemplate'] as $callback) {
 				$this->import($callback[0]);
-				$strBuffer = $this->$callback[0]->$callback[1]($strBuffer, $this->strTemplate);
+				$buffer = $this->$callback[0]->$callback[1]($buffer, $this->strTemplate);
 			}
 		}
 
-		$this->strBuffer = $strBuffer;
+		$this->strBuffer = $buffer;
 
 		echo $this->strBuffer;
 
@@ -115,73 +113,73 @@ class AvisotaNewsletterTemplate extends Template
 	 * @return string
 	 * @throws Exception
 	 */
-	public function getTemplate($strTemplate, $strFormat = 'html5')
+	public function getTemplate($template, $format = 'html5')
 	{
-		$strTemplate = basename($strTemplate);
-		$strFilename = $strTemplate . '.html5';
+		$template = basename($template);
+		$filename = $template . '.html5';
 
-		/** @var AvisotaNewsletter $objNewsletter */
-		$objNewsletter = AvisotaStatic::getNewsletter();
+		/** @var AvisotaNewsletter $newsletter */
+		$newsletter = AvisotaStatic::getNewsletter();
 
 		// Check for a theme folder
-		if ($objNewsletter) {
-			$strTemplateGroup = $objNewsletter
+		if ($newsletter) {
+			$templateGroup = $newsletter
 				->getTheme()
 				->getTemplateDirectory();
 		}
 		else {
-			$strTemplateGroup = '';
+			$templateGroup = '';
 		}
 
-		$strPath = TL_ROOT . '/templates';
+		$path = TL_ROOT . '/templates';
 
 		// Check the theme folder first
-		if (TL_MODE == 'FE' && $strTemplateGroup != '') {
-			$strFile = $strPath . '/' . $strTemplateGroup . '/' . $strFilename;
+		if (TL_MODE == 'FE' && $templateGroup != '') {
+			$pathname = $path . '/' . $templateGroup . '/' . $filename;
 
-			if (file_exists($strFile)) {
-				return $strFile;
+			if (file_exists($pathname)) {
+				return $pathname;
 			}
 
 			// Also check for .tpl files (backwards compatibility)
-			$strFile = $strPath . '/' . $strTemplateGroup . '/' . $strTemplate . '.tpl';
+			$pathname = $path . '/' . $templateGroup . '/' . $template . '.tpl';
 
-			if (file_exists($strFile)) {
-				return $strFile;
+			if (file_exists($pathname)) {
+				return $pathname;
 			}
 		}
 
 		// Then check the global templates directory
-		$strFile = $strPath . '/' . $strFilename;
+		$pathname = $path . '/' . $filename;
 
-		if (file_exists($strFile)) {
-			return $strFile;
+		if (file_exists($pathname)) {
+			return $pathname;
 		}
 
 		// Also check for .tpl files (backwards compatibility)
-		$strFile = $strPath . '/' . $strTemplate . '.tpl';
+		$pathname = $path . '/' . $template . '.tpl';
 
-		if (file_exists($strFile)) {
-			return $strFile;
+		if (file_exists($pathname)) {
+			return $pathname;
 		}
 
 		// At last browse all module folders in reverse order
-		foreach (array_reverse($this->Config->getActiveModules()) as $strModule) {
-			$strFile = TL_ROOT . '/system/modules/' . $strModule . '/templates/' . $strFilename;
+		foreach (array_reverse($this->Config->getActiveModules()) as $moduleName) {
+			$pathname = TL_ROOT . '/system/modules/' . $moduleName . '/templates/' . $filename;
 
-			if (file_exists($strFile)) {
-				return $strFile;
+			if (file_exists($pathname)) {
+				return $pathname;
 			}
 
 			// Also check for .tpl files (backwards compatibility)
-			$strFile = TL_ROOT . '/system/modules/' . $strModule . '/templates/' . $strTemplate . '.tpl';
+			$pathname = TL_ROOT . '/system/modules/' . $moduleName . '/templates/' . $template . '.tpl';
 
-			if (file_exists($strFile)) {
-				return $strFile;
+			if (file_exists($pathname)) {
+				return $pathname;
 			}
 		}
 
-		throw new Exception('Could not find template file "' . $strFilename . '"');
+		throw new Exception('Could not find template file "' . $filename . '"');
 	}
 
 
@@ -197,58 +195,58 @@ class AvisotaNewsletterTemplate extends Template
 	 * @return array
 	 * @throws Exception
 	 */
-	protected function getTemplateGroup($strPrefix, $intTheme = 0)
+	protected function getTemplateGroup($prefix, $themeId = 0)
 	{
-		$arrFolders   = array();
-		$arrTemplates = array();
+		$folders   = array();
+		$templates = array();
 
 		// Add the templates root directory
-		$arrFolders[] = TL_ROOT . '/templates';
+		$folders[] = TL_ROOT . '/templates';
 
 		// Add the theme templates folder
-		if ($intTheme > 0) {
-			$objTheme = $this->Database
+		if ($themeId > 0) {
+			$theme = $this->Database
 				->prepare("SELECT * FROM tl_avisota_newsletter_theme WHERE id=?")
 				->limit(1)
-				->execute($intTheme);
+				->execute($themeId);
 
-			if ($objTheme->numRows > 0 && $objTheme->templateDirectory != '') {
-				$arrFolders[] = TL_ROOT . '/' . $objTheme->templateDirectory;
+			if ($theme->numRows > 0 && $theme->templateDirectory != '') {
+				$folders[] = TL_ROOT . '/' . $theme->templateDirectory;
 			}
 		}
 		else {
-			$objNewsletter = AvisotaStatic::getNewsletter();
+			$newsletter = AvisotaStatic::getNewsletter();
 
 			// Check for a theme folder
-			if ($objNewsletter) {
-				$arrFolders[] = TL_ROOT . '/' . $objNewsletter
+			if ($newsletter) {
+				$folders[] = TL_ROOT . '/' . $newsletter
 					->getTheme()
 					->getTemplateDirectory();
 			}
 		}
 
 		// Add the module templates folders if they exist
-		foreach ($this->Config->getActiveModules() as $strModule) {
-			$strFolder = TL_ROOT . '/system/modules/' . $strModule . '/templates';
+		foreach ($this->Config->getActiveModules() as $module) {
+			$folder = TL_ROOT . '/system/modules/' . $module . '/templates';
 
-			if (is_dir($strFolder)) {
-				$arrFolders[] = $strFolder;
+			if (is_dir($folder)) {
+				$folders[] = $folder;
 			}
 		}
 
 		// Find all matching templates
-		foreach ($arrFolders as $strFolder) {
-			$arrFiles = preg_grep('/^' . preg_quote($strPrefix, '/') . '/i', scan($strFolder));
+		foreach ($folders as $folder) {
+			$files = preg_grep('/^' . preg_quote($prefix, '/') . '/i', scan($folder));
 
-			foreach ($arrFiles as $strTemplate) {
-				$strName        = basename($strTemplate);
-				$arrTemplates[] = substr($strName, 0, strrpos($strName, '.'));
+			foreach ($files as $file) {
+				$filename        = basename($file);
+				$templates[] = substr($filename, 0, strrpos($filename, '.'));
 			}
 		}
 
-		natcasesort($arrTemplates);
-		$arrTemplates = array_values(array_unique($arrTemplates));
+		natcasesort($templates);
+		$templates = array_values(array_unique($templates));
 
-		return $arrTemplates;
+		return $templates;
 	}
 }

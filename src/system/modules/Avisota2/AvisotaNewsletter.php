@@ -43,25 +43,25 @@
  */
 class AvisotaNewsletter
 {
-	public static function load($varId)
+	public static function load($id)
 	{
-		if (!$varId) {
+		if (!$id) {
 			return null;
 		}
 
-		$objResult = Database::getInstance()
+		$resultSet = Database::getInstance()
 			->prepare(
 			'SELECT *
 					   FROM tl_avisota_newsletter
 					   WHERE id=? OR alias=?'
 		)
-			->execute($varId, $varId);
+			->execute($id, $id);
 
-		if (!$objResult->next()) {
+		if (!$resultSet->next()) {
 			return null;
 		}
 
-		return new AvisotaNewsletter($objResult);
+		return new AvisotaNewsletter($resultSet);
 	}
 
 	/**
@@ -138,9 +138,9 @@ class AvisotaNewsletter
 	 */
 	protected $data;
 
-	function __construct(Database_Result $objResult = null)
+	function __construct(Database_Result $resultSet = null)
 	{
-		foreach ($objResult->row() as $name => $value) {
+		foreach ($resultSet->row() as $name => $value) {
 			$this->$name = $value;
 		}
 	}
@@ -382,57 +382,57 @@ class AvisotaNewsletter
 		}
 
 		// Add style sheet newsletter.css
-		$strStylesheets = '';
-		foreach ($this->theme->getStylesheets() as $strStylesheet) {
-			$blnContinue = true;
+		$stylesheetCode = '';
+		foreach ($this->theme->getStylesheets() as $stylesheetPathname) {
+			$continue = true;
 
 			// HOOK: add custom logic
 			if (isset($GLOBALS['TL_HOOKS']['avisotaGetCss']) && is_array($GLOBALS['TL_HOOKS']['avisotaGetCss'])) {
 				foreach ($GLOBALS['TL_HOOKS']['avisotaGetCss'] as $callback) {
 					$this->import($callback[0]);
-					$strTemp = $this->$callback[0]->$callback[1]($strStylesheet);
+					$temp = $this->$callback[0]->$callback[1]($stylesheetPathname);
 
-					if ($strTemp !== false) {
+					if ($temp !== false) {
 						// add content from file
-						if (file_exists(TL_ROOT . '/' . $strTemp)) {
-							$strStylesheet = $strTemp;
+						if (file_exists(TL_ROOT . '/' . $temp)) {
+							$stylesheetPathname = $temp;
 							break;
 						}
 						// add content directly as css
 						else {
-							$strStylesheets .= trim($strTemp);
-							$blnContinue = false;
+							$stylesheetCode .= trim($temp);
+							$continue = false;
 						}
 					}
 				}
 			}
 
-			if ($blnContinue && file_exists(TL_ROOT . '/' . $strStylesheet)) {
-				$objFile = new File($strStylesheet);
-				$strStylesheets .= AvisotaNewsletterContent::getInstance()
-					->cleanCSS($objFile->getContent(), $strStylesheet);
-				$objFile->close();
+			if ($continue && file_exists(TL_ROOT . '/' . $stylesheetPathname)) {
+				$file = new File($stylesheetPathname);
+				$stylesheetCode .= AvisotaNewsletterContent::getInstance()
+					->cleanCSS($file->getContent(), $stylesheetPathname);
+				$file->close();
 			}
 		}
 
-		if ($strStylesheets) {
-			$head .= '<style>' . "\n" . $strStylesheets . "\n" . '</style>';
+		if ($stylesheetCode) {
+			$head .= '<style>' . "\n" . $stylesheetCode . "\n" . '</style>';
 		}
 
-		$objTemplate        = new AvisotaNewsletterTemplate($this->theme->getHtmlTemplate());
-		$objTemplate->title = $this->subject;
-		$objTemplate->head  = $head;
-		foreach ($this->theme->getAreas() as $strArea) {
-			$objTemplate->$strArea = $this->generateContentHtml($strArea);
+		$template        = new AvisotaNewsletterTemplate($this->theme->getHtmlTemplate());
+		$template->title = $this->subject;
+		$template->head  = $head;
+		foreach ($this->theme->getAreas() as $areaName) {
+			$template->$areaName = $this->generateContentHtml($areaName);
 		}
-		$objTemplate->newsletter = $this;
+		$template->newsletter = $this;
 
-		$strBuffer = $this->replaceAndExtendURLs($objTemplate->parse());
+		$buffer = $this->replaceAndExtendURLs($template->parse());
 
 		// reset static information
 		AvisotaStatic::popNewsletter();
 
-		return $strBuffer;
+		return $buffer;
 	}
 
 	/**
@@ -448,10 +448,10 @@ class AvisotaNewsletter
 
 		AvisotaStatic::pushNewsletter($this);
 
-		$strContent = '';
+		$content = '';
 		if (isset($this->contentArray[$area])) {
 			foreach ($this->contentArray[$area] as $element) {
-				$strContent .= AvisotaNewsletterContent::getInstance()
+				$content .= AvisotaNewsletterContent::getInstance()
 					->generateNewsletterElement($element, NL_HTML);
 			}
 		}
@@ -459,7 +459,7 @@ class AvisotaNewsletter
 		// reset static information
 		AvisotaStatic::popNewsletter();
 
-		return $strContent;
+		return $content;
 	}
 
 	/**
@@ -476,19 +476,19 @@ class AvisotaNewsletter
 
 		AvisotaStatic::pushNewsletter($this);
 
-		$objTemplate        = new AvisotaNewsletterTemplate($this->theme->getHtmlTemplate());
-		$objTemplate->title = $this->subject;
-		foreach ($this->theme->getAreas() as $strArea) {
-			$objTemplate->$strArea = $this->generateContentText($strArea);
+		$template        = new AvisotaNewsletterTemplate($this->theme->getHtmlTemplate());
+		$template->title = $this->subject;
+		foreach ($this->theme->getAreas() as $areaName) {
+			$template->$areaName = $this->generateContentText($areaName);
 		}
-		$objTemplate->newsletter = $this;
+		$template->newsletter = $this;
 
-		$strBuffer = $objTemplate->parse();
+		$buffer = $template->parse();
 
 		// reset static information
 		AvisotaStatic::popNewsletter();
 
-		return $strBuffer;
+		return $buffer;
 	}
 
 	/**
@@ -504,10 +504,10 @@ class AvisotaNewsletter
 
 		AvisotaStatic::pushNewsletter($this);
 
-		$strContent = '';
+		$content = '';
 		if (isset($this->contentArray[$area])) {
 			foreach ($this->contentArray[$area] as $element) {
-				$strContent .= AvisotaNewsletterContent::getInstance()
+				$content .= AvisotaNewsletterContent::getInstance()
 					->generateNewsletterElement($element, NL_PLAIN);
 			}
 		}
@@ -515,6 +515,6 @@ class AvisotaNewsletter
 		// reset static information
 		AvisotaStatic::popNewsletter();
 
-		return $strContent;
+		return $content;
 	}
 }

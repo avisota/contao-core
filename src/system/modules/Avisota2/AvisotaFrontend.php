@@ -55,15 +55,15 @@ class AvisotaFrontend extends Frontend
 	 * @return string
 	 * @throws Exception
 	 */
-	public function getTemplate($strTemplate)
+	public function getTemplate($template)
 	{
 		return AvisotaBase::getInstance()
-			->getTemplate($strTemplate);
+			->getTemplate($template);
 	}
 
-	protected function getTemplateGroup($strPrefix, $intTheme = 0)
+	protected function getTemplateGroup($prefix, $themeId = 0)
 	{
 		return AvisotaBase::getInstance()
-			->getTemplateGroup($strPrefix, $intTheme);
+			->getTemplateGroup($prefix, $themeId);
 	}
 }

@@ -48,7 +48,7 @@ class AvisotaStatic extends Frontend
 	 *
 	 * @var array
 	 */
-	private static $objCategory = array();
+	private static $category = array();
 
 
 	/**
@@ -56,7 +56,7 @@ class AvisotaStatic extends Frontend
 	 *
 	 * @var array
 	 */
-	private static $objNewsletter = array();
+	private static $newsletter = array();
 
 
 	/**
@@ -64,16 +64,16 @@ class AvisotaStatic extends Frontend
 	 *
 	 * @var array
 	 */
-	private static $arrRecipient = array();
+	private static $recipientData = array();
 
 	/**
 	 * Reset all data.
 	 */
 	public static function reset()
 	{
-		self::$objCategory   = array();
-		self::$objNewsletter = array();
-		self::$arrRecipient  = array();
+		self::$category   = array();
+		self::$newsletter = array();
+		self::$recipientData  = array();
 	}
 
 
@@ -82,18 +82,18 @@ class AvisotaStatic extends Frontend
 	 */
 	public static function popCategory()
 	{
-		return array_shift(self::$objCategory);
+		return array_shift(self::$category);
 	}
 
 
 	/**
 	 * Set the current category.
 	 *
-	 * @param Database_Result $objCategory
+	 * @param Database_Result $category
 	 */
-	public static function pushCategory($objCategory)
+	public static function pushCategory($category)
 	{
-		array_unshift(self::$objCategory, $objCategory);
+		array_unshift(self::$category, $category);
 	}
 
 
@@ -104,7 +104,7 @@ class AvisotaStatic extends Frontend
 	 */
 	public static function getCategory()
 	{
-		return self::$objCategory[0];
+		return self::$category[0];
 	}
 
 
@@ -113,18 +113,18 @@ class AvisotaStatic extends Frontend
 	 */
 	public static function popNewsletter()
 	{
-		return array_shift(self::$objNewsletter);
+		return array_shift(self::$newsletter);
 	}
 
 
 	/**
 	 * Set the current newsletter.
 	 *
-	 * @param AvisotaNewsletter $objNewsletter
+	 * @param AvisotaNewsletter $newsletter
 	 */
-	public static function pushNewsletter(AvisotaNewsletter $objNewsletter)
+	public static function pushNewsletter(AvisotaNewsletter $newsletter)
 	{
-		array_unshift(self::$objNewsletter, $objNewsletter);
+		array_unshift(self::$newsletter, $newsletter);
 	}
 
 
@@ -135,7 +135,7 @@ class AvisotaStatic extends Frontend
 	 */
 	public static function getNewsletter()
 	{
-		return self::$objNewsletter[0];
+		return self::$newsletter[0];
 	}
 
 
@@ -144,18 +144,18 @@ class AvisotaStatic extends Frontend
 	 */
 	public static function popRecipient()
 	{
-		return array_shift(self::$arrRecipient);
+		return array_shift(self::$recipientData);
 	}
 
 
 	/**
 	 * Set the current recipient.
 	 *
-	 * @param AvisotaRecipient $arrRecipient
+	 * @param AvisotaRecipient $recipientData
 	 */
-	public static function pushRecipient(AvisotaRecipient $arrRecipient)
+	public static function pushRecipient(AvisotaRecipient $recipientData)
 	{
-		array_unshift(self::$arrRecipient, $arrRecipient);
+		array_unshift(self::$recipientData, $recipientData);
 	}
 
 
@@ -166,7 +166,7 @@ class AvisotaStatic extends Frontend
 	 */
 	public static function getRecipient()
 	{
-		return self::$arrRecipient[0];
+		return self::$recipientData[0];
 	}
 
 	/**

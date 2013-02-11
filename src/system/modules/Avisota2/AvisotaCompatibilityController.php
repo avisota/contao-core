@@ -70,26 +70,26 @@ class AvisotaCompatibilityController extends Backend
 
 		// disable Avisota
 		if ($this->Input->get('disable')) {
-			$arrInactiveModules   = deserialize($GLOBALS['TL_CONFIG']['inactiveModules'], true);
-			$arrInactiveModules[] = 'Avisota';
-			$this->Config->update("\$GLOBALS['TL_CONFIG']['inactiveModules']", serialize($arrInactiveModules));
+			$inactiveModules   = deserialize($GLOBALS['TL_CONFIG']['inactiveModules'], true);
+			$inactiveModules[] = 'Avisota';
+			$this->Config->update("\$GLOBALS['TL_CONFIG']['inactiveModules']", serialize($inactiveModules));
 			$this->Config->save();
 			$_SESSION[TL_INFO][] = $GLOBALS['TL_LANG']['avisotaCompatibilityController']['disabled'];
 			$this->redirect('contao/main.php');
 		}
 
-		$objTemplate               = new BackendTemplate('be_avisota_compatibility_controller');
-		$objTemplate->theme        = $this->getTheme();
-		$objTemplate->base         = $this->Environment->base;
-		$objTemplate->language     = $GLOBALS['TL_LANGUAGE'];
-		$objTemplate->title        = $GLOBALS['TL_CONFIG']['websiteTitle'];
-		$objTemplate->charset      = $GLOBALS['TL_CONFIG']['characterSet'];
-		$objTemplate->request      = ampersand($this->Environment->request);
-		$objTemplate->top          = $GLOBALS['TL_LANG']['MSC']['backToTop'];
-		$objTemplate->mysqlVersion = $this->Database->query('SHOW VARIABLES WHERE Variable_name = \'version\'')->Value;
-		$objTemplate->output();
+		$template               = new BackendTemplate('be_avisota_compatibility_controller');
+		$template->theme        = $this->getTheme();
+		$template->base         = $this->Environment->base;
+		$template->language     = $GLOBALS['TL_LANGUAGE'];
+		$template->title        = $GLOBALS['TL_CONFIG']['websiteTitle'];
+		$template->charset      = $GLOBALS['TL_CONFIG']['characterSet'];
+		$template->request      = ampersand($this->Environment->request);
+		$template->top          = $GLOBALS['TL_LANG']['MSC']['backToTop'];
+		$template->mysqlVersion = $this->Database->query('SHOW VARIABLES WHERE Variable_name = \'version\'')->Value;
+		$template->output();
 	}
 }
 
-$objController = new AvisotaCompatibilityController();
-$objController->run();
+$controller = new AvisotaCompatibilityController();
+$controller->run();

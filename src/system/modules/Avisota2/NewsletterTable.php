@@ -50,14 +50,14 @@ class NewsletterTable extends NewsletterElement
 	 *
 	 * @var string
 	 */
-	protected $strTemplateHTML = 'nle_table_html';
+	protected $templateHTML = 'nle_table_html';
 
 	/**
 	 * Plain text Template
 	 *
 	 * @var string
 	 */
-	protected $strTemplatePlain = 'nle_table_plain';
+	protected $templatePlain = 'nle_table_plain';
 
 
 	/**
@@ -74,15 +74,15 @@ class NewsletterTable extends NewsletterElement
 		$this->Template->thousandsSeparator = $GLOBALS['TL_LANG']['MSC']['thousandsSeparator'];
 		$this->Template->decimalSeparator   = $GLOBALS['TL_LANG']['MSC']['decimalSeparator'];
 
-		$arrHeader = array();
-		$arrBody   = array();
-		$arrFooter = array();
+		$headerContents = array();
+		$bodyContents   = array();
+		$footerContents = array();
 
 		// Table header
 		if ($this->thead) {
 			foreach ($rows[0] as $i => $v) {
 				// Add cell
-				$arrHeader[] = array
+				$headerContents[] = array
 				(
 					'class'   => 'head_' . $i . (($i == 0) ? ' col_first' : '') . (($i == (count($rows[0]) - 1))
 						? ' col_last' : ''),
@@ -93,7 +93,7 @@ class NewsletterTable extends NewsletterElement
 			array_shift($rows);
 		}
 
-		$this->Template->header = $arrHeader;
+		$this->Template->header = $headerContents;
 		$limit                  = $this->tfoot ? (count($rows) - 1) : count($rows);
 
 		// Table body
@@ -121,7 +121,7 @@ class NewsletterTable extends NewsletterElement
 					$class_td = ' col_last';
 				}
 
-				$arrBody['row_' . $j . $class_tr . $class_eo][] = array
+				$bodyContents['row_' . $j . $class_tr . $class_eo][] = array
 				(
 					'class'   => 'col_' . $i . $class_td,
 					'content' => (strlen($v) ? preg_replace('/[\n\r]+/i', '<br />', $v) : '&nbsp;')
@@ -129,12 +129,12 @@ class NewsletterTable extends NewsletterElement
 			}
 		}
 
-		$this->Template->body = $arrBody;
+		$this->Template->body = $bodyContents;
 
 		// Table footer
 		if ($this->tfoot) {
 			foreach ($rows[(count($rows) - 1)] as $i => $v) {
-				$arrFooter[] = array
+				$footerContents[] = array
 				(
 					'class'   => 'foot_' . $i . (($i == 0) ? ' col_first' : '') . (($i == (count(
 						$rows[(count($rows) - 1)]
@@ -144,6 +144,6 @@ class NewsletterTable extends NewsletterElement
 			}
 		}
 
-		$this->Template->footer = $arrFooter;
+		$this->Template->footer = $footerContents;
 	}
 }

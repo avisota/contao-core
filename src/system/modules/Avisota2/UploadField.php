@@ -64,7 +64,7 @@ class UploadField extends Widget implements uploadable
 	 *
 	 * @var array
 	 */
-	protected $arrContents = array();
+	protected $contents = array();
 
 
 	/**
@@ -73,15 +73,15 @@ class UploadField extends Widget implements uploadable
 	 * @param string
 	 * @param mixed
 	 */
-	public function __set($strKey, $varValue)
+	public function __set($key, $value)
 	{
-		switch ($strKey) {
+		switch ($key) {
 			case 'mandatory':
-				$this->arrConfiguration['mandatory'] = $varValue ? true : false;
+				$this->arrConfiguration['mandatory'] = $value ? true : false;
 				break;
 
 			default:
-				parent::__set($strKey, $varValue);
+				parent::__set($key, $value);
 				break;
 		}
 	}
@@ -93,13 +93,13 @@ class UploadField extends Widget implements uploadable
 	public function validate()
 	{
 		if (isset($_FILES[$this->strName]) && is_uploaded_file($_FILES[$this->strName]['tmp_name'])) {
-			$varValue = $_FILES[$this->strName];
+			$value = $_FILES[$this->strName];
 		}
 		else {
-			$varValue = false;
+			$value = false;
 		}
 
-		if ($this->mandatory && !$varValue) {
+		if ($this->mandatory && !$value) {
 			if ($this->strLabel == '') {
 				$this->addError($GLOBALS['TL_LANG']['ERR']['mdtryNoLabel']);
 			}
@@ -112,7 +112,7 @@ class UploadField extends Widget implements uploadable
 			$this->class = 'error';
 		}
 
-		$this->varValue = $varValue;
+		$this->varValue = $value;
 	}
 
 

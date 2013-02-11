@@ -37,13 +37,13 @@
 class tl_article_avisota extends tl_article
 {
 
-	public function pasteArticle(DataContainer $dc, $row, $table, $cr, $arrClipboard = false)
+	public function pasteArticle(DataContainer $dc, $row, $table, $cr, $clipboardData = false)
 	{
 		if ($table == $GLOBALS['TL_DCA'][$dc->table]['config']['ptable'] && $row['type'] == 'avisota') {
 			return $this->generateImage('pasteinto_.gif', '', 'class="blink"');
 		}
 
-		return parent::pasteArticle($dc, $row, $table, $cr, $arrClipboard);
+		return parent::pasteArticle($dc, $row, $table, $cr, $clipboardData);
 	}
 }
 

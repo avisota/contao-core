@@ -50,14 +50,14 @@ class NewsletterText extends NewsletterElement
 	 *
 	 * @var string
 	 */
-	protected $strTemplateHTML = 'nle_text_html';
+	protected $templateHTML = 'nle_text_html';
 
 	/**
 	 * Plain text Template
 	 *
 	 * @var string
 	 */
-	protected $strTemplatePlain = 'nle_text_plain';
+	protected $templatePlain = 'nle_text_plain';
 
 	/**
 	 * Compile the current element
@@ -90,7 +90,7 @@ class NewsletterText extends NewsletterElement
 
 		// Add image
 		if ($this->addImage && strlen($this->singleSRC) && is_file(TL_ROOT . '/' . $this->singleSRC)) {
-			$this->addImageToTemplate($this->Template, $this->arrData);
+			$this->addImageToTemplate($this->Template, $this->currentRecordData);
 
 			$this->Template->src = $this->extendURL($this->Template->src);
 			if ($this->Template->href) {

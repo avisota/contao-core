@@ -47,24 +47,24 @@ abstract class ModuleAvisotaRecipientForm extends Module
 	/**
 	 * @var string
 	 */
-	protected $strFormTemplate;
+	protected $formTemplate;
 
 	/**
 	 * @var string
 	 */
-	protected $strFormName;
+	protected $formName;
 
 	/**
 	 * Construct the content element
 	 */
-	public function __construct(Database_Result $objModule)
+	public function __construct(Database_Result $module)
 	{
-		parent::__construct($objModule);
+		parent::__construct($module);
 		$this->import('DomainLink');
 		$this->import('FrontendUser', 'User');
 		$this->loadLanguageFile('avisota');
 
-		$this->strFormName = get_class($this) . '_' . $objModule->id;
+		$this->formName = get_class($this) . '_' . $module->id;
 	}
 
 	/**
@@ -87,17 +87,17 @@ abstract class ModuleAvisotaRecipientForm extends Module
 
 		// Change the label of the permit personal tracing checkbox
 		if (isset($GLOBALS['TL_CONFIG']['avisota_data_privacy_statement_page'])) {
-			$objDataPrivacyStatementPage = $this->getPageDetails(
+			$dataPrivacyStatementPage = $this->getPageDetails(
 				$GLOBALS['TL_CONFIG']['avisota_data_privacy_statement_page']
 			);
 		}
 		else {
-			$objDataPrivacyStatementPage = $GLOBALS['objPage'];
+			$dataPrivacyStatementPage = $GLOBALS['objPage'];
 		}
 		$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['permitPersonalTracing']['label']    = $GLOBALS['TL_LANG']['tl_avisota_recipient']['permitPersonalTracingFE'];
 		$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['permitPersonalTracing']['label'][1] = sprintf(
 			$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['permitPersonalTracing']['label'][1],
-			$this->generateFrontendUrl($objDataPrivacyStatementPage->row())
+			$this->generateFrontendUrl($dataPrivacyStatementPage->row())
 		);
 
 		// Deserialize module configuration
@@ -107,30 +107,30 @@ abstract class ModuleAvisotaRecipientForm extends Module
 		return parent::generate();
 	}
 
-	protected function handleSubscribeSubmit(array $arrRecipient, array $arrMailingLists, FrontendTemplate $objTemplate)
+	protected function handleSubscribeSubmit(array $recipientData, array $mailingLists, FrontendTemplate $template)
 	{
 		try {
 			// load existing recipient
-			$objRecipeint = AvisotaIntegratedRecipient::byEmail($arrRecipient['email']);
+			$recipeint = AvisotaIntegratedRecipient::byEmail($recipientData['email']);
 		}
 		catch (AvisotaRecipientException $e) {
 			// create a new recipient
-			$objRecipeint = new AvisotaIntegratedRecipient($arrRecipient);
-			$objRecipeint->store();
+			$recipeint = new AvisotaIntegratedRecipient($recipientData);
+			$recipeint->store();
 		}
 
 		// subscribe to mailing lists
-		$arrSubscribedMailingLists = $objRecipeint->subscribe($arrMailingLists, true);
+		$subscribedMailingLists = $recipeint->subscribe($mailingLists, true);
 
 		// if subscription success...
-		if (is_array($arrSubscribedMailingLists) && count($arrSubscribedMailingLists)) {
+		if (is_array($subscribedMailingLists) && count($subscribedMailingLists)) {
 			// ...send confirmation mail...
-			$objRecipeint->sendSubscriptionConfirmation($arrSubscribedMailingLists);
+			$recipeint->sendSubscriptionConfirmation($subscribedMailingLists);
 
 			// ...and redirect if jump to page is configured
 			if ($this->avisota_subscribe_confirmation_page) {
-				$objJumpTo = $this->getPageDetails($this->avisota_subscribe_confirmation_page);
-				$this->redirect($this->generateFrontendUrl($objJumpTo->row()));
+				$jumpToPage = $this->getPageDetails($this->avisota_subscribe_confirmation_page);
+				$this->redirect($this->generateFrontendUrl($jumpToPage->row()));
 			}
 
 			return array('subscribed', $GLOBALS['TL_LANG']['avisota_subscribe']['subscribed'], true);
@@ -139,23 +139,23 @@ abstract class ModuleAvisotaRecipientForm extends Module
 		// ...or try to send reminder...
 		if ($GLOBALS['TL_CONFIG']['avisota_send_notification']) {
 			// resend subscriptions
-			$arrConfirmationSend = $objRecipeint->sendSubscriptionConfirmation($arrMailingLists, true);
-			$arrReminderSend     = array();
+			$sendConfirmations = $recipeint->sendSubscriptionConfirmation($mailingLists, true);
+			$sendReminders     = array();
 		}
 		else {
 			// first send subscriptions if not allready done
-			$arrConfirmationSend = $objRecipeint->sendSubscriptionConfirmation($arrMailingLists);
+			$sendConfirmations = $recipeint->sendSubscriptionConfirmation($mailingLists);
 			// now send reminders
-			$arrReminderSend = $objRecipeint->sendRemind(array_diff($arrMailingLists, $arrConfirmationSend), true);
+			$sendReminders = $recipeint->sendRemind(array_diff($mailingLists, $sendConfirmations), true);
 		}
 
-		if (is_array($arrConfirmationSend) && count($arrConfirmationSend) ||
-			is_array($arrReminderSend) && count($arrReminderSend)
+		if (is_array($sendConfirmations) && count($sendConfirmations) ||
+			is_array($sendReminders) && count($sendReminders)
 		) {
 			// ...and redirect if jump to page is configured
 			if ($this->avisota_subscribe_confirmation_page) {
-				$objJumpTo = $this->getPageDetails($this->avisota_subscribe_confirmation_page);
-				$this->redirect($this->generateFrontendUrl($objJumpTo->row()));
+				$jumpToPage = $this->getPageDetails($this->avisota_subscribe_confirmation_page);
+				$this->redirect($this->generateFrontendUrl($jumpToPage->row()));
 			}
 
 			return array('reminder_sent', $GLOBALS['TL_LANG']['avisota_subscribe']['subscribed'], true);
@@ -168,14 +168,14 @@ abstract class ModuleAvisotaRecipientForm extends Module
 	protected function handleSubscribeTokens()
 	{
 		try {
-			$strToken = $this->Input->get('subscribetoken');
+			$token = $this->Input->get('subscribetoken');
 			$this->Input->setGet('subscribetoken', '');
-			if ($strToken) {
-				$arrTokens = explode(',', $strToken);
+			if ($token) {
+				$tokens = explode(',', $token);
 
-				$objRecipient = AvisotaIntegratedRecipient::bySubscribeTokens($arrTokens);
-				if ($objRecipient !== null) {
-					return $objRecipient->confirmSubscription($arrTokens);
+				$recipient = AvisotaIntegratedRecipient::bySubscribeTokens($tokens);
+				if ($recipient !== null) {
+					return $recipient->confirmSubscription($tokens);
 				}
 			}
 		}
@@ -186,27 +186,27 @@ abstract class ModuleAvisotaRecipientForm extends Module
 	}
 
 	protected function handleUnsubscribeSubmit(
-		array $arrRecipient,
-		array $arrMailingLists,
-		FrontendTemplate $objTemplate
+		array $recipientData,
+		array $mailingLists,
+		FrontendTemplate $template
 	) {
 		try {
 			// search for the recipient
-			$objRecipient = AvisotaIntegratedRecipient::byEmail($arrRecipient['email']);
+			$recipient = AvisotaIntegratedRecipient::byEmail($recipientData['email']);
 
 			// unsubscribe from lists
-			$arrUnsubscribedLists = $objRecipient->unsubscribe($arrMailingLists);
+			$unsubscribedLists = $recipient->unsubscribe($mailingLists);
 
-			if ($arrUnsubscribedLists === false || !count($arrUnsubscribedLists)) {
+			if ($unsubscribedLists === false || !count($unsubscribedLists)) {
 				return array('not_subscribed', $GLOBALS['TL_LANG']['avisota_unsubscribe']['notSubscribed']);
 			}
 
 			if ($this->avisota_unsubscribe_confirmation_page) {
-				$objJumpTo = $this->getPageDetails($this->avisota_unsubscribe_confirmation_page);
-				$this->redirect($this->generateFrontendUrl($objJumpTo->row()));
+				$jumpToPage = $this->getPageDetails($this->avisota_unsubscribe_confirmation_page);
+				$this->redirect($this->generateFrontendUrl($jumpToPage->row()));
 			}
 
-			$objTemplate->hideForm = true;
+			$template->hideForm = true;
 
 			return array('unsubscribed', $GLOBALS['TL_LANG']['avisota_unsubscribe']['unsubscribed']);
 		}
@@ -220,44 +220,42 @@ abstract class ModuleAvisotaRecipientForm extends Module
 	 */
 	protected function addForm()
 	{
-		global $objPage;
-
 		// create the new form
-		$objTemplate = new FrontendTemplate($this->strFormTemplate);
-		$objTemplate->setData($this->arrData);
+		$template = new FrontendTemplate($this->formTemplate);
+		$template->setData($this->arrData);
 
 		// set defaults
-		$objTemplate->tableless = $this->tableless;
-		$objTemplate->fields    = '';
+		$template->tableless = $this->tableless;
+		$template->fields    = '';
 
 		// flag that store the submit state
 		$doNotSubmit = false;
 
 		// Email is mandatory field
-		$arrEditable = array('email');
+		$editables = array('email');
 
 		// Show lists if visible
 		if ($this->avisota_show_lists) {
-			$arrEditable[] = 'lists';
+			$editables[] = 'lists';
 		}
 
 		// Add more detail fields
 		if (count($this->avisota_recipient_fields)) {
-			$arrEditable = array_merge($arrEditable, $this->avisota_recipient_fields);
+			$editables = array_merge($editables, $this->avisota_recipient_fields);
 		}
 
 		// The recipient data
-		$arrRecipient    = array();
-		$arrMailingLists = array();
+		$recipientData    = array();
+		$mailingLists = array();
 
 		// The form fields
-		$arrFields = array();
+		$fields = array();
 		$hasUpload = false;
 		$i         = 0;
 
 		// add the lists options
 		if ($this->avisota_show_lists) {
-			$objList = $this->Database
+			$list = $this->Database
 				->execute(
 				"SELECT
 						*
@@ -268,163 +266,163 @@ abstract class ModuleAvisotaRecipientForm extends Module
 					ORDER BY
 						title"
 			);
-			while ($objList->next()) {
-				$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['lists']['options'][$objList->id] = $objList->title;
+			while ($list->next()) {
+				$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['lists']['options'][$list->id] = $list->title;
 			}
 		}
 
 		// or set selected lists, if they are not displayed
 		else if (count($this->avisota_lists)) {
-			$arrMailingLists = $this->avisota_lists;
+			$mailingLists = $this->avisota_lists;
 		}
 
 		// or use all, if there are no lists selected
 		else {
-			$arrMailingLists = $this->Database
+			$mailingLists = $this->Database
 				->query("SELECT id FROM tl_avisota_mailing_list")
 				->fetchEach('id');
 		}
 
 		// Build form
-		foreach ($arrEditable as $field) {
-			$arrData = $GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$field];
+		foreach ($editables as $field) {
+			$fieldConfig = $GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$field];
 
 			// Map checkboxWizard to regular checkbox widget
-			if ($arrData['inputType'] == 'checkboxWizard') {
-				$arrData['inputType']        = 'checkbox';
-				$arrData['eval']['multiple'] = true;
+			if ($fieldConfig['inputType'] == 'checkboxWizard') {
+				$fieldConfig['inputType']        = 'checkbox';
+				$fieldConfig['eval']['multiple'] = true;
 			}
 
-			$strClass = $GLOBALS['TL_FFL'][$arrData['inputType']];
+			$class = $GLOBALS['TL_FFL'][$fieldConfig['inputType']];
 
 			// Continue if the class is not defined
-			if (!$this->classFileExists($strClass)) {
+			if (!$this->classFileExists($class)) {
 				continue;
 			}
 
-			$arrData['eval']['tableless'] = $this->tableless;
-			$arrData['eval']['required']  = $arrData['eval']['mandatory'];
+			$fieldConfig['eval']['tableless'] = $this->tableless;
+			$fieldConfig['eval']['required']  = $fieldConfig['eval']['mandatory'];
 
-			$objWidget = new $strClass($this->prepareForWidget($arrData, $field, $arrData['default']));
+			$widget = new $class($this->prepareForWidget($fieldConfig, $field, $fieldConfig['default']));
 
-			$objWidget->storeValues = true;
-			$objWidget->rowClass    = 'row_' . $i . (($i == 0) ? ' row_first' : '') . ((($i % 2) == 0) ? ' even'
+			$widget->storeValues = true;
+			$widget->rowClass    = 'row_' . $i . (($i == 0) ? ' row_first' : '') . ((($i % 2) == 0) ? ' even'
 				: ' odd');
 
 			// Increase the row count if its a password field
-			if ($objWidget instanceof FormPassword) {
-				$objWidget->rowClassConfirm = 'row_' . ++$i . ((($i % 2) == 0) ? ' even' : ' odd');
+			if ($widget instanceof FormPassword) {
+				$widget->rowClassConfirm = 'row_' . ++$i . ((($i % 2) == 0) ? ' even' : ' odd');
 			}
 
 			// Validate input
-			if ($this->Input->post('FORM_SUBMIT') == $this->strFormName) {
-				$objWidget->validate();
-				$varValue = $objWidget->value;
+			if ($this->Input->post('FORM_SUBMIT') == $this->formName) {
+				$widget->validate();
+				$value = $widget->value;
 
-				$rgxp = $arrData['eval']['rgxp'];
+				$rgxp = $fieldConfig['eval']['rgxp'];
 
 				// Convert date formats into timestamps (check the eval setting first -> #3063)
-				if (($rgxp == 'date' || $rgxp == 'time' || $rgxp == 'datim') && $varValue != '') {
-					$objDate  = new Date($varValue, $GLOBALS['TL_CONFIG'][$rgxp . 'Format']);
-					$varValue = $objDate->tstamp;
+				if (($rgxp == 'date' || $rgxp == 'time' || $rgxp == 'datim') && $value != '') {
+					$date  = new Date($value, $GLOBALS['TL_CONFIG'][$rgxp . 'Format']);
+					$value = $date->tstamp;
 				}
 
 				// Make sure that unique fields are unique (check the eval setting first -> #3063)
-				if ($arrData['eval']['unique'] && $varValue != '') {
-					$objUnique = $this->Database
+				if ($fieldConfig['eval']['unique'] && $value != '') {
+					$unique = $this->Database
 						->prepare("SELECT * FROM tl_avisota_recipient WHERE " . $field . "=?")
 						->limit(1)
-						->execute($varValue);
+						->execute($value);
 
-					if ($objUnique->numRows) {
-						$objWidget->addError(
+					if ($unique->numRows) {
+						$widget->addError(
 							sprintf(
 								$GLOBALS['TL_LANG']['ERR']['unique'],
-								(strlen($arrData['label'][0]) ? $arrData['label'][0] : $field)
+								(strlen($fieldConfig['label'][0]) ? $fieldConfig['label'][0] : $field)
 							)
 						);
 					}
 				}
 
 				// Save callback
-				if (is_array($arrData['save_callback'])) {
-					foreach ($arrData['save_callback'] as $callback) {
+				if (is_array($fieldConfig['save_callback'])) {
+					foreach ($fieldConfig['save_callback'] as $callback) {
 						$this->import($callback[0]);
 
 						try {
-							$varValue = $this->$callback[0]->$callback[1]($varValue, $this->User);
+							$value = $this->$callback[0]->$callback[1]($value, $this->User);
 						}
 						catch (Exception $e) {
-							$objWidget->class = 'error';
-							$objWidget->addError($e->getMessage());
+							$widget->class = 'error';
+							$widget->addError($e->getMessage());
 						}
 					}
 				}
 
-				if ($objWidget->hasErrors()) {
+				if ($widget->hasErrors()) {
 					$doNotSubmit = true;
 				}
 
 				// Store current value
-				$arrRecipient[$field] = $varValue;
+				$recipientData[$field] = $value;
 			}
 
-			if ($objWidget instanceof uploadable) {
+			if ($widget instanceof uploadable) {
 				$hasUpload = true;
 			}
 
-			$temp = $objWidget->parse();
+			$temp = $widget->parse();
 
-			$objTemplate->fields .= $temp;
-			$arrFields[$field] = $temp;
+			$template->fields .= $temp;
+			$fields[$field] = $temp;
 
 			++$i;
 		}
 
 		// lists have to be an array
-		if (!is_array($arrMailingLists)) {
-			$arrMailingLists = array($arrMailingLists);
+		if (!is_array($mailingLists)) {
+			$mailingLists = array($mailingLists);
 		}
 
-		$objTemplate->enctype  = $hasUpload ? 'multipart/form-data' : 'application/x-www-form-urlencoded';
-		$objTemplate->hasError = $doNotSubmit;
+		$template->enctype  = $hasUpload ? 'multipart/form-data' : 'application/x-www-form-urlencoded';
+		$template->hasError = $doNotSubmit;
 
-		$strMessageKey = 'MESSAGE_' . strtoupper(get_class($this)) . '_' . $this->id;
-		if ($this->Input->post('FORM_SUBMIT') == $this->strFormName && !$doNotSubmit) {
-			$_SESSION[$strMessageKey] = $this->submit($arrRecipient, $arrMailingLists, $objTemplate);
+		$messageKey = 'MESSAGE_' . strtoupper(get_class($this)) . '_' . $this->id;
+		if ($this->Input->post('FORM_SUBMIT') == $this->formName && !$doNotSubmit) {
+			$_SESSION[$messageKey] = $this->submit($recipientData, $mailingLists, $template);
 			$this->reload();
 		}
-		else if (!empty($_SESSION[$strMessageKey])) {
-			list($strMessageClass, $strMessage, $blnHideForm) = $_SESSION[$strMessageKey];
-			$objTemplate->messageClass = $strMessageClass;
-			$objTemplate->message      = $strMessage;
-			$objTemplate->hideForm     = $blnHideForm;
-			unset($_SESSION[$strMessageKey]);
+		else if (!empty($_SESSION[$messageKey])) {
+			list($messageClass, $message, $hideForm) = $_SESSION[$messageKey];
+			$template->messageClass = $messageClass;
+			$template->message      = $message;
+			$template->hideForm     = $hideForm;
+			unset($_SESSION[$messageKey]);
 		}
 		else {
-			$arrLists = $this->handleSubscribeTokens();
+			$lists = $this->handleSubscribeTokens();
 
-			if ($arrLists && count($arrLists)) {
+			if ($lists && count($lists)) {
 				$this->loadLanguageFile('avisota_subscribe');
-				$objTemplate->messageClass = 'confirm_subscription';
-				$objTemplate->message      = $GLOBALS['TL_LANG']['avisota_subscribe']['confirmSubscription'];
+				$template->messageClass = 'confirm_subscription';
+				$template->message      = $GLOBALS['TL_LANG']['avisota_subscribe']['confirmSubscription'];
 			}
 		}
 
 		// Add fields
-		foreach ($arrFields as $k => $v) {
-			$objTemplate->$k = $v;
+		foreach ($fields as $k => $v) {
+			$template->$k = $v;
 		}
 
-		$objTemplate->formId     = $this->strFormName;
-		$objTemplate->formAction = $this->avisota_form_target ? $this->generateFrontendUrl(
+		$template->formId     = $this->formName;
+		$template->formAction = $this->avisota_form_target ? $this->generateFrontendUrl(
 			$this
 				->getPageDetails($this->avisota_form_target)
 				->row()
 		) : $this->getIndexFreeRequest();
 
-		$this->Template->form = $objTemplate->parse();
+		$this->Template->form = $template->parse();
 	}
 
-	protected abstract function submit(array $arrRecipient, array $arrMailingLists, FrontendTemplate $objTemplate);
+	protected abstract function submit(array $recipientData, array $mailingLists, FrontendTemplate $template);
 }

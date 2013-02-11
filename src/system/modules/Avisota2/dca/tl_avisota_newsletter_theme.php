@@ -254,64 +254,64 @@ class tl_avisota_newsletter_theme extends Backend
 			case 'edit':
 				// Dynamically add the record to the user profile
 				if (!in_array($this->Input->get('id'), $root)) {
-					$arrNew = $this->Session->get('new_records');
+					$newRecord = $this->Session->get('new_records');
 
-					if (is_array($arrNew['tl_avisota_newsletter_theme']) && in_array(
+					if (is_array($newRecord['tl_avisota_newsletter_theme']) && in_array(
 						$this->Input->get('id'),
-						$arrNew['tl_avisota_newsletter_theme']
+						$newRecord['tl_avisota_newsletter_theme']
 					)
 					) {
 						// Add permissions on user level
 						if ($this->User->inherit == 'custom' || !$this->User->groups[0]) {
-							$objUser = $this->Database
+							$user = $this->Database
 								->prepare(
 								"SELECT avisota_newsletter_categories, avisota_newsletter_category_permissions FROM tl_user WHERE id=?"
 							)
 								->limit(1)
 								->execute($this->User->id);
 
-							$arrNewsletterCategoryPermissions = deserialize(
-								$objUser->avisota_newsletter_category_permissions
+							$newsletterCategoryPermissions = deserialize(
+								$user->avisota_newsletter_category_permissions
 							);
 
-							if (is_array($arrNewsletterCategoryPermissions) && in_array(
+							if (is_array($newsletterCategoryPermissions) && in_array(
 								'create',
-								$arrNewsletterCategoryPermissions
+								$newsletterCategoryPermissions
 							)
 							) {
-								$arrNewsletterCategories   = deserialize($objUser->avisota_newsletter_categories);
-								$arrNewsletterCategories[] = $this->Input->get('id');
+								$newsletterCategories   = deserialize($user->avisota_newsletter_categories);
+								$newsletterCategories[] = $this->Input->get('id');
 
 								$this->Database
 									->prepare("UPDATE tl_user SET avisota_newsletter_categories=? WHERE id=?")
-									->execute(serialize($arrNewsletterCategories), $this->User->id);
+									->execute(serialize($newsletterCategories), $this->User->id);
 							}
 						}
 
 						// Add permissions on group level
 						elseif ($this->User->groups[0] > 0) {
-							$objGroup = $this->Database
+							$group = $this->Database
 								->prepare(
 								"SELECT avisota_newsletter_categories, avisota_newsletter_category_permissions FROM tl_user_group WHERE id=?"
 							)
 								->limit(1)
 								->execute($this->User->groups[0]);
 
-							$arrNewsletterCategoryPermissions = deserialize(
-								$objGroup->avisota_newsletter_category_permissions
+							$newsletterCategoryPermissions = deserialize(
+								$group->avisota_newsletter_category_permissions
 							);
 
-							if (is_array($arrNewsletterCategoryPermissions) && in_array(
+							if (is_array($newsletterCategoryPermissions) && in_array(
 								'create',
-								$arrNewsletterCategoryPermissions
+								$newsletterCategoryPermissions
 							)
 							) {
-								$arrNewsletterCategories   = deserialize($objGroup->avisota_newsletter_categories);
-								$arrNewsletterCategories[] = $this->Input->get('id');
+								$newsletterCategories   = deserialize($group->avisota_newsletter_categories);
+								$newsletterCategories[] = $this->Input->get('id');
 
 								$this->Database
 									->prepare("UPDATE tl_user_group SET avisota_newsletter_categories=? WHERE id=?")
-									->execute(serialize($arrNewsletterCategories), $this->User->groups[0]);
+									->execute(serialize($newsletterCategories), $this->User->groups[0]);
 							}
 						}
 
@@ -449,46 +449,46 @@ class tl_avisota_newsletter_theme extends Backend
 	 *
 	 * @return string
 	 */
-	public function generateAlias($varValue, DataContainer $dc)
+	public function generateAlias($value, DataContainer $dc)
 	{
 		$autoAlias = false;
 
 		// Generate alias if there is none
-		if (!strlen($varValue)) {
+		if (!strlen($value)) {
 			$autoAlias = true;
-			$varValue  = standardize($dc->activeRecord->title);
+			$value  = standardize($dc->activeRecord->title);
 		}
 
-		$objAlias = $this->Database
+		$aliasResultSet = $this->Database
 			->prepare("SELECT id FROM tl_avisota_newsletter_theme WHERE alias=?")
-			->execute($varValue);
+			->execute($value);
 
 		// Check whether the news alias exists
-		if ($objAlias->numRows > 1 && !$autoAlias) {
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $varValue));
+		if ($aliasResultSet->numRows > 1 && !$autoAlias) {
+			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $value));
 		}
 
 		// Add ID to alias
-		if ($objAlias->numRows && $autoAlias) {
-			$varValue .= '-' . $dc->id;
+		if ($aliasResultSet->numRows && $autoAlias) {
+			$value .= '-' . $dc->id;
 		}
 
-		return $varValue;
+		return $value;
 	}
 
 
 	public function getStylesheets($dc)
 	{
-		$arrStylesheets = array();
+		$stylesheets = array();
 
-		$objTheme = $this->Database->execute("SELECT * FROM tl_theme ORDER BY name");
+		$theme = $this->Database->execute("SELECT * FROM tl_theme ORDER BY name");
 
-		while ($objTheme->next()) {
-			$objCss = $this->Database
+		while ($theme->next()) {
+			$stylesheet = $this->Database
 				->prepare("SELECT * FROM tl_style_sheet WHERE pid=?")
-				->execute($objTheme->id);
-			while ($objCss->next()) {
-				$arrStylesheets['system/scripts/' . $objCss->name . '.css'] = '<span style="color:#A6A6A6">' . $objTheme->name . ': </span>' . $objCss->name . '<span style="color:#A6A6A6">.css</span>';
+				->execute($theme->id);
+			while ($stylesheet->next()) {
+				$stylesheets['system/scripts/' . $stylesheet->name . '.css'] = '<span style="color:#A6A6A6">' . $theme->name . ': </span>' . $stylesheet->name . '<span style="color:#A6A6A6">.css</span>';
 			}
 
 			// HOOK: add custom logic
@@ -498,7 +498,7 @@ class tl_avisota_newsletter_theme extends Backend
 			) {
 				foreach ($GLOBALS['TL_HOOKS']['avisotaCollectThemeCss'] as $callback) {
 					$this->import($callback[0]);
-					$arrStylesheets = $this->$callback[0]->$callback[1]($arrStylesheets, $objTheme->row());
+					$stylesheets = $this->$callback[0]->$callback[1]($stylesheets, $theme->row());
 				}
 			}
 		}
@@ -507,11 +507,11 @@ class tl_avisota_newsletter_theme extends Backend
 		if (isset($GLOBALS['TL_HOOKS']['avisotaCollectCss']) && is_array($GLOBALS['TL_HOOKS']['avisotaCollectCss'])) {
 			foreach ($GLOBALS['TL_HOOKS']['avisotaCollectCss'] as $callback) {
 				$this->import($callback[0]);
-				$arrStylesheets = $this->$callback[0]->$callback[1]($arrStylesheets);
+				$stylesheets = $this->$callback[0]->$callback[1]($stylesheets);
 			}
 		}
 
-		return $arrStylesheets;
+		return $stylesheets;
 	}
 
 	public function getHtmlTemplates()

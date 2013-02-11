@@ -53,13 +53,13 @@ abstract class AvisotaTransportMailerTransport extends AvisotaTransport
 	 */
 	protected $mailer;
 
-	public function __construct(Database_Result $objRow)
+	public function __construct(Database_Result $resultSet)
 	{
-		parent::__construct($objRow);
+		parent::__construct($resultSet);
 
-		$objMailerConfig = $this->createMailerConfig();
+		$mailerConfig = $this->createMailerConfig();
 
-		$this->mailer = $this->createMailer($objMailerConfig);
+		$this->mailer = $this->createMailer($mailerConfig);
 	}
 
 	/**
@@ -72,55 +72,55 @@ abstract class AvisotaTransportMailerTransport extends AvisotaTransport
 			->setLogFile('avisota_mailer_transport_' . $this->config->id . '.log');
 	}
 
-	protected function createMailer(MailerConfig $objMailerConfig)
+	protected function createMailer(MailerConfig $mailerConfig)
 	{
-		return Mailer::getMailer($objMailerConfig);
+		return Mailer::getMailer($mailerConfig);
 	}
 
 	/**
 	 * Transport a mail.
 	 *
 	 * @param string $strRecipientEmail
-	 * @param Mail   $objEmail
+	 * @param Mail   $email
 	 *
 	 * @return void
 	 * @throws AvisotaTransportException
 	 */
-	public function transportEmail($varRecipient, Mail $objEmail)
+	public function transportEmail($recipient, Mail $email)
 	{
-		global $objPage;
+		global $page;
 
 		try {
 			// set sender email
 			if ($this->config->sender) {
-				$objEmail->setSender($this->config->sender);
+				$email->setSender($this->config->sender);
 			}
-			else if (isset($objPage) && strlen($objPage->adminEmail)) {
-				$objEmail->setSender($objPage->adminEmail);
+			else if (isset($page) && strlen($page->adminEmail)) {
+				$email->setSender($page->adminEmail);
 			}
 			else {
-				$objEmail->setSender($GLOBALS['TL_CONFIG']['adminEmail']);
+				$email->setSender($GLOBALS['TL_CONFIG']['adminEmail']);
 			}
 
 			// set sender name
 			if (strlen($this->config->senderName)) {
-				$objEmail->setSenderName($this->config->senderName);
+				$email->setSenderName($this->config->senderName);
 			}
 
 			// set reply email
 			if ($this->config->replyTo) {
-				$objEmail->setReplyTo($this->config->replyTo);
+				$email->setReplyTo($this->config->replyTo);
 			}
 
 			// set reply name
 			if ($this->config->replyToName) {
-				$objEmail->setReplyToName($this->config->replyToName);
+				$email->setReplyToName($this->config->replyToName);
 			}
 
-			$this->mailer->send($objEmail, $varRecipient);
+			$this->mailer->send($email, $recipient);
 		}
 		catch (Swift_RfcComplianceException $e) {
-			throw new AvisotaTransportEmailException($varRecipient, $objEmail, $e->getMessage(), $e->getCode(), $e);
+			throw new AvisotaTransportEmailException($recipient, $email, $e->getMessage(), $e->getCode(), $e);
 		}
 	}
 }

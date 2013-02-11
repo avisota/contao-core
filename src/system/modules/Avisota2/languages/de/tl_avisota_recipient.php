@@ -154,10 +154,6 @@ $GLOBALS['TL_LANG']['tl_avisota_recipient']['notify']              = array(
 	'Abonnent benachrichtigen',
 	'Abonnent Benachrichtigungen und Erinnerungen senden'
 );
-$GLOBALS['TL_LANG']['tl_avisota_recipient']['tracking']            = array(
-	'Abonnent verfolgen',
-	'Lese und Reaktionsverhalten des Abonnenten verfolgen'
-);
 $GLOBALS['TL_LANG']['tl_avisota_recipient']['tools']               = array(
 	'Tools',
 	'Abonnenten in Massen verarbeiten.'

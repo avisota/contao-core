@@ -50,14 +50,14 @@ class NewsletterHyperlink extends NewsletterElement
 	 *
 	 * @var string
 	 */
-	protected $strTemplateHTML = 'nle_hyperlink_html';
+	protected $templateHTML = 'nle_hyperlink_html';
 
 	/**
 	 * Plain text Template
 	 *
 	 * @var string
 	 */
-	protected $strTemplatePlain = 'nle_hyperlink_plain';
+	protected $templatePlain = 'nle_hyperlink_plain';
 
 
 	/**
@@ -100,16 +100,16 @@ class NewsletterHyperlink extends NewsletterElement
 			TL_ROOT . '/' . $this->singleSRC
 		)
 		) {
-			$objFile = new File($this->singleSRC);
+			$file = new File($this->singleSRC);
 
-			if ($objFile->isGdImage) {
+			if ($file->isGdImage) {
 				$size        = deserialize($this->size);
-				$intMaxWidth = (TL_MODE == 'BE') ? 320 : 0;
+				$maxImageWidth = (TL_MODE == 'BE') ? 320 : 0;
 
 				// Adjust image size
-				if ($intMaxWidth > 0 && ($size[0] > $intMaxWidth || (!$size[0] && $objFile->width > $intMaxWidth))) {
-					$size[0] = $intMaxWidth;
-					$size[1] = floor($intMaxWidth * $objFile->height / $objFile->width);
+				if ($maxImageWidth > 0 && ($size[0] > $maxImageWidth || (!$size[0] && $file->width > $maxImageWidth))) {
+					$size[0] = $maxImageWidth;
+					$size[1] = floor($maxImageWidth * $file->height / $file->width);
 				}
 
 				$src = $this->getImage($this->urlEncode($this->singleSRC), $size[0], $size[1], $size[2]);

@@ -64,17 +64,17 @@ class Avisota extends Backend
 	 */
 	public function send()
 	{
-		$intId = $this->Input->get('id');
+		$id = $this->Input->get('id');
 
-		$objNewsletter = AvisotaNewsletter::load($intId);
+		$newsletter = AvisotaNewsletter::load($id);
 
-		if (!$objNewsletter) {
+		if (!$newsletter) {
 			$this->redirect('contao/main.php?do=avisota_newsletter');
 		}
 
-		$objCategory = AvisotaNewsletterCategory::load($objNewsletter->pid);
+		$category = AvisotaNewsletterCategory::load($newsletter->pid);
 
-		if (!$objCategory) {
+		if (!$category) {
 			$this->redirect('contao/main.php?do=avisota_newsletter');
 		}
 
@@ -89,9 +89,9 @@ class Avisota extends Backend
 				$root = $this->User->avisota_newsletter_categories;
 			}
 
-			if (!in_array($objCategory->id, $root)) {
+			if (!in_array($category->id, $root)) {
 				$this->log(
-					'Not enough permissions to send newsletter from category ID ' . $objCategory->id,
+					'Not enough permissions to send newsletter from category ID ' . $category->id,
 					'Avisota::send()',
 					TL_ERROR
 				);
@@ -99,14 +99,14 @@ class Avisota extends Backend
 			}
 		}
 
-		AvisotaStatic::pushCategory($objCategory);
-		AvisotaStatic::pushNewsletter($objNewsletter);
+		AvisotaStatic::pushCategory($category);
+		AvisotaStatic::pushNewsletter($newsletter);
 
-		$objTemplate = new BackendTemplate('be_avisota_send');
-		$objTemplate->import('BackendUser', 'User');
+		$template = new BackendTemplate('be_avisota_send');
+		$template->import('BackendUser', 'User');
 
 		// allow backend sending
-		$objTemplate->beSend = $this->Base->allowBackendSending();
+		$template->beSend = $this->Base->allowBackendSending();
 
 		// Store the current referer
 		$session = $this->Session->get('referer');
@@ -117,25 +117,25 @@ class Avisota extends Backend
 			$this->Session->set('referer', $session);
 		}
 
-		$objTemplate->users = $this->getAllowedUsers();
+		$template->users = $this->getAllowedUsers();
 
-		return $objTemplate->parse();
+		return $template->parse();
 	}
 
 
 	protected function getAllowedUsers()
 	{
-		$arrUser = array();
-		$objUser = $this->Database->execute("SELECT * FROM tl_user ORDER BY name,email");
-		while ($objUser->next()) {
-			if (!$objUser->admin && !$this->User->isAdmin) {
-				$arrGroups = array_intersect($this->User->groups, deserialize($objUser->groups, true));
-				if (!count($arrGroups)) {
+		$users = array();
+		$user = $this->Database->execute("SELECT * FROM tl_user ORDER BY name,email");
+		while ($user->next()) {
+			if (!$user->admin && !$this->User->isAdmin) {
+				$groups = array_intersect($this->User->groups, deserialize($user->groups, true));
+				if (!count($groups)) {
 					continue;
 				}
 			}
-			$arrUser[$objUser->id] = $objUser->row();
+			$users[$user->id] = $user->row();
 		}
-		return $arrUser;
+		return $users;
 	}
 }

@@ -44,21 +44,21 @@ class NewsletterEvent extends NewsletterElement
 	 *
 	 * @var string
 	 */
-	protected $strTemplateHTML = 'nle_events_html';
+	protected $templateHTML = 'nle_events_html';
 
 	/**
 	 * Plain text Template
 	 *
 	 * @var string
 	 */
-	protected $strTemplatePlain = 'nle_events_plain';
+	protected $templatePlain = 'nle_events_plain';
 
 	/**
 	 * Caching var for jumpTo-pages
 	 *
 	 * @var mixed tl_page-rows
 	 */
-	protected $arrObjJumpToPages = array();
+	protected $jumpToPages = array();
 
 
 	/**
@@ -70,8 +70,8 @@ class NewsletterEvent extends NewsletterElement
 	{
 		$this->import('DomainLink');
 
-		$events = unserialize($this->events);
-		if (!is_array($events)) {
+		$eventIdentifiers = unserialize($this->events);
+		if (!is_array($eventIdentifiers)) {
 			$this->Template->events = array();
 			return;
 		}
@@ -79,13 +79,13 @@ class NewsletterEvent extends NewsletterElement
 		// split ID and startTime
 		$eventIds        = array();
 		$eventStartTimes = array();
-		foreach ($events as $event) {
-			$tmp               = explode('_', $event);
+		foreach ($eventIdentifiers as $eventIdentifier) {
+			$tmp               = explode('_', $eventIdentifier);
 			$eventIds[]        = $tmp[0];
 			$eventStartTimes[] = $tmp[1];
 		}
 
-		$objEvents = $this->Database
+		$event = $this->Database
 			->prepare(
 			'SELECT e.*,c.jumpTo,c.title AS section
 												FROM tl_calendar_events as e
@@ -95,27 +95,27 @@ class NewsletterEvent extends NewsletterElement
 		)
 			->execute();
 
-		$arrEvents = array();
-		while ($objEvents->next()) {
-			$arrEvents[$objEvents->id] = $objEvents->row();
+		$events = array();
+		while ($event->next()) {
+			$events[$event->id] = $event->row();
 		}
 
-		$arrReturn = array();
+		$return = array();
 		foreach ($eventIds as $k => $id) {
 			// adjust startTime for recurring events
-			if ($arrEvents[$id]['recurring']) {
-				$event     = $arrEvents[$id];
+			if ($events[$id]['recurring']) {
+				$eventData     = $events[$id];
 				$count     = 0;
-				$arrRepeat = deserialize($event['repeatEach']);
+				$repeatData = deserialize($eventData['repeatEach']);
 
-				while ($event['recurrences'] <= $count || ($event['recurrences'] != 0 && $event['startTime'] < $event['repeatEnd'])) {
-					if ($event['startTime'] == $eventStartTimes[$k]) {
-						$arrReturn[] = $event;
+				while ($eventData['recurrences'] <= $count || ($eventData['recurrences'] != 0 && $eventData['startTime'] < $eventData['repeatEnd'])) {
+					if ($eventData['startTime'] == $eventStartTimes[$k]) {
+						$return[] = $eventData;
 						break;
 					}
 
-					$arg  = $arrRepeat['value'];
-					$unit = $arrRepeat['unit'];
+					$arg  = $repeatData['value'];
+					$unit = $repeatData['unit'];
 
 					if ($arg < 1) {
 						break;
@@ -123,16 +123,16 @@ class NewsletterEvent extends NewsletterElement
 
 					$strtotime = '+ ' . $arg . ' ' . $unit;
 
-					$event['startTime'] = strtotime($strtotime, $event['startTime']);
-					$event['endTime']   = strtotime($strtotime, $event['endTime']);
+					$eventData['startTime'] = strtotime($strtotime, $eventData['startTime']);
+					$eventData['endTime']   = strtotime($strtotime, $eventData['endTime']);
 
 				}
 			}
 			else {
-				$arrReturn[] = $arrEvents[$id];
+				$return[] = $events[$id];
 			}
 		}
 
-		$this->Template->events = $arrReturn;
+		$this->Template->events = $return;
 	}
 }

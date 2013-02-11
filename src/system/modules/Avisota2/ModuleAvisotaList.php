@@ -70,9 +70,9 @@ class ModuleAvisotaList extends Module
 	/**
 	 * Construct the content element
 	 */
-	public function __construct(Database_Result $objModule)
+	public function __construct(Database_Result $resultSet)
 	{
-		parent::__construct($objModule);
+		parent::__construct($resultSet);
 		$this->import('DomainLink');
 		$this->import('FrontendUser', 'User');
 		$this->import('AvisotaBase', 'Base');
@@ -86,9 +86,9 @@ class ModuleAvisotaList extends Module
 	public function generate()
 	{
 		if (TL_MODE == 'BE') {
-			$objTemplate           = new BackendTemplate('be_wildcard');
-			$objTemplate->wildcard = '### Avisota Newsletter List ###';
-			return $objTemplate->parse();
+			$template           = new BackendTemplate('be_wildcard');
+			$template->wildcard = '### Avisota Newsletter List ###';
+			return $template->parse();
 		}
 
 		$this->avisota_categories = array_filter(
@@ -110,72 +110,72 @@ class ModuleAvisotaList extends Module
 	 */
 	public function compile()
 	{
-		$varId = $this->Input->get('items');
+		$id = $this->Input->get('items');
 
-		$intPage = $this->Input->get('page');
-		if (!$intPage) {
-			$intPage = 0;
+		$pageId = $this->Input->get('page');
+		if (!$pageId) {
+			$pageId = 0;
 		}
-		$intLimit  = $this->perPage;
-		$intOffset = $intPage * $intLimit;
+		$limit  = $this->perPage;
+		$offset = $pageId * $limit;
 
-		$objNewsletter = $this->Database
+		$newsletter = $this->Database
 			->prepare(
 			"SELECT * FROM tl_avisota_newsletter WHERE sendOn > 0 AND pid IN (" . implode(
 				',',
 				$this->avisota_categories
 			) . ") ORDER BY sendOn DESC"
 		);
-		if ($intLimit > 0) {
-			$objNewsletter->limit($intLimit, $intOffset);
+		if ($limit > 0) {
+			$newsletter->limit($limit, $offset);
 		}
-		$objNewsletter = $objNewsletter->execute();
+		$newsletter = $newsletter->execute();
 
-		$objViewPage        = $this->jumpTo ? $this->getPageDetails($this->avisota_view_page) : false;
-		$arrViewOnlineCache = array();
+		$viewPage        = $this->jumpTo ? $this->getPageDetails($this->avisota_view_page) : false;
+		$viewOnlineCache = array();
 
-		$arrNewsletters = array();
-		while ($objNewsletter->next()) {
-			$arrNewsletter = $objNewsletter->row();
+		$newsletterDataSets = array();
+		while ($newsletter->next()) {
+			$newsletterData = $newsletter->row();
 
-			$strParams = '/items/' . ($GLOBALS['TL_CONFIG']['disableAlias'] ? $arrNewsletter['id']
-				: $arrNewsletter['alias']);
+			$params = '/items/' . ($GLOBALS['TL_CONFIG']['disableAlias'] ? $newsletterData['id']
+				: $newsletterData['alias']);
 
-			if ($objViewPage) {
-				$arrNewsletter['href'] = $this->generateFrontendUrl($objViewPage->row(), $strParams);
+			if ($viewPage) {
+				$newsletterData['href'] = $this->generateFrontendUrl($viewPage->row(), $params);
 			}
 			else {
-				if (!isset($arrViewOnlineCache[$objNewsletter->pid])) {
-					$objCategory = $this->Database
+				if (!isset($viewOnlineCache[$newsletter->pid])) {
+					$category = $this->Database
 						->prepare("SELECT * FROM tl_avisota_newsletter_category WHERE id=?")
-						->execute($objNewsletter->pid);
+						->execute($newsletter->pid);
 
-					if ($objCategory->next()) {
-						$arrViewOnlineCache[$objNewsletter->pid] = $this->Base->getViewOnlinePage($objCategory);
+					if ($category->next()) {
+						$viewOnlineCache[$newsletter->pid] = $this->Base->getViewOnlinePage($category);
 					}
 					else {
-						$arrViewOnlineCache[$objNewsletter->pid] = false;
+						$viewOnlineCache[$newsletter->pid] = false;
 					}
 				}
-				if ($arrViewOnlineCache[$objNewsletter->pid]) {
-					$arrNewsletter['href'] = $this->generateFrontendUrl(
-						$arrViewOnlineCache[$objNewsletter->pid]->row(),
-						$strParams
+				if ($viewOnlineCache[$newsletter->pid]) {
+					$newsletterData['href'] = $this->generateFrontendUrl(
+						$viewOnlineCache[$newsletter->pid]->row(),
+						$params
 					);
 				}
 				else {
-					$arrNewsletter['href'] = '';
+					$newsletterData['href'] = '';
 				}
 			}
 
-			$arrNewsletters[] = $arrNewsletter;
+			$newsletterDataSets[] = $newsletterData;
 		}
 
-		$objTemplate              = new FrontendTemplate($this->avisota_list_template);
-		$objTemplate->newsletters = $arrNewsletters;
-		$this->Template->list     = $objTemplate->parse();
+		$template              = new FrontendTemplate($this->avisota_list_template);
+		$template->newsletters = $newsletterDataSets;
+		$this->Template->list     = $template->parse();
 
-		$objNewsletter = $this->Database
+		$newsletter = $this->Database
 			->prepare(
 			"SELECT COUNT(id) as `count` FROM tl_avisota_newsletter WHERE sendOn > 0 AND pid IN (" . implode(
 				',',
@@ -184,7 +184,7 @@ class ModuleAvisotaList extends Module
 		)
 			->execute();
 
-		$this->Template->limit = $intLimit;
-		$this->Template->total = $objNewsletter->next() ? $objNewsletter->count : 0;
+		$this->Template->limit = $limit;
+		$this->Template->total = $newsletter->next() ? $newsletter->count : 0;
 	}
 }

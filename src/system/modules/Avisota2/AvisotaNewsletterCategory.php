@@ -43,25 +43,25 @@
  */
 class AvisotaNewsletterCategory
 {
-	public static function load($varId)
+	public static function load($id)
 	{
-		if (!$varId) {
+		if (!$id) {
 			return null;
 		}
 
-		$objResult = Database::getInstance()
+		$resultSet = Database::getInstance()
 			->prepare(
 			'SELECT *
 					   FROM tl_avisota_newsletter_category
 					   WHERE id=? OR alias=?'
 		)
-			->execute($varId, $varId);
+			->execute($id, $id);
 
-		if (!$objResult->next()) {
+		if (!$resultSet->next()) {
 			return null;
 		}
 
-		return new AvisotaNewsletterCategory($objResult);
+		return new AvisotaNewsletterCategory($resultSet);
 	}
 
 	/**
@@ -97,9 +97,9 @@ class AvisotaNewsletterCategory
 	 */
 	protected $data;
 
-	function __construct(Database_Result $objResult = null)
+	function __construct(Database_Result $resultSet = null)
 	{
-		foreach ($objResult->row() as $name => $value) {
+		foreach ($resultSet->row() as $name => $value) {
 			$this->__set($name, $value);
 		}
 	}

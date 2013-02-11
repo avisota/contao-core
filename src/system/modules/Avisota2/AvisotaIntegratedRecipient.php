@@ -46,114 +46,114 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	/**
 	 * @static
 	 *
-	 * @param $strEmail
+	 * @param $email
 	 */
-	public static function byEmail($strEmail)
+	public static function byEmail($email)
 	{
-		$objRecipient = new AvisotaIntegratedRecipient(array('email' => $strEmail));
-		$objRecipient->load();
-		return $objRecipient;
+		$recipient = new AvisotaIntegratedRecipient(array('email' => $email));
+		$recipient->load();
+		return $recipient;
 	}
 
-	public static function bySubscribeTokens($arrTokens)
+	public static function bySubscribeTokens($tokens)
 	{
-		$arrWhere = array();
-		foreach ($arrTokens as $strToken) {
-			$arrWhere[] = 'token=?';
+		$whereParts = array();
+		foreach ($tokens as $token) {
+			$whereParts[] = 'token=?';
 		}
 
-		$objRecipientID = Database::getInstance()
+		$recipientRef = Database::getInstance()
 			->prepare(
-			'SELECT DISTINCT recipient FROM tl_avisota_recipient_to_mailing_list WHERE ' . implode(' OR ', $arrWhere)
+			'SELECT DISTINCT recipient FROM tl_avisota_recipient_to_mailing_list WHERE ' . implode(' OR ', $whereParts)
 		)
-			->execute($arrTokens);
+			->execute($tokens);
 
-		if ($objRecipientID->numRows > 1) {
+		if ($recipientRef->numRows > 1) {
 			throw new AvisotaRecipientException('Illegal token list.');
 		}
-		else if ($objRecipientID->next()) {
-			$objRecipient     = new AvisotaIntegratedRecipient();
-			$objRecipient->id = $objRecipientID->recipient;
-			$objRecipient->load();
-			return $objRecipient;
+		else if ($recipientRef->next()) {
+			$recipient     = new AvisotaIntegratedRecipient();
+			$recipient->id = $recipientRef->recipient;
+			$recipient->load();
+			return $recipient;
 		}
 		else {
 			return null;
 		}
 	}
 
-	public static function checkBlacklisted($strEmail, $arrLists)
+	public static function checkBlacklisted($email, $lists)
 	{
-		$arrLists = array_map('intval', $arrLists);
-		$arrLists = array_filter($arrLists);
-		if (count($arrLists)) {
-			$strLists     = implode(',', $arrLists);
-			$objBlacklist = Database::getInstance()
+		$lists = array_map('intval', $lists);
+		$lists = array_filter($lists);
+		if (count($lists)) {
+			$listIds     = implode(',', $lists);
+			$blacklistEntry = Database::getInstance()
 				->prepare(
 				"SELECT * FROM tl_avisota_recipient_blacklist
-				           WHERE email=? AND pid IN (" . $strLists . ")"
+				           WHERE email=? AND pid IN (" . $listIds . ")"
 			)
-				->execute(md5(strtolower($strEmail)));
-			if ($objBlacklist->numRows) {
-				return $objBlacklist->fetchEach('list');
+				->execute(md5(strtolower($email)));
+			if ($blacklistEntry->numRows) {
+				return $blacklistEntry->fetchEach('list');
 			}
 		}
 		return false;
 	}
 
-	public function __construct(array $arrData = null)
+	public function __construct(array $data = null)
 	{
-		parent::__construct($arrData);
+		parent::__construct($data);
 
 		$this->loadLanguageFile('tl_avisota_recipient');
 		$this->loadDataContainer('tl_avisota_recipient');
 	}
 
-	public function load($blnUncached = false)
+	public function load($uncached = false)
 	{
-		if (isset($this->arrData['id'])) {
-			$strField = 'id';
-			$strValue = $this->id;
+		if (isset($this->data['id'])) {
+			$field = 'id';
+			$value = $this->id;
 		}
-		else if (isset($this->arrData['email'])) {
-			$strField = 'email';
-			$strValue = $this->email;
+		else if (isset($this->data['email'])) {
+			$field = 'email';
+			$value = $this->email;
 		}
 		else {
-			throw new AvisotaRecipientException($this->arrData, 'The recipient has no ID or EMAIL that can identify him!');
+			throw new AvisotaRecipientException($this->data, 'The recipient has no ID or EMAIL that can identify him!');
 		}
 
 		// fetch existing data
-		$objRecipient = $this->Database
-			->prepare("SELECT * FROM tl_avisota_recipient WHERE $strField=?");
+		$recipient = $this->Database
+			->prepare("SELECT * FROM tl_avisota_recipient WHERE $field=?");
 		// fetch uncached, e.g. if store is called before
-		if ($blnUncached) {
-			$objRecipient = $objRecipient->executeUncached($strValue);
+		if ($uncached) {
+			$recipient = $recipient->executeUncached($value);
 		}
 		// fetch cached result
 		else {
-			$objRecipient = $objRecipient->execute($strValue);
+			$recipient = $recipient->execute($value);
 		}
 
-		if ($objRecipient->next()) {
-			$arrRecipient = $objRecipient->row();
+		if ($recipient->next()) {
+			$recipientData = $recipient->row();
 
-			foreach ($arrRecipient as $k => $v) {
+			foreach ($recipientData as $k => $v) {
 				if (isset($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$k]['load_callback']) && is_array(
 					$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$k]['load_callback']
 				)
 				) {
 					foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$k]['load_callback'] as $callback) {
 						$this->import($callback[0]);
-						$arrRecipient[$k] = $v = $this->$callback[0]->$callback[1]($v);
+						$recipientData[$k] = $v = $this->$callback[0]->$callback[1]($v);
 					}
 				}
 			}
 
-			$this->setData($arrRecipient);
+			$this->setData($recipientData);
 		}
 		else {
-			throw new AvisotaRecipientException($this->arrData, 'The recipient data for ' . $this->email . ' could not be loaded!');
+			throw new AvisotaRecipientException($this->data, 'The recipient data for ' . $this->email . ' could not be loaded!');
 		}
 	}
 
@@ -164,15 +164,15 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	 */
 	public function store()
 	{
-		$this->validate($this->arrData);
+		$this->validate($this->data);
 
-		$arrData           = $this->arrData;
-		$arrData['tstamp'] = time();
+		$data           = $this->data;
+		$data['tstamp'] = time();
 
-		$arrSet  = array();
-		$arrArgs = array();
+		$set  = array();
+		$args = array();
 
-		foreach ($arrData as $k => $v) {
+		foreach ($data as $k => $v) {
 			if (isset($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$k]['save_callback']) && is_array(
 				$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$k]['save_callback']
 			)
@@ -183,32 +183,32 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 				}
 			}
 
-			$arrSet[]  = $k . '=?';
-			$arrArgs[] = trim($v);
+			$set[]  = $k . '=?';
+			$args[] = trim($v);
 		}
 
-		$arrInsert = array();
+		$insertSet = array();
 		// added on
-		$arrInsert[] = time();
+		$insertSet[] = time();
 		// added by backend user
 		if (TL_MODE == 'BE') {
-			$objUser = BackendUser::getInstance();
-			$objUser->authenticate();
-			$arrInsert[] = $objUser->id;
+			$backendUser = BackendUser::getInstance();
+			$backendUser->authenticate();
+			$insertSet[] = $backendUser->id;
 		}
 		// added by recipient itself
 		else {
-			$arrInsert[] = '0';
+			$insertSet[] = '0';
 		}
 
 		$this->Database
 			->prepare(
 			sprintf(
 				'INSERT INTO tl_avisota_recipient SET addedOn=?, addedBy=?, %1$s ON DUPLICATE KEY UPDATE %1$s',
-				implode(',', $arrSet)
+				implode(',', $set)
 			)
 		)
-			->execute(array_merge($arrInsert, $arrArgs, $arrArgs));
+			->execute(array_merge($insertSet, $args, $args));
 
 		$this->load(true);
 	}
@@ -218,19 +218,19 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	 *
 	 * @static
 	 *
-	 * @param array $arrData
+	 * @param array $data
 	 *
 	 * @throws AvisotaRecipientException
 	 */
-	public function validate(array $arrData)
+	public function validate(array $data)
 	{
-		foreach ($arrData as $k => $v) {
+		foreach ($data as $k => $v) {
 			$v = trim($v);
 			if ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$k]['eval']['mandatory'] && empty($v)) {
-				throw new AvisotaRecipientException($arrData, 'The recipient data field "' . $k . '" is mandatory!');
+				throw new AvisotaRecipientException($data, 'The recipient data field "' . $k . '" is mandatory!');
 			}
 		}
-		parent::validate($arrData);
+		parent::validate($data);
 	}
 
 	public function getMailingLists()
@@ -249,49 +249,49 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	 * Will <strong>not</strong> send any confirmation mails.
 	 * Throws an exception, if the recipient is in the blacklist.
 	 *
-	 * @param array $arrLists
-	 * @param bool  $blnIgnoreBlacklist
+	 * @param array $lists
+	 * @param bool  $ignoreBlacklist
 	 *
 	 * @throws AvisotaSubscriptionException
 	 * @throws AvisotaBlacklistException
 	 */
-	public function subscribe(array $arrLists, $blnIgnoreBlacklist = false)
+	public function subscribe(array $lists, $ignoreBlacklist = false)
 	{
 		if (!$this->id) {
 			throw new AvisotaSubscriptionException($this, 'This recipient has no ID!');
 		}
 
-		$arrLists = array_filter(array_map('intval', $arrLists));
-		if (!count($arrLists)) {
+		$lists = array_filter(array_map('intval', $lists));
+		if (!count($lists)) {
 			return false;
 		}
 
-		if (!$blnIgnoreBlacklist) {
-			$arrBlacklisted = self::checkBlacklisted($this->email, $arrLists);
-			if ($arrBlacklisted) {
-				throw new AvisotaBlacklistException($this->email, $arrBlacklisted);
+		if (!$ignoreBlacklist) {
+			$isBlacklisted = self::checkBlacklisted($this->email, $lists);
+			if ($isBlacklisted) {
+				throw new AvisotaBlacklistException($this->email, $isBlacklisted);
 			}
 		}
 
-		$arrLists = array_diff($arrLists, $this->getMailingLists());
-		if (count($arrLists)) {
-			$arrValues = array();
-			$arrArgs   = array();
-			foreach ($arrLists as $intList) {
-				$arrValues[] = '(?, ?)';
-				$arrArgs[]   = $this->id;
-				$arrArgs[]   = $intList;
+		$lists = array_diff($lists, $this->getMailingLists());
+		if (count($lists)) {
+			$values = array();
+			$args   = array();
+			foreach ($lists as $listId) {
+				$values[] = '(?, ?)';
+				$args[]   = $this->id;
+				$args[]   = $listId;
 			}
 			$this->Database
 				->prepare(
-				"INSERT INTO tl_avisota_recipient_to_mailing_list (recipient, list) VALUES " . implode(', ', $arrValues)
+				"INSERT INTO tl_avisota_recipient_to_mailing_list (recipient, list) VALUES " . implode(', ', $values)
 			)
-				->execute($arrArgs);
+				->execute($args);
 
 			// clean up blacklist
 			$this->Database
 				->prepare(
-				"DELETE FROM tl_avisota_recipient_blacklist WHERE email=? AND pid IN (" . implode(',', $arrLists) . ")"
+				"DELETE FROM tl_avisota_recipient_blacklist WHERE email=? AND pid IN (" . implode(',', $lists) . ")"
 			)
 				->execute(md5(strtolower($this->email)));
 
@@ -302,11 +302,11 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			) {
 				foreach ($GLOBALS['TL_HOOKS']['avisotaIntegratedRecipientSubscribe'] as $callback) {
 					$this->import($callback[0]);
-					$this->$callback[0]->$callback[1]($this, $arrLists);
+					$this->$callback[0]->$callback[1]($this, $lists);
 				}
 			}
 
-			return $arrLists;
+			return $lists;
 		}
 
 		return true;
@@ -315,51 +315,51 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	/**
 	 * Confirm the subscription of the mailing lists.
 	 *
-	 * @param array $arrToken
+	 * @param array $tokens
 	 *
 	 * @throws AvisotaSubscriptionException
 	 */
-	public function confirmSubscription(array $arrToken)
+	public function confirmSubscription(array $tokens)
 	{
 		if (!$this->id) {
 			throw new AvisotaSubscriptionException($this, 'This recipient has no ID!');
 		}
 
-		$arrLists = array_filter(array_map('trim', $arrToken));
-		if (!count($arrLists)) {
+		$lists = array_filter(array_map('trim', $tokens));
+		if (!count($lists)) {
 			return false;
 		}
 
-		$arrWhere = array();
-		$arrArgs  = array($this->id, '');
-		foreach ($arrToken as $strToken) {
-			$arrWhere[] = '?';
-			$arrArgs[]  = $strToken;
+		$whereParts = array();
+		$args  = array($this->id, '');
+		foreach ($tokens as $token) {
+			$whereParts[] = '?';
+			$args[]  = $token;
 		}
 
-		$objList = $this->Database
+		$list = $this->Database
 			->prepare(
 			"SELECT l.* FROM tl_avisota_recipient_to_mailing_list t
 					   INNER JOIN tl_avisota_mailing_list l
 					   ON l.id=t.list
-					   WHERE t.recipient=? AND t.confirmed=? AND t.token IN (" . implode(',', $arrWhere) . ")
+					   WHERE t.recipient=? AND t.confirmed=? AND t.token IN (" . implode(',', $whereParts) . ")
 					   ORDER BY l.title"
 		)
-			->execute($arrArgs);
+			->execute($args);
 
-		$arrLists = array();
-		while ($objList->next()) {
-			$arrLists[$objList->id] = $objList->row();
+		$lists = array();
+		while ($list->next()) {
+			$lists[$list->id] = $list->row();
 
 			$this->log(
-				'Recipient ' . $this->email . ' confirmed subscription to mailing list "' . $objList->title . '" [' . $objList->id . ']',
+				'Recipient ' . $this->email . ' confirmed subscription to mailing list "' . $list->title . '" [' . $list->id . ']',
 				'AvisotaIntegratedRecipient::confirmSubscription',
 				TL_INFO
 			);
 
 			$this->Database
 				->prepare("UPDATE tl_avisota_recipient_to_mailing_list SET confirmed=? WHERE recipient=? AND list=?")
-				->execute(1, $this->id, $objList->id);
+				->execute(1, $this->id, $list->id);
 		}
 
 		// HOOK: add custom logic
@@ -368,97 +368,97 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		) {
 			foreach ($GLOBALS['TL_HOOKS']['avisotaIntegratedRecipientConfirmSubscription'] as $callback) {
 				$this->import($callback[0]);
-				$this->$callback[0]->$callback[1]($this, $arrLists);
+				$this->$callback[0]->$callback[1]($this, $lists);
 			}
 		}
 
-		return $arrLists;
+		return $lists;
 	}
 
 	/**
 	 * Remove the subscription to the mailing lists.
 	 *
-	 * @param array $arrLists
-	 * @param bool  $blnDoNotBlacklist
+	 * @param array $listIds
+	 * @param bool  $doNotBlacklist
 	 *
 	 * @throws AvisotaSubscriptionException
 	 */
-	public function unsubscribe(array $arrLists, $blnDoNotBlacklist = false)
+	public function unsubscribe(array $listIds, $doNotBlacklist = false)
 	{
 		if (!$this->id) {
 			throw new AvisotaSubscriptionException($this, 'This recipient has no ID!');
 		}
 
-		$arrLists = array_filter(array_map('intval', $arrLists));
-		if (!count($arrLists)) {
+		$listIds = array_filter(array_map('intval', $listIds));
+		if (!count($listIds)) {
 			return false;
 		}
 
 		$this->loadLanguageFile('avisota_subscription');
 
-		$objList = $this->Database
+		$list = $this->Database
 			->prepare(
 			"SELECT l.* FROM tl_avisota_recipient_to_mailing_list t
 					   INNER JOIN tl_avisota_mailing_list l
 					   ON l.id=t.list
-					   WHERE t.recipient=? AND t.list IN (" . implode(',', $arrLists) . ")
+					   WHERE t.recipient=? AND t.list IN (" . implode(',', $listIds) . ")
 					   ORDER BY l.title"
 		)
 			->execute($this->id);
 
-		$arrListsByPage = array();
-		while ($objList->next()) {
-			$arrListsByPage[$objList->integratedRecipientManageSubscriptionPage][$objList->id] = $objList->row();
+		$listsByPage = array();
+		while ($list->next()) {
+			$listsByPage[$list->integratedRecipientManageSubscriptionPage][$list->id] = $list->row();
 		}
 
-		foreach ($arrListsByPage as $intPage => $arrLists) {
-			$objPage = $this->getPageDetails($intPage);
+		foreach ($listsByPage as $pageId => $lists) {
+			$page = $this->getPageDetails($pageId);
 
-			$arrTitle = array();
-			foreach ($arrLists as $arrList) {
-				$arrTitle[] = $arrList['title'];
+			$title = array();
+			foreach ($lists as $listData) {
+				$title[] = $listData['title'];
 			}
-			$strUrl = $this->generateFrontendUrl($objPage->row());
+			$url = $this->generateFrontendUrl($page->row());
 
-			$objPlain          = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_unsubscribe_mail_plain']);
-			$objPlain->content = sprintf(
+			$plainTemplate          = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_unsubscribe_mail_plain']);
+			$plainTemplate->content = sprintf(
 				$GLOBALS['TL_LANG']['avisota_subscription']['unsubscribe']['plain'],
-				implode(', ', $arrTitle),
-				$strUrl
+				implode(', ', $title),
+				$url
 			);
 
-			$objHtml          = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_unsubscribe_mail_html']);
-			$objHtml->title   = $GLOBALS['TL_LANG']['avisota']['unsubscribe']['subject'];
-			$objHtml->content = sprintf(
+			$htmlTemplate          = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_unsubscribe_mail_html']);
+			$htmlTemplate->title   = $GLOBALS['TL_LANG']['avisota']['unsubscribe']['subject'];
+			$htmlTemplate->content = sprintf(
 				$GLOBALS['TL_LANG']['avisota_subscription']['unsubscribe']['html'],
-				implode(', ', $arrTitle),
-				$strUrl
+				implode(', ', $title),
+				$url
 			);
 
-			$objEmail = new Mail();
+			$email = new Mail();
 
-			$objEmail->setSubject($GLOBALS['TL_LANG']['avisota_subscription']['unsubscribe']['subject']);
-			$objEmail->setText($objPlain->parse());
-			$objEmail->setHtml($objHtml->parse());
+			$email->setSubject($GLOBALS['TL_LANG']['avisota_subscription']['unsubscribe']['subject']);
+			$email->setText($plainTemplate->parse());
+			$email->setHtml($htmlTemplate->parse());
 
-			$objTransport = AvisotaTransport::getTransportModule();
-			$objTransport->transportEmail($this->email, $objEmail);
+			$transport = AvisotaTransport::getTransportModule();
+			$transport->transportEmail($this->email, $email);
 
-			foreach ($arrLists as $arrList) {
+			foreach ($lists as $listData) {
 				$this->log(
-					'Recipient ' . $this->email . ' was unsubscribed from mailing list "' . $arrList['title'] . '" [' . $arrList['id'] . ']',
+					'Recipient ' . $this->email . ' was unsubscribed from mailing list "' . $listData['title'] . '" [' . $listData['id'] . ']',
 					'AvisotaIntegratedRecipient::unsubscribe',
 					TL_INFO
 				);
 
 				$this->Database
 					->prepare("DELETE FROM tl_avisota_recipient_to_mailing_list WHERE recipient=? AND list=?")
-					->execute($this->id, $arrList['id']);
+					->execute($this->id, $listData['id']);
 			}
 		}
 
 		// delete recipient
-		$objList = $this->Database
+		$list = $this->Database
 			->prepare(
 			"SELECT COUNT(t.list) AS c FROM tl_avisota_recipient_to_mailing_list t
 					   WHERE t.recipient=?"
@@ -471,37 +471,37 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		) {
 			foreach ($GLOBALS['TL_HOOKS']['avisotaIntegratedRecipientUnsubscribe'] as $callback) {
 				$this->import($callback[0]);
-				$this->$callback[0]->$callback[1]($this, $arrListsByPage, $objList->c == 0);
+				$this->$callback[0]->$callback[1]($this, $listsByPage, $list->c == 0);
 			}
 		}
 
-		if ($objList->c == 0) {
+		if ($list->c == 0) {
 			$this->Database
 				->prepare("DELETE FROM tl_avisota_recipient WHERE id=?")
 				->execute($this->id);
 		}
 
-		return $arrListsByPage;
+		return $listsByPage;
 	}
 
 	/**
 	 * Send the subscription confirmation mail to the given mailing lists
 	 * or all unconfirmed mailing lists, the recipient has subscribed.
 	 *
-	 * @param array|null $arrLists
-	 * @param bool       $blnResend
+	 * @param array|null $listIds
+	 * @param bool       $resend
 	 *
 	 * @throws AvisotaSubscriptionException
 	 */
-	public function sendSubscriptionConfirmation(array $arrLists = null, $blnResend = false)
+	public function sendSubscriptionConfirmation(array $listIds = null, $resend = false)
 	{
 		if (!$this->id) {
 			throw new AvisotaSubscriptionException($this, 'This recipient has no ID!');
 		}
 
-		if ($arrLists !== null) {
-			$arrLists = array_filter(array_map('intval', $arrLists));
-			if (!count($arrLists)) {
+		if ($listIds !== null) {
+			$listIds = array_filter(array_map('intval', $listIds));
+			if (!count($listIds)) {
 				return false;
 			}
 		}
@@ -510,76 +510,77 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 		$time = time();
 
-		$objList = $this->Database
+		$list = $this->Database
 			->prepare(
 			"SELECT l.* FROM tl_avisota_recipient_to_mailing_list t
 					   INNER JOIN tl_avisota_mailing_list l
 					   ON l.id=t.list
-					   WHERE t.recipient=? AND t.confirmed=?" . ($blnResend ? " AND t.confirmationSent=0" : '')
-				. ($arrLists !== null ? " AND t.list IN (" . implode(',', $arrLists) . ")" : '')
+					   WHERE t.recipient=? AND t.confirmed=?" . ($resend ? " AND t.confirmationSent=0" : '')
+				. ($listIds !== null ? " AND t.list IN (" . implode(',', $listIds) . ")" : '')
 				. "ORDER BY l.title"
 		)
 			->execute($this->id, '');
 
-		$arrListsByPage = array();
-		while ($objList->next()) {
-			$arrList = $objList->row();
+		$listsByPage = array();
+		while ($list->next()) {
+			$listData = $list->row();
 
 			// generate a token
-			if (empty($arrList['token'])) {
-				$arrList['token'] = substr(
-					md5(mt_rand() . '-' . $this->id . '-' . $objList->id . '-' . $this->email . '-' . time()),
+			if (empty($listData['token'])) {
+				$listData['token'] = substr(
+					md5(mt_rand() . '-' . $this->id . '-' . $list->id . '-' . $this->email . '-' . time()),
 					0,
 					8
 				);
 			}
 
 			// set send time
-			$arrList['confirmationSent'] = $time;
+			$listData['confirmationSent'] = $time;
 
-			$intPage                                = $objList->integratedRecipientManageSubscriptionPage
-				? $objList->integratedRecipientManageSubscriptionPage : $GLOBALS['objPage']->id;
-			$arrListsByPage[$intPage][$objList->id] = $arrList;
+			$pageId                                = $list->integratedRecipientManageSubscriptionPage
+				? $list->integratedRecipientManageSubscriptionPage : $GLOBALS['objPage']->id;
+
+			$listsByPage[$pageId][$list->id] = $listData;
 		}
 
-		foreach ($arrListsByPage as $intPage => $arrLists) {
-			$objPage = $this->getPageDetails($intPage);
+		foreach ($listsByPage as $pageId => $lists) {
+			$page = $this->getPageDetails($pageId);
 
-			$arrTitle = array();
-			$arrToken = array();
-			foreach ($arrLists as $arrList) {
-				$arrTitle[] = $arrList['title'];
-				$arrToken[] = $arrList['token'];
+			$titles = array();
+			$tokens = array();
+			foreach ($lists as $listData) {
+				$titles[] = $listData['title'];
+				$tokens[] = $listData['token'];
 			}
-			$strUrl = $this->generateFrontendUrl($objPage->row()) . '?subscribetoken=' . implode(',', $arrToken);
+			$url = $this->generateFrontendUrl($page->row()) . '?subscribetoken=' . implode(',', $tokens);
 
-			$objPlain          = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_subscribe_mail_plain']);
-			$objPlain->content = sprintf(
+			$plainTemplate          = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_subscribe_mail_plain']);
+			$plainTemplate->content = sprintf(
 				$GLOBALS['TL_LANG']['avisota_subscription']['subscribe']['plain'],
-				implode(', ', $arrTitle),
-				$strUrl
+				implode(', ', $titles),
+				$url
 			);
 
-			$objHtml          = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_subscribe_mail_html']);
-			$objHtml->title   = $GLOBALS['TL_LANG']['avisota']['subscribe']['subject'];
-			$objHtml->content = sprintf(
+			$htmlTemplate          = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_subscribe_mail_html']);
+			$htmlTemplate->title   = $GLOBALS['TL_LANG']['avisota']['subscribe']['subject'];
+			$htmlTemplate->content = sprintf(
 				$GLOBALS['TL_LANG']['avisota_subscription']['subscribe']['html'],
-				implode(', ', $arrTitle),
-				$strUrl
+				implode(', ', $titles),
+				$url
 			);
 
-			$objEmail = new Mail();
+			$email = new Mail();
 
-			$objEmail->setSubject($GLOBALS['TL_LANG']['avisota_subscription']['subscribe']['subject']);
-			$objEmail->setText($objPlain->parse());
-			$objEmail->setHtml($objHtml->parse());
+			$email->setSubject($GLOBALS['TL_LANG']['avisota_subscription']['subscribe']['subject']);
+			$email->setText($plainTemplate->parse());
+			$email->setHtml($htmlTemplate->parse());
 
-			$objTransport = AvisotaTransport::getTransportModule();
-			$objTransport->transportEmail($this->email, $objEmail);
+			$transport = AvisotaTransport::getTransportModule();
+			$transport->transportEmail($this->email, $email);
 
-			foreach ($arrLists as $arrList) {
+			foreach ($lists as $listData) {
 				$this->log(
-					'Send subscription confirmation for recipient ' . $this->email . ' in mailing list "' . $arrList['title'] . '" [' . $arrList['id'] . ']',
+					'Send subscription confirmation for recipient ' . $this->email . ' in mailing list "' . $listData['title'] . '" [' . $listData['id'] . ']',
 					'AvisotaIntegratedRecipient::sendSubscriptionConfirmation',
 					TL_INFO
 				);
@@ -588,7 +589,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 					->prepare(
 					"UPDATE tl_avisota_recipient_to_mailing_list SET confirmationSent=?, token=? WHERE recipient=? AND list=?"
 				)
-					->execute($arrList['confirmationSent'], $arrList['token'], $this->id, $arrList['id']);
+					->execute($listData['confirmationSent'], $listData['token'], $this->id, $listData['id']);
 			}
 		}
 
@@ -598,22 +599,22 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		) {
 			foreach ($GLOBALS['TL_HOOKS']['avisotaIntegratedRecipientSendSubscriptionConfirmation'] as $callback) {
 				$this->import($callback[0]);
-				$this->$callback[0]->$callback[1]($this, $arrListsByPage);
+				$this->$callback[0]->$callback[1]($this, $listsByPage);
 			}
 		}
 
-		return $arrListsByPage;
+		return $listsByPage;
 	}
 
 	/**
 	 * Send a reminder to the given mailing lists
 	 * or all unconfirmed, not reminded mailing lists, the recipient has subscribed.
 	 *
-	 * @param array|null $arrLists
+	 * @param array|null $listIds
 	 *
 	 * @throws AvisotaSubscriptionException
 	 */
-	public function sendRemind(array $arrLists = null, $blnForce = false)
+	public function sendRemind(array $listIds = null, $force = false)
 	{
 		if (!$GLOBALS['TL_CONFIG']['avisota_send_notification']) {
 			return false;
@@ -623,9 +624,9 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			throw new AvisotaSubscriptionException($this, 'This recipient has no ID!');
 		}
 
-		if ($arrLists !== null) {
-			$arrLists = array_filter(array_map('intval', $arrLists));
-			if (!count($arrLists)) {
+		if ($listIds !== null) {
+			$listIds = array_filter(array_map('intval', $listIds));
+			if (!count($listIds)) {
 				return false;
 			}
 		}
@@ -636,13 +637,13 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 		$reminderTime = $GLOBALS['TL_CONFIG']['avisota_notification_time'] * 24 * 60 * 60;
 
-		$objList = $this->Database
+		$list = $this->Database
 			->prepare(
 			"SELECT l.* FROM tl_avisota_recipient_to_mailing_list t
 					   INNER JOIN tl_avisota_mailing_list l
 					   ON l.id=t.list
 					   WHERE t.recipient=? AND t.confirmed=?" .
-				($blnForce
+				($force
 					? ''
 					: "AND t.confirmationSent>0
 					     AND (
@@ -650,7 +651,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 					       OR
 					         (t.reminderSent>0 AND UNIT_TIMESTAMP()-t.reminderSent>(?+(?*t.reminderCount/2) AND t.reminderCount<?)
 					     )") .
-				($arrLists !== null ? " AND t.list IN (" . implode(',', $arrLists) . ")" : '') .
+				($listIds !== null ? " AND t.list IN (" . implode(',', $listIds) . ")" : '') .
 				"ORDER BY l.title"
 		)
 			->execute(
@@ -662,65 +663,65 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			$GLOBALS['TL_CONFIG']['avisota_notification_count']
 		);
 
-		$arrListsByPage = array();
-		while ($objList->next()) {
-			$arrList = $objList->row();
+		$listsByPage = array();
+		while ($list->next()) {
+			$listData = $list->row();
 
 			// generate a token
-			if (empty($arrList['token'])) {
-				$arrList['token'] = substr(
-					md5(mt_rand() . '-' . $this->id . '-' . $objList->id . '-' . $this->email . '-' . time()),
+			if (empty($listData['token'])) {
+				$listData['token'] = substr(
+					md5(mt_rand() . '-' . $this->id . '-' . $list->id . '-' . $this->email . '-' . time()),
 					0,
 					8
 				);
 			}
 
 			// set send time
-			$arrList['reminderSent'] = $time;
+			$listData['reminderSent'] = $time;
 
-			$intPage                                = $objList->integratedRecipientManageSubscriptionPage
-				? $objList->integratedRecipientManageSubscriptionPage : $GLOBALS['objPage']->id;
-			$arrListsByPage[$intPage][$objList->id] = $arrList;
+			$pageId                                = $list->integratedRecipientManageSubscriptionPage
+				? $list->integratedRecipientManageSubscriptionPage : $GLOBALS['objPage']->id;
+			$listsByPage[$pageId][$list->id] = $listData;
 		}
 
-		foreach ($arrListsByPage as $intPage => $arrLists) {
-			$objPage = $this->getPageDetails($intPage);
+		foreach ($listsByPage as $pageId => $lists) {
+			$page = $this->getPageDetails($pageId);
 
-			$arrTitle = array();
-			$arrToken = array();
-			foreach ($arrLists as $arrList) {
-				$arrTitle[] = $arrList['title'];
-				$arrToken[] = $arrList['token'];
+			$titles = array();
+			$tokens = array();
+			foreach ($lists as $listData) {
+				$titles[] = $listData['title'];
+				$tokens[] = $listData['token'];
 			}
-			$strUrl = $this->generateFrontendUrl($objPage->row()) . '?subscribetoken=' . implode(',', $arrToken);
+			$url = $this->generateFrontendUrl($page->row()) . '?subscribetoken=' . implode(',', $tokens);
 
-			$objPlain          = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_notification_mail_plain']);
-			$objPlain->content = sprintf(
+			$plainTemplate          = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_notification_mail_plain']);
+			$plainTemplate->content = sprintf(
 				$GLOBALS['TL_LANG']['avisota_subscription']['notification']['plain'],
-				implode(', ', $arrTitle),
-				$strUrl
+				implode(', ', $titles),
+				$url
 			);
 
-			$objHtml          = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_notification_mail_html']);
-			$objHtml->title   = $GLOBALS['TL_LANG']['avisota']['subscribe']['subject'];
-			$objHtml->content = sprintf(
+			$htmlTemplate          = new AvisotaNewsletterTemplate($GLOBALS['TL_CONFIG']['avisota_template_notification_mail_html']);
+			$htmlTemplate->title   = $GLOBALS['TL_LANG']['avisota']['subscribe']['subject'];
+			$htmlTemplate->content = sprintf(
 				$GLOBALS['TL_LANG']['avisota_subscription']['notification']['html'],
-				implode(', ', $arrTitle),
-				$strUrl
+				implode(', ', $titles),
+				$url
 			);
 
-			$objEmail = new Mail();
+			$email = new Mail();
 
-			$objEmail->setSubject($GLOBALS['TL_LANG']['avisota_subscription']['notification']['subject']);
-			$objEmail->setText($objPlain->parse());
-			$objEmail->setHtml($objHtml->parse());
+			$email->setSubject($GLOBALS['TL_LANG']['avisota_subscription']['notification']['subject']);
+			$email->setText($plainTemplate->parse());
+			$email->setHtml($htmlTemplate->parse());
 
-			$objTransport = AvisotaTransport::getTransportModule();
-			$objTransport->transportEmail($this->email, $objEmail);
+			$transport = AvisotaTransport::getTransportModule();
+			$transport->transportEmail($this->email, $email);
 
-			foreach ($arrLists as $arrList) {
+			foreach ($lists as $listData) {
 				$this->log(
-					'Send subscription reminder for recipient ' . $this->email . ' in mailing list "' . $arrList['title'] . '"',
+					'Send subscription reminder for recipient ' . $this->email . ' in mailing list "' . $listData['title'] . '"',
 					'AvisotaIntegratedRecipient::sendRemind',
 					TL_INFO
 				);
@@ -729,7 +730,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 					->prepare(
 					"UPDATE tl_avisota_recipient_to_mailing_list SET reminderSent=?, reminderCount=reminderCount+1, token=? WHERE recipient=? AND list=?"
 				)
-					->execute($arrList['reminderSent'], $arrList['token'], $this->id, $arrList['id']);
+					->execute($listData['reminderSent'], $listData['token'], $this->id, $listData['id']);
 			}
 		}
 
@@ -739,10 +740,10 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		) {
 			foreach ($GLOBALS['TL_HOOKS']['avisotaIntegratedRecipientSendSubscriptionReminder'] as $callback) {
 				$this->import($callback[0]);
-				$this->$callback[0]->$callback[1]($this, $arrListsByPage);
+				$this->$callback[0]->$callback[1]($this, $listsByPage);
 			}
 		}
 
-		return $arrListsByPage;
+		return $listsByPage;
 	}
 }

@@ -126,77 +126,77 @@ class tl_avisota_newsletter_create_from_draft extends Backend
 	 */
 	public function onsubmit_callback(DataContainer $dc)
 	{
-		$intCategory = $dc->getData('category');
-		$strSubject  = $dc->getData('subject');
-		$intDraft    = $dc->getData('draft');
+		$categoryId = $dc->getData('category');
+		$subject  = $dc->getData('subject');
+		$draftId    = $dc->getData('draft');
 
-		$objNewsletterDraft = $this->Database
+		$newsletterDraft = $this->Database
 			->prepare("SELECT * FROM tl_avisota_newsletter_draft WHERE id=?")
-			->execute($intDraft);
-		if ($objNewsletterDraft->next()) {
-			$arrRow = $objNewsletterDraft->row();
+			->execute($draftId);
+		if ($newsletterDraft->next()) {
+			$newsletterDraftData = $newsletterDraft->row();
 			// remove unwanted fields
-			unset($arrRow['id'], $arrRow['tstamp'], $arrRow['title'], $arrRow['description'], $arrRow['alias']);
+			unset($newsletterDraftData['id'], $newsletterDraftData['tstamp'], $newsletterDraftData['title'], $newsletterDraftData['description'], $newsletterDraftData['alias']);
 			// set pid
-			$arrRow['pid'] = $intCategory;
+			$newsletterDraftData['pid'] = $categoryId;
 			// set subject
-			$arrRow['subject'] = $strSubject;
+			$newsletterDraftData['subject'] = $subject;
 
 			// call hook
 			// TODO AvisotaHelper::callHook('prepareNewsletterCreateFromDraft', array(&$arrRow));
 
-			$strValue = '';
-			for ($i = 0; $i < count($arrRow); $i++) {
+			$value = '';
+			for ($i = 0; $i < count($newsletterDraftData); $i++) {
 				if ($i > 0) {
-					$strValue .= ',';
+					$value .= ',';
 				}
-				$strValue .= '?';
+				$value .= '?';
 			}
 
-			$objNewsletter = $this->Database
+			$newsletter = $this->Database
 				->prepare(
-				"INSERT INTO tl_avisota_newsletter (" . implode(",", array_keys($arrRow)) . ") VALUES ($strValue)"
+				"INSERT INTO tl_avisota_newsletter (" . implode(",", array_keys($newsletterDraftData)) . ") VALUES ($value)"
 			)
-				->execute($arrRow);
-			$intId         = $objNewsletter->insertId;
+				->execute($newsletterDraftData);
+			$newsletterId         = $newsletter->insertId;
 
-			$objContent = $this->Database
+			$content = $this->Database
 				->prepare("SELECT * FROM tl_avisota_newsletter_draft_content WHERE pid=?")
-				->execute($intDraft);
+				->execute($draftId);
 
-			while ($objContent->next()) {
-				$arrRow = $objContent->row();
+			while ($content->next()) {
+				$newsletterDraftData = $content->row();
 				// remove unwanted fields
-				unset($arrRow['id'], $arrRow['tstamp']);
+				unset($newsletterDraftData['id'], $newsletterDraftData['tstamp']);
 				// set pid
-				$arrRow['pid'] = $intId;
+				$newsletterDraftData['pid'] = $newsletterId;
 
 				// call hook
 				// TODO AvisotaHelper::callHook('prepareNewsletterContentCreateFromDraft', array(&$arrRow));
 
 				// prevent pid changing
-				$arrRow['pid'] = $intId;
+				$newsletterDraftData['pid'] = $newsletterId;
 
-				$strValue = '';
-				for ($i = 0; $i < count($arrRow); $i++) {
+				$value = '';
+				for ($i = 0; $i < count($newsletterDraftData); $i++) {
 					if ($i > 0) {
-						$strValue .= ',';
+						$value .= ',';
 					}
-					$strValue .= '?';
+					$value .= '?';
 				}
 
-				$objNewsletter = $this->Database
+				$newsletter = $this->Database
 					->prepare(
 					"INSERT INTO tl_avisota_newsletter_content (" . implode(
 						",",
-						array_keys($arrRow)
-					) . ") VALUES ($strValue)"
+						array_keys($newsletterDraftData)
+					) . ") VALUES ($value)"
 				)
-					->execute($arrRow);
+					->execute($newsletterDraftData);
 			}
 
 			$_SESSION['TL_INFO'][] = $GLOBALS['TL_LANG']['tl_avisota_newsletter_create_from_draft']['created'];
-			$this->redirect('contao/main.php?do=avisota_newsletter&table=tl_avisota_newsletter_content&id=' . $intId);
+			$this->redirect('contao/main.php?do=avisota_newsletter&table=tl_avisota_newsletter_content&id=' . $newsletterId);
 		}
 	}
 }

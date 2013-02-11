@@ -4,8 +4,8 @@
 	echo $this->list;
 
 	if ($this->total > $this->limit):
-		$objPagination = new Pagination($this->count, $intLimit);
-		echo $objPagination->generate();
+		$pagination = new Pagination($this->count, $this->limit);
+		echo $pagination->generate();
 	endif;
 	?>
 </section>

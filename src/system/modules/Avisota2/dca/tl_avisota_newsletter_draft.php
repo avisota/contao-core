@@ -218,30 +218,30 @@ class tl_avisota_newsletter_draft extends Backend
 	 *
 	 * @return string
 	 */
-	public function generateAlias($varValue, DataContainer $dc)
+	public function generateAlias($value, DataContainer $dc)
 	{
 		$autoAlias = false;
 
 		// Generate alias if there is none
-		if (!strlen($varValue)) {
+		if (!strlen($value)) {
 			$autoAlias = true;
-			$varValue  = standardize($dc->activeRecord->title);
+			$value  = standardize($dc->activeRecord->title);
 		}
 
-		$objAlias = $this->Database
+		$aliasResultSet = $this->Database
 			->prepare("SELECT id FROM tl_avisota_newsletter_draft WHERE alias=?")
-			->execute($varValue);
+			->execute($value);
 
 		// Check whether the news alias exists
-		if ($objAlias->numRows > 1 && !$autoAlias) {
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $varValue));
+		if ($aliasResultSet->numRows > 1 && !$autoAlias) {
+			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $value));
 		}
 
 		// Add ID to alias
-		if ($objAlias->numRows && $autoAlias) {
-			$varValue .= '-' . $dc->id;
+		if ($aliasResultSet->numRows && $autoAlias) {
+			$value .= '-' . $dc->id;
 		}
 
-		return $varValue;
+		return $value;
 	}
 }

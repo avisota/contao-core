@@ -60,9 +60,9 @@ class ModuleAvisotaReader extends Module
 	/**
 	 * Construct the content element
 	 */
-	public function __construct(Database_Result $objModule)
+	public function __construct(Database_Result $module)
 	{
-		parent::__construct($objModule);
+		parent::__construct($module);
 		$this->import('DomainLink');
 		$this->import('FrontendUser', 'User');
 		$this->import('AvisotaNewsletterContent');
@@ -76,9 +76,9 @@ class ModuleAvisotaReader extends Module
 	public function generate()
 	{
 		if (TL_MODE == 'BE') {
-			$objTemplate = new BackendTemplate('be_wildcard');
-			$objTemplate->wildcard = '### Avisota Newsletter Reader ###';
-			return $objTemplate->parse();
+			$template = new BackendTemplate('be_wildcard');
+			$template->wildcard = '### Avisota Newsletter Reader ###';
+			return $template->parse();
 		}
 
 		$this->avisota_categories = array_filter(
@@ -100,28 +100,28 @@ class ModuleAvisotaReader extends Module
 	 */
 	public function compile()
 	{
-		$varId = $this->Input->get('items');
+		$id = $this->Input->get('items');
 
-		$objNewsletter = $this->Database
+		$newsletter = $this->Database
 			->prepare(
 			"SELECT * FROM tl_avisota_newsletter WHERE (id=? OR alias=?) AND pid IN (" . implode(
 				',',
 				$this->avisota_categories
 			) . ")"
 		)
-			->execute($varId, $varId);
+			->execute($id, $id);
 
-		if ($objNewsletter->next()) {
-			$objCategory = $this->Database
+		if ($newsletter->next()) {
+			$category = $this->Database
 				->prepare("SELECT * FROM tl_avisota_newsletter_category WHERE id=?")
-				->execute($objNewsletter->pid);
-			if ($objCategory->next()) {
-				$objNewsletter->template_html = $this->avisota_reader_template;
+				->execute($newsletter->pid);
+			if ($category->next()) {
+				$newsletter->template_html = $this->avisota_reader_template;
 
-				$this->Template->newsletter = $objNewsletter->row();
+				$this->Template->newsletter = $newsletter->row();
 				$this->Template->html       = $this->AvisotaNewsletterContent->generateHtml(
-					$objNewsletter,
-					$objCategory,
+					$newsletter,
+					$category,
 					false
 				);
 			}

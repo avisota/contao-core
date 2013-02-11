@@ -47,7 +47,7 @@ define('NL_PLAIN', 'plain');
 /**
  * Update check
  */
-$blnAvisotaUpdate = AvisotaUpdate::getInstance()
+$avisotaUpdateRequired = AvisotaUpdate::getInstance()
 	->hasUpdates();
 
 
@@ -70,10 +70,6 @@ $GLOBALS['TL_CONFIG']['avisota_max_send_timeout']       = 1;
 $GLOBALS['TL_CONFIG']['avisota_notification_time']      = 3;
 $GLOBALS['TL_CONFIG']['avisota_notification_count']     = 3;
 $GLOBALS['TL_CONFIG']['avisota_cleanup_time']           = 14;
-$GLOBALS['TL_CONFIG']['avisota_chart']                  = 'jqplot';
-$GLOBALS['TL_CONFIG']['avisota_statistic']              = isset($GLOBALS['TL_CONFIG']['avisota_statistic'])
-	? $GLOBALS['TL_CONFIG']['avisota_statistic'] : true;
-$GLOBALS['TL_CONFIG']['avisota_statistic_personalized'] = 'with_aggrement';
 
 
 /**
@@ -160,16 +156,16 @@ $GLOBALS['BE_FFL']['columnAssignmentWizard'] = 'ColumnAssignmentWizard';
 /**
  * Build custom back end modules
  */
-$arrCustomModules = array();
-$objUser          = BackendUser::getInstance();
-$objDatabase      = Database::getInstance();
-if ($objDatabase->fieldExists('showInMenu', 'tl_avisota_newsletter_category')) {
-	$objCategory = $objDatabase->query(
+$customModules = array();
+$backendUser          = BackendUser::getInstance();
+$database      = Database::getInstance();
+if ($database->fieldExists('showInMenu', 'tl_avisota_newsletter_category')) {
+	$category = $database->query(
 		'SELECT * FROM tl_avisota_newsletter_category WHERE showInMenu=\'1\' ORDER BY title'
 	);
-	while ($objCategory->next()) {
-		$arrCustomModules['avisota_newsletter_' . $objCategory->id]          = array(
-			'href'       => 'table=tl_avisota_newsletter&amp;id=' . $objCategory->id,
+	while ($category->next()) {
+		$customModules['avisota_newsletter_' . $category->id]          = array(
+			'href'       => 'table=tl_avisota_newsletter&amp;id=' . $category->id,
 			'tables'     => array(
 				'tl_avisota_newsletter_category',
 				'tl_avisota_newsletter',
@@ -177,11 +173,11 @@ if ($objDatabase->fieldExists('showInMenu', 'tl_avisota_newsletter_category')) {
 				'tl_avisota_newsletter_create_from_draft'
 			),
 			'send'       => array('Avisota', 'send'),
-			'icon'       => $objCategory->menuIcon ? $objCategory->menuIcon
+			'icon'       => $category->menuIcon ? $category->menuIcon
 				: 'system/modules/Avisota2/html/newsletter.png',
 			'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 		);
-		$GLOBALS['TL_LANG']['MOD']['avisota_newsletter_' . $objCategory->id] = array($objCategory->title, '');
+		$GLOBALS['TL_LANG']['MOD']['avisota_newsletter_' . $category->id] = array($category->title, '');
 	}
 }
 
@@ -196,13 +192,6 @@ $GLOBALS['BE_MOD'] = array_merge(
 		'avisota' => array_merge
 		(
 			array(
-				'avisota_tracking' => array
-				(
-					'callback'   => 'AvisotaTracking',
-					'tables'     => array('tl_avisota_tracking_export'),
-					'icon'       => 'system/modules/Avisota2/html/tracking.png',
-					'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
-				),
 				'avisota_outbox'   => array
 				(
 					'callback'   => 'AvisotaBackendOutbox',
@@ -210,7 +199,7 @@ $GLOBALS['BE_MOD'] = array_merge(
 					'stylesheet' => 'system/modules/Avisota2/html/stylesheet.css'
 				)
 			),
-			$arrCustomModules,
+			$customModules,
 			array(
 				'avisota_newsletter' => array
 				(
@@ -243,10 +232,6 @@ $GLOBALS['BE_MOD'] = array_merge(
 	),
 	array_slice($GLOBALS['BE_MOD'], $i)
 );
-
-if (!$GLOBALS['TL_CONFIG']['avisota_statistic']) {
-	unset($GLOBALS['BE_MOD']['avisota']['avisota_tracking']);
-}
 
 $i                 = array_search('system', array_keys($GLOBALS['BE_MOD'])) + 1;
 $GLOBALS['BE_MOD'] = array_merge(
@@ -470,18 +455,18 @@ if (version_compare(
 	'<'
 )
 ) {
-	$objEnvironment = Environment::getInstance();
+	$environment = Environment::getInstance();
 	if ( // The update controller itself
-		strpos($objEnvironment->requestUri, 'system/modules/Avisota2/AvisotaCompatibilityController.php') === false
+		strpos($environment->requestUri, 'system/modules/Avisota2/AvisotaCompatibilityController.php') === false
 		// Backend login
-		&& strpos($objEnvironment->requestUri, 'contao/index.php') === false
+		&& strpos($environment->requestUri, 'contao/index.php') === false
 		// Extension manager
-		&& strpos($objEnvironment->requestUri, 'contao/main.php?do=repository_manager') === false
+		&& strpos($environment->requestUri, 'contao/main.php?do=repository_manager') === false
 		// Install Tool
-		&& strpos($objEnvironment->requestUri, 'contao/install.php') === false
+		&& strpos($environment->requestUri, 'contao/install.php') === false
 	) {
 		header(
-			'Location: ' . $objEnvironment->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/system/modules/Avisota2/AvisotaCompatibilityController.php'
+			'Location: ' . $environment->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/system/modules/Avisota2/AvisotaCompatibilityController.php'
 		);
 		exit;
 	}

@@ -50,14 +50,14 @@ class NewsletterGallery extends NewsletterElement
 	 *
 	 * @var string
 	 */
-	protected $strTemplateHTML = 'nle_gallery_html';
+	protected $templateHTML = 'nle_gallery_html';
 
 	/**
 	 * Plain text Template
 	 *
 	 * @var string
 	 */
-	protected $strTemplatePlain = 'nle_gallery_plain';
+	protected $templatePlain = 'nle_gallery_plain';
 
 
 	/**
@@ -103,65 +103,65 @@ class NewsletterGallery extends NewsletterElement
 		$auxDate = array();
 
 		// Get all images
-		foreach ($this->multiSRC as $file) {
-			if (isset($images[$file]) || !file_exists(TL_ROOT . '/' . $file)) {
+		foreach ($this->multiSRC as $pathname) {
+			if (isset($images[$pathname]) || !file_exists(TL_ROOT . '/' . $pathname)) {
 				continue;
 			}
 
 			// Single files
-			if (is_file(TL_ROOT . '/' . $file)) {
-				$objFile = new File($file);
-				$this->parseMetaFile(dirname($file), true);
-				$arrMeta = $this->arrMeta[$objFile->basename];
+			if (is_file(TL_ROOT . '/' . $pathname)) {
+				$file = new File($pathname);
+				$this->parseMetaFile(dirname($pathname), true);
+				$metaData = $this->arrMeta[$file->basename];
 
-				if ($arrMeta[0] == '') {
-					$arrMeta[0] = str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $objFile->filename));
+				if ($metaData[0] == '') {
+					$metaData[0] = str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $file->filename));
 				}
 
-				if ($objFile->isGdImage) {
-					$images[$file] = array
+				if ($file->isGdImage) {
+					$images[$pathname] = array
 					(
-						'name'      => $objFile->basename,
-						'singleSRC' => $file,
-						'alt'       => $arrMeta[0],
-						'imageUrl'  => $arrMeta[1],
-						'caption'   => $arrMeta[2]
+						'name'      => $file->basename,
+						'singleSRC' => $pathname,
+						'alt'       => $metaData[0],
+						'imageUrl'  => $metaData[1],
+						'caption'   => $metaData[2]
 					);
 
-					$auxDate[] = $objFile->mtime;
+					$auxDate[] = $file->mtime;
 				}
 
 				continue;
 			}
 
-			$subfiles = scan(TL_ROOT . '/' . $file);
-			$this->parseMetaFile($file);
+			$subfiles = scan(TL_ROOT . '/' . $pathname);
+			$this->parseMetaFile($pathname);
 
 			// Folders
 			foreach ($subfiles as $subfile) {
-				if (is_dir(TL_ROOT . '/' . $file . '/' . $subfile)) {
+				if (is_dir(TL_ROOT . '/' . $pathname . '/' . $subfile)) {
 					continue;
 				}
 
-				$objFile = new File($file . '/' . $subfile);
+				$file = new File($pathname . '/' . $subfile);
 
-				if ($objFile->isGdImage) {
-					$arrMeta = $this->arrMeta[$subfile];
+				if ($file->isGdImage) {
+					$metaData = $this->arrMeta[$subfile];
 
-					if ($arrMeta[0] == '') {
-						$arrMeta[0] = str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $objFile->filename));
+					if ($metaData[0] == '') {
+						$metaData[0] = str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $file->filename));
 					}
 
-					$images[$file . '/' . $subfile] = array
+					$images[$pathname . '/' . $subfile] = array
 					(
-						'name'      => $objFile->basename,
-						'singleSRC' => $file . '/' . $subfile,
-						'alt'       => $arrMeta[0],
-						'imageUrl'  => $arrMeta[1],
-						'caption'   => $arrMeta[2]
+						'name'      => $file->basename,
+						'singleSRC' => $pathname . '/' . $subfile,
+						'alt'       => $metaData[0],
+						'imageUrl'  => $metaData[1],
+						'caption'   => $metaData[2]
 					);
 
-					$auxDate[] = $objFile->mtime;
+					$auxDate[] = $file->mtime;
 				}
 			}
 		}
@@ -186,13 +186,12 @@ class NewsletterGallery extends NewsletterElement
 				break;
 
 			case 'meta':
-				$arrImages = array();
+				$images = array();
 				foreach ($this->arrAux as $k) {
 					if (strlen($k)) {
-						$arrImages[] = $images[$k];
+						$images[] = $images[$k];
 					}
 				}
-				$images = $arrImages;
 				break;
 
 			case 'random':
@@ -210,7 +209,7 @@ class NewsletterGallery extends NewsletterElement
 			$this->perRow = 1;
 		}
 		$colwidth    = floor(100 / $this->perRow);
-		$intMaxWidth = (TL_MODE == 'BE')
+		$maxImageWidth = (TL_MODE == 'BE')
 			? floor((640 / $this->perRow))
 			: floor(
 				($GLOBALS['TL_CONFIG']['maxImageWidth'] / $this->perRow)
@@ -243,13 +242,13 @@ class NewsletterGallery extends NewsletterElement
 					$class_td = ' col_last';
 				}
 
-				$objCell = new stdClass();
+				$cell = new stdClass();
 				$key     = 'row_' . $rowcount . $class_tr . $class_eo;
 
 				// Empty cell
 				if (!is_array($images[($i + $j)]) || ($j + $i) >= $limit) {
-					$objCell->class = 'col_' . $j . $class_td;
-					$body[$key][$j] = $objCell;
+					$cell->class = 'col_' . $j . $class_td;
+					$body[$key][$j] = $cell;
 
 					continue;
 				}
@@ -259,13 +258,13 @@ class NewsletterGallery extends NewsletterElement
 				$images[($i + $j)]['imagemargin'] = $this->imagemargin;
 				$images[($i + $j)]['fullsize']    = $this->fullsize;
 
-				$this->addImageToTemplate($objCell, $images[($i + $j)], $intMaxWidth);
+				$this->addImageToTemplate($cell, $images[($i + $j)], $maxImageWidth);
 
 				// Add column width and class
-				$objCell->colWidth = $colwidth . '%';
-				$objCell->class    = 'col_' . $j . $class_td;
+				$cell->colWidth = $colwidth . '%';
+				$cell->class    = 'col_' . $j . $class_td;
 
-				$body[$key][$j] = $objCell;
+				$body[$key][$j] = $cell;
 			}
 
 			++$rowcount;
@@ -273,28 +272,28 @@ class NewsletterGallery extends NewsletterElement
 
 		switch ($mode) {
 			case NL_HTML:
-				$strTemplate = 'nl_gallery_default_html';
+				$templateName = 'nl_gallery_default_html';
 
 				// Use a custom template
 				if (TL_MODE == 'NL' && $this->galleryHtmlTpl != '') {
-					$strTemplate = $this->galleryHtmlTpl;
+					$templateName = $this->galleryHtmlTpl;
 				}
 				break;
 
 			case NL_PLAIN:
-				$strTemplate = 'nl_gallery_default_plain';
+				$templateName = 'nl_gallery_default_plain';
 
 				// Use a custom template
 				if (TL_MODE == 'NL' && $this->galleryPlainTpl != '') {
-					$strTemplate = $this->galleryPlainTpl;
+					$templateName = $this->galleryPlainTpl;
 				}
 		}
 
-		$objTemplate = new AvisotaNewsletterTemplate($strTemplate);
+		$template = new AvisotaNewsletterTemplate($templateName);
 
-		$objTemplate->body     = $body;
-		$objTemplate->headline = $this->headline;
+		$template->body     = $body;
+		$template->headline = $this->headline;
 
-		$this->Template->images = $objTemplate->parse();
+		$this->Template->images = $template->parse();
 	}
 }

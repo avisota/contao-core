@@ -49,7 +49,7 @@ class tl_avisota_newsletter_draft_content extends tl_avisota_newsletter_content
 	/**
 	 * @var tl_avisota_newsletter_draft_content
 	 */
-	protected static $objInstance = null;
+	protected static $instance = null;
 
 	/**
 	 * @static
@@ -57,10 +57,10 @@ class tl_avisota_newsletter_draft_content extends tl_avisota_newsletter_content
 	 */
 	public static function getInstance()
 	{
-		if (self::$objInstance === null) {
-			self::$objInstance = new tl_avisota_newsletter_draft_content();
+		if (self::$instance === null) {
+			self::$instance = new tl_avisota_newsletter_draft_content();
 		}
-		return self::$objInstance;
+		return self::$instance;
 	}
 
 	/**
@@ -73,34 +73,34 @@ class tl_avisota_newsletter_draft_content extends tl_avisota_newsletter_content
 
 	public function getPalettes()
 	{
-		$arrPalette = array_slice(
+		$palette = array_slice(
 			$GLOBALS['TL_DCA']['tl_avisota_newsletter_content']['palettes'],
 			0
 		);
 
-		foreach ($arrPalette as $k => $v) {
-			if ($k != '__selector__' && $k != 'default') {
-				$arrPalette[$k] .= ';{draft_legend:hide},unmodifiable,undeletable';
+		foreach ($palette as $key => $value) {
+			if ($key != '__selector__' && $key != 'default') {
+				$palette[$key] .= ';{draft_legend:hide},unmodifiable,undeletable';
 			}
 		}
 
-		return $arrPalette;
+		return $palette;
 	}
 
 	public function getMetaPalettes()
 	{
-		$arrPalette = array_slice(
+		$palette = array_slice(
 			$GLOBALS['TL_DCA']['tl_avisota_newsletter_content']['metapalettes'],
 			0
 		);
 
-		foreach ($arrPalette as $k => $v) {
+		foreach ($palette as $k => $v) {
 			if ($k != '__selector__' && $k != 'default') {
-				$arrPalette[$k]['draft'] = array(':hide', 'unmodifiable', 'undeletable');
+				$palette[$k]['draft'] = array(':hide', 'unmodifiable', 'undeletable');
 			}
 		}
 
-		return $arrPalette;
+		return $palette;
 	}
 
 	public function getSubpalettes()
@@ -119,11 +119,11 @@ class tl_avisota_newsletter_draft_content extends tl_avisota_newsletter_content
 		);
 	}
 
-	public function getFields($arrFields)
+	public function getFields($fields)
 	{
 		return array_merge(
 			$GLOBALS['TL_DCA']['tl_avisota_newsletter_content']['fields'],
-			$arrFields
+			$fields
 		);
 	}
 

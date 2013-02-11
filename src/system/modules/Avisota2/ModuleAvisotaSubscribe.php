@@ -51,9 +51,9 @@ class ModuleAvisotaSubscribe extends ModuleAvisotaRecipientForm
 	 */
 	protected $strTemplate = 'mod_avisota_subscribe';
 
-	public function __construct(Database_Result $objModule)
+	public function __construct(Database_Result $module)
 	{
-		parent::__construct($objModule);
+		parent::__construct($module);
 
 		$this->loadLanguageFile('avisota_subscribe');
 	}
@@ -64,12 +64,12 @@ class ModuleAvisotaSubscribe extends ModuleAvisotaRecipientForm
 	public function generate()
 	{
 		if (TL_MODE == 'BE') {
-			$objTemplate           = new BackendTemplate('be_wildcard');
-			$objTemplate->wildcard = '### Avisota subscribe module ###';
-			return $objTemplate->parse();
+			$template           = new BackendTemplate('be_wildcard');
+			$template->wildcard = '### Avisota subscribe module ###';
+			return $template->parse();
 		}
 
-		$this->strFormTemplate = $this->avisota_template_subscribe;
+		$this->formTemplate = $this->avisota_template_subscribe;
 
 		return parent::generate();
 	}
@@ -83,8 +83,8 @@ class ModuleAvisotaSubscribe extends ModuleAvisotaRecipientForm
 		$this->addForm();
 	}
 
-	protected function submit(array $arrRecipient, array $arrMailingLists, FrontendTemplate $objTemplate)
+	protected function submit(array $recipientData, array $mailingLists, FrontendTemplate $template)
 	{
-		return $this->handleSubscribeSubmit($arrRecipient, $arrMailingLists, $objTemplate);
+		return $this->handleSubscribeSubmit($recipientData, $mailingLists, $template);
 	}
 }

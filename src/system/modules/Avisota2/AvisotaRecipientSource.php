@@ -62,14 +62,14 @@ interface AvisotaRecipientSource
 	 *
 	 * @return array
 	 */
-	public function getRecipients($arrOptions);
+	public function getRecipients($options);
 
 	/**
 	 * Get the recipient details.
 	 *
-	 * @param string $varId
+	 * @param string $id
 	 *
 	 * @return array
 	 */
-	public function getRecipientDetails($varId);
+	public function getRecipientDetails($id);
 }

@@ -50,14 +50,14 @@ class NewsletterArticleTeaser extends NewsletterElement
 	 *
 	 * @var string
 	 */
-	protected $strTemplateHTML = 'nle_article_teaser_html';
+	protected $templateHTML = 'nle_article_teaser_html';
 
 	/**
 	 * Plain text Template
 	 *
 	 * @var string
 	 */
-	protected $strTemplatePlain = 'nle_article_teaser_plain';
+	protected $templatePlain = 'nle_article_teaser_plain';
 
 
 	/**
@@ -68,9 +68,9 @@ class NewsletterArticleTeaser extends NewsletterElement
 	public function generateHTML()
 	{
 		if ($this->loadArticle()) {
-			$strBuffer = parent::generateHTML();
+			$buffer = parent::generateHTML();
 			unset($GLOBALS['objPage']);
-			return $strBuffer;
+			return $buffer;
 		}
 		return '';
 	}
@@ -84,9 +84,9 @@ class NewsletterArticleTeaser extends NewsletterElement
 	public function generatePlain()
 	{
 		if ($this->loadArticle()) {
-			$strBuffer = parent::generatePlain();
+			$buffer = parent::generatePlain();
 			unset($GLOBALS['objPage']);
-			return $strBuffer;
+			return $buffer;
 		}
 		return '';
 	}
@@ -97,11 +97,11 @@ class NewsletterArticleTeaser extends NewsletterElement
 	 */
 	protected function loadArticle()
 	{
-		$objArticle = $this->Database
+		$article = $this->Database
 			->prepare("SELECT * FROM tl_article WHERE id=?")
 			->execute($this->articleAlias);
-		if ($objArticle->next()) {
-			$this->article = $objArticle;
+		if ($article->next()) {
+			$this->article = $article;
 			return true;
 		}
 		return false;
@@ -129,14 +129,14 @@ class NewsletterArticleTeaser extends NewsletterElement
 		$this->Template->author    = $this->article->author;
 
 		// Override CSS ID and class
-		$arrCss = deserialize($this->article->teaserCssID);
+		$cssIdClass = deserialize($this->article->teaserCssID);
 
-		if (is_array($arrCss) && count($arrCss) == 2) {
-			if ($arrCss[0] == '') {
-				$arrCss[0] = $alias;
+		if (is_array($cssIdClass) && count($cssIdClass) == 2) {
+			if ($cssIdClass[0] == '') {
+				$cssIdClass[0] = $alias;
 			}
 		}
-		$this->cssID = $arrCss;
+		$this->cssID = $cssIdClass;
 
 		$article = (!$GLOBALS['TL_CONFIG']['disableAlias'] && strlen($this->article->alias)) ? $this->article->alias
 			: $this->article->id;

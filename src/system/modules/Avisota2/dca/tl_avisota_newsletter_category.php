@@ -327,64 +327,64 @@ class tl_avisota_newsletter_category extends Backend
 			case 'edit':
 				// Dynamically add the record to the user profile
 				if (!in_array($this->Input->get('id'), $root)) {
-					$arrNew = $this->Session->get('new_records');
+					$newRecord = $this->Session->get('new_records');
 
-					if (is_array($arrNew['tl_avisota_newsletter_category']) && in_array(
+					if (is_array($newRecord['tl_avisota_newsletter_category']) && in_array(
 						$this->Input->get('id'),
-						$arrNew['tl_avisota_newsletter_category']
+						$newRecord['tl_avisota_newsletter_category']
 					)
 					) {
 						// Add permissions on user level
 						if ($this->User->inherit == 'custom' || !$this->User->groups[0]) {
-							$objUser = $this->Database
+							$user = $this->Database
 								->prepare(
 								"SELECT avisota_newsletter_categories, avisota_newsletter_category_permissions FROM tl_user WHERE id=?"
 							)
 								->limit(1)
 								->execute($this->User->id);
 
-							$arrNewsletterCategoryPermissions = deserialize(
-								$objUser->avisota_newsletter_category_permissions
+							$newsletterCategoryPermissions = deserialize(
+								$user->avisota_newsletter_category_permissions
 							);
 
-							if (is_array($arrNewsletterCategoryPermissions) && in_array(
+							if (is_array($newsletterCategoryPermissions) && in_array(
 								'create',
-								$arrNewsletterCategoryPermissions
+								$newsletterCategoryPermissions
 							)
 							) {
-								$arrNewsletterCategories   = deserialize($objUser->avisota_newsletter_categories);
-								$arrNewsletterCategories[] = $this->Input->get('id');
+								$newsletterCategories   = deserialize($user->avisota_newsletter_categories);
+								$newsletterCategories[] = $this->Input->get('id');
 
 								$this->Database
 									->prepare("UPDATE tl_user SET avisota_newsletter_categories=? WHERE id=?")
-									->execute(serialize($arrNewsletterCategories), $this->User->id);
+									->execute(serialize($newsletterCategories), $this->User->id);
 							}
 						}
 
 						// Add permissions on group level
 						elseif ($this->User->groups[0] > 0) {
-							$objGroup = $this->Database
+							$group = $this->Database
 								->prepare(
 								"SELECT avisota_newsletter_categories, avisota_newsletter_category_permissions FROM tl_user_group WHERE id=?"
 							)
 								->limit(1)
 								->execute($this->User->groups[0]);
 
-							$arrNewsletterCategoryPermissions = deserialize(
-								$objGroup->avisota_newsletter_category_permissions
+							$newsletterCategoryPermissions = deserialize(
+								$group->avisota_newsletter_category_permissions
 							);
 
-							if (is_array($arrNewsletterCategoryPermissions) && in_array(
+							if (is_array($newsletterCategoryPermissions) && in_array(
 								'create',
-								$arrNewsletterCategoryPermissions
+								$newsletterCategoryPermissions
 							)
 							) {
-								$arrNewsletterCategories   = deserialize($objGroup->avisota_newsletter_categories);
-								$arrNewsletterCategories[] = $this->Input->get('id');
+								$newsletterCategories   = deserialize($group->avisota_newsletter_categories);
+								$newsletterCategories[] = $this->Input->get('id');
 
 								$this->Database
 									->prepare("UPDATE tl_user_group SET avisota_newsletter_categories=? WHERE id=?")
-									->execute(serialize($arrNewsletterCategories), $this->User->groups[0]);
+									->execute(serialize($newsletterCategories), $this->User->groups[0]);
 							}
 						}
 
@@ -522,31 +522,31 @@ class tl_avisota_newsletter_category extends Backend
 	 *
 	 * @return string
 	 */
-	public function generateAlias($varValue, DataContainer $dc)
+	public function generateAlias($value, DataContainer $dc)
 	{
 		$autoAlias = false;
 
 		// Generate alias if there is none
-		if (!strlen($varValue)) {
+		if (!strlen($value)) {
 			$autoAlias = true;
-			$varValue  = standardize($dc->activeRecord->title);
+			$value  = standardize($dc->activeRecord->title);
 		}
 
-		$objAlias = $this->Database
+		$aliasResultSet = $this->Database
 			->prepare("SELECT id FROM tl_avisota_newsletter_category WHERE alias=?")
-			->execute($varValue);
+			->execute($value);
 
 		// Check whether the news alias exists
-		if ($objAlias->numRows > 1 && !$autoAlias) {
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $varValue));
+		if ($aliasResultSet->numRows > 1 && !$autoAlias) {
+			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $value));
 		}
 
 		// Add ID to alias
-		if ($objAlias->numRows && $autoAlias) {
-			$varValue .= '-' . $dc->id;
+		if ($aliasResultSet->numRows && $autoAlias) {
+			$value .= '-' . $dc->id;
 		}
 
-		return $varValue;
+		return $value;
 	}
 
 
@@ -556,8 +556,8 @@ class tl_avisota_newsletter_category extends Backend
 			return array();
 		}
 
-		$arrAdditionalSource = array();
-		$objAdditionalSource = $this->Database
+		$additionalSources = array();
+		$additionalSource = $this->Database
 			->prepare(
 			"
 				SELECT
@@ -578,31 +578,31 @@ class tl_avisota_newsletter_category extends Backend
 				ORDER BY
 					s.`sorting`"
 		)
-			->execute($intTheme);
-		while ($objAdditionalSource->next()) {
-			$strType = $objAdditionalSource->type;
-			$label   = $objAdditionalSource->$strType;
+			->execute($themeId);
+		while ($additionalSource->next()) {
+			$type = $additionalSource->type;
+			$label   = $additionalSource->$type;
 
-			if ($objAdditionalSource->compress_yui) {
+			if ($additionalSource->compress_yui) {
 				$label .= '<span style="color: #009;">.yui</span>';
 			}
 
-			if ($objAdditionalSource->compress_gz) {
+			if ($additionalSource->compress_gz) {
 				$label .= '<span style="color: #009;">.gz</span>';
 			}
 
-			if (strlen($objAdditionalSource->cc)) {
-				$label .= ' <span style="color: #B3B3B3;">[' . $objAdditionalSource->cc . ']</span>';
+			if (strlen($additionalSource->cc)) {
+				$label .= ' <span style="color: #B3B3B3;">[' . $additionalSource->cc . ']</span>';
 			}
 
-			if (strlen($objAdditionalSource->media)) {
-				$arrMedia = unserialize($objAdditionalSource->media);
-				if (count($arrMedia)) {
-					$label .= ' <span style="color: #B3B3B3;">[' . implode(', ', $arrMedia) . ']</span>';
+			if (strlen($additionalSource->media)) {
+				$medias = unserialize($additionalSource->media);
+				if (count($medias)) {
+					$label .= ' <span style="color: #B3B3B3;">[' . implode(', ', $medias) . ']</span>';
 				}
 			}
 
-			switch ($objAdditionalSource->type) {
+			switch ($additionalSource->type) {
 				case 'js_file':
 				case 'js_url':
 					$image = 'iconJS.gif';
@@ -629,15 +629,15 @@ class tl_avisota_newsletter_category extends Backend
 					}
 			}
 
-			if (!isset($arrAdditionalSource[$objAdditionalSource->name])) {
-				$arrAdditionalSource[$objAdditionalSource->name] = array();
+			if (!isset($additionalSources[$additionalSource->name])) {
+				$additionalSources[$additionalSource->name] = array();
 			}
-			$arrAdditionalSource[$objAdditionalSource->name][$objAdditionalSource->id] = ($image ? $this->generateImage(
+			$additionalSources[$additionalSource->name][$additionalSource->id] = ($image ? $this->generateImage(
 				$image,
 				$label,
 				'style="vertical-align:middle"'
 			) . ' ' : '') . $label;
 		}
-		return $arrAdditionalSource;
+		return $additionalSources;
 	}
 }

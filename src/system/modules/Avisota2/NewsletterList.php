@@ -50,14 +50,14 @@ class NewsletterList extends NewsletterElement
 	 *
 	 * @var string
 	 */
-	protected $strTemplateHTML = 'nle_list_html';
+	protected $templateHTML = 'nle_list_html';
 
 	/**
 	 * Plain text Template
 	 *
 	 * @var string
 	 */
-	protected $strTemplatePlain = 'nle_list_plain';
+	protected $templatePlain = 'nle_list_plain';
 
 
 	/**
@@ -65,25 +65,25 @@ class NewsletterList extends NewsletterElement
 	 */
 	protected function compile($mode)
 	{
-		$arrItems = array();
-		$items    = deserialize($this->listitems);
+		$items = array();
+		$itemContents    = deserialize($this->listitems);
 
 		if ($mode == NL_HTML) {
-			$limit = count($items) - 1;
+			$limit = count($itemContents) - 1;
 
-			for ($i = 0; $i < count($items); $i++) {
-				$arrItems[] = array
+			for ($i = 0; $i < count($itemContents); $i++) {
+				$items[] = array
 				(
 					'class'   => (($i == 0) ? 'first' : (($i == $limit) ? 'last' : '')),
-					'content' => $items[$i]
+					'content' => $itemContents[$i]
 				);
 			}
 
-			$this->Template->items = $arrItems;
+			$this->Template->items = $items;
 			$this->Template->tag   = ($this->listtype == 'ordered') ? 'ol' : 'ul';
 		}
 		else {
-			$this->Template->items = $items;
+			$this->Template->items = $itemContents;
 		}
 	}
 }

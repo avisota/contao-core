@@ -44,50 +44,50 @@
  */
 abstract class AvisotaTransport extends Controller
 {
-	protected static $arrTransportModules = array();
+	protected static $transportModules = array();
 
 	/**
 	 * @static
 	 *
-	 * @param int $intTransportModule
+	 * @param int $transportModuleId
 	 *
 	 * @return AvisotaTransportModule
 	 * @throws AvisotaTransportException
 	 */
-	public static function getTransportModule($intTransportModule = 0)
+	public static function getTransportModule($transportModuleId = 0)
 	{
-		if ($intTransportModule == 0) {
-			$intTransportModule = $GLOBALS['TL_CONFIG']['avisota_default_transport'];
+		if ($transportModuleId == 0) {
+			$transportModuleId = $GLOBALS['TL_CONFIG']['avisota_default_transport'];
 		}
 
-		if (isset(self::$arrTransportModules[$intTransportModule])) {
-			return self::$arrTransportModules[$intTransportModule];
+		if (isset(self::$transportModules[$transportModuleId])) {
+			return self::$transportModules[$transportModuleId];
 		}
 
-		$objTransportModule = Database::getInstance()
+		$transportModule = Database::getInstance()
 			->prepare("SELECT * FROM tl_avisota_transport WHERE id=?")
-			->execute($intTransportModule);
-		if ($objTransportModule->next()) {
-			$strType = $objTransportModule->type;
+			->execute($transportModuleId);
+		if ($transportModule->next()) {
+			$type = $transportModule->type;
 
-			if (isset($GLOBALS['TL_AVISOTA_TRANSPORT'][$strType])) {
-				$strClass = $GLOBALS['TL_AVISOTA_TRANSPORT'][$strType];
-				return self::$arrTransportModules[$intTransportModule] = new $strClass($objTransportModule);
+			if (isset($GLOBALS['TL_AVISOTA_TRANSPORT'][$type])) {
+				$class = $GLOBALS['TL_AVISOTA_TRANSPORT'][$type];
+				return self::$transportModules[$transportModuleId] = new $class($transportModule);
 			}
 
-			throw new AvisotaTransportException('Unsupported transport module TYPE ' . $strType . '!');
+			throw new AvisotaTransportException('Unsupported transport module TYPE ' . $type . '!');
 		}
 
-		throw new AvisotaTransportException('Unknown transport module ID ' . $intTransportModule . '!');
+		throw new AvisotaTransportException('Unknown transport module ID ' . $transportModuleId . '!');
 	}
 
 	protected $config;
 
-	public function __construct(Database_Result $objRow)
+	public function __construct(Database_Result $resultSet)
 	{
 		parent::__construct();
 
-		$this->config = (object) $objRow->row();
+		$this->config = (object) $resultSet->row();
 	}
 
 	/**
@@ -105,13 +105,13 @@ abstract class AvisotaTransport extends Controller
 	 *
 	 * @abstract
 	 *
-	 * @param AvisotaRecipient  $objRecipient
-	 * @param AvisotaNewsletter $objNewsletter
+	 * @param AvisotaRecipient  $recipient
+	 * @param AvisotaNewsletter $newsletter
 	 *
 	 * @return void
 	 * @throws AvisotaTransportException
 	 */
-	public function transportNewsletter(AvisotaRecipient $objRecipient, AvisotaNewsletter $objNewsletter)
+	public function transportNewsletter(AvisotaRecipient $recipient, AvisotaNewsletter $newsletter)
 	{
 		// TODO
 	}
@@ -119,13 +119,13 @@ abstract class AvisotaTransport extends Controller
 	/**
 	 * Transport a mail.
 	 *
-	 * @param string $strRecipientEmail
-	 * @param Mail   $objEmail
+	 * @param string $recipientEmail
+	 * @param Mail   $email
 	 *
 	 * @return void
 	 * @throws AvisotaTransportException
 	 */
-	public abstract function transportEmail($strRecipientEmail, Mail $objEmail);
+	public abstract function transportEmail($recipientEmail, Mail $email);
 
 	/**
 	 * Finalise the transport.

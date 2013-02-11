@@ -102,55 +102,55 @@ class tl_avisota_recipient_migrate extends Backend
 	 */
 	public function onsubmit_callback(DataContainer $dc)
 	{
-		$arrSource    = array_filter(array_map('intval', $dc->getData('source')));
-		$blnPersonals = $dc->getData('personals') ? true : false;
-		$blnForce     = $dc->getData('force') ? true : false;
+		$sourceIds    = array_filter(array_map('intval', $dc->getData('source')));
+		$usePersonals = $dc->getData('personals') ? true : false;
+		$force     = $dc->getData('force') ? true : false;
 
-		if (count($arrSource)) {
-			$strSource = implode(',', $arrSource);
+		if (count($sourceIds)) {
+			$source = implode(',', $sourceIds);
 
-			$strInsertPersonals = '';
-			$strSelectPersonals = '';
-			if ($blnPersonals) {
+			$insertPersonals = '';
+			$selectPersonals = '';
+			if ($usePersonals) {
 				$this->loadDataContainer('tl_avisota_recipient');
 				$this->loadDataContainer('tl_member');
-				foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $strField => $arrField) {
+				foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $fieldName => $fieldConfig) {
 					if ( // do not add default fields
 						!in_array(
-							$strField,
+							$fieldName,
 							array('pid', 'tstamp', 'email', 'confirmed', 'addedOn', 'addedBy', 'token')
 						)
 						// only add importable fields
-						&& isset($arrField['eval']['importable'])
-						&& $arrField['eval']['importable']
+						&& isset($fieldConfig['eval']['importable'])
+						&& $fieldConfig['eval']['importable']
 						// only add fields, that are exists in tl_member table
-						&& isset($GLOBALS['TL_DCA']['tl_member']['fields'][$strField])
+						&& isset($GLOBALS['TL_DCA']['tl_member']['fields'][$fieldName])
 					) {
-						$strInsertPersonals .= ',' . $strField;
-						$strSelectPersonals .= ',IFNULL(m.' . $strField . ', "")';
+						$insertPersonals .= ',' . $fieldName;
+						$selectPersonals .= ',IFNULL(m.' . $fieldName . ', "")';
 					}
 				}
 			}
 
-			$objStmt = $this->Database
+			$stmt = $this->Database
 				->prepare(
 				"INSERT INTO
-						tl_avisota_recipient (pid,tstamp,email" . $strInsertPersonals . ",confirmed,addedOn,addedBy,token)
+						tl_avisota_recipient (pid,tstamp,email" . $insertPersonals . ",confirmed,addedOn,addedBy,token)
 					SELECT
-						?,r.tstamp,r.email" . $strSelectPersonals . ",r.active,?,?,r.token
+						?,r.tstamp,r.email" . $selectPersonals . ",r.active,?,?,r.token
 					FROM
 						tl_newsletter_recipients r
-					" . ($blnPersonals ? "
+					" . ($usePersonals ? "
 					LEFT JOIN
 						tl_member m
 					ON
 						r.email = m.email
 					" : "") . "
 					WHERE
-						r.pid IN ($strSource)
+						r.pid IN ($source)
 					AND
 						r.email NOT IN (SELECT email FROM tl_avisota_recipient WHERE pid=?)
-					" . ($blnForce
+					" . ($force
 					? ""
 					: "
 					AND
@@ -167,10 +167,10 @@ class tl_avisota_recipient_migrate extends Backend
 
 			$_SESSION['TL_CONFIRM'][] = sprintf(
 				$GLOBALS['TL_LANG']['tl_avisota_recipient_migrate']['migrated'],
-				$objStmt->affectedRows
+				$stmt->affectedRows
 			);
 
-			if ($blnForce) {
+			if ($force) {
 				$this->Database
 					->prepare(
 					"DELETE FROM

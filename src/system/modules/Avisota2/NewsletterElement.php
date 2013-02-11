@@ -51,28 +51,28 @@ abstract class NewsletterElement extends AvisotaFrontend
 	 *
 	 * @var string
 	 */
-	protected $strTemplateHTML = null;
+	protected $templateHTML = null;
 
 	/**
 	 * Plain text Template
 	 *
 	 * @var string
 	 */
-	protected $strTemplatePlain = null;
+	protected $templatePlain = null;
 
 	/**
 	 * Current record
 	 *
 	 * @var array
 	 */
-	protected $arrData = array();
+	protected $currentRecordData = array();
 
 	/**
 	 * Style array
 	 *
 	 * @var array
 	 */
-	protected $arrStyle = array();
+	protected $style = array();
 
 
 	/**
@@ -82,17 +82,17 @@ abstract class NewsletterElement extends AvisotaFrontend
 	 *
 	 * @return string
 	 */
-	public function __construct(array $arrElement)
+	public function __construct(array $elementData)
 	{
 		parent::__construct();
 
-		$this->arrData = $arrElement;
-		$this->space   = deserialize($arrElement['space']);
-		$this->cssID   = deserialize($arrElement['cssID'], true);
+		$this->currentRecordData = $elementData;
+		$this->space   = deserialize($elementData['space']);
+		$this->cssID   = deserialize($elementData['cssID'], true);
 
-		$arrHeadline    = deserialize($arrElement['headline']);
-		$this->headline = is_array($arrHeadline) ? $arrHeadline['value'] : $arrHeadline;
-		$this->hl       = is_array($arrHeadline) ? $arrHeadline['unit'] : 'h1';
+		$headline    = deserialize($elementData['headline']);
+		$this->headline = is_array($headline) ? $headline['value'] : $headline;
+		$this->hl       = is_array($headline) ? $headline['unit'] : 'h1';
 	}
 
 
@@ -102,9 +102,9 @@ abstract class NewsletterElement extends AvisotaFrontend
 	 * @param string
 	 * @param mixed
 	 */
-	public function __set($strKey, $varValue)
+	public function __set($key, $value)
 	{
-		$this->arrData[$strKey] = $varValue;
+		$this->currentRecordData[$key] = $value;
 	}
 
 
@@ -115,9 +115,9 @@ abstract class NewsletterElement extends AvisotaFrontend
 	 *
 	 * @return mixed
 	 */
-	public function __get($strKey)
+	public function __get($key)
 	{
-		return $this->arrData[$strKey];
+		return $this->currentRecordData[$key];
 	}
 
 
@@ -129,60 +129,60 @@ abstract class NewsletterElement extends AvisotaFrontend
 	 * @param integer
 	 * @param string
 	 */
-	protected function addImageToTemplate($objTemplate, $arrItem, $intMaxWidth = false, $strLightboxId = false)
+	protected function addImageToTemplate($template, $itemData, $maxWidth = false, $lightboxId = false)
 	{
-		$size    = deserialize($arrItem['size']);
-		$imgSize = getimagesize(TL_ROOT . '/' . $arrItem['singleSRC']);
+		$size    = deserialize($itemData['size']);
+		$imgSize = getimagesize(TL_ROOT . '/' . $itemData['singleSRC']);
 
-		if (!$intMaxWidth) {
-			$intMaxWidth = ($this->Input->get('table') == 'tl_avisota_newsletter_content' ? 320
+		if (!$maxWidth) {
+			$maxWidth = ($this->Input->get('table') == 'tl_avisota_newsletter_content' ? 320
 				: $GLOBALS['TL_CONFIG']['maxImageWidth']);
 		}
 
 		// Store original dimensions
-		$objTemplate->width  = $imgSize[0];
-		$objTemplate->height = $imgSize[1];
+		$template->width  = $imgSize[0];
+		$template->height = $imgSize[1];
 
 		// Adjust image size
-		if ($intMaxWidth > 0 && ($size[0] > $intMaxWidth || (!$size[0] && !$size[1] && $imgSize[0] > $intMaxWidth))) {
-			$arrMargin = deserialize($arrItem['imagemargin']);
+		if ($maxWidth > 0 && ($size[0] > $maxWidth || (!$size[0] && !$size[1] && $imgSize[0] > $maxWidth))) {
+			$imageMargins = deserialize($itemData['imagemargin']);
 
 			// Subtract margins
-			if (is_array($arrMargin) && $arrMargin['unit'] == 'px') {
-				$intMaxWidth = $intMaxWidth - $arrMargin['left'] - $arrMargin['right'];
+			if (is_array($imageMargins) && $imageMargins['unit'] == 'px') {
+				$maxWidth = $maxWidth - $imageMargins['left'] - $imageMargins['right'];
 			}
 
 			// See #2268 (thanks to Thyon)
 			$ratio = ($size[0] && $size[1]) ? $size[1] / $size[0] : $imgSize[1] / $imgSize[0];
 
-			$size[0] = $intMaxWidth;
-			$size[1] = floor($intMaxWidth * $ratio);
+			$size[0] = $maxWidth;
+			$size[1] = floor($maxWidth * $ratio);
 		}
 
-		$src = $this->getImage($this->urlEncode($arrItem['singleSRC']), $size[0], $size[1], $size[2]);
+		$src = $this->getImage($this->urlEncode($itemData['singleSRC']), $size[0], $size[1], $size[2]);
 
 		// Image dimensions
 		if (($imgSize = @getimagesize(TL_ROOT . '/' . $src)) !== false) {
-			$objTemplate->arrSize = $imgSize;
-			$objTemplate->imgSize = ' ' . $imgSize[3];
+			$template->arrSize = $imgSize;
+			$template->imgSize = ' ' . $imgSize[3];
 		}
 
 		// Float image
-		if (in_array($arrItem['floating'], array('left', 'right'))) {
-			$objTemplate->floatClass = ' float_' . $arrItem['floating'];
+		if (in_array($itemData['floating'], array('left', 'right'))) {
+			$template->floatClass = ' float_' . $itemData['floating'];
 		}
 
 		// Image link
-		if (strlen($arrItem['imageUrl'])) {
-			$objTemplate->href       = $this->extendURL($arrItem['imageUrl']);
-			$objTemplate->attributes = $arrItem['fullsize'] ? LINK_NEW_WINDOW : '';
+		if (strlen($itemData['imageUrl'])) {
+			$template->href       = $this->extendURL($itemData['imageUrl']);
+			$template->attributes = $itemData['fullsize'] ? LINK_NEW_WINDOW : '';
 		}
 
-		$objTemplate->src      = $this->extendURL($src);
-		$objTemplate->alt      = specialchars($arrItem['alt']);
-		$objTemplate->margin   = $this->generateMargin(deserialize($arrItem['imagemargin']), 'padding');
-		$objTemplate->caption  = $arrItem['caption'];
-		$objTemplate->addImage = true;
+		$template->src      = $this->extendURL($src);
+		$template->alt      = specialchars($itemData['alt']);
+		$template->margin   = $this->generateMargin(deserialize($itemData['imagemargin']), 'padding');
+		$template->caption  = $itemData['caption'];
+		$template->addImage = true;
 	}
 
 
@@ -193,26 +193,26 @@ abstract class NewsletterElement extends AvisotaFrontend
 	 */
 	public function generateHTML()
 	{
-		if (!$this->strTemplateHTML) {
+		if (!$this->templateHTML) {
 			return '';
 		}
 
-		$this->arrStyle = array();
+		$this->style = array();
 
-		if (strlen($this->arrData['space'][0])) {
-			$this->arrStyle[] = 'margin-top:' . $this->arrData['space'][0] . 'px;';
+		if (strlen($this->currentRecordData['space'][0])) {
+			$this->style[] = 'margin-top:' . $this->currentRecordData['space'][0] . 'px;';
 		}
 
-		if (strlen($this->arrData['space'][1])) {
-			$this->arrStyle[] = 'margin-bottom:' . $this->arrData['space'][1] . 'px;';
+		if (strlen($this->currentRecordData['space'][1])) {
+			$this->style[] = 'margin-bottom:' . $this->currentRecordData['space'][1] . 'px;';
 		}
 
-		$this->Template = new AvisotaNewsletterTemplate($this->strTemplateHTML);
-		$this->Template->setData($this->arrData);
+		$this->Template = new AvisotaNewsletterTemplate($this->templateHTML);
+		$this->Template->setData($this->currentRecordData);
 
 		$this->compile(NL_HTML);
 
-		$this->Template->style = count($this->arrStyle) ? implode(' ', $this->arrStyle) : '';
+		$this->Template->style = count($this->style) ? implode(' ', $this->style) : '';
 		$this->Template->cssID = strlen($this->cssID[0]) ? ' id="' . $this->cssID[0] . '"' : '';
 		$this->Template->class = trim('ce_' . $this->type . ' ' . $this->cssID[1]);
 
@@ -235,14 +235,14 @@ abstract class NewsletterElement extends AvisotaFrontend
 	 */
 	public function generatePlain()
 	{
-		if (!$this->strTemplatePlain) {
+		if (!$this->templatePlain) {
 			return '';
 		}
 
-		$this->arrStyle = array();
+		$this->style = array();
 
-		$this->Template = new AvisotaNewsletterTemplate($this->strTemplatePlain);
-		$this->Template->setData($this->arrData);
+		$this->Template = new AvisotaNewsletterTemplate($this->templatePlain);
+		$this->Template->setData($this->currentRecordData);
 
 		$this->compile(NL_PLAIN);
 
@@ -250,12 +250,12 @@ abstract class NewsletterElement extends AvisotaFrontend
 			$this->Template->headline = $this->headline;
 		}
 
-		$intHl = intval(substr(!strlen($this->Template->hl) ? $this->hl : $this->Template->hl, 1));
-		$strHl = '';
-		for ($i = 0; $i < $intHl; $i++) {
-			$strHl .= '#';
+		$headlineLevel = intval(substr(!strlen($this->Template->hl) ? $this->hl : $this->Template->hl, 1));
+		$headline = '';
+		for ($i = 0; $i < $headlineLevel; $i++) {
+			$headline .= '#';
 		}
-		$this->Template->hl = $strHl;
+		$this->Template->hl = $headline;
 
 		return $this->Template->parse();
 	}

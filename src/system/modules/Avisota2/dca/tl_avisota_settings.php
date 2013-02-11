@@ -77,7 +77,6 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 				'avisota_max_send_count',
 				'avisota_max_send_timeout'
 			),
-			'statistics'   => array(':hide', 'avisota_statistic'),
 			'developer'    => array(':hide', 'avisota_developer_mode')
 		)
 	),
@@ -92,7 +91,6 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 		),
 		'avisota_do_cleanup'        => array('avisota_cleanup_time'),
 		'avisota_developer_mode'    => array('avisota_developer_email'),
-		'avisota_statistic'         => array('avisota_statistic_personalized', 'avisota_chart')
 	),
 	'metasubselectpalettes' => array
 	(
@@ -100,10 +98,6 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 		(
 			'highstock' => array('avisota_chart_highstock_confirmed')
 		),
-		'avisota_statistic_personalized' => array
-		(
-			'with_aggrement' => array('avisota_data_privacy_statement_page')
-		)
 	),
 	// Fields
 	'fields'                => array
@@ -291,49 +285,6 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 				'tl_class'  => 'w50'
 			)
 		),
-		'avisota_statistic'                         => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_statistic'],
-			'inputType' => 'checkbox',
-			'eval'      => array(
-				'submitOnChange' => true,
-				'tl_class'       => 'clr'
-			)
-		),
-		'avisota_statistic_personalized'            => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_statistic_personalized'],
-			'inputType' => 'radio',
-			'options'   => array('with_aggrement', 'without_aggrement'),
-			'reference' => &$GLOBALS['TL_LANG']['tl_avisota_settings'],
-			'eval'      => array(
-				'tl_class'           => 'clr',
-				'submitOnChange'     => true,
-				'includeBlankOption' => true,
-				'blankOptionLabel'   => $GLOBALS['TL_LANG']['tl_avisota_settings']['unpersonalized']
-			)
-		),
-		'avisota_data_privacy_statement_page'       => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_data_privacy_statement_page'],
-			'inputType' => 'pageTree',
-			'eval'      => array(
-				'mandatory' => true,
-				'fieldType' => 'radio',
-				'tl_class'  => 'clr'
-			)
-		),
-		'avisota_chart'                             => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_chart'],
-			'inputType' => 'select',
-			'options'   => array('jqplot', 'highstock', 'pchart'),
-			'reference' => &$GLOBALS['TL_LANG']['tl_avisota_settings'],
-			'eval'      => array(
-				'submitOnChange' => true,
-				'tl_class'       => 'clr'
-			)
-		),
 		'avisota_developer_mode'                    => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_mode'],
@@ -370,7 +321,7 @@ class tl_avisota_settings extends Backend
 		}
 	}
 
-	public function renderMissingHighstockField(DataContainer $dc, $strLabel)
+	public function renderMissingHighstockField(DataContainer $dc, $label)
 	{
 		return $GLOBALS['TL_LANG']['tl_avisota_settings']['missing_highstock'];
 	}
@@ -380,27 +331,27 @@ class tl_avisota_settings extends Backend
 		// Return all templates
 		switch ($dc->field) {
 			case 'avisota_template_subscribe_mail_plain':
-				$strTemplatePrefix = 'mail_subscribe_plain_';
+				$templatePrefix = 'mail_subscribe_plain_';
 				break;
 			case 'avisota_template_subscribe_mail_html':
-				$strTemplatePrefix = 'mail_subscribe_html_';
+				$templatePrefix = 'mail_subscribe_html_';
 				break;
 			case 'avisota_template_unsubscribe_mail_plain':
-				$strTemplatePrefix = 'mail_unsubscribe_plain_';
+				$templatePrefix = 'mail_unsubscribe_plain_';
 				break;
 			case 'avisota_template_unsubscribe_mail_html':
-				$strTemplatePrefix = 'mail_unsubscribe_html_';
+				$templatePrefix = 'mail_unsubscribe_html_';
 				break;
 			case 'avisota_template_notification_mail_plain':
-				$strTemplatePrefix = 'mail_notification_plain_';
+				$templatePrefix = 'mail_notification_plain_';
 				break;
 			case 'avisota_template_notification_mail_html':
-				$strTemplatePrefix = 'mail_notification_html_';
+				$templatePrefix = 'mail_notification_html_';
 				break;
 			default:
 				return array();
 		}
 
-		return $this->getTemplateGroup($strTemplatePrefix);
+		return $this->getTemplateGroup($templatePrefix);
 	}
 }

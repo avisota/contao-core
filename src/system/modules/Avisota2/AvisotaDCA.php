@@ -43,15 +43,15 @@
  */
 class AvisotaDCA extends Controller
 {
-	protected static $objInstance = null;
+	protected static $instance = null;
 
 	public static function getInstance()
 	{
-		if (self::$objInstance == null) {
-			self::$objInstance = new AvisotaDCA();
+		if (self::$instance == null) {
+			self::$instance = new AvisotaDCA();
 		}
 
-		return self::$objInstance;
+		return self::$instance;
 	}
 
 	protected function __construct()
@@ -63,51 +63,51 @@ class AvisotaDCA extends Controller
 	/**
 	 * Convert a string list into an array.
 	 *
-	 * @param $strLists
+	 * @param $lists
 	 *
 	 * @return array
 	 */
-	public function convertFromStringList($strLists)
+	public function convertFromStringList($lists)
 	{
-		return explode(',', $strLists);
+		return explode(',', $lists);
 	}
 
 
 	/**
 	 * Convert an array into a string list.
 	 *
-	 * @param $arrLists
+	 * @param $lists
 	 *
 	 * @return string
 	 */
-	public function convertToStringList($arrLists)
+	public function convertToStringList($lists)
 	{
-		$arrLists = deserialize($arrLists);
-		return is_array($arrLists) ? implode(',', $arrLists) : '';
+		$lists = deserialize($lists);
+		return is_array($lists) ? implode(',', $lists) : '';
 	}
 
-	public function getSelectableLists($varContainer)
+	public function getSelectableLists($container)
 	{
-		$strSql = 'SELECT * FROM tl_avisota_mailing_list';
-		if ($varContainer instanceof ModuleRegistration) {
-			$arrLists = array_filter(
+		$sql = 'SELECT * FROM tl_avisota_mailing_list';
+		if ($container instanceof ModuleRegistration) {
+			$listIds = array_filter(
 				array_map(
 					'intval',
-					deserialize($varContainer->avisota_selectable_lists, true)
+					deserialize($container->avisota_selectable_lists, true)
 				)
 			);
-			$strSql .= ' WHERE id IN (' . (count($arrLists) ? implode(',', $arrLists) : '0') . ')';
+			$sql .= ' WHERE id IN (' . (count($listIds) ? implode(',', $listIds) : '0') . ')';
 		}
-		$strSql .= ' ORDER BY title';
+		$sql .= ' ORDER BY title';
 
-		$objLists = $this->Database->execute($strSql);
+		$list = $this->Database->execute($sql);
 
-		$arrOptions = array();
-		while ($objLists->next()) {
-			$arrOptions[$objLists->id] = $objLists->title;
+		$options = array();
+		while ($list->next()) {
+			$options[$list->id] = $list->title;
 		}
 
-		return $arrOptions;
+		return $options;
 	}
 
 	public function filterByMailingLists(DataContainer $dc = null)
@@ -118,111 +118,112 @@ class AvisotaDCA extends Controller
 
 		switch ($dc->table) {
 			case 'tl_member':
-				$varId = $this->Input->get('avisota_showlist');
+				$id = $this->Input->get('avisota_showlist');
 				break;
 			case 'tl_avisota_recipient':
-				$varId = $this->Input->get('showlist');
+				$id = $this->Input->get('showlist');
 				break;
 		}
-		if ($varId) {
-			$objList = $this->Database
+		if ($id) {
+			$list = $this->Database
 				->prepare("SELECT * FROM tl_avisota_mailing_list WHERE id=?")
-				->execute($varId);
-			if ($objList->next()) {
+				->execute($id);
+			if ($list->next()) {
 				switch ($dc->table) {
 					case 'tl_member':
 						$GLOBALS['TL_DCA']['tl_member']['list']['sorting']['filter'][] = array(
 							'FIND_IN_SET(?, avisota_lists)',
-							$varId
+							$id
 						);
 						break;
 					case 'tl_avisota_recipient':
 						$GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['sorting']['filter'][] = array(
 							'id IN (SELECT recipient FROM tl_avisota_recipient_to_mailing_list WHERE list=?)',
-							$varId
+							$id
 						);
 						break;
 				}
 				$this->loadLanguageFile('avisota_dca');
 				$_SESSION['TL_INFO'][] = sprintf(
 					$GLOBALS['TL_LANG']['avisota_dca']['filteredByMailingList'],
-					$objList->title,
+					$list->title,
 					preg_replace('#[&\?](avisota_)?showlist=\d+#', '', $this->Environment->request)
 				);
 			}
 		}
 	}
 
-	public function hookCreateNewUser($insertId, $arrData, $objModuleRegistration)
+	public function hookCreateNewUser($insertId, $data, $moduleRegistration)
 	{
-		if ($arrData['avisota_subscribe']) {
+		if ($data['avisota_subscribe']) {
 			// TODO rework to send confirmation mail
 			$this->Database
 				->prepare("UPDATE tl_member SET avisota_lists = ? WHERE id = ?")
-				->execute(implode(',', deserialize($objModuleRegistration->avisota_selectable_lists, true)), $insertId);
+				->execute(implode(',', deserialize($moduleRegistration->avisota_selectable_lists, true)), $insertId);
 		}
 	}
 
-	public function hookActivateAccount($objMember, $objModuleRegistration)
+	public function hookActivateAccount($member, $moduleRegistration)
 	{
-		if ($objModuleRegistration->avisota_confirm_on_activate) {
-			$arrLists = array_filter(
-				array_map('intval', deserialize($objModuleRegistration->avisota_selectable_lists, true))
+		if ($moduleRegistration->avisota_confirm_on_activate) {
+			// TODO
+			$lists = array_filter(
+				array_map('intval', deserialize($moduleRegistration->avisota_selectable_lists, true))
 			);
 
 		}
 	}
 
-	public function hookUpdatePersonalData($objUser, $arrFormData, $objModulePersonalData)
+	public function hookUpdatePersonalData($user, $formData, $modulePersonalData)
 	{
 		// Hack, because ModulePersonalData does not call the onsubmit_callback
 		// uncomment when https://github.com/contao/core/pull/4018 is merged
 		// if (version_compare(VERSION . '.' . BUILD, '2.11.0', '<=') && isset($arrFormData['avisota_lists'])) {
-		$arrLists = deserialize($arrFormData['avisota_lists'], true);
-		if (empty($arrLists)) {
+		$lists = deserialize($formData['avisota_lists'], true);
+		if (empty($lists)) {
 			$this->import('Database');
 			$this->Database
 				->prepare("UPDATE tl_member SET avisota_subscribe=? WHERE id=?")
-				->execute('', $objUser->id);
+				->execute('', $user->id);
 		}
 		// }
 
-		if (isset($arrFormData['avisota_subscribe'])) {
-			if ($arrFormData['avisota_subscribe']) {
-				$arrLists = array_unique(
+		if (isset($formData['avisota_subscribe'])) {
+			if ($formData['avisota_subscribe']) {
+				$lists = array_unique(
 					array_merge(
 						array_filter(
 							array_map(
 								'intval',
-								is_array($objUser->avisota_lists)
-									? $objUser->avisota_lists
+								is_array($user->avisota_lists)
+									? $user->avisota_lists
 									: explode(
 									',',
-									$objUser->avisota_lists
+									$user->avisota_lists
 								)
 							)
 						),
 						array_filter(
-							array_map('intval', deserialize($objModulePersonalData->avisota_selectable_lists, true))
+							array_map('intval', deserialize($modulePersonalData->avisota_selectable_lists, true))
 						)
 					)
 				);
 			}
 			else {
-				$arrLists = array_diff(
+				$lists = array_diff(
 					array_filter(
 						array_map(
 							'intval',
-							is_array($objUser->avisota_lists)
-								? $objUser->avisota_lists
+							is_array($user->avisota_lists)
+								? $user->avisota_lists
 								: explode(
 								',',
-								$objUser->avisota_lists
+								$user->avisota_lists
 							)
 						)
 					),
 					array_filter(
-						array_map('intval', deserialize($objModulePersonalData->avisota_selectable_lists, true))
+						array_map('intval', deserialize($modulePersonalData->avisota_selectable_lists, true))
 					)
 				);
 			}
@@ -230,7 +231,7 @@ class AvisotaDCA extends Controller
 			// TODO rework to send confirmation mail
 			$this->Database
 				->prepare("UPDATE tl_member SET avisota_lists = ? WHERE id = ?")
-				->execute(implode(',', $arrLists), $objUser->id);
+				->execute(implode(',', $lists), $user->id);
 		}
 	}
 }

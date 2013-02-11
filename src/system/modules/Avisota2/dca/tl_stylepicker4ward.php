@@ -37,9 +37,9 @@ $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('tl_stylepicker4ward_avisota
 
 class tl_stylepicker4ward_avisota_callback
 {
-	public function hookLoadDataContainer($strName)
+	public function hookLoadDataContainer($name)
 	{
-		if ($strName == 'tl_stylepicker4ward') {
+		if ($name == 'tl_stylepicker4ward') {
 			$GLOBALS['TL_DCA']['tl_stylepicker4ward']['palettes']['default'] .= ';{Avisota_legend},_AvisotaNewsletterCEs,_AvisotaNewsletterCE_Row';
 			$GLOBALS['TL_DCA']['tl_stylepicker4ward']['fields']['_AvisotaNewsletterCEs']    = array
 			(

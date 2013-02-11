@@ -53,16 +53,16 @@ class AvisotaBackendEditorStyle extends Controller
 	}
 
 
-	public function hookGetEditorStylesLayout($strEditor)
+	public function hookGetEditorStylesLayout($editor)
 	{
-		if ($strEditor == 'newsletter'
+		if ($editor == 'newsletter'
 			&& $this->Input->get('do') == 'avisota_newsletter'
 			&& $this->Input->get('table') == 'tl_avisota_newsletter_content'
 			&& $this->Input->get('act') == 'edit'
 		) {
-			$strId = $this->Input->get('id');
+			$id = $this->Input->get('id');
 
-			$objNewsletter = $this->Database
+			$newsletter = $this->Database
 				->prepare(
 				"
 					SELECT
@@ -76,9 +76,9 @@ class AvisotaBackendEditorStyle extends Controller
 					WHERE
 						c.`id`=?"
 			)
-				->execute($strId);
+				->execute($id);
 
-			$objCategory = $this->Database
+			$category = $this->Database
 				->prepare(
 				"
 					SELECT
@@ -88,11 +88,11 @@ class AvisotaBackendEditorStyle extends Controller
 					WHERE
 						`id`=?"
 			)
-				->execute($objNewsletter->pid);
+				->execute($newsletter->pid);
 
-			if ($objCategory->viewOnlinePage > 0 && 0) {
+			if ($category->viewOnlinePage > 0 && 0) {
 				// the "view online" page does not contains the option to set a layout, use parent page instead
-				$objViewOnlinePage = $this->Database
+				$viewOnlinePage = $this->Database
 					->prepare(
 					"
 						SELECT
@@ -102,16 +102,16 @@ class AvisotaBackendEditorStyle extends Controller
 						WHERE
 							`id`=?"
 				)
-					->execute($objCategory->viewOnlinePage);
-				$objPage           = $this->getPageDetails($objViewOnlinePage->pid);
+					->execute($category->viewOnlinePage);
+				$page           = $this->getPageDetails($viewOnlinePage->pid);
 			}
-			elseif ($objCategory->subscriptionPage > 0) {
-				$objPage = $this->getPageDetails($objCategory->subscriptionPage);
+			elseif ($category->subscriptionPage > 0) {
+				$page = $this->getPageDetails($category->subscriptionPage);
 			}
 			else {
 				return false;
 			}
-			return $objPage->layout;
+			return $page->layout;
 		}
 		return false;
 	}

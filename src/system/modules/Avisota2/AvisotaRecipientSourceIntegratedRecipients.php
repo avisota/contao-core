@@ -49,10 +49,10 @@ class AvisotaRecipientSourceIntegratedRecipients extends Controller implements A
 	 */
 	private $config;
 
-	public function __construct($arrConfig)
+	public function __construct($configData)
 	{
 		$this->import('Database');
-		$this->config = $arrConfig;
+		$this->config = $configData;
 	}
 
 	/**
@@ -65,83 +65,83 @@ class AvisotaRecipientSourceIntegratedRecipients extends Controller implements A
 	{
 		switch ($this->config['integratedBy']) {
 			case 'integratedByMailingLists':
-				$arrIDs = array_filter(array_map('intval', deserialize($this->config['integratedMailingLists'], true)));
-				if (!count($arrIDs)) {
-					$arrIDs[] = 0;
+				$ids = array_filter(array_map('intval', deserialize($this->config['integratedMailingLists'], true)));
+				if (!count($ids)) {
+					$ids[] = 0;
 				}
 				// fetch all selected mailing lists
-				$objMailingList = $this->Database
+				$mailingList = $this->Database
 					->execute(
 					'SELECT * FROM tl_avisota_mailing_list
-							   WHERE id IN (' . implode(',', $arrIDs) . ')
+							   WHERE id IN (' . implode(',', $ids) . ')
 							   ORDER BY title'
 				);
 			// continue with same logic as for all mailing lists
 			case 'integratedByAllMailingLists':
 				// fetch mailing lists, if there are no result
-				if (!isset($objMailingList)) {
-					$objMailingList = $this->Database
+				if (!isset($mailingList)) {
+					$mailingList = $this->Database
 						->execute('SELECT * FROM tl_avisota_mailing_list ORDER BY title');
 				}
 
 				// if single selection is allowed, build an option for every mailing list
 				if ($this->config['integratedAllowSingleListSelection']) {
-					$arrOptions = array();
-					while ($objMailingList->next()) {
-						$arrOptions[$objMailingList->id] = $objMailingList->title;
+					$options = array();
+					while ($mailingList->next()) {
+						$options[$mailingList->id] = $mailingList->title;
 					}
-					return $arrOptions;
+					return $options;
 				}
 
 				// build a wildcard option for non-single select
 				else {
 					return array(
-						'*' => implode(', ', $objMailingList->fetchEach('title'))
+						'*' => implode(', ', $mailingList->fetchEach('title'))
 					);
 				}
 				break;
 
 			case 'integratedByRecipients':
-				$arrIDs = array_filter(array_map('intval', deserialize($this->config['integratedMailingLists'], true)));
-				if (!count($arrIDs)) {
-					$arrIDs[] = 0;
+				$ids = array_filter(array_map('intval', deserialize($this->config['integratedMailingLists'], true)));
+				if (!count($ids)) {
+					$ids[] = 0;
 				}
-				$objRecipient = $this->Database
+				$recipient = $this->Database
 					->prepare(
 					'SELECT r.*, (SELECT t2.confirmed FROM tl_avisota_recipient_to_mailing_list t2 WHERE t2.recipient=r.id AND confirmed=? LIMIT 1) as confirmed
 							   FROM tl_avisota_recipient r
 							   INNER JOIN tl_avisota_recipient_to_mailing_list t ON t.recipient=r.id
-							   WHERE t.list IN (' . implode(',', $arrIDs) . ')
+							   WHERE t.list IN (' . implode(',', $ids) . ')
 							   ORDER BY email'
 				)
 					->execute(1);
 			case 'integratedByAllRecipients':
-				if (!isset($objRecipient)) {
-					$objRecipient = $this->Database
+				if (!isset($recipient)) {
+					$recipient = $this->Database
 						->execute(
 						"SELECT *, 1 AS confirmed FROM tl_avisota_recipient
 								   ORDER BY email"
 					);
 				}
 
-				$arrOptions = array();
-				while ($objRecipient->next()) {
-					$strName = trim($objRecipient->firstname . ' ' . $objRecipient->lastname);
-					$strName = $strName ? sprintf('%s &lt;%s&gt;', $strName, $objRecipient->email)
-						: $objRecipient->email;
-					if (!$objRecipient->confirmed) {
-						$strName = '<span style="color:#A6A6A6">' . $strName . '</span>';
+				$options = array();
+				while ($recipient->next()) {
+					$name = trim($recipient->firstname . ' ' . $recipient->lastname);
+					$name = $name ? sprintf('%s &lt;%s&gt;', $name, $recipient->email)
+						: $recipient->email;
+					if (!$recipient->confirmed) {
+						$name = '<span style="color:#A6A6A6">' . $name . '</span>';
 					}
-					$arrOptions[$objRecipient->id] = $strName;
+					$options[$recipient->id] = $name;
 				}
 
 				if ($this->config['integratedAllowSingleSelection']) {
-					return $arrOptions;
+					return $options;
 				}
 
 				else {
 					return array(
-						'*' => implode(', ', $arrOptions)
+						'*' => implode(', ', $options)
 					);
 				}
 				break;
@@ -165,7 +165,7 @@ class AvisotaRecipientSourceIntegratedRecipients extends Controller implements A
 	 *
 	 * @return array
 	 */
-	public function getRecipients($arrOptions)
+	public function getRecipients($options)
 	{
 		switch ($this->config['integratedBy']) {
 			case 'integratedByMailingLists':
@@ -189,11 +189,11 @@ class AvisotaRecipientSourceIntegratedRecipients extends Controller implements A
 	/**
 	 * Get the recipient details.
 	 *
-	 * @param string $varId
+	 * @param string $id
 	 *
 	 * @return array
 	 */
-	public function getRecipientDetails($varId)
+	public function getRecipientDetails($id)
 	{
 
 	}

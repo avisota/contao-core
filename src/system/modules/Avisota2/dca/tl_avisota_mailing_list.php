@@ -220,64 +220,64 @@ class tl_avisota_mailing_list extends Backend
 			case 'edit':
 				// Dynamically add the record to the user profile
 				if (!in_array($this->Input->get('id'), $root)) {
-					$arrNew = $this->Session->get('new_records');
+					$newRecords = $this->Session->get('new_records');
 
-					if (is_array($arrNew['tl_avisota_mailing_list']) && in_array(
+					if (is_array($newRecords['tl_avisota_mailing_list']) && in_array(
 						$this->Input->get('id'),
-						$arrNew['tl_avisota_mailing_list']
+						$newRecords['tl_avisota_mailing_list']
 					)
 					) {
 						// Add permissions on user level
 						if ($this->User->inherit == 'custom' || !$this->User->groups[0]) {
-							$objUser = $this->Database
+							$user = $this->Database
 								->prepare(
 								"SELECT avisota_recipient_lists, avisota_recipient_list_permissions FROM tl_user WHERE id=?"
 							)
 								->limit(1)
 								->execute($this->User->id);
 
-							$arrNewsletterCategoryPermissions = deserialize(
-								$objUser->avisota_recipient_list_permissions
+							$newsletterCategoryPermissions = deserialize(
+								$user->avisota_recipient_list_permissions
 							);
 
-							if (is_array($arrNewsletterCategoryPermissions) && in_array(
+							if (is_array($newsletterCategoryPermissions) && in_array(
 								'create',
-								$arrNewsletterCategoryPermissions
+								$newsletterCategoryPermissions
 							)
 							) {
-								$arrNewsletterCategories   = deserialize($objUser->avisota_recipient_lists);
-								$arrNewsletterCategories[] = $this->Input->get('id');
+								$newsletterCategories   = deserialize($user->avisota_recipient_lists);
+								$newsletterCategories[] = $this->Input->get('id');
 
 								$this->Database
 									->prepare("UPDATE tl_user SET avisota_recipient_lists=? WHERE id=?")
-									->execute(serialize($arrNewsletterCategories), $this->User->id);
+									->execute(serialize($newsletterCategories), $this->User->id);
 							}
 						}
 
 						// Add permissions on group level
 						elseif ($this->User->groups[0] > 0) {
-							$objGroup = $this->Database
+							$group = $this->Database
 								->prepare(
 								"SELECT avisota_recipient_lists, avisota_recipient_list_permissions FROM tl_user_group WHERE id=?"
 							)
 								->limit(1)
 								->execute($this->User->groups[0]);
 
-							$arrNewsletterCategoryPermissions = deserialize(
-								$objGroup->avisota_recipient_list_permissions
+							$newsletterCategoryPermissions = deserialize(
+								$group->avisota_recipient_list_permissions
 							);
 
-							if (is_array($arrNewsletterCategoryPermissions) && in_array(
+							if (is_array($newsletterCategoryPermissions) && in_array(
 								'create',
-								$arrNewsletterCategoryPermissions
+								$newsletterCategoryPermissions
 							)
 							) {
-								$arrNewsletterCategories   = deserialize($objGroup->avisota_recipient_lists);
-								$arrNewsletterCategories[] = $this->Input->get('id');
+								$newsletterCategories   = deserialize($group->avisota_recipient_lists);
+								$newsletterCategories[] = $this->Input->get('id');
 
 								$this->Database
 									->prepare("UPDATE tl_user_group SET avisota_recipient_lists=? WHERE id=?")
-									->execute(serialize($arrNewsletterCategories), $this->User->groups[0]);
+									->execute(serialize($newsletterCategories), $this->User->groups[0]);
 							}
 						}
 
@@ -337,9 +337,9 @@ class tl_avisota_mailing_list extends Backend
 	}
 
 
-	public function getLabel($arrRow, $strLabel, DataContainer $dc)
+	public function getLabel($rowData, $label, DataContainer $dc)
 	{
-		$strLabel = '<div style="padding: 3px 0;"><strong>' . $strLabel . '</strong></div>';
+		$label = '<div style="padding: 3px 0;"><strong>' . $label . '</strong></div>';
 
 		if (isset($GLOBALS['TL_HOOKS']['avisotaMailingListLabel']) && is_array(
 			$GLOBALS['TL_HOOKS']['avisotaMailingListLabel']
@@ -347,10 +347,10 @@ class tl_avisota_mailing_list extends Backend
 		) {
 			foreach ($GLOBALS['TL_HOOKS']['avisotaMailingListLabel'] as $callback) {
 				$this->import($callback[0]);
-				$strLabel = $this->$callback[0]->$callback[1]($arrRow, $strLabel, $dc);
+				$label = $this->$callback[0]->$callback[1]($rowData, $label, $dc);
 			}
 		}
-		return $strLabel;
+		return $label;
 	}
 
 
@@ -431,30 +431,30 @@ class tl_avisota_mailing_list extends Backend
 	 *
 	 * @return string
 	 */
-	public function generateAlias($varValue, DataContainer $dc)
+	public function generateAlias($value, DataContainer $dc)
 	{
 		$autoAlias = false;
 
 		// Generate alias if there is none
-		if (!strlen($varValue)) {
+		if (!strlen($value)) {
 			$autoAlias = true;
-			$varValue  = standardize($dc->activeRecord->title);
+			$value  = standardize($dc->activeRecord->title);
 		}
 
-		$objAlias = $this->Database
+		$aliasResultSet = $this->Database
 			->prepare("SELECT id FROM tl_avisota_mailing_list WHERE alias=?")
-			->execute($varValue);
+			->execute($value);
 
 		// Check whether the news alias exists
-		if ($objAlias->numRows > 1 && !$autoAlias) {
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $varValue));
+		if ($aliasResultSet->numRows > 1 && !$autoAlias) {
+			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $value));
 		}
 
 		// Add ID to alias
-		if ($objAlias->numRows && $autoAlias) {
-			$varValue .= '-' . $dc->id;
+		if ($aliasResultSet->numRows && $autoAlias) {
+			$value .= '-' . $dc->id;
 		}
 
-		return $varValue;
+		return $value;
 	}
 }

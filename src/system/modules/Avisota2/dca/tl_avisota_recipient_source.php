@@ -454,12 +454,12 @@ class tl_avisota_recipient_source extends Backend
 
 	public function onload_callback(DataContainer $dc)
 	{
-		$objSource = $this->Database
+		$source = $this->Database
 			->prepare("SELECT * FROM tl_avisota_recipient_source WHERE id=?")
 			->execute($dc->id);
 
-		if ($objSource->next() && $objSource->filter) {
-			switch ($objSource->type) {
+		if ($source->next() && $source->filter) {
+			switch ($source->type) {
 				case 'integrated':
 					MetaPalettes::appendFields(
 						'tl_avisota_recipient_source',
@@ -503,11 +503,11 @@ class tl_avisota_recipient_source extends Backend
 	public function onsubmit_callback(DataContainer $dc)
 	{
 		if ($dc->activeRecord->sorting == 0) {
-			$objSource = $this->Database
+			$source = $this->Database
 				->execute("SELECT MAX(sorting) as sorting FROM tl_avisota_recipient_source");
 			$this->Database
 				->prepare("UPDATE tl_avisota_recipient_source SET sorting=? WHERE id=?")
-				->execute($objSource->sorting > 0 ? $objSource->sorting * 2 : 128, $dc->id);
+				->execute($source->sorting > 0 ? $source->sorting * 2 : 128, $dc->id);
 		}
 	}
 
@@ -567,80 +567,80 @@ class tl_avisota_recipient_source extends Backend
 	 * @param integer
 	 * @param boolean
 	 */
-	public function toggleVisibility($intId, $blnVisible)
+	public function toggleVisibility($id, $isVisible)
 	{
 		// Check permissions to edit
-		$this->Input->setGet('id', $intId);
+		$this->Input->setGet('id', $id);
 		$this->Input->setGet('act', 'toggle');
 		$this->checkPermission();
 
 		// Check permissions to publish
 		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_avisota_recipient_source::disable', 'alexf')) {
 			$this->log(
-				'Not enough permissions to publish/unpublish newsletter recipient source ID "' . $intId . '"',
+				'Not enough permissions to publish/unpublish newsletter recipient source ID "' . $id . '"',
 				'tl_avisota_recipient_source toggleVisibility',
 				TL_ERROR
 			);
 			$this->redirect('contao/main.php?act=error');
 		}
 
-		$this->createInitialVersion('tl_avisota_recipient_source', $intId);
+		$this->createInitialVersion('tl_avisota_recipient_source', $id);
 
 		// Trigger the save_callback
 		if (is_array($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['disable']['save_callback'])) {
 			foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['disable']['save_callback'] as $callback) {
 				$this->import($callback[0]);
-				$blnVisible = $this->$callback[0]->$callback[1]($blnVisible, $this);
+				$isVisible = $this->$callback[0]->$callback[1]($isVisible, $this);
 			}
 		}
 
 		// Update the database
 		$this->Database
 			->prepare(
-			"UPDATE tl_avisota_recipient_source SET tstamp=" . time() . ", disable='" . ($blnVisible ? ''
+			"UPDATE tl_avisota_recipient_source SET tstamp=" . time() . ", disable='" . ($isVisible ? ''
 				: 1) . "' WHERE id=?"
 		)
-			->execute($intId);
+			->execute($id);
 
-		$this->createNewVersion('tl_avisota_recipient_source', $intId);
+		$this->createNewVersion('tl_avisota_recipient_source', $id);
 	}
 
 
 	public function move_button_callback(
-		$arrRow,
+		$row,
 		$href,
 		$label,
 		$title,
 		$icon,
 		$attributes,
-		$strTable,
-		$arrRootIds,
-		$arrChildRecordIds,
-		$blnCircularReference,
-		$strPrevious,
-		$strNext
+		$table,
+		$rootIds,
+		$childRecordIds,
+		$isCircularReference,
+		$previous,
+		$next
 	) {
-		$arrDirections = array('up', 'down');
+		$directions = array('up', 'down');
 		$href          = '&amp;act=move';
 		$return        = '';
 
-		foreach ($arrDirections as $dir) {
-			$label = strlen($GLOBALS['TL_LANG'][$strTable][$dir][0]) ? $GLOBALS['TL_LANG'][$strTable][$dir][0] : $dir;
+		foreach ($directions as $dir) {
+			$label = strlen($GLOBALS['TL_LANG'][$table][$dir][0]) ? $GLOBALS['TL_LANG'][$table][$dir][0] : $dir;
 			$title = sprintf(
-				strlen($GLOBALS['TL_LANG'][$strTable][$dir][1]) ? $GLOBALS['TL_LANG'][$strTable][$dir][1] : $dir,
-				$arrRow['id']
+				strlen($GLOBALS['TL_LANG'][$table][$dir][1]) ? $GLOBALS['TL_LANG'][$table][$dir][1] : $dir,
+				$row['id']
 			);
 
-			$objSource = $this->Database
+			$source = $this->Database
 				->prepare(
 				"SELECT * FROM tl_avisota_recipient_source WHERE " . ($dir == 'up' ? "sorting<?"
 					: "sorting>?") . " ORDER BY sorting " . ($dir == 'up' ? "DESC" : "ASC")
 			)
 				->limit(1)
-				->execute($arrRow['sorting']);
-			if ($objSource->next()) {
-				$return .= ' <a href="' . $this->addToUrl($href . '&amp;id=' . $arrRow['id']) . '&amp;sid=' . intval(
-					$objSource->id
+				->execute($row['sorting']);
+			if ($source->next()) {
+				$return .= ' <a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '&amp;sid=' . intval(
+					$source->id
 				) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage(
 					$dir . '.gif',
 					$label
@@ -659,16 +659,16 @@ class tl_avisota_recipient_source extends Backend
 		$this->loadLanguageFile('tl_avisota_recipient');
 		$this->loadDataContainer('tl_avisota_recipient');
 
-		$arrOptions = array();
+		$options = array();
 
 		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $k => $v) {
 			if ($v['eval']['importable']) {
-				$arrOptions[$k] = $v['label'][0];
+				$options[$k] = $v['label'][0];
 			}
 		}
-		asort($arrOptions);
+		asort($options);
 
-		return $arrOptions;
+		return $options;
 	}
 
 	public function getRecipientFilterColumns()
@@ -676,14 +676,14 @@ class tl_avisota_recipient_source extends Backend
 		$this->loadLanguageFile('tl_avisota_recipient');
 		$this->loadDataContainer('tl_avisota_recipient');
 
-		$arrOptions = array();
+		$options = array();
 
 		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $k => $v) {
-			$arrOptions[$k] = $v['label'][0] . ' (' . $k . ')';
+			$options[$k] = $v['label'][0] . ' (' . $k . ')';
 		}
-		asort($arrOptions);
+		asort($options);
 
-		return $arrOptions;
+		return $options;
 	}
 
 	public function getMemberFilterColumns()
@@ -691,13 +691,13 @@ class tl_avisota_recipient_source extends Backend
 		$this->loadLanguageFile('tl_member');
 		$this->loadDataContainer('tl_member');
 
-		$arrOptions = array();
+		$options = array();
 
 		foreach ($GLOBALS['TL_DCA']['tl_member']['fields'] as $k => $v) {
-			$arrOptions[$k] = $v['label'][0] . ' (' . $k . ')';
+			$options[$k] = $v['label'][0] . ' (' . $k . ')';
 		}
-		asort($arrOptions);
+		asort($options);
 
-		return $arrOptions;
+		return $options;
 	}
 }

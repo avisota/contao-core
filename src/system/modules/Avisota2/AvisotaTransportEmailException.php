@@ -48,11 +48,11 @@ class AvisotaTransportEmailException extends Exception
 
 	protected $email;
 
-	public function __construct($varRecipient, Email $objEmail, $message = '', $code = 0, $previous = null)
+	public function __construct($recipient, Email $email, $message = '', $code = 0, $previous = null)
 	{
 		parent::__construct($message, $code, $previous);
-		$this->recipient  = $varRecipient;
-		$this->newsletter = $objEmail;
+		$this->recipient  = $recipient;
+		$this->newsletter = $email;
 	}
 
 	public function getRecipient()

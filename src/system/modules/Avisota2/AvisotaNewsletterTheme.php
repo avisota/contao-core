@@ -45,20 +45,20 @@ class AvisotaNewsletterTheme
 {
 	protected static function load($id)
 	{
-		$objResult = Database::getInstance()
+		$result = Database::getInstance()
 			->prepare('SELECT * FROM tl_avisota_newsletter_theme WHERE id=?')
 			->execute($id);
-		if ($objResult->next()) {
-			$objTheme                    = new AvisotaNewsletterTheme();
-			$objTheme->id                = $objResult->id;
-			$objTheme->title             = $objResult->title;
-			$objTheme->previewImage      = $objResult->preview;
-			$objTheme->areas             = deserialize($objResult->areas, true);
-			$objTheme->htmlTemplate      = $objResult->template_html;
-			$objTheme->plainTemplate     = $objResult->template_plain;
-			$objTheme->stylesheets       = deserialize($objResult->stylesheets, true);
-			$objTheme->templateDirectory = $objResult->templateDirectory;
-			return $objTheme;
+		if ($result->next()) {
+			$theme                    = new AvisotaNewsletterTheme();
+			$theme->id                = $result->id;
+			$theme->title             = $result->title;
+			$theme->previewImage      = $result->preview;
+			$theme->areas             = deserialize($result->areas, true);
+			$theme->htmlTemplate      = $result->template_html;
+			$theme->plainTemplate     = $result->template_plain;
+			$theme->stylesheets       = deserialize($result->stylesheets, true);
+			$theme->templateDirectory = $result->templateDirectory;
+			return $theme;
 		}
 		return null;
 	}

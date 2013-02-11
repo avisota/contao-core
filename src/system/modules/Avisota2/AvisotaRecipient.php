@@ -43,27 +43,27 @@
  */
 class AvisotaRecipient extends Controller
 {
-	protected $arrData;
+	protected $data;
 
 	/**
 	 * @param $arrRecipient
 	 */
-	public function __construct(array $arrData = null)
+	public function __construct(array $data = null)
 	{
 		parent::__construct();
 
 		$this->import('Database');
 
-		$this->arrData = array();
+		$this->data = array();
 
-		if ($arrData != null) {
-			$this->setData($arrData);
+		if ($data != null) {
+			$this->setData($data);
 		}
 	}
 
-	public function setData($arrData)
+	public function setData($data)
 	{
-		foreach ($arrData as $k => $v) {
+		foreach ($data as $k => $v) {
 			$this->$k = $v;
 		}
 	}
@@ -79,22 +79,22 @@ class AvisotaRecipient extends Controller
 				$v = strtolower($v);
 				break;
 		}
-		$this->arrData[$k] = $v;
+		$this->data[$k] = $v;
 	}
 
 	public function __get($k)
 	{
-		return isset($this->arrData[$k]) ? $this->arrData[$k] : '';
+		return isset($this->data[$k]) ? $this->data[$k] : '';
 	}
 
 	public function __isset($k)
 	{
-		return isset($this->arrData[$k]);
+		return isset($this->data[$k]);
 	}
 
 	public function __unset($k)
 	{
-		unset($this->arrData[$k]);
+		unset($this->data[$k]);
 	}
 
 	/**
@@ -102,24 +102,24 @@ class AvisotaRecipient extends Controller
 	 *
 	 * @static
 	 *
-	 * @param array $arrData
+	 * @param array $data
 	 *
 	 * @throws AvisotaRecipientException
 	 */
-	public function validate(array $arrData)
+	public function validate(array $data)
 	{
-		if (!isset($arrData['email'])) {
-			throw new AvisotaRecipientException($arrData, 'The recipient has no email!');
+		if (!isset($data['email'])) {
+			throw new AvisotaRecipientException($data, 'The recipient has no email!');
 		}
-		if (!$this->isValidEmailAddress($arrData['email'])) {
-			throw new AvisotaRecipientException($arrData, 'The email "' . $arrData['email'] . '" is not valid!');
+		if (!$this->isValidEmailAddress($data['email'])) {
+			throw new AvisotaRecipientException($data, 'The email "' . $data['email'] . '" is not valid!');
 		}
 	}
 
 	public function isValid()
 	{
 		try {
-			$this->validate($this->arrData);
+			$this->validate($this->data);
 			return true;
 		}
 		catch (AvisotaRecipientException $e) {
@@ -129,7 +129,7 @@ class AvisotaRecipient extends Controller
 
 	public function getMailingLists()
 	{
-		return isset($this->arrData['lists']) && is_array($this->arrData['lists']) ? $this->arrData['lists'] : array();
+		return isset($this->data['lists']) && is_array($this->data['lists']) ? $this->data['lists'] : array();
 	}
 
 	/**
@@ -137,13 +137,13 @@ class AvisotaRecipient extends Controller
 	 * Will <strong>not</strong> send any confirmation mails.
 	 * Throws an exception, if the recipient is in the blacklist.
 	 *
-	 * @param array $arrLists
-	 * @param bool  $blnIgnoreBlacklist
+	 * @param array $lists
+	 * @param bool  $ignoreBlacklist
 	 *
 	 * @throws AvisotaSubscriptionException
 	 * @throws AvisotaBlacklistException
 	 */
-	public function subscribe(array $arrLists, $blnIgnoreBlacklist = false)
+	public function subscribe(array $lists, $ignoreBlacklist = false)
 	{
 		throw new AvisotaSubscriptionException($this, 'This recipient cannot subscribe!');
 
@@ -152,11 +152,11 @@ class AvisotaRecipient extends Controller
 	/**
 	 * Confirm the subscription of the mailing lists.
 	 *
-	 * @param array $arrToken
+	 * @param array $tokens
 	 *
 	 * @throws AvisotaSubscriptionException
 	 */
-	public function confirmSubscription(array $arrToken)
+	public function confirmSubscription(array $tokens)
 	{
 		throw new AvisotaSubscriptionException($this, 'This recipient cannot subscribe!');
 	}
@@ -164,12 +164,12 @@ class AvisotaRecipient extends Controller
 	/**
 	 * Remove the subscription to the mailing lists.
 	 *
-	 * @param array $arrLists
-	 * @param bool  $blnDoNotBlacklist
+	 * @param array $listIds
+	 * @param bool  $doNotBlacklist
 	 *
 	 * @throws AvisotaSubscriptionException
 	 */
-	public function unsubscribe(array $arrLists, $blnDoNotBlacklist = false)
+	public function unsubscribe(array $listIds, $doNotBlacklist = false)
 	{
 		throw new AvisotaSubscriptionException($this, 'This recipient cannot subscribe!');
 	}
@@ -178,11 +178,11 @@ class AvisotaRecipient extends Controller
 	 * Send the subscription confirmation mail to the given mailing lists
 	 * or all unconfirmed mailing lists, the recipient has subscribed.
 	 *
-	 * @param array|null $arrLists
+	 * @param array|null $listIds
 	 *
 	 * @throws AvisotaSubscriptionException
 	 */
-	public function sendSubscriptionConfirmation(array $arrLists = null)
+	public function sendSubscriptionConfirmation(array $listIds = null)
 	{
 		throw new AvisotaSubscriptionException($this, 'This recipient cannot subscribe!');
 	}
@@ -191,11 +191,11 @@ class AvisotaRecipient extends Controller
 	 * Send a reminder to the given mailing lists
 	 * or all unconfirmed, not reminded mailing lists, the recipient has subscribed.
 	 *
-	 * @param array|null $arrLists
+	 * @param array|null $listIds
 	 *
 	 * @throws AvisotaSubscriptionException
 	 */
-	public function sendRemind(array $arrLists = null)
+	public function sendRemind(array $listIds = null)
 	{
 		throw new AvisotaSubscriptionException($this, 'This recipient cannot subscribe!');
 	}

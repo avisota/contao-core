@@ -44,11 +44,11 @@
  */
 class AvisotaRecipientSourceCSVFile extends Controller implements AvisotaRecipientSource
 {
-	private $arrConfig;
+	private $config;
 
-	public function __construct($arrConfig)
+	public function __construct($configData)
 	{
-		$this->arrConfig = $arrConfig;
+		$this->config = $configData;
 	}
 
 	/**
@@ -71,7 +71,7 @@ class AvisotaRecipientSourceCSVFile extends Controller implements AvisotaRecipie
 	 *
 	 * @return array
 	 */
-	public function getRecipients($arrOptions)
+	public function getRecipients($options)
 	{
 
 	}
@@ -79,11 +79,11 @@ class AvisotaRecipientSourceCSVFile extends Controller implements AvisotaRecipie
 	/**
 	 * Get the recipient details.
 	 *
-	 * @param string $varId
+	 * @param string $id
 	 *
 	 * @return array
 	 */
-	public function getRecipientDetails($varId)
+	public function getRecipientDetails($id)
 	{
 
 	}

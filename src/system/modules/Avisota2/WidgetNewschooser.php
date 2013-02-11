@@ -57,11 +57,11 @@ class WidgetNewschooser extends Widget
 	 * @param string
 	 * @param mixed
 	 */
-	public function __set($strKey, $varValue)
+	public function __set($key, $value)
 	{
-		switch ($strKey) {
+		switch ($key) {
 			default:
-				parent::__set($strKey, $varValue);
+				parent::__set($key, $value);
 				break;
 		}
 	}
@@ -75,12 +75,11 @@ class WidgetNewschooser extends Widget
 	public function generate()
 	{
 		$this->import('Database');
-		$strClass = 'newschooser';
 		if (!is_array($this->value)) {
 			$this->value = array();
 		}
 
-		$objNews = $this->Database
+		$news = $this->Database
 			->prepare(
 			'SELECT n.id, n.headline, n.time, a.title AS archive
 												FROM tl_news AS n
@@ -91,31 +90,31 @@ class WidgetNewschooser extends Widget
 			->execute();
 
 
-		if ($objNews->numRows < 1) {
+		if ($news->numRows < 1) {
 			return '<p class="tl_noopt">' . $GLOBALS['TL_LANG']['MSC']['noResult'] . '</p>';
 		}
 
-		$strBuffer = '';
+		$buffer = '';
 		$header    = "";
-		while ($objNews->next()) {
-			if ($objNews->archive != $header) {
-				$header = $objNews->archive;
-				$strBuffer .= '<br/><h1 class="main_headline">' . $header . '</h1>';
+		while ($news->next()) {
+			if ($news->archive != $header) {
+				$header = $news->archive;
+				$buffer .= '<br/><h1 class="main_headline">' . $header . '</h1>';
 			}
 
-			$strBuffer .= '<div class="tl_content">';
-			$strBuffer .= '<input type="checkbox" id="news' . $objNews->id . '" class="tl_checkbox" name="news[]" value="' . $objNews->id . '"';
-			if (in_array($objNews->id, $this->value)) {
-				$strBuffer .= ' CHECKED';
+			$buffer .= '<div class="tl_content">';
+			$buffer .= '<input type="checkbox" id="news' . $news->id . '" class="tl_checkbox" name="news[]" value="' . $news->id . '"';
+			if (in_array($news->id, $this->value)) {
+				$buffer .= ' CHECKED';
 			}
-			$strBuffer .= '/>';
-			$strBuffer .= '<label for="news' . $objNews->id . '"> ';
-			$strBuffer .= $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $objNews->time) . ' - ';
-			$strBuffer .= '<strong>' . $objNews->headline . '</strong></label>';
-			$strBuffer .= '</div>';
+			$buffer .= '/>';
+			$buffer .= '<label for="news' . $news->id . '"> ';
+			$buffer .= $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $news->time) . ' - ';
+			$buffer .= '<strong>' . $news->headline . '</strong></label>';
+			$buffer .= '</div>';
 		}
 
-		return $strBuffer;
+		return $buffer;
 	}
 
 }

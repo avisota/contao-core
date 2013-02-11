@@ -50,23 +50,23 @@ class AvisotaTransportSwiftTransport extends AvisotaTransportMailerTransport
 
 	protected function createMailerConfig()
 	{
-		$objMailerConfig = parent::createMailerConfig();
+		$mailerConfig = parent::createMailerConfig();
 
 		switch ($this->config->swiftUseSmtp) {
 			case 'swiftSmtpOn':
-				$objMailerConfig->setUseSMTP(true);
-				$objMailerConfig->setSmtpHost($this->config->swiftSmtpHost);
-				$objMailerConfig->setSmtpPort($this->config->swiftSmtpPort);
-				$objMailerConfig->setSmtpUser($this->config->swiftSmtpUser);
-				$objMailerConfig->setSmtpPassword($this->config->swiftSmtpPass);
-				$objMailerConfig->setSmtpEncryption($this->config->swiftSmtpEnc);
+				$mailerConfig->setUseSMTP(true);
+				$mailerConfig->setSmtpHost($this->config->swiftSmtpHost);
+				$mailerConfig->setSmtpPort($this->config->swiftSmtpPort);
+				$mailerConfig->setSmtpUser($this->config->swiftSmtpUser);
+				$mailerConfig->setSmtpPassword($this->config->swiftSmtpPass);
+				$mailerConfig->setSmtpEncryption($this->config->swiftSmtpEnc);
 				break;
 
 			case 'swiftSmtpOff':
-				$objMailerConfig->setUseSMTP(false);
+				$mailerConfig->setUseSMTP(false);
 				break;
 		}
 
-		return $objMailerConfig;
+		return $mailerConfig;
 	}
 }

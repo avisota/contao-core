@@ -606,12 +606,12 @@ class tl_avisota_newsletter_content extends Backend
 					$this->redirect('contao/main.php?act=error');
 				}
 
-				$objCes = $this->Database
+				$contentElement = $this->Database
 					->prepare("SELECT id FROM tl_avisota_newsletter_content WHERE pid=?")
 					->execute(CURRENT_ID);
 
 				$session                   = $this->Session->getData();
-				$session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'], $objCes->fetchEach('id'));
+				$session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'], $contentElement->fetchEach('id'));
 				$this->Session->setData($session);
 				break;
 
@@ -652,18 +652,18 @@ class tl_avisota_newsletter_content extends Backend
 	 *
 	 * @return boolean
 	 */
-	protected function checkAccessToElement($id, $blnIsPid = false)
+	protected function checkAccessToElement($id, $isPid = false)
 	{
 		if ($this->User->isAdmin) {
 			return true;
 		}
 
-		if (!$blnIsPid) {
-			$objContent = $this->Database
+		if (!$isPid) {
+			$content = $this->Database
 				->prepare("SELECT * FROM tl_avisota_newsletter_content WHERE id=?")
 				->execute($id);
-			if ($objContent->next()) {
-				$id = $objContent->pid;
+			if ($content->next()) {
+				$id = $content->pid;
 			}
 			else {
 				$this->log(
@@ -675,11 +675,11 @@ class tl_avisota_newsletter_content extends Backend
 			}
 		}
 
-		$objNewsletter = $this->Database
+		$newsletter = $this->Database
 			->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
 			->execute($id);
-		if ($objNewsletter->next()) {
-			$pid = $objNewsletter->pid;
+		if ($newsletter->next()) {
+			$pid = $newsletter->pid;
 		}
 		else {
 			$this->log(
@@ -748,11 +748,11 @@ class tl_avisota_newsletter_content extends Backend
 	 */
 	public function pagePicker(DataContainer $dc)
 	{
-		$strField = 'ctrl_' . $dc->field . (($this->Input->get('act') == 'editAll') ? '_' . $dc->id : '');
+		$fieldId = 'ctrl_' . $dc->field . (($this->Input->get('act') == 'editAll') ? '_' . $dc->id : '');
 		return ' ' . $this->generateImage(
 			'pickpage.gif',
 			$GLOBALS['TL_LANG']['MSC']['pagepicker'],
-			'style="vertical-align:top; cursor:pointer;" onclick="Backend.pickPage(\'' . $strField . '\')"'
+			'style="vertical-align:top; cursor:pointer;" onclick="Backend.pickPage(\'' . $fieldId . '\')"'
 		);
 	}
 
@@ -786,22 +786,22 @@ class tl_avisota_newsletter_content extends Backend
 	public function getGalleryTemplates(DataContainer $dc)
 	{
 		// Get the page ID
-		$objArticle = $this->Database
+		$article = $this->Database
 			->prepare("SELECT pid FROM tl_article WHERE id=?")
 			->limit(1)
 			->execute($dc->activeRecord->pid);
 
 		// Inherit the page settings
-		$objPage = $this->getPageDetails($objArticle->pid);
+		$page = $this->getPageDetails($article->pid);
 
 		// Get the theme ID
-		$objLayout = $this->Database
+		$layout = $this->Database
 			->prepare("SELECT pid FROM tl_layout WHERE id=?")
 			->limit(1)
-			->execute($objPage->layout);
+			->execute($page->layout);
 
 		// Return all gallery templates
-		return $this->getTemplateGroup('nl_gallery_', $objLayout->pid);
+		return $this->getTemplateGroup('nl_gallery_', $layout->pid);
 	}
 
 
@@ -812,26 +812,26 @@ class tl_avisota_newsletter_content extends Backend
 	 *
 	 * @return string
 	 */
-	public function addElement($arrRow)
+	public function addElement($contentData)
 	{
-		$key = $arrRow['invisible'] ? 'unpublished' : 'published';
+		$key = $contentData['invisible'] ? 'unpublished' : 'published';
 
 		return '
 <div class="cte_type ' . $key . '">' .
-			(isset($GLOBALS['TL_LANG']['NLE'][$arrRow['type']][0]) ? $GLOBALS['TL_LANG']['NLE'][$arrRow['type']][0]
-				: $arrRow['type']) .
-			($arrRow['protected']
+			(isset($GLOBALS['TL_LANG']['NLE'][$contentData['type']][0]) ? $GLOBALS['TL_LANG']['NLE'][$contentData['type']][0]
+				: $contentData['type']) .
+			($contentData['protected']
 				? ' (' . $GLOBALS['TL_LANG']['MSC']['protected'] . ')'
-				: ($arrRow['guests']
+				: ($contentData['guests']
 					? ' (' . $GLOBALS['TL_LANG']['MSC']['guests'] . ')' : '')) .
-			($this->hasMultipleNewsletterAreas($arrRow) ? sprintf(
+			($this->hasMultipleNewsletterAreas($contentData) ? sprintf(
 				' <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>',
-				isset($GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$arrRow['area']])
-					? $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$arrRow['area']] : $arrRow['area']
+				isset($GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$contentData['area']])
+					? $GLOBALS['TL_LANG']['tl_avisota_newsletter_content']['area'][$contentData['area']] : $contentData['area']
 			) : '') .
 			'</div>
 <div class="limit_height' . (!$GLOBALS['TL_CONFIG']['doNotCollapse'] ? ' h64' : '') . ' block">
-<table>' . $this->Content->getNewsletterElement($arrRow['id']) . '</table>
+<table>' . $this->Content->getNewsletterElement($contentData['id']) . '</table>
 </div>' . "\n";
 	}
 
@@ -873,14 +873,14 @@ class tl_avisota_newsletter_content extends Backend
 	 * @param integer
 	 * @param boolean
 	 */
-	public function toggleVisibility($intId, $blnVisible)
+	public function toggleVisibility($contentId, $visible)
 	{
 		// Check permissions to edit
-		$this->Input->setGet('id', $intId);
+		$this->Input->setGet('id', $contentId);
 		$this->Input->setGet('act', 'toggle');
 		$this->checkPermission();
 
-		$this->createInitialVersion('tl_avisota_newsletter_content', $intId);
+		$this->createInitialVersion('tl_avisota_newsletter_content', $contentId);
 
 		// Trigger the save_callback
 		if (is_array($GLOBALS['TL_DCA']['tl_avisota_newsletter_content']['fields']['invisible']['save_callback'])) {
@@ -889,19 +889,19 @@ class tl_avisota_newsletter_content extends Backend
 				$callback
 			) {
 				$this->import($callback[0]);
-				$blnVisible = $this->$callback[0]->$callback[1]($blnVisible, $this);
+				$visible = $this->$callback[0]->$callback[1]($visible, $this);
 			}
 		}
 
 		// Update the database
 		$this->Database
 			->prepare(
-			"UPDATE tl_avisota_newsletter_content SET tstamp=" . time() . ", invisible='" . ($blnVisible ? ''
+			"UPDATE tl_avisota_newsletter_content SET tstamp=" . time() . ", invisible='" . ($visible ? ''
 				: 1) . "' WHERE id=?"
 		)
-			->execute($intId);
+			->execute($contentId);
 
-		$this->createNewVersion('tl_avisota_newsletter_content', $intId);
+		$this->createNewVersion('tl_avisota_newsletter_content', $contentId);
 	}
 
 
@@ -912,8 +912,8 @@ class tl_avisota_newsletter_content extends Backend
 	 */
 	public function hasMultipleNewsletterAreas($dc)
 	{
-		$arrAreas = $this->dcaGetNewsletterAreas($dc);
-		return count($arrAreas) > 1;
+		$areas = $this->dcaGetNewsletterAreas($dc);
+		return count($areas) > 1;
 	}
 
 
@@ -922,29 +922,29 @@ class tl_avisota_newsletter_content extends Backend
 	 */
 	public function dcaGetNewsletterAreas($dc)
 	{
-		$objCategory = $this->Database
+		$category = $this->Database
 			->prepare(
 			"SELECT c.* FROM tl_avisota_newsletter_category c INNER JOIN tl_avisota_newsletter n ON c.id=n.pid INNER JOIN tl_avisota_newsletter_content nle ON n.id=nle.pid WHERE nle.id=?"
 		)
 			->execute(is_array($dc) ? $dc['id'] : (is_object($dc) ? $dc->id : $dc));
-		if ($objCategory->next()) {
-			$arrAreas = array_filter(array_merge(array('body'), trimsplit(',', $objCategory->areas)));
+		if ($category->next()) {
+			$areas = array_filter(array_merge(array('body'), trimsplit(',', $category->areas)));
 		}
 		else {
-			$arrAreas = array('body');
+			$areas = array('body');
 		}
-		return array_unique($arrAreas);
+		return array_unique($areas);
 	}
 
 
 	/**
 	 * Update this data container.
 	 *
-	 * @param unknown_type $strName
+	 * @param unknown_type $name
 	 */
-	public function myLoadDataContainer($strName)
+	public function myLoadDataContainer($name)
 	{
-		if ($strName == 'tl_avisota_newsletter_content') {
+		if ($name == 'tl_avisota_newsletter_content') {
 			if ($this->Input->get('table') == 'tl_avisota_newsletter_content' && $this->Input->get('act') == 'edit') {
 				if (!$this->hasMultipleNewsletterAreas($this->Input->get('id'))) {
 					foreach ($GLOBALS['TL_DCA']['tl_avisota_newsletter_content']['palettes'] as $k => $v) {
@@ -970,44 +970,44 @@ class tl_avisota_newsletter_content extends Backend
 	 */
 	public function getArticleAlias(DataContainer $dc)
 	{
-		$arrPids  = array();
-		$arrAlias = array();
+		$pids  = array();
+		$aliases = array();
 
 		if (!$this->User->isAdmin) {
 			foreach ($this->User->pagemounts as $id) {
-				$arrPids[] = $id;
-				$arrPids   = array_merge($arrPids, $this->getChildRecords($id, 'tl_page', true));
+				$pids[] = $id;
+				$pids   = array_merge($pids, $this->getChildRecords($id, 'tl_page', true));
 			}
 
-			if (empty($arrPids)) {
-				return $arrAlias;
+			if (empty($pids)) {
+				return $aliases;
 			}
 
-			$objAlias = $this->Database->execute(
+			$alias = $this->Database->execute(
 				"SELECT a.id, a.title, a.inColumn, p.title AS parent FROM tl_article a LEFT JOIN tl_page p ON p.id=a.pid WHERE a.pid IN(" . implode(
 					',',
-					array_map('intval', array_unique($arrPids))
+					array_map('intval', array_unique($pids))
 				) . ") ORDER BY parent, a.sorting"
 			);
 		}
 		else {
-			$objAlias = $this->Database->execute(
+			$alias = $this->Database->execute(
 				"SELECT a.id, a.title, a.inColumn, p.title AS parent FROM tl_article a LEFT JOIN tl_page p ON p.id=a.pid ORDER BY parent, a.sorting"
 			);
 		}
 
-		if ($objAlias->numRows) {
+		if ($alias->numRows) {
 			$this->loadLanguageFile('tl_article');
 
-			while ($objAlias->next()) {
-				$arrAlias[$objAlias->parent][$objAlias->id] = $objAlias->title . ' (' . (strlen(
-					$GLOBALS['TL_LANG']['tl_article'][$objAlias->inColumn]
-				) ? $GLOBALS['TL_LANG']['tl_article'][$objAlias->inColumn]
-					: $objAlias->inColumn) . ', ID ' . $objAlias->id . ')';
+			while ($alias->next()) {
+				$aliases[$alias->parent][$alias->id] = $alias->title . ' (' . (strlen(
+					$GLOBALS['TL_LANG']['tl_article'][$alias->inColumn]
+				) ? $GLOBALS['TL_LANG']['tl_article'][$alias->inColumn]
+					: $alias->inColumn) . ', ID ' . $alias->id . ')';
 			}
 		}
 
-		return $arrAlias;
+		return $aliases;
 	}
 
 

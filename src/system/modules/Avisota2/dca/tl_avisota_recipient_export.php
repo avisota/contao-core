@@ -111,16 +111,15 @@ class tl_avisota_recipient_export extends Backend
 	 */
 	public function getFields()
 	{
-		$arrOptions = array();
-		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $strField => $arrData) {
-			if (isset($arrData['eval']) && isset($arrData['eval']['exportable']) && $arrData['eval']['exportable']) {
-				$arrOptions[$strField] = empty($arrData['label'][0]) ? $strField
-					: $arrData['label'][0] . ' [' . $strField . ']';
+		$options = array();
+		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $field => $data) {
+			if (isset($data['eval']) && isset($data['eval']['exportable']) && $data['eval']['exportable']) {
+				$options[$field] = empty($data['label'][0]) ? $field
+					: $data['label'][0] . ' [' . $field . ']';
 			}
 		}
-		$arrOptions['statistic:links'] = & $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'][0];
 
-		return $arrOptions;
+		return $options;
 	}
 
 
@@ -131,10 +130,10 @@ class tl_avisota_recipient_export extends Backend
 	 */
 	public function onload_callback(DataContainer $dc)
 	{
-		$varData = $this->Session->get('AVISOTA_EXPORT');
+		$sessionData = $this->Session->get('AVISOTA_EXPORT');
 
-		if ($varData && is_array($varData)) {
-			foreach ($varData as $k => $v) {
+		if ($sessionData && is_array($sessionData)) {
+			foreach ($sessionData as $k => $v) {
 				$dc->setData($k, $v);
 			}
 		}
@@ -151,51 +150,47 @@ class tl_avisota_recipient_export extends Backend
 		// Get delimiter
 		switch ($dc->getData('delimiter')) {
 			case 'semicolon':
-				$strDelimiter = ';';
+				$delimiter = ';';
 				break;
 
 			case 'tabulator':
-				$strDelimiter = "\t";
+				$delimiter = "\t";
 				break;
 
 			case 'linebreak':
-				$strDelimiter = "\n";
+				$delimiter = "\n";
 				break;
 
 			default:
-				$strDelimiter = ',';
+				$delimiter = ',';
 				break;
 		}
 
 		// Get enclosure
 		switch ($dc->getData('enclosure')) {
 			case 'single':
-				$strEnclosure = '\'';
+				$enclosure = '\'';
 				break;
 
 			default:
-				$strEnclosure = '"';
+				$enclosure = '"';
 				break;
 		}
 
 		// Get fields
-		$arrFields = $dc->getData('fields');
+		$fields = $dc->getData('fields');
 
 		// Get field labels
-		$arrLabels = array();
-		foreach ($arrFields as $strField) {
-			switch ($strField) {
-				case 'statistic:links':
-					$arrLabels[] = & $GLOBALS['TL_LANG']['tl_avisota_recipient_export']['statistic:links'][1];
-					break;
-
+		$labels = array();
+		foreach ($fields as $field) {
+			switch ($field) {
 				default:
-					$arrData = $GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$strField];
-					if (empty($arrData['label'][0])) {
-						$arrLabels[] = $strField;
+					$fieldConfig = $GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$field];
+					if (empty($fieldConfig['label'][0])) {
+						$labels[] = $field;
 					}
 					else {
-						$arrLabels[] = $arrData['label'][0] . ' [' . $strField . ']';
+						$labels[] = $fieldConfig['label'][0] . ' [' . $field . ']';
 					}
 					break;
 			}
@@ -211,11 +206,11 @@ class tl_avisota_recipient_export extends Backend
 		);
 
 		// search for the list
-		$objList = $this->Database
+		$list = $this->Database
 			->prepare("SELECT * FROM tl_avisota_mailing_list WHERE id=?")
 			->execute($this->Input->get('id'));
 
-		if (!$objList->next()) {
+		if (!$list->next()) {
 			$this->log(
 				'The recipient list ID ' . $this->Input->get('id') . ' does not exists!',
 				'tl_avisota_recipient_export',
@@ -225,102 +220,68 @@ class tl_avisota_recipient_export extends Backend
 		}
 
 		// create temporary file
-		$strFile = substr(tempnam(TL_ROOT . '/system/tmp', 'recipients_export_') . '.csv', strlen(TL_ROOT) + 1);
+		$temporaryPathname = substr(tempnam(TL_ROOT . '/system/tmp', 'recipients_export_') . '.csv', strlen(TL_ROOT) + 1);
 
 		// create new file object
-		$objFile = new File($strFile);
+		$temporaryFile = new File($temporaryPathname);
 
 		// open file handle
-		$objFile->write('');
+		$temporaryFile->write('');
 
 		// write the headline
-		fputcsv($objFile->handle, $arrLabels, $strDelimiter, $strEnclosure);
+		fputcsv($temporaryFile->handle, $labels, $delimiter, $enclosure);
 
 		// write recipient rows
-		$objRecipient = $this->Database
+		$recipient = $this->Database
 			->prepare("SELECT * FROM tl_avisota_recipient WHERE pid=?")
 			->execute($this->Input->get('id'));
-		while ($objRecipient->next()) {
-			$arrRow = array();
-			foreach ($arrFields as $strField) {
-				$intStatisticLinksIndex = -1;
-				switch ($strField) {
-					case 'statistic:links':
-						$intStatisticLinksIndex = count($arrRow);
-						$arrRow[]               = '';
-						break;
-
+		while ($recipient->next()) {
+			$row = array();
+			foreach ($fields as $field) {
+				switch ($field) {
 					default:
-						$arrRow[] = $objRecipient->$strField;
+						$row[] = $recipient->$field;
 				}
 			}
 
-			if ($intStatisticLinksIndex) {
-				$objLinks = $this->Database
-					->prepare(
-					"SELECT l.url
-						FROM tl_avisota_statistic_raw_recipient_link l
-						INNER JOIN tl_avisota_statistic_raw_link_hit h
-						ON h.recipientLinkID = l.id
-						WHERE l.recipient=?
-						GROUP BY l.url
-						ORDER BY l.url"
-				)
-					->execute($objRecipient->email);
-
-				if ($objLinks->numRows) {
-					$arrEmptyRow = array();
-					for ($i = 0; $i < count($arrRow); $i++) {
-						$arrEmptyRow[] = '';
-					}
-
-					while ($objLinks->next()) {
-						$arrRow[$intStatisticLinksIndex] = $objLinks->url;
-						fputcsv($objFile->handle, $arrRow, $strDelimiter, $strEnclosure);
-						$arrRow = $arrEmptyRow;
-					}
-					continue;
-				}
-			}
-
-			fputcsv($objFile->handle, $arrRow, $strDelimiter, $strEnclosure);
+			fputcsv($temporaryFile->handle, $row, $delimiter, $enclosure);
 		}
 
 		// close file handle
-		$objFile->close();
+		$temporaryFile->close();
 
 		// create temporary zip file
-		$strZip = $strFile . '.zip';
+		$zipFile = $temporaryPathname . '.zip';
 
 		// create a zip writer
-		$objZip = new ZipWriter($strZip);
+		$zip = new ZipWriter($zipFile);
 
 		// add the temporary csv
-		$objZip->addFile($strFile, $objList->title . '.csv');
+		$zip->addFile($temporaryPathname, $list->title . '.csv');
 
 		// close the zip
-		$objZip->close();
+		$zip->close();
 
 		// create new file object
-		$objZip = new File($strZip);
+		$zip = new File($zipFile);
 
 		// Open the "save as â€¦" dialogue
-		header('Content-Type: ' . $objZip->mime);
+		header('Content-Type: ' . $zip->mime);
 		header('Content-Transfer-Encoding: binary');
-		header('Content-Disposition: attachment; filename="' . $objList->title . '.zip"');
-		header('Content-Length: ' . $objZip->filesize);
+		header('Content-Disposition: attachment; filename="' . $list->title . '.zip"');
+		header('Content-Length: ' . $zip->filesize);
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		header('Pragma: public');
 		header('Expires: 0');
 
 		// send the zip file
-		$resFile = fopen(TL_ROOT . '/' . $strZip, 'rb');
+		$resFile = fopen(TL_ROOT . '/' . $zipFile, 'rb');
 		fpassthru($resFile);
 		fclose($resFile);
 
 		// delete temporary files
-		$objFile->delete();
-		$objZip->delete();
+		$temporaryFile->delete();
+		$zip->delete();
 
 		exit;
 	}

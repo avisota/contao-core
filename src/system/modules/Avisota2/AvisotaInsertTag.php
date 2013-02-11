@@ -55,85 +55,85 @@ class AvisotaInsertTag extends Controller
 	}
 
 
-	public function hookReplaceNewsletterInsertTags($strTag)
+	public function hookReplaceNewsletterInsertTags($tagName)
 	{
-		$strTag = explode('::', $strTag);
-		switch ($strTag[0]) {
+		$tagParts = explode('::', $tagName);
+		switch ($tagParts[0]) {
 			case 'recipient':
-				$arrCurrentRecipient = $this->Static->getRecipient();
+				$currentRecipient = $this->Static->getRecipient();
 
-				if ($arrCurrentRecipient) {
-					switch ($strTag[1]) {
+				if ($currentRecipient) {
+					switch ($tagParts[1]) {
 						default:
-							if ($arrCurrentRecipient && isset($arrCurrentRecipient[$strTag[1]])) {
-								return $arrCurrentRecipient[$strTag[1]];
+							if ($currentRecipient && isset($currentRecipient[$tagParts[1]])) {
+								return $currentRecipient[$tagParts[1]];
 							}
 					}
 				}
 				return '';
 
 			case 'newsletter':
-				$arrCurrentRecipient = $this->Static->getRecipient();
-				$objCategory         = $this->Static->getCategory();
-				$objNewsletter       = $this->Static->getNewsletter();
+				$currentRecipient = $this->Static->getRecipient();
+				$category         = $this->Static->getCategory();
+				$newsletter       = $this->Static->getNewsletter();
 
-				if ($arrCurrentRecipient && $objCategory && $objNewsletter) {
-					switch ($strTag[1]) {
+				if ($currentRecipient && $category && $newsletter) {
+					switch ($tagParts[1]) {
 						case 'href':
-							$objPage = $this->Base->getViewOnlinePage($objCategory, $arrCurrentRecipient);
-							if ($objPage) {
+							$page = $this->Base->getViewOnlinePage($category, $currentRecipient);
+							if ($page) {
 								return $this->Base->extendURL(
 									$this->generateFrontendUrl(
-										$objPage->row(),
-										'/item/' . ($objNewsletter->alias ? $objNewsletter->alias : $objNewsletter->id)
+										$page->row(),
+										'/item/' . ($newsletter->alias ? $newsletter->alias : $newsletter->id)
 									),
-									$objPage
+									$page
 								);
 							}
 							break;
 
 						case 'unsubscribe':
 						case 'unsubscribe_url':
-							$strAlias = false;
-							if ($arrCurrentRecipient['source'] == 'list') {
-								$objRecipientList = $this->Database
+							$alias = false;
+							if ($currentRecipient['source'] == 'list') {
+								$recipientList = $this->Database
 									->prepare("SELECT * FROM tl_avisota_mailing_list WHERE id=?")
-									->execute($arrCurrentRecipient['sourceID']);
-								if (!$objRecipientList->next()) {
+									->execute($currentRecipient['sourceID']);
+								if (!$recipientList->next()) {
 									return '';
 								}
-								$strAlias = $objRecipientList->alias;
-								$objPage  = $this->getPageDetails($objRecipientList->subscriptionPage);
+								$alias = $recipientList->alias;
+								$page  = $this->getPageDetails($recipientList->subscriptionPage);
 							}
-							else if ($arrCurrentRecipient['source'] == 'mgroup') {
-								if ($objCategory->subscriptionPage > 0) {
-									$objPage = $this->getPageDetails($objCategory->subscriptionPage);
+							else if ($currentRecipient['source'] == 'mgroup') {
+								if ($category->subscriptionPage > 0) {
+									$page = $this->getPageDetails($category->subscriptionPage);
 								}
 							}
 
-							if ($objPage) {
-								$strUrl = $this->Base->extendURL(
-									$this->generateFrontendUrl($objPage->row()) . '?' . ($arrCurrentRecipient['email']
-										? 'email=' . $arrCurrentRecipient['email'] : '') . ($strAlias
-										? '&unsubscribetoken=' . $strAlias : '')
+							if ($page) {
+								$url = $this->Base->extendURL(
+									$this->generateFrontendUrl($page->row()) . '?' . ($currentRecipient['email']
+										? 'email=' . $currentRecipient['email'] : '') . ($alias
+										? '&unsubscribetoken=' . $alias : '')
 								);
 							}
 							else {
-								$strUrl = $this->Base->extendURL(
-									'?' . ($arrCurrentRecipient['email'] ? 'email=' . $arrCurrentRecipient['email']
-										: '') . ($strAlias ? '&unsubscribetoken=' . $strAlias : '')
+								$url = $this->Base->extendURL(
+									'?' . ($currentRecipient['email'] ? 'email=' . $currentRecipient['email']
+										: '') . ($alias ? '&unsubscribetoken=' . $alias : '')
 								);
 							}
 
-							if ($strTag[1] == 'unsubscribe_url') {
-								return $strUrl;
+							if ($tagParts[1] == 'unsubscribe_url') {
+								return $url;
 							}
 
-							switch ($strTag[2]) {
+							switch ($tagParts[2]) {
 								case 'html':
 									return sprintf(
 										'<a href="%s">%s</a>',
-										$strUrl,
+										$url,
 										$GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe']
 									);
 
@@ -141,7 +141,7 @@ class AvisotaInsertTag extends Controller
 									return sprintf(
 										"%s\n[%s]",
 										$GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe'],
-										$strUrl
+										$url
 									);
 							}
 							break;
@@ -151,9 +151,9 @@ class AvisotaInsertTag extends Controller
 
 			case 'newsletter_latest_link':
 			case 'newsletter_latest_url':
-				if (strlen($strTag[1])) {
-					$strId = "'" . implode("','", trimsplit(',', $strTag[1])) . "'";
-					$objNewsletter = $this->Database
+				if (strlen($tagParts[1])) {
+					$id = "'" . implode("','", trimsplit(',', $tagParts[1])) . "'";
+					$newsletter = $this->Database
 						->prepare(
 						"
 						SELECT
@@ -167,17 +167,17 @@ class AvisotaInsertTag extends Controller
 						ON
 							c.`id`=n.`pid`
 						WHERE
-							(	c.`id` IN ($strId)
-							OR	c.`alias` IN ($strId))
+							(	c.`id` IN ($id)
+							OR	c.`alias` IN ($id))
 							AND n.`sendOn`!=''
 						ORDER BY
 							n.`sendOn` DESC"
 					)
 						->limit(1)
 						->execute();
-					if ($objNewsletter->next()) {
-						if (strlen($strTag[2])) {
-							$objPage = $this->Database
+					if ($newsletter->next()) {
+						if (strlen($tagParts[2])) {
+							$page = $this->Database
 								->prepare(
 								"
 								SELECT
@@ -188,28 +188,28 @@ class AvisotaInsertTag extends Controller
 										`id`=?
 									OR	`alias`=?"
 							)
-								->execute($strTag[2], $strTag[2]);
-							if (!$objPage->next()) {
-								$objPage = false;
+								->execute($tagParts[2], $tagParts[2]);
+							if (!$page->next()) {
+								$page = false;
 							}
 						}
 						else {
-							$objPage = $this->Base->getViewOnlinePage($objNewsletter, false);
+							$page = $this->Base->getViewOnlinePage($newsletter, false);
 						}
-						if ($objPage) {
-							$strUrl = $this->Base->extendURL(
+						if ($page) {
+							$url = $this->Base->extendURL(
 								$this->generateFrontendUrl(
-									$objPage->row(),
-									'/item/' . ($objNewsletter->alias ? $objNewsletter->alias : $objNewsletter->id)
+									$page->row(),
+									'/item/' . ($newsletter->alias ? $newsletter->alias : $newsletter->id)
 								),
-								$objPage
+								$page
 							);
-							if ($strTag[0] == 'newsletter_latest_link') {
+							if ($tagParts[0] == 'newsletter_latest_link') {
 								$this->loadLanguageFile('avisota');
-								return sprintf($GLOBALS['TL_LANG']['avisota']['latest_link'], specialchars($strUrl));
+								return sprintf($GLOBALS['TL_LANG']['avisota']['latest_link'], specialchars($url));
 							}
 							else {
-								return $strUrl;
+								return $url;
 							}
 						}
 					}

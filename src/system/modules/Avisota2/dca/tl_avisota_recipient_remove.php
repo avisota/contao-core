@@ -99,29 +99,28 @@ class tl_avisota_recipient_remove extends Backend
 	 */
 	public function onsubmit_callback(DataContainer $dc)
 	{
-		$arrSource = $dc->getData('source');
-		$arrUpload = $dc->getData('upload');
-		$strEmails = $dc->getData('emails');
+		$source = $dc->getData('source');
+		$upload = $dc->getData('upload');
+		$emails = $dc->getData('emails');
 
-		$time     = time();
-		$intTotal = 0;
+		$totalCount = 0;
 
-		if (is_array($arrSource)) {
-			foreach ($arrSource as $strCsvFile) {
-				$objFile = new File($strCsvFile);
-				$this->removeRecipients($objFile->getContent(), $intTotal);
+		if (is_array($source)) {
+			foreach ($source as $csvFile) {
+				$file = new File($csvFile);
+				$this->removeRecipients($file->getContent(), $totalCount);
 			}
 		}
 
-		if ($arrUpload) {
-			$this->removeRecipients(file_get_contents($arrUpload['tmp_name']), $intTotal);
+		if ($upload) {
+			$this->removeRecipients(file_get_contents($upload['tmp_name']), $totalCount);
 		}
 
-		if ($strEmails) {
-			$this->removeRecipients($strEmails, $intTotal);
+		if ($emails) {
+			$this->removeRecipients($emails, $totalCount);
 		}
 
-		$_SESSION['TL_CONFIRM'][] = sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['confirm'], $intTotal);
+		$_SESSION['TL_CONFIRM'][] = sprintf($GLOBALS['TL_LANG']['tl_avisota_recipient_remove']['confirm'], $totalCount);
 
 		setcookie('BE_PAGE_OFFSET', 0, 0, '/');
 		$this->reload();
@@ -131,39 +130,39 @@ class tl_avisota_recipient_remove extends Backend
 	/**
 	 * Remove recipients.
 	 *
-	 * @param string $strEmails
-	 * @param int    $intTotal
+	 * @param string $emailList
+	 * @param int    $totalCount
 	 */
-	protected function removeRecipients($strEmails, &$intTotal)
+	protected function removeRecipients($emailList, &$totalCount)
 	{
-		$arrEmails = preg_split('#[\s,;]#u', $strEmails, -1, PREG_SPLIT_NO_EMPTY);
-		$arrEmails = array_filter(array_unique($arrEmails));
+		$emails = preg_split('#[\s,;]#u', $emailList, -1, PREG_SPLIT_NO_EMPTY);
+		$emails = array_filter(array_unique($emails));
 
-		$arrParams       = array($this->Input->get('id'));
-		$arrPlaceHolders = array();
-		foreach ($arrEmails as $strEmail) {
-			if (preg_match('#^".*"$#', $strEmail) || preg_match("#^'.*'$#", $strEmail)) {
-				$strEmail = substr($strEmail, 1, -1);
+		$params       = array($this->Input->get('id'));
+		$placeHolders = array();
+		foreach ($emails as $email) {
+			if (preg_match('#^".*"$#', $email) || preg_match("#^'.*'$#", $email)) {
+				$email = substr($email, 1, -1);
 			}
 
 			// Skip invalid entries
-			if (!$this->isValidEmailAddress($strEmail)) {
+			if (!$this->isValidEmailAddress($email)) {
 				continue;
 			}
 
-			$arrParams[]       = $strEmail;
-			$arrPlaceHolders[] = '?';
+			$params[]       = $email;
+			$placeHolders[] = '?';
 		}
 
-		if (count($arrParams)) {
+		if (count($params)) {
 			// Check whether the e-mail address exists
-			$objDelete = $this->Database
+			$resultSet = $this->Database
 				->prepare(
-				"DELETE FROM tl_avisota_recipient WHERE pid=? AND email IN (" . implode(',', $arrPlaceHolders) . ")"
+				"DELETE FROM tl_avisota_recipient WHERE pid=? AND email IN (" . implode(',', $placeHolders) . ")"
 			)
-				->execute($arrParams);
+				->execute($params);
 
-			$intTotal += $objDelete->affectedRows;
+			$totalCount += $resultSet->affectedRows;
 		}
 	}
 }

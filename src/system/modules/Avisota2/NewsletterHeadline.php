@@ -50,14 +50,14 @@ class NewsletterHeadline extends NewsletterElement
 	 *
 	 * @var string
 	 */
-	protected $strTemplateHTML = 'nle_headline_html';
+	protected $templateHTML = 'nle_headline_html';
 
 	/**
 	 * Plain text Template
 	 *
 	 * @var string
 	 */
-	protected $strTemplatePlain = 'nle_headline_plain';
+	protected $templatePlain = 'nle_headline_plain';
 
 
 	/**

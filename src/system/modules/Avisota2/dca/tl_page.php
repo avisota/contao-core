@@ -58,9 +58,9 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['jumpBack'] = array
 
 class tl_page_avisota extends tl_page
 {
-	public function alterDataContainer($strName)
+	public function alterDataContainer($name)
 	{
-		if ($strName == 'tl_page') {
+		if ($name == 'tl_page') {
 			$GLOBALS['TL_DCA']['tl_page']['config']['onsubmit_callback'][]                = array(
 				'tl_page_avisota',
 				'onSubmit'
@@ -88,36 +88,36 @@ class tl_page_avisota extends tl_page
 		}
 	}
 
-	public function sitemapCallback($varValue, DataContainer $dc)
+	public function sitemapCallback($value, DataContainer $dc)
 	{
 		if (!$dc->activeRecord) {
-			$objPage = $this->Database
+			$page = $this->Database
 				->prepare("SELECT * FROM tl_page WHERE id=?")
 				->execute($dc->id);
-			if ($objPage->next() && $objPage->type == 'avisota') {
+			if ($page->next() && $page->type == 'avisota') {
 				return 'map_never';
 			}
 		}
 		else if ($dc->activeRecord->type == 'avisota') {
 			return 'map_never';
 		}
-		return $varValue;
+		return $value;
 	}
 
-	public function hideCallback($varValue, DataContainer $dc)
+	public function hideCallback($value, DataContainer $dc)
 	{
 		if (!$dc->activeRecord) {
-			$objPage = $this->Database
+			$page = $this->Database
 				->prepare("SELECT * FROM tl_page WHERE id=?")
 				->execute($dc->id);
-			if ($objPage->next() && $objPage->type == 'avisota') {
+			if ($page->next() && $page->type == 'avisota') {
 				return '1';
 			}
 		}
 		else if ($dc->activeRecord->type == 'avisota') {
 			return '1';
 		}
-		return $varValue;
+		return $value;
 	}
 
 	public function onSubmit(DataContainer $dc)
@@ -139,15 +139,15 @@ class tl_page_avisota extends tl_page
 	}
 
 
-	public function pastePage(DataContainer $dc, $row, $table, $cr, $arrClipboard = false)
+	public function pastePage(DataContainer $dc, $row, $table, $cr, $clipboardData = false)
 	{
 		if ($row['type'] == 'avisota') {
 			$disablePA = false;
 
 			// Disable all buttons if there is a circular reference
-			if ($arrClipboard !== false && ($arrClipboard['mode'] == 'cut' && ($cr == 1 || $arrClipboard['id'] == $row['id']) || $arrClipboard['mode'] == 'cutAll' && ($cr == 1 || in_array(
+			if ($clipboardData !== false && ($clipboardData['mode'] == 'cut' && ($cr == 1 || $clipboardData['id'] == $row['id']) || $clipboardData['mode'] == 'cutAll' && ($cr == 1 || in_array(
 				$row['id'],
-				$arrClipboard['id']
+				$clipboardData['id']
 			)))
 			) {
 				$disablePA = true;
@@ -155,14 +155,14 @@ class tl_page_avisota extends tl_page
 
 			// Check permissions if the user is not an administrator
 			if (!$this->User->isAdmin) {
-				$objPage = $this->Database
+				$page = $this->Database
 					->prepare("SELECT * FROM " . $table . " WHERE id=?")
 					->limit(1)
 					->execute($row['pid']);
 
 				// Disable "paste after" button if there is no permission 2 for the parent page
-				if (!$disablePA && $objPage->numRows) {
-					if (!$this->User->isAllowed(2, $objPage->row())) {
+				if (!$disablePA && $page->numRows) {
+					if (!$this->User->isAllowed(2, $page->row())) {
 						$disablePA = true;
 					}
 				}
@@ -184,9 +184,9 @@ class tl_page_avisota extends tl_page
 				return $disablePA
 					? $this->generateImage('pasteafter_.gif', '', 'class="blink"') . ' '
 					: '<a href="' . $this->addToUrl(
-						'act=' . $arrClipboard['mode'] . '&amp;mode=1&amp;pid=' . $row['id'] . (!is_array(
-							$arrClipboard['id']
-						) ? '&amp;id=' . $arrClipboard['id'] : '')
+						'act=' . $clipboardData['mode'] . '&amp;mode=1&amp;pid=' . $row['id'] . (!is_array(
+							$clipboardData['id']
+						) ? '&amp;id=' . $clipboardData['id'] : '')
 					) . '" title="' . specialchars(
 						sprintf($GLOBALS['TL_LANG'][$table]['pasteafter'][1], $row['id'])
 					) . '" onclick="Backend.getScrollOffset();">' . $imagePasteAfter . '</a> ' . $this->generateImage(
@@ -198,7 +198,7 @@ class tl_page_avisota extends tl_page
 
 			return '';
 		}
-		return parent::pastePage($dc, $row, $table, $cr, $arrClipboard);
+		return parent::pastePage($dc, $row, $table, $cr, $clipboardData);
 	}
 
 
@@ -207,8 +207,8 @@ class tl_page_avisota extends tl_page
 		$label,
 		DataContainer $dc = null,
 		$imageAttribute = '',
-		$blnReturnImage = false,
-		$blnProtected = false
+		$returnImage = false,
+		$isProtected = false
 	) {
 		if ($row['type'] == 'avisota') {
 			$sub   = 0;
@@ -232,14 +232,14 @@ class tl_page_avisota extends tl_page
 			}
 
 			// Return the image only
-			if ($blnReturnImage) {
+			if ($returnImage) {
 				return $this->generateImage($image, '', $imageAttribute);
 			}
 
 			// Return image
 			return $this->generateImage($image, '', $imageAttribute) . ' ' . $label;
 		}
-		return parent::addIcon($row, $label, $dc, $imageAttribute, $blnReturnImage);
+		return parent::addIcon($row, $label, $dc, $imageAttribute, $returnImage);
 	}
 }
 

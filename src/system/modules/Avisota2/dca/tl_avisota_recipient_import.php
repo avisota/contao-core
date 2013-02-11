@@ -191,56 +191,56 @@ class tl_avisota_recipient_import extends Backend
 	/**
 	 * Validate columns definition
 	 */
-	public function validateFieldSelectorArray($varValue)
+	public function validateFieldSelectorArray($value)
 	{
-		$arrColnums     = array();
-		$arrFields      = array();
-		$blnEmailExists = false;
-		$blnDoubles     = false;
+		$columnNumbers     = array();
+		$fields      = array();
+		$emailExists = false;
+		$doubles     = false;
 
-		foreach ($varValue as $row) {
-			$intColnum = $row['values']['colnum'];
-			$strField  = $row['values']['field'];
+		foreach ($value as $row) {
+			$columnNumber = $row['values']['colnum'];
+			$field  = $row['values']['field'];
 
-			if (in_array($intColnum, $arrColnums)) {
-				$blnDoubles = true;
+			if (in_array($columnNumber, $columnNumbers)) {
+				$doubles = true;
 			}
 			else {
-				$arrColnums[] = $intColnum;
+				$columnNumbers[] = $columnNumber;
 			}
 
-			if (in_array($strField, $arrFields)) {
-				$blnDoubles = true;
+			if (in_array($field, $fields)) {
+				$doubles = true;
 			}
 			else {
-				$arrFields[] = $strField;
+				$fields[] = $field;
 			}
 
-			if ($strField == 'email') {
-				$blnEmailExists = true;
+			if ($field == 'email') {
+				$emailExists = true;
 			}
 		}
 
-		if ($blnDoubles) {
+		if ($doubles) {
 			$_SESSION['TL_ERROR'][] = $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['doubles'];
 		}
 
-		if (!$blnEmailExists) {
+		if (!$emailExists) {
 			$_SESSION['TL_ERROR'][] = $GLOBALS['TL_LANG']['tl_avisota_recipient_import']['emailMissing'];
 		}
 
-		return !$blnDoubles && $blnEmailExists;
+		return !$doubles && $emailExists;
 	}
 
 
 	/**
 	 * Store the columns definition array.
 	 *
-	 * @param Widget $objWidget
+	 * @param Widget $widget
 	 *
 	 * @return void
 	 */
-	public function storeFieldSelectorArray(MultiSelectWizard $objWidget)
+	public function storeFieldSelectorArray(MultiSelectWizard $widget)
 	{
 		// just do nothink
 		// prevent update the non-existing table
@@ -254,10 +254,10 @@ class tl_avisota_recipient_import extends Backend
 	 */
 	public function onload_callback(DataContainer $dc)
 	{
-		$varData = $this->Session->get('AVISOTA_IMPORT');
+		$sessionData = $this->Session->get('AVISOTA_IMPORT');
 
-		if ($varData && is_array($varData)) {
-			foreach ($varData as $k => $v) {
+		if ($sessionData && is_array($sessionData)) {
+			foreach ($sessionData as $k => $v) {
 				$dc->setData($k, $v);
 			}
 		}
@@ -271,44 +271,44 @@ class tl_avisota_recipient_import extends Backend
 	 */
 	public function onsubmit_callback(DataContainer $dc)
 	{
-		$arrSource = $dc->getData('source');
-		$arrUpload = $dc->getData('upload');
+		$source = $dc->getData('source');
+		$upload = $dc->getData('upload');
 
 		// Get delimiter
 		switch ($dc->getData('delimiter')) {
 			case 'semicolon':
-				$strDelimiter = ';';
+				$delimiter = ';';
 				break;
 
 			case 'tabulator':
-				$strDelimiter = "\t";
+				$delimiter = "\t";
 				break;
 
 			case 'linebreak':
-				$strDelimiter = "\n";
+				$delimiter = "\n";
 				break;
 
 			default:
-				$strDelimiter = ',';
+				$delimiter = ',';
 				break;
 		}
 
 		// Get enclosure
 		switch ($dc->getData('enclosure')) {
 			case 'single':
-				$strEnclosure = '\'';
+				$enclosure = '\'';
 				break;
 
 			default:
-				$strEnclosure = '"';
+				$enclosure = '"';
 				break;
 		}
 
 		// Get columns
-		$arrColumnsRaw = $dc->getData('columns');
+		$rawColumns = $dc->getData('columns');
 
-		$blnOverwrite = $dc->getData('overwrite') ? true : false;
-		$blnForce     = $dc->getData('force') ? true : false;
+		$overwrite = $dc->getData('overwrite') ? true : false;
+		$force     = $dc->getData('force') ? true : false;
 
 		$this->Session->set(
 			'AVISOTA_IMPORT',
@@ -319,86 +319,86 @@ class tl_avisota_recipient_import extends Backend
 			)
 		);
 
-		if ($this->validateFieldSelectorArray($arrColumnsRaw)) {
-			$arrColumns = array();
-			foreach ($arrColumnsRaw as $arrRow) {
-				$arrColumns[$arrRow['values']['colnum']] = $arrRow['values']['field'];
+		if ($this->validateFieldSelectorArray($rawColumns)) {
+			$columns = array();
+			foreach ($rawColumns as $row) {
+				$columns[$row['values']['colnum']] = $row['values']['field'];
 			}
-			$time         = time();
-			$intTotal     = 0;
-			$intOverwrite = 0;
-			$intSkipped   = 0;
-			$intInvalid   = 0;
+			$startTime         = time();
+			$totalCount     = 0;
+			$overwriteCount = 0;
+			$skipCount   = 0;
+			$invalidCount   = 0;
 
-			if (is_array($arrSource)) {
-				foreach ($arrSource as $strCsvFile) {
-					$objFile = new File($strCsvFile);
+			if (is_array($source)) {
+				foreach ($source as $csvFile) {
+					$file = new File($csvFile);
 
-					if ($objFile->extension != 'csv') {
-						$_SESSION['TL_ERROR'][] = sprintf($GLOBALS['TL_LANG']['ERR']['filetype'], $objFile->extension);
+					if ($file->extension != 'csv') {
+						$_SESSION['TL_ERROR'][] = sprintf($GLOBALS['TL_LANG']['ERR']['filetype'], $file->extension);
 						continue;
 					}
 
 					$this->importRecipients(
-						$objFile->handle,
-						$strDelimiter,
-						$strEnclosure,
-						$arrColumns,
-						$blnOverwrite,
-						$blnForce,
-						$time,
-						$intTotal,
-						$intOverwrite,
-						$intSkipped,
-						$intInvalid
+						$file->handle,
+						$delimiter,
+						$enclosure,
+						$columns,
+						$overwrite,
+						$force,
+						$startTime,
+						$totalCount,
+						$overwriteCount,
+						$skipCount,
+						$invalidCount
 					);
-					$objFile->close();
+					$file->close();
 				}
 			}
 
-			if ($arrUpload) {
-				$resFile = fopen($arrUpload['tmp_name'], 'r');
+			if ($upload) {
+				$resFile = fopen($upload['tmp_name'], 'r');
 				$this->importRecipients(
 					$resFile,
-					$strDelimiter,
-					$strEnclosure,
-					$arrColumns,
-					$blnOverwrite,
-					$blnForce,
-					$time,
-					$intTotal,
-					$intOverwrite,
-					$intSkipped,
-					$intInvalid
+					$delimiter,
+					$enclosure,
+					$columns,
+					$overwrite,
+					$force,
+					$startTime,
+					$totalCount,
+					$overwriteCount,
+					$skipCount,
+					$invalidCount
 				);
 				fclose($resFile);
 			}
 
-			if ($intTotal > 0) {
+			if ($totalCount > 0) {
 				$_SESSION['TL_CONFIRM'][] = sprintf(
 					$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['confirmed'],
-					$intTotal
+					$totalCount
 				);
 			}
 
-			if ($intOverwrite > 0) {
+			if ($overwriteCount > 0) {
 				$_SESSION['TL_CONFIRM'][] = sprintf(
 					$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['overwritten'],
-					$intOverwrite
+					$overwriteCount
 				);
 			}
 
-			if ($intSkipped > 0) {
+			if ($skipCount > 0) {
 				$_SESSION['TL_CONFIRM'][] = sprintf(
 					$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['skipped'],
-					$intSkipped
+					$skipCount
 				);
 			}
 
-			if ($intInvalid > 0) {
+			if ($invalidCount > 0) {
 				$_SESSION['TL_INFO'][] = sprintf(
 					$GLOBALS['TL_LANG']['tl_avisota_recipient_import']['invalid'],
-					$intInvalid
+					$invalidCount
 				);
 			}
 
@@ -413,120 +413,120 @@ class tl_avisota_recipient_import extends Backend
 	 * Read a csv file and import the data.
 	 *
 	 * @param handle $resFile
-	 * @param string $strDelimiter
-	 * @param string $strEnclosure
+	 * @param string $delimiter
+	 * @param string $enclosure
 	 * @param int    $time
-	 * @param int    $intTotal
-	 * @param int    $intInvalid
+	 * @param int    $totalCount
+	 * @param int    $invalidCount
 	 */
 	protected function importRecipients(
 		$resFile,
-		$strDelimiter,
-		$strEnclosure,
-		$arrColumns,
-		$blnOverwrite,
-		$blnForce,
+		$delimiter,
+		$enclosure,
+		$columns,
+		$overwrite,
+		$force,
 		$time,
-		&$intTotal,
-		&$intOverwrite,
-		&$intSkipped,
-		&$intInvalid
+		&$totalCount,
+		&$overwriteCount,
+		&$skipCount,
+		&$invalidCount
 	) {
-		$arrRecipients = array();
-		$arrEmail      = array();
+		$recipients = array();
+		$emails      = array();
 		$n             = 0;
 
-		while (($arrRow = @fgetcsv($resFile, null, $strDelimiter, $strEnclosure)) !== false) {
-			$arrRecipient = array();
-			foreach ($arrColumns as $intColnum => $strField) {
-				$arrRecipient[$strField] = $arrRow[$intColnum];
+		while (($row = @fgetcsv($resFile, null, $delimiter, $enclosure)) !== false) {
+			$recipientData = array();
+			foreach ($columns as $columnNumber => $field) {
+				$recipientData[$field] = $row[$columnNumber];
 			}
 
 			// Skip invalid entries
-			if (!$this->isValidEmailAddress($arrRecipient['email'])) {
+			if (!$this->isValidEmailAddress($recipientData['email'])) {
 				$this->log(
-					'Recipient address "' . $arrRecipient['email'] . '" seems to be invalid and has been skipped',
+					'Recipient address "' . $recipientData['email'] . '" seems to be invalid and has been skipped',
 					'Avisota importRecipients()',
 					TL_ERROR
 				);
 
-				++$intInvalid;
+				++$invalidCount;
 			}
 			else {
-				$arrRecipients[$n] = $arrRecipient;
-				$arrEmail[$n]      = $arrRecipient['email'];
+				$recipients[$n] = $recipientData;
+				$emails[$n]      = $recipientData['email'];
 				$n++;
 			}
-			unset($arrRecipient, $arrRow);
+			unset($recipientData, $row);
 		}
 
-		$arrBlacklist = array();
-		if ($blnForce) {
-			$objBlacklist = $this->Database
+		$blacklist = array();
+		if ($force) {
+			$this->Database
 				->prepare(
 				"DELETE FROM tl_avisota_recipient_blacklist WHERE pid=? AND email IN (MD5('" . implode(
 					"'),MD5('",
-					array_map('md5', $arrEmail)
+					array_map('md5', $emails)
 				) . "'))"
 			)
 				->execute($this->Input->get('id'));
 		}
 		else {
-			$objBlacklist = $this->Database
+			$blacklistResultSet = $this->Database
 				->prepare(
 				"SELECT * FROM tl_avisota_recipient_blacklist WHERE pid=? AND email IN (MD5('" . implode(
 					"'),MD5('",
-					$arrEmail
+					$emails
 				) . "'))"
 			)
 				->execute($this->Input->get('id'));
-			while ($objBlacklist->next()) {
-				$arrBlacklist[$objBlacklist->email] = $objBlacklist->id;
+			while ($blacklistResultSet->next()) {
+				$blacklist[$blacklistResultSet->email] = $blacklistResultSet->id;
 			}
 		}
 
 		// Check whether the e-mail address exists
-		$arrExistingRecipients = array();
-		$objExistingRecipients = $this->Database
+		$existingRecipients = array();
+		$existingRecipient = $this->Database
 			->prepare(
-			"SELECT id,email FROM tl_avisota_recipient WHERE pid=? AND email IN ('" . implode("','", $arrEmail) . "')"
+			"SELECT id,email FROM tl_avisota_recipient WHERE pid=? AND email IN ('" . implode("','", $emails) . "')"
 		)
 			->execute($this->Input->get('id'));
-		while ($objExistingRecipients->next()) {
-			$arrExistingRecipients[$objExistingRecipients->email] = $objExistingRecipients->id;
+		while ($existingRecipient->next()) {
+			$existingRecipients[$existingRecipient->email] = $existingRecipient->id;
 		}
 
-		foreach ($arrRecipients as $arrRecipient) {
+		foreach ($recipients as $recipientData) {
 			// check blacklist
-			if (!$blnForce && isset($arrBlacklist[$arrRecipient['email']])) {
-				++$intSkipped;
+			if (!$force && isset($blacklist[$recipientData['email']])) {
+				++$skipCount;
 				continue;
 			}
 
-			$arrRecipient['tstamp'] = $time;
+			$recipientData['tstamp'] = $time;
 
-			if (!isset($arrExistingRecipients[$arrRecipient['email']])) {
-				$arrRecipient['pid']       = $this->Input->get('id');
-				$arrRecipient['addedOn']   = $time;
-				$arrRecipient['addedBy']   = $this->User->id;
-				$arrRecipient['confirmed'] = 1;
+			if (!isset($existingRecipients[$recipientData['email']])) {
+				$recipientData['pid']       = $this->Input->get('id');
+				$recipientData['addedOn']   = $time;
+				$recipientData['addedBy']   = $this->User->id;
+				$recipientData['confirmed'] = 1;
 				$this->Database
 					->prepare("INSERT INTO tl_avisota_recipient %s")
-					->set($arrRecipient)
+					->set($recipientData)
 					->execute();
 
-				++$intTotal;
+				++$totalCount;
 			}
-			else if ($blnOverwrite) {
+			else if ($overwrite) {
 				$this->Database
 					->prepare("UPDATE tl_avisota_recipient %s WHERE pid=? AND email=?")
-					->set($arrRecipient)
-					->execute($this->Input->get('id'), $arrRecipient['email']);
+					->set($recipientData)
+					->execute($this->Input->get('id'), $recipientData['email']);
 
-				++$intOverwrite;
+				++$overwriteCount;
 			}
 			else {
-				++$intSkipped;
+				++$skipCount;
 			}
 		}
 	}

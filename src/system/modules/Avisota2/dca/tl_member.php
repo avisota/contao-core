@@ -81,20 +81,20 @@ class tl_member_avisota extends Backend
 	public function onsubmit_callback()
 	{
 		if (TL_MODE == 'FE') {
-			list($objUser, $arrFormData, $objModulePersonalData) = func_get_args();
-			$arrLists = deserialize($arrFormData['avisota_lists'], true);
-			$intId    = $objUser->id;
+			list($user, $formData, $modulePersonalData) = func_get_args();
+			$listIds = deserialize($formData['avisota_lists'], true);
+			$userId    = $user->id;
 		}
 		else {
 			list($dc) = func_get_args();
-			$arrLists = deserialize($dc->activeRecord->avisota_lists, true);
-			$intId    = $dc->id;
+			$listIds = deserialize($dc->activeRecord->avisota_lists, true);
+			$userId    = $dc->id;
 		}
 
-		if (empty($arrLists)) {
+		if (empty($listIds)) {
 			$this->Database
 				->prepare("UPDATE tl_member SET avisota_subscribe=? WHERE id=?")
-				->execute('', $intId);
+				->execute('', $userId);
 		}
 	}
 }

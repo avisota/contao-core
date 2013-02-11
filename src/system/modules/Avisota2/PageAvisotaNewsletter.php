@@ -54,34 +54,34 @@ class PageAvisotaNewsletter extends Frontend
 	 *
 	 * @param object
 	 */
-	public function generate(Database_Result $objPage)
+	public function generate(Database_Result $pageResultSet)
 	{
 		// Define the static URL constants
-		define('TL_FILES_URL', ($objPage->staticFiles != '' && !$GLOBALS['TL_CONFIG']['debugMode'])
-			? $objPage->staticFiles . TL_PATH . '/' : '');
-		define('TL_SCRIPT_URL', ($objPage->staticSystem != '' && !$GLOBALS['TL_CONFIG']['debugMode'])
-			? $objPage->staticSystem . TL_PATH . '/' : '');
-		define('TL_PLUGINS_URL', ($objPage->staticPlugins != '' && !$GLOBALS['TL_CONFIG']['debugMode'])
-			? $objPage->staticPlugins . TL_PATH . '/' : '');
+		define('TL_FILES_URL', ($pageResultSet->staticFiles != '' && !$GLOBALS['TL_CONFIG']['debugMode'])
+			? $pageResultSet->staticFiles . TL_PATH . '/' : '');
+		define('TL_SCRIPT_URL', ($pageResultSet->staticSystem != '' && !$GLOBALS['TL_CONFIG']['debugMode'])
+			? $pageResultSet->staticSystem . TL_PATH . '/' : '');
+		define('TL_PLUGINS_URL', ($pageResultSet->staticPlugins != '' && !$GLOBALS['TL_CONFIG']['debugMode'])
+			? $pageResultSet->staticPlugins . TL_PATH . '/' : '');
 
 		$this->import('AvisotaNewsletterContent', 'Content');
 
 		// force all URLs absolute
 		$GLOBALS['TL_CONFIG']['forceAbsoluteDomainLink'] = true;
 
-		$strId = $this->Input->get('item') ? $this->Input->get('item') : $this->Input->get('items');
-		$strNewsletter = $this->Content->generateOnlineNewsletter($strId);
+		$newsletterId = $this->Input->get('item') ? $this->Input->get('item') : $this->Input->get('items');
+		$newsletterContent = $this->Content->generateOnlineNewsletter($newsletterId);
 
-		if ($strNewsletter) {
+		if ($newsletterContent) {
 			header('Content-Type: text/html; charset=utf-8');
-			echo $strNewsletter;
+			echo $newsletterContent;
 			exit;
 		}
 
 		$this->redirect(
 			$this->generateFrontendUrl(
 				$this
-					->getPageDetails($objPage->jumpBack ? $objPage->jumpBack : $objPage->pid)
+					->getPageDetails($pageResultSet->jumpBack ? $pageResultSet->jumpBack : $pageResultSet->pid)
 					->row()
 			)
 		);

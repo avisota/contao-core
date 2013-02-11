@@ -281,13 +281,13 @@ class tl_module_avisota extends Backend
 	 */
 	public function getCategories()
 	{
-		$objCategory = $this->Database
+		$category = $this->Database
 			->execute("SELECT * FROM tl_avisota_newsletter_category ORDER BY title");
-		$arrList     = array();
-		while ($objCategory->next()) {
-			$arrList[$objCategory->id] = $objCategory->title;
+		$lists     = array();
+		while ($category->next()) {
+			$lists[$category->id] = $category->title;
 		}
-		return $arrList;
+		return $lists;
 	}
 
 	/**
@@ -297,7 +297,7 @@ class tl_module_avisota extends Backend
 	 */
 	public function getLists()
 	{
-		$objList = $this->Database->execute(
+		$list = $this->Database->execute(
 			"
 				SELECT
 					*
@@ -306,11 +306,11 @@ class tl_module_avisota extends Backend
 				ORDER BY
 					`title`"
 		);
-		$arrList = array();
-		while ($objList->next()) {
-			$arrList[$objList->id] = $objList->title;
+		$lists = array();
+		while ($list->next()) {
+			$lists[$list->id] = $list->title;
 		}
-		return $arrList;
+		return $lists;
 	}
 
 	public function getTemplates(DataContainer $dc)
@@ -318,30 +318,30 @@ class tl_module_avisota extends Backend
 		// Return all templates
 		switch ($dc->field) {
 			case 'avisota_reader_template':
-				$strTemplatePrefix = 'avisota_reader_';
+				$templatePrefix = 'avisota_reader_';
 				break;
 
 			case 'avisota_list_template':
-				$strTemplatePrefix = 'avisota_list_';
+				$templatePrefix = 'avisota_list_';
 				break;
 
 			case 'avisota_template_subscribe':
-				$strTemplatePrefix = 'avisota_subscribe_';
+				$templatePrefix = 'avisota_subscribe_';
 				break;
 
 			case 'avisota_template_unsubscribe':
-				$strTemplatePrefix = 'avisota_unsubscribe_';
+				$templatePrefix = 'avisota_unsubscribe_';
 				break;
 
 			case 'avisota_template_subscription':
-				$strTemplatePrefix = 'avisota_subscription_';
+				$templatePrefix = 'avisota_subscription_';
 				break;
 
 			default:
 				return array();
 		}
 
-		return $this->getTemplateGroup($strTemplatePrefix, $dc->activeRecord->pid);
+		return $this->getTemplateGroup($templatePrefix, $dc->activeRecord->pid);
 	}
 
 	public function getEditableRecipientProperties()
@@ -370,16 +370,16 @@ class tl_module_avisota extends Backend
 	 */
 	public function getSubscriptionTemplates(DataContainer $dc)
 	{
-		$intPid = $dc->activeRecord->pid;
+		$pid = $dc->activeRecord->pid;
 
 		if ($this->Input->get('act') == 'overrideAll') {
-			$intPid = $this->Input->get('id');
+			$pid = $this->Input->get('id');
 		}
 
 		return array_merge
 		(
 			array('mod_avisota_subscription'),
-			$this->getTemplateGroup('subscription_', $intPid)
+			$this->getTemplateGroup('subscription_', $pid)
 		);
 	}
 }

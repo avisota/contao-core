@@ -82,26 +82,26 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 	 */
 	public function loadAvisotaNewsletterCEs($val, $dc)
 	{
-		$arrReturn  = array();
-		$objTargets = $this->Database
+		$return  = array();
+		$targets = $this->Database
 			->prepare('SELECT DISTINCT(cond) FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=?')
 			->execute($dc->id, 'tl_avisota_newsletter_content');
-		while ($objTargets->next()) {
-			$arrReturn[] = $objTargets->cond;
+		while ($targets->next()) {
+			$return[] = $targets->cond;
 		}
-		return serialize($arrReturn);
+		return serialize($return);
 	}
 
 	public function loadAvisotaNewsletterCE_Rows($val, $dc)
 	{
-		$arrReturn  = array();
-		$objTargets = $this->Database
+		$return  = array();
+		$targets = $this->Database
 			->prepare('SELECT DISTINCT(sec) FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=?')
 			->execute($dc->id, 'tl_avisota_newsletter_content');
-		while ($objTargets->next()) {
-			$arrReturn[] = $objTargets->sec;
+		while ($targets->next()) {
+			$return[] = $targets->sec;
 		}
-		return serialize($arrReturn);
+		return serialize($return);
 	}
 
 	/**
@@ -111,14 +111,14 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 	 */
 	public function getAvisotaNewsletterContentElements()
 	{
-		$arrCEs = array();
+		$contentElements = array();
 		foreach ($GLOBALS['TL_NLE'] as $key => $arr) {
 			foreach ($arr as $elementName => $val) {
-				array_push($arrCEs, $elementName);
+				array_push($contentElements, $elementName);
 			}
 		}
 
-		return $arrCEs;
+		return $contentElements;
 	}
 
 	/**
@@ -130,12 +130,12 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 	{
 		$ret = array('body');
 
-		$objCategory = $this->Database
+		$category = $this->Database
 			->query('SELECT * FROM tl_avisota_newsletter_category WHERE areas!=\'\'');
-		while ($objCategory->next()) {
+		while ($category->next()) {
 			$ret = array_merge(
 				$ret,
-				trimsplit(',', $objCategory->areas)
+				trimsplit(',', $category->areas)
 			);
 		}
 

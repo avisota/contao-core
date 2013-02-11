@@ -44,21 +44,21 @@ class NewsletterNews extends NewsletterElement
 	 *
 	 * @var string
 	 */
-	protected $strTemplateHTML = 'nle_news_html';
+	protected $templateHTML = 'nle_news_html';
 
 	/**
 	 * Plain text Template
 	 *
 	 * @var string
 	 */
-	protected $strTemplatePlain = 'nle_news_plain';
+	protected $templatePlain = 'nle_news_plain';
 
 	/**
 	 * Caching var for jumpTo-pages
 	 *
 	 * @var mixed tl_page-rows
 	 */
-	protected $arrObjJumpToPages = array();
+	protected $jumpToPages = array();
 
 
 	/**
@@ -76,7 +76,7 @@ class NewsletterNews extends NewsletterElement
 			return;
 		}
 
-		$objNews = $this->Database
+		$news = $this->Database
 			->prepare(
 			'SELECT n.*,a.jumpTo,a.title AS section
 				FROM tl_news as n
@@ -86,6 +86,6 @@ class NewsletterNews extends NewsletterElement
 		)
 			->execute();
 
-		$this->Template->news = $objNews->fetchAllAssoc();
+		$this->Template->news = $news->fetchAllAssoc();
 	}
 }
