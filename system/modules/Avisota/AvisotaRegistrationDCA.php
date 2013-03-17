@@ -147,6 +147,7 @@ class AvisotaRegistrationDCA extends Controller {
 	{
 		if(!$strTable == 'tl_module') return;
 		$arrPalettes = &$GLOBALS['TL_DCA']['tl_module']['palettes'];
+		if(!isset($arrPalettes['registration'])) return;
 		if(isset($arrPalettes['avisota_registration'])) return;
 		$arrPalettes['avisota_registration'] = $arrPalettes['registration'] . $arrPalettes['__avisota_registration'];
 	}
