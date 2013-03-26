@@ -36,9 +36,9 @@
 
 class ModuleAvisotaRegistration extends ModuleRegistration {
 	
-	protected function loadDataContainer($strTable)
+	protected function loadDataContainer($strTable,$blnNoCache=false)
 	{
-		parent::loadDataContainer($strTable);
+		parent::loadDataContainer($strTable,$blnNoCache);
 		
 		$this->import('AvisotaRegistrationDCA');
 		$this->AvisotaRegistrationDCA->setSelectableLists($this->avisota_registration_lists);
