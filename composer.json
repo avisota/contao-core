@@ -1,7 +1,6 @@
 {
 	"name":"bit3/contao-avisota",
 	"description":"Avisota newslettersystem for contao",
-	"version":"2.0.0-dev",
 	"keywords":["avisota", "email", "mail", "newsletter", "marketing"],
 	"type":"contao-module",
 	"homepage":"http://avisota.org",
