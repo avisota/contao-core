@@ -10,6 +10,9 @@ Thumbs.db
 .idea/
 nbproject/
 
+# runtime files
+contao/config/dynamics.php
+
 # dependencies
 build
 vendor
