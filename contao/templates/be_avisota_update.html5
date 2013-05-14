@@ -1,0 +1,64 @@
+<div id="tl_buttons">
+	<a class="header_more" href="http://www.contao.org/erweiterungsliste/view/Avisota.<?php echo $GLOBALS['TL_LANGUAGE']; ?>.html" onclick="window.open(this.href); return false;">
+		<?php echo $GLOBALS['TL_LANG']['avisota_update']['moreVersionUpdates']; ?>
+	</a>
+</div>
+
+<h2 class="sub_headline"><?php echo $GLOBALS['TL_LANG']['avisota_update']['headline']; ?></h2>
+
+<?php echo $this->getMessages(); ?>
+
+<?php
+$hasUpdates = false;
+$hasMandatoryUpdates = false;
+?>
+
+<form id="avisota_update" action="contao/main.php?do=avisota_update" class="tl_form" method="post">
+	<input type="hidden" name="FORM_SUBMIT" value="avisota_update">
+	<input type="hidden" name="REQUEST_TOKEN" value="<?php echo REQUEST_TOKEN; ?>">
+
+	<div class="tl_formbody_edit preview">
+
+		<div class="versions">
+			<div class="previous">
+				<span class="title"><?php echo $GLOBALS['TL_LANG']['avisota_update']['previousVersion']; ?></span>
+				<span class="version"><?php echo $this->previous; ?></span>
+			</div>
+			<div class="installed">
+				<span class="title"><?php echo $GLOBALS['TL_LANG']['avisota_update']['installedVersion']; ?></span>
+				<span class="version"><?php echo AVISOTA_VERSION; ?></span>
+			</div>
+		</div>
+
+		<div class="updates">
+			<?php foreach ($this->updates as $version=>$updateData): ?>
+				<h2 data-version="<?php echo $version; ?>" data-mandatory="<?php echo $updateData['required'] ? 'yes' : 'no'; ?>" data-status="<?php echo $this->status[$version] ? 'open' : 'done'; ?>">
+					<?php if (!$this->status[$version]): ?>
+						<?php echo $this->generateImage('system/modules/avisota/html/updated.png', ''); ?>
+						<label><?php echo $GLOBALS['TL_LANG']['avisota_update']['update'][$version][0]; ?></label>
+					<?php else: ?>
+						<?php
+						$hasUpdates = true;
+						$hasMandatoryUpdates = $hasMandatoryUpdates || $updateData['required'];
+						?>
+						<input type="checkbox" name="update[]" value="<?php echo $version; ?>" id="update_<?php echo $version; ?>"<?php if ($updateData['required'] || !isset($_SESSION['AUTORUN_UPDATES']) || in_array($version, $_SESSION['AUTORUN_UPDATES'])): ?> checked="checked"<?php endif; ?><?php if (isset($updateData['required']) && $updateData['required']): ?> onchange="this.checked = true;"<?php endif; ?>>
+						<label for="update_<?php echo $version; ?>"><?php echo $GLOBALS['TL_LANG']['avisota_update']['update'][$version][0]; ?><?php if (isset($updateData['required']) && $updateData['required']): ?><span class="mandatory">*</span><?php endif; ?></label>
+					<?php endif; ?>
+				</h2>
+				<?php if ($this->status[$version]): ?>
+					<div class="description">
+						<?php echo $GLOBALS['TL_LANG']['avisota_update']['update'][$version][1]; ?>
+					</div>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</div>
+
+	</div>
+
+	<div class="tl_formbody_submit">
+		<div class="tl_submit_container">
+			<input name="doupdate" class="tl_submit" accesskey="u" type="submit" value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_update']['doUpdate']); ?>"<?php if (!$hasUpdates): ?> disabled="disabled"<?php endif; ?>>
+			<input name="dbupdate" class="tl_submit" accesskey="d" type="submit" value="<?php echo specialchars($GLOBALS['TL_LANG']['avisota_update']['doDatabaseUpdate']); ?>"<?php if ($hasMandatoryUpdates): ?> disabled="disabled"<?php endif; ?>>
+		</div>
+	</div>
+</form>

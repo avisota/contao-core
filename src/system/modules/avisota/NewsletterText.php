@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * Avisota newsletter and mailing system
+ * Copyright (C) 2013 Tristan Lins
+ *
+ * PHP version 5
+ *
+ * @copyright  bit3 UG 2013
+ * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @package    avisota
+ * @license    LGPL
+ * @filesource
+ */
+
+
+/**
+ * Class NewsletterText
+ *
+ *
+ * @copyright  bit3 UG 2013
+ * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @package    Avisota
+ */
+class NewsletterText extends NewsletterElement
+{
+
+	/**
+	 * HTML Template
+	 *
+	 * @var string
+	 */
+	protected $templateHTML = 'nle_text_html';
+
+	/**
+	 * Plain text Template
+	 *
+	 * @var string
+	 */
+	protected $templatePlain = 'nle_text_plain';
+
+	/**
+	 * Compile the current element
+	 */
+	protected function compile($mode)
+	{
+		$this->import('String');
+
+		switch ($mode) {
+			case NL_HTML:
+				// Clean RTE output
+				$this->Template->text = str_ireplace
+				(
+					array('<u>', '</u>', '</p>', '<br /><br />', ' target="_self"'),
+					array('<span style="text-decoration:underline;">', '</span>', "</p>\n", "<br /><br />\n", ''),
+					$this->String->encodeEmail($this->text)
+				);
+				break;
+
+			case NL_PLAIN:
+				if ($this->plain) {
+					$this->Template->text = $this->plain;
+				}
+				else {
+					$this->Template->text = $this->getPlainFromHTML($this->text);
+				}
+		}
+
+		$this->Template->addImage = false;
+
+		// Add image
+		if ($this->addImage && strlen($this->singleSRC) && is_file(TL_ROOT . '/' . $this->singleSRC)) {
+			$this->addImageToTemplate($this->Template, $this->currentRecordData);
+
+			$this->Template->src = $this->extendURL($this->Template->src);
+			if ($this->Template->href) {
+				$this->Template->href = $this->extendURL($this->Template->href);
+			}
+		}
+	}
+}
