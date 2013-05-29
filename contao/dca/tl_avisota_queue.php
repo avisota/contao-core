@@ -92,6 +92,9 @@ $GLOBALS['TL_DCA']['tl_avisota_queue'] = array
 			'send'  => array('sendOn')
 		),
 	),
+	'metasubpalettes' => array(
+		'scheduledSending' => array('sendingTime')
+	),
 	// Fields
 	'fields'       => array
 	(
@@ -139,16 +142,30 @@ $GLOBALS['TL_DCA']['tl_avisota_queue'] = array
 				'tl_class'  => 'w50'
 			)
 		),
-		'timechart'         => array
+		'allowManualSending'         => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_queue']['timechart'],
-			'inputType' => 'select',
-			'options'   => array('custom', 'time'),
-			'reference' => &$GLOBALS['TL_LANG']['tl_avisota_queue'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_queue']['allowManualSending'],
+			'inputType' => 'checkbox',
 			'eval'      => array(
-				'mandatory' => true,
-				'maxlength' => 255,
-				'tl_class'  => 'w50'
+				'tl_class'  => 'm12 w50'
+			)
+		),
+		'scheduledSending'         => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_queue']['scheduledSending'],
+			'inputType' => 'checkbox',
+			'eval'      => array(
+				'submitOnChange' => true,
+				'tl_class'  => 'clr m12 w50'
+			)
+		),
+		'sendingTime'         => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_queue']['sendingTime'],
+			'inputType' => 'checkbox',
+			'eval'      => array(
+				'submitOnChange' => true,
+				'tl_class'  => 'clr m12 w50'
 			)
 		),
 	)

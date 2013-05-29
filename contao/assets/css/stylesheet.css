@@ -1,3 +1,9 @@
+.nested_menu.avisota_config .avisota-logo {
+	margin: -18px -18px 0;
+	padding: 18px 0;
+	background-color: #494949;
+	text-align: center;
+}
 .nested_menu.avisota_config .promotion {
 	border: 1px solid #999;
 	box-shadow: 0 0 3px #ccc;
@@ -12,7 +18,7 @@
 	overflow: hidden;
 }
 .nested_menu.avisota_config .promotion * {
-	font-size: 16px;
+	font-size: 14px;
 }
 .nested_menu.avisota_config .promotion a {
 	color: #8ab858;

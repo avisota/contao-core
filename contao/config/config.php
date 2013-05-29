@@ -31,6 +31,20 @@ if (file_exists(__DIR__ . '/dynamics.php')) {
 	$GLOBALS['AVISOTA_DYNAMICS'] = include(__DIR__ . '/dynamics.php');
 }
 
+
+/**
+ * Models
+ */
+$GLOBALS['TL_MODELS']['tl_avisota_mailing_list'] = 'Avisota\Model\MailingListModel';
+$GLOBALS['TL_MODELS']['tl_avisota_newsletter'] = 'Avisota\Model\NewsletterModel';
+$GLOBALS['TL_MODELS']['tl_avisota_newsletter_category'] = 'Avisota\Model\NewsletterCategoryModel';
+$GLOBALS['TL_MODELS']['tl_avisota_newsletter_content'] = 'Avisota\Model\NewsletterContentModel';
+$GLOBALS['TL_MODELS']['tl_avisota_newsletter_theme'] = 'Avisota\Model\NewsletterThemeModel';
+$GLOBALS['TL_MODELS']['tl_avisota_queue'] = 'Avisota\Model\QueueModel';
+$GLOBALS['TL_MODELS']['tl_avisota_recipient'] = 'Avisota\Model\RecipientModel';
+$GLOBALS['TL_MODELS']['tl_avisota_transport'] = 'Avisota\Model\TransportModel';
+
+
 /**
  * Update check
  */
@@ -230,7 +244,10 @@ $GLOBALS['BE_MOD']['system'] = array_merge(
 		'avisota_config'     => array
 		(
 			'icon'       => 'system/modules/avisota/assets/images/avisota_config.png',
-			'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
+			'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css',
+			'nested-config' => array(
+				'headline' => false
+			)
 		),
 		'avisota_settings'         => array
 		(
@@ -356,6 +373,8 @@ $GLOBALS['TL_AVISOTA_TRANSPORT']['service'] = 'Avisota\Transport\Service';
 //$GLOBALS['TL_HOOKS']['updatePersonalData'][]      = array('AvisotaDCA', 'hookUpdatePersonalData');
 //$GLOBALS['TL_HOOKS']['avisotaMailingListLabel'][] = array('AvisotaBackend', 'hookAvisotaMailingListLabel');
 //$GLOBALS['TL_HOOKS']['getUserNavigation'][]       = array('AvisotaBackend', 'hookGetUserNavigation');
+//$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('tl_avisota_newsletter_content', 'myLoadDataContainer');
+$GLOBALS['TL_HOOKS']['nestedMenuPreContent'][]     = array('Avisota\Backend', 'hookNestedMenuPreContent');
 $GLOBALS['TL_HOOKS']['nestedMenuPostContent'][]     = array('Avisota\Backend', 'hookNestedMenuPostContent');
 
 

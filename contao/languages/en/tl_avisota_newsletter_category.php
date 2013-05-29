@@ -17,47 +17,59 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['title']          = array(
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['title']             = array(
 	'Title',
 	'Please enter the newsletter category title.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['alias']          = array(
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['alias']             = array(
 	'Alias',
 	'The category alias is a unique reference to the category which can be called instead of its numeric ID.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipientsMode'] = array(
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipientsMode']    = array(
 	'Recipients selection mode',
 	'Please chose the recipients selection mode.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipients']     = array(
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipients']        = array(
 	'Recipients',
 	'Please chose the preselected recipients.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['themeMode']      = array(
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['themeMode']         = array(
 	'Layout selection mode',
 	'Please chose the layout selection mode.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['theme']          = array(
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['theme']             = array(
 	'Layout',
 	'Please chose the preselected layout.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transportMode']  = array(
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transportMode']     = array(
 	'Transport module selection mode',
 	'Please chose the transport module selection mode.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transport']      = array(
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transport']         = array(
 	'Transport module',
 	'Please chose the preselected transport module.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['showInMenu']     = array(
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['queueMode']         = array(
+	'Queue selection mode',
+	'Please chose the queue selection mode.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['queue']             = array(
+	'Queue',
+	'Please chose the preselected queue.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['showInMenu']        = array(
 	'Show in menu',
 	'Please chose to show this category in the backend menu.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['menuIcon']       = array(
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['useCustomMenuIcon'] = array(
+	'Use custom icon',
+	'Please chose if you want to use a custom icon in the menu.'
+);
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['menuIcon']          = array(
 	'Custom icon',
 	'Please chose a custom backend menu item.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['tstamp']         = array(
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['tstamp']            = array(
 	'Revision date',
 	'Date and time of the latest revision'
 );
@@ -70,6 +82,7 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['category_legend']   = 'Ca
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['recipients_legend'] = 'Recipients settings';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['theme_legend']      = 'Layout settings';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['transport_legend']  = 'Transport settings';
+$GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['queue_legend']      = 'Queue settings';
 $GLOBALS['TL_LANG']['tl_avisota_newsletter_category']['expert_legend']     = 'Experts settings';
 
 

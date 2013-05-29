@@ -40,32 +40,17 @@ class CSVFile implements RecipientSourceInterface
 	 */
 	public function getRecipientOptions()
 	{
-		// TODO: Implement getRecipientOptions() method.
+		if ($this->config->csvFileSrc) {
+			return array('*' => basename($this->config->csvFileSrc));
+		}
+		return array();
 	}
 
 	/**
-	 * Get recipient IDs of a list of options.
-	 *
-	 * @abstract
-	 *
-	 * @param array $varOption
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getRecipients($options)
 	{
-
-	}
-
-	/**
-	 * Get the recipient details.
-	 *
-	 * @param string $id
-	 *
-	 * @return array
-	 */
-	public function getRecipientDetails($id)
-	{
-
+		throw new \Exception('Not implemented yet');
 	}
 }

@@ -66,22 +66,23 @@ class IntegratedRecipients implements RecipientSourceInterface
 						->execute('SELECT * FROM tl_avisota_mailing_list ORDER BY title');
 				}
 
+				$options = array();
+				while ($mailingList->next()) {
+					$options[$mailingList->id] = $mailingList->title;
+				}
+
 				// if single selection is allowed, build an option for every mailing list
 				if ($this->config['integratedAllowSingleListSelection']) {
-					$options = array();
-					while ($mailingList->next()) {
-						$options[$mailingList->id] = $mailingList->title;
-					}
 					return $options;
 				}
 
 				// build a wildcard option for non-single select
-				else {
+				else if (count($options)) {
 					return array(
 						'*' => implode(', ', $mailingList->fetchEach('title'))
 					);
 				}
-				break;
+				return array();
 
 			case 'integratedByRecipients':
 				$ids = array_filter(array_map('intval', deserialize($this->config['integratedMailingLists'], true)));
@@ -101,8 +102,9 @@ class IntegratedRecipients implements RecipientSourceInterface
 				if (!isset($recipient)) {
 					$recipient = $database
 						->execute(
-						"SELECT *, 1 AS confirmed FROM tl_avisota_recipient
-								   ORDER BY email"
+						"SELECT *, 1 AS confirmed
+						 FROM tl_avisota_recipient
+						 ORDER BY email"
 					);
 				}
 
@@ -121,34 +123,27 @@ class IntegratedRecipients implements RecipientSourceInterface
 					return $options;
 				}
 
-				else {
+				else if (count($options)) {
 					return array(
-						'*' => implode(', ', $options)
+						'*' => implode(', ', array_slice($options, 3)) . (count($options) > 3 ? '&hellip' : '')
 					);
 				}
-				break;
+				return array();
 
 			default:
-				$this->log(
-					'The integrated recipient source ID ' . $this->config['id'] . ' is not fully configured!',
-					'AvisotaRecipientSourceIntegratedRecipients::getRecipientOptions()',
-					TL_ERROR
+				$GLOBALS['container']['avisota.logger']->error(
+					'The integrated recipient source ID ' . $this->config['id'] . ' is not fully configured!'
 				);
 				return array();
 		}
 	}
 
 	/**
-	 * Get recipient IDs of a list of options.
-	 *
-	 * @abstract
-	 *
-	 * @param array $varOption
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getRecipients($options)
 	{
+		throw new \Exception('Not implemented yet');
 		switch ($this->config['integratedBy']) {
 			case 'integratedByMailingLists':
 
@@ -159,24 +154,10 @@ class IntegratedRecipients implements RecipientSourceInterface
 			case 'integratedByAllRecipients':
 				break;
 			default:
-				$this->log(
-					'The recipient source ID ' . $this->config['id'] . ' is not fully configured!',
-					'AvisotaRecipientSourceIntegratedRecipients::getRecipientOptions()',
-					TL_ERROR
+				$GLOBALS['container']['avisota.logger']->error(
+					'The recipient source ID ' . $this->config['id'] . ' is not fully configured!'
 				);
 				return array();
 		}
-	}
-
-	/**
-	 * Get the recipient details.
-	 *
-	 * @param string $id
-	 *
-	 * @return array
-	 */
-	public function getRecipientDetails($id)
-	{
-
 	}
 }

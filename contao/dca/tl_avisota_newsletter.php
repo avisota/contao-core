@@ -19,7 +19,6 @@
  */
 $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 (
-
 	// Config
 	'config'          => array
 	(
@@ -30,11 +29,11 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 		'enableVersioning'  => true,
 		'palettes_callback' => array
 		(
-			array('tl_avisota_newsletter', 'updatePalette')
+			array('Avisota\DataContainer\Newsletter', 'updatePalette')
 		),
 		'onload_callback'   => array
 		(
-			array('tl_avisota_newsletter', 'checkPermission')
+			array('Avisota\DataContainer\Newsletter', 'checkPermission')
 		)
 	),
 	// List
@@ -46,13 +45,13 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'fields'                => array('sendOn=\'\' DESC', 'sendOn DESC'),
 			'panelLayout'           => 'search,limit',
 			'headerFields'          => array('title'),
-			'header_callback'       => array('tl_avisota_newsletter', 'addHeader'),
-			'child_record_callback' => array('tl_avisota_newsletter', 'addNewsletter'),
+			'header_callback'       => array('Avisota\DataContainer\Newsletter', 'addHeader'),
+			'child_record_callback' => array('Avisota\DataContainer\Newsletter', 'addNewsletter'),
 			'child_record_class'    => 'no_padding',
 		),
 		'label'             => array
 		(
-			'group_callback' => array('tl_avisota_newsletter', 'addGroup')
+			'group_callback' => array('Avisota\DataContainer\Newsletter', 'addGroup')
 		),
 		'global_operations' => array
 		(
@@ -79,7 +78,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 				'href'            => 'table=tl_avisota_newsletter_content',
 				'icon'            => 'edit.gif',
 				'attributes'      => 'class="contextmenu"',
-				'button_callback' => array('tl_avisota_newsletter', 'editNewsletter')
+				'button_callback' => array('Avisota\DataContainer\Newsletter', 'editNewsletter')
 			),
 			'editheader' => array
 			(
@@ -87,7 +86,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 				'href'            => 'act=edit',
 				'icon'            => 'header.gif',
 				'attributes'      => 'class="edit-header"',
-				'button_callback' => array('tl_avisota_newsletter', 'editHeader')
+				'button_callback' => array('Avisota\DataContainer\Newsletter', 'editHeader')
 			),
 			'copy'       => array
 			(
@@ -95,7 +94,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 				'href'            => 'act=paste&amp;mode=copy',
 				'icon'            => 'copy.gif',
 				'attributes'      => 'onclick="Backend.getScrollOffset();"',
-				'button_callback' => array('tl_avisota_newsletter', 'copyNewsletter')
+				'button_callback' => array('Avisota\DataContainer\Newsletter', 'copyNewsletter')
 			),
 			'delete'     => array
 			(
@@ -103,7 +102,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 				'href'            => 'act=delete',
 				'icon'            => 'delete.gif',
 				'attributes'      => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-				'button_callback' => array('tl_avisota_newsletter', 'deleteNewsletter')
+				'button_callback' => array('Avisota\DataContainer\Newsletter', 'deleteNewsletter')
 			),
 			'show'       => array
 			(
@@ -116,7 +115,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['send'],
 				'href'            => 'key=send',
 				'icon'            => 'system/modules/avisota/html/send.png',
-				'button_callback' => array('tl_avisota_newsletter', 'sendNewsletter')
+				'button_callback' => array('Avisota\DataContainer\Newsletter', 'sendNewsletter')
 			)
 		),
 	),
@@ -174,7 +173,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			),
 			'save_callback' => array
 			(
-				array('tl_avisota_newsletter', 'generateAlias')
+				array('Avisota\DataContainer\Newsletter', 'generateAlias')
 			)
 		),
 		'description'   => array
@@ -182,10 +181,10 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['description'],
 			'exclude'   => true,
 			'search'    => true,
-			'inputType' => 'text',
+			'inputType' => 'textarea',
 			'eval'      => array(
 				'maxlength' => 255,
-				'tl_class'  => 'w50'
+				'rows'      => 4,
 			)
 		),
 		'keywords'      => array
@@ -196,7 +195,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 			'inputType' => 'text',
 			'eval'      => array(
 				'maxlength' => 255,
-				'tl_class'  => 'w50'
+				'tl_class'  => 'long'
 			)
 		),
 		'setRecipients' => array
@@ -209,7 +208,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter'] = array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipients'],
 			'inputType'        => 'checkbox',
-			'options_callback' => array('AvisotaBackend', 'getRecipients'),
+			'options_callback' => array('Avisota\DataContainer\Newsletter', 'getRecipients'),
 			'eval'             => array(
 				'mandatory' => true,
 				'multiple'  => true,

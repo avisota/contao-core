@@ -35,7 +35,7 @@ interface RecipientSourceInterface
 	public function getRecipientOptions();
 
 	/**
-	 * Get recipient IDs of a list of options.
+	 * Get complete recipients data for a list of options.
 	 *
 	 * @abstract
 	 *
@@ -44,13 +44,4 @@ interface RecipientSourceInterface
 	 * @return array
 	 */
 	public function getRecipients($options);
-
-	/**
-	 * Get the recipient details.
-	 *
-	 * @param string $id
-	 *
-	 * @return array
-	 */
-	public function getRecipientDetails($id);
 }

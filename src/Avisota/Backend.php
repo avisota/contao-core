@@ -22,7 +22,7 @@ namespace Avisota;
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    Avisota
  */
-class Backend extends \System
+class Backend extends \Controller
 {
 	/**
 	 * @var Backend
@@ -44,6 +44,16 @@ class Backend extends \System
 	protected function __construct()
 	{
 		parent::__construct();
+	}
+
+	public function hookNestedMenuPreContent($do, $groups)
+	{
+		if ($do == 'avisota_config') {
+			return sprintf(
+				'<div class="avisota-logo"><a href="http://avisota.org" target="_blank">%s</a></div>',
+				$this->generateImage('system/modules/avisota/assets/images/logo.png', 'Avisota Newsletter & Mailingsystem')
+			);
+		}
 	}
 
 	public function hookNestedMenuPostContent($do, $groups)

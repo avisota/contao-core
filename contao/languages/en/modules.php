@@ -17,7 +17,7 @@
 /**
  * Back end modules
  */
-$GLOBALS['TL_LANG']['MOD']['avisota']                   = array('Avisota newsletter system');
+$GLOBALS['TL_LANG']['MOD']['avisota']                   = array('Avisota newsletter');
 $GLOBALS['TL_LANG']['MOD']['avisota_outbox']            = array('Outbox');
 $GLOBALS['TL_LANG']['MOD']['avisota_newsletter']        = array('Newsletters');
 $GLOBALS['TL_LANG']['MOD']['avisota_recipients']        = array('Recipients');

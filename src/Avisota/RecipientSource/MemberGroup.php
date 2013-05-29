@@ -101,22 +101,23 @@ class MemberGroup implements RecipientSourceInterface
 						->execute('SELECT * FROM tl_member_group ORDER BY name');
 				}
 
+				$options = array();
+				while ($group->next()) {
+					$options[$group->id] = $group->name;
+				}
+
 				// if single selection is allowed, build an option for every mailing list
 				if ($this->config['memberAllowSingleGroupSelection']) {
-					$options = array();
-					while ($group->next()) {
-						$options[$group->id] = $group->name;
-					}
 					return $options;
 				}
 
 				// build a wildcard option for non-single select
-				else {
+				else if (count($options)) {
 					return array(
 						'*' => implode(', ', $group->fetchEach('name'))
 					);
 				}
-				break;
+				return array();
 
 			// members as single
 			case 'memberByMailingListMembers':
@@ -181,12 +182,12 @@ class MemberGroup implements RecipientSourceInterface
 				if ($this->config['memberAllowSingleSelection']) {
 					return $options;
 				}
-				else {
+				else if (count($options)) {
 					return array(
 						'*' => implode(', ', $options)
 					);
 				}
-				break;
+				return array();
 
 			default:
 				$this->log(
@@ -199,28 +200,10 @@ class MemberGroup implements RecipientSourceInterface
 	}
 
 	/**
-	 * Get recipient IDs of a list of options.
-	 *
-	 * @abstract
-	 *
-	 * @param array $varOption
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getRecipients($options)
 	{
-
-	}
-
-	/**
-	 * Get the recipient details.
-	 *
-	 * @param string $id
-	 *
-	 * @return array
-	 */
-	public function getRecipientDetails($id)
-	{
-
+		throw new \Exception('Not implemented yet');
 	}
 }
