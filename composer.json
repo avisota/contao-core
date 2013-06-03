@@ -1,5 +1,5 @@
 {
-	"name":"bit3/contao-avisota",
+	"name":"avisota/contao",
 	"description":"Avisota newslettersystem for contao",
 	"keywords":["avisota", "email", "mail", "newsletter", "marketing"],
 	"type":"contao-module",
@@ -24,9 +24,9 @@
 	"require":{
 		"php":">=5.3",
 		"contao/core": ">=2.11.11,<3.2",
-		"swiftmailer/swiftmailer": "~5",
+		"avisota/core": "~1",
 		"bit3/contao-dependency-container": "~1",
-		"bit3/contao-doctrine-orm":"~2.3",
+		"bit3/contao-doctrine-dbal":"~2.3",
 		"bit3/contao-nested-menu": "~1",
 		"bit3/contao-twig": "~1",
 		"bit3/contao-meta-palettes": "~1",
