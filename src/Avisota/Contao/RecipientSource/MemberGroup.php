@@ -13,7 +13,7 @@
  * @filesource
  */
 
-namespace Avisota\RecipientSource;
+namespace Avisota\Contao\RecipientSource;
 
 /**
  * Class AvisotaRecipientSourceMemberGroup

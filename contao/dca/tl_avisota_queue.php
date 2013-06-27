@@ -26,11 +26,11 @@ $GLOBALS['TL_DCA']['tl_avisota_queue'] = array
 		'dataContainer'     => 'Table',
 		'enableVersioning'  => true,
 		'onload_callback'   => array(
-			array('Avisota\DataContainer\Queue', 'onload_callback')
+			array('Avisota\Contao\DataContainer\Queue', 'onload_callback')
 		),
 		'onsubmit_callback' => array(
-			array('Avisota\DataContainer\Queue', 'onsubmit_callback'),
-			array('Avisota\Backend', 'regenerateDynamics')
+			array('Avisota\Contao\DataContainer\Queue', 'onsubmit_callback'),
+			array('Avisota\Contao\Backend', 'regenerateDynamics')
 		)
 	),
 	// List
@@ -82,14 +82,17 @@ $GLOBALS['TL_DCA']['tl_avisota_queue'] = array
 	),
 	// Palettes
 	'palettes'     => array(
-		'__selector__' => array('type', 'swiftUseSmtp')
+		'__selector__' => array('type')
 	),
 	// Meta Palettes
 	'metapalettes' => array
 	(
 		'default'          => array(
-			'queue' => array('title', 'alias'),
-			'send'  => array('sendOn')
+			'queue' => array('type'),
+		),
+		'simpleDatabase'          => array(
+			'queue' => array('type', 'title', 'alias'),
+			'send'  => array('allowManualSending', 'scheduledSending')
 		),
 	),
 	'metasubpalettes' => array(
@@ -98,10 +101,25 @@ $GLOBALS['TL_DCA']['tl_avisota_queue'] = array
 	// Fields
 	'fields'       => array
 	(
+		'type'                                  => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_queue']['type'],
+			'inputType' => 'select',
+			'options'   => array_keys($GLOBALS['TL_AVISOTA_QUEUE']),
+			'reference' => &$GLOBALS['TL_LANG']['tl_avisota_queue'],
+			'filter'    => true,
+			'eval'      => array(
+				'mandatory'          => true,
+				'submitOnChange'     => true,
+				'includeBlankOption' => true,
+			)
+		),
 		'title'         => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_queue']['title'],
 			'inputType' => 'text',
+			'search'    => true,
+			'flag'      => 1,
 			'eval'      => array(
 				'mandatory' => true,
 				'maxlength' => 255,
@@ -123,23 +141,11 @@ $GLOBALS['TL_DCA']['tl_avisota_queue'] = array
 			),
 			'load_callback' => array
 			(
-				array('Avisota\DataContainer\Queue', 'rememberAlias')
+				array('Avisota\Contao\DataContainer\Queue', 'rememberAlias')
 			),
 			'save_callback' => array
 			(
-				array('Avisota\DataContainer\Queue', 'generateAlias')
-			)
-		),
-		'sendOn'         => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_queue']['sendOn'],
-			'inputType' => 'select',
-			'options'   => array('custom', 'time'),
-			'reference' => &$GLOBALS['TL_LANG']['tl_avisota_queue'],
-			'eval'      => array(
-				'mandatory' => true,
-				'maxlength' => 255,
-				'tl_class'  => 'w50'
+				array('Avisota\Contao\DataContainer\Queue', 'generateAlias')
 			)
 		),
 		'allowManualSending'         => array
@@ -164,7 +170,6 @@ $GLOBALS['TL_DCA']['tl_avisota_queue'] = array
 			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_queue']['sendingTime'],
 			'inputType' => 'checkbox',
 			'eval'      => array(
-				'submitOnChange' => true,
 				'tl_class'  => 'clr m12 w50'
 			)
 		),

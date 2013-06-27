@@ -31,6 +31,7 @@
 		"bit3/contao-twig": "~1",
 		"bit3/contao-meta-palettes": "~1",
 		"bit3/contao-logger": "~1",
+		"bit3/contao-console": "~1",
 		"menatwork/contao-multicolumnwizard": "~3",
 		"metamodels/dc_general": "~0.9"
 	},

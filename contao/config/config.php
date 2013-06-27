@@ -46,6 +46,13 @@ $GLOBALS['TL_MODELS']['tl_avisota_transport'] = 'Avisota\Model\TransportModel';
 
 
 /**
+ * Entities
+ */
+$GLOBALS['DOCTRINE_ENTITY_NAMESPACE_MAP']['tl_avisota'] = 'Avisota\Contao\Entity';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_mailing_list';
+
+
+/**
  * Update check
  */
 /*
@@ -155,6 +162,7 @@ $GLOBALS['TL_PTY']['avisota'] = 'PageAvisotaNewsletter';
  */
 $GLOBALS['BE_FFL']['upload']                 = 'UploadField';
 $GLOBALS['BE_FFL']['columnAssignmentWizard'] = 'ColumnAssignmentWizard';
+
 
 /**
  * Build custom back end modules
@@ -349,10 +357,15 @@ $GLOBALS['BE_FFL']['newschooser']  = 'WidgetNewschooser';
 /**
  * Recipient sources
  */
-$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['integrated'] = 'Avisota\RecipientSource\IntegratedRecipients';
-$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['member']     = 'Avisota\RecipientSource\MemberGroup';
-$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['csv_file']   = 'Avisota\RecipientSource\CSVFile';
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['integrated'] = 'Avisota\Contao\RecipientSource\IntegratedRecipients';
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['member']     = 'Avisota\Contao\RecipientSource\MemberGroup';
+$GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE']['csv_file']   = 'Avisota\Contao\RecipientSource\CSVFile';
 
+
+/**
+ * Queues
+ */
+$GLOBALS['TL_AVISOTA_QUEUE']['simpleDatabase'] = 'Avisota\Queue\SimpleDatabaseQueue';
 
 /**
  * Transport modules
@@ -374,8 +387,8 @@ $GLOBALS['TL_AVISOTA_TRANSPORT']['service'] = 'Avisota\Transport\Service';
 //$GLOBALS['TL_HOOKS']['avisotaMailingListLabel'][] = array('AvisotaBackend', 'hookAvisotaMailingListLabel');
 //$GLOBALS['TL_HOOKS']['getUserNavigation'][]       = array('AvisotaBackend', 'hookGetUserNavigation');
 //$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('tl_avisota_newsletter_content', 'myLoadDataContainer');
-$GLOBALS['TL_HOOKS']['nestedMenuPreContent'][]     = array('Avisota\Backend', 'hookNestedMenuPreContent');
-$GLOBALS['TL_HOOKS']['nestedMenuPostContent'][]     = array('Avisota\Backend', 'hookNestedMenuPostContent');
+$GLOBALS['TL_HOOKS']['nestedMenuPreContent'][]      = array('Avisota\Contao\Backend', 'hookNestedMenuPreContent');
+$GLOBALS['TL_HOOKS']['nestedMenuPostContent'][]     = array('Avisota\Contao\Backend', 'hookNestedMenuPostContent');
 
 
 /**

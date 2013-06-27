@@ -26,7 +26,7 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 		'dataContainer'   => 'File',
 		'closed'          => true,
 		'onload_callback' => array(
-			array('Avisota\DataContainer\Settings', 'onload_callback')
+			array('Avisota\Contao\DataContainer\Settings', 'onload_callback')
 		)
 	),
 	// Palettes
@@ -124,7 +124,7 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 			'exclude'          => true,
 			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_subscribe_mail'],
 			'inputType'        => 'select',
-			'options_callback' => array('Avisota\DataContainer\Settings', 'getBoilerplateNewsletters'),
+			'options_callback' => array('Avisota\Contao\DataContainer\Settings', 'getBoilerplateNewsletters'),
 			'eval'             => array('tl_class' => 'w50 clr')
 		),
 		'avisota_unsubscribe_mail'   => array
@@ -132,7 +132,7 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 			'exclude'          => true,
 			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_unsubscribe_mail'],
 			'inputType'        => 'select',
-			'options_callback' => array('Avisota\DataContainer\Settings', 'getBoilerplateNewsletters'),
+			'options_callback' => array('Avisota\Contao\DataContainer\Settings', 'getBoilerplateNewsletters'),
 			'eval'             => array('tl_class' => 'w50')
 		),
 		'avisota_send_notification'                 => array
@@ -172,7 +172,7 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 			'exclude'          => true,
 			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_notification_mail'],
 			'inputType'        => 'select',
-			'options_callback' => array('Avisota\DataContainer\Settings', 'getBoilerplateNewsletters'),
+			'options_callback' => array('Avisota\Contao\DataContainer\Settings', 'getBoilerplateNewsletters'),
 			'eval'             => array('tl_class' => 'w50')
 		),
 		'avisota_do_cleanup'                        => array

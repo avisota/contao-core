@@ -27,11 +27,11 @@ $GLOBALS['TL_DCA']['tl_avisota_mailing_list'] = array
 		'enableVersioning' => true,
 		'onload_callback'  => array
 		(
-			array('Avisota\DataContainer\MailingList', 'checkPermission')
+			array('Avisota\Contao\DataContainer\MailingList', 'checkPermission')
 		),
 		'onsubmit_callback'  => array
 		(
-			array('Avisota\Backend', 'regenerateDynamics')
+			array('Avisota\Contao\Backend', 'regenerateDynamics')
 		)
 	),
 	// List
@@ -48,7 +48,7 @@ $GLOBALS['TL_DCA']['tl_avisota_mailing_list'] = array
 		(
 			'fields'         => array('title'),
 			'format'         => '%s',
-			'label_callback' => array('Avisota\DataContainer\MailingList', 'getLabel')
+			'label_callback' => array('Avisota\Contao\DataContainer\MailingList', 'getLabel')
 		),
 		'global_operations' => array
 		(
@@ -67,7 +67,7 @@ $GLOBALS['TL_DCA']['tl_avisota_mailing_list'] = array
 				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['edit'],
 				'href'            => 'act=edit',
 				'icon'            => 'edit.gif',
-				'button_callback' => array('Avisota\DataContainer\MailingList', 'editList')
+				'button_callback' => array('Avisota\Contao\DataContainer\MailingList', 'editList')
 			),
 			'copy'   => array
 			(
@@ -75,7 +75,7 @@ $GLOBALS['TL_DCA']['tl_avisota_mailing_list'] = array
 				'href'            => 'act=copy',
 				'icon'            => 'copy.gif',
 				'attributes'      => 'onclick="Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\DataContainer\MailingList', 'copyCategory')
+				'button_callback' => array('Avisota\Contao\DataContainer\MailingList', 'copyCategory')
 			),
 			'delete' => array
 			(
@@ -83,7 +83,7 @@ $GLOBALS['TL_DCA']['tl_avisota_mailing_list'] = array
 				'href'            => 'act=delete',
 				'icon'            => 'delete.gif',
 				'attributes'      => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\DataContainer\MailingList', 'deleteCategory')
+				'button_callback' => array('Avisota\Contao\DataContainer\MailingList', 'deleteCategory')
 			),
 			'show'   => array
 			(
@@ -132,7 +132,7 @@ $GLOBALS['TL_DCA']['tl_avisota_mailing_list'] = array
 			),
 			'save_callback' => array
 			(
-				array('Avisota\DataContainer\MailingList', 'generateAlias')
+				array('Avisota\Contao\DataContainer\MailingList', 'generateAlias')
 			)
 		),
 		'viewOnlinePage'                            => array

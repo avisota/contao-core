@@ -13,7 +13,7 @@
  * @filesource
  */
 
-namespace Avisota\DataContainer;
+namespace Avisota\Contao\DataContainer;
 
 class Recipient extends \Backend
 {
@@ -317,12 +317,17 @@ class Recipient extends \Backend
 
 		$database = \Database::getInstance();
 
+		$sql = 'SELECT * FROM tl_avisota_recipient_to_mailing_list WHERE recipient=?';
+		$args = array($dc->id);
+
+		if ($confirmed !== null) {
+			$sql .= ' AND confirmed=?';
+			$args[] = $confirmed ? '1' : '';
+		}
+
 		return $database
-			->prepare(
-			"SELECT * FROM tl_avisota_recipient_to_mailing_list WHERE recipient=?"
-				. ($confirmed !== null ? ' AND confirmed=?' : '')
-		)
-			->execute($dc->id, $confirmed ? '1' : '')
+			->prepare($sql)
+			->execute($args)
 			->fetchEach('list');
 	}
 

@@ -254,8 +254,12 @@ CREATE TABLE `tl_avisota_newsletter_content` (
 CREATE TABLE `tl_avisota_queue` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `tstamp` int(10) unsigned NOT NULL default '0',
+  `type` varchar(255) NOT NULL default '',
   `title` varchar(255) NOT NULL default '',
   `alias` varbinary(128) NOT NULL default '',
+  `allowManualSending` char(1) NOT NULL default '',
+  `scheduledSending` char(1) NOT NULL default '',
+  `sendingTime` text NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

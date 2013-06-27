@@ -28,17 +28,17 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 		'enableVersioning'  => true,
 		'onload_callback'   => array
 		(
-			array('Avisota\DataContainer\Recipient', 'checkPermission'),
-			array('Avisota\DataContainer\Recipient', 'filterByMailingLists'),
-			array('Avisota\DataContainer\Recipient', 'onload_callback')
+			array('Avisota\Contao\DataContainer\Recipient', 'checkPermission'),
+			array('Avisota\Contao\DataContainer\Recipient', 'filterByMailingLists'),
+			array('Avisota\Contao\DataContainer\Recipient', 'onload_callback')
 		),
 		'onsubmit_callback' => array
 		(
-			array('Avisota\DataContainer\Recipient', 'onsubmit_callback')
+			array('Avisota\Contao\DataContainer\Recipient', 'onsubmit_callback')
 		),
 		'ondelete_callback' => array
 		(
-			array('Avisota\DataContainer\Recipient', 'ondelete_callback')
+			array('Avisota\Contao\DataContainer\Recipient', 'ondelete_callback')
 		)
 	),
 	// List
@@ -54,7 +54,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 		(
 			'fields'         => array('firstname', 'lastname', 'email'),
 			'format'         => '%s %s &lt;%s&gt;',
-			'label_callback' => array('Avisota\DataContainer\Recipient', 'getLabel')
+			'label_callback' => array('Avisota\Contao\DataContainer\Recipient', 'getLabel')
 		),
 		'global_operations' => array
 		(
@@ -101,7 +101,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['edit'],
 				'href'            => 'act=edit',
 				'icon'            => 'edit.gif',
-				'button_callback' => array('Avisota\DataContainer\Recipient', 'editRecipient')
+				'button_callback' => array('Avisota\Contao\DataContainer\Recipient', 'editRecipient')
 			),
 			'delete'              => array
 			(
@@ -109,7 +109,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 				'href'            => 'act=delete',
 				'icon'            => 'delete.gif',
 				'attributes'      => 'class="contextmenu" onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\DataContainer\Recipient', 'deleteRecipient')
+				'button_callback' => array('Avisota\Contao\DataContainer\Recipient', 'deleteRecipient')
 			),
 			'delete_no_blacklist' => array
 			(
@@ -117,7 +117,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 				'href'            => 'act=delete&amp;blacklist=false',
 				'icon'            => 'delete.gif',
 				'attributes'      => 'class="edit-header" onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\DataContainer\Recipient', 'deleteRecipientNoBlacklist')
+				'button_callback' => array('Avisota\Contao\DataContainer\Recipient', 'deleteRecipientNoBlacklist')
 			),
 			'show'                => array
 			(
@@ -130,7 +130,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_recipient']['notify'],
 				'href'            => '',
 				'icon'            => 'system/modules/avisota/html/notify.png',
-				'button_callback' => array('Avisota\DataContainer\Recipient', 'notify')
+				'button_callback' => array('Avisota\Contao\DataContainer\Recipient', 'notify')
 			),
 		),
 	),
@@ -166,7 +166,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			),
 			'save_callback' => array
 			(
-				array('Avisota\DataContainer\Recipient', 'saveEmail')
+				array('Avisota\Contao\DataContainer\Recipient', 'saveEmail')
 			)
 		),
 		'lists'                 => array
@@ -183,12 +183,12 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 			),
 			'load_callback' => array
 			(
-				array('Avisota\DataContainer\Recipient', 'loadMailingLists')
+				array('Avisota\Contao\DataContainer\Recipient', 'loadMailingLists')
 			),
 			'save_callback' => array
 			(
-				array('Avisota\DataContainer\Recipient', 'validateBlacklist'),
-				array('Avisota\DataContainer\Recipient', 'saveMailingLists')
+				array('Avisota\Contao\DataContainer\Recipient', 'validateBlacklist'),
+				array('Avisota\Contao\DataContainer\Recipient', 'saveMailingLists')
 			)
 		),
 		'subscriptionAction'    => array
@@ -202,7 +202,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient'] = array
 				'doNotCopy'      => true,
 				'doNotShow'      => true
 			),
-			'save_callback' => array(array('Avisota\DataContainer\Recipient', 'saveSubscriptionAction'))
+			'save_callback' => array(array('Avisota\Contao\DataContainer\Recipient', 'saveSubscriptionAction'))
 		),
 		'salutation'            => array
 		(

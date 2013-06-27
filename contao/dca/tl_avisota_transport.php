@@ -26,11 +26,11 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 		'dataContainer'     => 'Table',
 		'enableVersioning'  => true,
 		'onload_callback'   => array(
-			array('Avisota\DataContainer\Transport', 'onload_callback')
+			array('Avisota\Contao\DataContainer\Transport', 'onload_callback')
 		),
 		'onsubmit_callback' => array(
-			array('Avisota\DataContainer\Transport', 'onsubmit_callback'),
-			array('Avisota\Backend', 'regenerateDynamics')
+			array('Avisota\Contao\DataContainer\Transport', 'onsubmit_callback'),
+			array('Avisota\Contao\Backend', 'regenerateDynamics')
 		)
 	),
 	// List
@@ -154,7 +154,7 @@ $GLOBALS['TL_DCA']['tl_avisota_transport'] = array
 			),
 			'save_callback' => array
 			(
-				array('Avisota\DataContainer\Transport', 'generateAlias')
+				array('Avisota\Contao\DataContainer\Transport', 'generateAlias')
 			)
 		),
 		'sender'        => array

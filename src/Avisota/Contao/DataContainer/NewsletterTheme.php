@@ -13,9 +13,11 @@
  * @filesource
  */
 
-namespace Avisota\DataContainer;
+namespace Avisota\Contao\DataContainer;
 
-class NewsletterCategory extends \Backend
+use Avisota\Contao\Theme;
+
+class NewsletterTheme extends \Backend
 {
 	/**
 	 * Import the back end user object
@@ -26,49 +28,14 @@ class NewsletterCategory extends \Backend
 		$this->import('BackendUser', 'User');
 	}
 
-	/**
-	 * Get options list of recipients.
-	 *
-	 * @return array
-	 */
-	public function getRecipients($prefixSourceId = false)
-	{
-		$recipients = array();
-
-		$source = $this->Database
-			->execute("SELECT * FROM tl_avisota_recipient_source WHERE disable='' ORDER BY sorting");
-		while ($source->next()) {
-			if (isset($GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE'][$source->type])) {
-				$class    = $GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE'][$source->type];
-				$instance = new $class($source->row());
-				$options  = $instance->getRecipientOptions();
-				if (count($options)) {
-					$sourceOptions = array();
-					foreach ($options as $k => $v) {
-						$sourceOptions[$source->id . ':' . $k] = $v;
-					}
-					$recipients[($prefixSourceId ? $source->id . ':'
-						: '') . $source->title] = $sourceOptions;
-				}
-			}
-			else {
-				$this->log(
-					'Recipient source "' . $source->type . '" type not found!',
-					'AvisotaBackend::getRecipients()',
-					TL_ERROR
-				);
-				$this->redirect('contao/main.php?act=error');
-			}
-		}
-
-		return $recipients;
-	}
 
 	/**
 	 * Check permissions to edit table tl_newsletter_channel
 	 */
 	public function checkPermission()
 	{
+		return; // TODO
+
 		if ($this->User->isAdmin) {
 			return;
 		}
@@ -84,11 +51,11 @@ class NewsletterCategory extends \Backend
 			$root = $this->User->avisota_newsletter_categories;
 		}
 
-		$GLOBALS['TL_DCA']['tl_avisota_newsletter_category']['list']['sorting']['root'] = $root;
+		$GLOBALS['TL_DCA']['tl_avisota_newsletter_theme']['list']['sorting']['root'] = $root;
 
 		// Check permissions to add channels
 		if (!$this->User->hasAccess('create', 'avisota_newsletter_category_permissions')) {
-			$GLOBALS['TL_DCA']['tl_avisota_newsletter_category']['config']['closed'] = true;
+			$GLOBALS['TL_DCA']['tl_avisota_newsletter_theme']['config']['closed'] = true;
 		}
 
 		// Check current action
@@ -103,9 +70,9 @@ class NewsletterCategory extends \Backend
 				if (!in_array($this->Input->get('id'), $root)) {
 					$newRecord = $this->Session->get('new_records');
 
-					if (is_array($newRecord['tl_avisota_newsletter_category']) && in_array(
+					if (is_array($newRecord['tl_avisota_newsletter_theme']) && in_array(
 						$this->Input->get('id'),
-						$newRecord['tl_avisota_newsletter_category']
+						$newRecord['tl_avisota_newsletter_theme']
 					)
 					) {
 						// Add permissions on user level
@@ -181,7 +148,7 @@ class NewsletterCategory extends \Backend
 						'Not enough permissions to ' . $this->Input->get(
 							'act'
 						) . ' avisota newsletter category ID "' . $this->Input->get('id') . '"',
-						'tl_avisota_newsletter_category checkPermission',
+						'tl_avisota_newsletter_theme checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -209,7 +176,7 @@ class NewsletterCategory extends \Backend
 				if (strlen($this->Input->get('act'))) {
 					$this->log(
 						'Not enough permissions to ' . $this->Input->get('act') . ' avisota newsletter categories',
-						'tl_avisota_newsletter_category checkPermission',
+						'tl_avisota_newsletter_theme checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -233,7 +200,7 @@ class NewsletterCategory extends \Backend
 	 */
 	public function editHeader($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || count(preg_grep('/^tl_avisota_newsletter_category::/', $this->User->alexf)) > 0)
+		return ($this->User->isAdmin || count(preg_grep('/^tl_avisota_newsletter_theme::/', $this->User->alexf)) > 0)
 			? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
 				$title
 			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
@@ -307,7 +274,7 @@ class NewsletterCategory extends \Backend
 		}
 
 		$aliasResultSet = $this->Database
-			->prepare("SELECT id FROM tl_avisota_newsletter_category WHERE alias=?")
+			->prepare("SELECT id FROM tl_avisota_newsletter_theme WHERE alias=?")
 			->execute($value);
 
 		// Check whether the news alias exists
@@ -326,92 +293,48 @@ class NewsletterCategory extends \Backend
 
 	public function getStylesheets($dc)
 	{
-		if (!in_array('layout_additional_sources', $this->Config->getActiveModules())) {
-			return array();
-		}
+		$stylesheets = array();
 
-		$additionalSources = array();
-		$additionalSource = $this->Database
-			->prepare(
-			"
-				SELECT
-					t.name,
-					s.type,
-					s.id,
-					s.css_url,
-					s.css_file
-				FROM
-					`tl_additional_source` s
-				INNER JOIN
-					`tl_theme` t
-				ON
-					t.id=s.pid
-				WHERE
-						`type`='css_url'
-					OR  `type`='css_file'
-				ORDER BY
-					s.`sorting`"
-		)
-			->execute($themeId);
-		while ($additionalSource->next()) {
-			$type = $additionalSource->type;
-			$label   = $additionalSource->$type;
+		$theme = $this->Database->execute("SELECT * FROM tl_theme ORDER BY name");
 
-			if ($additionalSource->compress_yui) {
-				$label .= '<span style="color: #009;">.yui</span>';
+		while ($theme->next()) {
+			$stylesheet = $this->Database
+				->prepare("SELECT * FROM tl_style_sheet WHERE pid=?")
+				->execute($theme->id);
+			while ($stylesheet->next()) {
+				$stylesheets['system/scripts/' . $stylesheet->name . '.css'] = '<span style="color:#A6A6A6">' . $theme->name . ': </span>' . $stylesheet->name . '<span style="color:#A6A6A6">.css</span>';
 			}
 
-			if ($additionalSource->compress_gz) {
-				$label .= '<span style="color: #009;">.gz</span>';
-			}
-
-			if (strlen($additionalSource->cc)) {
-				$label .= ' <span style="color: #B3B3B3;">[' . $additionalSource->cc . ']</span>';
-			}
-
-			if (strlen($additionalSource->media)) {
-				$medias = unserialize($additionalSource->media);
-				if (count($medias)) {
-					$label .= ' <span style="color: #B3B3B3;">[' . implode(', ', $medias) . ']</span>';
+			// HOOK: add custom logic
+			if (isset($GLOBALS['TL_HOOKS']['avisotaCollectThemeCss']) && is_array(
+				$GLOBALS['TL_HOOKS']['avisotaCollectThemeCss']
+			)
+			) {
+				foreach ($GLOBALS['TL_HOOKS']['avisotaCollectThemeCss'] as $callback) {
+					$this->import($callback[0]);
+					$stylesheets = $this->$callback[0]->$callback[1]($stylesheets, $theme->row());
 				}
 			}
-
-			switch ($additionalSource->type) {
-				case 'js_file':
-				case 'js_url':
-					$image = 'iconJS.gif';
-					break;
-
-				case 'css_file':
-				case 'css_url':
-					$image = 'iconCSS.gif';
-					break;
-
-				default:
-					$image = false;
-					if (isset($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']) && is_array(
-						$GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']
-					)
-					) {
-						foreach ($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage'] as $callback) {
-							$this->import($callback[0]);
-							$image = $this->$callback[0]->$callback[1]($row);
-							if ($image !== false) {
-								break;
-							}
-						}
-					}
-			}
-
-			if (!isset($additionalSources[$additionalSource->name])) {
-				$additionalSources[$additionalSource->name] = array();
-			}
-			$additionalSources[$additionalSource->name][$additionalSource->id] = ($image ? $this->generateImage(
-				$image,
-				$label,
-				'style="vertical-align:middle"'
-			) . ' ' : '') . $label;
 		}
-		return $additionalSources;
+
+		// HOOK: add custom logic
+		if (isset($GLOBALS['TL_HOOKS']['avisotaCollectCss']) && is_array($GLOBALS['TL_HOOKS']['avisotaCollectCss'])) {
+			foreach ($GLOBALS['TL_HOOKS']['avisotaCollectCss'] as $callback) {
+				$this->import($callback[0]);
+				$stylesheets = $this->$callback[0]->$callback[1]($stylesheets);
+			}
+		}
+
+		return $stylesheets;
+	}
+
+	public function getHtmlTemplates()
+	{
+		return Theme::getInstance()->getTemplateGroup('mail_html_', $this->Input->get('id'));
+	}
+
+	public function getPlainTemplates()
+	{
+		return Theme::getInstance()->getTemplateGroup('mail_plain_', $this->Input->get('id'));
 	}
 }

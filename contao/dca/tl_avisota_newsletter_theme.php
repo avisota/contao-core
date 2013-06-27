@@ -27,11 +27,11 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 		'enableVersioning' => true,
 		'onload_callback'  => array
 		(
-			array('Avisota\DataContainer\NewsletterTheme', 'checkPermission')
+			array('Avisota\Contao\DataContainer\NewsletterTheme', 'checkPermission')
 		),
 		'onsubmit_callback'  => array
 		(
-			array('Avisota\Backend', 'regenerateDynamics')
+			array('Avisota\Contao\Backend', 'regenerateDynamics')
 		)
 	),
 	// List
@@ -73,7 +73,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 				'href'            => 'act=copy',
 				'icon'            => 'copy.gif',
 				'attributes'      => 'onclick="Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\DataContainer\NewsletterTheme', 'copyCategory')
+				'button_callback' => array('Avisota\Contao\DataContainer\NewsletterTheme', 'copyCategory')
 			),
 			'delete' => array
 			(
@@ -81,7 +81,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 				'href'            => 'act=delete',
 				'icon'            => 'delete.gif',
 				'attributes'      => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\DataContainer\NewsletterTheme', 'deleteCategory')
+				'button_callback' => array('Avisota\Contao\DataContainer\NewsletterTheme', 'deleteCategory')
 			),
 			'show'   => array
 			(
@@ -135,7 +135,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 			),
 			'save_callback' => array
 			(
-				array('Avisota\DataContainer\NewsletterTheme', 'generateAlias')
+				array('Avisota\Contao\DataContainer\NewsletterTheme', 'generateAlias')
 			)
 		),
 		'preview'           => array
@@ -166,7 +166,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_newsletter_theme']['stylesheets'],
 			'inputType'        => 'checkboxWizard',
-			'options_callback' => array('Avisota\DataContainer\NewsletterTheme', 'getStylesheets'),
+			'options_callback' => array('Avisota\Contao\DataContainer\NewsletterTheme', 'getStylesheets'),
 			'eval'             => array(
 				'tl_class' => 'clr',
 				'multiple' => true
@@ -178,7 +178,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 			'default'          => 'mail_html_default',
 			'exclude'          => true,
 			'inputType'        => 'select',
-			'options_callback' => array('Avisota\DataContainer\NewsletterTheme', 'getHtmlTemplates'),
+			'options_callback' => array('Avisota\Contao\DataContainer\NewsletterTheme', 'getHtmlTemplates'),
 			'eval'             => array('tl_class' => 'w50')
 		),
 		'template_plain'    => array
@@ -187,7 +187,7 @@ $GLOBALS['TL_DCA']['tl_avisota_newsletter_theme'] = array
 			'default'          => 'mail_plain_default',
 			'exclude'          => true,
 			'inputType'        => 'select',
-			'options_callback' => array('Avisota\DataContainer\NewsletterTheme', 'getPlainTemplates'),
+			'options_callback' => array('Avisota\Contao\DataContainer\NewsletterTheme', 'getPlainTemplates'),
 			'eval'             => array('tl_class' => 'w50')
 		),
 		'templateDirectory' => array

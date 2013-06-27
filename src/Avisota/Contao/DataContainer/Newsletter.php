@@ -13,7 +13,7 @@
  * @filesource
  */
 
-namespace Avisota\DataContainer;
+namespace Avisota\Contao\DataContainer;
 
 use Avisota\Model\NewsletterCategoryModel;
 

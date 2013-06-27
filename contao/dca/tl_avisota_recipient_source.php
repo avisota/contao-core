@@ -26,11 +26,11 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 		'dataContainer'     => 'Table',
 		'enableVersioning'  => true,
 		'onload_callback'   => array(
-			array('Avisota\DataContainer\RecipientSource', 'onload_callback')
+			array('Avisota\Contao\DataContainer\RecipientSource', 'onload_callback')
 		),
 		'onsubmit_callback' => array(
-			array('Avisota\DataContainer\RecipientSource', 'onsubmit_callback'),
-			array('Avisota\Backend', 'regenerateDynamics')
+			array('Avisota\Contao\DataContainer\RecipientSource', 'onsubmit_callback'),
+			array('Avisota\Contao\Backend', 'regenerateDynamics')
 		)
 	),
 	// List
@@ -79,7 +79,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 				'label'           => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['toggle'],
 				'icon'            => 'visible.gif',
 				'attributes'      => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
-				'button_callback' => array('Avisota\DataContainer\RecipientSource', 'toggleIcon')
+				'button_callback' => array('Avisota\Contao\DataContainer\RecipientSource', 'toggleIcon')
 			),
 			'show'   => array
 			(
@@ -89,7 +89,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 			),
 			'move'   => array
 			(
-				'button_callback' => array('Avisota\DataContainer\RecipientSource', 'move_button_callback')
+				'button_callback' => array('Avisota\Contao\DataContainer\RecipientSource', 'move_button_callback')
 			)
 		),
 	),
@@ -183,7 +183,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 			),
 			'save_callback' => array
 			(
-				array('Avisota\DataContainer\RecipientSource', 'generateAlias')
+				array('Avisota\Contao\DataContainer\RecipientSource', 'generateAlias')
 			)
 		),
 		// integrated source
@@ -248,7 +248,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 					'field'      => array(
 						'label'            => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['integratedFilterByColumnsField'],
 						'inputType'        => 'select',
-						'options_callback' => array('Avisota\DataContainer\RecipientSource', 'getRecipientFilterColumns'),
+						'options_callback' => array('Avisota\Contao\DataContainer\RecipientSource', 'getRecipientFilterColumns'),
 						'eval'             => array('style' => 'width:200px')
 					),
 					'comparator' => array(
@@ -354,7 +354,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 					'field'      => array(
 						'label'            => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['memberFilterByColumnsField'],
 						'inputType'        => 'select',
-						'options_callback' => array('Avisota\DataContainer\RecipientSource', 'getMemberFilterColumns'),
+						'options_callback' => array('Avisota\Contao\DataContainer\RecipientSource', 'getMemberFilterColumns'),
 						'eval'             => array('style' => 'width:200px')
 					),
 					'comparator' => array(
@@ -418,7 +418,7 @@ $GLOBALS['TL_DCA']['tl_avisota_recipient_source'] = array
 					'field'  => array(
 						'label'            => &$GLOBALS['TL_LANG']['tl_avisota_recipient_source']['csvColumnAssignmentField'],
 						'inputType'        => 'select',
-						'options_callback' => array('Avisota\DataContainer\RecipientSource', 'getRecipientColumns'),
+						'options_callback' => array('Avisota\Contao\DataContainer\RecipientSource', 'getRecipientColumns'),
 						'eval'             => array()
 					)
 				)
