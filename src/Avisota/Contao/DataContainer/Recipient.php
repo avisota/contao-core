@@ -15,6 +15,8 @@
 
 namespace Avisota\Contao\DataContainer;
 
+use Doctrine\ORM\EntityManager;
+
 class Recipient extends \Backend
 {
 	/**
@@ -183,6 +185,12 @@ class Recipient extends \Backend
 	 */
 	public function onsubmit_callback($dc)
 	{
+		/** @var EntityManager $entityManager */
+		$entityManager = $GLOBALS['container']['doctrine.orm.entityManager'];
+		$repository = $entityManager->getRepository('Avisota\Contao\Entity\Recipient');
+		/** @var \Avisota\Contao\Entity\Recipient $recipient */
+		$recipient = $repository->findBy(array('email' => $dc->activeRecord->email));
+
 		$recipient = AvisotaIntegratedRecipient::byEmail($dc->activeRecord->email);
 		$recipient->subscribe($_SESSION['avisotaMailingLists'], true);
 

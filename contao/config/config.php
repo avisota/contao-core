@@ -50,6 +50,20 @@ $GLOBALS['TL_MODELS']['tl_avisota_transport'] = 'Avisota\Model\TransportModel';
  */
 $GLOBALS['DOCTRINE_ENTITY_NAMESPACE_MAP']['tl_avisota'] = 'Avisota\Contao\Entity';
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_mailing_list';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_newletter';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_newsletter_category';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_newsletter_content';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_newsletter_create_from_draft';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_newsletter_theme';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_queue';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_recipient';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_recipient_export';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_recipient_import';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_recipient_migrate';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_recipient_notify';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_recipient_remove';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_recipient_source';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'tl_avisota_transport';
 
 
 /**

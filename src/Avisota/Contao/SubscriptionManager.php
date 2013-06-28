@@ -13,7 +13,10 @@
  * @filesource
  */
 
-namespace Avisota;
+namespace Avisota\Contao;
+
+use Avisota\Contao\Entity\Recipient;
+use Contao\Doctrine\ORM\EntityHelper;
 
 /**
  * Class SubscriptionManager
@@ -91,13 +94,42 @@ class SubscriptionManager
 	/**
 	 * Add a new subscription or update existing.
 	 *
-	 * @param string|array $recipient Recipient email address or array of recipient details.
+	 * @param array|int|string|Recipient $recipient Recipient email address or array of recipient details.
 	 * @param null|array   $lists     <em>null</em> to globally subscribe, or array of mailing lists to subscribe to.
 	 */
 	public function subscribe($recipient, $lists = null)
 	{
-		if (!is_array($recipient)) {
-			$recipient = array('email' => $recipient);
+		$entityManager = EntityHelper::getEntityManager();
+		$repository = $entityManager->getRepository('Avisota\Contao\Entity\Recipient');
+
+		// new recipient
+		if (is_array($recipient)) {
+			/** @var \Avisota\Contao\Entity\Recipient $recipient */
+			$recipient = $repository->findOneBy(array('email' => $recipient['email']));
+
+			if (!$recipient) {
+				$recipient = new Recipient();
+				foreach ($recipient as $key => $value) {
+					$setter = 'set' . ucfirst($key);
+					$recipient->$setter($value);
+				}
+			}
+		}
+
+		// by id
+		else if (is_numeric($recipient)) {
+			/** @var \Avisota\Contao\Entity\Recipient $recipient */
+			$recipient = $repository->find($recipient);
+		}
+
+		// by email
+		else if (is_string($recipient)) {
+			/** @var \Avisota\Contao\Entity\Recipient $recipient */
+			$recipient = $repository->findOneBy(array('email' => $recipient));
+		}
+
+		if (!$recipient instanceof Recipient) {
+			throw new \RuntimeException('Invalid argument ' . gettype($recipient));
 		}
 
 		// TODO

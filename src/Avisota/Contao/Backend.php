@@ -13,7 +13,7 @@
  * @filesource
  */
 
-namespace Avisota;
+namespace Avisota\Contao;
 
 /**
  * Class Backend
