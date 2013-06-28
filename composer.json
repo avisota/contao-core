@@ -33,6 +33,7 @@
 		"bit3/contao-meta-palettes": "~1",
 		"bit3/contao-logger": "~1",
 		"bit3/contao-console": "~1",
+		"bit3/contao-event-dispatcher": "~2.3",
 		"menatwork/contao-multicolumnwizard": "~3",
 		"metamodels/dc_general": "~0.9"
 	},
