@@ -81,7 +81,7 @@ class AvisotaBase extends Controller
 						SELECT
 							*
 						FROM
-							`tl_avisota_mailing_list`
+							`orm_avisota_mailing_list`
 						WHERE
 							`id`=?"
 				)
@@ -135,7 +135,7 @@ class AvisotaBase extends Controller
 	 */
 	public function getPreviewRecipient()
 	{
-		$this->loadLanguageFile('tl_avisota_newsletter');
+		$this->loadLanguageFile('orm_avisota_newsletter');
 
 		list($firstName, $lastName) = $this->splitFriendlyName($this->User->name);
 
@@ -187,15 +187,15 @@ class AvisotaBase extends Controller
 		}
 
 		// extend with maybe missing anonymous informations
-		$this->extendArray($GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous'], $recipientData);
+		$this->extendArray($GLOBALS['TL_LANG']['orm_avisota_newsletter']['anonymous'], $recipientData);
 
 		// update salutation
 		if (empty($recipientData['salutation'])) {
-			if (isset($GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $recipientData['gender']])) {
-				$recipientData['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_' . $recipientData['gender']];
+			if (isset($GLOBALS['TL_LANG']['orm_avisota_newsletter']['salutation_' . $recipientData['gender']])) {
+				$recipientData['salutation'] = $GLOBALS['TL_LANG']['orm_avisota_newsletter']['salutation_' . $recipientData['gender']];
 			}
 			else {
-				$recipientData['salutation'] = $GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation'];
+				$recipientData['salutation'] = $GLOBALS['TL_LANG']['orm_avisota_newsletter']['salutation'];
 			}
 		}
 
@@ -224,7 +224,7 @@ class AvisotaBase extends Controller
 					&& !in_array(
 						$k,
 						array(
-							// tl_avisota_recipient fields
+							// orm_avisota_recipient fields
 							'id',
 							'pid',
 							'tstamp',
@@ -349,7 +349,7 @@ class AvisotaBase extends Controller
 		// Add the theme templates folder
 		if ($themeId > 0) {
 			$theme = $this->Database
-				->prepare("SELECT * FROM tl_avisota_newsletter_theme WHERE id=?")
+				->prepare("SELECT * FROM orm_avisota_newsletter_theme WHERE id=?")
 				->limit(1)
 				->execute($themeId);
 

@@ -26,7 +26,7 @@ class AvisotaNewsletterTheme
 	protected static function load($id)
 	{
 		$result = Database::getInstance()
-			->prepare('SELECT * FROM tl_avisota_newsletter_theme WHERE id=?')
+			->prepare('SELECT * FROM orm_avisota_newsletter_theme WHERE id=?')
 			->execute($id);
 		if ($result->next()) {
 			$theme                    = new AvisotaNewsletterTheme();

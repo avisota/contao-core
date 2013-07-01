@@ -90,7 +90,7 @@ class AvisotaNewsletterTransport extends Backend
 		$this->User->authenticate();
 
 		// load language files
-		$this->loadLanguageFile('tl_avisota_newsletter');
+		$this->loadLanguageFile('orm_avisota_newsletter');
 
 		// get the current action
 		$action = $this->Input->post('action');
@@ -128,7 +128,7 @@ class AvisotaNewsletterTransport extends Backend
 	protected function findNewsletter($id)
 	{
 		$this->newsletter = $this->Database
-			->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
+			->prepare("SELECT * FROM orm_avisota_newsletter WHERE id=?")
 			->execute($id);
 
 		if (!$this->newsletter->next()) {
@@ -138,7 +138,7 @@ class AvisotaNewsletterTransport extends Backend
 
 		// find the newsletter category
 		$this->category = $this->Database
-			->prepare("SELECT * FROM tl_avisota_newsletter_category WHERE id=?")
+			->prepare("SELECT * FROM orm_avisota_newsletter_category WHERE id=?")
 			->execute($this->newsletter->pid);
 
 		if (!$this->category->next()) {
@@ -249,10 +249,10 @@ class AvisotaNewsletterTransport extends Backend
 		$this->sendNewsletter($email, $plain, $html, $recipient, $personalized);
 
 		// Redirect
-		$_SESSION['TL_CONFIRM'][] = sprintf($GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirmPreview'], $recipientEmail);
+		$_SESSION['TL_CONFIRM'][] = sprintf($GLOBALS['TL_LANG']['orm_avisota_newsletter']['confirmPreview'], $recipientEmail);
 
 		$this->redirect(
-			'contao/main.php?do=avisota_newsletter&table=tl_avisota_newsletter&key=send&id=' . $this->newsletter->id
+			'contao/main.php?do=avisota_newsletter&table=orm_avisota_newsletter&key=send&id=' . $this->newsletter->id
 		);
 	}
 
@@ -267,7 +267,7 @@ class AvisotaNewsletterTransport extends Backend
 		$time = time();
 
 		$outboxId = $this->Database
-			->prepare("INSERT INTO tl_avisota_newsletter_outbox %s")
+			->prepare("INSERT INTO orm_avisota_newsletter_outbox %s")
 			->set(array('pid' => $this->newsletter->id, 'tstamp' => $time))
 			->execute()
 			->insertId;
@@ -283,7 +283,7 @@ class AvisotaNewsletterTransport extends Backend
 							->prepare(
 							"
 							INSERT INTO
-								tl_avisota_newsletter_outbox_recipient
+								orm_avisota_newsletter_outbox_recipient
 								(pid, tstamp, email, domain, recipientID, source, sourceID)
 							SELECT
 								?,
@@ -294,9 +294,9 @@ class AvisotaNewsletterTransport extends Backend
 								'list',
 								r.pid
 							FROM
-								tl_avisota_recipient r
+								orm_avisota_recipient r
 							WHERE
-									r.email NOT IN (SELECT email FROM tl_avisota_newsletter_outbox_recipient WHERE pid=?)
+									r.email NOT IN (SELECT email FROM orm_avisota_newsletter_outbox_recipient WHERE pid=?)
 								AND	r.pid=?
 								AND r.confirmed='1'"
 						)
@@ -309,7 +309,7 @@ class AvisotaNewsletterTransport extends Backend
 							->prepare(
 							"
 							INSERT INTO
-								tl_avisota_newsletter_outbox_recipient
+								orm_avisota_newsletter_outbox_recipient
 								(pid, tstamp, email, domain, recipientID, source, sourceID)
 							SELECT
 								?,
@@ -326,7 +326,7 @@ class AvisotaNewsletterTransport extends Backend
 							ON
 								m.id=g.member_id
 							WHERE
-									m.email NOT IN (SELECT email FROM tl_avisota_newsletter_outbox_recipient WHERE pid=?)
+									m.email NOT IN (SELECT email FROM orm_avisota_newsletter_outbox_recipient WHERE pid=?)
 								AND	g.group_id=?
 								AND m.disable=''
 								AND m.email!=''"
@@ -347,7 +347,7 @@ class AvisotaNewsletterTransport extends Backend
 	protected function send()
 	{
 		$outbox = $this->Database
-			->prepare("SELECT * FROM tl_avisota_newsletter_outbox WHERE id=?")
+			->prepare("SELECT * FROM orm_avisota_newsletter_outbox WHERE id=?")
 			->execute($this->Input->post('id'));
 
 		if (!$outbox->next()) {
@@ -374,7 +374,7 @@ class AvisotaNewsletterTransport extends Backend
 			"SELECT
 					*
 				FROM
-					tl_avisota_newsletter_outbox_recipient
+					orm_avisota_newsletter_outbox_recipient
 				WHERE
 						pid=?
 					AND send=0
@@ -391,7 +391,7 @@ class AvisotaNewsletterTransport extends Backend
 					->prepare(
 					"
 						UPDATE
-							tl_avisota_newsletter
+							orm_avisota_newsletter
 						SET
 							sendOn=?
 						WHERE
@@ -408,7 +408,7 @@ class AvisotaNewsletterTransport extends Backend
 				// add recipient details
 				if ($recipient->source == 'list') {
 					$data = $this->Database
-						->prepare("SELECT * FROM tl_avisota_recipient WHERE id=?")
+						->prepare("SELECT * FROM orm_avisota_recipient WHERE id=?")
 						->execute($recipient->recipientID);
 					if ($data->next()) {
 						$this->Base->extendArray($data->row(), $recipientData);
@@ -466,14 +466,14 @@ class AvisotaNewsletterTransport extends Backend
 					$fails[] = $recipient->row();
 
 					$this->Database
-						->prepare("UPDATE tl_avisota_newsletter_outbox_recipient SET failed='1' WHERE id=?")
+						->prepare("UPDATE orm_avisota_newsletter_outbox_recipient SET failed='1' WHERE id=?")
 						->execute($recipient->id);
 
 					// disable recipient from list
 					if ($recipient->source == 'list') {
 						if (!$GLOBALS['TL_CONFIG']['avisota_dont_disable_recipient_on_failure']) {
 							$this->Database
-								->prepare("UPDATE tl_avisota_recipient SET confirmed='' WHERE id=?")
+								->prepare("UPDATE orm_avisota_recipient SET confirmed='' WHERE id=?")
 								->execute($recipient->recipientID);
 							$this->log(
 								'Recipient address "' . $recipient->email . '" was rejected and has been deactivated',
@@ -499,7 +499,7 @@ class AvisotaNewsletterTransport extends Backend
 				}
 
 				$this->Database
-					->prepare("UPDATE tl_avisota_newsletter_outbox_recipient SET send=? WHERE id=?")
+					->prepare("UPDATE orm_avisota_newsletter_outbox_recipient SET send=? WHERE id=?")
 					->execute(time(), $recipient->id);
 			}
 		}

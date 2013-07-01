@@ -1,0 +1,65 @@
+-- **********************************************************
+-- *                                                        *
+-- * IMPORTANT NOTE                                         *
+-- *                                                        *
+-- * Do not import this file manually but use the TYPOlight *
+-- * install tool to create and maintain database tables!   *
+-- *                                                        *
+-- **********************************************************
+
+
+--
+-- Table `orm_avisota_recipient_to_mailing_list`
+--
+
+CREATE TABLE `orm_avisota_recipient_to_mailing_list` (
+  `recipient` int(10) unsigned NOT NULL default '0',
+  `list` int(10) unsigned NOT NULL default '0',
+  `confirmationSent` int(10) unsigned NOT NULL default '0',
+  `reminderSent` int(10) unsigned NOT NULL default '0',
+  `reminderCount` int(1) unsigned NOT NULL default '0',
+  `confirmed` char(1) NOT NULL default '',
+  `token` char(8) NOT NULL default '',
+  PRIMARY KEY  (`recipient`, `list`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table `orm_avisota_recipient_blacklist`
+-- 
+
+CREATE TABLE `orm_avisota_recipient_blacklist` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `pid` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  `email` char(32) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `pid` (`pid`),
+  UNIQUE KEY `recipient` (`pid`, `email`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table `orm_avisota_newsletter_category`
+-- 
+
+CREATE TABLE `orm_avisota_newsletter_category` (
+  `viewOnlinePage` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `alias` (`alias`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+
+-- 
+-- Table `orm_avisota_newsletter_content`
+-- 
+
+CREATE TABLE `orm_avisota_newsletter_content` (
+  `html` mediumtext NULL,
+  PRIMARY KEY  (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

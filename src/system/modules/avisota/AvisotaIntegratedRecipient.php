@@ -44,7 +44,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 		$recipientRef = Database::getInstance()
 			->prepare(
-			'SELECT DISTINCT recipient FROM tl_avisota_recipient_to_mailing_list WHERE ' . implode(' OR ', $whereParts)
+			'SELECT DISTINCT recipient FROM orm_avisota_recipient_to_mailing_list WHERE ' . implode(' OR ', $whereParts)
 		)
 			->execute($tokens);
 
@@ -70,7 +70,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			$listIds     = implode(',', $lists);
 			$blacklistEntry = Database::getInstance()
 				->prepare(
-				"SELECT * FROM tl_avisota_recipient_blacklist
+				"SELECT * FROM orm_avisota_recipient_blacklist
 				           WHERE email=? AND pid IN (" . $listIds . ")"
 			)
 				->execute(md5(strtolower($email)));
@@ -85,8 +85,8 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	{
 		parent::__construct($data);
 
-		$this->loadLanguageFile('tl_avisota_recipient');
-		$this->loadDataContainer('tl_avisota_recipient');
+		$this->loadLanguageFile('orm_avisota_recipient');
+		$this->loadDataContainer('orm_avisota_recipient');
 	}
 
 	public function load($uncached = false)
@@ -105,7 +105,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 		// fetch existing data
 		$recipient = $this->Database
-			->prepare("SELECT * FROM tl_avisota_recipient WHERE $field=?");
+			->prepare("SELECT * FROM orm_avisota_recipient WHERE $field=?");
 		// fetch uncached, e.g. if store is called before
 		if ($uncached) {
 			$recipient = $recipient->executeUncached($value);
@@ -119,11 +119,11 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			$recipientData = $recipient->row();
 
 			foreach ($recipientData as $k => $v) {
-				if (isset($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$k]['load_callback']) && is_array(
-					$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$k]['load_callback']
+				if (isset($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'][$k]['load_callback']) && is_array(
+					$GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'][$k]['load_callback']
 				)
 				) {
-					foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$k]['load_callback'] as $callback) {
+					foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'][$k]['load_callback'] as $callback) {
 						$this->import($callback[0]);
 						$recipientData[$k] = $v = $this->$callback[0]->$callback[1]($v);
 					}
@@ -153,11 +153,11 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		$args = array();
 
 		foreach ($data as $k => $v) {
-			if (isset($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$k]['save_callback']) && is_array(
-				$GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$k]['save_callback']
+			if (isset($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'][$k]['save_callback']) && is_array(
+				$GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'][$k]['save_callback']
 			)
 			) {
-				foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$k]['save_callback'] as $callback) {
+				foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'][$k]['save_callback'] as $callback) {
 					$this->import($callback[0]);
 					$v = $this->$callback[0]->$callback[1]($v);
 				}
@@ -184,7 +184,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		$this->Database
 			->prepare(
 			sprintf(
-				'INSERT INTO tl_avisota_recipient SET addedOn=?, addedBy=?, %1$s ON DUPLICATE KEY UPDATE %1$s',
+				'INSERT INTO orm_avisota_recipient SET addedOn=?, addedBy=?, %1$s ON DUPLICATE KEY UPDATE %1$s',
 				implode(',', $set)
 			)
 		)
@@ -206,7 +206,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	{
 		foreach ($data as $k => $v) {
 			$v = trim($v);
-			if ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'][$k]['eval']['mandatory'] && empty($v)) {
+			if ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'][$k]['eval']['mandatory'] && empty($v)) {
 				throw new AvisotaRecipientException($data, 'The recipient data field "' . $k . '" is mandatory!');
 			}
 		}
@@ -218,7 +218,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		return array_map(
 			'intval',
 			$this->Database
-				->prepare("SELECT * FROM tl_avisota_recipient_to_mailing_list rtml WHERE recipient=?")
+				->prepare("SELECT * FROM orm_avisota_recipient_to_mailing_list rtml WHERE recipient=?")
 				->execute($this->id)
 				->fetchEach('list')
 		);
@@ -264,14 +264,14 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			}
 			$this->Database
 				->prepare(
-				"INSERT INTO tl_avisota_recipient_to_mailing_list (recipient, list) VALUES " . implode(', ', $values)
+				"INSERT INTO orm_avisota_recipient_to_mailing_list (recipient, list) VALUES " . implode(', ', $values)
 			)
 				->execute($args);
 
 			// clean up blacklist
 			$this->Database
 				->prepare(
-				"DELETE FROM tl_avisota_recipient_blacklist WHERE email=? AND pid IN (" . implode(',', $lists) . ")"
+				"DELETE FROM orm_avisota_recipient_blacklist WHERE email=? AND pid IN (" . implode(',', $lists) . ")"
 			)
 				->execute(md5(strtolower($this->email)));
 
@@ -319,8 +319,8 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 		$list = $this->Database
 			->prepare(
-			"SELECT l.* FROM tl_avisota_recipient_to_mailing_list t
-					   INNER JOIN tl_avisota_mailing_list l
+			"SELECT l.* FROM orm_avisota_recipient_to_mailing_list t
+					   INNER JOIN orm_avisota_mailing_list l
 					   ON l.id=t.list
 					   WHERE t.recipient=? AND t.confirmed=? AND t.token IN (" . implode(',', $whereParts) . ")
 					   ORDER BY l.title"
@@ -338,7 +338,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			);
 
 			$this->Database
-				->prepare("UPDATE tl_avisota_recipient_to_mailing_list SET confirmed=? WHERE recipient=? AND list=?")
+				->prepare("UPDATE orm_avisota_recipient_to_mailing_list SET confirmed=? WHERE recipient=? AND list=?")
 				->execute(1, $this->id, $list->id);
 		}
 
@@ -378,8 +378,8 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 		$list = $this->Database
 			->prepare(
-			"SELECT l.* FROM tl_avisota_recipient_to_mailing_list t
-					   INNER JOIN tl_avisota_mailing_list l
+			"SELECT l.* FROM orm_avisota_recipient_to_mailing_list t
+					   INNER JOIN orm_avisota_mailing_list l
 					   ON l.id=t.list
 					   WHERE t.recipient=? AND t.list IN (" . implode(',', $listIds) . ")
 					   ORDER BY l.title"
@@ -432,7 +432,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 				);
 
 				$this->Database
-					->prepare("DELETE FROM tl_avisota_recipient_to_mailing_list WHERE recipient=? AND list=?")
+					->prepare("DELETE FROM orm_avisota_recipient_to_mailing_list WHERE recipient=? AND list=?")
 					->execute($this->id, $listData['id']);
 			}
 		}
@@ -440,7 +440,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		// delete recipient
 		$list = $this->Database
 			->prepare(
-			"SELECT COUNT(t.list) AS c FROM tl_avisota_recipient_to_mailing_list t
+			"SELECT COUNT(t.list) AS c FROM orm_avisota_recipient_to_mailing_list t
 					   WHERE t.recipient=?"
 		)
 			->execute($this->id);
@@ -457,7 +457,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 		if ($list->c == 0) {
 			$this->Database
-				->prepare("DELETE FROM tl_avisota_recipient WHERE id=?")
+				->prepare("DELETE FROM orm_avisota_recipient WHERE id=?")
 				->execute($this->id);
 		}
 
@@ -492,8 +492,8 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 		$list = $this->Database
 			->prepare(
-			"SELECT l.* FROM tl_avisota_recipient_to_mailing_list t
-					   INNER JOIN tl_avisota_mailing_list l
+			"SELECT l.* FROM orm_avisota_recipient_to_mailing_list t
+					   INNER JOIN orm_avisota_mailing_list l
 					   ON l.id=t.list
 					   WHERE t.recipient=? AND t.confirmed=?" . ($resend ? " AND t.confirmationSent=0" : '')
 				. ($listIds !== null ? " AND t.list IN (" . implode(',', $listIds) . ")" : '')
@@ -567,7 +567,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 				$this->Database
 					->prepare(
-					"UPDATE tl_avisota_recipient_to_mailing_list SET confirmationSent=?, token=? WHERE recipient=? AND list=?"
+					"UPDATE orm_avisota_recipient_to_mailing_list SET confirmationSent=?, token=? WHERE recipient=? AND list=?"
 				)
 					->execute($listData['confirmationSent'], $listData['token'], $this->id, $listData['id']);
 			}
@@ -619,8 +619,8 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 		$list = $this->Database
 			->prepare(
-			"SELECT l.* FROM tl_avisota_recipient_to_mailing_list t
-					   INNER JOIN tl_avisota_mailing_list l
+			"SELECT l.* FROM orm_avisota_recipient_to_mailing_list t
+					   INNER JOIN orm_avisota_mailing_list l
 					   ON l.id=t.list
 					   WHERE t.recipient=? AND t.confirmed=?" .
 				($force
@@ -708,7 +708,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 				$this->Database
 					->prepare(
-					"UPDATE tl_avisota_recipient_to_mailing_list SET reminderSent=?, reminderCount=reminderCount+1, token=? WHERE recipient=? AND list=?"
+					"UPDATE orm_avisota_recipient_to_mailing_list SET reminderSent=?, reminderCount=reminderCount+1, token=? WHERE recipient=? AND list=?"
 				)
 					->execute($listData['reminderSent'], $listData['token'], $this->id, $listData['id']);
 			}

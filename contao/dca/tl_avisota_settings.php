@@ -201,7 +201,7 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 		(
 			'label'      => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_default_transport'],
 			'inputType'  => 'select',
-			'foreignKey' => 'tl_avisota_transport.title',
+			'foreignKey' => 'orm_avisota_transport.title',
 			'eval'       => array(
 				'mandatory' => true,
 				'tl_class'  => 'w50'

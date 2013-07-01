@@ -51,8 +51,8 @@ class Settings extends \Backend
 
 		$resultSet = $database->query(
 			'SELECT c.title AS category, n.*
-			 FROM tl_avisota_newsletter n
-			 INNER JOIN tl_avisota_newsletter_category c
+			 FROM orm_avisota_newsletter n
+			 INNER JOIN orm_avisota_newsletter_category c
 			 ON c.id = n.pid
 			 WHERE c.boilerplates = \'1\'
 			 ORDER BY c.title, n.subject'

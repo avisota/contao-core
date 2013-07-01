@@ -37,7 +37,7 @@ class AvisotaBackendEditorStyle extends Controller
 	{
 		if ($editor == 'newsletter'
 			&& $this->Input->get('do') == 'avisota_newsletter'
-			&& $this->Input->get('table') == 'tl_avisota_newsletter_content'
+			&& $this->Input->get('table') == 'orm_avisota_newsletter_content'
 			&& $this->Input->get('act') == 'edit'
 		) {
 			$id = $this->Input->get('id');
@@ -48,9 +48,9 @@ class AvisotaBackendEditorStyle extends Controller
 					SELECT
 						n.*
 					FROM
-						`tl_avisota_newsletter` n
+						`orm_avisota_newsletter` n
 					INNER JOIN
-						`tl_avisota_newsletter_content` c
+						`orm_avisota_newsletter_content` c
 					ON
 						n.`id`=c.`pid`
 					WHERE
@@ -64,7 +64,7 @@ class AvisotaBackendEditorStyle extends Controller
 					SELECT
 						*
 					FROM
-						`tl_avisota_newsletter_category`
+						`orm_avisota_newsletter_category`
 					WHERE
 						`id`=?"
 			)

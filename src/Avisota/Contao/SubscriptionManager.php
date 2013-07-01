@@ -15,8 +15,15 @@
 
 namespace Avisota\Contao;
 
+use Avisota\Contao\Entity\MailingList;
 use Avisota\Contao\Entity\Recipient;
+use Avisota\Contao\Entity\RecipientBlacklist;
+use Avisota\Contao\Entity\RecipientSubscription;
+use Avisota\Contao\Event\ConfirmSubscriptionEvent;
+use Avisota\Contao\Event\SubscribeEvent;
+use Avisota\Contao\Event\UnsubscribeEvent;
 use Contao\Doctrine\ORM\EntityHelper;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Class SubscriptionManager
@@ -33,71 +40,19 @@ use Contao\Doctrine\ORM\EntityHelper;
  */
 class SubscriptionManager
 {
-	/**
-	 * Check if a recipient is blacklisted.
-	 *
-	 * @param string|array $recipient Recipient email address or array of recipient details.
-	 * @param null|array   $lists     Array of mailing lists to check the blacklist status
-	 *
-	 * @return bool|array
-	 * Return <em>false</em> if the recipient is not blacklisted.
-	 * Return an array of blacklisted lists, if <em>$lists</em> is given.
-	 * Return <em>true</em> if the recipient is globally blacklisted, even if <em>$lists</em> is provided.
-	 */
-	public function isBlacklisted($recipient, $lists = null)
-	{
-		if (is_array($recipient)) {
-			$email = $recipient['email'];
-		}
-		else if (is_object($recipient)) {
-			$email = $recipient->email;
-		}
-		else {
-			$email = (string) $recipient;
-		}
+	const BLACKLIST_GLOBAL = 'global';
 
-		if ($lists === null) {
-			$lists = array(0);
-		}
-		else {
-			$lists = array_map('intval', $lists);
-			$lists = array_filter($lists);
-			// globally blacklisted
-			$lists[] = '0';
-		}
+	const OPT_IGNORE_BLACKLIST = 1;
 
-		$database = Database::getInstance();
+	const OPT_NO_BLACKLIST = 2;
 
-		$listIds        = implode(',', $lists);
-		$blacklistEntry = $database
-			->prepare(
-				'SELECT *
-				 FROM tl_avisota_recipient_blacklist
-				 WHERE email=?
-				 AND pid IN (' . $listIds . ')'
-			)
-			->execute(md5(strtolower($email)));
-		if ($blacklistEntry->numRows) {
-			$blackklistedLists = $blacklistEntry->fetchEach('list');
+	const OPT_UNSUBSCRIBE_GLOBAL = 4;
 
-			if (in_array('0', $blackklistedLists)) {
-				return true;
-			}
-			else {
-				return $blackklistedLists;
-			}
-		}
+	const OPT_ACTIVATE = 8;
 
-		return false;
-	}
+	const OPT_NO_CONFIRMATION = 16;
 
-	/**
-	 * Add a new subscription or update existing.
-	 *
-	 * @param array|int|string|Recipient $recipient Recipient email address or array of recipient details.
-	 * @param null|array   $lists     <em>null</em> to globally subscribe, or array of mailing lists to subscribe to.
-	 */
-	public function subscribe($recipient, $lists = null)
+	public function resolveRecipient($recipient)
 	{
 		$entityManager = EntityHelper::getEntityManager();
 		$repository = $entityManager->getRepository('Avisota\Contao\Entity\Recipient');
@@ -107,12 +62,18 @@ class SubscriptionManager
 			/** @var \Avisota\Contao\Entity\Recipient $recipient */
 			$recipient = $repository->findOneBy(array('email' => $recipient['email']));
 
+			$store = false;
 			if (!$recipient) {
 				$recipient = new Recipient();
-				foreach ($recipient as $key => $value) {
-					$setter = 'set' . ucfirst($key);
-					$recipient->$setter($value);
-				}
+				$store = true;
+			}
+			foreach ($recipient as $key => $value) {
+				$setter = 'set' . ucfirst($key);
+				$recipient->$setter($value);
+			}
+			if ($store) {
+				$entityManager->persist($recipient);
+				$entityManager->flush();
 			}
 		}
 
@@ -132,7 +93,197 @@ class SubscriptionManager
 			throw new \RuntimeException('Invalid argument ' . gettype($recipient));
 		}
 
-		// TODO
+		return $recipient;
+	}
+
+	protected function resolveLists($lists, $includeGlobal = false)
+	{
+		$lists = (array)$lists;
+
+		if ($includeGlobal && !in_array(static::BLACKLIST_GLOBAL, $lists)) {
+			$lists[] = static::BLACKLIST_GLOBAL;
+		}
+
+		$lists = array_map(
+			function($list) {
+				if (is_numeric($list)) {
+					return 'mailing_list:' . $list;
+				}
+				else if ($list instanceof MailingList) {
+					return 'mailing_list:' . $list->getId();
+				}
+				return $list;
+			},
+			$lists
+		);
+
+		return array_values($lists);
+	}
+
+	/**
+	 * Check if a recipient is blacklisted.
+	 *
+	 * @param string|array $recipient Recipient email address or array of recipient details.
+	 * @param null|array   $lists     Array of mailing lists to check the blacklist status
+	 *
+	 * @return bool|RecipientBlacklist[]
+	 * Return <em>false</em> if the recipient is not blacklisted.
+	 * Return an array of blacklisted lists, if <em>$lists</em> is given.
+	 * Return <em>true</em> if the recipient is globally blacklisted, even if <em>$lists</em> is provided.
+	 */
+	public function isBlacklisted($recipient, $lists = null)
+	{
+		$entityManager = EntityHelper::getEntityManager();
+
+		$recipient = $this->resolveRecipient($recipient);
+		$lists     = $this->resolveLists($lists, true);
+
+		$queryBuilder = $entityManager->createQueryBuilder();
+		$queryBuilder
+			->select('b')
+			->from('Avisota\Contao:RecipientBlacklist', 'b')
+			->where('b.email=?1')
+			->setParameter(1, md5(strtolower($recipient->getEmail())));
+
+		$whereList = array();
+		foreach ($lists as $index => $list) {
+			$whereList[] = 'b.list=?' . ($index+2);
+			$queryBuilder->setParameter($index+2, $list);
+		}
+
+		$queryBuilder->orWhere('(' . implode(' OR ', $whereList) . ')');
+
+		$query = $queryBuilder->getQuery();
+		$blacklistEntries = $query->getResult();
+
+		if (count($blacklistEntries)) {
+			return $blacklistEntries;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Add a new subscription or update existing.
+	 *
+	 * @param array|int|string|Recipient $recipient
+	 * Recipient data (array of details, useful to create a new recipient),
+	 * numeric id, email adress or recipient entity..
+	 * @param null|array   $lists
+	 * <em>null</em> to globally subscribe, or array of mailing lists to subscribe to.
+	 *
+	 * @return array
+	 */
+	public function subscribe(
+		$recipient,
+		$lists = null,
+		$options = 0
+	) {
+		$entityManager = EntityHelper::getEntityManager();
+		$subscriptionRepository = $entityManager->getRepository('Avisota\Contao:RecipientSubscription');
+
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		$recipient = $this->resolveRecipient($recipient);
+		$lists     = $this->resolveLists($lists, true);
+
+		$blacklists = $this->isBlacklisted($recipient, $lists);
+		if ($options & static::OPT_IGNORE_BLACKLIST) {
+			foreach ($blacklists as $blacklist) {
+				$entityManager->detach($blacklist);
+			}
+		}
+		else {
+			foreach ($blacklists as $blacklist) {
+				if ($blacklist->getList() == static::BLACKLIST_GLOBAL) {
+					// break on global blacklist
+					return;
+				}
+				else {
+					$pos = array_search($blacklist->getList(), $lists);
+					unset($lists[$pos]);
+				}
+			}
+		}
+
+		$subscriptions = array();
+		foreach ($lists as $list) {
+			$subscription = $subscriptionRepository->findOneBy(
+				array(
+					 'recipient' => $recipient->getId(),
+					 'list' => $list
+				)
+			);
+
+			if (!$subscription) {
+				$subscription = new RecipientSubscription();
+				$subscription->setRecipient($recipient->getId());
+				$subscription->setList($list);
+				if ($options & static::OPT_ACTIVATE) {
+					$subscription->setConfirmed(true);
+				}
+				$subscription->setToken(substr(md5($recipient->getEmail() . '|' . mt_rand() . '|' . microtime(true)), 0, 5));
+				$entityManager->persist($subscription);
+				$entityManager->flush();
+
+				$eventDispatcher->dispatch('avisota-subscribe', new SubscribeEvent($recipient, $subscription));
+			}
+
+			if (!$subscription->getConfirmed()) {
+				$subscriptions[] = $subscription;
+			}
+		}
+
+		if ($options ^ static::OPT_NO_CONFIRMATION) {
+			// TODO send confirmations
+		}
+
+		return $subscriptions;
+	}
+
+	/**
+	 * Confirm subscription.
+	 *
+	 * @param array|int|string|Recipient $recipient
+	 * Recipient data (array of details, useful to create a new recipient),
+	 * numeric id, email adress or recipient entity..
+	 * @param null|array   $lists
+	 * <em>null</em> to globally subscribe, or array of mailing lists to subscribe to.
+	 *
+	 * @return array
+	 */
+	public function confirm(
+		$recipient,
+		array $token
+	) {
+		$entityManager = EntityHelper::getEntityManager();
+
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		$recipient = $this->resolveRecipient($recipient);
+
+		$queryBuilder = $entityManager->createQueryBuilder();
+		$subscriptions = $queryBuilder
+			->select('s')
+			->from('Avisota\Contao:RecipientSubscription', 's')
+			->where('s.recipient=:recipient')
+			->andWhere($queryBuilder->expr()->in('s.list', ':token'))
+			->setParameter(':recipient', $recipient->getId())
+			->setParameter(':token', $token)
+			->getQuery()
+			->getResult();
+
+		/** @var RecipientSubscription $subscription */
+		foreach ($subscriptions as $subscription) {
+			$subscription->setConfirmed(true);
+			$subscription->setConfirmedAt(new \DateTime());
+
+			$eventDispatcher->dispatch('avisota-confirm-subscription', new ConfirmSubscriptionEvent($recipient, $subscription));
+		}
+
+		return $subscriptions;
 	}
 
 	/**
@@ -141,12 +292,52 @@ class SubscriptionManager
 	 * @param string|array $recipient Recipient email address or array of recipient details.
 	 * @param null|array   $lists     <em>null</em> to globally unsubscribe from all mailing lists, or array of mailing lists to unsubscribe from.
 	 */
-	public function unsubscribe($recipient, $lists = null)
+	public function unsubscribe($recipient, $lists = null, $options = 0)
 	{
-		if (!is_array($recipient)) {
-			$recipient = array('email' => $recipient);
+		$entityManager = EntityHelper::getEntityManager();
+		$subscriptionRepository = $entityManager->getRepository('Avisota\Contao:RecipientSubscription');
+
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		if ($options & static::OPT_UNSUBSCRIBE_GLOBAL) {
+			$listRepository = $entityManager->getRepository('Avisota\Contao:MailingList');
+			$lists = $listRepository->findAll();
 		}
 
-		// TODO
+		$recipient = $this->resolveRecipient($recipient);
+		$lists     = $this->resolveLists($lists);
+
+		$subscriptions = array();
+
+		foreach ($lists as $list) {
+			$subscription = $subscriptionRepository->findOneBy(
+				array(
+					 'recipient' => $recipient->getId(),
+					 'list' => $list
+				)
+			);
+
+			if ($subscription) {
+				if ($options ^ static::OPT_NO_BLACKLIST) {
+					$blacklist = new RecipientBlacklist();
+					$blacklist->setEmail(md5(strtolower($recipient->getEmail())));
+					$blacklist->setList($list);
+					$entityManager->persist($blacklist);
+					$entityManager->flush();
+				}
+
+				$entityManager->remove($subscription);
+				$entityManager->flush();
+
+				$subscriptions[] = $subscription;
+
+				$eventDispatcher->dispatch('avisota-unsubscribe', new UnsubscribeEvent($recipient, $subscription, $blacklist));
+			}
+		}
+
+		if ($options ^ static::OPT_NO_CONFIRMATION) {
+			// TODO send confirmations
+		}
 	}
 }

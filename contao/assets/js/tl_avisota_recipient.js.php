@@ -6,7 +6,7 @@ require('system/initialize.php');
 class JavaScript extends System {
 	public function __construct() {
 		parent::__construct();
-		$this->loadLanguageFile('tl_avisota_recipient');
+		$this->loadLanguageFile('orm_avisota_recipient');
 	}
 }
 
@@ -46,7 +46,7 @@ window.addEvent('domready', function() {
 		var inputDelete = formSelect.getElement('input#delete');
 		var inputDeleteNoBlacklist = inputDelete.clone();
 		inputDeleteNoBlacklist.set('id', 'deleteNoBlacklist');
-		inputDeleteNoBlacklist.set('value', <?php echo json_encode($GLOBALS['TL_LANG']['tl_avisota_recipient']['delete_no_blacklist'][0]); ?>);
+		inputDeleteNoBlacklist.set('value', <?php echo json_encode($GLOBALS['TL_LANG']['orm_avisota_recipient']['delete_no_blacklist'][0]); ?>);
 		var onclickFunction = inputDeleteNoBlacklist.onclick;
 		inputDeleteNoBlacklist.onclick = function() {
 			if (onclickFunction()) {

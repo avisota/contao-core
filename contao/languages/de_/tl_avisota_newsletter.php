@@ -17,65 +17,65 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['subject']              = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['subject']              = array(
 	'Betreff',
 	'Bitte geben Sie den Betreff des Newsletters ein.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['alias']                = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['alias']                = array(
 	'Newsletteralias',
 	'Der Newsletteralias ist eine eindeutige Referenz, die anstelle der numerischen Newsletter-Id aufgerufen werden kann.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['addFile']              = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['addFile']              = array(
 	'Dateien anhängen',
 	'Dem Newsletter eine oder mehrere Dateien anhängen.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['files']                = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['files']                = array(
 	'Dateianhänge',
 	'Bitte wählen Sie die anzuhängenden Dateien aus der Dateiübersicht.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['setRecipients']        = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['setRecipients']        = array(
 	'Empfänger zuweisen',
 	'Wählen Sie für diesen Newsletter eine neue Liste von Empfängern aus.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipients']           = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['recipients']           = array(
 	'Empfänger',
 	'Wählen Sie hier die Empfänger aus.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['setTheme']             = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['setTheme']             = array(
 	'Layout zuweisen',
 	'Wählen Sie für diesen Newsletter ein neues Layout aus.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['theme']                = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['theme']                = array(
 	'Layout',
 	'Wählen Sie hier das Layouts aus.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['setTransport']         = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['setTransport']         = array(
 	'Transportmodul zuweisen',
 	'Wählen Sie für diesen Newsletter ein neues Transportmodul aus.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['transport']            = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['transport']            = array(
 	'Transportmodul',
 	'Wählen Sie hier das Transportmodul aus.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['tstamp']               = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['tstamp']               = array(
 	'Änderungsdatum',
 	'Datum und Uhrzeit der letzten Änderung'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewToUser']    = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['sendPreviewToUser']    = array(
 	'Testsendung an Benutzer',
 	'Die Testsendung des Newsletters an diesen Benutzer versenden.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sendPreviewToEmail']   = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['sendPreviewToEmail']   = array(
 	'Testsendung an E-Mail',
 	'Die Testsendung des Newsletters an diese E-Mail-Adresse versenden. Geben Sie hier eine E-Mail Adresse an, wird der Versand an die Benutzerauswahl ignoriert.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview_mode']         = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['preview_mode']         = array(
 	'Vorschaumodus',
 	'Den Vorschaumodus wechseln.',
 	'HTML Vorschau',
 	'Plain Text Vorschau'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview_personalized'] = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['preview_personalized'] = array(
 	'Personalisieren',
 	'Die Vorschau personalisieren.',
 	'Keine',
@@ -87,69 +87,69 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview_personalized'] = array(
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['newsletter_legend'] = 'Newsletter';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['recipient_legend']  = 'Empfänger';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['theme_legend']      = 'Layout-Einstellungen';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['transport_legend']  = 'Transport-Einstellungen';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['attachment_legend'] = 'Dateianhänge';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['headline']          = 'Newsletter ansehen und versenden';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['from']              = 'Absender';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['live']              = 'Vorschau aktualisieren';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['preview']           = 'Testsendung';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe']       = 'vom Newsletter abmelden';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation']        = 'Sehr geehrte/-r {fullname}';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_male']   = 'Sehr geehrter Herr {fullname}';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['salutation_female'] = 'Sehr geehrte Frau {fullname}';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['newsletter_legend'] = 'Newsletter';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['recipient_legend']  = 'Empfänger';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['theme_legend']      = 'Layout-Einstellungen';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['transport_legend']  = 'Transport-Einstellungen';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['attachment_legend'] = 'Dateianhänge';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['headline']          = 'Newsletter ansehen und versenden';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['from']              = 'Absender';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['live']              = 'Vorschau aktualisieren';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['preview']           = 'Testsendung';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['unsubscribe']       = 'vom Newsletter abmelden';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['salutation']        = 'Sehr geehrte/-r {fullname}';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['salutation_male']   = 'Sehr geehrter Herr {fullname}';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['salutation_female'] = 'Sehr geehrte Frau {fullname}';
 
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['created_from_draft']  = 'Newsletter wurde erstellt.';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view']                = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['created_from_draft']  = 'Newsletter wurde erstellt.';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['view']                = array(
 	'Ansehen und Versenden',
 	'Den Newsletter ansehen und versenden.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['view_only']           = array('Ansehen', 'Den Newsletter ansehen.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['send']                = array('Versenden', 'Den Newsletter versenden.');
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['sended']              = 'versendet am %s';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirm']             = 'Der Newsletter wurde an alle Empfänger versendet.';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['confirmPreview']      = 'Die Testsendung wurde an %s versendet.';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['online']              = 'Probleme mit der Darstellung? Den Newsletter Online ansehen.';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['list']                = 'Verteiler';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['member']              = 'Mitglieder';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['mgroup']              = 'Mitgliedergruppe';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['notSend']             = 'noch nicht versendet';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['inheritFromCategory'] = '- von Kategorie übernehmen -';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['fallback']            = '(fallback)';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['view_only']           = array('Ansehen', 'Den Newsletter ansehen.');
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['send']                = array('Versenden', 'Den Newsletter versenden.');
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['sended']              = 'versendet am %s';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['confirm']             = 'Der Newsletter wurde an alle Empfänger versendet.';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['confirmPreview']      = 'Die Testsendung wurde an %s versendet.';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['online']              = 'Probleme mit der Darstellung? Den Newsletter Online ansehen.';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['list']                = 'Verteiler';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['member']              = 'Mitglieder';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['mgroup']              = 'Mitgliedergruppe';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['notSend']             = 'noch nicht versendet';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['inheritFromCategory'] = '- von Kategorie übernehmen -';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['fallback']            = '(fallback)';
 
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['new']               = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['new']               = array(
 	'Neuer Newsletter',
 	'Einen neuen Newsletter erstellen'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['create_from_draft'] = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['create_from_draft'] = array(
 	'Neuer Newsletter aus Vorlage',
 	'Einen neuen Newsletter aus Vorlage erstellen'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['show']              = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['show']              = array(
 	'Newsletterdetails',
 	'Details des Newsletter ID %s anzeigen'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['copy']              = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['copy']              = array(
 	'Newsletter duplizieren',
 	'Newsletter ID %s duplizieren'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['delete']            = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['delete']            = array(
 	'Newsletter löschen',
 	'Newsletter ID %s löschen'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['edit']              = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['edit']              = array(
 	'Newsletter bearbeiten',
 	'Newsletter ID %s bearbeiten'
 );
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader']        = array(
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['editheader']        = array(
 	'Newslettereinstellungen bearbeiten',
 	'Einstellungen des Newsletter ID %s bearbeiten'
 );
@@ -158,16 +158,16 @@ $GLOBALS['TL_LANG']['tl_avisota_newsletter']['editheader']        = array(
 /**
  * Personalisation
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous']['salutation'] = 'Sehr geehrte/-r {fullname}';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous']['name']       = 'Abonnent/-in';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous']['fullname']   = 'Abonnent/-in';
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['anonymous']['shortname']  = 'Abonnent/-in';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['anonymous']['salutation'] = 'Sehr geehrte/-r {fullname}';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['anonymous']['name']       = 'Abonnent/-in';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['anonymous']['fullname']   = 'Abonnent/-in';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['anonymous']['shortname']  = 'Abonnent/-in';
 
 
 /**
  * Errors
  */
-$GLOBALS['TL_LANG']['tl_avisota_newsletter']['transport_error'] = 'Beim Versand ist ein Fehler aufgetreten, der noch nicht weiter analysiert wurde.<br>
+$GLOBALS['TL_LANG']['orm_avisota_newsletter']['transport_error'] = 'Beim Versand ist ein Fehler aufgetreten, der noch nicht weiter analysiert wurde.<br>
 Bitte übermitteln Sie folgende Meldung an den Entwickler.<br/>
 &mdash; via <a href="http://contao-forge.org/projects/avisota/issues" onclick="window.open(this.href); return false;">Contao Forge</a><br/>
 &mdash; via <a href="http://www.contao-community.de/forumdisplay.php?121-Avisota" onclick="window.open(this.href); return false;">Contao Community Forum</a><br/>

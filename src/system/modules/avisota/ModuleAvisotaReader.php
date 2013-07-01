@@ -84,7 +84,7 @@ class ModuleAvisotaReader extends Module
 
 		$newsletter = $this->Database
 			->prepare(
-			"SELECT * FROM tl_avisota_newsletter WHERE (id=? OR alias=?) AND pid IN (" . implode(
+			"SELECT * FROM orm_avisota_newsletter WHERE (id=? OR alias=?) AND pid IN (" . implode(
 				',',
 				$this->avisota_categories
 			) . ")"
@@ -93,7 +93,7 @@ class ModuleAvisotaReader extends Module
 
 		if ($newsletter->next()) {
 			$category = $this->Database
-				->prepare("SELECT * FROM tl_avisota_newsletter_category WHERE id=?")
+				->prepare("SELECT * FROM orm_avisota_newsletter_category WHERE id=?")
 				->execute($newsletter->pid);
 			if ($category->next()) {
 				$newsletter->template_html = $this->avisota_reader_template;

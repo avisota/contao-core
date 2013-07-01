@@ -31,7 +31,7 @@ class AvisotaBackendOutbox extends BackendModule
 		$this->import('DomainLink');
 		$this->import('BackendUser', 'User');
 		$this->import('AvisotaBase', 'Base');
-		$this->loadLanguageFile('tl_avisota_newsletter');
+		$this->loadLanguageFile('orm_avisota_newsletter');
 	}
 
 	/**
@@ -64,8 +64,8 @@ class AvisotaBackendOutbox extends BackendModule
 			$this->redirect('contao/main.php?act=error');
 		}
 
-		$this->loadLanguageFile('tl_avisota_newsletter_outbox');
-		$this->loadLanguageFile('tl_avisota_newsletter');
+		$this->loadLanguageFile('orm_avisota_newsletter_outbox');
+		$this->loadLanguageFile('orm_avisota_newsletter');
 
 		if ($this->Input->get('act') == 'details') {
 			$this->details();
@@ -157,7 +157,7 @@ class AvisotaBackendOutbox extends BackendModule
 		}
 		$recipients = array();
 		$recipient = $this->Database
-			->prepare("SELECT * FROM tl_avisota_newsletter_outbox_recipient WHERE pid=? $where ORDER BY email")
+			->prepare("SELECT * FROM orm_avisota_newsletter_outbox_recipient WHERE pid=? $where ORDER BY email")
 			->limit($sessionData['limit'], $sessionData['offset'])
 			->execute($outbox->id);
 		while ($recipient->next()) {
@@ -165,7 +165,7 @@ class AvisotaBackendOutbox extends BackendModule
 			$recipientData = $recipient->row();
 			switch ($recipient->source) {
 				case 'list':
-					$recipientData['linkedEmail'] = '<a href="contao/main.php?do=avisota_recipients&table=tl_avisota_recipient&act=edit&id=' . $recipientData['recipientID'] . '">' . $recipientData['email'] . '</a>';
+					$recipientData['linkedEmail'] = '<a href="contao/main.php?do=avisota_recipients&table=orm_avisota_recipient&act=edit&id=' . $recipientData['recipientID'] . '">' . $recipientData['email'] . '</a>';
 					break;
 
 				case 'mgroup':
@@ -181,13 +181,13 @@ class AvisotaBackendOutbox extends BackendModule
 	protected function remove()
 	{
 		$this->Database
-			->prepare("DELETE FROM tl_avisota_newsletter_outbox WHERE id=?")
+			->prepare("DELETE FROM orm_avisota_newsletter_outbox WHERE id=?")
 			->execute($this->Input->get('id'));
 		$this->Database
-			->prepare("DELETE FROM tl_avisota_newsletter_outbox_recipient WHERE pid=?")
+			->prepare("DELETE FROM orm_avisota_newsletter_outbox_recipient WHERE pid=?")
 			->execute($this->Input->get('id'));
 
-		$_SESSION['TL_CONFIRM'][] = $GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['removed'];
+		$_SESSION['TL_CONFIRM'][] = $GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox']['removed'];
 
 		$this->redirect('contao/main.php?do=avisota_outbox');
 	}
@@ -228,13 +228,13 @@ class AvisotaBackendOutbox extends BackendModule
 					o.id,
 					n.subject as newsletter,
 					o.tstamp,
-					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE r.pid=o.id) as recipients,
-					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE r.pid=o.id AND r.send=0) as outstanding,
-					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE r.pid=o.id AND r.failed='1') as failed
+					(SELECT COUNT(id) FROM orm_avisota_newsletter_outbox_recipient r WHERE r.pid=o.id) as recipients,
+					(SELECT COUNT(id) FROM orm_avisota_newsletter_outbox_recipient r WHERE r.pid=o.id AND r.send=0) as outstanding,
+					(SELECT COUNT(id) FROM orm_avisota_newsletter_outbox_recipient r WHERE r.pid=o.id AND r.failed='1') as failed
 				FROM
-					tl_avisota_newsletter_outbox o
+					orm_avisota_newsletter_outbox o
 				INNER JOIN
-					tl_avisota_newsletter n
+					orm_avisota_newsletter n
 				ON
 					n.id=o.pid
 				ORDER BY
@@ -246,7 +246,7 @@ class AvisotaBackendOutbox extends BackendModule
 			// show source-list-names
 			$resultSet = $this->Database
 				->prepare(
-				'SELECT source, sourceID, COUNT(id) as recipients FROM tl_avisota_newsletter_outbox_recipient WHERE pid=? GROUP BY source'
+				'SELECT source, sourceID, COUNT(id) as recipients FROM orm_avisota_newsletter_outbox_recipient WHERE pid=? GROUP BY source'
 			)
 				->execute($outbox->id);
 
@@ -291,18 +291,18 @@ class AvisotaBackendOutbox extends BackendModule
 		switch ($recipient->source) {
 			case 'list':
 				$list = $this->Database
-					->prepare("SELECT * FROM tl_avisota_mailing_list WHERE id=?")
+					->prepare("SELECT * FROM orm_avisota_mailing_list WHERE id=?")
 					->execute($recipient->sourceID);
 				if ($list->next()) {
 					$source                = $list->row();
 					$source['title']       = sprintf(
 						'%s: %s',
-						$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['recipient_list'],
+						$GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox']['recipient_list'],
 						$list->title
 					);
 					$source['linkedTitle'] = sprintf(
-						'%s: <a href="contao/main.php?do=avisota_recipients&table=tl_avisota_recipient&id=%d">%s</a>',
-						$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['recipient_list'],
+						'%s: <a href="contao/main.php?do=avisota_recipients&table=orm_avisota_recipient&id=%d">%s</a>',
+						$GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox']['recipient_list'],
 						$list->id,
 						$list->title
 					);
@@ -317,12 +317,12 @@ class AvisotaBackendOutbox extends BackendModule
 					$source                = $memberGroup->row();
 					$source['title']       = sprintf(
 						'%s: %s',
-						$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['mgroup'],
+						$GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox']['mgroup'],
 						$memberGroup->name
 					);
 					$source['linkedTitle'] = sprintf(
 						'%s: <a href="contao/main.php?do=member">%s</a>',
-						$GLOBALS['TL_LANG']['tl_avisota_newsletter_outbox']['mgroup'],
+						$GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox']['mgroup'],
 						$memberGroup->name
 					);
 					return $source;
@@ -338,11 +338,11 @@ class AvisotaBackendOutbox extends BackendModule
 			->prepare(
 			"SELECT
 					*,
-					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE o.id=r.pid) as recipients,
-					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE o.id=r.pid AND r.send=0) as outstanding,
-					(SELECT COUNT(id) FROM tl_avisota_newsletter_outbox_recipient r WHERE o.id=r.pid AND r.failed='1') as failed
+					(SELECT COUNT(id) FROM orm_avisota_newsletter_outbox_recipient r WHERE o.id=r.pid) as recipients,
+					(SELECT COUNT(id) FROM orm_avisota_newsletter_outbox_recipient r WHERE o.id=r.pid AND r.send=0) as outstanding,
+					(SELECT COUNT(id) FROM orm_avisota_newsletter_outbox_recipient r WHERE o.id=r.pid AND r.failed='1') as failed
 				FROM
-					tl_avisota_newsletter_outbox o
+					orm_avisota_newsletter_outbox o
 				WHERE
 					id=?"
 		)
@@ -358,7 +358,7 @@ class AvisotaBackendOutbox extends BackendModule
 	protected function getNewsletter($outbox)
 	{
 		$newsletter = $this->Database
-			->prepare("SELECT * FROM tl_avisota_newsletter WHERE id=?")
+			->prepare("SELECT * FROM orm_avisota_newsletter WHERE id=?")
 			->execute($outbox->pid);
 
 		if (!$newsletter->next()) {

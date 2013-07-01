@@ -89,7 +89,7 @@ class Queue extends \Backend
 
 
 	/**
-	 * Check permissions to edit table tl_avisota_transport
+	 * Check permissions to edit table orm_avisota_transport
 	 */
 	public function checkPermission()
 	{
@@ -119,7 +119,7 @@ class Queue extends \Backend
 		}
 
 		$aliasResultSet = $this->Database
-			->prepare("SELECT id FROM tl_avisota_queue WHERE alias=?")
+			->prepare("SELECT id FROM orm_avisota_queue WHERE alias=?")
 			->execute($value);
 
 		// Check whether the news alias exists

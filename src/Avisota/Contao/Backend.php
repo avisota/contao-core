@@ -80,11 +80,11 @@ class Backend extends \Controller
 
 		foreach (
 			array(
-				'tl_avisota_mailing_list',
-				'tl_avisota_recipient_source',
-				'tl_avisota_newsletter_theme',
-				'tl_avisota_transport',
-				'tl_avisota_queue'
+				'orm_avisota_mailing_list',
+				'orm_avisota_recipient_source',
+				'orm_avisota_newsletter_theme',
+				'orm_avisota_transport',
+				'orm_avisota_queue'
 			) as $table
 		) {
 			$key = substr($table, 11);

@@ -32,7 +32,7 @@ class AvisotaNewsletter
 		$resultSet = Database::getInstance()
 			->prepare(
 			'SELECT *
-					   FROM tl_avisota_newsletter
+					   FROM orm_avisota_newsletter
 					   WHERE id=? OR alias=?'
 		)
 			->execute($id, $id);

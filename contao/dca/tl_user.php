@@ -37,7 +37,7 @@ $GLOBALS['TL_DCA']['tl_user']['fields']['avisota_recipient_lists'] = array
 	'label'      => &$GLOBALS['TL_LANG']['tl_user']['avisota_recipient_lists'],
 	'exclude'    => true,
 	'inputType'  => 'checkbox',
-	'foreignKey' => 'tl_avisota_mailing_list.title',
+	'foreignKey' => 'orm_avisota_mailing_list.title',
 	'eval'       => array('multiple' => true)
 );
 
@@ -66,7 +66,7 @@ $GLOBALS['TL_DCA']['tl_user']['fields']['avisota_newsletter_categories'] = array
 	'label'      => &$GLOBALS['TL_LANG']['tl_user']['avisota_newsletter_categories'],
 	'exclude'    => true,
 	'inputType'  => 'checkbox',
-	'foreignKey' => 'tl_avisota_newsletter_category.title',
+	'foreignKey' => 'orm_avisota_newsletter_category.title',
 	'eval'       => array('multiple' => true)
 );
 

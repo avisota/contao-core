@@ -42,7 +42,7 @@ class Transport extends \Backend
 
 
 	/**
-	 * Check permissions to edit table tl_avisota_transport
+	 * Check permissions to edit table orm_avisota_transport
 	 */
 	public function checkPermission()
 	{
@@ -72,7 +72,7 @@ class Transport extends \Backend
 		}
 
 		$aliasResultSet = $this->Database
-			->prepare("SELECT id FROM tl_avisota_transport WHERE alias=?")
+			->prepare("SELECT id FROM orm_avisota_transport WHERE alias=?")
 			->execute($value);
 
 		// Check whether the news alias exists

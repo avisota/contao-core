@@ -32,14 +32,14 @@ class RecipientSource extends \Backend
 	public function onload_callback($dc)
 	{
 		$source = $this->Database
-			->prepare("SELECT * FROM tl_avisota_recipient_source WHERE id=?")
+			->prepare("SELECT * FROM orm_avisota_recipient_source WHERE id=?")
 			->execute($dc->id);
 
 		if ($source->next() && $source->filter) {
 			switch ($source->type) {
 				case 'integrated':
 					MetaPalettes::appendFields(
-						'tl_avisota_recipient_source',
+						'orm_avisota_recipient_source',
 						'integrated',
 						'filter',
 						array('integratedFilterByColumns')
@@ -48,25 +48,25 @@ class RecipientSource extends \Backend
 
 				case 'member':
 					MetaPalettes::appendFields(
-						'tl_avisota_recipient_source',
+						'orm_avisota_recipient_source',
 						'member',
 						'filter',
 						array('memberFilterByColumns')
 					);
 					MetaPalettes::appendFields(
-						'tl_avisota_recipient_source',
+						'orm_avisota_recipient_source',
 						'memberByMailingLists',
 						'filter',
 						array('memberFilterByColumns')
 					);
 					MetaPalettes::appendFields(
-						'tl_avisota_recipient_source',
+						'orm_avisota_recipient_source',
 						'memberByGroups',
 						'filter',
 						array('memberFilterByColumns')
 					);
 					MetaPalettes::appendFields(
-						'tl_avisota_recipient_source',
+						'orm_avisota_recipient_source',
 						'memberByAll',
 						'filter',
 						array('memberFilterByColumns')
@@ -84,16 +84,16 @@ class RecipientSource extends \Backend
 	{
 		if ($dc->activeRecord->sorting == 0) {
 			$source = $this->Database
-				->execute("SELECT MAX(sorting) as sorting FROM tl_avisota_recipient_source");
+				->execute("SELECT MAX(sorting) as sorting FROM orm_avisota_recipient_source");
 			$this->Database
-				->prepare("UPDATE tl_avisota_recipient_source SET sorting=? WHERE id=?")
+				->prepare("UPDATE orm_avisota_recipient_source SET sorting=? WHERE id=?")
 				->execute($source->sorting > 0 ? $source->sorting * 2 : 128, $dc->id);
 		}
 	}
 
 
 	/**
-	 * Check permissions to edit table tl_avisota_recipient_source
+	 * Check permissions to edit table orm_avisota_recipient_source
 	 */
 	public function checkPermission()
 	{
@@ -125,7 +125,7 @@ class RecipientSource extends \Backend
 		}
 
 		// Check permissions AFTER checking the tid, so hacking attempts are logged
-		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_avisota_recipient_source::disable', 'alexf')) {
+		if (!$this->User->isAdmin && !$this->User->hasAccess('orm_avisota_recipient_source::disable', 'alexf')) {
 			return '';
 		}
 
@@ -155,20 +155,20 @@ class RecipientSource extends \Backend
 		$this->checkPermission();
 
 		// Check permissions to publish
-		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_avisota_recipient_source::disable', 'alexf')) {
+		if (!$this->User->isAdmin && !$this->User->hasAccess('orm_avisota_recipient_source::disable', 'alexf')) {
 			$this->log(
 				'Not enough permissions to publish/unpublish newsletter recipient source ID "' . $id . '"',
-				'tl_avisota_recipient_source toggleVisibility',
+				'orm_avisota_recipient_source toggleVisibility',
 				TL_ERROR
 			);
 			$this->redirect('contao/main.php?act=error');
 		}
 
-		$this->createInitialVersion('tl_avisota_recipient_source', $id);
+		$this->createInitialVersion('orm_avisota_recipient_source', $id);
 
 		// Trigger the save_callback
-		if (is_array($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['disable']['save_callback'])) {
-			foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields']['disable']['save_callback'] as $callback) {
+		if (is_array($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields']['disable']['save_callback'])) {
+			foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields']['disable']['save_callback'] as $callback) {
 				$this->import($callback[0]);
 				$isVisible = $this->$callback[0]->$callback[1]($isVisible, $this);
 			}
@@ -177,12 +177,12 @@ class RecipientSource extends \Backend
 		// Update the database
 		$this->Database
 			->prepare(
-			"UPDATE tl_avisota_recipient_source SET tstamp=" . time() . ", disable='" . ($isVisible ? ''
+			"UPDATE orm_avisota_recipient_source SET tstamp=" . time() . ", disable='" . ($isVisible ? ''
 				: 1) . "' WHERE id=?"
 		)
 			->execute($id);
 
-		$this->createNewVersion('tl_avisota_recipient_source', $id);
+		$this->createNewVersion('orm_avisota_recipient_source', $id);
 	}
 
 
@@ -213,7 +213,7 @@ class RecipientSource extends \Backend
 
 			$source = $this->Database
 				->prepare(
-				"SELECT * FROM tl_avisota_recipient_source WHERE " . ($dir == 'up' ? "sorting<?"
+				"SELECT * FROM orm_avisota_recipient_source WHERE " . ($dir == 'up' ? "sorting<?"
 					: "sorting>?") . " ORDER BY sorting " . ($dir == 'up' ? "DESC" : "ASC")
 			)
 				->limit(1)
@@ -236,12 +236,12 @@ class RecipientSource extends \Backend
 
 	public function getRecipientColumns()
 	{
-		$this->loadLanguageFile('tl_avisota_recipient');
-		$this->loadDataContainer('tl_avisota_recipient');
+		$this->loadLanguageFile('orm_avisota_recipient');
+		$this->loadDataContainer('orm_avisota_recipient');
 
 		$options = array();
 
-		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $k => $v) {
+		foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'] as $k => $v) {
 			if ($v['eval']['importable']) {
 				$options[$k] = $v['label'][0];
 			}
@@ -253,12 +253,12 @@ class RecipientSource extends \Backend
 
 	public function getRecipientFilterColumns()
 	{
-		$this->loadLanguageFile('tl_avisota_recipient');
-		$this->loadDataContainer('tl_avisota_recipient');
+		$this->loadLanguageFile('orm_avisota_recipient');
+		$this->loadDataContainer('orm_avisota_recipient');
 
 		$options = array();
 
-		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['fields'] as $k => $v) {
+		foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'] as $k => $v) {
 			$options[$k] = $v['label'][0] . ' (' . $k . ')';
 		}
 		asort($options);
@@ -300,7 +300,7 @@ class RecipientSource extends \Backend
 		}
 
 		$aliasResultSet = $this->Database
-			->prepare("SELECT id FROM tl_avisota_recipient_source WHERE alias=?")
+			->prepare("SELECT id FROM orm_avisota_recipient_source WHERE alias=?")
 			->execute($value);
 
 		// Check whether the news alias exists

@@ -34,7 +34,7 @@ class Avisota extends Backend
 		$this->import('DomainLink');
 		$this->import('BackendUser', 'User');
 		$this->import('AvisotaBase', 'Base');
-		$this->loadLanguageFile('tl_avisota_newsletter');
+		$this->loadLanguageFile('orm_avisota_newsletter');
 	}
 
 	/**
@@ -91,7 +91,7 @@ class Avisota extends Backend
 		// Store the current referer
 		$session = $this->Session->get('referer');
 		if ($session['current'] != $this->Environment->requestUri) {
-			$session['tl_avisota_newsletter'] = $this->Environment->requestUri;
+			$session['orm_avisota_newsletter'] = $this->Environment->requestUri;
 			$session['last']                  = $session['current'];
 			$session['current']               = $this->Environment->requestUri;
 			$this->Session->set('referer', $session);

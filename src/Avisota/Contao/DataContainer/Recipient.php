@@ -15,6 +15,10 @@
 
 namespace Avisota\Contao\DataContainer;
 
+use Avisota\Contao\Entity\MailingList;
+use Avisota\Contao\Entity\RecipientBlacklist;
+use Avisota\Contao\SubscriptionManager;
+use Contao\Doctrine\ORM\EntityHelper;
 use Doctrine\ORM\EntityManager;
 
 class Recipient extends \Backend
@@ -43,11 +47,11 @@ class Recipient extends \Backend
 		$id = $input->get('showlist');
 		if ($id) {
 			$list = $database
-				->prepare("SELECT * FROM tl_avisota_mailing_list WHERE id=?")
+				->prepare("SELECT * FROM orm_avisota_mailing_list WHERE id=?")
 				->execute($id);
 			if ($list->next()) {
-				$GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['sorting']['filter'][] = array(
-					'id IN (SELECT recipient FROM tl_avisota_recipient_to_mailing_list WHERE list=?)',
+				$GLOBALS['TL_DCA']['orm_avisota_recipient']['list']['sorting']['filter'][] = array(
+					'id IN (SELECT recipient FROM orm_avisota_recipient_to_mailing_list WHERE list=?)',
 					$id
 				);
 
@@ -82,7 +86,7 @@ class Recipient extends \Backend
 
 		$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(';
 		$label .= sprintf(
-			$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedOn'][2],
+			$GLOBALS['TL_LANG']['orm_avisota_recipient']['addedOn'][2],
 			$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $recipientData['addedOn'])
 		);
 		if ($recipientData['addedBy'] > 0) {
@@ -90,8 +94,8 @@ class Recipient extends \Backend
 				->prepare("SELECT * FROM tl_user WHERE id=?")
 				->execute($recipientData['addedBy']);
 			$label .= sprintf(
-				$GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy'][2],
-				$user->next() ? $user->name : $GLOBALS['TL_LANG']['tl_avisota_recipient']['addedBy'][3]
+				$GLOBALS['TL_LANG']['orm_avisota_recipient']['addedBy'][2],
+				$user->next() ? $user->name : $GLOBALS['TL_LANG']['orm_avisota_recipient']['addedBy'][3]
 			);
 		}
 		$label .= ')</span>';
@@ -100,13 +104,13 @@ class Recipient extends \Backend
 
 		$list = $database
 			->prepare(
-			"SELECT ml.*, rtml.confirmed, rtml.confirmationSent, rtml.reminderSent, rtml.reminderCount FROM tl_avisota_mailing_list ml INNER JOIN tl_avisota_recipient_to_mailing_list rtml ON ml.id=rtml.list WHERE rtml.recipient=? ORDER BY ml.title"
+			"SELECT ml.*, rtml.confirmed, rtml.confirmationSent, rtml.reminderSent, rtml.reminderCount FROM orm_avisota_mailing_list ml INNER JOIN orm_avisota_recipient_to_mailing_list rtml ON ml.id=rtml.list WHERE rtml.recipient=? ORDER BY ml.title"
 		)
 			->execute($recipientData['id']);
 		while ($list->next()) {
 			$label .= '<li>';
 			$label .= '<a href="javascript:void(0);" onclick="if ($(this).getProperty(\'data-confirmed\') || confirm(' . specialchars(
-				json_encode($GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmManualActivation'])
+				json_encode($GLOBALS['TL_LANG']['orm_avisota_recipient']['confirmManualActivation'])
 			) . ')) Avisota.toggleConfirmation(this);" data-recipient="' . $recipientData['id'] . '" data-list="' . $list->id . '" data-confirmed="' . ($list->confirmed
 				? '1' : '') . '">';
 			$label .= $this->generateImage(
@@ -123,20 +127,20 @@ class Recipient extends \Backend
 				$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(';
 				if ($list->reminderCount > 1) {
 					$label .= sprintf(
-						$GLOBALS['TL_LANG']['tl_avisota_recipient']['remindersSent'],
+						$GLOBALS['TL_LANG']['orm_avisota_recipient']['remindersSent'],
 						$list->reminderCount,
 						$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
 					);
 				}
 				else if ($list->reminderSent > 0) {
 					$label .= sprintf(
-						$GLOBALS['TL_LANG']['tl_avisota_recipient']['reminderSent'],
+						$GLOBALS['TL_LANG']['orm_avisota_recipient']['reminderSent'],
 						$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
 					);
 				}
 				else if ($list->confirmationSent > 0) {
 					$label .= sprintf(
-						$GLOBALS['TL_LANG']['tl_avisota_recipient']['confirmationSent'],
+						$GLOBALS['TL_LANG']['orm_avisota_recipient']['confirmationSent'],
 						$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
 					);
 				}
@@ -167,7 +171,7 @@ class Recipient extends \Backend
 			$listId      = $input->get('list');
 
 			$database
-				->prepare("UPDATE tl_avisota_recipient_to_mailing_list SET confirmed=? WHERE recipient=? AND list=?")
+				->prepare("UPDATE orm_avisota_recipient_to_mailing_list SET confirmed=? WHERE recipient=? AND list=?")
 				->execute($input->get('confirmed') ? '1' : '', $recipientId, $listId);
 
 			header('Content-Type: application/javascript');
@@ -185,23 +189,23 @@ class Recipient extends \Backend
 	 */
 	public function onsubmit_callback($dc)
 	{
-		/** @var EntityManager $entityManager */
-		$entityManager = $GLOBALS['container']['doctrine.orm.entityManager'];
-		$repository = $entityManager->getRepository('Avisota\Contao\Entity\Recipient');
-		/** @var \Avisota\Contao\Entity\Recipient $recipient */
-		$recipient = $repository->findBy(array('email' => $dc->activeRecord->email));
-
-		$recipient = AvisotaIntegratedRecipient::byEmail($dc->activeRecord->email);
-		$recipient->subscribe($_SESSION['avisotaMailingLists'], true);
+		$opt = SubscriptionManager::OPT_IGNORE_BLACKLIST;
 
 		switch ($_SESSION['avisotaSubscriptionAction']) {
-			case 'sendConfirmation':
-				$recipient->sendSubscriptionConfirmation($_SESSION['avisotaMailingLists']);
-				break;
 			case 'activateSubscription':
-				$recipient->confirmSubscription($_SESSION['avisotaMailingLists']);
+				$opt |= SubscriptionManager::OPT_ACTIVATE;
+				break;
+			case 'doNothink':
+				$opt |= SubscriptionManager::OPT_NO_CONFIRMATION;
 				break;
 		}
+
+		$subscriptionManager = new SubscriptionManager();
+		$subscriptionManager->subscribe(
+			$dc->activeRecord->email,
+			$_SESSION['avisotaMailingLists'],
+			$opt
+		);
 
 		unset ($_SESSION['avisotaMailingLists'], $_SESSION['avisotaSubscriptionAction']);
 	}
@@ -213,36 +217,17 @@ class Recipient extends \Backend
 	{
 		$input = \Input::getInstance();
 
-		if ($input->get('blacklist') !== 'false') {
-			$time = time();
-
-			$lists = $this->loadMailingLists('', $dc, true);
-
-			// build insert values
-			$values = array();
-			$args   = array();
-			foreach ($lists as $listId) {
-				$values[] = '(?, ?, ?)';
-				$args[]   = $time;
-				$args[]   = $listId;
-				$args[]   = md5(strtolower($dc->activeRecord->email));
-			}
-
-			// on duplicate key update tstamp
-			$args[] = $time;
-
-			// execute query
-			if (count($values)) {
-				$database = \Database::getInstance();
-				$database
-					->prepare(
-					"INSERT INTO tl_avisota_recipient_blacklist (tstamp, pid, email)
-							   VALUES " . implode(',', $values) . "
-							   ON DUPLICATE KEY UPDATE tstamp=?"
-				)
-					->execute($args);
-			}
+		$options = SubscriptionManager::OPT_UNSUBSCRIBE_GLOBAL;
+		if ($input->get('blacklist') == 'false') {
+			$options |= SubscriptionManager::OPT_NO_BLACKLIST;
 		}
+
+		$subscriptionManager = new SubscriptionManager();
+		$subscriptionManager->unsubscribe(
+			$dc->activeRecord->email,
+			null,
+			$options
+		);
 	}
 
 
@@ -259,55 +244,75 @@ class Recipient extends \Backend
 	}
 
 	/**
-	 * @param array          $listIds
+	 * @param array          $lists
 	 * @param \DataContainer $dc
 	 *
 	 * @return array
 	 * @throws Exception
 	 */
-	public function validateBlacklist($listIds, $dc)
+	public function validateBlacklist($lists, $dc)
 	{
 		// do not check in frontend mode
 		if (TL_MODE == 'FE') {
-			return $listIds;
+			return $lists;
 		}
 
+		$subscriptionManager = new SubscriptionManager();
 		$input = \Input::getInstance();
 
 		$email = $input->post('email');
-		$listIds = deserialize($listIds, true);
-		$listIds = array_map('intval', $listIds);
-		$listIds = array_filter($listIds);
-		if (!count($listIds)) {
-			return $listIds;
-		}
+		$lists = deserialize($lists, true);
 
-		$blacklisted = AvisotaIntegratedRecipient::checkBlacklisted($email, $listIds);
+		$blacklists = $subscriptionManager->isBlacklisted($email, $lists);
 
-		if ($blacklisted) {
-			$database = \Database::getInstance();
-
-			$blacklist = $database
-				->execute(
-				"SELECT * FROM tl_avisota_mailing_list
-				           WHERE id IN (" . implode(',', $blacklisted) . ")
-				           ORDER BY title"
+		if ($blacklists) {
+			$k = array_map(
+				function ($blacklist) {
+					/** @var RecipientBlacklist $blacklist */
+					return $blacklist->getList();
+				},
+				$blacklists
 			);
-			if ($blacklist->numRows) {
-				$k = 'AVISOTA_BLACKLIST_WARNING_' . md5(implode(',', $blacklist->fetchEach('id')));
-				if (!(isset($_SESSION[$k]) && time() - $_SESSION[$k] < 60)) {
-					$_SESSION[$k] = time();
-					throw new Exception(
-						sprintf(
-							$GLOBALS['TL_LANG']['tl_avisota_recipient'][$blacklist->numRows > 1 ? 'blacklists'
-								: 'blacklist'],
-							implode(', ', $blacklist->fetchEach('title'))
-						)
-					);
+			$k = 'AVISOTA_BLACKLIST_WARNING_' . md5(implode(',', $k));
+
+			if (!(isset($_SESSION[$k]) && time() - $_SESSION[$k] < 60)) {
+				$_SESSION[$k] = time();
+
+				$entityManager = EntityHelper::getEntityManager();
+				$queryBuilder = $entityManager->createQueryBuilder();
+				$queryBuilder
+					->select('m')
+					->from('Avisota\Contao:MailingList', 'm');
+				foreach ($blacklists as $index => $blacklist) {
+					if ($index) {
+						$queryBuilder->orWhere('id=?' . $index);
+					}
+					else {
+						$queryBuilder->where('id=?' . $index);
+					}
+					$queryBuilder->setParameter($index, str_replace('mailing_list:', '', $blacklist->getList()));
 				}
+				$query = $queryBuilder->getQuery();
+				$mailingLists = $query->getResult();
+
+				$titles = array_map(
+					function ($mailingList) {
+						/** @var MailingList $mailingList */
+						return $mailingList->getTitle();
+					},
+					$mailingLists
+				);
+
+				throw new Exception(
+					sprintf(
+						$GLOBALS['TL_LANG']['orm_avisota_recipient'][count($blacklists) > 1 ? 'blacklists'
+							: 'blacklist'],
+						implode(', ', $titles)
+					)
+				);
 			}
 		}
-		return $listIds;
+		return $lists;
 	}
 
 	/**
@@ -325,7 +330,7 @@ class Recipient extends \Backend
 
 		$database = \Database::getInstance();
 
-		$sql = 'SELECT * FROM tl_avisota_recipient_to_mailing_list WHERE recipient=?';
+		$sql = 'SELECT * FROM orm_avisota_recipient_to_mailing_list WHERE recipient=?';
 		$args = array($dc->id);
 
 		if ($confirmed !== null) {
@@ -370,7 +375,7 @@ class Recipient extends \Backend
 	}
 
 	/**
-	 * Check permissions to edit table tl_avisota_recipient
+	 * Check permissions to edit table orm_avisota_recipient
 	 */
 	public function checkPermission()
 	{
@@ -398,37 +403,37 @@ class Recipient extends \Backend
 
 		// Check permissions to add recipients
 		if (!$this->User->hasAccess('create', 'avisota_recipient_permissions')) {
-			$GLOBALS['TL_DCA']['tl_avisota_recipient']['config']['closed'] = true;
-			unset($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['global_operations']['migrate']);
-			unset($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['global_operations']['import']);
+			$GLOBALS['TL_DCA']['orm_avisota_recipient']['config']['closed'] = true;
+			unset($GLOBALS['TL_DCA']['orm_avisota_recipient']['list']['global_operations']['migrate']);
+			unset($GLOBALS['TL_DCA']['orm_avisota_recipient']['list']['global_operations']['import']);
 		}
 
 		// Check permission to delete recipients
 		if (!$this->User->hasAccess('delete', 'avisota_recipient_permissions')) {
-			unset($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['global_operations']['remove']);
+			unset($GLOBALS['TL_DCA']['orm_avisota_recipient']['list']['global_operations']['remove']);
 
 			// remove edit header class, if only delete without blacklist is allowed
 			if ($this->User->hasAccess('delete_no_blacklist', 'avisota_recipient_permissions')) {
-				$GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['operations']['delete_no_blacklist']['attributes'] = str_replace(
+				$GLOBALS['TL_DCA']['orm_avisota_recipient']['list']['operations']['delete_no_blacklist']['attributes'] = str_replace(
 					'class="edit-header"',
 					'',
-					$GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['operations']['delete_no_blacklist']['attributes']
+					$GLOBALS['TL_DCA']['orm_avisota_recipient']['list']['operations']['delete_no_blacklist']['attributes']
 				);
 			}
 			else {
-				unset($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['operations']['delete_no_blacklist']);
+				unset($GLOBALS['TL_DCA']['orm_avisota_recipient']['list']['operations']['delete_no_blacklist']);
 			}
 		}
 
 		// remove tools if there are no tools
 		$tools = 0;
-		foreach ($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['global_operations'] as $globalOperation) {
+		foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['list']['global_operations'] as $globalOperation) {
 			if (strpos($globalOperation['class'], 'recipient_tool') !== false) {
 				$tools++;
 			}
 		}
 		if ($tools <= 1) {
-			unset($GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['global_operations']['tools']);
+			unset($GLOBALS['TL_DCA']['orm_avisota_recipient']['list']['global_operations']['tools']);
 		}
 
 		// Check current action
@@ -443,7 +448,7 @@ class Recipient extends \Backend
 						'Not enough permissions to create newsletters recipients in list ID "' . $input->get(
 							'pid'
 						) . '"',
-						'tl_avisota_recipient checkPermission',
+						'orm_avisota_recipient checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -457,14 +462,14 @@ class Recipient extends \Backend
 			case 'delete':
 			case 'toggle':
 				$recipient = $database
-					->prepare("SELECT pid FROM tl_avisota_recipient WHERE id=?")
+					->prepare("SELECT pid FROM orm_avisota_recipient WHERE id=?")
 					->limit(1)
 					->execute($id);
 
 				if ($recipient->numRows < 1) {
 					$this->log(
 						'Invalid newsletter recipient ID "' . $id . '"',
-						'tl_avisota_recipient checkPermission',
+						'orm_avisota_recipient checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -473,7 +478,7 @@ class Recipient extends \Backend
 				switch ($input->get('act')) {
 					case 'edit':
 					case 'toggle':
-						$hasAccess = (count(preg_grep('/^tl_avisota_recipient::/', $this->User->alexf)) > 0);
+						$hasAccess = (count(preg_grep('/^orm_avisota_recipient::/', $this->User->alexf)) > 0);
 						break;
 
 					case 'show':
@@ -496,7 +501,7 @@ class Recipient extends \Backend
 						'Not enough permissions to ' . $input->get(
 							'act'
 						) . ' recipient ID "' . $id . '" of recipient list ID "' . $recipient->pid . '"',
-						'tl_avisota_recipient checkPermission',
+						'orm_avisota_recipient checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -514,7 +519,7 @@ class Recipient extends \Backend
 
 					case 'editAll':
 					case 'overrideAll':
-						$hasAccess = (count(preg_grep('/^tl_avisota_recipient::/', $this->User->alexf)) > 0);
+						$hasAccess = (count(preg_grep('/^orm_avisota_recipient::/', $this->User->alexf)) > 0);
 						break;
 
 					case 'deleteAll':
@@ -527,20 +532,20 @@ class Recipient extends \Backend
 				if (!in_array($id, $root) || !$hasAccess) {
 					$this->log(
 						'Not enough permissions to access recipient list ID "' . $id . '"',
-						'tl_avisota_recipient checkPermission',
+						'orm_avisota_recipient checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
 				}
 
 				$recipient = $database
-					->prepare("SELECT id FROM tl_avisota_recipient WHERE pid=?")
+					->prepare("SELECT id FROM orm_avisota_recipient WHERE pid=?")
 					->execute($id);
 
 				if ($recipient->numRows < 1) {
 					$this->log(
 						'Invalid newsletter recipient ID "' . $id . '"',
-						'tl_avisota_recipient checkPermission',
+						'orm_avisota_recipient checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -558,7 +563,7 @@ class Recipient extends \Backend
 				if (strlen($input->get('act'))) {
 					$this->log(
 						'Invalid command "' . $input->get('act') . '"',
-						'tl_avisota_recipient checkPermission',
+						'orm_avisota_recipient checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -566,7 +571,7 @@ class Recipient extends \Backend
 				elseif (!in_array($id, $root)) {
 					$this->log(
 						'Not enough permissions to access newsletter recipient ID "' . $id . '"',
-						'tl_avisota_recipient checkPermission',
+						'orm_avisota_recipient checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -590,7 +595,7 @@ class Recipient extends \Backend
 	 */
 	public function editRecipient($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || count(preg_grep('/^tl_avisota_recipient::/', $this->User->alexf)) > 0)
+		return ($this->User->isAdmin || count(preg_grep('/^orm_avisota_recipient::/', $this->User->alexf)) > 0)
 			? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
 				$title
 			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
@@ -683,7 +688,7 @@ class Recipient extends \Backend
 	 */
 	public function notify($row, $href, $label, $title, $icon, $attributes)
 	{
-		return '<a href="contao/main.php?do=avisota_recipients&amp;table=tl_avisota_recipient_notify&amp;act=edit&amp;id=' . $row['id'] . '" title="' . specialchars(
+		return '<a href="contao/main.php?do=avisota_recipients&amp;table=orm_avisota_recipient_notify&amp;act=edit&amp;id=' . $row['id'] . '" title="' . specialchars(
 			$title
 		) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ';
 	}

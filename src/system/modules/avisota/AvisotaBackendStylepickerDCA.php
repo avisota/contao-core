@@ -34,7 +34,7 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 	public function saveAvisotaNewsletterCEs($val, $dc)
 	{
 		// delete all records for this table/pid
-		$this->truncateTargets($dc->id, 'tl_avisota_newsletter_content');
+		$this->truncateTargets($dc->id, 'orm_avisota_newsletter_content');
 
 		$vals = unserialize($val);
 		if (is_array($vals)) {
@@ -47,7 +47,7 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 			// save CEs foreach section
 			foreach ($secs as $sec) {
 				foreach ($vals as $val) {
-					$this->saveTarget($dc->id, 'tl_avisota_newsletter_content', 'cssID', $sec, $val);
+					$this->saveTarget($dc->id, 'orm_avisota_newsletter_content', 'cssID', $sec, $val);
 				}
 			}
 		}
@@ -65,7 +65,7 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 		$return  = array();
 		$targets = $this->Database
 			->prepare('SELECT DISTINCT(cond) FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=?')
-			->execute($dc->id, 'tl_avisota_newsletter_content');
+			->execute($dc->id, 'orm_avisota_newsletter_content');
 		while ($targets->next()) {
 			$return[] = $targets->cond;
 		}
@@ -77,7 +77,7 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 		$return  = array();
 		$targets = $this->Database
 			->prepare('SELECT DISTINCT(sec) FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=?')
-			->execute($dc->id, 'tl_avisota_newsletter_content');
+			->execute($dc->id, 'orm_avisota_newsletter_content');
 		while ($targets->next()) {
 			$return[] = $targets->sec;
 		}
@@ -111,7 +111,7 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 		$ret = array('body');
 
 		$category = $this->Database
-			->query('SELECT * FROM tl_avisota_newsletter_category WHERE areas!=\'\'');
+			->query('SELECT * FROM orm_avisota_newsletter_category WHERE areas!=\'\'');
 		while ($category->next()) {
 			$ret = array_merge(
 				$ret,

@@ -68,7 +68,7 @@ class AvisotaDCA extends Controller
 
 	public function getSelectableLists($container)
 	{
-		$sql = 'SELECT * FROM tl_avisota_mailing_list';
+		$sql = 'SELECT * FROM orm_avisota_mailing_list';
 		if ($container instanceof ModuleRegistration) {
 			$listIds = array_filter(
 				array_map(
@@ -100,13 +100,13 @@ class AvisotaDCA extends Controller
 			case 'tl_member':
 				$id = $this->Input->get('avisota_showlist');
 				break;
-			case 'tl_avisota_recipient':
+			case 'orm_avisota_recipient':
 				$id = $this->Input->get('showlist');
 				break;
 		}
 		if ($id) {
 			$list = $this->Database
-				->prepare("SELECT * FROM tl_avisota_mailing_list WHERE id=?")
+				->prepare("SELECT * FROM orm_avisota_mailing_list WHERE id=?")
 				->execute($id);
 			if ($list->next()) {
 				switch ($dc->table) {
@@ -116,9 +116,9 @@ class AvisotaDCA extends Controller
 							$id
 						);
 						break;
-					case 'tl_avisota_recipient':
-						$GLOBALS['TL_DCA']['tl_avisota_recipient']['list']['sorting']['filter'][] = array(
-							'id IN (SELECT recipient FROM tl_avisota_recipient_to_mailing_list WHERE list=?)',
+					case 'orm_avisota_recipient':
+						$GLOBALS['TL_DCA']['orm_avisota_recipient']['list']['sorting']['filter'][] = array(
+							'id IN (SELECT recipient FROM orm_avisota_recipient_to_mailing_list WHERE list=?)',
 							$id
 						);
 						break;

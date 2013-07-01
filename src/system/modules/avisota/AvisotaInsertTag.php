@@ -77,7 +77,7 @@ class AvisotaInsertTag extends Controller
 							$alias = false;
 							if ($currentRecipient['source'] == 'list') {
 								$recipientList = $this->Database
-									->prepare("SELECT * FROM tl_avisota_mailing_list WHERE id=?")
+									->prepare("SELECT * FROM orm_avisota_mailing_list WHERE id=?")
 									->execute($currentRecipient['sourceID']);
 								if (!$recipientList->next()) {
 									return '';
@@ -114,13 +114,13 @@ class AvisotaInsertTag extends Controller
 									return sprintf(
 										'<a href="%s">%s</a>',
 										$url,
-										$GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe']
+										$GLOBALS['TL_LANG']['orm_avisota_newsletter']['unsubscribe']
 									);
 
 								case 'plain':
 									return sprintf(
 										"%s\n[%s]",
-										$GLOBALS['TL_LANG']['tl_avisota_newsletter']['unsubscribe'],
+										$GLOBALS['TL_LANG']['orm_avisota_newsletter']['unsubscribe'],
 										$url
 									);
 							}
@@ -141,9 +141,9 @@ class AvisotaInsertTag extends Controller
 							c.`viewOnlinePage`,
 							c.`subscriptionPage`
 						FROM
-							`tl_avisota_newsletter` n
+							`orm_avisota_newsletter` n
 						INNER JOIN
-							`tl_avisota_newsletter_category` c
+							`orm_avisota_newsletter_category` c
 						ON
 							c.`id`=n.`pid`
 						WHERE

@@ -44,11 +44,11 @@ class MailingList extends \Backend
 			$root = $this->User->avisota_recipient_lists;
 		}
 
-		$GLOBALS['TL_DCA']['tl_avisota_mailing_list']['list']['sorting']['root'] = $root;
+		$GLOBALS['TL_DCA']['orm_avisota_mailing_list']['list']['sorting']['root'] = $root;
 
 		// Check permissions to add recipient lists
 		if (!$this->User->hasAccess('create', 'avisota_recipient_list_permissions')) {
-			$GLOBALS['TL_DCA']['tl_avisota_mailing_list']['config']['closed'] = true;
+			$GLOBALS['TL_DCA']['orm_avisota_mailing_list']['config']['closed'] = true;
 		}
 
 		// Check current action
@@ -63,9 +63,9 @@ class MailingList extends \Backend
 				if (!in_array($this->Input->get('id'), $root)) {
 					$newRecords = $this->Session->get('new_records');
 
-					if (is_array($newRecords['tl_avisota_mailing_list']) && in_array(
+					if (is_array($newRecords['orm_avisota_mailing_list']) && in_array(
 							$this->Input->get('id'),
-							$newRecords['tl_avisota_mailing_list']
+							$newRecords['orm_avisota_mailing_list']
 						)
 					) {
 						// Add permissions on user level
@@ -140,7 +140,7 @@ class MailingList extends \Backend
 						'Not enough permissions to ' . $this->Input->get(
 							'act'
 						) . ' avisota newsletter category ID "' . $this->Input->get('id') . '"',
-						'tl_avisota_mailing_list checkPermission',
+						'orm_avisota_mailing_list checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -168,7 +168,7 @@ class MailingList extends \Backend
 				if (strlen($this->Input->get('act'))) {
 					$this->log(
 						'Not enough permissions to ' . $this->Input->get('act') . ' avisota newsletter categories',
-						'tl_avisota_mailing_list checkPermission',
+						'orm_avisota_mailing_list checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -215,7 +215,7 @@ class MailingList extends \Backend
 	 */
 	public function editList($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || count(preg_grep('/^tl_avisota_mailing_list::/', $this->User->alexf)) > 0)
+		return ($this->User->isAdmin || count(preg_grep('/^orm_avisota_mailing_list::/', $this->User->alexf)) > 0)
 			? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
 				$title
 			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
@@ -288,7 +288,7 @@ class MailingList extends \Backend
 		}
 
 		$aliasResultSet = $this->Database
-			->prepare("SELECT id FROM tl_avisota_mailing_list WHERE alias=?")
+			->prepare("SELECT id FROM orm_avisota_mailing_list WHERE alias=?")
 			->execute($value);
 
 		// Check whether the news alias exists

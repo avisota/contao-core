@@ -186,7 +186,7 @@ class AvisotaNewsletterTemplate extends Template
 		// Add the theme templates folder
 		if ($themeId > 0) {
 			$theme = $this->Database
-				->prepare("SELECT * FROM tl_avisota_newsletter_theme WHERE id=?")
+				->prepare("SELECT * FROM orm_avisota_newsletter_theme WHERE id=?")
 				->limit(1)
 				->execute($themeId);
 

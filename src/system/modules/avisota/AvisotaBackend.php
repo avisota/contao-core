@@ -56,10 +56,10 @@ class AvisotaBackend extends Controller
 		$recipients = array();
 
 		$source = $this->Database
-			->execute("SELECT * FROM tl_avisota_recipient_source WHERE disable='' ORDER BY sorting");
+			->execute("SELECT * FROM orm_avisota_recipient_source WHERE disable='' ORDER BY sorting");
 		while ($source->next()) {
-			if (isset($GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE'][$source->type])) {
-				$class    = $GLOBALS['TL_AVISOTA_RECIPIENT_SOURCE'][$source->type];
+			if (isset($GLOBALS['orm_avisota_RECIPIENT_SOURCE'][$source->type])) {
+				$class    = $GLOBALS['orm_avisota_RECIPIENT_SOURCE'][$source->type];
 				$instance = new $class($source->row());
 				$options  = $instance->getRecipientOptions();
 				if (count($options)) {
@@ -88,9 +88,9 @@ class AvisotaBackend extends Controller
 	{
 		if ($template == 'be_main') {
 			# add form multipart enctype
-			if (($this->Input->get('table') == 'tl_avisota_recipient_import' || $this->Input->get(
+			if (($this->Input->get('table') == 'orm_avisota_recipient_import' || $this->Input->get(
 				'table'
-			) == 'tl_avisota_recipient_remove')
+			) == 'orm_avisota_recipient_remove')
 			) {
 				$content = str_replace('<form', '<form enctype="multipart/form-data"', $content);
 			}
@@ -103,8 +103,8 @@ class AvisotaBackend extends Controller
 		$result = $this->Database
 			->prepare(
 			"SELECT
-				(SELECT COUNT(rl.recipient) FROM tl_avisota_recipient_to_mailing_list rl WHERE rl.list=?) as total_recipients,
-				(SELECT COUNT(rl.recipient) FROM tl_avisota_recipient_to_mailing_list rl INNER JOIN tl_avisota_recipient r ON r.id=rl.recipient WHERE rl.confirmed=? AND rl.list=?) as disabled_recipients,
+				(SELECT COUNT(rl.recipient) FROM orm_avisota_recipient_to_mailing_list rl WHERE rl.list=?) as total_recipients,
+				(SELECT COUNT(rl.recipient) FROM orm_avisota_recipient_to_mailing_list rl INNER JOIN orm_avisota_recipient r ON r.id=rl.recipient WHERE rl.confirmed=? AND rl.list=?) as disabled_recipients,
 				(SELECT COUNT(ml.member) FROM tl_member_to_mailing_list ml WHERE ml.list=?) as total_members,
 				(SELECT COUNT(ml.member) FROM tl_member_to_mailing_list ml INNER JOIN tl_member m ON m.id=ml.member WHERE m.disable=? AND ml.list=?) as disabled_members"
 		)
@@ -116,7 +116,7 @@ class AvisotaBackend extends Controller
 					$this->generateImage('system/modules/avisota/html/recipients.png', '') .
 					' ' .
 					sprintf(
-						$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['label_recipients'],
+						$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['label_recipients'],
 						$result->total_recipients,
 						$result->total_recipients - $result->disabled_recipients,
 						$result->disabled_recipients
@@ -130,7 +130,7 @@ class AvisotaBackend extends Controller
 					$this->generateImage('system/themes/default/images/member.gif', '') .
 					' ' .
 					sprintf(
-						$GLOBALS['TL_LANG']['tl_avisota_mailing_list']['label_members'],
+						$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['label_members'],
 						$result->total_members,
 						$result->total_members - $result->disabled_members,
 						$result->disabled_members
@@ -153,11 +153,11 @@ class AvisotaBackend extends Controller
 					$categoryId = $match[1];
 
 					// $module['class'] = str_replace(' active', '', $module['class']);
-					$module['href'] .= '&amp;table=tl_avisota_newsletter&amp;id=' . $categoryId;
+					$module['href'] .= '&amp;table=orm_avisota_newsletter&amp;id=' . $categoryId;
 
 					// if this category is active
 					if ($this->Input->get('do') == 'avisota_newsletter' &&
-						$this->Input->get('table') == 'tl_avisota_newsletter' &&
+						$this->Input->get('table') == 'orm_avisota_newsletter' &&
 						$this->Input->get('act') != 'edit' &&
 						$this->Input->get('id') == $categoryId
 					) {
@@ -174,8 +174,8 @@ class AvisotaBackend extends Controller
 			}
 			/*
 			$arrCustomModules = array();
-			if ($this->Database->fieldExists('showInMenu', 'tl_avisota_newsletter_category')) {
-				$objCategory = $this->Database->query('SELECT * FROM tl_avisota_newsletter_category WHERE showInMenu=\'1\' ORDER BY title');
+			if ($this->Database->fieldExists('showInMenu', 'orm_avisota_newsletter_category')) {
+				$objCategory = $this->Database->query('SELECT * FROM orm_avisota_newsletter_category WHERE showInMenu=\'1\' ORDER BY title');
 				while ($objCategory->next()) {
 					$arrCustomModules['avisota_newsletter_' . $objCategory->id] = array_slice($arrModules['avisota']['modules']['avisota_newsletter'], 0);
 					if ($objCategory->menuIcon) {
@@ -184,11 +184,11 @@ class AvisotaBackend extends Controller
 					$arrCustomModules['avisota_newsletter_' . $objCategory->id]['label'] = $objCategory->title;
 					$arrCustomModules['avisota_newsletter_' . $objCategory->id]['class'] = str_replace(' active', '', $arrCustomModules['avisota_newsletter_' . $objCategory->id]['class']);
 					$arrCustomModules['avisota_newsletter_' . $objCategory->id]['class'] .= ' avisota_newsletter_' . $objCategory->id;
-					$arrCustomModules['avisota_newsletter_' . $objCategory->id]['href']  .= '&amp;table=tl_avisota_newsletter&amp;id=' . $objCategory->id;
+					$arrCustomModules['avisota_newsletter_' . $objCategory->id]['href']  .= '&amp;table=orm_avisota_newsletter&amp;id=' . $objCategory->id;
 
 					// if this category is active
 					if ($this->Input->get('do') == 'avisota_newsletter' &&
-						$this->Input->get('table') == 'tl_avisota_newsletter' &&
+						$this->Input->get('table') == 'orm_avisota_newsletter' &&
 						$this->Input->get('act') != 'edit' &&
 						$this->Input->get('id') == $objCategory->id) {
 						// remove active class from avisota_newsletter menu item
@@ -226,7 +226,7 @@ class AvisotaBackend extends Controller
 		while ($module->next()) {
 			$recipient = $this->Database
 				->prepare(
-				"SELECT * FROM tl_avisota_recipient WHERE confirmed='' AND token!='' AND addedOn<=? AND addedByModule=?"
+				"SELECT * FROM orm_avisota_recipient WHERE confirmed='' AND token!='' AND addedOn<=? AND addedByModule=?"
 			)
 				->execute(mktime(0, 0, 0) - ($module->avisota_cleanup_time * 24 * 60 * 60), $module->id);
 			while ($recipient->next()) {
@@ -237,7 +237,7 @@ class AvisotaBackend extends Controller
 				);
 
 				$this->Database
-					->prepare("DELETE FROM tl_avisota_recipient WHERE id=?")
+					->prepare("DELETE FROM orm_avisota_recipient WHERE id=?")
 					->execute($recipient->id);
 			}
 		}
@@ -261,7 +261,7 @@ class AvisotaBackend extends Controller
 			$recipient = $this->Database
 				->prepare(
 				"SELECT addedOnPage, email, GROUP_CONCAT(pid) as lists, GROUP_CONCAT(id) as ids, GROUP_CONCAT(token) as tokens
-					FROM tl_avisota_recipient
+					FROM orm_avisota_recipient
 					WHERE confirmed='' AND token!='' AND addedOn<=? AND addedByModule=? AND notification=''
 					GROUP BY addedOnPage,email"
 			)
@@ -325,7 +325,7 @@ class AvisotaBackend extends Controller
 
 				$this->Database
 					->execute(
-					"UPDATE tl_avisota_recipient SET notification='1' WHERE id IN (" . $recipient->ids . ")"
+					"UPDATE orm_avisota_recipient SET notification='1' WHERE id IN (" . $recipient->ids . ")"
 				);
 			}
 		}
@@ -396,7 +396,7 @@ class AvisotaBackend extends Controller
 					SELECT
 						*
 					FROM
-						`tl_avisota_mailing_list`
+						`orm_avisota_mailing_list`
 					WHERE
 						`id` IN (" . implode(',', $placeholders) . ")
 					ORDER BY
