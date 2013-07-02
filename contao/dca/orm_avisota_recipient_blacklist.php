@@ -20,6 +20,10 @@
  */
 $GLOBALS['TL_DCA']['orm_avisota_recipient_blacklist'] = array
 (
+	// Entity
+	'entity' => array(
+		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_NONE
+	),
 	// Fields
 	'fields' => array
 	(
