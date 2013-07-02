@@ -80,7 +80,7 @@ class AvisotaNewsletter
 	protected $attachments;
 
 	/**
-	 * The content array contains the database rows of content, grouped by area.
+	 * The content array contains the database rows of content, grouped by cell.
 	 *
 	 * for example:
 	 * <pre>

@@ -37,48 +37,6 @@ class Queue extends \Backend
 	 */
 	public function onsubmit_callback($dc)
 	{
-		$database = \Database::getInstance();
-
-		$openTableName = 'avisota_newsletter_outbox_' . $dc->activeRecord->alias . '_open';
-		$sendTableName = 'avisota_newsletter_outbox_' . $dc->activeRecord->alias . '_send';
-
-		if (isset($_SESSION['AVISOTA_QUEUE_ALIAS'][$dc->id])) {
-			if ($_SESSION['AVISOTA_QUEUE_ALIAS'][$dc->id] !== $dc->activeRecord->alias) {
-				$previousOpenTableName = 'avisota_newsletter_outbox_' . $_SESSION['AVISOTA_QUEUE_ALIAS'][$dc->id] . '_open';
-				$previousSendTableName = 'avisota_newsletter_outbox_' . $_SESSION['AVISOTA_QUEUE_ALIAS'][$dc->id] . '_send';
-
-				if ($database->tableExists($previousOpenTableName) && !$database->tableExists($openTableName)) {
-					$database->query(
-						sprintf(
-							'RENAME TABLE `%s` TO `%s`',
-							$previousOpenTableName,
-							$openTableName
-						)
-					);
-				}
-				if ($database->tableExists($previousSendTableName) && !$database->tableExists($sendTableName)) {
-					$database->query(
-						sprintf(
-							'RENAME TABLE `%s` TO `%s`',
-							$previousSendTableName,
-							$sendTableName
-						)
-					);
-				}
-			}
-		}
-
-		if (!$database->tableExists($openTableName, null, true)) {
-			$sql = file_get_contents(AVISOTA_ROOT . '/config/outbox_open.sql');
-			$sql = str_replace('{{alias}}', $dc->activeRecord->alias, $sql);
-			$database->query($sql);
-		}
-
-		if (!$database->tableExists($sendTableName, null, true)) {
-			$sql = file_get_contents(AVISOTA_ROOT . '/config/outbox_send.sql');
-			$sql = str_replace('{{alias}}', $dc->activeRecord->alias, $sql);
-			$database->query($sql);
-		}
 	}
 
 	public function rememberAlias($alias, $dc)

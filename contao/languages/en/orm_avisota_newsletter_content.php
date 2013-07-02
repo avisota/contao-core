@@ -168,11 +168,11 @@ $GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['events_legend']    = 'Eve
  */
 $GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['anonymous']      = 'Anonym personalisieren, falls keine persönlichen Daten verfügbar sind <strong style="color:red">REMOVE</strong>';
 $GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['private']        = 'Persönlich personalisieren, blendet das Element aus, wenn keine persönlichen Daten verfügbar sind <strong style="color:red">REMOVE</strong>';
-$GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['area']['body']   = 'Inhalt <strong style="color:red">REMOVE</strong>';
-$GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['area']['header'] = 'Kopfzeile <strong style="color:red">REMOVE</strong>';
-$GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['area']['footer'] = 'Fußzeile <strong style="color:red">REMOVE</strong>';
-$GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['area']['left']   = 'Linke Spalte <strong style="color:red">REMOVE</strong>';
-$GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['area']['right']  = 'Rechte Spalte <strong style="color:red">REMOVE</strong>';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['cell']['body']   = 'Inhalt <strong style="color:red">REMOVE</strong>';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['cell']['header'] = 'Kopfzeile <strong style="color:red">REMOVE</strong>';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['cell']['footer'] = 'Fußzeile <strong style="color:red">REMOVE</strong>';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['cell']['left']   = 'Linke Spalte <strong style="color:red">REMOVE</strong>';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['cell']['right']  = 'Rechte Spalte <strong style="color:red">REMOVE</strong>';
 
 
 /**

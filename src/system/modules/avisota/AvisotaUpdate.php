@@ -187,7 +187,7 @@ class AvisotaUpdate extends BackendModule
 	protected function check0_4_5()
 	{
 		return $this->Database->tableExists('orm_avisota_newsletter_content')
-			&& !$this->Database->fieldExists('area', 'orm_avisota_newsletter_content');
+			&& !$this->Database->fieldExists('cell', 'orm_avisota_newsletter_content');
 	}
 
 	/**
@@ -197,13 +197,13 @@ class AvisotaUpdate extends BackendModule
 	{
 		try {
 			if ($this->Database->tableExists('orm_avisota_newsletter_content')) {
-				if (!$this->Database->fieldExists('area', 'orm_avisota_newsletter_content')) {
+				if (!$this->Database->fieldExists('cell', 'orm_avisota_newsletter_content')) {
 					$this->Database
-						->execute("ALTER TABLE orm_avisota_newsletter_content ADD area varchar(32) NOT NULL default ''");
+						->execute("ALTER TABLE orm_avisota_newsletter_content ADD cell varchar(32) NOT NULL default ''");
 				}
 
 				$this->Database
-					->prepare("UPDATE orm_avisota_newsletter_content SET area=? WHERE area=?")
+					->prepare("UPDATE orm_avisota_newsletter_content SET cell=? WHERE cell=?")
 					->execute('body', '');
 			}
 		}

@@ -303,8 +303,8 @@ class NewsletterContent extends \Backend
 					? ' (' . $GLOBALS['TL_LANG']['MSC']['guests'] . ')' : '')) .
 			($this->hasMultipleNewsletterAreas($contentData) ? sprintf(
 				' <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>',
-				isset($GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['area'][$contentData['area']])
-					? $GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['area'][$contentData['area']] : $contentData['area']
+				isset($GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['cell'][$contentData['cell']])
+					? $GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['cell'][$contentData['cell']] : $contentData['cell']
 			) : '') .
 			'</div>
 <div class="limit_height' . (!$GLOBALS['TL_CONFIG']['doNotCollapse'] ? ' h64' : '') . ' block">
@@ -383,7 +383,7 @@ class NewsletterContent extends \Backend
 
 
 	/**
-	 * Check if there are more than the default 'body' area.
+	 * Check if there are more than the default 'body' cell.
 	 *
 	 * @param DataContainer $dc
 	 */
@@ -426,12 +426,12 @@ class NewsletterContent extends \Backend
 				if (!$this->hasMultipleNewsletterAreas($this->Input->get('id'))) {
 					foreach ($GLOBALS['TL_DCA']['orm_avisota_newsletter_content']['palettes'] as $k => $v) {
 						$GLOBALS['TL_DCA']['orm_avisota_newsletter_content']['palettes'][$k] = str_replace(
-							',area',
+							',cell',
 							'',
 							$v
 						);
 					}
-					$GLOBALS['TL_DCA']['orm_avisota_newsletter_content']['fields']['area']['filter'] = false;
+					$GLOBALS['TL_DCA']['orm_avisota_newsletter_content']['fields']['cell']['filter'] = false;
 				}
 			}
 		}

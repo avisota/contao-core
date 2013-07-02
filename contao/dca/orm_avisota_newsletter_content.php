@@ -117,25 +117,25 @@ $GLOBALS['TL_DCA']['orm_avisota_newsletter_content'] = array
 		),
 		'headline'  => array
 		(
-			'type'   => array('type', 'area', 'headline'),
+			'type'   => array('type', 'cell', 'headline'),
 			'expert' => array(':hide', 'cssID', 'space')
 		),
 		'text'      => array
 		(
-			'type'   => array('type', 'area', 'headline'),
+			'type'   => array('type', 'cell', 'headline'),
 			'text'   => array('text', 'definePlain', 'personalize'),
 			'image'  => array('addImage'),
 			'expert' => array(':hide', 'cssID', 'space')
 		),
 		'list'      => array
 		(
-			'type'   => array('type', 'area', 'headline'),
+			'type'   => array('type', 'cell', 'headline'),
 			'list'   => array('listtype', 'listitems'),
 			'expert' => array(':hide', 'cssID', 'space')
 		),
 		'table'     => array
 		(
-			'type'     => array('type', 'area', 'headline'),
+			'type'     => array('type', 'cell', 'headline'),
 			'table'    => array('tableitems'),
 			'tconfig'  => array('summary', 'thead', 'tfoot'),
 			'sortable' => array(':hide', 'sortable'),
@@ -143,20 +143,20 @@ $GLOBALS['TL_DCA']['orm_avisota_newsletter_content'] = array
 		),
 		'hyperlink' => array
 		(
-			'type'   => array('type', 'area', 'headline'),
+			'type'   => array('type', 'cell', 'headline'),
 			'link'   => array('url', 'linkTitle', 'embed'),
 			'expert' => array(':hide', 'cssID', 'space')
 		),
 		'image'     => array
 		(
-			'type'   => array('type', 'area', 'headline'),
+			'type'   => array('type', 'cell', 'headline'),
 			'source' => array('singleSRC'),
 			'image'  => array('alt', 'size', 'imagemargin', 'imageUrl', 'caption'),
 			'expert' => array(':hide', 'cssID', 'space')
 		),
 		'gallery'   => array
 		(
-			'type'     => array('type', 'area', 'headline'),
+			'type'     => array('type', 'cell', 'headline'),
 			'source'   => array('multiSRC'),
 			'image'    => array('size', 'imagemargin', 'perRow', 'sortBy'),
 			'template' => array(':hide', 'galleryHtmlTpl', 'galleryPlainTpl'),
@@ -164,19 +164,19 @@ $GLOBALS['TL_DCA']['orm_avisota_newsletter_content'] = array
 		),
 		'news'      => array
 		(
-			'type'    => array('type', 'area', 'headline'),
+			'type'    => array('type', 'cell', 'headline'),
 			'include' => array('news'),
 			'expert'  => array(':hide', 'cssID', 'space')
 		),
 		'events'    => array
 		(
-			'type'   => array('type', 'area', 'headline'),
+			'type'   => array('type', 'cell', 'headline'),
 			'events' => array('events'),
 			'expert' => array(':hide', 'cssID', 'space')
 		),
 		'article'   => array
 		(
-			'type'    => array('type', 'area', 'headline'),
+			'type'    => array('type', 'cell', 'headline'),
 			'include' => array('articleAlias'),
 			'expert'  => array(':hide', 'cssID', 'space')
 		)
@@ -247,15 +247,15 @@ $GLOBALS['TL_DCA']['orm_avisota_newsletter_content'] = array
 			'reference'        => &$GLOBALS['TL_LANG']['NLE'],
 			'eval'             => array('helpwizard' => true, 'submitOnChange' => true, 'tl_class' => 'w50')
 		),
-		'area'            => array
+		'cell'            => array
 		(
-			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['area'],
+			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['cell'],
 			'default'          => 'body',
 			'exclude'          => true,
 			'filter'           => true,
 			'inputType'        => 'select',
 			'options_callback' => array('Avisota\Contao\DataContainer\NewsletterContent', 'dcaGetNewsletterAreas'),
-			'reference'        => &$GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['area'],
+			'reference'        => &$GLOBALS['TL_LANG']['orm_avisota_newsletter_content']['cell'],
 			'eval'             => array('mandatory' => true, 'tl_class' => 'w50')
 		),
 		'headline'        => array

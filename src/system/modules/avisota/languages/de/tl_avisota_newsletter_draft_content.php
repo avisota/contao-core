@@ -44,11 +44,11 @@ $GLOBALS['TL_LANG']['orm_avisota_newsletter_draft_content']['draft_legend'] = 'V
  */
 $GLOBALS['TL_LANG']['orm_avisota_newsletter_draft_content']['anonymous']      = 'Anonym personalisieren, falls keine persönlichen Daten verfügbar sind';
 $GLOBALS['TL_LANG']['orm_avisota_newsletter_draft_content']['private']        = 'Persönlich personalisieren, blendet das Element aus, wenn keine persönlichen Daten verfügbar sind';
-$GLOBALS['TL_LANG']['orm_avisota_newsletter_draft_content']['area']['body']   = 'Inhalt';
-$GLOBALS['TL_LANG']['orm_avisota_newsletter_draft_content']['area']['header'] = 'Kopfzeile';
-$GLOBALS['TL_LANG']['orm_avisota_newsletter_draft_content']['area']['footer'] = 'Fußzeile';
-$GLOBALS['TL_LANG']['orm_avisota_newsletter_draft_content']['area']['left']   = 'Linke Spalte';
-$GLOBALS['TL_LANG']['orm_avisota_newsletter_draft_content']['area']['right']  = 'Rechte Spalte';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter_draft_content']['cell']['body']   = 'Inhalt';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter_draft_content']['cell']['header'] = 'Kopfzeile';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter_draft_content']['cell']['footer'] = 'Fußzeile';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter_draft_content']['cell']['left']   = 'Linke Spalte';
+$GLOBALS['TL_LANG']['orm_avisota_newsletter_draft_content']['cell']['right']  = 'Rechte Spalte';
 
 
 /**
