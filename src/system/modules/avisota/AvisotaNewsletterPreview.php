@@ -130,7 +130,7 @@ class AvisotaNewsletterPreview extends Backend
 						SELECT
 							*
 						FROM
-							orm_avisota_newsletter
+							orm_avisota_mailing
 						WHERE
 							id=?"
 		)
@@ -148,7 +148,7 @@ class AvisotaNewsletterPreview extends Backend
 						SELECT
 							*
 						FROM
-							orm_avisota_newsletter_category
+							orm_avisota_mailing_category
 						WHERE
 							id=?"
 		)

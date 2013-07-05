@@ -186,8 +186,8 @@ class AvisotaUpdate extends BackendModule
 
 	protected function check0_4_5()
 	{
-		return $this->Database->tableExists('orm_avisota_newsletter_content')
-			&& !$this->Database->fieldExists('cell', 'orm_avisota_newsletter_content');
+		return $this->Database->tableExists('orm_avisota_mailing_content')
+			&& !$this->Database->fieldExists('cell', 'orm_avisota_mailing_content');
 	}
 
 	/**
@@ -196,14 +196,14 @@ class AvisotaUpdate extends BackendModule
 	protected function upgrade0_4_5()
 	{
 		try {
-			if ($this->Database->tableExists('orm_avisota_newsletter_content')) {
-				if (!$this->Database->fieldExists('cell', 'orm_avisota_newsletter_content')) {
+			if ($this->Database->tableExists('orm_avisota_mailing_content')) {
+				if (!$this->Database->fieldExists('cell', 'orm_avisota_mailing_content')) {
 					$this->Database
-						->execute("ALTER TABLE orm_avisota_newsletter_content ADD cell varchar(32) NOT NULL default ''");
+						->execute("ALTER TABLE orm_avisota_mailing_content ADD cell varchar(32) NOT NULL default ''");
 				}
 
 				$this->Database
-					->prepare("UPDATE orm_avisota_newsletter_content SET cell=? WHERE cell=?")
+					->prepare("UPDATE orm_avisota_mailing_content SET cell=? WHERE cell=?")
 					->execute('body', '');
 			}
 		}
@@ -219,14 +219,14 @@ class AvisotaUpdate extends BackendModule
 	 */
 	protected function check1_5_0()
 	{
-		return $this->Database->tableExists('orm_avisota_newsletter_outbox')
-			&& (!$this->Database->tableExists('orm_avisota_newsletter_outbox_recipient') ||
-				!$this->Database->fieldExists('tstamp', 'orm_avisota_newsletter_outbox') ||
-				$this->Database->fieldExists('token', 'orm_avisota_newsletter_outbox')
-					&& $this->Database->fieldExists('email', 'orm_avisota_newsletter_outbox')
-					&& $this->Database->fieldExists('send', 'orm_avisota_newsletter_outbox')
-					&& $this->Database->fieldExists('source', 'orm_avisota_newsletter_outbox')
-					&& $this->Database->fieldExists('failed', 'orm_avisota_newsletter_outbox'));
+		return $this->Database->tableExists('orm_avisota_mailing_outbox')
+			&& (!$this->Database->tableExists('orm_avisota_mailing_outbox_recipient') ||
+				!$this->Database->fieldExists('tstamp', 'orm_avisota_mailing_outbox') ||
+				$this->Database->fieldExists('token', 'orm_avisota_mailing_outbox')
+					&& $this->Database->fieldExists('email', 'orm_avisota_mailing_outbox')
+					&& $this->Database->fieldExists('send', 'orm_avisota_mailing_outbox')
+					&& $this->Database->fieldExists('source', 'orm_avisota_mailing_outbox')
+					&& $this->Database->fieldExists('failed', 'orm_avisota_mailing_outbox'));
 	}
 
 	/**
@@ -235,11 +235,11 @@ class AvisotaUpdate extends BackendModule
 	protected function upgrade1_5_0()
 	{
 		try {
-			if ($this->Database->tableExists('orm_avisota_newsletter_outbox')) {
-				if (!$this->Database->tableExists('orm_avisota_newsletter_outbox_recipient')) {
+			if ($this->Database->tableExists('orm_avisota_mailing_outbox')) {
+				if (!$this->Database->tableExists('orm_avisota_mailing_outbox_recipient')) {
 					// create outbox recipient table
 					$this->Database->execute(
-						"CREATE TABLE `orm_avisota_newsletter_outbox_recipient` (
+						"CREATE TABLE `orm_avisota_mailing_outbox_recipient` (
 					  `id` int(10) unsigned NOT NULL auto_increment,
 					  `pid` int(10) unsigned NOT NULL default '0',
 					  `tstamp` int(10) unsigned NOT NULL default '0',
@@ -263,22 +263,22 @@ class AvisotaUpdate extends BackendModule
 				}
 
 				// make sure the tstamp field exists
-				if (!$this->Database->fieldExists('tstamp', 'orm_avisota_newsletter_outbox')) {
+				if (!$this->Database->fieldExists('tstamp', 'orm_avisota_mailing_outbox')) {
 					$this->Database
 						->execute(
-						"ALTER TABLE orm_avisota_newsletter_outbox ADD tstamp int(10) unsigned NOT NULL default '0'"
+						"ALTER TABLE orm_avisota_mailing_outbox ADD tstamp int(10) unsigned NOT NULL default '0'"
 					);
 				}
 
 				// split the outbox table data
-				if ($this->Database->fieldExists('token', 'orm_avisota_newsletter_outbox')
-					&& $this->Database->fieldExists('email', 'orm_avisota_newsletter_outbox')
-					&& $this->Database->fieldExists('send', 'orm_avisota_newsletter_outbox')
-					&& $this->Database->fieldExists('source', 'orm_avisota_newsletter_outbox')
-					&& $this->Database->fieldExists('failed', 'orm_avisota_newsletter_outbox')
+				if ($this->Database->fieldExists('token', 'orm_avisota_mailing_outbox')
+					&& $this->Database->fieldExists('email', 'orm_avisota_mailing_outbox')
+					&& $this->Database->fieldExists('send', 'orm_avisota_mailing_outbox')
+					&& $this->Database->fieldExists('source', 'orm_avisota_mailing_outbox')
+					&& $this->Database->fieldExists('failed', 'orm_avisota_mailing_outbox')
 				) {
 					$outbox      = $this->Database
-						->execute("SELECT DISTINCT pid,token FROM orm_avisota_newsletter_outbox");
+						->execute("SELECT DISTINCT pid,token FROM orm_avisota_mailing_outbox");
 					$newsletterDataSets = $outbox->fetchAllAssoc();
 
 					if (count($newsletterDataSets)) {
@@ -289,13 +289,13 @@ class AvisotaUpdate extends BackendModule
 							if ($newsletterData['token']) {
 								$time = $this->Database
 									->prepare(
-									"SELECT IF (tstamp, tstamp, send) as time FROM (SELECT MIN(tstamp) as tstamp, MIN(send) as send FROM orm_avisota_newsletter_outbox WHERE token=? GROUP BY token) t"
+									"SELECT IF (tstamp, tstamp, send) as time FROM (SELECT MIN(tstamp) as tstamp, MIN(send) as send FROM orm_avisota_mailing_outbox WHERE token=? GROUP BY token) t"
 								)
 									->execute($newsletterData['token'])
 									->time;
 
 								$outboxeIds[$newsletterData['token']] = $this->Database
-									->prepare("INSERT INTO orm_avisota_newsletter_outbox SET pid=?, tstamp=?")
+									->prepare("INSERT INTO orm_avisota_mailing_outbox SET pid=?, tstamp=?")
 									->execute($newsletterData['pid'], $time)
 									->insertId;
 							}
@@ -305,7 +305,7 @@ class AvisotaUpdate extends BackendModule
 						foreach ($outboxeIds as $token => $outboxId) {
 							$this->Database
 								->prepare(
-								"INSERT INTO orm_avisota_newsletter_outbox_recipient (pid,tstamp,email,domain,send,source,sourceID,failed)
+								"INSERT INTO orm_avisota_mailing_outbox_recipient (pid,tstamp,email,domain,send,source,sourceID,failed)
 									SELECT
 										?,
 										tstamp,
@@ -315,7 +315,7 @@ class AvisotaUpdate extends BackendModule
 										SUBSTRING(source, 1, LOCATE(':', source)-1) as source,
 										SUBSTRING(source, LOCATE(':', source)+1) as sourceID,
 										failed
-									FROM orm_avisota_newsletter_outbox
+									FROM orm_avisota_mailing_outbox
 									WHERE token=?"
 							)
 								->execute($outboxId, $token);
@@ -323,7 +323,7 @@ class AvisotaUpdate extends BackendModule
 
 						// update recipientID
 						$recipient = $this->Database
-							->execute("SELECT * FROM orm_avisota_newsletter_outbox_recipient WHERE recipientID=0");
+							->execute("SELECT * FROM orm_avisota_mailing_outbox_recipient WHERE recipientID=0");
 						while ($recipient->next()) {
 							switch ($recipient->source) {
 								case 'list':
@@ -345,7 +345,7 @@ class AvisotaUpdate extends BackendModule
 							if ($resultSet->next()) {
 								$this->Database
 									->prepare(
-									"UPDATE orm_avisota_newsletter_outbox_recipient SET recipientID=? WHERE id=?"
+									"UPDATE orm_avisota_mailing_outbox_recipient SET recipientID=? WHERE id=?"
 								)
 									->execute($resultSet->id, $recipient->id);
 							}
@@ -354,7 +354,7 @@ class AvisotaUpdate extends BackendModule
 						// delete old entries from outbox
 						$this->Database
 							->execute(
-							"DELETE FROM orm_avisota_newsletter_outbox WHERE id NOT IN (" . implode(
+							"DELETE FROM orm_avisota_mailing_outbox WHERE id NOT IN (" . implode(
 								',',
 								$outboxeIds
 							) . ")"
@@ -362,8 +362,8 @@ class AvisotaUpdate extends BackendModule
 
 						// delete old fields
 						foreach (array('token', 'email', 'send', 'source', 'failed') as $fieldName) {
-							if ($this->Database->fieldExists($fieldName, 'orm_avisota_newsletter_outbox')) {
-								$this->Database->execute('ALTER TABLE orm_avisota_newsletter_outbox DROP ' . $fieldName);
+							if ($this->Database->fieldExists($fieldName, 'orm_avisota_mailing_outbox')) {
+								$this->Database->execute('ALTER TABLE orm_avisota_mailing_outbox DROP ' . $fieldName);
 							}
 						}
 					}
@@ -427,7 +427,7 @@ class AvisotaUpdate extends BackendModule
 					}
 					else {
 						$newsletter = $this->Database
-							->prepare("SELECT * FROM orm_avisota_newsletter WHERE id=?")
+							->prepare("SELECT * FROM orm_avisota_mailing WHERE id=?")
 							->execute($link->pid);
 						if ($newsletter->next()) {
 							$newsletter = $newsletterCache[$link->pid] = (object) $newsletter->row();
@@ -443,7 +443,7 @@ class AvisotaUpdate extends BackendModule
 						}
 						else {
 							$category = $this->Database
-								->prepare("SELECT * FROM orm_avisota_newsletter_category WHERE id=?")
+								->prepare("SELECT * FROM orm_avisota_mailing_category WHERE id=?")
 								->execute($newsletter->pid);
 							if ($category->next()) {
 								$category = $categoryCache[$newsletter->pid] = (object) $category->row();
@@ -726,18 +726,18 @@ class AvisotaUpdate extends BackendModule
 
 	protected function check2_0_0_u2()
 	{
-		return $this->Database->tableExists('orm_avisota_newsletter_category')
+		return $this->Database->tableExists('orm_avisota_mailing_category')
 			&& (!$this->Database->tableExists('orm_avisota_transport')
-				|| !$this->Database->fieldExists('transportMode', 'orm_avisota_newsletter_category')
+				|| !$this->Database->fieldExists('transportMode', 'orm_avisota_mailing_category')
 				|| $this->Database->execute(
-					"SELECT COUNT(id) AS c FROM orm_avisota_newsletter_category WHERE transportMode=''"
+					"SELECT COUNT(id) AS c FROM orm_avisota_mailing_category WHERE transportMode=''"
 				)->c > 0);
 	}
 
 	protected function upgrade2_0_0_u2()
 	{
 		try {
-			if ($this->Database->tableExists('orm_avisota_newsletter_category')) {
+			if ($this->Database->tableExists('orm_avisota_mailing_category')) {
 				if (!$this->Database->tableExists('orm_avisota_transport')) {
 					$this->Database->query(
 						"CREATE TABLE `orm_avisota_transport` (
@@ -760,23 +760,23 @@ class AvisotaUpdate extends BackendModule
 					);
 				}
 
-				if (!$this->Database->fieldExists('transportMode', 'orm_avisota_newsletter_category')) {
+				if (!$this->Database->fieldExists('transportMode', 'orm_avisota_mailing_category')) {
 					$this->Database->query(
-						"ALTER TABLE `orm_avisota_newsletter_category` ADD `transportMode` char(22) NOT NULL default ''"
+						"ALTER TABLE `orm_avisota_mailing_category` ADD `transportMode` char(22) NOT NULL default ''"
 					);
 				}
 
-				if (!$this->Database->fieldExists('transport', 'orm_avisota_newsletter_category')) {
+				if (!$this->Database->fieldExists('transport', 'orm_avisota_mailing_category')) {
 					$this->Database->query(
-						"ALTER TABLE `orm_avisota_newsletter_category` ADD `transport` int(10) unsigned NOT NULL default '0'"
+						"ALTER TABLE `orm_avisota_mailing_category` ADD `transport` int(10) unsigned NOT NULL default '0'"
 					);
 				}
 
-				if ($this->Database->fieldExists('useSMTP', 'orm_avisota_newsletter_category')) {
+				if ($this->Database->fieldExists('useSMTP', 'orm_avisota_mailing_category')) {
 					$category = $this->Database
 						->execute(
 						"SELECT GROUP_CONCAT(id) AS ids, useSMTP, smtpHost, smtpUser, smtpPass, smtpPort, smtpEnc, sender, senderName
-								   FROM orm_avisota_newsletter_category
+								   FROM orm_avisota_mailing_category
 								   WHERE transportMode=''
 								   GROUP BY useSMTP, smtpHost, smtpUser, smtpPass, smtpPort, smtpEnc, sender, senderName"
 					);
@@ -807,7 +807,7 @@ class AvisotaUpdate extends BackendModule
 						// update categories to use the transport
 						$this->Database
 							->query(
-							"UPDATE orm_avisota_newsletter_category SET transportMode='byCategory', transport=" . $transportId . " WHERE id IN (" . $category->ids . ")"
+							"UPDATE orm_avisota_mailing_category SET transportMode='byCategory', transport=" . $transportId . " WHERE id IN (" . $category->ids . ")"
 						);
 					}
 				}
@@ -822,9 +822,9 @@ class AvisotaUpdate extends BackendModule
 
 	protected function check2_0_0_u3()
 	{
-		return $this->Database->tableExists('orm_avisota_newsletter') &&
+		return $this->Database->tableExists('orm_avisota_mailing') &&
 			$this->Database->execute(
-				"SELECT COUNT(id) AS c FROM orm_avisota_newsletter WHERE recipients LIKE '%list-%' OR recipients LIKE '%mgroup-%'"
+				"SELECT COUNT(id) AS c FROM orm_avisota_mailing WHERE recipients LIKE '%list-%' OR recipients LIKE '%mgroup-%'"
 			)->c > 0;
 	}
 
@@ -860,13 +860,13 @@ class AvisotaUpdate extends BackendModule
 					);
 				}
 
-				if (!$this->Database->fieldExists('recipientsMode', 'orm_avisota_newsletter_category')) {
+				if (!$this->Database->fieldExists('recipientsMode', 'orm_avisota_mailing_category')) {
 					$this->Database->query(
-						"ALTER TABLE `orm_avisota_newsletter_category` ADD `recipientsMode` char(22) NOT NULL default ''"
+						"ALTER TABLE `orm_avisota_mailing_category` ADD `recipientsMode` char(22) NOT NULL default ''"
 					);
 				}
-				if (!$this->Database->fieldExists('recipients', 'orm_avisota_newsletter_category')) {
-					$this->Database->query("ALTER TABLE `orm_avisota_newsletter_category` ADD `recipients` blob NULL");
+				if (!$this->Database->fieldExists('recipients', 'orm_avisota_mailing_category')) {
+					$this->Database->query("ALTER TABLE `orm_avisota_mailing_category` ADD `recipients` blob NULL");
 				}
 
 				$sources               = array();
@@ -877,7 +877,7 @@ class AvisotaUpdate extends BackendModule
 				$newsletter = $this->Database
 					->execute(
 					"SELECT id, pid, recipients
-							   FROM orm_avisota_newsletter
+							   FROM orm_avisota_mailing
 							   WHERE recipients LIKE '%list-%' OR recipients LIKE '%mgroup-%'"
 				);
 				while ($newsletter->next()) {
@@ -995,13 +995,13 @@ class AvisotaUpdate extends BackendModule
 						}
 						$this->Database
 							->prepare(
-							"UPDATE orm_avisota_newsletter_category SET recipientsMode=?, recipients=? WHERE id=?"
+							"UPDATE orm_avisota_mailing_category SET recipientsMode=?, recipients=? WHERE id=?"
 						)
 							->execute('byCategory', serialize($tmp), $categoryId);
 
 						$this->Database
 							->query(
-							"UPDATE orm_avisota_newsletter SET recipients='' WHERE id IN (" . implode(
+							"UPDATE orm_avisota_mailing SET recipients='' WHERE id IN (" . implode(
 								',',
 								$newsletterIds
 							) . ")"
@@ -1011,7 +1011,7 @@ class AvisotaUpdate extends BackendModule
 					// every newsletter use its own source
 					else {
 						$this->Database
-							->prepare("UPDATE orm_avisota_newsletter_category SET recipientsMode=? WHERE id=?")
+							->prepare("UPDATE orm_avisota_mailing_category SET recipientsMode=? WHERE id=?")
 							->execute('byNewsletter', $categoryId);
 
 						// update each newsletter
@@ -1021,7 +1021,7 @@ class AvisotaUpdate extends BackendModule
 								$tmp[$k] = $v . ':*';
 							}
 							$this->Database
-								->prepare("UPDATE orm_avisota_newsletter SET recipients=? WHERE id=?")
+								->prepare("UPDATE orm_avisota_mailing SET recipients=? WHERE id=?")
 								->execute(serialize($tmp), $newsletterId);
 						}
 					}

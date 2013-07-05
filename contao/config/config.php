@@ -35,19 +35,20 @@ if (file_exists(__DIR__ . '/dynamics.php')) {
 /**
  * Entities
  */
-$GLOBALS['DOCTRINE_ENTITY_NAMESPACE_ALIAS']['Avisota\Contao'] = 'Avisota\Contao\Entity';
-$GLOBALS['DOCTRINE_ENTITY_NAMESPACE_MAP']['orm_avisota']      = 'Avisota\Contao\Entity';
-$GLOBALS['DOCTRINE_ENTITIES'][]                               = 'orm_avisota_mailing_list';
-$GLOBALS['DOCTRINE_ENTITIES'][]                               = 'orm_avisota_newsletter';
-$GLOBALS['DOCTRINE_ENTITIES'][]                               = 'orm_avisota_newsletter_category';
-$GLOBALS['DOCTRINE_ENTITIES'][]                               = 'orm_avisota_newsletter_content';
-$GLOBALS['DOCTRINE_ENTITIES'][]                               = 'orm_avisota_newsletter_theme';
-$GLOBALS['DOCTRINE_ENTITIES'][]                               = 'orm_avisota_queue';
-$GLOBALS['DOCTRINE_ENTITIES'][]                               = 'orm_avisota_recipient';
-$GLOBALS['DOCTRINE_ENTITIES'][]                               = 'orm_avisota_recipient_blacklist';
-$GLOBALS['DOCTRINE_ENTITIES'][]                               = 'orm_avisota_recipient_source';
-$GLOBALS['DOCTRINE_ENTITIES'][]                               = 'orm_avisota_recipient_subscription';
-$GLOBALS['DOCTRINE_ENTITIES'][]                               = 'orm_avisota_transport';
+$GLOBALS['DOCTRINE_ENTITY_NAMESPACE_ALIAS']['Avisota\Contao']        = 'Avisota\Contao\Entity';
+$GLOBALS['DOCTRINE_ENTITY_NAMESPACE_MAP']['orm_avisota']             = 'Avisota\Contao\Entity';
+$GLOBALS['DOCTRINE_ENTITY_CLASS']['Avisota\Contao\Entity\Recipient'] = 'Avisota\Contao\Entity\AbstractRecipient';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing_list';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing_category';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing_content';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing_theme';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_queue';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient_blacklist';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient_source';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient_subscription';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_transport';
 
 
 /**
@@ -169,18 +170,18 @@ $customModules = array();
 /*
 $backendUser          = BackendUser::getInstance();
 $database      = Database::getInstance();
-if ($database->fieldExists('showInMenu', 'orm_avisota_newsletter_category')) {
+if ($database->fieldExists('showInMenu', 'orm_avisota_mailing_category')) {
 	$category = $database->query(
-		'SELECT * FROM orm_avisota_newsletter_category WHERE showInMenu=\'1\' ORDER BY title'
+		'SELECT * FROM orm_avisota_mailing_category WHERE showInMenu=\'1\' ORDER BY title'
 	);
 	while ($category->next()) {
 		$customModules['avisota_newsletter_' . $category->id]          = array(
-			'href'       => 'table=orm_avisota_newsletter&amp;id=' . $category->id,
+			'href'       => 'table=orm_avisota_mailing&amp;id=' . $category->id,
 			'tables'     => array(
-				'orm_avisota_newsletter_category',
-				'orm_avisota_newsletter',
-				'orm_avisota_newsletter_content',
-				'orm_avisota_newsletter_create_from_draft'
+				'orm_avisota_mailing_category',
+				'orm_avisota_mailing',
+				'orm_avisota_mailing_content',
+				'orm_avisota_mailing_create_from_draft'
 			),
 			'send'       => array('Avisota', 'send'),
 			'icon'       => $category->menuIcon ? $category->menuIcon
@@ -215,10 +216,10 @@ $GLOBALS['BE_MOD'] = array_merge(
 			 'avisota_newsletter' => array
 			 (
 				 'tables'     => array(
-					 'orm_avisota_newsletter_category',
-					 'orm_avisota_newsletter',
-					 'orm_avisota_newsletter_content',
-					 'orm_avisota_newsletter_create_from_draft'
+					 'orm_avisota_mailing_category',
+					 'orm_avisota_mailing',
+					 'orm_avisota_mailing_content',
+					 'orm_avisota_mailing_create_from_draft'
 				 ),
 				 'send'       => array('Avisota', 'send'),
 				 'icon'       => 'system/modules/avisota/html/newsletter.png',
@@ -279,7 +280,7 @@ $GLOBALS['BE_MOD']['system'] = array_merge(
 		 'avisota_theme'            => array
 		 (
 			 'nested'     => 'avisota_config:newsletter',
-			 'tables'     => array('orm_avisota_newsletter_theme'),
+			 'tables'     => array('orm_avisota_mailing_theme'),
 			 'icon'       => 'system/modules/avisota/assets/images/theme.png',
 			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
 		 ),
@@ -385,7 +386,7 @@ $GLOBALS['orm_avisota_TRANSPORT']['service'] = 'Avisota\Transport\Service';
 //$GLOBALS['TL_HOOKS']['updatePersonalData'][]      = array('AvisotaDCA', 'hookUpdatePersonalData');
 //$GLOBALS['TL_HOOKS']['avisotaMailingListLabel'][] = array('AvisotaBackend', 'hookAvisotaMailingListLabel');
 //$GLOBALS['TL_HOOKS']['getUserNavigation'][]       = array('AvisotaBackend', 'hookGetUserNavigation');
-//$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('orm_avisota_newsletter_content', 'myLoadDataContainer');
+//$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('orm_avisota_mailing_content', 'myLoadDataContainer');
 $GLOBALS['TL_HOOKS']['nestedMenuPreContent'][]  = array('Avisota\Contao\Backend', 'hookNestedMenuPreContent');
 $GLOBALS['TL_HOOKS']['nestedMenuPostContent'][] = array('Avisota\Contao\Backend', 'hookNestedMenuPostContent');
 

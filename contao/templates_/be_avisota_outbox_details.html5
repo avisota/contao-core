@@ -8,11 +8,11 @@
 <div class="tl_filter tl_subpanel">
 <strong><?php echo $GLOBALS['TL_LANG']['MSC']['filter']; ?>:</strong>
 <select name="state" id="state" class="tl_select<?php if ($this->state): ?> active<?php endif; ?>">
-  <option value="tl_state"><?php echo $GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox']['state']; ?></option>
+  <option value="tl_state"><?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['state']; ?></option>
   <option value="tl_state">---</option>
-  <option value="outstanding"<?php if ($this->state == 'outstanding'): ?> selected="selected"<?php endif; ?>><?php echo $GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox']['outstanding']; ?></option>
-  <option value="sended"<?php if ($this->state == 'sended'): ?> selected="selected"<?php endif; ?>><?php echo $GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox']['sended']; ?></option>
-  <option value="failed"<?php if ($this->state == 'failed'): ?> selected="selected"<?php endif; ?>><?php echo $GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox']['failed']; ?></option>
+  <option value="outstanding"<?php if ($this->state == 'outstanding'): ?> selected="selected"<?php endif; ?>><?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['outstanding']; ?></option>
+  <option value="sended"<?php if ($this->state == 'sended'): ?> selected="selected"<?php endif; ?>><?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['sended']; ?></option>
+  <option value="failed"<?php if ($this->state == 'failed'): ?> selected="selected"<?php endif; ?>><?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['failed']; ?></option>
 </select>
 </div>
 
@@ -61,16 +61,16 @@
   <thead>
   <tr class="head_0">
     <th class="col_0">&nbsp;</th>
-    <th class="col_1">&nbsp;<?php echo $GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox']['sended_on'] ?>&nbsp;</th>
-    <th class="col_2">&nbsp;<?php echo $GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox']['recipient'] ?>&nbsp;</th>
-    <th class="col_3">&nbsp;<?php echo $GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox']['source'] ?>&nbsp;</th>
+    <th class="col_1">&nbsp;<?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['sended_on'] ?>&nbsp;</th>
+    <th class="col_2">&nbsp;<?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['recipient'] ?>&nbsp;</th>
+    <th class="col_3">&nbsp;<?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['source'] ?>&nbsp;</th>
   </tr>
   </thead>
   <tbody>
   <?php foreach ($this->recipients as $k=>$r): ?>
   <tr class="row_<?php echo $k ?>">
-    <td class="col_0"><img src="system/modules/avisota/html/outbox_<?php echo $r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding' ?>.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox'][($r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding')]); ?>" title="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox'][$r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding']); ?>" /></td>
-    <td class="col_1"><?php if ($r['send'] > 0): echo $this->parseDate($GLOBALS['TL_LANG']['orm_avisota_newsletter_outbox']['dateimsFormat'], $r['send']); endif; ?></td>
+    <td class="col_0"><img src="system/modules/avisota/html/outbox_<?php echo $r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding' ?>.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_mailing_outbox'][($r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding')]); ?>" title="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_mailing_outbox'][$r['send'] > 0 ? ($r['failed'] ? 'failed' : 'sended') : 'outstanding']); ?>" /></td>
+    <td class="col_1"><?php if ($r['send'] > 0): echo $this->parseDate($GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['dateimsFormat'], $r['send']); endif; ?></td>
     <td class="col_2"><?php echo $r['linkedEmail'] ?></td>
     <td class="col_3"><?php echo $r['source']['linkedTitle'] ?></td>
   </tr>

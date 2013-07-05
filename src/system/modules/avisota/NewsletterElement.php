@@ -115,7 +115,7 @@ abstract class NewsletterElement extends AvisotaFrontend
 		$imgSize = getimagesize(TL_ROOT . '/' . $itemData['singleSRC']);
 
 		if (!$maxWidth) {
-			$maxWidth = ($this->Input->get('table') == 'orm_avisota_newsletter_content' ? 320
+			$maxWidth = ($this->Input->get('table') == 'orm_avisota_mailing_content' ? 320
 				: $GLOBALS['TL_CONFIG']['maxImageWidth']);
 		}
 

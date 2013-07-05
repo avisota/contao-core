@@ -52,25 +52,23 @@ class SubscriptionManager
 
 	const OPT_NO_CONFIRMATION = 16;
 
-	public function resolveRecipient($recipient)
+	public function resolveRecipient($recipientIdentity)
 	{
 		$entityManager = EntityHelper::getEntityManager();
 		$repository = $entityManager->getRepository('Avisota\Contao\Entity\Recipient');
 
 		// new recipient
-		if (is_array($recipient)) {
+		if (is_array($recipientIdentity)) {
 			/** @var \Avisota\Contao\Entity\Recipient $recipient */
-			$recipient = $repository->findOneBy(array('email' => $recipient['email']));
+			$recipient = $repository->findOneBy(array('email' => $recipientIdentity['email']));
 
 			$store = false;
 			if (!$recipient) {
 				$recipient = new Recipient();
+				$recipient->setTstamp(new \DateTime());
 				$store = true;
 			}
-			foreach ($recipient as $key => $value) {
-				$setter = 'set' . ucfirst($key);
-				$recipient->$setter($value);
-			}
+			$recipient->fromArray($recipientIdentity);
 			if ($store) {
 				$entityManager->persist($recipient);
 				$entityManager->flush();
@@ -78,19 +76,19 @@ class SubscriptionManager
 		}
 
 		// by id
-		else if (is_numeric($recipient)) {
+		else if (is_numeric($recipientIdentity)) {
 			/** @var \Avisota\Contao\Entity\Recipient $recipient */
-			$recipient = $repository->find($recipient);
+			$recipient = $repository->find($recipientIdentity);
 		}
 
 		// by email
-		else if (is_string($recipient)) {
+		else if (is_string($recipientIdentity)) {
 			/** @var \Avisota\Contao\Entity\Recipient $recipient */
-			$recipient = $repository->findOneBy(array('email' => $recipient));
+			$recipient = $repository->findOneBy(array('email' => $recipientIdentity));
 		}
 
 		if (!$recipient instanceof Recipient) {
-			throw new \RuntimeException('Invalid argument ' . gettype($recipient));
+			throw new \RuntimeException('Invalid argument ' . gettype($recipientIdentity));
 		}
 
 		return $recipient;
@@ -189,20 +187,22 @@ class SubscriptionManager
 		$lists     = $this->resolveLists($lists, true);
 
 		$blacklists = $this->isBlacklisted($recipient, $lists);
-		if ($options & static::OPT_IGNORE_BLACKLIST) {
-			foreach ($blacklists as $blacklist) {
-				$entityManager->detach($blacklist);
-			}
-		}
-		else {
-			foreach ($blacklists as $blacklist) {
-				if ($blacklist->getList() == static::BLACKLIST_GLOBAL) {
-					// break on global blacklist
-					return;
+		if ($blacklists) {
+			if ($options & static::OPT_IGNORE_BLACKLIST) {
+				foreach ($blacklists as $blacklist) {
+					$entityManager->detach($blacklist);
 				}
-				else {
-					$pos = array_search($blacklist->getList(), $lists);
-					unset($lists[$pos]);
+			}
+			else {
+				foreach ($blacklists as $blacklist) {
+					if ($blacklist->getList() == static::BLACKLIST_GLOBAL) {
+						// break on global blacklist
+						return;
+					}
+					else {
+						$pos = array_search($blacklist->getList(), $lists);
+						unset($lists[$pos]);
+					}
 				}
 			}
 		}
@@ -220,10 +220,8 @@ class SubscriptionManager
 				$subscription = new RecipientSubscription();
 				$subscription->setRecipient($recipient->getId());
 				$subscription->setList($list);
-				if ($options & static::OPT_ACTIVATE) {
-					$subscription->setConfirmed(true);
-				}
-				$subscription->setToken(substr(md5($recipient->getEmail() . '|' . mt_rand() . '|' . microtime(true)), 0, 5));
+				$subscription->setConfirmed($options & static::OPT_ACTIVATE);
+				$subscription->setToken(substr(md5($recipient->getEmail() . '|' . mt_rand() . '|' . microtime(true)), 0, 16));
 				$entityManager->persist($subscription);
 				$entityManager->flush();
 

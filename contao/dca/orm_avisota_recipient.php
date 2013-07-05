@@ -40,7 +40,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 		'ondelete_callback' => array
 		(
 			array('Avisota\Contao\DataContainer\Recipient', 'ondelete_callback')
-		)
+		),
 	),
 	// List
 	'list'         => array
@@ -153,12 +153,12 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 			'field' => array(
 				'id' => true,
 				'type' => 'integer'
-			)
+			),
 		),
 		'tstamp' => array(
 			'field' => array(
 				'type' => 'timestamp'
-			)
+			),
 		),
 		'email'                 => array
 		(
@@ -235,7 +235,10 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'exportable'         => true,
 				'feEditable'         => true,
 				'tl_class'           => 'w50'
-			)
+			),
+			'field' => array(
+				'nullable' => true
+			),
 		),
 		'title'                 => array
 		(
@@ -251,7 +254,10 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'exportable' => true,
 				'feEditable' => true,
 				'tl_class'   => 'w50'
-			)
+			),
+			'field' => array(
+				'nullable' => true
+			),
 		),
 		'firstname'             => array
 		(
@@ -267,7 +273,10 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'exportable' => true,
 				'feEditable' => true,
 				'tl_class'   => 'w50'
-			)
+			),
+			'field' => array(
+				'nullable' => true
+			),
 		),
 		'lastname'              => array
 		(
@@ -283,7 +292,10 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'exportable' => true,
 				'feEditable' => true,
 				'tl_class'   => 'w50'
-			)
+			),
+			'field' => array(
+				'nullable' => true
+			),
 		),
 		'gender'                => array
 		(
@@ -300,7 +312,10 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'exportable'         => true,
 				'feEditable'         => true,
 				'tl_class'           => 'clr'
-			)
+			),
+			'field' => array(
+				'nullable' => true
+			),
 		),
 		'permitPersonalTracing' => array
 		(
@@ -313,7 +328,10 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'exportable' => true,
 				'feEditable' => true,
 				'tl_class'   => 'clr m12'
-			)
+			),
+			'field' => array(
+				'nullable' => true
+			),
 		),
 		'token'                 => array
 		(
@@ -335,7 +353,10 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'exportable' => true,
 				'doNotShow'  => true,
 				'doNotCopy'  => true
-			)
+			),
+			'field' => array(
+				'nullable' => true
+			),
 		),
 		'addedBy'               => array
 		(
@@ -350,13 +371,10 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'exportable' => true,
 				'doNotShow'  => true,
 				'doNotCopy'  => true
-			)
-		),
-		'notification' => array(
+			),
 			'field' => array(
-				'type' => 'integer',
-				'length' => 1
-			)
-		)
+				'nullable' => true
+			),
+		),
 	)
 );

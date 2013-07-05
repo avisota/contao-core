@@ -17,50 +17,61 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['subject']              = array(
-	'Betreff',
-	'Bitte geben Sie den Betreff des Newsletters ein.'
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['subject']       = array(
+	'Subject',
+	'Please enter the subject of this newsletter.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['alias']                = array(
-	'Newsletteralias',
-	'Der Newsletteralias ist eine eindeutige Referenz, die anstelle der numerischen Newsletter-Id aufgerufen werden kann.'
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['alias']         = array(
+	'Alias',
+	'The newsletter alias is a unique reference to the newsletter which can be called instead of its numeric ID.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['addFile']              = array(
-	'Dateien anhängen',
-	'Dem Newsletter eine oder mehrere Dateien anhängen.'
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['description']   = array(
+	'Description',
+	'Please enter a short description for this newsletter.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['files']                = array(
-	'Dateianhänge',
-	'Bitte wählen Sie die anzuhängenden Dateien aus der Dateiübersicht.'
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['keywords']      = array(
+	'Keywords',
+	'Please enter the keywords for this newsletter.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['setRecipients']        = array(
-	'Empfänger zuweisen',
-	'Wählen Sie für diesen Newsletter eine neue Liste von Empfängern aus.'
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['addFile']       = array(
+	'Attach files',
+	'Attach additional files to the newsletter.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['recipients']           = array(
-	'Empfänger',
-	'Wählen Sie hier die Empfänger aus.'
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['files']         = array(
+	'Attachments',
+	'Please chose the attachments.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['setTheme']             = array(
-	'Layout zuweisen',
-	'Wählen Sie für diesen Newsletter ein neues Layout aus.'
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['setRecipients'] = array(
+	'Select recipients',
+	'Select the recipients for this newsletter.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['theme']                = array(
-	'Layout',
-	'Wählen Sie hier das Layouts aus.'
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['recipients']    = array(
+	'Recipients',
+	'Please chose the recipients for this newsletter.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['setTransport']         = array(
-	'Transportmodul zuweisen',
-	'Wählen Sie für diesen Newsletter ein neues Transportmodul aus.'
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['setTheme']      = array(
+	'Assign theme',
+	'Assign a theme to this newsletter.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['transport']            = array(
-	'Transportmodul',
-	'Wählen Sie hier das Transportmodul aus.'
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['theme']         = array(
+	'Theme',
+	'Please chose the newsletter theme.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['tstamp']               = array(
-	'Änderungsdatum',
-	'Datum und Uhrzeit der letzten Änderung'
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['setTransport']  = array(
+	'Assign transport module',
+	'Assign a transport module to this newsletter.'
 );
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['transport']     = array(
+	'Transport module',
+	'Please chose the transport module.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['tstamp']        = array(
+	'Revision date',
+	'Date and time of the latest revision'
+);
+
+// TODO
+/*
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['sendPreviewToUser']    = array(
 	'Testsendung an Benutzer',
 	'Die Testsendung des Newsletters an diesen Benutzer versenden.'
@@ -82,16 +93,20 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing']['preview_personalized'] = array(
 	'Anonym',
 	'Persönlich'
 );
+*/
 
 
 /**
  * Legends
  */
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['newsletter_legend'] = 'Newsletter';
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['recipient_legend']  = 'Empfänger';
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['theme_legend']      = 'Layout-Einstellungen';
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['transport_legend']  = 'Transport-Einstellungen';
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['attachment_legend'] = 'Dateianhänge';
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['meta_legend']       = 'Details';
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['recipient_legend']  = 'Recipient';
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['theme_legend']      = 'Theme settings';
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['transport_legend']  = 'Transport settings';
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['attachment_legend'] = 'Attachments';
+
+/*
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['headline']          = 'Newsletter ansehen und versenden';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['from']              = 'Absender';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['live']              = 'Vorschau aktualisieren';
@@ -100,10 +115,12 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing']['unsubscribe']       = 'vom Newslette
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['salutation']        = 'Sehr geehrte/-r {fullname}';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['salutation_male']   = 'Sehr geehrter Herr {fullname}';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['salutation_female'] = 'Sehr geehrte Frau {fullname}';
+*/
 
 /**
  * Reference
  */
+/*
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['created_from_draft']  = 'Newsletter wurde erstellt.';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['view']                = array(
 	'Ansehen und Versenden',
@@ -121,54 +138,59 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing']['mgroup']              = 'Mitgliederg
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['notSend']             = 'noch nicht versendet';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['inheritFromCategory'] = '- von Kategorie übernehmen -';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['fallback']            = '(fallback)';
+*/
 
 /**
  * Buttons
  */
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['new']               = array(
-	'Neuer Newsletter',
-	'Einen neuen Newsletter erstellen'
+	'New newsletter',
+	'Add a new newsletter'
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['create_from_draft'] = array(
-	'Neuer Newsletter aus Vorlage',
-	'Einen neuen Newsletter aus Vorlage erstellen'
+	'New newsletter from boilerplate',
+	'Add a new newsletter from boilerplate'
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['show']              = array(
-	'Newsletterdetails',
-	'Details des Newsletter ID %s anzeigen'
+	'Newsletter details',
+	'Show the details of newsletter ID %s'
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['copy']              = array(
-	'Newsletter duplizieren',
-	'Newsletter ID %s duplizieren'
+	'Duplicate newsletter',
+	'Duplicate newsletter ID %s'
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['delete']            = array(
-	'Newsletter löschen',
-	'Newsletter ID %s löschen'
+	'Delete newsletter',
+	'Delete newsletter ID %s'
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['edit']              = array(
-	'Newsletter bearbeiten',
-	'Newsletter ID %s bearbeiten'
+	'Edit newsletter',
+	'Edit newsletter ID %s'
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['editheader']        = array(
-	'Newslettereinstellungen bearbeiten',
-	'Einstellungen des Newsletter ID %s bearbeiten'
+	'Edit newsletter settings',
+	'Edit newsletter settings ID %s'
 );
 
 
 /**
  * Personalisation
  */
+/*
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['anonymous']['salutation'] = 'Sehr geehrte/-r {fullname}';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['anonymous']['name']       = 'Abonnent/-in';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['anonymous']['fullname']   = 'Abonnent/-in';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['anonymous']['shortname']  = 'Abonnent/-in';
+*/
 
 
 /**
  * Errors
  */
+/*
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['transport_error'] = 'Beim Versand ist ein Fehler aufgetreten, der noch nicht weiter analysiert wurde.<br>
 Bitte übermitteln Sie folgende Meldung an den Entwickler.<br/>
 &mdash; via <a href="http://contao-forge.org/projects/avisota/issues" onclick="window.open(this.href); return false;">Contao Forge</a><br/>
 &mdash; via <a href="http://www.contao-community.de/forumdisplay.php?121-Avisota" onclick="window.open(this.href); return false;">Contao Community Forum</a><br/>
 &mdash; via <a href="mailto:info@infinitysoft.de">E-Mail</a>';
+*/

@@ -23,7 +23,7 @@ namespace Avisota\Contao\Module;
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    Avisota
  */
-class Subscribe extends ModuleAvisotaRecipientForm
+class Subscribe extends AbstractRecipientForm
 {
 	/**
 	 * Template
@@ -32,7 +32,7 @@ class Subscribe extends ModuleAvisotaRecipientForm
 	 */
 	protected $strTemplate = 'mod_avisota_subscribe';
 
-	public function __construct(Database_Result $module)
+	public function __construct(\Database_Result $module)
 	{
 		parent::__construct($module);
 
@@ -64,8 +64,8 @@ class Subscribe extends ModuleAvisotaRecipientForm
 		$this->addForm();
 	}
 
-	protected function submit(array $recipientData, array $mailingLists, FrontendTemplate $template)
+	protected function submit(array $recipientData, array $mailingLists, \TwigFrontendTemplate $template)
 	{
-		return $this->handleSubscribeSubmit($recipientData, $mailingLists, $template);
+		return $this->handleSubscribeSubmit($recipientData, $mailingLists);
 	}
 }

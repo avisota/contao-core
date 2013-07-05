@@ -1,4 +1,4 @@
-<?php if (!isset($GLOBALS['objPage'])): echo $GLOBALS['TL_LANG']['orm_avisota_newsletter']['online'] . "\n" ?>
+<?php if (!isset($GLOBALS['objPage'])): echo $GLOBALS['TL_LANG']['orm_avisota_mailing']['online'] . "\n" ?>
 [{{newsletter::href}}]
 <?php endif; ?>
 

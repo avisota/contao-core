@@ -42,10 +42,10 @@ CREATE TABLE `orm_avisota_recipient_blacklist` (
 -- --------------------------------------------------------
 
 --
--- Table `orm_avisota_newsletter_category`
+-- Table `orm_avisota_mailing_category`
 -- 
 
-CREATE TABLE `orm_avisota_newsletter_category` (
+CREATE TABLE `orm_avisota_mailing_category` (
   `viewOnlinePage` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `alias` (`alias`)
@@ -55,10 +55,10 @@ CREATE TABLE `orm_avisota_newsletter_category` (
 
 
 -- 
--- Table `orm_avisota_newsletter_content`
+-- Table `orm_avisota_mailing_content`
 -- 
 
-CREATE TABLE `orm_avisota_newsletter_content` (
+CREATE TABLE `orm_avisota_mailing_content` (
   `html` mediumtext NULL,
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)

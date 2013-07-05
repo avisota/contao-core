@@ -15,6 +15,7 @@
 
 namespace Avisota\Contao\Module;
 
+use Avisota\Contao\Entity\MailingList;
 use Avisota\Contao\Entity\Recipient;
 use Avisota\Contao\SubscriptionManager;
 use Contao\Doctrine\ORM\EntityHelper;
@@ -46,7 +47,7 @@ abstract class AbstractRecipientForm extends \TwigModule
 	/**
 	 * Construct the content element
 	 */
-	public function __construct(Database_Result $module)
+	public function __construct(\Database_Result $module)
 	{
 		parent::__construct($module);
 
@@ -79,23 +80,9 @@ abstract class AbstractRecipientForm extends \TwigModule
 
 	protected function handleSubscribeSubmit(array $recipientData, array $mailingLists)
 	{
-		$entityManager = EntityHelper::getEntityManager();
-		$recipientRepository = EntityHelper::getRepository('Avisota\Contao:Recipient');
-
-		/** @var Recipient $recipient */
-		$recipient = $recipientRepository->findOneBy(array('email' => strtolower($recipientData['email'])));
-
-		if (!$recipient) {
-			$recipient = new Recipient();
-		}
-
-		$recipient->fromArray($recipientData);
-		$entityManager->persist($recipient);
-		$entityManager->flush();
-
 		$subscriptionManager = new SubscriptionManager();
-		$subscriptions = $subscriptionManager->subscribe(
-			$recipient,
+		$subscriptions       = $subscriptionManager->subscribe(
+			$recipientData,
 			$mailingLists,
 			SubscriptionManager::OPT_IGNORE_BLACKLIST
 		);
@@ -157,7 +144,7 @@ abstract class AbstractRecipientForm extends \TwigModule
 	protected function addForm()
 	{
 		// create the new form
-		$template = new FrontendTemplate($this->formTemplate);
+		$template = new \TwigFrontendTemplate($this->formTemplate);
 		$template->setData($this->arrData);
 
 		// set defaults
@@ -181,42 +168,38 @@ abstract class AbstractRecipientForm extends \TwigModule
 		}
 
 		// The recipient data
-		$recipientData    = array();
-		$mailingLists = array();
+		$recipientData = array();
+		$mailingLists  = array();
 
 		// The form fields
-		$fields = array();
+		$fields    = array();
 		$hasUpload = false;
 		$i         = 0;
 
+		// fetch mailing lists
+		if (count($this->avisota_lists)) {
+			$queryBuilder = EntityHelper::getEntityManager()
+				->createQueryBuilder();
+			$mailingLists = $queryBuilder
+				->select('m')
+				->from('Avisota\Contao:MailingList', 'm')
+				->where(
+					$queryBuilder
+						->expr()
+						->in('m.id', '?1')
+				)
+				->setParameter(1, $this->avisota_lists)
+				->getQuery()
+				->getResult();
+		}
+
 		// add the lists options
 		if ($this->avisota_show_lists) {
-			$list = $this->Database
-				->execute(
-				"SELECT
-						*
-					FROM
-						orm_avisota_mailing_list" . (count($this->avisota_lists) ? "
-					WHERE
-						id IN (" . implode(',', $this->avisota_lists) . ")" : '') . "
-					ORDER BY
-						title"
-			);
-			while ($list->next()) {
-				$GLOBALS['TL_DCA']['orm_avisota_recipient']['fields']['lists']['options'][$list->id] = $list->title;
+			/** @var MailingList $mailingList */
+			foreach ($mailingLists as $mailingList) {
+				$GLOBALS['TL_DCA']['orm_avisota_recipient']['fields']['lists']['options'][$mailingList->getId(
+				)] = $mailingList->getTitle();
 			}
-		}
-
-		// or set selected lists, if they are not displayed
-		else if (count($this->avisota_lists)) {
-			$mailingLists = $this->avisota_lists;
-		}
-
-		// or use all, if there are no lists selected
-		else {
-			$mailingLists = $this->Database
-				->query("SELECT id FROM orm_avisota_mailing_list")
-				->fetchEach('id');
 		}
 
 		// Build form
@@ -243,7 +226,7 @@ abstract class AbstractRecipientForm extends \TwigModule
 
 			$widget->storeValues = true;
 			$widget->rowClass    = 'row_' . $i . (($i == 0) ? ' row_first' : '') . ((($i % 2) == 0) ? ' even'
-				: ' odd');
+					: ' odd');
 
 			// Increase the row count if its a password field
 			if ($widget instanceof FormPassword) {
@@ -307,10 +290,7 @@ abstract class AbstractRecipientForm extends \TwigModule
 				$hasUpload = true;
 			}
 
-			$temp = $widget->parse();
-
-			$template->fields .= $temp;
-			$fields[$field] = $temp;
+			$fields[$field] = $widget;
 
 			++$i;
 		}
@@ -345,20 +325,25 @@ abstract class AbstractRecipientForm extends \TwigModule
 			}
 		}
 
-		// Add fields
-		foreach ($fields as $k => $v) {
-			$template->$k = $v;
+		// generate form action page
+		if ($this->avisota_form_target) {
+			$formAction = $this->generateFrontendUrl(
+				$this
+					->getPageDetails($this->avisota_form_target)
+					->row()
+			);
+		}
+		else {
+			$formAction = $this->getIndexFreeRequest();
 		}
 
+		// Complete formular data
+		$template->fields     = $fields;
 		$template->formId     = $this->formName;
-		$template->formAction = $this->avisota_form_target ? $this->generateFrontendUrl(
-			$this
-				->getPageDetails($this->avisota_form_target)
-				->row()
-		) : $this->getIndexFreeRequest();
+		$template->formAction = $formAction;
 
 		$this->Template->form = $template->parse();
 	}
 
-	protected abstract function submit(array $recipientData, array $mailingLists, FrontendTemplate $template);
+	protected abstract function submit(array $recipientData, array $mailingLists, \TwigFrontendTemplate $template);
 }

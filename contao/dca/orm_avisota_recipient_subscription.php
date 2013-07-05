@@ -25,59 +25,64 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_subscription'] = array
 		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_NONE
 	),
 	// Fields
-	'fields'       => array
+	'fields' => array
 	(
-		'recipient' => array
+		'recipient'        => array
 		(
 			'field' => array(
-				'id' => true,
-				'type'   => 'integer',
+				'id'   => true,
+				'type' => 'integer',
 			)
 		),
-		'list'  => array
+		'list'             => array
 		(
 			'field' => array(
-				'id' => true,
+				'id'     => true,
 				'type'   => 'string',
 				'length' => 64,
 			)
 		),
-		'confirmationSent'  => array
+		'confirmationSent' => array
 		(
 			'field' => array(
-				'type'   => 'timestamp',
+				'type'     => 'timestamp',
+				'nullable' => true,
 			)
 		),
-		'reminderSent'  => array
+		'reminderSent'     => array
 		(
 			'field' => array(
-				'type'   => 'timestamp',
+				'type'     => 'timestamp',
+				'nullable' => true,
 			)
 		),
-		'reminderCount'  => array
+		'reminderCount'    => array
 		(
 			'field' => array(
-				'type'   => 'timestamp',
+				'type'     => 'timestamp',
+				'nullable' => true,
 			)
 		),
-		'confirmed'  => array
+		'confirmed'        => array
 		(
 			'field' => array(
-				'type'   => 'boolean',
+				'type' => 'boolean',
 			)
 		),
-		'confirmedAt'  => array
+		'confirmedAt'      => array
 		(
 			'field' => array(
-				'type'   => 'timestamp',
+				'type'     => 'timestamp',
+				'nullable' => true,
 			)
 		),
-		'token'  => array
+		'token'            => array
 		(
 			'field' => array(
-				'type'   => 'string',
-				'length' => 8,
-				'fixed'  => true,
+				'type'     => 'string',
+				'length'   => 16,
+				'fixed'    => true,
+				'nullable' => true,
 			)
 		),
 	)

@@ -32,7 +32,7 @@ class AvisotaNewsletterCategory
 		$resultSet = Database::getInstance()
 			->prepare(
 			'SELECT *
-					   FROM orm_avisota_newsletter_category
+					   FROM orm_avisota_mailing_category
 					   WHERE id=? OR alias=?'
 		)
 			->execute($id, $id);

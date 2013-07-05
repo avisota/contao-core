@@ -27,8 +27,8 @@ class Newsletter extends \Controller
 		$database = \Database::getInstance();
 
 		if ($input->get('do') == 'avisota_newsletter' &&
-			$input->get('table') == 'orm_avisota_newsletter' &&
-			$database->tableExists('orm_avisota_newsletter_category')
+			$input->get('table') == 'orm_avisota_mailing' &&
+			$database->tableExists('orm_avisota_mailing_category')
 		) {
 			try {
 				$newsletterCategoryRepository = EntityHelper::getRepository('Avisota\Contao:NewsletterCategory');
@@ -42,31 +42,31 @@ class Newsletter extends \Controller
 
 					switch ($newsletterCategory->getRecipientsMode()) {
 						case 'byNewsletterOrCategory':
-							$GLOBALS['TL_DCA']['orm_avisota_newsletter']['metapalettes']['default']['recipient'][] = 'setRecipients';
+							$GLOBALS['TL_DCA']['orm_avisota_mailing']['metapalettes']['default']['recipient'][] = 'setRecipients';
 							break;
 
 						case 'byNewsletter':
-							$GLOBALS['TL_DCA']['orm_avisota_newsletter']['metapalettes']['default']['recipient'][] = 'recipients';
+							$GLOBALS['TL_DCA']['orm_avisota_mailing']['metapalettes']['default']['recipient'][] = 'recipients';
 							break;
 					}
 
 					switch ($newsletterCategory->getThemeMode()) {
 						case 'byNewsletterOrCategory':
-							$GLOBALS['TL_DCA']['orm_avisota_newsletter']['metapalettes']['default']['theme'][] = 'setTheme';
+							$GLOBALS['TL_DCA']['orm_avisota_mailing']['metapalettes']['default']['theme'][] = 'setTheme';
 							break;
 
 						case 'byNewsletter':
-							$GLOBALS['TL_DCA']['orm_avisota_newsletter']['metapalettes']['default']['theme'][] = 'theme';
+							$GLOBALS['TL_DCA']['orm_avisota_mailing']['metapalettes']['default']['theme'][] = 'theme';
 							break;
 					}
 
 					switch ($newsletterCategory->getTransportMode()) {
 						case 'byNewsletterOrCategory':
-							$GLOBALS['TL_DCA']['orm_avisota_newsletter']['metapalettes']['default']['transport'][] = 'setTransport';
+							$GLOBALS['TL_DCA']['orm_avisota_mailing']['metapalettes']['default']['transport'][] = 'setTransport';
 							break;
 
 						case 'byNewsletter':
-							$GLOBALS['TL_DCA']['orm_avisota_newsletter']['metapalettes']['default']['transport'][] = 'transport';
+							$GLOBALS['TL_DCA']['orm_avisota_mailing']['metapalettes']['default']['transport'][] = 'transport';
 							break;
 					}
 				}
@@ -77,21 +77,21 @@ class Newsletter extends \Controller
 					switch ($newsletterCategory->getRecipientsMode()) {
 						case 'byNewsletterOrCategory':
 						case 'byCategory':
-							$GLOBALS['TL_DCA']['orm_avisota_newsletter']['list']['sorting']['headerFields'][] = 'recipients';
+							$GLOBALS['TL_DCA']['orm_avisota_mailing']['list']['sorting']['headerFields'][] = 'recipients';
 							break;
 					}
 
 					switch ($newsletterCategory->getThemeMode()) {
 						case 'byNewsletterOrCategory':
 						case 'byCategory':
-							$GLOBALS['TL_DCA']['orm_avisota_newsletter']['list']['sorting']['headerFields'][] = 'theme';
+							$GLOBALS['TL_DCA']['orm_avisota_mailing']['list']['sorting']['headerFields'][] = 'theme';
 							break;
 					}
 
 					switch ($newsletterCategory->getTransportMode()) {
 						case 'byNewsletterOrCategory':
 						case 'byCategory':
-							$GLOBALS['TL_DCA']['orm_avisota_newsletter']['list']['sorting']['headerFields'][] = 'transport';
+							$GLOBALS['TL_DCA']['orm_avisota_mailing']['list']['sorting']['headerFields'][] = 'transport';
 							break;
 					}
 				}
@@ -129,7 +129,7 @@ class Newsletter extends \Controller
 
 		// Check permissions to add channels
 		if (!$user->hasAccess('create', 'avisota_newsletter_permissions')) {
-			$GLOBALS['TL_DCA']['orm_avisota_newsletter']['config']['closed'] = true;
+			$GLOBALS['TL_DCA']['orm_avisota_mailing']['config']['closed'] = true;
 		}
 
 		// Check current action
@@ -147,7 +147,7 @@ class Newsletter extends \Controller
 				$pid = -1;
 				if ($input->get('id')) {
 					$newsletter = $database
-						->prepare("SELECT * FROM orm_avisota_newsletter WHERE id=?")
+						->prepare("SELECT * FROM orm_avisota_mailing WHERE id=?")
 						->execute($input->get('id'));
 					if ($newsletter->next()) {
 						$pid = $newsletter->pid;
@@ -162,7 +162,7 @@ class Newsletter extends \Controller
 						'Not enough permissions to ' . $input->get(
 							'act'
 						) . ' avisota newsletter ID "' . $input->get('id') . '"',
-						'orm_avisota_newsletter checkPermission',
+						'orm_avisota_mailing checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -190,7 +190,7 @@ class Newsletter extends \Controller
 				if (strlen($input->get('act'))) {
 					$this->log(
 						'Not enough permissions to ' . $input->get('act') . ' avisota newsletter',
-						'orm_avisota_newsletter checkPermission',
+						'orm_avisota_mailing checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -216,7 +216,7 @@ class Newsletter extends \Controller
 		$user = \BackendUser::getInstance();
 
 		return (!$row['sendOn'] && ($user->isAdmin || count(
-					preg_grep('/^orm_avisota_newsletter::/', $user->alexf)
+					preg_grep('/^orm_avisota_mailing::/', $user->alexf)
 				) > 0)) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
 				$title
 			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
@@ -239,7 +239,7 @@ class Newsletter extends \Controller
 		$user = \BackendUser::getInstance();
 
 		return (!$row['sendOn'] && ($user->isAdmin || count(
-					preg_grep('/^orm_avisota_newsletter::/', $user->alexf)
+					preg_grep('/^orm_avisota_mailing::/', $user->alexf)
 				) > 0)) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
 				$title
 			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
@@ -315,8 +315,8 @@ class Newsletter extends \Controller
 		$user = \BackendUser::getInstance();
 
 		if (!$user->isAdmin && !$user->hasAccess('send', 'avisota_newsletter_permissions')) {
-			$label = $GLOBALS['TL_LANG']['orm_avisota_newsletter']['view_only'][0];
-			$title = $GLOBALS['TL_LANG']['orm_avisota_newsletter']['view_only'][1];
+			$label = $GLOBALS['TL_LANG']['orm_avisota_mailing']['view_only'][0];
+			$title = $GLOBALS['TL_LANG']['orm_avisota_mailing']['view_only'][1];
 		}
 		return '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
 			$title
@@ -325,7 +325,7 @@ class Newsletter extends \Controller
 
 	public function addHeader($add, $dc)
 	{
-		$key       = $GLOBALS['TL_LANG']['orm_avisota_newsletter_category']['recipients'][0];
+		$key       = $GLOBALS['TL_LANG']['orm_avisota_mailing_category']['recipients'][0];
 		$add[$key] = array();
 
 		$newsletterCategoryRepository = EntityHelper::getRepository('Avisota\Contao:NewsletterCategory');
@@ -350,7 +350,7 @@ class Newsletter extends \Controller
 						$source,
 						$group,
 						$list,
-						$fallback ? ' ' . $GLOBALS['TL_LANG']['orm_avisota_newsletter']['fallback'] : ''
+						$fallback ? ' ' . $GLOBALS['TL_LANG']['orm_avisota_mailing']['fallback'] : ''
 					);
 				}
 			}
@@ -361,14 +361,14 @@ class Newsletter extends \Controller
 
 
 		if ($newsletterCategory->getThemeMode() == 'byNewsletterOrCategory') {
-			$key = $GLOBALS['TL_LANG']['orm_avisota_newsletter_category']['theme'][0];
-			$add[$key] .= ' ' . $GLOBALS['TL_LANG']['orm_avisota_newsletter']['fallback'];
+			$key = $GLOBALS['TL_LANG']['orm_avisota_mailing_category']['theme'][0];
+			$add[$key] .= ' ' . $GLOBALS['TL_LANG']['orm_avisota_mailing']['fallback'];
 		}
 
 
 		if ($newsletterCategory->getTransportMode() == 'byNewsletterOrCategory') {
-			$key = $GLOBALS['TL_LANG']['orm_avisota_newsletter_category']['transport'][0];
-			$add[$key] .= ' ' . $GLOBALS['TL_LANG']['orm_avisota_newsletter']['fallback'];
+			$key = $GLOBALS['TL_LANG']['orm_avisota_mailing_category']['transport'][0];
+			$add[$key] .= ' ' . $GLOBALS['TL_LANG']['orm_avisota_mailing']['fallback'];
 		}
 
 
@@ -413,7 +413,7 @@ class Newsletter extends \Controller
 		if ($row[$GLOBALS['MAGIC_ADD_GROUP_INDEX']]['sendOn'] > 0) {
 			return $this->parseDate('F Y', $row[$GLOBALS['MAGIC_ADD_GROUP_INDEX']]['sendOn']);
 		}
-		return $GLOBALS['TL_LANG']['orm_avisota_newsletter']['notSend'];
+		return $GLOBALS['TL_LANG']['orm_avisota_mailing']['notSend'];
 	}
 
 	/**
@@ -437,7 +437,7 @@ class Newsletter extends \Controller
 		}
 
 		$aliasResultSet = $database
-			->prepare("SELECT id FROM orm_avisota_newsletter WHERE alias=?")
+			->prepare("SELECT id FROM orm_avisota_mailing WHERE alias=?")
 			->execute($value);
 
 		// Check whether the news alias exists
