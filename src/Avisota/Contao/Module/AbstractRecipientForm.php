@@ -87,7 +87,11 @@ abstract class AbstractRecipientForm extends \TwigModule
 			SubscriptionManager::OPT_IGNORE_BLACKLIST
 		);
 
-		return $subscriptions;
+		if (count($subscriptions)) {
+			return array('confirm', $GLOBALS['TL_LANG']['avisota_subscription']['subscribed'], true);
+		}
+
+		return array('duplicate', $GLOBALS['TL_LANG']['avisota_subscription']['allreadySubscribed'], false);
 	}
 
 	protected function handleSubscribeTokens()
@@ -132,10 +136,17 @@ abstract class AbstractRecipientForm extends \TwigModule
 		}
 
 		$subscriptionManager = new SubscriptionManager();
-		return $subscriptionManager->unsubscribe(
+		$subscriptions = $subscriptionManager->unsubscribe(
 			$recipient,
 			$mailingLists
 		);
+
+
+		if (count($subscriptions)) {
+			return array('confirm', $GLOBALS['TL_LANG']['avisota_subscription']['unsubscribed'], true);
+		}
+
+		return array('notfound', $GLOBALS['TL_LANG']['avisota_subscription']['notSubscribed'], false);
 	}
 
 	/**
@@ -319,9 +330,9 @@ abstract class AbstractRecipientForm extends \TwigModule
 			$lists = $this->handleSubscribeTokens();
 
 			if ($lists && count($lists)) {
-				$this->loadLanguageFile('avisota_subscribe');
+				$this->loadLanguageFile('avisota_subscription');
 				$template->messageClass = 'confirm_subscription';
-				$template->message      = $GLOBALS['TL_LANG']['avisota_subscribe']['confirmSubscription'];
+				$template->message      = $GLOBALS['TL_LANG']['avisota_subscription']['confirmSubscription'];
 			}
 		}
 

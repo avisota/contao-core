@@ -35,8 +35,7 @@ class ModuleAvisotaSubscription extends ModuleAvisotaRecipientForm
 	{
 		parent::__construct($module);
 
-		$this->loadLanguageFile('avisota_subscribe');
-		$this->loadLanguageFile('avisota_unsubscribe');
+		$this->loadLanguageFile('avisota_subscription');
 	}
 
 	/**

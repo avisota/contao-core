@@ -13,6 +13,7 @@
  * @filesource
  */
 
+namespace Avisota\Contao\Module;
 
 /**
  * Class ModuleAvisotaUnsubscribe
@@ -22,7 +23,7 @@
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    Avisota
  */
-class ModuleAvisotaUnsubscribe extends ModuleAvisotaRecipientForm
+class Unsubscribe extends AbstractRecipientForm
 {
 	/**
 	 * Template
@@ -31,11 +32,11 @@ class ModuleAvisotaUnsubscribe extends ModuleAvisotaRecipientForm
 	 */
 	protected $strTemplate = 'mod_avisota_unsubscribe';
 
-	public function __construct(Database_Result $module)
+	public function __construct(\Database_Result $module)
 	{
 		parent::__construct($module);
 
-		$this->loadLanguageFile('avisota_unsubscribe');
+		$this->loadLanguageFile('avisota_subscription');
 	}
 
 	/**
@@ -44,7 +45,7 @@ class ModuleAvisotaUnsubscribe extends ModuleAvisotaRecipientForm
 	public function generate()
 	{
 		if (TL_MODE == 'BE') {
-			$template           = new BackendTemplate('be_wildcard');
+			$template           = new \BackendTemplate('be_wildcard');
 			$template->wildcard = '### Avisota unsubscribe module ###';
 			return $template->parse();
 		}
@@ -64,7 +65,7 @@ class ModuleAvisotaUnsubscribe extends ModuleAvisotaRecipientForm
 		$this->addForm();
 	}
 
-	protected function submit(array $recipientData, array $mailingLists, FrontendTemplate $template)
+	protected function submit(array $recipientData, array $mailingLists, \TwigFrontendTemplate $template)
 	{
 		return $this->handleUnsubscribeSubmit($recipientData, $mailingLists, $template);
 	}

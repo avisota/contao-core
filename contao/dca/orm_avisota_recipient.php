@@ -333,14 +333,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'nullable' => true
 			),
 		),
-		'token'                 => array
-		(
-			'label' => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['token'],
-			'field' => array(
-				'type' => 'string',
-				'length' => 32
-			)
-		),
 		'addedOn'               => array
 		(
 			'label'   => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['addedOn'],

@@ -87,6 +87,10 @@ class SubscriptionManager
 			$recipient = $repository->findOneBy(array('email' => $recipientIdentity));
 		}
 
+		else {
+			$recipient = $recipientIdentity;
+		}
+
 		if (!$recipient instanceof Recipient) {
 			throw new \RuntimeException('Invalid argument ' . gettype($recipientIdentity));
 		}
@@ -304,7 +308,7 @@ class SubscriptionManager
 		}
 
 		$recipient = $this->resolveRecipient($recipient);
-		$lists     = $this->resolveLists($lists);
+		$lists     = $this->resolveLists($lists, true);
 
 		$subscriptions = array();
 
@@ -334,8 +338,12 @@ class SubscriptionManager
 			}
 		}
 
+
+
 		if ($options ^ static::OPT_NO_CONFIRMATION) {
 			// TODO send confirmations
 		}
+
+		return $subscriptions;
 	}
 }

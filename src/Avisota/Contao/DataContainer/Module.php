@@ -98,7 +98,7 @@ class Module extends \Backend
 				return array();
 		}
 
-		return $this->getTemplateGroup($templatePrefix, $dc->activeRecord->pid);
+		return \TwigHelper::getTemplateGroup($templatePrefix, $dc->activeRecord->pid);
 	}
 
 	public function getEditableRecipientProperties()

@@ -36,7 +36,7 @@ class Subscribe extends AbstractRecipientForm
 	{
 		parent::__construct($module);
 
-		$this->loadLanguageFile('avisota_subscribe');
+		$this->loadLanguageFile('avisota_subscription');
 	}
 
 	/**
