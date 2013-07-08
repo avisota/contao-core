@@ -5,7 +5,7 @@
 <?php echo $this->getMessages(); ?>
 
 <?php if ($this->outbox): foreach (array('open', 'incomplete', 'complete') as $group): if (count($this->outbox[$group]) > 0): ?>
-<h2 class="sub_headline"><?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox'][$group] ?></h2>
+<h2 class="sub_headline"><?php echo $GLOBALS['TL_LANG']['orm_avisota_message_outbox'][$group] ?></h2>
 
 <div class="tl_formbody_edit">
 <table class="prev_header outbox" summary="" cellpadding="0" cellspacing="0" width="100%">
@@ -20,12 +20,12 @@
   </colgroup>
   <thead>
   <tr class="head_0">
-    <th class="col_1">&nbsp;<?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['date'] ?>&nbsp;</th>
-    <th class="col_1"><?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['newsletter'] ?>&nbsp;</th>
-    <th class="col_2"><?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['count'] ?>&nbsp;</th>
-    <th class="col_2"><img src="system/modules/avisota/html/outbox_outstanding.png" alt="<?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['outstanding'] ?>" title="<?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['outstanding'] ?>" /></th>
-    <th class="col_3"><img src="system/modules/avisota/html/recipients.png" alt="<?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['total'] ?>" title="<?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['total'] ?>" /></th>
-    <?php if ($this->display_failed): ?><th class="col_4"><img src="system/modules/avisota/html/outbox_failed.png" alt="<?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['failed'] ?>" title="<?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['failed'] ?>" /></th><?php endif; ?>
+    <th class="col_1">&nbsp;<?php echo $GLOBALS['TL_LANG']['orm_avisota_message_outbox']['date'] ?>&nbsp;</th>
+    <th class="col_1"><?php echo $GLOBALS['TL_LANG']['orm_avisota_message_outbox']['newsletter'] ?>&nbsp;</th>
+    <th class="col_2"><?php echo $GLOBALS['TL_LANG']['orm_avisota_message_outbox']['count'] ?>&nbsp;</th>
+    <th class="col_2"><img src="system/modules/avisota/html/outbox_outstanding.png" alt="<?php echo $GLOBALS['TL_LANG']['orm_avisota_message_outbox']['outstanding'] ?>" title="<?php echo $GLOBALS['TL_LANG']['orm_avisota_message_outbox']['outstanding'] ?>" /></th>
+    <th class="col_3"><img src="system/modules/avisota/html/recipients.png" alt="<?php echo $GLOBALS['TL_LANG']['orm_avisota_message_outbox']['total'] ?>" title="<?php echo $GLOBALS['TL_LANG']['orm_avisota_message_outbox']['total'] ?>" /></th>
+    <?php if ($this->display_failed): ?><th class="col_4"><img src="system/modules/avisota/html/outbox_failed.png" alt="<?php echo $GLOBALS['TL_LANG']['orm_avisota_message_outbox']['failed'] ?>" title="<?php echo $GLOBALS['TL_LANG']['orm_avisota_message_outbox']['failed'] ?>" /></th><?php endif; ?>
     <th class="col_5"></th>
   </tr>
   </thead>
@@ -40,7 +40,7 @@
     <td class="col_2" align="center"><span class="outstanding"><?php echo number_format($outbox['outstanding'], 0, ',', '.') ?></span></td>
     <td class="col_3" align="center"><span class="total"><?php echo number_format($outbox['recipients'], 0, ',', '.'); ?></span></td>
     <?php if ($this->display_failed): ?><td class="col_4" align="center"><?php if ($outbox['failed'] > 0): ?><span class="failed"><?php echo number_format($outbox['failed'], 0, ',', '.'); ?></span><?php endif; ?></td><?php endif; ?>
-    <td class="col_5"><a href="<?php echo $GLOBALS['TL_CONFIG']['websitePath'] ?>/contao/main.php?do=avisota_outbox&amp;act=details&amp;id=<?php echo $outbox['id'] ?>" title="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['details'][1]) ?>"><img src="system/modules/avisota/html/outbox_details.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['details'][0]) ?>" /></a>&nbsp;<a href="<?php echo $GLOBALS['TL_CONFIG']['websitePath'] ?>/contao/main.php?do=avisota_outbox&amp;act=remove&amp;id=<?php echo $outbox['id'] ?>" title="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['remove'][1]) ?>" onclick="return confirm('<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['remove'][2]) ?>');"><img src="system/modules/avisota/html/outbox_remove.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['remove'][0]) ?>" /></a><?php if ($this->beSend && $outbox['outstanding'] > 0): ?>&nbsp;<a href="<?php echo $GLOBALS['TL_CONFIG']['websitePath'] ?>/contao/main.php?do=avisota_outbox&amp;act=send&amp;id=<?php echo $outbox['id'] ?>" title="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['send'][1]) ?>"><img src="system/modules/avisota/html/send_go.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['send'][0]) ?>" /></a><?php endif ?></td>
+    <td class="col_5"><a href="<?php echo $GLOBALS['TL_CONFIG']['websitePath'] ?>/contao/main.php?do=avisota_outbox&amp;act=details&amp;id=<?php echo $outbox['id'] ?>" title="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_message_outbox']['details'][1]) ?>"><img src="system/modules/avisota/html/outbox_details.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_message_outbox']['details'][0]) ?>" /></a>&nbsp;<a href="<?php echo $GLOBALS['TL_CONFIG']['websitePath'] ?>/contao/main.php?do=avisota_outbox&amp;act=remove&amp;id=<?php echo $outbox['id'] ?>" title="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_message_outbox']['remove'][1]) ?>" onclick="return confirm('<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_message_outbox']['remove'][2]) ?>');"><img src="system/modules/avisota/html/outbox_remove.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_message_outbox']['remove'][0]) ?>" /></a><?php if ($this->beSend && $outbox['outstanding'] > 0): ?>&nbsp;<a href="<?php echo $GLOBALS['TL_CONFIG']['websitePath'] ?>/contao/main.php?do=avisota_outbox&amp;act=send&amp;id=<?php echo $outbox['id'] ?>" title="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_message_outbox']['send'][1]) ?>"><img src="system/modules/avisota/html/send_go.png" alt="<?php echo specialchars($GLOBALS['TL_LANG']['orm_avisota_message_outbox']['send'][0]) ?>" /></a><?php endif ?></td>
   </tr>
   <?php endforeach; ?>
   </tbody>
@@ -49,6 +49,6 @@
 </div>
 <?php endif; endforeach; else: ?>
 <div class="tl_formbody_edit">
-<p><?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing_outbox']['empty']; ?></p>
+<p><?php echo $GLOBALS['TL_LANG']['orm_avisota_message_outbox']['empty']; ?></p>
 </div>
 <?php endif; ?>

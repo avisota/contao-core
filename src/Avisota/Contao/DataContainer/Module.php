@@ -39,7 +39,7 @@ class Module extends \Backend
 	public function getCategories()
 	{
 		$category = $this->Database
-			->execute("SELECT * FROM orm_avisota_mailing_category ORDER BY title");
+			->execute("SELECT * FROM orm_avisota_message_category ORDER BY title");
 		$lists     = array();
 		while ($category->next()) {
 			$lists[$category->id] = $category->title;

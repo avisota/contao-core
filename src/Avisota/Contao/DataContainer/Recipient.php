@@ -20,6 +20,7 @@ use Avisota\Contao\Entity\RecipientBlacklist;
 use Avisota\Contao\SubscriptionManager;
 use Contao\Doctrine\ORM\EntityHelper;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query\Expr\Join;
 
 class Recipient extends \Backend
 {
@@ -44,6 +45,7 @@ class Recipient extends \Backend
 		$input = \Input::getInstance();
 		$database = \Database::getInstance();
 
+		/*
 		$id = $input->get('showlist');
 		if ($id) {
 			$list = $database
@@ -51,7 +53,7 @@ class Recipient extends \Backend
 				->execute($id);
 			if ($list->next()) {
 				$GLOBALS['TL_DCA']['orm_avisota_recipient']['list']['sorting']['filter'][] = array(
-					'id IN (SELECT recipient FROM orm_avisota_recipient_to_mailing_list WHERE list=?)',
+					'id IN (SELECT recipient FROM orm_avisota_mailing_list WHERE list=?)',
 					$id
 				);
 
@@ -63,6 +65,7 @@ class Recipient extends \Backend
 				);
 			}
 		}
+		*/
 	}
 
 	/**
@@ -102,51 +105,61 @@ class Recipient extends \Backend
 
 		$label .= '<ul style="margin-top: 3px;">';
 
-		$list = $database
-			->prepare(
-			"SELECT ml.*, rtml.confirmed, rtml.confirmationSent, rtml.reminderSent, rtml.reminderCount FROM orm_avisota_mailing_list ml INNER JOIN orm_avisota_recipient_to_mailing_list rtml ON ml.id=rtml.list WHERE rtml.recipient=? ORDER BY ml.title"
-		)
-			->execute($recipientData['id']);
-		while ($list->next()) {
-			$label .= '<li>';
-			$label .= '<a href="javascript:void(0);" onclick="if ($(this).getProperty(\'data-confirmed\') || confirm(' . specialchars(
-				json_encode($GLOBALS['TL_LANG']['orm_avisota_recipient']['confirmManualActivation'])
-			) . ')) Avisota.toggleConfirmation(this);" data-recipient="' . $recipientData['id'] . '" data-list="' . $list->id . '" data-confirmed="' . ($list->confirmed
-				? '1' : '') . '">';
-			$label .= $this->generateImage(
-				sprintf(
-					'system/themes/%s/images/%s.gif',
-					$this->getTheme(),
-					$list->confirmed ? 'visible' : 'invisible'
-				),
-				''
-			);
-			$label .= '</a> ';
-			$label .= $list->title;
-			if ($list->confirmationSent || $list->reminderSent) {
-				$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(';
-				if ($list->reminderCount > 1) {
-					$label .= sprintf(
-						$GLOBALS['TL_LANG']['orm_avisota_recipient']['remindersSent'],
-						$list->reminderCount,
-						$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
-					);
+		$entityManager = EntityHelper::getEntityManager();
+		$queryBuilder = $entityManager->createQueryBuilder();
+		$subscriptions = $queryBuilder
+			->select('s')
+			->from('Avisota\Contao:RecipientSubscription', 's')
+			->where('s.recipient=?1')
+			->setParameter(1, $dc->id)
+			->getQuery()
+			->getResult();
+
+		if ($subscriptions) {
+			/** @var MailingList $subscription */
+			foreach ($subscriptions as $subscription) {
+				/*
+				$label .= '<li>';
+				$label .= '<a href="javascript:void(0);" onclick="if ($(this).getProperty(\'data-confirmed\') || confirm(' . specialchars(
+					json_encode($GLOBALS['TL_LANG']['orm_avisota_recipient']['confirmManualActivation'])
+				) . ')) Avisota.toggleConfirmation(this);" data-recipient="' . $recipientData['id'] . '" data-list="' . $subscription->getId() . '" data-confirmed="' . ($list->confirmed
+					? '1' : '') . '">';
+				$label .= $this->generateImage(
+					sprintf(
+						'system/themes/%s/images/%s.gif',
+						$this->getTheme(),
+						$list->confirmed ? 'visible' : 'invisible'
+					),
+					''
+				);
+				$label .= '</a> ';
+				$label .= $list->title;
+				if ($list->confirmationSent || $list->reminderSent) {
+					$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(';
+					if ($list->reminderCount > 1) {
+						$label .= sprintf(
+							$GLOBALS['TL_LANG']['orm_avisota_recipient']['remindersSent'],
+							$list->reminderCount,
+							$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
+						);
+					}
+					else if ($list->reminderSent > 0) {
+						$label .= sprintf(
+							$GLOBALS['TL_LANG']['orm_avisota_recipient']['reminderSent'],
+							$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
+						);
+					}
+					else if ($list->confirmationSent > 0) {
+						$label .= sprintf(
+							$GLOBALS['TL_LANG']['orm_avisota_recipient']['confirmationSent'],
+							$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
+						);
+					}
+					$label .= ')</span>';
 				}
-				else if ($list->reminderSent > 0) {
-					$label .= sprintf(
-						$GLOBALS['TL_LANG']['orm_avisota_recipient']['reminderSent'],
-						$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
-					);
-				}
-				else if ($list->confirmationSent > 0) {
-					$label .= sprintf(
-						$GLOBALS['TL_LANG']['orm_avisota_recipient']['confirmationSent'],
-						$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
-					);
-				}
-				$label .= ')</span>';
+				$label .= '</li>';
+				*/
 			}
-			$label .= '</li>';
 		}
 
 		$label .= '</ul>';
@@ -171,7 +184,7 @@ class Recipient extends \Backend
 			$listId      = $input->get('list');
 
 			$database
-				->prepare("UPDATE orm_avisota_recipient_to_mailing_list SET confirmed=? WHERE recipient=? AND list=?")
+				->prepare("UPDATE orm_avisota_mailing_list SET confirmed=? WHERE recipient=? AND list=?")
 				->execute($input->get('confirmed') ? '1' : '', $recipientId, $listId);
 
 			header('Content-Type: application/javascript');
@@ -328,9 +341,27 @@ class Recipient extends \Backend
 			return;
 		}
 
+		$entityManager = EntityHelper::getEntityManager();
+		$queryBuilder = $entityManager->createQueryBuilder();
+		$mailingListIds = $queryBuilder
+			->select('l.id')
+			->from('Avisota\Contao:MailingList', 'l')
+			->innerJoin(
+				'Avisota\Contao:RecipientSubscription',
+				's',
+				Join::WITH,
+				$queryBuilder->expr()->eq($queryBuilder->expr()->concat('\'mailing_list:\'', 'l.id'), 's.list')
+			)
+			->where('s.recipient=?1')
+			->setParameter(1, $dc->id)
+			->getQuery()
+			->getResult();
+
+		return $mailingListIds;
+		/*
 		$database = \Database::getInstance();
 
-		$sql = 'SELECT * FROM orm_avisota_recipient_to_mailing_list WHERE recipient=?';
+		$sql = 'SELECT * FROM orm_avisota_mailing_list WHERE recipient=?';
 		$args = array($dc->id);
 
 		if ($confirmed !== null) {
@@ -342,6 +373,7 @@ class Recipient extends \Backend
 			->prepare($sql)
 			->execute($args)
 			->fetchEach('list');
+		*/
 	}
 
 	/**

@@ -1,0 +1,7 @@
+
+{% macro image() %}
+[{{ src }}]
+({{ alt }})
+
+{% if href %}{{ href }}{% endif %}
+{% endmacro %}

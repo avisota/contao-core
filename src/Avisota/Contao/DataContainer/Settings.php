@@ -45,14 +45,14 @@ class Settings extends \Backend
 	 *
 	 * @return array
 	 */
-	public function getBoilerplateMailings($dc)
+	public function getBoilerplateMessages($dc)
 	{
 		$database = \Database::getInstance();
 
 		$resultSet = $database->query(
 			'SELECT c.title AS category, n.*
-			 FROM orm_avisota_mailing n
-			 INNER JOIN orm_avisota_mailing_category c
+			 FROM orm_avisota_message n
+			 INNER JOIN orm_avisota_message_category c
 			 ON c.id = n.pid
 			 WHERE c.boilerplates = \'1\'
 			 ORDER BY c.title, n.subject'

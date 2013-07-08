@@ -13,7 +13,7 @@
  * @filesource
  */
 
-class orm_avisota_mailing_create_from_draft extends Backend
+class orm_avisota_message_create_from_draft extends Backend
 {
 	/**
 	 * Import the back end user object
@@ -48,7 +48,7 @@ class orm_avisota_mailing_create_from_draft extends Backend
 		$draftId    = $dc->getData('draft');
 
 		$newsletterDraft = $this->Database
-			->prepare("SELECT * FROM orm_avisota_mailing_draft WHERE id=?")
+			->prepare("SELECT * FROM orm_avisota_message_draft WHERE id=?")
 			->execute($draftId);
 		if ($newsletterDraft->next()) {
 			$newsletterDraftData = $newsletterDraft->row();
@@ -72,13 +72,13 @@ class orm_avisota_mailing_create_from_draft extends Backend
 
 			$newsletter = $this->Database
 				->prepare(
-				"INSERT INTO orm_avisota_mailing (" . implode(",", array_keys($newsletterDraftData)) . ") VALUES ($value)"
+				"INSERT INTO orm_avisota_message (" . implode(",", array_keys($newsletterDraftData)) . ") VALUES ($value)"
 			)
 				->execute($newsletterDraftData);
 			$newsletterId         = $newsletter->insertId;
 
 			$content = $this->Database
-				->prepare("SELECT * FROM orm_avisota_mailing_draft_content WHERE pid=?")
+				->prepare("SELECT * FROM orm_avisota_message_draft_content WHERE pid=?")
 				->execute($draftId);
 
 			while ($content->next()) {
@@ -104,7 +104,7 @@ class orm_avisota_mailing_create_from_draft extends Backend
 
 				$newsletter = $this->Database
 					->prepare(
-					"INSERT INTO orm_avisota_mailing_content (" . implode(
+					"INSERT INTO orm_avisota_message_content (" . implode(
 						",",
 						array_keys($newsletterDraftData)
 					) . ") VALUES ($value)"
@@ -112,8 +112,8 @@ class orm_avisota_mailing_create_from_draft extends Backend
 					->execute($newsletterDraftData);
 			}
 
-			$_SESSION['TL_INFO'][] = $GLOBALS['TL_LANG']['orm_avisota_mailing_create_from_draft']['created'];
-			$this->redirect('contao/main.php?do=avisota_newsletter&table=orm_avisota_mailing_content&id=' . $newsletterId);
+			$_SESSION['TL_INFO'][] = $GLOBALS['TL_LANG']['orm_avisota_message_create_from_draft']['created'];
+			$this->redirect('contao/main.php?do=avisota_newsletter&table=orm_avisota_message_content&id=' . $newsletterId);
 		}
 	}
 }

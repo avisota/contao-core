@@ -101,7 +101,7 @@ class ModuleAvisotaList extends Module
 
 		$newsletter = $this->Database
 			->prepare(
-			"SELECT * FROM orm_avisota_mailing WHERE sendOn > 0 AND pid IN (" . implode(
+			"SELECT * FROM orm_avisota_message WHERE sendOn > 0 AND pid IN (" . implode(
 				',',
 				$this->avisota_categories
 			) . ") ORDER BY sendOn DESC"
@@ -127,7 +127,7 @@ class ModuleAvisotaList extends Module
 			else {
 				if (!isset($viewOnlineCache[$newsletter->pid])) {
 					$category = $this->Database
-						->prepare("SELECT * FROM orm_avisota_mailing_category WHERE id=?")
+						->prepare("SELECT * FROM orm_avisota_message_category WHERE id=?")
 						->execute($newsletter->pid);
 
 					if ($category->next()) {
@@ -157,7 +157,7 @@ class ModuleAvisotaList extends Module
 
 		$newsletter = $this->Database
 			->prepare(
-			"SELECT COUNT(id) as `count` FROM orm_avisota_mailing WHERE sendOn > 0 AND pid IN (" . implode(
+			"SELECT COUNT(id) as `count` FROM orm_avisota_message WHERE sendOn > 0 AND pid IN (" . implode(
 				',',
 				$this->avisota_categories
 			) . ")"

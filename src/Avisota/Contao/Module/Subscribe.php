@@ -45,7 +45,7 @@ class Subscribe extends AbstractRecipientForm
 	public function generate()
 	{
 		if (TL_MODE == 'BE') {
-			$template           = new BackendTemplate('be_wildcard');
+			$template           = new \BackendTemplate('be_wildcard');
 			$template->wildcard = '### Avisota subscribe module ###';
 			return $template->parse();
 		}

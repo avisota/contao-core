@@ -153,11 +153,11 @@ class AvisotaBackend extends Controller
 					$categoryId = $match[1];
 
 					// $module['class'] = str_replace(' active', '', $module['class']);
-					$module['href'] .= '&amp;table=orm_avisota_mailing&amp;id=' . $categoryId;
+					$module['href'] .= '&amp;table=orm_avisota_message&amp;id=' . $categoryId;
 
 					// if this category is active
 					if ($this->Input->get('do') == 'avisota_newsletter' &&
-						$this->Input->get('table') == 'orm_avisota_mailing' &&
+						$this->Input->get('table') == 'orm_avisota_message' &&
 						$this->Input->get('act') != 'edit' &&
 						$this->Input->get('id') == $categoryId
 					) {
@@ -174,8 +174,8 @@ class AvisotaBackend extends Controller
 			}
 			/*
 			$arrCustomModules = array();
-			if ($this->Database->fieldExists('showInMenu', 'orm_avisota_mailing_category')) {
-				$objCategory = $this->Database->query('SELECT * FROM orm_avisota_mailing_category WHERE showInMenu=\'1\' ORDER BY title');
+			if ($this->Database->fieldExists('showInMenu', 'orm_avisota_message_category')) {
+				$objCategory = $this->Database->query('SELECT * FROM orm_avisota_message_category WHERE showInMenu=\'1\' ORDER BY title');
 				while ($objCategory->next()) {
 					$arrCustomModules['avisota_newsletter_' . $objCategory->id] = array_slice($arrModules['avisota']['modules']['avisota_newsletter'], 0);
 					if ($objCategory->menuIcon) {
@@ -184,11 +184,11 @@ class AvisotaBackend extends Controller
 					$arrCustomModules['avisota_newsletter_' . $objCategory->id]['label'] = $objCategory->title;
 					$arrCustomModules['avisota_newsletter_' . $objCategory->id]['class'] = str_replace(' active', '', $arrCustomModules['avisota_newsletter_' . $objCategory->id]['class']);
 					$arrCustomModules['avisota_newsletter_' . $objCategory->id]['class'] .= ' avisota_newsletter_' . $objCategory->id;
-					$arrCustomModules['avisota_newsletter_' . $objCategory->id]['href']  .= '&amp;table=orm_avisota_mailing&amp;id=' . $objCategory->id;
+					$arrCustomModules['avisota_newsletter_' . $objCategory->id]['href']  .= '&amp;table=orm_avisota_message&amp;id=' . $objCategory->id;
 
 					// if this category is active
 					if ($this->Input->get('do') == 'avisota_newsletter' &&
-						$this->Input->get('table') == 'orm_avisota_mailing' &&
+						$this->Input->get('table') == 'orm_avisota_message' &&
 						$this->Input->get('act') != 'edit' &&
 						$this->Input->get('id') == $objCategory->id) {
 						// remove active class from avisota_newsletter menu item

@@ -1,0 +1,14 @@
+
+{% macro image() %}
+	{% spaceless %}
+		<figure class="image_container{{ floatClass }}"{% if margin or float %} style="{{ margin }}{{ float }}"{% endif %}>
+			{% if href %}<a href="{{ href }}"{{ attributes }} title="{{ alt }}">{% endif %}
+			<img src="{{ src }}"{{ imgSize }} alt="{{ alt }}">
+			{% if href %}</a>{% endif %}
+
+			{% if caption %}
+				<figcaption class="caption" style="line-height: normal;">{{ caption }}</figcaption>
+			{% endif %}
+		</figure>
+	{% endspaceless %}
+{% endmacro %}

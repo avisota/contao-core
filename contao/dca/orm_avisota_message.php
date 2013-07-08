@@ -15,26 +15,26 @@
 
 
 /**
- * Table orm_avisota_mailing
- * Entity Avisota\Contao:Mailing
+ * Table orm_avisota_message
+ * Entity Avisota\Contao:Message
  */
-$GLOBALS['TL_DCA']['orm_avisota_mailing'] = array
+$GLOBALS['TL_DCA']['orm_avisota_message'] = array
 (
 	// Config
 	'config'          => array
 	(
 		'dataContainer'     => 'Table',
-		'ptable'            => 'orm_avisota_mailing_category',
-		'ctable'            => array('orm_avisota_mailing_content'),
+		'ptable'            => 'orm_avisota_message_category',
+		'ctable'            => array('orm_avisota_message_content'),
 		'switchToEdit'      => true,
 		'enableVersioning'  => true,
 		'palettes_callback' => array
 		(
-			array('Avisota\Contao\DataContainer\Mailing', 'updatePalette')
+			array('Avisota\Contao\DataContainer\Message', 'updatePalette')
 		),
 		'onload_callback'   => array
 		(
-			array('Avisota\Contao\DataContainer\Mailing', 'checkPermission')
+			array('Avisota\Contao\DataContainer\Message', 'checkPermission')
 		)
 	),
 	// List
@@ -46,20 +46,20 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing'] = array
 			'fields'                => array('sendOn=\'\' DESC', 'sendOn DESC'),
 			'panelLayout'           => 'search,limit',
 			'headerFields'          => array('title'),
-			'header_callback'       => array('Avisota\Contao\DataContainer\Mailing', 'addHeader'),
-			'child_record_callback' => array('Avisota\Contao\DataContainer\Mailing', 'addMailing'),
+			'header_callback'       => array('Avisota\Contao\DataContainer\Message', 'addHeader'),
+			'child_record_callback' => array('Avisota\Contao\DataContainer\Message', 'addMessageRow'),
 			'child_record_class'    => 'no_padding',
 		),
 		'label'             => array
 		(
-			'group_callback' => array('Avisota\Contao\DataContainer\Mailing', 'addGroup')
+			'group_callback' => array('Avisota\Contao\DataContainer\Message', 'addGroup')
 		),
 		'global_operations' => array
 		(
 			'createFromDraft' => array
 			(
-				'label'      => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['create_from_draft'],
-				'href'       => 'table=orm_avisota_mailing_create_from_draft&amp;act=edit',
+				'label'      => &$GLOBALS['TL_LANG']['orm_avisota_message']['create_from_draft'],
+				'href'       => 'table=orm_avisota_message_create_from_draft&amp;act=edit',
 				'class'      => 'header_new',
 				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="d"'
 			),
@@ -75,46 +75,46 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing'] = array
 		(
 			'edit'       => array
 			(
-				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['edit'],
-				'href'            => 'table=orm_avisota_mailing_content',
+				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_message']['edit'],
+				'href'            => 'table=orm_avisota_message_content',
 				'icon'            => 'edit.gif',
-				'button_callback' => array('Avisota\Contao\DataContainer\Mailing', 'editMailing')
+				'button_callback' => array('Avisota\Contao\DataContainer\Message', 'editMessage')
 			),
 			'editheader' => array
 			(
-				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['editheader'],
+				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_message']['editheader'],
 				'href'            => 'act=edit',
 				'icon'            => 'header.gif',
-				'button_callback' => array('Avisota\Contao\DataContainer\Mailing', 'editHeader')
+				'button_callback' => array('Avisota\Contao\DataContainer\Message', 'editHeader')
 			),
 			'copy'       => array
 			(
-				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['copy'],
+				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_message']['copy'],
 				'href'            => 'act=paste&amp;mode=copy',
 				'icon'            => 'copy.gif',
 				'attributes'      => 'onclick="Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\Contao\DataContainer\Mailing', 'copyMailing')
+				'button_callback' => array('Avisota\Contao\DataContainer\Message', 'copyMessage')
 			),
 			'delete'     => array
 			(
-				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['delete'],
+				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_message']['delete'],
 				'href'            => 'act=delete',
 				'icon'            => 'delete.gif',
 				'attributes'      => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\Contao\DataContainer\Mailing', 'deleteMailing')
+				'button_callback' => array('Avisota\Contao\DataContainer\Message', 'deleteMessage')
 			),
 			'show'       => array
 			(
-				'label' => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['show'],
+				'label' => &$GLOBALS['TL_LANG']['orm_avisota_message']['show'],
 				'href'  => 'act=show',
 				'icon'  => 'show.gif'
 			),
 			'send'       => array
 			(
-				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['send'],
+				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_message']['send'],
 				'href'            => 'key=send',
 				'icon'            => 'system/modules/avisota/html/send.png',
-				'button_callback' => array('Avisota\Contao\DataContainer\Mailing', 'sendMailing')
+				'button_callback' => array('Avisota\Contao\DataContainer\Message', 'sendMessage')
 			)
 		),
 	),
@@ -161,7 +161,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing'] = array
 		),
 		'subject'       => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['subject'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['subject'],
 			'exclude'   => true,
 			'search'    => true,
 			'flag'      => 1,
@@ -175,7 +175,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing'] = array
 		),
 		'alias'         => array
 		(
-			'label'         => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['alias'],
+			'label'         => &$GLOBALS['TL_LANG']['orm_avisota_message']['alias'],
 			'exclude'       => true,
 			'search'        => true,
 			'inputType'     => 'text',
@@ -188,12 +188,12 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing'] = array
 			),
 			'save_callback' => array
 			(
-				array('Avisota\Contao\DataContainer\Mailing', 'generateAlias')
+				array('Avisota\Contao\DataContainer\Message', 'generateAlias')
 			)
 		),
 		'description'   => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['description'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['description'],
 			'exclude'   => true,
 			'search'    => true,
 			'inputType' => 'textarea',
@@ -204,7 +204,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing'] = array
 		),
 		'keywords'      => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['keywords'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['keywords'],
 			'exclude'   => true,
 			'search'    => true,
 			'inputType' => 'text',
@@ -215,15 +215,15 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing'] = array
 		),
 		'setRecipients' => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['setRecipients'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['setRecipients'],
 			'inputType' => 'checkbox',
 			'eval'      => array('tl_class' => 'clr m12', 'submitOnChange' => true)
 		),
 		'recipients'    => array
 		(
-			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['recipients'],
+			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_message']['recipients'],
 			'inputType'        => 'checkbox',
-			'options_callback' => array('Avisota\Contao\DataContainer\Mailing', 'getRecipients'),
+			'options_callback' => array('Avisota\Contao\DataContainer\Message', 'getRecipients'),
 			'eval'             => array(
 				'mandatory' => true,
 				'multiple'  => true,
@@ -232,13 +232,13 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing'] = array
 		),
 		'setTheme'      => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['setTheme'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['setTheme'],
 			'inputType' => 'checkbox',
 			'eval'      => array('tl_class' => 'clr m12 w50', 'submitOnChange' => true)
 		),
 		'theme'         => array
 		(
-			'label'      => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['theme'],
+			'label'      => &$GLOBALS['TL_LANG']['orm_avisota_message']['theme'],
 			'inputType'  => 'select',
 			'foreignKey' => 'orm_avisota_theme.title',
 			'eval'       => array(
@@ -248,13 +248,13 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing'] = array
 		),
 		'setTransport'  => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['setTransport'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['setTransport'],
 			'inputType' => 'checkbox',
 			'eval'      => array('tl_class' => 'clr m12 w50', 'submitOnChange' => true)
 		),
 		'transport'     => array
 		(
-			'label'      => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['transport'],
+			'label'      => &$GLOBALS['TL_LANG']['orm_avisota_message']['transport'],
 			'inputType'  => 'select',
 			'foreignKey' => 'orm_avisota_transport.title',
 			'eval'       => array(
@@ -264,7 +264,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing'] = array
 		),
 		'addFile'       => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['addFile'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['addFile'],
 			'exclude'   => true,
 			'filter'    => true,
 			'inputType' => 'checkbox',
@@ -272,7 +272,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing'] = array
 		),
 		'files'         => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing']['files'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['files'],
 			'exclude'   => true,
 			'inputType' => 'fileTree',
 			'eval'      => array(

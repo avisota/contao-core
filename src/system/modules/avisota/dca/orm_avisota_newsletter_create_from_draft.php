@@ -15,9 +15,9 @@
 
 
 /**
- * Table orm_avisota_mailing_create_from_draft
+ * Table orm_avisota_message_create_from_draft
  */
-$GLOBALS['TL_DCA']['orm_avisota_mailing_create_from_draft'] = array
+$GLOBALS['TL_DCA']['orm_avisota_message_create_from_draft'] = array
 (
 
 	// Config
@@ -27,11 +27,11 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_create_from_draft'] = array
 		'closed'            => true,
 		'onload_callback'   => array
 		(
-			array('orm_avisota_mailing_create_from_draft', 'onload_callback'),
+			array('orm_avisota_message_create_from_draft', 'onload_callback'),
 		),
 		'onsubmit_callback' => array
 		(
-			array('orm_avisota_mailing_create_from_draft', 'onsubmit_callback'),
+			array('orm_avisota_message_create_from_draft', 'onsubmit_callback'),
 		)
 	),
 	// Palettes
@@ -46,9 +46,9 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_create_from_draft'] = array
 	(
 		'category' => array
 		(
-			'label'      => &$GLOBALS['TL_LANG']['orm_avisota_mailing_create_from_draft']['category'],
+			'label'      => &$GLOBALS['TL_LANG']['orm_avisota_message_create_from_draft']['category'],
 			'inputType'  => 'select',
-			'foreignKey' => 'orm_avisota_mailing_category.title',
+			'foreignKey' => 'orm_avisota_message_category.title',
 			'eval'       => array(
 				'mandatory' => true,
 				'tl_class'  => 'w50'
@@ -56,7 +56,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_create_from_draft'] = array
 		),
 		'subject'  => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing_create_from_draft']['subject'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message_create_from_draft']['subject'],
 			'inputType' => 'text',
 			'eval'      => array(
 				'mandatory' => true,
@@ -65,9 +65,9 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_create_from_draft'] = array
 		),
 		'draft'    => array
 		(
-			'label'      => &$GLOBALS['TL_LANG']['orm_avisota_mailing_create_from_draft']['draft'],
+			'label'      => &$GLOBALS['TL_LANG']['orm_avisota_message_create_from_draft']['draft'],
 			'inputType'  => 'radio',
-			'foreignKey' => 'orm_avisota_mailing_draft.title',
+			'foreignKey' => 'orm_avisota_message_draft.title',
 			'eval'       => array(
 				'mandatory' => true,
 				'tl_class'  => 'clr'

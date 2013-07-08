@@ -51,7 +51,7 @@ class Backend extends \Controller
 		if ($do == 'avisota_config') {
 			return sprintf(
 				'<div class="avisota-logo"><a href="http://avisota.org" target="_blank">%s</a></div>',
-				$this->generateImage('system/modules/avisota/assets/images/logo.png', 'Avisota Newsletter & Mailingsystem')
+				$this->generateImage('system/modules/avisota/assets/images/logo.png', 'Avisota newsletter and mailing system')
 			);
 		}
 	}

@@ -18,7 +18,7 @@ namespace Avisota\Contao\DataContainer;
 use Avisota\Contao\Entity\RecipientSource;
 use Contao\Doctrine\ORM\EntityHelper;
 
-class MailingCategory extends \Backend
+class MessageCategory extends \Backend
 {
 	/**
 	 * Import the back end user object
@@ -68,11 +68,11 @@ class MailingCategory extends \Backend
 			$root = $this->User->avisota_newsletter_categories;
 		}
 
-		$GLOBALS['TL_DCA']['orm_avisota_mailing_category']['list']['sorting']['root'] = $root;
+		$GLOBALS['TL_DCA']['orm_avisota_message_category']['list']['sorting']['root'] = $root;
 
 		// Check permissions to add channels
 		if (!$this->User->hasAccess('create', 'avisota_newsletter_category_permissions')) {
-			$GLOBALS['TL_DCA']['orm_avisota_mailing_category']['config']['closed'] = true;
+			$GLOBALS['TL_DCA']['orm_avisota_message_category']['config']['closed'] = true;
 		}
 
 		// Check current action
@@ -87,9 +87,9 @@ class MailingCategory extends \Backend
 				if (!in_array($this->Input->get('id'), $root)) {
 					$newRecord = $this->Session->get('new_records');
 
-					if (is_array($newRecord['orm_avisota_mailing_category']) && in_array(
+					if (is_array($newRecord['orm_avisota_message_category']) && in_array(
 						$this->Input->get('id'),
-						$newRecord['orm_avisota_mailing_category']
+						$newRecord['orm_avisota_message_category']
 					)
 					) {
 						// Add permissions on user level
@@ -165,7 +165,7 @@ class MailingCategory extends \Backend
 						'Not enough permissions to ' . $this->Input->get(
 							'act'
 						) . ' avisota newsletter category ID "' . $this->Input->get('id') . '"',
-						'orm_avisota_mailing_category checkPermission',
+						'orm_avisota_message_category checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -193,7 +193,7 @@ class MailingCategory extends \Backend
 				if (strlen($this->Input->get('act'))) {
 					$this->log(
 						'Not enough permissions to ' . $this->Input->get('act') . ' avisota newsletter categories',
-						'orm_avisota_mailing_category checkPermission',
+						'orm_avisota_message_category checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -217,7 +217,7 @@ class MailingCategory extends \Backend
 	 */
 	public function editHeader($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || count(preg_grep('/^orm_avisota_mailing_category::/', $this->User->alexf)) > 0)
+		return ($this->User->isAdmin || count(preg_grep('/^orm_avisota_message_category::/', $this->User->alexf)) > 0)
 			? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
 				$title
 			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
@@ -291,7 +291,7 @@ class MailingCategory extends \Backend
 		}
 
 		$aliasResultSet = $this->Database
-			->prepare("SELECT id FROM orm_avisota_mailing_category WHERE alias=?")
+			->prepare("SELECT id FROM orm_avisota_message_category WHERE alias=?")
 			->execute($value);
 
 		// Check whether the news alias exists

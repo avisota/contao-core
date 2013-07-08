@@ -136,7 +136,7 @@ class AvisotaNewsletterContent extends Controller
 				SELECT
 					*
 				FROM
-					orm_avisota_mailing_content
+					orm_avisota_message_content
 				WHERE
 					id=?"
 		)
@@ -153,7 +153,7 @@ class AvisotaNewsletterContent extends Controller
 				SELECT
 					*
 				FROM
-					orm_avisota_mailing
+					orm_avisota_message
 				WHERE
 					id=?"
 		)
@@ -165,7 +165,7 @@ class AvisotaNewsletterContent extends Controller
 				SELECT
 					*
 				FROM
-					orm_avisota_mailing_category
+					orm_avisota_message_category
 				WHERE
 					id=?"
 		)
@@ -303,9 +303,9 @@ class AvisotaNewsletterContent extends Controller
 				SELECT
 					c.*
 				FROM
-					`orm_avisota_mailing_category` c
+					`orm_avisota_message_category` c
 				INNER JOIN
-					`orm_avisota_mailing` n
+					`orm_avisota_message` n
 				ON
 					c.`id`=n.`pid`
 				WHERE

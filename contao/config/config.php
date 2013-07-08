@@ -31,9 +31,9 @@ $GLOBALS['DOCTRINE_ENTITY_NAMESPACE_ALIAS']['Avisota\Contao']        = 'Avisota\
 $GLOBALS['DOCTRINE_ENTITY_NAMESPACE_MAP']['orm_avisota']             = 'Avisota\Contao\Entity';
 $GLOBALS['DOCTRINE_ENTITY_CLASS']['Avisota\Contao\Entity\Recipient'] = 'Avisota\Contao\Entity\AbstractRecipient';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing_list';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing_category';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing_content';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_message';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_message_category';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_message_content';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_theme';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_queue';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient';
@@ -180,18 +180,18 @@ $customModules = array();
 /*
 $backendUser          = BackendUser::getInstance();
 $database      = Database::getInstance();
-if ($database->fieldExists('showInMenu', 'orm_avisota_mailing_category')) {
+if ($database->fieldExists('showInMenu', 'orm_avisota_message_category')) {
 	$category = $database->query(
-		'SELECT * FROM orm_avisota_mailing_category WHERE showInMenu=\'1\' ORDER BY title'
+		'SELECT * FROM orm_avisota_message_category WHERE showInMenu=\'1\' ORDER BY title'
 	);
 	while ($category->next()) {
 		$customModules['avisota_newsletter_' . $category->id]          = array(
-			'href'       => 'table=orm_avisota_mailing&amp;id=' . $category->id,
+			'href'       => 'table=orm_avisota_message&amp;id=' . $category->id,
 			'tables'     => array(
-				'orm_avisota_mailing_category',
-				'orm_avisota_mailing',
-				'orm_avisota_mailing_content',
-				'orm_avisota_mailing_create_from_draft'
+				'orm_avisota_message_category',
+				'orm_avisota_message',
+				'orm_avisota_message_content',
+				'orm_avisota_message_create_from_draft'
 			),
 			'send'       => array('Avisota', 'send'),
 			'icon'       => $category->menuIcon ? $category->menuIcon
@@ -226,10 +226,10 @@ $GLOBALS['BE_MOD'] = array_merge(
 			 'avisota_newsletter' => array
 			 (
 				 'tables'     => array(
-					 'orm_avisota_mailing_category',
-					 'orm_avisota_mailing',
-					 'orm_avisota_mailing_content',
-					 'orm_avisota_mailing_create_from_draft'
+					 'orm_avisota_message_category',
+					 'orm_avisota_message',
+					 'orm_avisota_message_content',
+					 'orm_avisota_message_create_from_draft'
 				 ),
 				 'send'       => array('Avisota', 'send'),
 				 'icon'       => 'system/modules/avisota/html/newsletter.png',
@@ -324,7 +324,7 @@ $GLOBALS['FE_MOD']['avisota']['avisota_reader']       = 'Avisota\Contao\Module\R
 
 
 /**
- * Mailing elements
+ * Message elements
  */
 $GLOBALS['TL_NLE'] = array_merge_recursive(
 	array
@@ -396,7 +396,7 @@ $GLOBALS['orm_avisota_TRANSPORT']['service'] = 'Avisota\Transport\Service';
 //$GLOBALS['TL_HOOKS']['updatePersonalData'][]      = array('AvisotaDCA', 'hookUpdatePersonalData');
 //$GLOBALS['TL_HOOKS']['avisotaMailingListLabel'][] = array('AvisotaBackend', 'hookAvisotaMailingListLabel');
 //$GLOBALS['TL_HOOKS']['getUserNavigation'][]       = array('AvisotaBackend', 'hookGetUserNavigation');
-//$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('orm_avisota_mailing_content', 'myLoadDataContainer');
+//$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('orm_avisota_message_content', 'myLoadDataContainer');
 $GLOBALS['TL_HOOKS']['nestedMenuPreContent'][]  = array('Avisota\Contao\Backend', 'hookNestedMenuPreContent');
 $GLOBALS['TL_HOOKS']['nestedMenuPostContent'][] = array('Avisota\Contao\Backend', 'hookNestedMenuPostContent');
 

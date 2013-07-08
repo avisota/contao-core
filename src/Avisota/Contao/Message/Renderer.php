@@ -13,10 +13,10 @@
  * @filesource
  */
 
-namespace Avisota\Contao;
+namespace Avisota\Contao\Message;
 
-use Avisota\Contao\Entity\Mailing;
-use Avisota\Contao\Entity\MailingContent;
+use Avisota\Contao\Entity\Message;
+use Avisota\Contao\Entity\MessageContent;
 
 /**
  * Class Theme
@@ -27,22 +27,12 @@ use Avisota\Contao\Entity\MailingContent;
  */
 class Renderer
 {
-	public function render(Mailing $mailing)
+	public function render(Message $mailing)
 	{
 
 	}
 
-	public function compile(Mailing $mailing)
-	{
-
-	}
-
-	public function renderElement(MailingContent $content)
-	{
-
-	}
-
-	public function compileElement(Mailing $mailing)
+	public function renderElement(MessageContent $content)
 	{
 
 	}

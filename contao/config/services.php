@@ -154,3 +154,10 @@ foreach ($GLOBALS['AVISOTA_DYNAMICS'] as $type => $records) {
 		}
 	}
 }
+
+/**
+ * Define message renderer
+ */
+$container['avisota.renderer'] = function() {
+	return new \Avisota\Contao\Message\Renderer();
+};

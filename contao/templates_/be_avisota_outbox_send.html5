@@ -7,7 +7,7 @@
 <h2 class="sub_headline" id="headline"><?php echo $this->newsletter['subject'] ?></h2>
 
 <div id="transport_error" style="display:none">
-	<p class="message"><?php echo $GLOBALS['TL_LANG']['orm_avisota_mailing']['transport_error']; ?></p>
+	<p class="message"><?php echo $GLOBALS['TL_LANG']['orm_avisota_message']['transport_error']; ?></p>
 	<pre class="response"></pre>
 </div>
 

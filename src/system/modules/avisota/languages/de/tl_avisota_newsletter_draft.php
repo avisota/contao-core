@@ -17,41 +17,41 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['title']                = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['title']                = array(
 	'Name',
 	'Bitte geben Sie einen Namen für die Vorlage ein.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['alias']                = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['alias']                = array(
 	'Alias',
 	'Der Alias ist eine eindeutige Referenz, die anstelle der numerischen Id aufgerufen werden kann.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['description']          = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['description']          = array(
 	'Beschreibung',
 	'Geben Sie hier eine Beschreibung für die Vorlage an.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['addFile']              = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['addFile']              = array(
 	'Dateien anhängen',
 	'Dem Newsletter eine oder mehrere Dateien anhängen.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['files']                = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['files']                = array(
 	'Dateianhänge',
 	'Bitte wählen Sie die anzuhängenden Dateien aus der Dateiübersicht.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['tstamp']               = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['tstamp']               = array(
 	'Änderungsdatum',
 	'Datum und Uhrzeit der letzten Änderung'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['sendPreviewTo']        = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['sendPreviewTo']        = array(
 	'Testsendung an',
 	'Die Testsendung des Newsletters an diese E-Mail-Adresse versenden.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['preview_mode']         = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['preview_mode']         = array(
 	'Vorschaumodus',
 	'Den Vorschaumodus wechseln.',
 	'HTML Vorschau',
 	'Plain Text Vorschau'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['preview_personalized'] = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['preview_personalized'] = array(
 	'Personalisieren',
 	'Die Vorschau personalisieren.',
 	'Keine',
@@ -63,33 +63,33 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['preview_personalized'] = array
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['newsletter_legend'] = 'Vorlage';
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['attachment_legend'] = 'Dateianhänge';
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['template_legend']   = 'Template-Einstellungen';
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['newsletter_legend'] = 'Vorlage';
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['attachment_legend'] = 'Dateianhänge';
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['template_legend']   = 'Template-Einstellungen';
 
 
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['new']        = array('Neue Vorlage', 'Eine neue Vorlage erstellen');
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['show']       = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['new']        = array('Neue Vorlage', 'Eine neue Vorlage erstellen');
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['show']       = array(
 	'Vorlagedetails',
 	'Details der Vorlage ID %s anzeigen'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['copy']       = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['copy']       = array(
 	'Vorlage duplizieren',
 	'Vorlage ID %s duplizieren'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['delete']     = array('Vorlage löschen', 'Vorlage ID %s löschen');
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['edit']       = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['delete']     = array('Vorlage löschen', 'Vorlage ID %s löschen');
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['edit']       = array(
 	'Vorlage bearbeiten',
 	'Vorlage ID %s bearbeiten'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['editheader'] = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['editheader'] = array(
 	'Vorlageeinstellungen bearbeiten',
 	'Einstellungen der Vorlage ID %s bearbeiten'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['preview']    = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['preview']    = array(
 	'Vorlage ansehen',
 	'Die Vorlage ID %s ansehen'
 );
@@ -98,4 +98,4 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['preview']    = array(
 /**
  * Messages
  */
-$GLOBALS['TL_LANG']['orm_avisota_mailing_draft']['missing_template'] = 'Eine Vorlage kann nur angezeigt werden, wenn ein Template ausgewählt wurde.';
+$GLOBALS['TL_LANG']['orm_avisota_message_draft']['missing_template'] = 'Eine Vorlage kann nur angezeigt werden, wenn ein Template ausgewählt wurde.';

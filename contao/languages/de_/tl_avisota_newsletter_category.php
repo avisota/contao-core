@@ -17,47 +17,47 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['title']          = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['title']          = array(
 	'Titel',
 	'Hier können Sie den Titel der Kategorie angeben.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['alias']          = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['alias']          = array(
 	'Kategoriealias',
 	'Der Kategoriealias ist eine eindeutige Referenz, die anstelle der numerischen Kategoriealias-Id aufgerufen werden kann.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['recipientsMode'] = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['recipientsMode'] = array(
 	'Empfänger Auswahl',
 	'Wählen Sie hier wie die Auswahl der Empfänger möglich sein soll.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['recipients']     = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['recipients']     = array(
 	'Empfänger',
 	'Wählen Sie hier die Empfänger aus.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['themeMode']      = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['themeMode']      = array(
 	'Layout Auswahl',
 	'Wählen Sie hier wie die Auswahl des Layouts möglich sein soll.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['theme']          = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['theme']          = array(
 	'Layout',
 	'Wählen Sie hier das Layouts aus.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['transportMode']  = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['transportMode']  = array(
 	'Transportmodul Auswahl',
 	'Wählen Sie hier wie die Auswahl des Transportmoduls möglich sein soll.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['transport']      = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['transport']      = array(
 	'Transportmodul',
 	'Wählen Sie hier das Transportmodul aus.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['showInMenu']     = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['showInMenu']     = array(
 	'Im Menü anzeigen',
 	'Zeigt die Kategorie im Backend-Menü an.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['menuIcon']       = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['menuIcon']       = array(
 	'Eigenes Icon',
 	'Wählen Sie hier ein eigenes Menü-Icon aus.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['tstamp']         = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['tstamp']         = array(
 	'Änderungsdatum',
 	'Datum und Uhrzeit der letzten Änderung'
 );
@@ -66,44 +66,44 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing_category']['tstamp']         = array(
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['category_legend']   = 'Kategorie';
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['recipients_legend'] = 'Empfänger-Einstellungen';
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['theme_legend']      = 'Layout-Einstellungen';
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['transport_legend']  = 'Transport-Einstellungen';
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['category_legend']   = 'Kategorie';
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['recipients_legend'] = 'Empfänger-Einstellungen';
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['theme_legend']      = 'Layout-Einstellungen';
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['transport_legend']  = 'Transport-Einstellungen';
 
 
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['byCategory']             = 'Nur über die Kategorie';
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['byNewsletterOrCategory'] = 'Im Newsletter optional, mit Rückfalloption auf die Kategorieeinstellung';
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['byNewsletter']           = 'Nur über den Newsletter';
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['byCategory']             = 'Nur über die Kategorie';
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['byNewsletterOrCategory'] = 'Im Newsletter optional, mit Rückfalloption auf die Kategorieeinstellung';
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['byNewsletter']           = 'Nur über den Newsletter';
 
 
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['new']        = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['new']        = array(
 	'Neue Kategorie',
 	'Eine neue Liste erstellen'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['show']       = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['show']       = array(
 	'Kategoriedetails',
 	'Details der Kategorie ID %s anzeigen'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['copy']       = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['copy']       = array(
 	'Kategorie duplizieren',
 	'Kategorie ID %s duplizieren'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['delete']     = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['delete']     = array(
 	'Kategorie löschen',
 	'Kategorie ID %s löschen'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['edit']       = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['edit']       = array(
 	'Kategorie bearbeiten',
 	'Kategorie ID %s bearbeiten'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['editheader'] = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['editheader'] = array(
 	'Kategorieeinstellungen bearbeiten',
 	'Einstellungen der Kategorie ID %s bearbeiten'
 );

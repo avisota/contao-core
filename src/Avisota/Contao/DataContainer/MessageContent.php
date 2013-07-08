@@ -15,7 +15,7 @@
 
 namespace Avisota\Contao\DataContainer;
 
-class MailingContent extends \Backend
+class MessageContent extends \Backend
 {
 
 	/**
@@ -28,7 +28,7 @@ class MailingContent extends \Backend
 
 
 	/**
-	 * Check permissions to edit table orm_avisota_mailing_content
+	 * Check permissions to edit table orm_avisota_message_content
 	 */
 	public function checkPermission()
 	{
@@ -51,7 +51,7 @@ class MailingContent extends \Backend
 				if (!$this->checkAccessToElement(CURRENT_ID, true)) {
 					$this->log(
 						'Access to element ID ' . CURRENT_ID . ' denied!',
-						'orm_avisota_mailing_content',
+						'orm_avisota_message_content',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -73,14 +73,14 @@ class MailingContent extends \Backend
 				) {
 					$this->log(
 						'Access to element ID ' . $this->Input->get('pid') . ' denied!',
-						'orm_avisota_mailing_content',
+						'orm_avisota_message_content',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
 				}
 
 				$contentElement = $this->Database
-					->prepare("SELECT id FROM orm_avisota_mailing_content WHERE pid=?")
+					->prepare("SELECT id FROM orm_avisota_message_content WHERE pid=?")
 					->execute(CURRENT_ID);
 
 				$session                   = $this->Session->getData();
@@ -94,7 +94,7 @@ class MailingContent extends \Backend
 				if (!$this->checkAccessToElement($this->Input->get('pid'), ($this->Input->get('mode') == 2))) {
 					$this->log(
 						'Access to element ID ' . $this->Input->get('pid') . ' denied!',
-						'orm_avisota_mailing_content',
+						'orm_avisota_message_content',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -106,7 +106,7 @@ class MailingContent extends \Backend
 				if (!$this->checkAccessToElement($this->Input->get('id'))) {
 					$this->log(
 						'Access to element ID ' . $this->Input->get('id') . ' denied!',
-						'orm_avisota_mailing_content',
+						'orm_avisota_message_content',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -135,7 +135,7 @@ class MailingContent extends \Backend
 
 		if (!$isPid) {
 			$content = $this->Database
-				->prepare("SELECT * FROM orm_avisota_mailing_content WHERE id=?")
+				->prepare("SELECT * FROM orm_avisota_message_content WHERE id=?")
 				->execute($id);
 			if ($content->next()) {
 				$id = $content->pid;
@@ -143,7 +143,7 @@ class MailingContent extends \Backend
 			else {
 				$this->log(
 					'Invalid avisota newsletter content element ID ' . $id,
-					'orm_avisota_mailing_content checkAccessToElement()',
+					'orm_avisota_message_content checkAccessToElement()',
 					TL_ERROR
 				);
 				return false;
@@ -151,7 +151,7 @@ class MailingContent extends \Backend
 		}
 
 		$newsletter = $this->Database
-			->prepare("SELECT * FROM orm_avisota_mailing WHERE id=?")
+			->prepare("SELECT * FROM orm_avisota_message WHERE id=?")
 			->execute($id);
 		if ($newsletter->next()) {
 			$pid = $newsletter->pid;
@@ -159,7 +159,7 @@ class MailingContent extends \Backend
 		else {
 			$this->log(
 				'Invalid avisota newsletter ID ' . $id,
-				'orm_avisota_mailing_content checkAccessToElement()',
+				'orm_avisota_message_content checkAccessToElement()',
 				TL_ERROR
 			);
 			return false;
@@ -180,7 +180,7 @@ class MailingContent extends \Backend
 		if (!in_array($pid, $root)) {
 			$this->log(
 				'Not enough permissions to modify newsletter ID ' . $id,
-				'orm_avisota_mailing_content checkAccessToElement()',
+				'orm_avisota_message_content checkAccessToElement()',
 				TL_ERROR
 			);
 			return false;
@@ -202,13 +202,13 @@ class MailingContent extends \Backend
 	 *
 	 * @return string
 	 */
-	public function sendMailingButton($href, $label, $title, $icon, $attributes)
+	public function sendMessageButton($href, $label, $title, $icon, $attributes)
 	{
 		$user = \BackendUser::getInstance();
 
 		if (!($user->isAdmin || $user->hasAccess('send', 'avisota_newsletter_permissions'))) {
-			$label = $GLOBALS['TL_LANG']['orm_avisota_mailing']['view_only'][0];
-			$title = $GLOBALS['TL_LANG']['orm_avisota_mailing']['view_only'][1];
+			$label = $GLOBALS['TL_LANG']['orm_avisota_message']['view_only'][0];
+			$title = $GLOBALS['TL_LANG']['orm_avisota_message']['view_only'][1];
 		}
 		return ' &#160; :: &#160; <a href="' . $this->addToUrl(
 			$href . '&amp;id=' . $this->Input->get('id')
@@ -239,7 +239,7 @@ class MailingContent extends \Backend
 	 *
 	 * @return array
 	 */
-	public function getMailingElements()
+	public function getMessageElements()
 	{
 		$groups = array();
 
@@ -301,14 +301,14 @@ class MailingContent extends \Backend
 				? ' (' . $GLOBALS['TL_LANG']['MSC']['protected'] . ')'
 				: ($contentData['guests']
 					? ' (' . $GLOBALS['TL_LANG']['MSC']['guests'] . ')' : '')) .
-			($this->hasMultipleMailingAreas($contentData) ? sprintf(
+			($this->hasMultipleMessageAreas($contentData) ? sprintf(
 				' <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>',
-				isset($GLOBALS['TL_LANG']['orm_avisota_mailing_content']['cell'][$contentData['cell']])
-					? $GLOBALS['TL_LANG']['orm_avisota_mailing_content']['cell'][$contentData['cell']] : $contentData['cell']
+				isset($GLOBALS['TL_LANG']['orm_avisota_message_content']['cell'][$contentData['cell']])
+					? $GLOBALS['TL_LANG']['orm_avisota_message_content']['cell'][$contentData['cell']] : $contentData['cell']
 			) : '') .
 			'</div>
 <div class="limit_height' . (!$GLOBALS['TL_CONFIG']['doNotCollapse'] ? ' h64' : '') . ' block">
-<table>' . /* $this->Content->getMailingElement($contentData['id']) . */ '</table>
+<table>' . /* $this->Content->getMessageElement($contentData['id']) . */ '</table>
 </div>' . "\n";
 	}
 
@@ -357,12 +357,12 @@ class MailingContent extends \Backend
 		$this->Input->setGet('act', 'toggle');
 		$this->checkPermission();
 
-		$this->createInitialVersion('orm_avisota_mailing_content', $contentId);
+		$this->createInitialVersion('orm_avisota_message_content', $contentId);
 
 		// Trigger the save_callback
-		if (is_array($GLOBALS['TL_DCA']['orm_avisota_mailing_content']['fields']['invisible']['save_callback'])) {
+		if (is_array($GLOBALS['TL_DCA']['orm_avisota_message_content']['fields']['invisible']['save_callback'])) {
 			foreach (
-				$GLOBALS['TL_DCA']['orm_avisota_mailing_content']['fields']['invisible']['save_callback'] as
+				$GLOBALS['TL_DCA']['orm_avisota_message_content']['fields']['invisible']['save_callback'] as
 				$callback
 			) {
 				$this->import($callback[0]);
@@ -373,12 +373,12 @@ class MailingContent extends \Backend
 		// Update the database
 		$this->Database
 			->prepare(
-			"UPDATE orm_avisota_mailing_content SET tstamp=" . time() . ", invisible='" . ($visible ? ''
+			"UPDATE orm_avisota_message_content SET tstamp=" . time() . ", invisible='" . ($visible ? ''
 				: 1) . "' WHERE id=?"
 		)
 			->execute($contentId);
 
-		$this->createNewVersion('orm_avisota_mailing_content', $contentId);
+		$this->createNewVersion('orm_avisota_message_content', $contentId);
 	}
 
 
@@ -387,9 +387,9 @@ class MailingContent extends \Backend
 	 *
 	 * @param DataContainer $dc
 	 */
-	public function hasMultipleMailingAreas($dc)
+	public function hasMultipleMessageAreas($dc)
 	{
-		$areas = $this->dcaGetMailingAreas($dc);
+		$areas = $this->dcaGetMessageAreas($dc);
 		return count($areas) > 1;
 	}
 
@@ -397,11 +397,11 @@ class MailingContent extends \Backend
 	/**
 	 * Get a list of areas from the parent category.
 	 */
-	public function dcaGetMailingAreas($dc)
+	public function dcaGetMessageAreas($dc)
 	{
 		$category = $this->Database
 			->prepare(
-			"SELECT c.* FROM orm_avisota_mailing_category c INNER JOIN orm_avisota_mailing n ON c.id=n.pid INNER JOIN orm_avisota_mailing_content nle ON n.id=nle.pid WHERE nle.id=?"
+			"SELECT c.* FROM orm_avisota_message_category c INNER JOIN orm_avisota_message n ON c.id=n.pid INNER JOIN orm_avisota_message_content nle ON n.id=nle.pid WHERE nle.id=?"
 		)
 			->execute(is_array($dc) ? $dc['id'] : (is_object($dc) ? $dc->id : $dc));
 		if ($category->next()) {
@@ -421,17 +421,17 @@ class MailingContent extends \Backend
 	 */
 	public function myLoadDataContainer($name)
 	{
-		if ($name == 'orm_avisota_mailing_content') {
-			if ($this->Input->get('table') == 'orm_avisota_mailing_content' && $this->Input->get('act') == 'edit') {
-				if (!$this->hasMultipleMailingAreas($this->Input->get('id'))) {
-					foreach ($GLOBALS['TL_DCA']['orm_avisota_mailing_content']['palettes'] as $k => $v) {
-						$GLOBALS['TL_DCA']['orm_avisota_mailing_content']['palettes'][$k] = str_replace(
+		if ($name == 'orm_avisota_message_content') {
+			if ($this->Input->get('table') == 'orm_avisota_message_content' && $this->Input->get('act') == 'edit') {
+				if (!$this->hasMultipleMessageAreas($this->Input->get('id'))) {
+					foreach ($GLOBALS['TL_DCA']['orm_avisota_message_content']['palettes'] as $k => $v) {
+						$GLOBALS['TL_DCA']['orm_avisota_message_content']['palettes'][$k] = str_replace(
 							',cell',
 							'',
 							$v
 						);
 					}
-					$GLOBALS['TL_DCA']['orm_avisota_mailing_content']['fields']['cell']['filter'] = false;
+					$GLOBALS['TL_DCA']['orm_avisota_message_content']['fields']['cell']['filter'] = false;
 				}
 			}
 		}
