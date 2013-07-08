@@ -16,19 +16,15 @@
 namespace Avisota\Contao\Event;
 
 use Avisota\Contao\Entity\Recipient;
-use Avisota\Contao\Entity\RecipientSubscription;
 use Symfony\Component\EventDispatcher\Event;
 
-class SubscribeEvent extends Event
+class RecipientEvent extends Event
 {
 	protected $recipient;
 
-	protected $subscription;
-
-	function __construct(Recipient $recipient, $subscription)
+	function __construct(Recipient $recipient)
 	{
 		$this->recipient = $recipient;
-		$this->list = $subscription;
 	}
 
 	/**
@@ -37,13 +33,5 @@ class SubscribeEvent extends Event
 	public function getRecipient()
 	{
 		return $this->recipient;
-	}
-
-	/**
-	 * @return RecipientSubscription
-	 */
-	public function getSubscription()
-	{
-		return $this->list;
 	}
 }

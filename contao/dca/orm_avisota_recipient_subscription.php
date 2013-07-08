@@ -39,7 +39,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_subscription'] = array
 			'field' => array(
 				'id'     => true,
 				'type'   => 'string',
-				'length' => 64,
 			)
 		),
 		'confirmationSent' => array

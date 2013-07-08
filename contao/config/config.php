@@ -25,14 +25,6 @@ define('AVISOTA_ROOT', dirname(__DIR__));
 
 
 /**
- * Include dynamic generated informations
- */
-if (file_exists(__DIR__ . '/dynamics.php')) {
-	$GLOBALS['AVISOTA_DYNAMICS'] = include(__DIR__ . '/dynamics.php');
-}
-
-
-/**
  * Entities
  */
 $GLOBALS['DOCTRINE_ENTITY_NAMESPACE_ALIAS']['Avisota\Contao']        = 'Avisota\Contao\Entity';
@@ -48,7 +40,25 @@ $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avis
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient_blacklist';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient_source';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient_subscription';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient_subscription_log';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_transport';
+
+
+/**
+ * Events
+ */
+$GLOBALS['TL_EVENT_SUBSCRIBERS']['avisota-subscription-log'] = 'Avisota\Contao\SubscriptionLogger';
+
+
+/**
+ * Include dynamic generated informations
+ */
+if (file_exists(__DIR__ . '/dynamics.php')) {
+	$GLOBALS['AVISOTA_DYNAMICS'] = include(__DIR__ . '/dynamics.php');
+}
+else {
+	$GLOBALS['AVISOTA_DYNAMICS'] = array();
+}
 
 
 /**

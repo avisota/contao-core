@@ -20,27 +20,48 @@ $container['avisota.subscription'] = $container->share(
 );
 
 /**
- * Define logger defaults
+ * Define logger defaults levels
  */
+
+// avisota log default level
 $container['avisota.logger.default.level'] = function($container) {
 	return $container['logger.default.level'];
 };
 
+// transport log default level
 $container['avisota.logger.default.level.transport'] = function($container) {
 	return $container['avisota.logger.default.level'];
 };
 
+// subscription log default level
+$container['avisota.logger.default.level.subscription'] = function($container) {
+	return 'debug';
+};
+
+/**
+ * Definer logger default handlers
+ */
+
+// avisota log default handlers
 $container['avisota.logger.default.handlers'] = new ArrayObject(
 	array('avisota.logger.handler.general')
 );
 
+// transport log default handlers
 $container['avisota.logger.default.handlers.transport'] = new ArrayObject(
-	array('avisota.logger.handler.transport', 'avisota.logger.handler')
+	array('avisota.logger.handler.transport', 'avisota.logger.handler.general')
+);
+
+// subscription log default handlers
+$container['avisota.logger.default.handlers.subscription'] = new ArrayObject(
+	array('avisota.logger.handler.subscription', 'avisota.logger.handler.general')
 );
 
 /**
  * Define logger handlers
  */
+
+// avisota log handler
 $container['avisota.logger.handler.general'] = $container->share(
 	function($container) {
 		$factory = $container['logger.factory.handler.rotatingFile'];
@@ -49,6 +70,7 @@ $container['avisota.logger.handler.general'] = $container->share(
 	}
 );
 
+// transport log handler
 $container['avisota.logger.handler.transport'] = $container->share(
 	function($container) {
 		$factory = $container['logger.factory.handler.rotatingFile'];
@@ -57,9 +79,20 @@ $container['avisota.logger.handler.transport'] = $container->share(
 	}
 );
 
+// subscription log handler
+$container['avisota.logger.handler.subscription'] = $container->share(
+	function($container) {
+		$factory = $container['logger.factory.handler.stream'];
+
+		return $factory('avisota.subscription.log', $container['avisota.logger.default.level.subscription']);
+	}
+);
+
 /**
  * Define loggers
  */
+
+// avisota log
 $container['avisota.logger'] = function($container) {
 	$factory = $container['logger.factory'];
 	$logger = $factory('avisota', $container['avisota.logger.default.handlers']);
@@ -67,9 +100,18 @@ $container['avisota.logger'] = function($container) {
 	return $logger;
 };
 
+// transport log
 $container['avisota.logger.transport'] = function($container) {
 	$factory = $container['logger.factory'];
 	$logger = $factory('avisota.transport', $container['avisota.logger.default.handlers.transport']);
+
+	return $logger;
+};
+
+// subscription log
+$container['avisota.logger.subscription'] = function($container) {
+	$factory = $container['logger.factory'];
+	$logger = $factory('avisota.subscription', $container['avisota.logger.default.handlers.subscription']);
 
 	return $logger;
 };
