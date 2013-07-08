@@ -34,7 +34,7 @@ $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avis
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing_category';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing_content';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing_theme';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_theme';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_queue';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient_blacklist';
@@ -163,7 +163,7 @@ else if (is_string($GLOBALS['TL_CONFIG']['avisota_salutations'])) {
 /**
  * Page types
  */
-$GLOBALS['TL_PTY']['avisota'] = 'PageAvisotaNewsletter';
+$GLOBALS['TL_PTY']['avisota'] = 'PageAvisotaMailing';
 
 
 /**
@@ -290,7 +290,7 @@ $GLOBALS['BE_MOD']['system'] = array_merge(
 		 'avisota_theme'            => array
 		 (
 			 'nested'     => 'avisota_config:newsletter',
-			 'tables'     => array('orm_avisota_mailing_theme'),
+			 'tables'     => array('orm_avisota_theme'),
 			 'icon'       => 'system/modules/avisota/assets/images/theme.png',
 			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
 		 ),
@@ -324,7 +324,7 @@ $GLOBALS['FE_MOD']['avisota']['avisota_reader']       = 'Avisota\Contao\Module\R
 
 
 /**
- * Newsletter elements
+ * Mailing elements
  */
 $GLOBALS['TL_NLE'] = array_merge_recursive(
 	array

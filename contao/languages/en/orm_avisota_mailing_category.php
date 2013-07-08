@@ -94,8 +94,8 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing_category']['expert_legend']     = 'Expe
  * Reference
  */
 $GLOBALS['TL_LANG']['orm_avisota_mailing_category']['byCategory']             = 'only in category';
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['byNewsletterOrCategory'] = 'preselected in category, overwriteable in newsletter';
-$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['byNewsletter']           = 'only in newsletter';
+$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['byMailingOrCategory'] = 'preselected in category, overwriteable in newsletter';
+$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['byMailing']           = 'only in newsletter';
 
 
 /**

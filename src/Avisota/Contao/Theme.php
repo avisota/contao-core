@@ -70,7 +70,7 @@ class Theme
 		$template = basename($template);
 		$filename = $template . '.html5';
 
-		/** @var AvisotaNewsletter $newsletter */
+		/** @var AvisotaMailing $newsletter */
 		global $newsletter;
 
 		// Check for a theme folder
@@ -161,7 +161,7 @@ class Theme
 		// Add the theme templates folder
 		if ($themeId > 0) {
 			$theme = $database
-				->prepare("SELECT * FROM orm_avisota_mailing_theme WHERE id=?")
+				->prepare("SELECT * FROM orm_avisota_theme WHERE id=?")
 				->limit(1)
 				->execute($themeId);
 

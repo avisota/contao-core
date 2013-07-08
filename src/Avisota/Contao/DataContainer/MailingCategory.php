@@ -18,7 +18,7 @@ namespace Avisota\Contao\DataContainer;
 use Avisota\Contao\Entity\RecipientSource;
 use Contao\Doctrine\ORM\EntityHelper;
 
-class NewsletterCategory extends \Backend
+class MailingCategory extends \Backend
 {
 	/**
 	 * Import the back end user object

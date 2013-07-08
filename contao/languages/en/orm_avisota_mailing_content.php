@@ -132,11 +132,11 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing_content']['source']          = array(
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing_content']['events']          = array(
 	'Events <strong style="color:red">REMOVE</strong>',
-	'Hier können Events gewählt werden, welche in den Newsletter eingebunden werden sollen.'
+	'Hier können Events gewählt werden, welche in den Mailing eingebunden werden sollen.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing_content']['news']            = array(
 	'Nachrichten <strong style="color:red">REMOVE</strong>',
-	'Hier können Nachrichten gewählt werden, welche in den Newsletter eingebunden werden sollen.'
+	'Hier können Nachrichten gewählt werden, welche in den Mailing eingebunden werden sollen.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing_content']['articleAlias']    = array(
 	'Bezogener Artikel <strong style="color:red">REMOVE</strong>',

@@ -68,7 +68,7 @@ class AvisotaNewsletter
 	/**
 	 * The theme of thins newsletter.
 	 *
-	 * @var AvisotaNewsletterTheme
+	 * @var AvisotaTheme
 	 */
 	protected $theme;
 
@@ -225,7 +225,7 @@ class AvisotaNewsletter
 	}
 
 	/**
-	 * @param \AvisotaNewsletterTheme $theme
+	 * @param \AvisotaTheme $theme
 	 */
 	public function setTheme($theme)
 	{

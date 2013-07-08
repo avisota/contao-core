@@ -45,7 +45,7 @@ class Settings extends \Backend
 	 *
 	 * @return array
 	 */
-	public function getBoilerplateNewsletters($dc)
+	public function getBoilerplateMailings($dc)
 	{
 		$database = \Database::getInstance();
 

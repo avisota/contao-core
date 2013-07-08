@@ -15,7 +15,7 @@
 
 namespace Avisota\Contao\DataContainer;
 
-class NewsletterContent extends \Backend
+class MailingContent extends \Backend
 {
 
 	/**
@@ -202,7 +202,7 @@ class NewsletterContent extends \Backend
 	 *
 	 * @return string
 	 */
-	public function sendNewsletterButton($href, $label, $title, $icon, $attributes)
+	public function sendMailingButton($href, $label, $title, $icon, $attributes)
 	{
 		$user = \BackendUser::getInstance();
 
@@ -239,7 +239,7 @@ class NewsletterContent extends \Backend
 	 *
 	 * @return array
 	 */
-	public function getNewsletterElements()
+	public function getMailingElements()
 	{
 		$groups = array();
 
@@ -301,14 +301,14 @@ class NewsletterContent extends \Backend
 				? ' (' . $GLOBALS['TL_LANG']['MSC']['protected'] . ')'
 				: ($contentData['guests']
 					? ' (' . $GLOBALS['TL_LANG']['MSC']['guests'] . ')' : '')) .
-			($this->hasMultipleNewsletterAreas($contentData) ? sprintf(
+			($this->hasMultipleMailingAreas($contentData) ? sprintf(
 				' <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>',
 				isset($GLOBALS['TL_LANG']['orm_avisota_mailing_content']['cell'][$contentData['cell']])
 					? $GLOBALS['TL_LANG']['orm_avisota_mailing_content']['cell'][$contentData['cell']] : $contentData['cell']
 			) : '') .
 			'</div>
 <div class="limit_height' . (!$GLOBALS['TL_CONFIG']['doNotCollapse'] ? ' h64' : '') . ' block">
-<table>' . /* $this->Content->getNewsletterElement($contentData['id']) . */ '</table>
+<table>' . /* $this->Content->getMailingElement($contentData['id']) . */ '</table>
 </div>' . "\n";
 	}
 
@@ -387,9 +387,9 @@ class NewsletterContent extends \Backend
 	 *
 	 * @param DataContainer $dc
 	 */
-	public function hasMultipleNewsletterAreas($dc)
+	public function hasMultipleMailingAreas($dc)
 	{
-		$areas = $this->dcaGetNewsletterAreas($dc);
+		$areas = $this->dcaGetMailingAreas($dc);
 		return count($areas) > 1;
 	}
 
@@ -397,7 +397,7 @@ class NewsletterContent extends \Backend
 	/**
 	 * Get a list of areas from the parent category.
 	 */
-	public function dcaGetNewsletterAreas($dc)
+	public function dcaGetMailingAreas($dc)
 	{
 		$category = $this->Database
 			->prepare(
@@ -423,7 +423,7 @@ class NewsletterContent extends \Backend
 	{
 		if ($name == 'orm_avisota_mailing_content') {
 			if ($this->Input->get('table') == 'orm_avisota_mailing_content' && $this->Input->get('act') == 'edit') {
-				if (!$this->hasMultipleNewsletterAreas($this->Input->get('id'))) {
+				if (!$this->hasMultipleMailingAreas($this->Input->get('id'))) {
 					foreach ($GLOBALS['TL_DCA']['orm_avisota_mailing_content']['palettes'] as $k => $v) {
 						$GLOBALS['TL_DCA']['orm_avisota_mailing_content']['palettes'][$k] = str_replace(
 							',cell',

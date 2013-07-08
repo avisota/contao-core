@@ -58,19 +58,19 @@ $GLOBALS['TL_LANG']['tl_module']['avisota_template_subscription'] = array(
 
 $GLOBALS['TL_LANG']['tl_module']['avisota_categories']                    = array(
 	'Kategorien',
-	'Wählen Sie die Kategorien aus, aus denen die Newsletter angezeigt werden sollen.'
+	'Wählen Sie die Kategorien aus, aus denen die Mailing angezeigt werden sollen.'
 );
 $GLOBALS['TL_LANG']['tl_module']['avisota_reader_template']               = array(
 	'Leser-Template',
-	'Wählen Sie hier das Template für den Newsletter-Leser aus.'
+	'Wählen Sie hier das Template für den Mailing-Leser aus.'
 );
 $GLOBALS['TL_LANG']['tl_module']['avisota_list_template']                 = array(
 	'Listen-Template',
-	'Wählen Sie hier das Template für die Newsletter-Liste aus.'
+	'Wählen Sie hier das Template für die Mailing-Liste aus.'
 );
 $GLOBALS['TL_LANG']['tl_module']['avisota_view_page']                     = array(
 	'Ansichtsseite',
-	'Wählen Sie hier eine Seite aus, auf der die Newsletter angezeigt werden soll. Wird keine Seite ausgewählt, wird die in der Kategorie hinterlegte Seite zur Online-Ansicht verwendet.'
+	'Wählen Sie hier eine Seite aus, auf der die Mailing angezeigt werden soll. Wird keine Seite ausgewählt, wird die in der Kategorie hinterlegte Seite zur Online-Ansicht verwendet.'
 );
 $GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe']          = array(
 	'Form-Template',
@@ -85,5 +85,5 @@ $GLOBALS['TL_LANG']['tl_module']['avisota_subscription_legend'] = 'Abonnement';
 $GLOBALS['TL_LANG']['tl_module']['avisota_mail_legend']         = 'Mail Einstellungen';
 $GLOBALS['TL_LANG']['tl_module']['avisota_notification_legend'] = 'Erinnerung';
 $GLOBALS['TL_LANG']['tl_module']['avisota_cleanup_legend']      = 'Aufräumen';
-$GLOBALS['TL_LANG']['tl_module']['avisota_reader_legend']       = 'Newsletter-Leser';
-$GLOBALS['TL_LANG']['tl_module']['avisota_list_legend']         = 'Newsletter-Liste';
+$GLOBALS['TL_LANG']['tl_module']['avisota_reader_legend']       = 'Mailing-Leser';
+$GLOBALS['TL_LANG']['tl_module']['avisota_list_legend']         = 'Mailing-Liste';

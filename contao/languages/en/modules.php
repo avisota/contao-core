@@ -19,7 +19,7 @@
  */
 $GLOBALS['TL_LANG']['MOD']['avisota']                   = array('Avisota newsletter');
 $GLOBALS['TL_LANG']['MOD']['avisota_outbox']            = array('Outbox');
-$GLOBALS['TL_LANG']['MOD']['avisota_newsletter']        = array('Newsletters');
+$GLOBALS['TL_LANG']['MOD']['avisota_newsletter']        = array('Mailings');
 $GLOBALS['TL_LANG']['MOD']['avisota_recipients']        = array('Recipients');
 $GLOBALS['TL_LANG']['MOD']['avisota_config']            = array('Avisota settings');
 $GLOBALS['TL_LANG']['MOD']['avisota_settings']          = array(
@@ -32,9 +32,9 @@ $GLOBALS['TL_LANG']['MOD']['avisota_mailing_list']      = array(
 	'Manage the mailing lists that can be subscribed.'
 );
 $GLOBALS['TL_LANG']['MOD']['avisota_recipient_source']  = array('Recipient sources', 'Manager recipient sources.');
-$GLOBALS['TL_LANG']['MOD']['avisota_config:newsletter'] = array('Newsletter config');
+$GLOBALS['TL_LANG']['MOD']['avisota_config:newsletter'] = array('Mailing config');
 $GLOBALS['TL_LANG']['MOD']['avisota_newsletter_draft']  = array(
-	'Newsletter drafts',
+	'Mailing drafts',
 	'Manager newsletter drafts to create new newsletters from.'
 );
 $GLOBALS['TL_LANG']['MOD']['avisota_theme']             = array(

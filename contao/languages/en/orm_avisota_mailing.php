@@ -74,11 +74,11 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing']['tstamp']        = array(
 /*
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['sendPreviewToUser']    = array(
 	'Testsendung an Benutzer',
-	'Die Testsendung des Newsletters an diesen Benutzer versenden.'
+	'Die Testsendung des Mailings an diesen Benutzer versenden.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['sendPreviewToEmail']   = array(
 	'Testsendung an E-Mail',
-	'Die Testsendung des Newsletters an diese E-Mail-Adresse versenden. Geben Sie hier eine E-Mail Adresse an, wird der Versand an die Benutzerauswahl ignoriert.'
+	'Die Testsendung des Mailings an diese E-Mail-Adresse versenden. Geben Sie hier eine E-Mail Adresse an, wird der Versand an die Benutzerauswahl ignoriert.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['preview_mode']         = array(
 	'Vorschaumodus',
@@ -99,7 +99,7 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing']['preview_personalized'] = array(
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['newsletter_legend'] = 'Newsletter';
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['newsletter_legend'] = 'Mailing';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['meta_legend']       = 'Details';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['recipient_legend']  = 'Recipient';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['theme_legend']      = 'Theme settings';
@@ -107,11 +107,11 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing']['transport_legend']  = 'Transport set
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['attachment_legend'] = 'Attachments';
 
 /*
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['headline']          = 'Newsletter ansehen und versenden';
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['headline']          = 'Mailing ansehen und versenden';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['from']              = 'Absender';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['live']              = 'Vorschau aktualisieren';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['preview']           = 'Testsendung';
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['unsubscribe']       = 'vom Newsletter abmelden';
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['unsubscribe']       = 'vom Mailing abmelden';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['salutation']        = 'Sehr geehrte/-r {fullname}';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['salutation_male']   = 'Sehr geehrter Herr {fullname}';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['salutation_female'] = 'Sehr geehrte Frau {fullname}';
@@ -121,17 +121,17 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing']['salutation_female'] = 'Sehr geehrte 
  * Reference
  */
 /*
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['created_from_draft']  = 'Newsletter wurde erstellt.';
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['created_from_draft']  = 'Mailing wurde erstellt.';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['view']                = array(
 	'Ansehen und Versenden',
-	'Den Newsletter ansehen und versenden.'
+	'Den Mailing ansehen und versenden.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['view_only']           = array('Ansehen', 'Den Newsletter ansehen.');
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['send']                = array('Versenden', 'Den Newsletter versenden.');
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['view_only']           = array('Ansehen', 'Den Mailing ansehen.');
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['send']                = array('Versenden', 'Den Mailing versenden.');
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['sended']              = 'versendet am %s';
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['confirm']             = 'Der Newsletter wurde an alle Empfänger versendet.';
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['confirm']             = 'Der Mailing wurde an alle Empfänger versendet.';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['confirmPreview']      = 'Die Testsendung wurde an %s versendet.';
-$GLOBALS['TL_LANG']['orm_avisota_mailing']['online']              = 'Probleme mit der Darstellung? Den Newsletter Online ansehen.';
+$GLOBALS['TL_LANG']['orm_avisota_mailing']['online']              = 'Probleme mit der Darstellung? Den Mailing Online ansehen.';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['list']                = 'Verteiler';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['member']              = 'Mitglieder';
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['mgroup']              = 'Mitgliedergruppe';
@@ -152,7 +152,7 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing']['create_from_draft'] = array(
 	'Add a new newsletter from boilerplate'
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['show']              = array(
-	'Newsletter details',
+	'Mailing details',
 	'Show the details of newsletter ID %s'
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing']['copy']              = array(

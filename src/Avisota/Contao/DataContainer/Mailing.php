@@ -15,11 +15,11 @@
 
 namespace Avisota\Contao\DataContainer;
 
-use Avisota\Contao\Entity\NewsletterCategory;
+use Avisota\Contao\Entity\MailingCategory;
 use Contao\Doctrine\ORM\EntityHelper;
 use Doctrine\Common\Persistence\Mapping\MappingException;
 
-class Newsletter extends \Controller
+class Mailing extends \Controller
 {
 	public function updatePalette()
 	{
@@ -31,65 +31,65 @@ class Newsletter extends \Controller
 			$database->tableExists('orm_avisota_mailing_category')
 		) {
 			try {
-				$newsletterCategoryRepository = EntityHelper::getRepository('Avisota\Contao:NewsletterCategory');
+				$newsletterCategoryRepository = EntityHelper::getRepository('Avisota\Contao:MailingCategory');
 
 				if ($input->get('act') == 'edit') {
-					$newsletterRepository = EntityHelper::getRepository('Avisota\Contao:Newsletter');
-					/** @var \Avisota\Contao\Entity\Newsletter $newsletter */
+					$newsletterRepository = EntityHelper::getRepository('Avisota\Contao:Mailing');
+					/** @var \Avisota\Contao\Entity\Mailing $newsletter */
 					$newsletter = $newsletterRepository->find($input->get('id'));
-					/** @var NewsletterCategory $newsletterCategory */
+					/** @var MailingCategory $newsletterCategory */
 					$newsletterCategory = $newsletterCategoryRepository->find($newsletter->getPid());
 
 					switch ($newsletterCategory->getRecipientsMode()) {
-						case 'byNewsletterOrCategory':
+						case 'byMailingOrCategory':
 							$GLOBALS['TL_DCA']['orm_avisota_mailing']['metapalettes']['default']['recipient'][] = 'setRecipients';
 							break;
 
-						case 'byNewsletter':
+						case 'byMailing':
 							$GLOBALS['TL_DCA']['orm_avisota_mailing']['metapalettes']['default']['recipient'][] = 'recipients';
 							break;
 					}
 
 					switch ($newsletterCategory->getThemeMode()) {
-						case 'byNewsletterOrCategory':
+						case 'byMailingOrCategory':
 							$GLOBALS['TL_DCA']['orm_avisota_mailing']['metapalettes']['default']['theme'][] = 'setTheme';
 							break;
 
-						case 'byNewsletter':
+						case 'byMailing':
 							$GLOBALS['TL_DCA']['orm_avisota_mailing']['metapalettes']['default']['theme'][] = 'theme';
 							break;
 					}
 
 					switch ($newsletterCategory->getTransportMode()) {
-						case 'byNewsletterOrCategory':
+						case 'byMailingOrCategory':
 							$GLOBALS['TL_DCA']['orm_avisota_mailing']['metapalettes']['default']['transport'][] = 'setTransport';
 							break;
 
-						case 'byNewsletter':
+						case 'byMailing':
 							$GLOBALS['TL_DCA']['orm_avisota_mailing']['metapalettes']['default']['transport'][] = 'transport';
 							break;
 					}
 				}
 				else {
-					/** @var NewsletterCategory $newsletterCategory */
+					/** @var MailingCategory $newsletterCategory */
 					$newsletterCategory = $newsletterCategoryRepository->find($input->get('id'));
 
 					switch ($newsletterCategory->getRecipientsMode()) {
-						case 'byNewsletterOrCategory':
+						case 'byMailingOrCategory':
 						case 'byCategory':
 							$GLOBALS['TL_DCA']['orm_avisota_mailing']['list']['sorting']['headerFields'][] = 'recipients';
 							break;
 					}
 
 					switch ($newsletterCategory->getThemeMode()) {
-						case 'byNewsletterOrCategory':
+						case 'byMailingOrCategory':
 						case 'byCategory':
 							$GLOBALS['TL_DCA']['orm_avisota_mailing']['list']['sorting']['headerFields'][] = 'theme';
 							break;
 					}
 
 					switch ($newsletterCategory->getTransportMode()) {
-						case 'byNewsletterOrCategory':
+						case 'byMailingOrCategory':
 						case 'byCategory':
 							$GLOBALS['TL_DCA']['orm_avisota_mailing']['list']['sorting']['headerFields'][] = 'transport';
 							break;
@@ -211,7 +211,7 @@ class Newsletter extends \Controller
 	 *
 	 * @return string
 	 */
-	public function editNewsletter($row, $href, $label, $title, $icon, $attributes)
+	public function editMailing($row, $href, $label, $title, $icon, $attributes)
 	{
 		$user = \BackendUser::getInstance();
 
@@ -258,7 +258,7 @@ class Newsletter extends \Controller
 	 *
 	 * @return string
 	 */
-	public function copyNewsletter($row, $href, $label, $title, $icon, $attributes)
+	public function copyMailing($row, $href, $label, $title, $icon, $attributes)
 	{
 		$user = \BackendUser::getInstance();
 
@@ -284,7 +284,7 @@ class Newsletter extends \Controller
 	 *
 	 * @return string
 	 */
-	public function deleteNewsletter($row, $href, $label, $title, $icon, $attributes)
+	public function deleteMailing($row, $href, $label, $title, $icon, $attributes)
 	{
 		$user = \BackendUser::getInstance();
 
@@ -310,7 +310,7 @@ class Newsletter extends \Controller
 	 *
 	 * @return string
 	 */
-	public function sendNewsletter($row, $href, $label, $title, $icon, $attributes)
+	public function sendMailing($row, $href, $label, $title, $icon, $attributes)
 	{
 		$user = \BackendUser::getInstance();
 
@@ -328,11 +328,11 @@ class Newsletter extends \Controller
 		$key       = $GLOBALS['TL_LANG']['orm_avisota_mailing_category']['recipients'][0];
 		$add[$key] = array();
 
-		$newsletterCategoryRepository = EntityHelper::getRepository('Avisota\Contao:NewsletterCategory');
-		/** @var NewsletterCategory $newsletterCategory */
+		$newsletterCategoryRepository = EntityHelper::getRepository('Avisota\Contao:MailingCategory');
+		/** @var MailingCategory $newsletterCategory */
 		$newsletterCategory = $newsletterCategoryRepository->find($dc->id);
 
-		$fallback = $newsletterCategory->getRecipientsMode() == 'byNewsletterOrCategory';
+		$fallback = $newsletterCategory->getRecipientsMode() == 'byMailingOrCategory';
 
 		/*
 		 * TODO
@@ -360,13 +360,13 @@ class Newsletter extends \Controller
 		$add[$key] = implode('<br>', $add[$key]);
 
 
-		if ($newsletterCategory->getThemeMode() == 'byNewsletterOrCategory') {
+		if ($newsletterCategory->getThemeMode() == 'byMailingOrCategory') {
 			$key = $GLOBALS['TL_LANG']['orm_avisota_mailing_category']['theme'][0];
 			$add[$key] .= ' ' . $GLOBALS['TL_LANG']['orm_avisota_mailing']['fallback'];
 		}
 
 
-		if ($newsletterCategory->getTransportMode() == 'byNewsletterOrCategory') {
+		if ($newsletterCategory->getTransportMode() == 'byMailingOrCategory') {
 			$key = $GLOBALS['TL_LANG']['orm_avisota_mailing_category']['transport'][0];
 			$add[$key] .= ' ' . $GLOBALS['TL_LANG']['orm_avisota_mailing']['fallback'];
 		}
@@ -380,7 +380,7 @@ class Newsletter extends \Controller
 	 *
 	 * @param array
 	 */
-	public function addNewsletter($newsletterData)
+	public function addMailing($newsletterData)
 	{
 		$icon = $newsletterData['sendOn'] ? 'visible' : 'invisible';
 

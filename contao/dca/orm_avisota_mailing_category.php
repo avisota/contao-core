@@ -16,7 +16,7 @@
 
 /**
  * Table orm_avisota_mailing_category
- * Entity Avisota\Contao:NewsletterCategory
+ * Entity Avisota\Contao:MailingCategory
  */
 $GLOBALS['TL_DCA']['orm_avisota_mailing_category'] = array
 (
@@ -30,7 +30,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_category'] = array
 		'enableVersioning' => true,
 		'onload_callback'  => array
 		(
-			array('Avisota\Contao\DataContainer\NewsletterCategory', 'checkPermission')
+			array('Avisota\Contao\DataContainer\MailingCategory', 'checkPermission')
 		)
 	),
 	// List
@@ -71,7 +71,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_category'] = array
 				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['editheader'],
 				'href'            => 'act=edit',
 				'icon'            => 'header.gif',
-				'button_callback' => array('Avisota\Contao\DataContainer\NewsletterCategory', 'editHeader'),
+				'button_callback' => array('Avisota\Contao\DataContainer\MailingCategory', 'editHeader'),
 			),
 			'copy'       => array
 			(
@@ -79,7 +79,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_category'] = array
 				'href'            => 'act=copy',
 				'icon'            => 'copy.gif',
 				'attributes'      => 'onclick="Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\Contao\DataContainer\NewsletterCategory', 'copyCategory')
+				'button_callback' => array('Avisota\Contao\DataContainer\MailingCategory', 'copyCategory')
 			),
 			'delete'     => array
 			(
@@ -87,7 +87,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_category'] = array
 				'href'            => 'act=delete',
 				'icon'            => 'delete.gif',
 				'attributes'      => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\Contao\DataContainer\NewsletterCategory', 'deleteCategory')
+				'button_callback' => array('Avisota\Contao\DataContainer\MailingCategory', 'deleteCategory')
 			),
 			'show'       => array
 			(
@@ -130,22 +130,22 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_category'] = array
 		'recipientsMode' => array
 		(
 			'byCategory'             => array('recipients'),
-			'byNewsletterOrCategory' => array('recipients'),
+			'byMailingOrCategory' => array('recipients'),
 		),
 		'themeMode'      => array
 		(
 			'byCategory'             => array('theme'),
-			'byNewsletterOrCategory' => array('theme')
+			'byMailingOrCategory' => array('theme')
 		),
 		'transportMode'  => array
 		(
 			'byCategory'             => array('transport'),
-			'byNewsletterOrCategory' => array('transport')
+			'byMailingOrCategory' => array('transport')
 		),
 		'queueMode'      => array
 		(
 			'byCategory'             => array('queue'),
-			'byNewsletterOrCategory' => array('queue')
+			'byMailingOrCategory' => array('queue')
 		)
 	),
 	// Fields
@@ -189,7 +189,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_category'] = array
 			),
 			'save_callback' => array
 			(
-				array('Avisota\Contao\DataContainer\NewsletterCategory', 'generateAlias')
+				array('Avisota\Contao\DataContainer\MailingCategory', 'generateAlias')
 			)
 		),
 		'recipientsMode'    => array
@@ -197,7 +197,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_category'] = array
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['recipientsMode'],
 			'default'   => 'byCategory',
 			'inputType' => 'select',
-			'options'   => array('byCategory', 'byNewsletterOrCategory', 'byNewsletter'),
+			'options'   => array('byCategory', 'byMailingOrCategory', 'byMailing'),
 			'reference' => &$GLOBALS['TL_LANG']['orm_avisota_mailing_category'],
 			'eval'      => array(
 				'mandatory'      => true,
@@ -209,7 +209,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_category'] = array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['recipients'],
 			'inputType'        => 'checkbox',
-			'options_callback' => array('Avisota\Contao\DataContainer\NewsletterCategory', 'getRecipients'),
+			'options_callback' => array('Avisota\Contao\DataContainer\MailingCategory', 'getRecipients'),
 			'eval'             => array(
 				'mandatory' => true,
 				'multiple'  => true,
@@ -221,7 +221,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_category'] = array
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['themeMode'],
 			'default'   => 'byCategory',
 			'inputType' => 'select',
-			'options'   => array('byCategory', 'byNewsletterOrCategory', 'byNewsletter'),
+			'options'   => array('byCategory', 'byMailingOrCategory', 'byMailing'),
 			'reference' => &$GLOBALS['TL_LANG']['orm_avisota_mailing_category'],
 			'eval'      => array(
 				'mandatory'      => true,
@@ -233,7 +233,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_category'] = array
 		(
 			'label'      => &$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['theme'],
 			'inputType'  => 'select',
-			'foreignKey' => 'orm_avisota_mailing_theme.title',
+			'foreignKey' => 'orm_avisota_theme.title',
 			'eval'       => array(
 				'mandatory'          => true,
 				'includeBlankOption' => true,
@@ -245,7 +245,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_category'] = array
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['transportMode'],
 			'default'   => 'byCategory',
 			'inputType' => 'select',
-			'options'   => array('byCategory', 'byNewsletterOrCategory', 'byNewsletter'),
+			'options'   => array('byCategory', 'byMailingOrCategory', 'byMailing'),
 			'reference' => &$GLOBALS['TL_LANG']['orm_avisota_mailing_category'],
 			'eval'      => array(
 				'mandatory'      => true,
@@ -269,7 +269,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_category'] = array
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing_category']['queueMode'],
 			'default'   => 'byCategory',
 			'inputType' => 'select',
-			'options'   => array('byCategory', 'byNewsletterOrCategory', 'byNewsletter'),
+			'options'   => array('byCategory', 'byMailingOrCategory', 'byMailing'),
 			'reference' => &$GLOBALS['TL_LANG']['orm_avisota_mailing_category'],
 			'eval'      => array(
 				'mandatory'      => true,

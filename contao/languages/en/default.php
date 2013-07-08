@@ -15,7 +15,7 @@
 
 
 /**
- * Newsletter content elements
+ * Mailing content elements
  */
 $GLOBALS['TL_LANG']['NLE']['texts']     = 'Text elements';
 $GLOBALS['TL_LANG']['NLE']['headline']  = array('Headline', 'Generates a headline (h1 - h6).');

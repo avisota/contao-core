@@ -82,7 +82,7 @@ class Backend extends \Controller
 			array(
 				'orm_avisota_mailing_list',
 				'orm_avisota_recipient_source',
-				'orm_avisota_mailing_theme',
+				'orm_avisota_theme',
 				'orm_avisota_transport',
 				'orm_avisota_queue'
 			) as $table

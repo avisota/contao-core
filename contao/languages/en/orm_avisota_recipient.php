@@ -135,7 +135,7 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient']['notify']              = array(
 );
 $GLOBALS['TL_LANG']['orm_avisota_recipient']['migrate']             = array(
 	'Migrieren <span style="color:red">REMOVE</span>',
-	'Abonnenten aus dem Contao Newslettersystem migrieren.'
+	'Abonnenten aus dem Contao Mailingsystem migrieren.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_recipient']['import']              = array(
 	'CSV-Import <span style="color:red">REMOVE</span>',
