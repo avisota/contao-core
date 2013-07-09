@@ -28,6 +28,7 @@
 		"bit3/contao-dependency-container": "~1",
 		"bit3/contao-doctrine-dbal":"~2.4",
 		"bit3/contao-doctrine-orm":"~2.4",
+		"bit3/contao-doctrine-orm-timestampable": "~2.4",
 		"bit3/contao-nested-menu": "~1",
 		"bit3/contao-twig": "~1",
 		"bit3/contao-meta-palettes": "~1",
@@ -36,7 +37,7 @@
 		"bit3/contao-event-dispatcher": "~2.3",
 		"bit3/php-string-builder": "~1",
 		"menatwork/contao-multicolumnwizard": "~3",
-		"metamodels/dc_general": "~0.9"
+		"metamodels/dc_general": "~1.0.0"
 	},
 	"require-dev":{
 		"phpunit/phpunit":"3.7.*",

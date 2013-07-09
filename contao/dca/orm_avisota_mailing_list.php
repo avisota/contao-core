@@ -24,17 +24,34 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 	// Config
 	'config'       => array
 	(
-		'dataContainer'    => 'Table',
-		'enableVersioning' => true,
-		'onload_callback'  => array
+		'dataContainer'     => 'General',
+		'enableVersioning'  => true,
+		'onload_callback'   => array
 		(
 			array('Avisota\Contao\DataContainer\MailingList', 'checkPermission')
 		),
-		'onsubmit_callback'  => array
+		'onsubmit_callback' => array
 		(
 			array('Avisota\Contao\Backend', 'regenerateDynamics')
 		)
 	),
+
+	// DataContainer
+	'dca_config'   => array
+	(
+		'callback'      => 'GeneralCallbackDefault',
+		'data_provider' => array
+		(
+			'default' => array
+			(
+				'class'  => 'Contao\Doctrine\ORM\DataContainer\General\EntityData',
+				'source' => 'orm_avisota_mailing_list'
+			)
+		),
+		'controller'    => 'GeneralControllerDefault',
+		'view'          => 'GeneralViewDefault'
+	),
+
 	// List
 	'list'         => array
 	(
@@ -106,15 +123,20 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 	// Fields
 	'fields'       => array
 	(
-		'id' => array(
+		'id'                                        => array(
 			'field' => array(
-				'id' => true,
+				'id'   => true,
 				'type' => 'integer'
 			)
 		),
-		'tstamp' => array(
+		'createAt'                                    => array(
 			'field' => array(
-				'type' => 'timestamp'
+				'type' => 'datetime'
+			)
+		),
+		'modifyAt'                                    => array(
+			'field' => array(
+				'type' => 'datetime'
 			)
 		),
 		'title'                                     => array
@@ -142,9 +164,9 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 				'maxlength'         => 128,
 				'tl_class'          => 'w50'
 			),
-			'save_callback' => array
+			'setter_callback' => array
 			(
-				array('Avisota\Contao\DataContainer\MailingList', 'generateAlias')
+				array('Contao\Doctrine\ORM\Helper', 'generateAlias')
 			)
 		),
 		'viewOnlinePage'                            => array

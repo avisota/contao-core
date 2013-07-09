@@ -171,7 +171,20 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				'maxlength'      => 255,
 				'tl_class'       => 'w50',
 				'decodeEntities' => true
-			)
+			),
+		),
+		'language'       => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['language'],
+			'exclude'   => true,
+			'filter'    => true,
+			'flag'      => 1,
+			'inputType' => 'select',
+			'options'   => $this->getCountries(),
+			'eval'      => array(
+				'mandatory'      => true,
+				'tl_class'       => 'w50',
+			),
 		),
 		'alias'         => array
 		(
