@@ -368,8 +368,7 @@ $GLOBALS['BE_FFL']['newschooser']  = 'WidgetNewschooser';
  */
 $GLOBALS['orm_avisota_RECIPIENT_SOURCE']['integrated']                 = 'Avisota\Contao\RecipientSource\IntegratedRecipients';
 $GLOBALS['orm_avisota_RECIPIENT_SOURCE']['integrated_by_mailing_list'] = 'Avisota\Contao\RecipientSource\IntegratedRecipientsByMailingList';
-// $GLOBALS['orm_avisota_RECIPIENT_SOURCE']['member']     = 'Avisota\Contao\RecipientSource\MemberGroup';
-$GLOBALS['orm_avisota_RECIPIENT_SOURCE']['csv_file'] = 'Avisota\RecipientSource\CSVFile';
+$GLOBALS['orm_avisota_RECIPIENT_SOURCE']['csv_file']                   = 'Avisota\RecipientSource\CSVFile';
 
 
 /**

@@ -20,11 +20,14 @@
  */
 $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 (
-
+	// Entity
+	'entity' => array(
+		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_UUID
+	),
 	// Config
 	'config'       => array
 	(
-		'dataContainer'     => 'Table',
+		'dataContainer'     => 'General',
 		'enableVersioning'  => true,
 		'onload_callback'   => array(
 			array('Avisota\Contao\DataContainer\Queue', 'onload_callback')
@@ -33,6 +36,21 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 			array('Avisota\Contao\DataContainer\Queue', 'onsubmit_callback'),
 			array('Avisota\Contao\Backend', 'regenerateDynamics')
 		)
+	),
+	// DataContainer
+	'dca_config'   => array
+	(
+		'callback'      => 'GeneralCallbackDefault',
+		'data_provider' => array
+		(
+			'default' => array
+			(
+				'class'  => 'Contao\Doctrine\ORM\DataContainer\General\EntityData',
+				'source' => 'orm_avisota_queue'
+			)
+		),
+		'controller'    => 'GeneralControllerDefault',
+		'view'          => 'GeneralViewDefault'
 	),
 	// List
 	'list'         => array
@@ -105,12 +123,21 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 		'id' => array(
 			'field' => array(
 				'id' => true,
-				'type' => 'integer'
+				'type' => 'string',
+				'length' => '36',
+				'options' => array('fixed' => true),
 			)
 		),
-		'tstamp' => array(
+		'createdAt'                                 => array(
 			'field' => array(
-				'type' => 'timestamp'
+				'type'          => 'datetime',
+				'timestampable' => array('on' => 'create')
+			)
+		),
+		'updatedAt'                                => array(
+			'field' => array(
+				'type'          => 'datetime',
+				'timestampable' => array('on' => 'update')
 			)
 		),
 		'type'                                  => array
@@ -155,9 +182,9 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 			(
 				array('Avisota\Contao\DataContainer\Queue', 'rememberAlias')
 			),
-			'save_callback' => array
+			'setter_callback' => array
 			(
-				array('Avisota\Contao\DataContainer\Queue', 'generateAlias')
+				array('Contao\Doctrine\ORM\Helper', 'generateAlias')
 			)
 		),
 		'allowManualSending'         => array

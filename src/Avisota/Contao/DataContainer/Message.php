@@ -415,41 +415,4 @@ class Message extends \Controller
 		}
 		return $GLOBALS['TL_LANG']['orm_avisota_message']['notSend'];
 	}
-
-	/**
-	 * Autogenerate a news alias if it has not been set yet
-	 *
-	 * @param mixed          $value
-	 * @param \DataContainer $dc
-	 *
-	 * @return string
-	 */
-	public function generateAlias($value, $dc)
-	{
-		$database = \Database::getInstance();
-
-		$autoAlias = false;
-
-		// Generate alias if there is none
-		if (!strlen($value)) {
-			$autoAlias = true;
-			$value     = standardize($dc->activeRecord->subject);
-		}
-
-		$aliasResultSet = $database
-			->prepare("SELECT id FROM orm_avisota_message WHERE alias=?")
-			->execute($value);
-
-		// Check whether the news alias exists
-		if ($aliasResultSet->numRows > 1 && !$autoAlias) {
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $value));
-		}
-
-		// Add ID to alias
-		if ($aliasResultSet->numRows && $autoAlias) {
-			$value .= '-' . $dc->id;
-		}
-
-		return $value;
-	}
 }

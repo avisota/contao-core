@@ -30,15 +30,17 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_subscription'] = array
 		'recipient'        => array
 		(
 			'field' => array(
-				'id'   => true,
-				'type' => 'integer',
+				'id'      => true,
+				'type'    => 'string',
+				'length'  => '36',
+				'options' => array('fixed' => true),
 			)
 		),
 		'list'             => array
 		(
 			'field' => array(
-				'id'     => true,
-				'type'   => 'string',
+				'id'   => true,
+				'type' => 'string',
 			)
 		),
 		'confirmationSent' => array
@@ -80,7 +82,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_subscription'] = array
 			'field' => array(
 				'type'     => 'string',
 				'length'   => 16,
-				'fixed'    => true,
+				'options'  => array('fixed' => true),
 				'nullable' => true,
 			)
 		),

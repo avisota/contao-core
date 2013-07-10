@@ -198,29 +198,31 @@ class Recipient extends \Backend
 	}
 
 	/**
-	 * @param \DataContainer $dc
+	 * @param \DC_General $dc
 	 */
 	public function onsubmit_callback($dc)
 	{
-		$opt = SubscriptionManager::OPT_IGNORE_BLACKLIST;
+		if (isset($_SESSION['avisotaSubscriptionAction']) && isset($_SESSION['avisotaMailingLists'])) {
+			$opt = SubscriptionManager::OPT_IGNORE_BLACKLIST;
 
-		switch ($_SESSION['avisotaSubscriptionAction']) {
-			case 'activateSubscription':
-				$opt |= SubscriptionManager::OPT_ACTIVATE;
-				break;
-			case 'doNothink':
-				$opt |= SubscriptionManager::OPT_NO_CONFIRMATION;
-				break;
+			switch ($_SESSION['avisotaSubscriptionAction']) {
+				case 'activateSubscription':
+					$opt |= SubscriptionManager::OPT_ACTIVATE;
+					break;
+				case 'doNothink':
+					$opt |= SubscriptionManager::OPT_NO_CONFIRMATION;
+					break;
+			}
+
+			$subscriptionManager = new SubscriptionManager();
+			$subscriptionManager->subscribe(
+				$dc->getCurrentModel()->getProperty('email'),
+				$_SESSION['avisotaMailingLists'],
+				$opt
+			);
+
+			unset ($_SESSION['avisotaMailingLists'], $_SESSION['avisotaSubscriptionAction']);
 		}
-
-		$subscriptionManager = new SubscriptionManager();
-		$subscriptionManager->subscribe(
-			$dc->activeRecord->email,
-			$_SESSION['avisotaMailingLists'],
-			$opt
-		);
-
-		unset ($_SESSION['avisotaMailingLists'], $_SESSION['avisotaSubscriptionAction']);
 	}
 
 	/**
@@ -237,7 +239,7 @@ class Recipient extends \Backend
 
 		$subscriptionManager = new SubscriptionManager();
 		$subscriptionManager->unsubscribe(
-			$dc->activeRecord->email,
+			$dc->getCurrentModel()->getProperty('email'),
 			null,
 			$options
 		);
@@ -350,10 +352,11 @@ class Recipient extends \Backend
 				'Avisota\Contao:RecipientSubscription',
 				's',
 				Join::WITH,
-				$queryBuilder->expr()->eq($queryBuilder->expr()->concat('\'mailing_list:\'', 'l.id'), 's.list')
+				$queryBuilder->expr()->eq($queryBuilder->expr()->concat(':mailingListPrefix', 'l.id'), 's.list')
 			)
-			->where('s.recipient=?1')
-			->setParameter(1, $dc->id)
+			->where('s.recipient=:recipientId')
+			->setParameter(':mailingListPrefix', 'mailing_list:')
+			->setParameter(':recipientId', $dc->id)
 			->getQuery()
 			->getResult();
 
@@ -723,5 +726,16 @@ class Recipient extends \Backend
 		return '<a href="contao/main.php?do=avisota_recipients&amp;table=orm_avisota_recipient_notify&amp;act=edit&amp;id=' . $row['id'] . '" title="' . specialchars(
 			$title
 		) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ';
+	}
+
+	public function getMailingListOptions()
+	{
+		$repository = EntityHelper::getRepository('Avisota\Contao:MailingList');
+		$mailingLists = $repository->findBy(array(), array('title' => 'ASC'));
+		$options = array();
+		foreach ($mailingLists as $mailingList) {
+			$options[$mailingList->getId()] = $mailingList->getTitle();
+		}
+		return $options;
 	}
 }

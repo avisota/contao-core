@@ -20,7 +20,10 @@
  */
 $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 (
-
+	// Entity
+	'entity' => array(
+		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_UUID
+	),
 	// Config
 	'config'       => array
 	(
@@ -35,7 +38,6 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 			array('Avisota\Contao\Backend', 'regenerateDynamics')
 		)
 	),
-
 	// DataContainer
 	'dca_config'   => array
 	(
@@ -51,7 +53,6 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 		'controller'    => 'GeneralControllerDefault',
 		'view'          => 'GeneralViewDefault'
 	),
-
 	// List
 	'list'         => array
 	(
@@ -126,17 +127,21 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 		'id'                                        => array(
 			'field' => array(
 				'id'   => true,
-				'type' => 'integer'
+				'type' => 'string',
+				'length' => '36',
+				'options' => array('fixed' => true),
 			)
 		),
-		'createAt'                                    => array(
+		'createdAt'                                 => array(
 			'field' => array(
-				'type' => 'datetime'
+				'type'          => 'datetime',
+				'timestampable' => array('on' => 'create')
 			)
 		),
-		'modifyAt'                                    => array(
+		'updatedAt'                                => array(
 			'field' => array(
-				'type' => 'datetime'
+				'type'          => 'datetime',
+				'timestampable' => array('on' => 'update')
 			)
 		),
 		'title'                                     => array
@@ -153,11 +158,11 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 		),
 		'alias'                                     => array
 		(
-			'label'         => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['alias'],
-			'exclude'       => true,
-			'search'        => true,
-			'inputType'     => 'text',
-			'eval'          => array(
+			'label'           => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['alias'],
+			'exclude'         => true,
+			'search'          => true,
+			'inputType'       => 'text',
+			'eval'            => array(
 				'rgxp'              => 'alnum',
 				'unique'            => true,
 				'spaceToUnderscore' => true,
@@ -169,6 +174,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 				array('Contao\Doctrine\ORM\Helper', 'generateAlias')
 			)
 		),
+		/*
 		'viewOnlinePage'                            => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['viewOnlinePage'],
@@ -179,6 +185,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 				'mandatory' => true
 			)
 		),
+		*/
 		'integratedRecipientManageSubscriptionPage' => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['integratedRecipientManageSubscriptionPage'],

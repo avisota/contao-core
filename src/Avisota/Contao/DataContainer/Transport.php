@@ -52,39 +52,4 @@ class Transport extends \Backend
 
 		// TODO
 	}
-
-	/**
-	 * Autogenerate a news alias if it has not been set yet
-	 *
-	 * @param mixed $value
-	 * @param \DataContainer $dc
-	 *
-	 * @return string
-	 */
-	public function generateAlias($value, $dc)
-	{
-		$autoAlias = false;
-
-		// Generate alias if there is none
-		if (!strlen($value)) {
-			$autoAlias = true;
-			$value  = standardize($dc->activeRecord->title);
-		}
-
-		$aliasResultSet = $this->Database
-			->prepare("SELECT id FROM orm_avisota_transport WHERE alias=?")
-			->execute($value);
-
-		// Check whether the news alias exists
-		if ($aliasResultSet->numRows > 1 && !$autoAlias) {
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $value));
-		}
-
-		// Add ID to alias
-		if ($aliasResultSet->numRows && $autoAlias) {
-			$value .= '-' . $dc->id;
-		}
-
-		return $value;
-	}
 }

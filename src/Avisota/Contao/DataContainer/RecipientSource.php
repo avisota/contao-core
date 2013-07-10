@@ -15,6 +15,8 @@
 
 namespace Avisota\Contao\DataContainer;
 
+use Contao\Doctrine\ORM\EntityHelper;
+
 class RecipientSource extends \Backend
 {
 	/**
@@ -82,7 +84,7 @@ class RecipientSource extends \Backend
 	 */
 	public function onsubmit_callback($dc)
 	{
-		if ($dc->activeRecord->sorting == 0) {
+		if ($dc->getCurrentModel()->getProperty('sorting') == 0) {
 			$source = $this->Database
 				->execute("SELECT MAX(sorting) as sorting FROM orm_avisota_recipient_source");
 			$this->Database
@@ -149,6 +151,7 @@ class RecipientSource extends \Backend
 	 */
 	public function toggleVisibility($id, $isVisible)
 	{
+		/*
 		// Check permissions to edit
 		$this->Input->setGet('id', $id);
 		$this->Input->setGet('act', 'toggle');
@@ -183,55 +186,7 @@ class RecipientSource extends \Backend
 			->execute($id);
 
 		$this->createNewVersion('orm_avisota_recipient_source', $id);
-	}
-
-
-	public function move_button_callback(
-		$row,
-		$href,
-		$label,
-		$title,
-		$icon,
-		$attributes,
-		$table,
-		$rootIds,
-		$childRecordIds,
-		$isCircularReference,
-		$previous,
-		$next
-	) {
-		$directions = array('up', 'down');
-		$href          = '&amp;act=move';
-		$return        = '';
-
-		foreach ($directions as $dir) {
-			$label = strlen($GLOBALS['TL_LANG'][$table][$dir][0]) ? $GLOBALS['TL_LANG'][$table][$dir][0] : $dir;
-			$title = sprintf(
-				strlen($GLOBALS['TL_LANG'][$table][$dir][1]) ? $GLOBALS['TL_LANG'][$table][$dir][1] : $dir,
-				$row['id']
-			);
-
-			$source = $this->Database
-				->prepare(
-				"SELECT * FROM orm_avisota_recipient_source WHERE " . ($dir == 'up' ? "sorting<?"
-					: "sorting>?") . " ORDER BY sorting " . ($dir == 'up' ? "DESC" : "ASC")
-			)
-				->limit(1)
-				->execute($row['sorting']);
-			if ($source->next()) {
-				$return .= ' <a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '&amp;sid=' . intval(
-					$source->id
-				) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage(
-					$dir . '.gif',
-					$label
-				) . '</a> ';
-			}
-			else {
-				$return .= ' ' . $this->generateImage('system/modules/avisota/html/' . $dir . '_.gif', $label);
-			}
-		}
-
-		return trim($return);
+		*/
 	}
 
 	public function getRecipientColumns()
@@ -279,40 +234,5 @@ class RecipientSource extends \Backend
 		asort($options);
 
 		return $options;
-	}
-
-	/**
-	 * Autogenerate a news alias if it has not been set yet
-	 *
-	 * @param mixed $value
-	 * @param \DataContainer $dc
-	 *
-	 * @return string
-	 */
-	public function generateAlias($value, $dc)
-	{
-		$autoAlias = false;
-
-		// Generate alias if there is none
-		if (!strlen($value)) {
-			$autoAlias = true;
-			$value     = standardize($dc->activeRecord->title);
-		}
-
-		$aliasResultSet = $this->Database
-			->prepare("SELECT id FROM orm_avisota_recipient_source WHERE alias=?")
-			->execute($value);
-
-		// Check whether the news alias exists
-		if ($aliasResultSet->numRows > 1 && !$autoAlias) {
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $value));
-		}
-
-		// Add ID to alias
-		if ($aliasResultSet->numRows && $autoAlias) {
-			$value .= '-' . $dc->id;
-		}
-
-		return $value;
 	}
 }

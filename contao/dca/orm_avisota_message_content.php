@@ -20,17 +20,35 @@
  */
 $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 (
-
+	// Entity
+	'entity' => array(
+		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_UUID
+	),
 	// Config
 	'config'          => array
 	(
-		'dataContainer'    => 'Table',
+		'dataContainer'    => 'General',
 		'ptable'           => 'orm_avisota_message',
 		'enableVersioning' => true,
 		'onload_callback'  => array
 		(
 			array('Avisota\Contao\DataContainer\MessageContent', 'checkPermission')
 		)
+	),
+	// DataContainer
+	'dca_config'   => array
+	(
+		'callback'      => 'GeneralCallbackDefault',
+		'data_provider' => array
+		(
+			'default' => array
+			(
+				'class'  => 'Contao\Doctrine\ORM\DataContainer\General\EntityData',
+				'source' => 'orm_avisota_message_content'
+			)
+		),
+		'controller'    => 'GeneralControllerDefault',
+		'view'          => 'GeneralViewDefault'
 	),
 	// List
 	'list'            => array
@@ -195,7 +213,9 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 		'id' => array(
 			'field' => array(
 				'id' => true,
-				'type' => 'integer'
+				'type' => 'string',
+				'length' => '36',
+				'options' => array('fixed' => true),
 			)
 		),
 		'pid' => array(
@@ -204,9 +224,16 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 				'type' => 'integer'
 			)
 		),
-		'tstamp' => array(
+		'createdAt'                                 => array(
 			'field' => array(
-				'type' => 'timestamp'
+				'type'          => 'datetime',
+				'timestampable' => array('on' => 'create')
+			)
+		),
+		'updatedAt'                                => array(
+			'field' => array(
+				'type'          => 'datetime',
+				'timestampable' => array('on' => 'update')
 			)
 		),
 		'sorting'       => array

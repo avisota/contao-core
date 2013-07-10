@@ -20,6 +20,10 @@
  */
 $GLOBALS['TL_DCA']['orm_avisota_recipient_subscription_log'] = array
 (
+	// Entity
+	'entity' => array(
+		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_UUID
+	),
 	// Fields
 	'fields' => array
 	(
@@ -27,7 +31,9 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_subscription_log'] = array
 		(
 			'field' => array(
 				'id'   => true,
-				'type' => 'integer',
+				'type' => 'string',
+				'length' => '36',
+				'options' => array('fixed' => true),
 			)
 		),
 		'recipient' => array

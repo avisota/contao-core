@@ -260,13 +260,13 @@ class MessageContent extends \Backend
 	 *
 	 * @return array
 	 */
-	public function getGalleryTemplates(DataContainer $dc)
+	public function getGalleryTemplates(\DC_General $dc)
 	{
 		// Get the page ID
 		$article = $this->Database
 			->prepare("SELECT pid FROM tl_article WHERE id=?")
 			->limit(1)
-			->execute($dc->activeRecord->pid);
+			->execute($dc->getCurrentModel()->getProperty('pid'));
 
 		// Inherit the page settings
 		$page = $this->getPageDetails($article->pid);
@@ -352,6 +352,7 @@ class MessageContent extends \Backend
 	 */
 	public function toggleVisibility($contentId, $visible)
 	{
+		/*
 		// Check permissions to edit
 		$this->Input->setGet('id', $contentId);
 		$this->Input->setGet('act', 'toggle');
@@ -379,6 +380,7 @@ class MessageContent extends \Backend
 			->execute($contentId);
 
 		$this->createNewVersion('orm_avisota_message_content', $contentId);
+		*/
 	}
 
 

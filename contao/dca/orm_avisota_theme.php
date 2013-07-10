@@ -20,11 +20,14 @@
  */
 $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 (
-
+	// Entity
+	'entity' => array(
+		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_UUID
+	),
 	// Config
 	'config'          => array
 	(
-		'dataContainer'    => 'Table',
+		'dataContainer'    => 'General',
 		'enableVersioning' => true,
 		'onload_callback'  => array
 		(
@@ -34,6 +37,21 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 		(
 			array('Avisota\Contao\Backend', 'regenerateDynamics')
 		)
+	),
+	// DataContainer
+	'dca_config'   => array
+	(
+		'callback'      => 'GeneralCallbackDefault',
+		'data_provider' => array
+		(
+			'default' => array
+			(
+				'class'  => 'Contao\Doctrine\ORM\DataContainer\General\EntityData',
+				'source' => 'orm_avisota_theme'
+			)
+		),
+		'controller'    => 'GeneralControllerDefault',
+		'view'          => 'GeneralViewDefault'
 	),
 	// List
 	'list'            => array
@@ -99,7 +117,7 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 		(
 			'theme'     => array('title', 'alias', 'preview'),
 			'structure' => array('areas'),
-			'template'  => array('stylesheets', 'template_html', 'template_plain'),
+			'template'  => array('stylesheets'),
 			'expert'    => array(':hide', 'templateDirectory')
 		)
 	),
@@ -112,12 +130,21 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 		'id' => array(
 			'field' => array(
 				'id' => true,
-				'type' => 'integer'
+				'type' => 'string',
+				'length' => '36',
+				'options' => array('fixed' => true),
 			)
 		),
-		'tstamp' => array(
+		'createdAt'                                 => array(
 			'field' => array(
-				'type' => 'timestamp'
+				'type'          => 'datetime',
+				'timestampable' => array('on' => 'create')
+			)
+		),
+		'updatedAt'                                => array(
+			'field' => array(
+				'type'          => 'datetime',
+				'timestampable' => array('on' => 'update')
 			)
 		),
 		'title'             => array
@@ -145,9 +172,9 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 				'maxlength'         => 128,
 				'tl_class'          => 'w50'
 			),
-			'save_callback' => array
+			'setter_callback' => array
 			(
-				array('Avisota\Contao\DataContainer\Theme', 'generateAlias')
+				array('Contao\Doctrine\ORM\Helper', 'generateAlias')
 			)
 		),
 		'preview'           => array
@@ -160,8 +187,11 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 				'filesOnly'  => true,
 				'fieldType'  => 'radio',
 				'extensions' => 'jpg,jpeg,png,gif',
-				'tl_class'   => 'clr'
-			)
+				'tl_class'   => 'clr',
+			),
+			'field' => array(
+				'nullable' => true,
+			),
 		),
 		'areas'             => array
 		(
@@ -172,7 +202,10 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 				'mandatory' => false,
 				'rgxp'      => 'extnd',
 				'nospace'   => true
-			)
+			),
+			'field' => array(
+				'nullable' => true,
+			),
 		),
 		'stylesheets'       => array
 		(
@@ -181,9 +214,13 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 			'options_callback' => array('Avisota\Contao\DataContainer\Theme', 'getStylesheets'),
 			'eval'             => array(
 				'tl_class' => 'clr',
-				'multiple' => true
-			)
+				'multiple' => true,
+			),
+			'field' => array(
+				'nullable' => true,
+			),
 		),
+		/*
 		'template_html'     => array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_theme']['template_html'],
@@ -202,6 +239,7 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 			'options_callback' => array('Avisota\Contao\DataContainer\Theme', 'getPlainTemplates'),
 			'eval'             => array('tl_class' => 'w50')
 		),
+		*/
 		'templateDirectory' => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_theme']['templateDirectory'],
@@ -211,7 +249,10 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 				'tl_class'  => 'clr',
 				'fieldType' => 'radio',
 				'path'      => 'templates'
-			)
+			),
+			'field' => array(
+				'nullable' => true,
+			),
 		)
 	)
 );
