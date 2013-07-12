@@ -288,7 +288,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 			),
 			'setter_callback' => array
 			(
-				array('Contao\Doctrine\ORM\Helper', 'generateAlias')
+				array('Avisota\Contao\DataContainer\Message', 'generateAlias')
 			)
 		),
 		'language'      => array

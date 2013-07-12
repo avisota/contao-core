@@ -390,4 +390,9 @@ class Message extends \Controller
 		}
 		return $GLOBALS['TL_LANG']['orm_avisota_message']['notSend'];
 	}
+
+	static public function generateAlias($alias, Entity $entity, $baseField = false)
+	{
+		return \Contao\Doctrine\ORM\Helper::generateAlias($alias, $entity, 'subject');
+	}
 }
