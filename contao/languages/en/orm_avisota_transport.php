@@ -27,7 +27,7 @@ $GLOBALS['TL_LANG']['orm_avisota_transport']['title']       = array(
 );
 $GLOBALS['TL_LANG']['orm_avisota_transport']['alias']       = array(
 	'Alias',
-	'The transport module alias is a unique reference to the transport module which can be used instead of its numeric ID.'
+	'The transport module alias is a unique reference to the transport module which can be used instead of its ID.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_transport']['sender']      = array(
 	'Sender address',

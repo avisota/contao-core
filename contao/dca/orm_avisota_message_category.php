@@ -435,7 +435,6 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 				'extensions' => 'png,gif,jpg,jpeg'
 			),
 			'field'     => array(
-				'nullable' => true,
 			),
 		),
 	)

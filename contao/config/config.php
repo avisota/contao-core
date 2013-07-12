@@ -31,6 +31,7 @@ $GLOBALS['DOCTRINE_ENTITY_NAMESPACE_ALIAS']['Avisota\Contao']        = 'Avisota\
 $GLOBALS['DOCTRINE_ENTITY_NAMESPACE_MAP']['orm_avisota']             = 'Avisota\Contao\Entity';
 $GLOBALS['DOCTRINE_ENTITY_CLASS']['Avisota\Contao\Entity\Recipient'] = 'Avisota\Contao\Entity\AbstractRecipient';
 $GLOBALS['DOCTRINE_ENTITY_CLASS']['Avisota\Contao\Entity\Message']   = 'Avisota\Contao\Entity\AbstractMessage';
+$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_layout';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing_list';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_message';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_message_category';
@@ -291,7 +292,7 @@ $GLOBALS['BE_MOD']['system'] = array_merge(
 		 'avisota_theme'            => array
 		 (
 			 'nested'     => 'avisota_config:newsletter',
-			 'tables'     => array('orm_avisota_theme'),
+			 'tables'     => array('orm_avisota_theme', 'orm_avisota_layout'),
 			 'icon'       => 'system/modules/avisota/assets/images/theme.png',
 			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
 		 ),
@@ -375,7 +376,7 @@ $GLOBALS['AVISOTA_RECIPIENT_SOURCE']['csv_file']                   = 'Avisota\Re
 /**
  * Queues
  */
-$GLOBALS['orm_avisota_QUEUE']['simpleDatabase'] = 'Avisota\Queue\SimpleDatabaseQueue';
+$GLOBALS['AVISOTA_QUEUE']['simpleDatabase'] = 'Avisota\Queue\SimpleDatabaseQueue';
 
 /**
  * Transport modules
@@ -499,3 +500,66 @@ else if (TL_MODE == 'BE') {
 	* /
 }
 */
+
+$GLOBALS['AVISOTA_MESSAGE_STRUCT']['templates']['3col-basic3column'] = array(
+    'template' => 'system/modules/avisota/templates/3col-basic3column.html',
+    'cells' => array(
+        'title' => array(
+            'xpath' => '/html/head/meta[@property="og:title"]/@content|/html/head/title',
+            'content' => '##newsletter.subject##',
+        ),
+        'teaser' => array(
+            'xpath' => '//div[@mc:edit="std_preheader_content"]',
+            'content' => '##newsletter.description##',
+            'ifEmptyRemove' => '//div[@mc:edit="std_preheader_content"]/..',
+        ),
+        'viewonline' => array(
+            'xpath' => '//div[@mc:edit="std_preheader_links"]',
+            'content' => '##view_online_link##',
+        ),
+        'header' => array(
+            'xpath' => '//table[@id="templateContainer"]//img[@mc:edit="header_image"]/..',
+            'content' => '{{image::##theme.headerImage##}}',
+        ),
+        'col1' => array(
+            'xpath' => '//div[@id="templateBody"]//td[@class="leftColumnContent"]',
+            'wrapContent' => '<table border="0" cellpadding="20" cellspacing="0" width="100%"></table>',
+            'wrapRow' => '<tr><td valign="top"></td></tr>',
+			'preferedElements' => array('image'),
+        ),
+        'col2' => array(
+            'xpath' => '//table[@id="templateBody"]//td[@class="centerColumnContent"]',
+            'wrapContent' => '<table border="0" cellpadding="20" cellspacing="0" width="100%"></table>',
+            'wrapRow' => '<tr><td valign="top"></td></tr>',
+			'preferedElements' => array('text'),
+        ),
+        'col3' => array(
+            'xpath' => '//table[@id="templateBody"]//td[@class="rightColumnContent"]',
+            'wrapContent' => '<table border="0" cellpadding="20" cellspacing="0" width="100%"></table>',
+            'wrapRow' => '<tr><td valign="top"></td></tr>',
+			'preferedElements' => array('image'),
+        ),
+        'footer' => array(
+            'xpath' => '//table[@id="templateFooter"]//td[@class="footerContent"]',
+        ),
+    ),
+    'formation' => array(
+        array(
+			'cells' => array(
+            	'teaser' => array(),
+			),
+        ),
+        array(
+			'cells' => array(
+				'col1' => array(),
+				'col2' => array(),
+				'col3' => array(),
+			),
+        ),
+        array(
+			'cells' => array(
+            	'footer' => array(),
+			),
+        ),
+    )
+);

@@ -639,7 +639,6 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 			array('Avisota\Contao\DataContainer\MessageContent', 'editArticleAlias')
 		),
 		'field'            => array(
-			'nullable' => true,
 			'type'     => 'serialized',
 			'length'   => 65532
 		)

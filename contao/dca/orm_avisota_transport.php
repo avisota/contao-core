@@ -210,7 +210,6 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'tl_class'       => 'w50'
 			),
 			'field' => array(
-				'nullable' => true,
 			),
 		),
 		'senderName'    => array
@@ -227,7 +226,6 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'tl_class'       => 'w50'
 			),
 			'field' => array(
-				'nullable' => true,
 			),
 		),
 		'replyTo'       => array
@@ -244,7 +242,6 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'tl_class'       => 'w50'
 			),
 			'field' => array(
-				'nullable' => true,
 			),
 		),
 		'replyToName'   => array
@@ -261,7 +258,6 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'tl_class'       => 'w50'
 			),
 			'field' => array(
-				'nullable' => true,
 			),
 		),
 		// swift mailer
@@ -291,7 +287,6 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'tl_class'  => 'w50'
 			),
 			'field' => array(
-				'nullable' => true,
 			),
 		),
 		'swiftSmtpUser' => array
@@ -306,7 +301,6 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'tl_class'       => 'w50'
 			),
 			'field' => array(
-				'nullable' => true,
 			),
 		),
 		'swiftSmtpPass' => array
@@ -321,7 +315,6 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'tl_class'       => 'w50'
 			),
 			'field' => array(
-				'nullable' => true,
 			),
 		),
 		'swiftSmtpEnc'  => array
@@ -339,7 +332,6 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'tl_class'           => 'w50'
 			),
 			'field' => array(
-				'nullable' => true,
 			),
 		),
 		'swiftSmtpPort' => array
@@ -366,7 +358,6 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'tl_class'  => 'w50'
 			),
 			'field' => array(
-				'nullable' => true,
 			),
 		),
 	)

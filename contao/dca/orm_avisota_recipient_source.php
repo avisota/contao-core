@@ -222,7 +222,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 			'manyToMany' => array(
 				'targetEntity' => 'Avisota\Contao\Entity\MailingList',
 				'joinTable' => array(
-					'name' => 'orm_avisota_recipient_source_mailing_list',
+					'name' => 'orm_avisota_recipient_source_mailing_lists',
 					'joinColumns'  => array(
 						array(
 							'name'                 => 'recipientSource',
@@ -250,7 +250,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				'mandatory' => true,
 			),
 			'field'     => array(
-				'nullable' => true,
 			),
 		),
 		/*
@@ -288,7 +287,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				'fieldType'  => 'radio'
 			),
 			'field'     => array(
-				'nullable' => true,
 			),
 		),
 		'csvColumnAssignment' => array

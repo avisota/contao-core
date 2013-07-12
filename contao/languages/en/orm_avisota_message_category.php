@@ -23,7 +23,7 @@ $GLOBALS['TL_LANG']['orm_avisota_message_category']['title']             = array
 );
 $GLOBALS['TL_LANG']['orm_avisota_message_category']['alias']             = array(
 	'Alias',
-	'The category alias is a unique reference to the category which can be called instead of its numeric ID.'
+	'The category alias is a unique reference to the category which can be called instead of its ID.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_message_category']['recipientsMode']    = array(
 	'Recipients selection mode',

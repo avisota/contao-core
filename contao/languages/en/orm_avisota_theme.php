@@ -21,25 +21,9 @@ $GLOBALS['TL_LANG']['orm_avisota_theme']['title']             = array(
 	'Title',
 	'Please enter the theme title.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_theme']['preview']           = array(
-	'Preview image',
-	'Please chose a preview image.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_theme']['areas']             = array(
-	'Bereiche <span style="color:red">REMOVE</span>',
-	'Komma-getrennte Liste von zusätzlichen Mailingbereichen (z.B. header,left,right,footer).'
-);
-$GLOBALS['TL_LANG']['orm_avisota_theme']['stylesheets']       = array(
-	'Stylesheets',
-	'Please chose the stylesheets to used in this theme.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_theme']['template_html']     = array(
-	'HTML email template',
-	'Please chose the basic html email template.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_theme']['template_plain']    = array(
-	'Plain email template',
-	'Please chose the basic plain email template.'
+$GLOBALS['TL_LANG']['orm_avisota_theme']['alias']              = array(
+	'Alias',
+	'The theme alias is a unique reference to the theme which can be used instead of its ID.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_theme']['templateDirectory'] = array(
 	'Templates folder',
@@ -51,8 +35,6 @@ $GLOBALS['TL_LANG']['orm_avisota_theme']['templateDirectory'] = array(
  * Legends
  */
 $GLOBALS['TL_LANG']['orm_avisota_theme']['theme_legend']     = 'Theme';
-$GLOBALS['TL_LANG']['orm_avisota_theme']['structure_legend'] = 'Structure and content';
-$GLOBALS['TL_LANG']['orm_avisota_theme']['template_legend']  = 'Template settings';
 $GLOBALS['TL_LANG']['orm_avisota_theme']['expert_legend']    = 'Experts settings';
 
 

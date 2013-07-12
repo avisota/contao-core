@@ -269,7 +269,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'tl_class'           => 'w50'
 			),
 			'field'     => array(
-				'nullable' => true,
 			),
 		),
 		'title'                 => array
@@ -288,7 +287,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'tl_class'   => 'w50'
 			),
 			'field'     => array(
-				'nullable' => true
 			),
 		),
 		'firstname'             => array
@@ -307,7 +305,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'tl_class'   => 'w50'
 			),
 			'field'     => array(
-				'nullable' => true
 			),
 		),
 		'lastname'              => array
@@ -326,7 +323,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'tl_class'   => 'w50'
 			),
 			'field'     => array(
-				'nullable' => true
 			),
 		),
 		'gender'                => array
@@ -346,7 +342,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'tl_class'           => 'clr'
 			),
 			'field'     => array(
-				'nullable' => true
 			),
 		),
 		'permitPersonalTracing' => array
@@ -362,7 +357,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'tl_class'   => 'clr m12'
 			),
 			'field'     => array(
-				'nullable' => true
 			),
 		),
 		'addedOn'               => array

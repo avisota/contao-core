@@ -27,7 +27,7 @@ $GLOBALS['TL_LANG']['orm_avisota_queue']['title']              = array(
 );
 $GLOBALS['TL_LANG']['orm_avisota_queue']['alias']              = array(
 	'Alias',
-	'The queue alias is a unique reference to the queue which can be used instead of its numeric ID.'
+	'The queue alias is a unique reference to the queue which can be used instead of its ID.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_queue']['allowManualSending'] = array(
 	'Allow manual sending',

@@ -436,7 +436,6 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				'mandatory' => true
 			),
 			'field'     => array(
-				'nullable' => true,
 			),
 		),
 		'sendOn'        => array

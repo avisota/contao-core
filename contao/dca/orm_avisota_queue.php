@@ -144,7 +144,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['type'],
 			'inputType' => 'select',
-			'options'   => array_keys($GLOBALS['orm_avisota_QUEUE']),
+			'options'   => array_keys($GLOBALS['AVISOTA_QUEUE']),
 			'reference' => &$GLOBALS['TL_LANG']['orm_avisota_queue'],
 			'filter'    => true,
 			'eval'      => array(
