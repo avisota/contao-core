@@ -234,7 +234,7 @@ class SubscriptionManager
 
 			if (!$subscription) {
 				$subscription = new RecipientSubscription();
-				$subscription->setRecipient($recipient->getId());
+				$subscription->setRecipient($recipient);
 				$subscription->setList($list);
 				$subscription->setConfirmed($options & static::OPT_ACTIVATE);
 				$subscription->setToken(

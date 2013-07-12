@@ -17,8 +17,18 @@ namespace Avisota\Contao\DataContainer;
 
 use Contao\Doctrine\ORM\EntityHelper;
 
-class OptionsBuilder
+class OptionsBuilder extends \System
 {
+	static protected $instance;
+
+	static public function getInstance()
+	{
+		if (!static::$instance) {
+			static::$instance = new OptionsBuilder();
+		}
+		return static::$instance;
+	}
+
 	static function getMailingListOptions()
 	{
 		$mailingListRepository = EntityHelper::getRepository('Avisota\Contao:MailingList');
@@ -139,6 +149,32 @@ class OptionsBuilder
 		/** @var \Avisota\Contao\Entity\Transport $transport */
 		foreach ($transports as $transport) {
 			$options[$transport->getId()] = $transport->getTitle();
+		}
+		return $options;
+	}
+
+	static function getMessagesStructOptions()
+	{
+		static::getInstance()->loadLanguageFile('avisota_message_struct');
+
+		$options = array();
+		foreach ($GLOBALS['AVISOTA_MESSAGE_STRUCT'] as $group => $structs) {
+			if (isset($GLOBALS['TL_LANG']['avisota_message_struct'][$group])) {
+				$groupLabel = $GLOBALS['TL_LANG']['avisota_message_struct'][$group];
+			}
+			else {
+				$groupLabel = $group;
+			}
+			foreach ($structs as $name => $struct) {
+				if (isset($GLOBALS['TL_LANG']['avisota_message_struct'][$name])) {
+					$label = $GLOBALS['TL_LANG']['avisota_message_struct'][$name];
+				}
+				else {
+					$label = $name;
+				}
+
+				$options[$groupLabel][$group . ':' . $name] = $label;
+			}
 		}
 		return $options;
 	}
