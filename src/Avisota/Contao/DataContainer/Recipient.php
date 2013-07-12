@@ -727,15 +727,4 @@ class Recipient extends \Backend
 			$title
 		) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ';
 	}
-
-	public function getMailingListOptions()
-	{
-		$repository = EntityHelper::getRepository('Avisota\Contao:MailingList');
-		$mailingLists = $repository->findBy(array(), array('title' => 'ASC'));
-		$options = array();
-		foreach ($mailingLists as $mailingList) {
-			$options[$mailingList->getId()] = $mailingList->getTitle();
-		}
-		return $options;
-	}
 }

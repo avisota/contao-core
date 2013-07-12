@@ -29,12 +29,10 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_subscription'] = array
 	(
 		'recipient'        => array
 		(
-			'field' => array(
-				'id'      => true,
-				'type'    => 'string',
-				'length'  => '36',
-				'options' => array('fixed' => true),
-			)
+			'oneToMany' => array(
+				'targetEntity' => 'Avisota\Contao\Entity\Recipient',
+				'mappedBy'     => 'recipient',
+			),
 		),
 		'list'             => array
 		(

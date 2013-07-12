@@ -45,6 +45,11 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 			(
 				'class'  => 'Contao\Doctrine\ORM\DataContainer\General\EntityData',
 				'source' => 'orm_avisota_message_content'
+			),
+			'parent' => array
+			(
+				'class'  => 'Contao\Doctrine\ORM\DataContainer\General\EntityData',
+				'source' => 'orm_avisota_message'
 			)
 		),
 		'controller'    => 'GeneralControllerDefault',
@@ -218,12 +223,6 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 				'options' => array('fixed' => true),
 			)
 		),
-		'pid' => array(
-			'field' => array(
-				'index' => true,
-				'type' => 'integer'
-			)
-		),
 		'createdAt'                                 => array(
 			'field' => array(
 				'type'          => 'datetime',
@@ -234,6 +233,23 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 			'field' => array(
 				'type'          => 'datetime',
 				'timestampable' => array('on' => 'update')
+			)
+		),
+		'message'      => array(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['message'],
+			'eval' => array(
+				'doNotShow' => true,
+			),
+			'manyToOne' => array(
+				'index'        => true,
+				'targetEntity' => 'Avisota\Contao\Entity\Message',
+				'inversedBy'   => 'contents',
+				'joinColumns'  => array(
+					array(
+						'name'                 => 'message',
+						'referencedColumnName' => 'id',
+					)
+				)
 			)
 		),
 		'sorting'       => array

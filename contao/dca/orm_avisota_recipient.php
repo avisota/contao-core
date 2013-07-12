@@ -21,7 +21,7 @@
 $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 (
 	// Entity
-	'entity' => array(
+	'entity'       => array(
 		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_UUID
 	),
 	// Config
@@ -163,30 +163,30 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 	(
 		'default' => array
 		(
-			'recipient'    => array('email'),
+			'recipient' => array('email'),
 			/* 'subscription' => array('lists', 'subscriptionAction'), */
-			'personals'    => array('salutation', 'title', 'firstname', 'lastname', 'gender'),
-			'tracing'      => array('permitPersonalTracing')
+			'personals' => array('salutation', 'title', 'firstname', 'lastname', 'gender'),
+			'tracing'   => array('permitPersonalTracing')
 		)
 	),
 	// Fields
 	'fields'       => array
 	(
-		'id' => array(
+		'id'                    => array(
 			'field' => array(
-				'id' => true,
-				'type' => 'string',
-				'length' => '36',
+				'id'      => true,
+				'type'    => 'string',
+				'length'  => '36',
 				'options' => array('fixed' => true),
 			),
 		),
-		'createdAt'                                 => array(
+		'createdAt'             => array(
 			'field' => array(
 				'type'          => 'datetime',
 				'timestampable' => array('on' => 'create')
 			)
 		),
-		'updatedAt'                                => array(
+		'updatedAt'             => array(
 			'field' => array(
 				'type'          => 'datetime',
 				'timestampable' => array('on' => 'update')
@@ -215,26 +215,26 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 		),
 		'lists'                 => array
 		(
-			'label'         => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['lists'],
-			'inputType'     => 'checkbox',
-			'options_callback' => array('Avisota\Contao\DataContainer\Recipient', 'getMailingListOptions'),
-			'eval'          => array(
+			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['lists'],
+			'inputType'        => 'checkbox',
+			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getMailingListOptions'),
+			'eval'             => array(
 				'multiple'       => true,
 				'doNotSaveEmpty' => true,
 				'doNotCopy'      => true,
 				'doNotShow'      => true,
 				'tl_class'       => 'clr'
 			),
-			'load_callback' => array
+			'load_callback'    => array
 			(
 				array('Avisota\Contao\DataContainer\Recipient', 'loadMailingLists')
 			),
-			'save_callback' => array
+			'save_callback'    => array
 			(
 				array('Avisota\Contao\DataContainer\Recipient', 'validateBlacklist'),
 				array('Avisota\Contao\DataContainer\Recipient', 'saveMailingLists')
 			),
-			'field' => false,
+			'field'            => false,
 		),
 		'subscriptionAction'    => array
 		(
@@ -248,7 +248,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'doNotShow'      => true
 			),
 			'save_callback' => array(array('Avisota\Contao\DataContainer\Recipient', 'saveSubscriptionAction')),
-			'field' => false,
+			'field'         => false,
 		),
 		'salutation'            => array
 		(
@@ -268,7 +268,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'feEditable'         => true,
 				'tl_class'           => 'w50'
 			),
-			'field' => array(
+			'field'     => array(
 				'nullable' => true,
 			),
 		),
@@ -287,7 +287,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'feEditable' => true,
 				'tl_class'   => 'w50'
 			),
-			'field' => array(
+			'field'     => array(
 				'nullable' => true
 			),
 		),
@@ -306,7 +306,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'feEditable' => true,
 				'tl_class'   => 'w50'
 			),
-			'field' => array(
+			'field'     => array(
 				'nullable' => true
 			),
 		),
@@ -325,7 +325,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'feEditable' => true,
 				'tl_class'   => 'w50'
 			),
-			'field' => array(
+			'field'     => array(
 				'nullable' => true
 			),
 		),
@@ -345,7 +345,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'feEditable'         => true,
 				'tl_class'           => 'clr'
 			),
-			'field' => array(
+			'field'     => array(
 				'nullable' => true
 			),
 		),
@@ -361,14 +361,13 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'feEditable' => true,
 				'tl_class'   => 'clr m12'
 			),
-			'field' => array(
+			'field'     => array(
 				'nullable' => true
 			),
 		),
 		'addedOn'               => array
 		(
 			'label'   => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['addedOn'],
-			'default' => time(),
 			'filter'  => true,
 			'sorting' => true,
 			'flag'    => 8,
@@ -378,8 +377,9 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'doNotShow'  => true,
 				'doNotCopy'  => true
 			),
-			'field' => array(
-				'nullable' => true
+			'field'   => array(
+				'type' => 'datetime',
+				'nullable' => true,
 			),
 		),
 		'addedBy'               => array
@@ -396,8 +396,8 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'doNotShow'  => true,
 				'doNotCopy'  => true
 			),
-			'field' => array(
-				'nullable' => true
+			'field'      => array(
+				'nullable' => true,
 			),
 		),
 	)

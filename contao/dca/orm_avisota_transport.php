@@ -159,7 +159,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_transport']['type'],
 			'inputType' => 'select',
-			'options'   => array_keys($GLOBALS['orm_avisota_TRANSPORT']),
+			'options'   => array_keys($GLOBALS['AVISOTA_TRANSPORT']),
 			'reference' => &$GLOBALS['TL_LANG']['orm_avisota_transport'],
 			'eval'      => array(
 				'mandatory'          => true,

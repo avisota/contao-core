@@ -173,28 +173,6 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 			(
 				array('Contao\Doctrine\ORM\Helper', 'generateAlias')
 			)
-		),
-		/*
-		'viewOnlinePage'                            => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['viewOnlinePage'],
-			'exclude'   => true,
-			'inputType' => 'pageTree',
-			'eval'      => array(
-				'fieldType' => 'radio',
-				'mandatory' => true
-			)
-		),
-		*/
-		'integratedRecipientManageSubscriptionPage' => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['integratedRecipientManageSubscriptionPage'],
-			'exclude'   => true,
-			'inputType' => 'pageTree',
-			'eval'      => array(
-				'fieldType' => 'radio',
-				'mandatory' => true
-			)
 		)
 	)
 );

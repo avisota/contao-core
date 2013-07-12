@@ -15,6 +15,9 @@
 
 namespace Avisota\Contao\DataContainer;
 
+use Avisota\Contao\Entity\Message;
+use Contao\Doctrine\ORM\EntityHelper;
+
 class Settings extends \Backend
 {
 	public function onload_callback()
@@ -47,21 +50,25 @@ class Settings extends \Backend
 	 */
 	public function getBoilerplateMessages($dc)
 	{
-		$database = \Database::getInstance();
+		$entityManager = EntityHelper::getEntityManager();
+		$queryBuilder = $entityManager->createQueryBuilder();
 
-		$resultSet = $database->query(
-			'SELECT c.title AS category, n.*
-			 FROM orm_avisota_message n
-			 INNER JOIN orm_avisota_message_category c
-			 ON c.id = n.pid
-			 WHERE c.boilerplates = \'1\'
-			 ORDER BY c.title, n.subject'
-		);
+		/** @var Message[] $messages */
+		$messages = $queryBuilder
+			->select('m')
+			->from('Avisota\Contao:Message', 'm')
+			->innerJoin('Avisota\Contao:MessageCategory', 'c', 'c.id=m.category')
+			->where('c.boilerplates=:boilerplate')
+			->orderBy('c.title', 'ASC')
+			->addOrderBy('m.subject', 'ASC')
+			->setParameter(':boilerplate', true)
+			->getQuery()
+			->getResult();
 
 		$options = array();
 
-		while ($resultSet->next()) {
-			$options[$resultSet->category][$resultSet->id] = $resultSet->subject;
+		foreach ($messages as $message) {
+			$options[$message->getCategory()->getTitle()][$message->getId()] = $message->getSubject();
 		}
 
 		return $options;

@@ -21,7 +21,7 @@
 $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 (
 	// Entity
-	'entity' => array(
+	'entity'                => array(
 		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_UUID
 	),
 	// Config
@@ -37,7 +37,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 		)
 	),
 	// DataContainer
-	'dca_config'   => array
+	'dca_config'            => array
 	(
 		'callback'      => 'GeneralCallbackDefault',
 		'data_provider' => array
@@ -80,9 +80,9 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 		(
 			'edit'       => array
 			(
-				'label'      => &$GLOBALS['TL_LANG']['orm_avisota_message_category']['edit'],
-				'href'       => 'table=orm_avisota_message',
-				'icon'       => 'edit.gif',
+				'label' => &$GLOBALS['TL_LANG']['orm_avisota_message_category']['edit'],
+				'href'  => 'table=orm_avisota_message',
+				'icon'  => 'edit.gif',
 			),
 			'editheader' => array
 			(
@@ -116,12 +116,12 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 		),
 	),
 	// Palettes
-	'palettes' => array(
+	'palettes'              => array(
 		'__selector__' => array('boilerplates')
 	),
 	'metapalettes'          => array
 	(
-		'default' => array
+		'default'      => array
 		(
 			'category'   => array('title', 'alias'),
 			'recipients' => array('recipientsMode'),
@@ -132,8 +132,8 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 		),
 		'boilerplates' => array
 		(
-			'category'   => array('title', 'alias'),
-			'expert'     => array(':hide', 'boilerplates'),
+			'category' => array('title', 'alias'),
+			'expert'   => array(':hide', 'boilerplates'),
 		),
 	),
 	// Subpalettes
@@ -147,47 +147,61 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 	(
 		'recipientsMode' => array
 		(
-			'byCategory'             => array('recipients'),
+			'byCategory'          => array('recipients'),
 			'byMessageOrCategory' => array('recipients'),
 		),
 		'themeMode'      => array
 		(
-			'byCategory'             => array('theme'),
+			'byCategory'          => array('theme'),
 			'byMessageOrCategory' => array('theme')
 		),
 		'transportMode'  => array
 		(
-			'byCategory'             => array('transport'),
+			'byCategory'          => array('transport'),
 			'byMessageOrCategory' => array('transport')
 		),
 		'queueMode'      => array
 		(
-			'byCategory'             => array('queue'),
+			'byCategory'          => array('queue'),
 			'byMessageOrCategory' => array('queue')
 		)
 	),
 	// Fields
 	'fields'                => array
 	(
-		'id' => array(
+		'id'                => array(
 			'field' => array(
-				'id' => true,
-				'type' => 'string',
-				'length' => '36',
+				'id'      => true,
+				'type'    => 'string',
+				'length'  => '36',
 				'options' => array('fixed' => true),
 			)
 		),
-		'createdAt'                                 => array(
+		'createdAt'         => array(
 			'field' => array(
 				'type'          => 'datetime',
 				'timestampable' => array('on' => 'create')
 			)
 		),
-		'updatedAt'                                => array(
+		'updatedAt'         => array(
 			'field' => array(
 				'type'          => 'datetime',
 				'timestampable' => array('on' => 'update')
 			)
+		),
+		'messages'          => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message_category']['messages'],
+			'eval'      => array(
+				'doNotShow' => true,
+			),
+			'oneToMany' => array(
+				'targetEntity' => 'Avisota\Contao\Entity\Message',
+				'mappedBy'     => 'category',
+				// 'orphanRemoval' => false,
+				// 'isCascadeRemove' => false,
+				'orderBy'      => array('sendOn' => 'ASC')
+			),
 		),
 		'title'             => array
 		(
@@ -203,11 +217,11 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 		),
 		'alias'             => array
 		(
-			'label'         => &$GLOBALS['TL_LANG']['orm_avisota_message_category']['alias'],
-			'exclude'       => true,
-			'search'        => true,
-			'inputType'     => 'text',
-			'eval'          => array(
+			'label'           => &$GLOBALS['TL_LANG']['orm_avisota_message_category']['alias'],
+			'exclude'         => true,
+			'search'          => true,
+			'inputType'       => 'text',
+			'eval'            => array(
 				'rgxp'              => 'alnum',
 				'unique'            => true,
 				'spaceToUnderscore' => true,
@@ -241,7 +255,25 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 				'mandatory' => true,
 				'multiple'  => true,
 				'tl_class'  => 'clr'
-			)
+			),
+			'manyToMany' => array(
+				'targetEntity' => 'Avisota\Contao\Entity\RecipientSource',
+				'joinTable' => array(
+					'name' => 'orm_avisota_message_category_recipients',
+					'joinColumns'  => array(
+						array(
+							'name'                 => 'messageCategory',
+							'referencedColumnName' => 'id',
+						),
+					),
+					'inverseJoinColumns' => array(
+						array(
+							'name'                 => 'recipient',
+							'referencedColumnName' => 'id',
+						),
+					),
+				),
+			),
 		),
 		'themeMode'         => array
 		(
@@ -258,14 +290,23 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 		),
 		'theme'             => array
 		(
-			'label'      => &$GLOBALS['TL_LANG']['orm_avisota_message_category']['theme'],
-			'inputType'  => 'select',
-			'foreignKey' => 'orm_avisota_theme.title',
-			'eval'       => array(
+			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_message_category']['theme'],
+			'inputType'        => 'select',
+			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getThemeOptions'),
+			'eval'             => array(
 				'mandatory'          => true,
 				'includeBlankOption' => true,
 				'tl_class'           => 'w50'
-			)
+			),
+			'manyToOne' => array(
+				'targetEntity' => 'Avisota\Contao\Entity\Theme',
+				'joinColumns'  => array(
+					array(
+						'name'                 => 'theme',
+						'referencedColumnName' => 'id',
+					),
+				),
+			),
 		),
 		'transportMode'     => array
 		(
@@ -282,14 +323,23 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 		),
 		'transport'         => array
 		(
-			'label'      => &$GLOBALS['TL_LANG']['orm_avisota_message_category']['transport'],
-			'inputType'  => 'select',
-			'foreignKey' => 'orm_avisota_transport.title',
-			'eval'       => array(
+			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_message_category']['transport'],
+			'inputType'        => 'select',
+			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getTransportOptions'),
+			'eval'             => array(
 				'mandatory'          => true,
 				'includeBlankOption' => true,
 				'tl_class'           => 'w50'
-			)
+			),
+			'manyToOne' => array(
+				'targetEntity' => 'Avisota\Contao\Entity\Transport',
+				'joinColumns'  => array(
+					array(
+						'name'                 => 'transport',
+						'referencedColumnName' => 'id',
+					),
+				),
+			),
 		),
 		'queueMode'         => array
 		(
@@ -306,20 +356,29 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 		),
 		'queue'             => array
 		(
-			'label'      => &$GLOBALS['TL_LANG']['orm_avisota_message_category']['queue'],
-			'inputType'  => 'select',
-			'foreignKey' => 'orm_avisota_queue.title',
-			'eval'       => array(
+			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_message_category']['queue'],
+			'inputType'        => 'select',
+			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getQueueOptions'),
+			'eval'             => array(
 				'mandatory'          => true,
 				'includeBlankOption' => true,
 				'tl_class'           => 'w50'
-			)
+			),
+			'manyToOne' => array(
+				'targetEntity' => 'Avisota\Contao\Entity\Queue',
+				'joinColumns'  => array(
+					array(
+						'name'                 => 'queue',
+						'referencedColumnName' => 'id',
+					),
+				),
+			),
 		),
-		'boilerplates'    => array
+		'boilerplates'      => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message_category']['boilerplates'],
-			'exclude'       => true,
-			'filter'       => true,
+			'exclude'   => true,
+			'filter'    => true,
 			'inputType' => 'checkbox',
 			'eval'      => array(
 				'submitOnChange' => true,
@@ -332,7 +391,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 			'inputType' => 'checkbox',
 			'eval'      => array(
 				'submitOnChange' => true,
-				'tl_class' => 'm12 w50'
+				'tl_class'       => 'm12 w50'
 			)
 		),
 		'useCustomMenuIcon' => array
@@ -352,6 +411,6 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 				'fieldType'  => 'radio',
 				'extensions' => 'png,gif,jpg,jpeg'
 			)
-		)
+		),
 	)
 );

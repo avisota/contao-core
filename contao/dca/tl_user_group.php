@@ -29,11 +29,11 @@ $GLOBALS['TL_DCA']['tl_user_group']['palettes']['default'] = str_replace(
  */
 $GLOBALS['TL_DCA']['tl_user_group']['fields']['avisota_recipient_lists'] = array
 (
-	'label'      => &$GLOBALS['TL_LANG']['tl_user_group']['avisota_recipient_lists'],
-	'exclude'    => true,
-	'inputType'  => 'checkbox',
-	'foreignKey' => 'orm_avisota_mailing_list.title',
-	'eval'       => array('multiple' => true)
+	'label'            => &$GLOBALS['TL_LANG']['tl_user_group']['avisota_recipient_lists'],
+	'exclude'          => true,
+	'inputType'        => 'checkbox',
+	'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getMailingListOptions'),
+	'eval'             => array('multiple' => true)
 );
 
 $GLOBALS['TL_DCA']['tl_user_group']['fields']['avisota_recipient_list_permissions'] = array
@@ -58,11 +58,11 @@ $GLOBALS['TL_DCA']['tl_user_group']['fields']['avisota_recipient_permissions'] =
 
 $GLOBALS['TL_DCA']['tl_user_group']['fields']['avisota_newsletter_categories'] = array
 (
-	'label'      => &$GLOBALS['TL_LANG']['tl_user_group']['avisota_newsletter_categories'],
-	'exclude'    => true,
-	'inputType'  => 'checkbox',
-	'foreignKey' => 'orm_avisota_message_category.title',
-	'eval'       => array('multiple' => true)
+	'label'            => &$GLOBALS['TL_LANG']['tl_user_group']['avisota_newsletter_categories'],
+	'exclude'          => true,
+	'inputType'        => 'checkbox',
+	'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getMessageCategoryOptions'),
+	'eval'             => array('multiple' => true)
 );
 
 $GLOBALS['TL_DCA']['tl_user_group']['fields']['avisota_newsletter_category_permissions'] = array

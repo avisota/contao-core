@@ -25,6 +25,16 @@ abstract class AbstractRecipient extends Entity
 	protected $email;
 
 	/**
+	 * @var \DateTime
+	 */
+	protected $addedOn;
+
+	function __construct()
+	{
+		$this->addedOn = new \DateTime();
+	}
+
+	/**
 	 * @param string $email
 	 */
 	public function setEmail($email)

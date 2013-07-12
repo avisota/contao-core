@@ -15,7 +15,6 @@
 
 namespace Avisota\Contao\DataContainer;
 
-use Avisota\Contao\Entity\MessageCategory;
 use Contao\Doctrine\ORM\EntityHelper;
 use Doctrine\Common\Persistence\Mapping\MappingException;
 
@@ -31,14 +30,11 @@ class Message extends \Controller
 			$database->tableExists('orm_avisota_message_category')
 		) {
 			try {
-				$newsletterCategoryRepository = EntityHelper::getRepository('Avisota\Contao:MessageCategory');
-
 				if ($input->get('act') == 'edit') {
 					$newsletterRepository = EntityHelper::getRepository('Avisota\Contao:Message');
 					/** @var \Avisota\Contao\Entity\Message $newsletter */
-					$newsletter = $newsletterRepository->find($input->get('id'));
-					/** @var MessageCategory $newsletterCategory */
-					$newsletterCategory = $newsletterCategoryRepository->find($newsletter->getPid());
+					$newsletter         = $newsletterRepository->find($input->get('id'));
+					$newsletterCategory = $newsletter->getCategory();
 
 					switch ($newsletterCategory->getRecipientsMode()) {
 						case 'byMessageOrCategory':
@@ -71,7 +67,8 @@ class Message extends \Controller
 					}
 				}
 				else {
-					/** @var MessageCategory $newsletterCategory */
+					$newsletterCategoryRepository = EntityHelper::getRepository('Avisota\Contao:MessageCategory');
+					/** @var \Avisota\Contao\Entity\MessageCategory $newsletterCategory */
 					$newsletterCategory = $newsletterCategoryRepository->find($input->get('id'));
 
 					switch ($newsletterCategory->getRecipientsMode()) {
@@ -329,7 +326,7 @@ class Message extends \Controller
 		$add[$key] = array();
 
 		$newsletterCategoryRepository = EntityHelper::getRepository('Avisota\Contao:MessageCategory');
-		/** @var MessageCategory $newsletterCategory */
+		/** @var \Avisota\Contao\Entity\MessageCategory $newsletterCategory */
 		$newsletterCategory = $newsletterCategoryRepository->find($dc->id);
 
 		$fallback = $newsletterCategory->getRecipientsMode() == 'byMessageOrCategory';

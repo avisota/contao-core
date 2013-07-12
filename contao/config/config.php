@@ -366,9 +366,9 @@ $GLOBALS['BE_FFL']['newschooser']  = 'WidgetNewschooser';
 /**
  * Recipient sources
  */
-$GLOBALS['orm_avisota_RECIPIENT_SOURCE']['integrated']                 = 'Avisota\Contao\RecipientSource\IntegratedRecipients';
-$GLOBALS['orm_avisota_RECIPIENT_SOURCE']['integrated_by_mailing_list'] = 'Avisota\Contao\RecipientSource\IntegratedRecipientsByMailingList';
-$GLOBALS['orm_avisota_RECIPIENT_SOURCE']['csv_file']                   = 'Avisota\RecipientSource\CSVFile';
+$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['integrated']                 = 'Avisota\Contao\RecipientSource\IntegratedRecipients';
+$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['integrated_by_mailing_list'] = 'Avisota\Contao\RecipientSource\IntegratedRecipientsByMailingList';
+$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['csv_file']                   = 'Avisota\RecipientSource\CSVFile';
 
 
 /**
@@ -379,8 +379,8 @@ $GLOBALS['orm_avisota_QUEUE']['simpleDatabase'] = 'Avisota\Queue\SimpleDatabaseQ
 /**
  * Transport modules
  */
-$GLOBALS['orm_avisota_TRANSPORT']['swift']   = 'Avisota\Transport\Swift';
-$GLOBALS['orm_avisota_TRANSPORT']['service'] = 'Avisota\Transport\Service';
+$GLOBALS['AVISOTA_TRANSPORT']['swift']   = 'Avisota\Transport\Swift';
+$GLOBALS['AVISOTA_TRANSPORT']['service'] = 'Avisota\Transport\Service';
 
 
 /**
