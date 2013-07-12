@@ -44,8 +44,8 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 	// DataContainer
 	'dca_config'      => array
 	(
-		'callback'      => 'GeneralCallbackDefault',
-		'data_provider' => array
+		'callback'       => 'GeneralCallbackDefault',
+		'data_provider'  => array
 		(
 			'default' => array
 			(
@@ -58,8 +58,50 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				'source' => 'orm_avisota_message_category'
 			)
 		),
-		'controller'    => 'GeneralControllerDefault',
-		'view'          => 'GeneralViewDefault'
+		'controller'     => 'GeneralControllerDefault',
+		'view'           => 'GeneralViewDefault',
+		'childCondition' => array(
+			array(
+				'from'   => 'orm_avisota_message_category',
+				'to'     => 'self',
+				'setOn'  => array
+				(
+					array(
+						'to_field'   => 'category',
+						'from_field' => 'id',
+					),
+				),
+				'filter' => array
+				(
+					array
+					(
+						'local'     => 'category',
+						'remote'    => 'id',
+						'operation' => '=',
+					)
+				)
+			),
+			array(
+				'from'   => 'self',
+				'to'     => 'orm_avisota_message_content',
+				'setOn'  => array
+				(
+					array(
+						'to_field'   => 'message',
+						'from_field' => 'id',
+					),
+				),
+				'filter' => array
+				(
+					array
+					(
+						'local'     => 'message',
+						'remote'    => 'id',
+						'operation' => '=',
+					)
+				)
+			)
+		)
 	),
 	// List
 	'list'            => array
@@ -67,7 +109,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 		'sorting'           => array
 		(
 			'mode'                  => 4,
-			'fields'                => array('sendOn=\'\' DESC', 'sendOn DESC'),
+			'fields'                => array('sendOn'),
 			'panelLayout'           => 'search,limit',
 			'headerFields'          => array('title'),
 			'header_callback'       => array('Avisota\Contao\DataContainer\Message', 'addHeader'),
@@ -261,6 +303,11 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				'mandatory' => true,
 				'tl_class'  => 'w50',
 			),
+			'field'     => array(
+				'type'    => 'string',
+				'length'  => 5,
+				'options' => array('fixed' => true),
+			),
 		),
 		'description'   => array
 		(
@@ -300,11 +347,11 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				'multiple'  => true,
 				'tl_class'  => 'clr'
 			),
-			'manyToMany' => array(
+			'manyToMany'       => array(
 				'targetEntity' => 'Avisota\Contao\Entity\RecipientSource',
-				'joinTable' => array(
-					'name' => 'orm_avisota_message_recipients',
-					'joinColumns'  => array(
+				'joinTable'    => array(
+					'name'               => 'orm_avisota_message_recipients',
+					'joinColumns'        => array(
 						array(
 							'name'                 => 'message',
 							'referencedColumnName' => 'id',
@@ -334,7 +381,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				'mandatory' => true,
 				'tl_class'  => 'w50'
 			),
-			'manyToOne' => array(
+			'manyToOne'        => array(
 				'targetEntity' => 'Avisota\Contao\Entity\Theme',
 				'joinColumns'  => array(
 					array(
@@ -359,7 +406,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				'mandatory' => true,
 				'tl_class'  => 'w50'
 			),
-			'manyToOne' => array(
+			'manyToOne'        => array(
 				'targetEntity' => 'Avisota\Contao\Entity\Transport',
 				'joinColumns'  => array(
 					array(
@@ -387,7 +434,10 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				'files'     => true,
 				'filesOnly' => true,
 				'mandatory' => true
-			)
+			),
+			'field'     => array(
+				'nullable' => true,
+			),
 		),
 		'sendOn'        => array
 		(

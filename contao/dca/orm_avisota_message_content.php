@@ -21,7 +21,7 @@
 $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 (
 	// Entity
-	'entity' => array(
+	'entity'          => array(
 		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_UUID
 	),
 	// Config
@@ -36,24 +36,46 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 		)
 	),
 	// DataContainer
-	'dca_config'   => array
+	'dca_config'      => array
 	(
-		'callback'      => 'GeneralCallbackDefault',
-		'data_provider' => array
+		'callback'       => 'GeneralCallbackDefault',
+		'data_provider'  => array
 		(
 			'default' => array
 			(
 				'class'  => 'Contao\Doctrine\ORM\DataContainer\General\EntityData',
 				'source' => 'orm_avisota_message_content'
 			),
-			'parent' => array
+			'parent'  => array
 			(
 				'class'  => 'Contao\Doctrine\ORM\DataContainer\General\EntityData',
 				'source' => 'orm_avisota_message'
 			)
 		),
-		'controller'    => 'GeneralControllerDefault',
-		'view'          => 'GeneralViewDefault'
+		'controller'     => 'GeneralControllerDefault',
+		'view'           => 'GeneralViewDefault',
+		'childCondition' => array(
+			array(
+				'from'   => 'orm_avisota_message',
+				'to'     => 'self',
+				'setOn'  => array
+				(
+					array(
+						'to_field'   => 'message',
+						'from_field' => 'id',
+					),
+				),
+				'filter' => array
+				(
+					array
+					(
+						'local'     => 'message',
+						'remote'    => 'id',
+						'operation' => '=',
+					)
+				)
+			)
+		)
 	),
 	// List
 	'list'            => array
@@ -215,29 +237,29 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 	// Fields
 	'fields'          => array
 	(
-		'id' => array(
+		'id'              => array(
 			'field' => array(
-				'id' => true,
-				'type' => 'string',
-				'length' => '36',
+				'id'      => true,
+				'type'    => 'string',
+				'length'  => '36',
 				'options' => array('fixed' => true),
 			)
 		),
-		'createdAt'                                 => array(
+		'createdAt'       => array(
 			'field' => array(
 				'type'          => 'datetime',
 				'timestampable' => array('on' => 'create')
 			)
 		),
-		'updatedAt'                                => array(
+		'updatedAt'       => array(
 			'field' => array(
 				'type'          => 'datetime',
 				'timestampable' => array('on' => 'update')
 			)
 		),
-		'message'      => array(
+		'message'         => array(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['message'],
-			'eval' => array(
+			'eval'      => array(
 				'doNotShow' => true,
 			),
 			'manyToOne' => array(
@@ -252,7 +274,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 				)
 			)
 		),
-		'sorting'       => array
+		'sorting'         => array
 		(
 			'field' => array(
 				'type' => 'integer'
@@ -260,22 +282,25 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 		),
 		'invisible'       => array
 		(
-			'label' => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['invisible'],
-			'field' => array(
+			'label'   => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['invisible'],
+			'default' => false,
+			'field'   => array(
 				'type' => 'boolean'
 			)
 		),
-		'unmodifiable'       => array
+		'unmodifiable'    => array
 		(
-			'label' => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['unmodifiable'],
-			'field' => array(
+			'label'   => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['unmodifiable'],
+			'default' => false,
+			'field'   => array(
 				'type' => 'boolean'
 			)
 		),
-		'undeletable'       => array
+		'undeletable'     => array
 		(
-			'label' => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['undeletable'],
-			'field' => array(
+			'label'   => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['undeletable'],
+			'default' => false,
+			'field'   => array(
 				'type' => 'boolean'
 			)
 		),
@@ -299,7 +324,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 			'inputType'        => 'select',
 			'options_callback' => array('Avisota\Contao\DataContainer\MessageContent', 'dcaGetMessageAreas'),
 			'reference'        => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['cell'],
-			'eval'             => array('mandatory' => true, 'tl_class' => 'w50')
+			'eval'             => array('mandatory' => true, 'includeBlankOption' => true, 'tl_class' => 'w50')
 		),
 		'headline'        => array
 		(
@@ -308,7 +333,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 			'search'    => true,
 			'inputType' => 'inputUnit',
 			'options'   => array('h1', 'h2', 'h3', 'h4', 'h5', 'h6'),
-			'eval'      => array('maxlength' => 255, 'tl_class' => 'clr')
+			'eval'      => array('maxlength' => 255, 'tl_class' => 'clr'),
 		),
 		'text'            => array
 		(
@@ -582,26 +607,41 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['events'],
 			'exclude'   => true,
 			'inputType' => 'eventchooser',
-			'eval'      => array('mandatory' => true)
-		),
-		'news'            => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['news'],
-			'exclude'   => true,
-			'inputType' => 'newschooser',
-			'eval'      => array('mandatory' => true)
-		),
-		'articleAlias'    => array
-		(
-			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['articleAlias'],
-			'exclude'          => true,
-			'inputType'        => 'select',
-			'options_callback' => array('Avisota\Contao\DataContainer\MessageContent', 'getArticleAlias'),
-			'eval'             => array('mandatory' => true, 'submitOnChange' => true),
-			'wizard'           => array
-			(
-				array('Avisota\Contao\DataContainer\MessageContent', 'editArticleAlias')
+			'eval'      => array('mandatory' => true),
+			'field'     => array(
+				'nullable' => true,
+				'type'     => 'serialized',
+				'length'   => 65532
 			)
+		),
+	),
+	'news'            => array
+	(
+		'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['news'],
+		'exclude'   => true,
+		'inputType' => 'newschooser',
+		'eval'      => array('mandatory' => true),
+		'field'     => array(
+			'nullable' => true,
+			'type'     => 'serialized',
+			'length'   => 65532
+		)
+	),
+	'articleAlias'    => array
+	(
+		'label'            => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['articleAlias'],
+		'exclude'          => true,
+		'inputType'        => 'select',
+		'options_callback' => array('Avisota\Contao\DataContainer\MessageContent', 'getArticleAlias'),
+		'eval'             => array('mandatory' => true, 'submitOnChange' => true),
+		'wizard'           => array
+		(
+			array('Avisota\Contao\DataContainer\MessageContent', 'editArticleAlias')
+		),
+		'field'            => array(
+			'nullable' => true,
+			'type'     => 'serialized',
+			'length'   => 65532
 		)
 	)
 );

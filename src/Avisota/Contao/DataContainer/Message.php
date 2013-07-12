@@ -15,6 +15,7 @@
 
 namespace Avisota\Contao\DataContainer;
 
+use Avisota\Contao\Entity\RecipientSource;
 use Contao\Doctrine\ORM\EntityHelper;
 use Doctrine\Common\Persistence\Mapping\MappingException;
 
@@ -63,32 +64,6 @@ class Message extends \Controller
 
 						case 'byMessage':
 							$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['transport'][] = 'transport';
-							break;
-					}
-				}
-				else {
-					$newsletterCategoryRepository = EntityHelper::getRepository('Avisota\Contao:MessageCategory');
-					/** @var \Avisota\Contao\Entity\MessageCategory $newsletterCategory */
-					$newsletterCategory = $newsletterCategoryRepository->find($input->get('id'));
-
-					switch ($newsletterCategory->getRecipientsMode()) {
-						case 'byMessageOrCategory':
-						case 'byCategory':
-							$GLOBALS['TL_DCA']['orm_avisota_message']['list']['sorting']['headerFields'][] = 'recipients';
-							break;
-					}
-
-					switch ($newsletterCategory->getThemeMode()) {
-						case 'byMessageOrCategory':
-						case 'byCategory':
-							$GLOBALS['TL_DCA']['orm_avisota_message']['list']['sorting']['headerFields'][] = 'theme';
-							break;
-					}
-
-					switch ($newsletterCategory->getTransportMode()) {
-						case 'byMessageOrCategory':
-						case 'byCategory':
-							$GLOBALS['TL_DCA']['orm_avisota_message']['list']['sorting']['headerFields'][] = 'transport';
 							break;
 					}
 				}
@@ -322,52 +297,55 @@ class Message extends \Controller
 
 	public function addHeader($add, $dc)
 	{
-		$key       = $GLOBALS['TL_LANG']['orm_avisota_message_category']['recipients'][0];
-		$add[$key] = array();
-
 		$newsletterCategoryRepository = EntityHelper::getRepository('Avisota\Contao:MessageCategory');
 		/** @var \Avisota\Contao\Entity\MessageCategory $newsletterCategory */
 		$newsletterCategory = $newsletterCategoryRepository->find($dc->id);
 
-		$fallback = $newsletterCategory->getRecipientsMode() == 'byMessageOrCategory';
+		$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['recipients'][0];
+		if ($newsletterCategory->getRecipientsMode() != 'byMessage') {
+			$add[$key] = array();
+			$fallback  = $newsletterCategory->getRecipientsMode() == 'byMessageOrCategory';
 
-		/*
-		 * TODO
-		$selectedRecipients = $newsletterCategory->getRecipients();
+			/** @var RecipientSource $recipientSource */
+			foreach ($newsletterCategory->getRecipients() as $recipientSource) {
+				$add[$key][] = sprintf(
+					'<a href="contao/main.php?do=avisota_recipient_source&act=edit&id=%d">%s</a>%s',
+					$recipientSource->getId(),
+					$recipientSource->getTitle(),
+					$fallback ? ' ' . $GLOBALS['TL_LANG']['orm_avisota_message']['fallback'] : ''
+				);
+			}
+			$add[$key] = implode('<br>', $add[$key]);
+		}
+		else {
+			unset($add[$key]);
+		}
 
-		$recipients = AvisotaBackend::getInstance()
-			->getRecipients(true);
-
-		foreach ($recipients as $group => $lists) {
-			list($source, $group) = explode(':', $group, 2);
-			foreach ($lists as $listKey => $list) {
-				if (in_array($listKey, $selectedRecipients)) {
-					$add[$key][] = sprintf(
-						'<a href="contao/main.php?do=avisota_recipient_source&act=edit&id=%d">%s &raquo; %s</a>%s',
-						$source,
-						$group,
-						$list,
-						$fallback ? ' ' . $GLOBALS['TL_LANG']['orm_avisota_message']['fallback'] : ''
-					);
-				}
+		$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['theme'][0];
+		if ($newsletterCategory->getThemeMode() != 'byMessage') {
+			$add[$key] = $newsletterCategory
+				->getTheme()
+				->getTitle();
+			if ($newsletterCategory->getThemeMode() == 'byMessageOrCategory') {
+				$add[$key] .= ' ' . $GLOBALS['TL_LANG']['orm_avisota_message']['fallback'];
 			}
 		}
-		*/
-
-		$add[$key] = implode('<br>', $add[$key]);
-
-
-		if ($newsletterCategory->getThemeMode() == 'byMessageOrCategory') {
-			$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['theme'][0];
-			$add[$key] .= ' ' . $GLOBALS['TL_LANG']['orm_avisota_message']['fallback'];
+		else {
+			unset($add[$key]);
 		}
 
-
-		if ($newsletterCategory->getTransportMode() == 'byMessageOrCategory') {
-			$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['transport'][0];
-			$add[$key] .= ' ' . $GLOBALS['TL_LANG']['orm_avisota_message']['fallback'];
+		$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['transport'][0];
+		if ($newsletterCategory->getTransportMode() != 'byMessage') {
+			$add[$key] = $newsletterCategory
+				->getTransport()
+				->getTitle();
+			if ($newsletterCategory->getTransportMode() == 'byMessageOrCategory') {
+				$add[$key] .= ' ' . $GLOBALS['TL_LANG']['orm_avisota_message']['fallback'];
+			}
 		}
-
+		else {
+			unset($add[$key]);
+		}
 
 		return $add;
 	}

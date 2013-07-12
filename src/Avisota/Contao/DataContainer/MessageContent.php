@@ -401,6 +401,9 @@ class MessageContent extends \Backend
 	 */
 	public function dcaGetMessageAreas($dc)
 	{
+		return array('body[1]');
+
+		// TODO
 		$category = $this->Database
 			->prepare(
 			"SELECT c.* FROM orm_avisota_message_category c INNER JOIN orm_avisota_message n ON c.id=n.pid INNER JOIN orm_avisota_message_content nle ON n.id=nle.pid WHERE nle.id=?"

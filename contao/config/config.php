@@ -30,6 +30,7 @@ define('AVISOTA_ROOT', dirname(__DIR__));
 $GLOBALS['DOCTRINE_ENTITY_NAMESPACE_ALIAS']['Avisota\Contao']        = 'Avisota\Contao\Entity';
 $GLOBALS['DOCTRINE_ENTITY_NAMESPACE_MAP']['orm_avisota']             = 'Avisota\Contao\Entity';
 $GLOBALS['DOCTRINE_ENTITY_CLASS']['Avisota\Contao\Entity\Recipient'] = 'Avisota\Contao\Entity\AbstractRecipient';
+$GLOBALS['DOCTRINE_ENTITY_CLASS']['Avisota\Contao\Entity\Message']   = 'Avisota\Contao\Entity\AbstractMessage';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing_list';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_message';
 $GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_message_category';
