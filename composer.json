@@ -36,6 +36,7 @@
 		"bit3/contao-console": "~1",
 		"bit3/contao-event-dispatcher": "~2.3",
 		"bit3/php-string-builder": "~1",
+		"bit3/tag-replacer": "~1",
 		"menatwork/contao-multicolumnwizard": "~3",
 		"metamodels/dc_general": "~1.0.0"
 	},
