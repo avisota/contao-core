@@ -15,10 +15,23 @@
 
 namespace Avisota\Contao\DataContainer;
 
-use Avisota\Contao\Theme as AvisotaTheme;
-
 class Layout
 {
+	/**
+	 * Add the type of content element
+	 *
+	 * @param array
+	 *
+	 * @return string
+	 */
+	static public function addElement($contentData)
+	{
+		return sprintf(
+			'<div>%s</div>' . "\n",
+			$contentData['title']
+		);
+	}
+
 	/**
 	 * @param \DC_General|\Avisota\Contao\Entity\Layout $layout
 	 */
@@ -27,8 +40,8 @@ class Layout
 		if ($layout instanceof \DC_General) {
 			$layout = $layout->getCurrentModel()->getEntity();
 		}
-		list($group, $struct) = explode(':', $layout->getStruct());
-		$config = $GLOBALS['AVISOTA_MESSAGE_STRUCT'][$group][$struct];
+		list($group, $baseTemplate) = explode(':', $layout->getBaseTemplate());
+		$config = $GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$group][$baseTemplate];
 
 		$options = array();
 		foreach ($config['cells'] as $cellName => $cellConfig) {
@@ -66,8 +79,8 @@ class Layout
 		if ($layout instanceof \DC_General) {
 			$layout = $layout->getCurrentModel()->getEntity();
 		}
-		list($group, $struct) = explode(':', $layout->getStruct());
-		$config = $GLOBALS['AVISOTA_MESSAGE_STRUCT'][$group][$struct];
+		list($group, $baseTemplate) = explode(':', $layout->getBaseTemplate());
+		$config = $GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$group][$baseTemplate];
 
 		$value = array();
 		foreach ($config['cells'] as $cellName => $cellConfig) {

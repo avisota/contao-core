@@ -22,7 +22,7 @@
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    Avisota
  */
-class Image extends NewsletterElement
+class NewsletterImage extends Element
 {
 
 	/**

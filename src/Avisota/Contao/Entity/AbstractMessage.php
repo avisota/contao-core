@@ -30,4 +30,30 @@ abstract class AbstractMessage extends Entity
 			$this->language = $GLOBALS['TL_LANGUAGE'];
 		}
 	}
+
+	/**
+	 * @return Layout
+	 */
+	public function getLayout()
+	{
+		$category = $this->getCategory();
+
+		switch ($category->getLayoutMode()) {
+			case 'byMessage':
+				$layout = $this->getLayout();
+				break;
+
+			case 'byMessageOrCategory':
+				$layout = $this->getLayout();
+				if ($layout) {
+					break;
+				}
+
+			case 'byCategory':
+				$layout = $category->getLayout();
+				break;
+		}
+
+		return $layout;
+	}
 }

@@ -47,13 +47,13 @@ class Message extends \Controller
 							break;
 					}
 
-					switch ($newsletterCategory->getThemeMode()) {
+					switch ($newsletterCategory->getLayoutMode()) {
 						case 'byMessageOrCategory':
-							$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['theme'][] = 'setTheme';
+							$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['layout'][] = 'setLayout';
 							break;
 
 						case 'byMessage':
-							$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['theme'][] = 'theme';
+							$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['layout'][] = 'layout';
 							break;
 					}
 
@@ -321,12 +321,12 @@ class Message extends \Controller
 			unset($add[$key]);
 		}
 
-		$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['theme'][0];
-		if ($newsletterCategory->getThemeMode() != 'byMessage') {
+		$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['layout'][0];
+		if ($newsletterCategory->getLayoutMode() != 'byMessage') {
 			$add[$key] = $newsletterCategory
-				->getTheme()
+				->getLayout()
 				->getTitle();
-			if ($newsletterCategory->getThemeMode() == 'byMessageOrCategory') {
+			if ($newsletterCategory->getLayoutMode() == 'byMessageOrCategory') {
 				$add[$key] .= ' ' . $GLOBALS['TL_LANG']['orm_avisota_message']['fallback'];
 			}
 		}

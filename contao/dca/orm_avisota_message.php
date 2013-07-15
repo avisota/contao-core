@@ -192,7 +192,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 			'newsletter' => array('subject', 'alias', 'language'),
 			'meta'       => array('description', 'keywords'),
 			'recipient'  => array(),
-			'theme'      => array(),
+			'layout'      => array(),
 			'transport'  => array(),
 			'attachment' => array('addFile'),
 		),
@@ -201,7 +201,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 	'metasubpalettes' => array
 	(
 		'setRecipients' => array('recipients'),
-		'setTheme'      => array('theme'),
+		'setLayout'      => array('layout'),
 		'setTransport'  => array('transport'),
 		'addFile'       => array('files')
 	),
@@ -366,26 +366,26 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				),
 			),
 		),
-		'setTheme'      => array
+		'setLayout'      => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['setTheme'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['setLayout'],
 			'inputType' => 'checkbox',
 			'eval'      => array('tl_class' => 'clr m12 w50', 'submitOnChange' => true)
 		),
-		'theme'         => array
+		'layout'         => array
 		(
-			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_message']['theme'],
+			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_message']['layout'],
 			'inputType'        => 'select',
-			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getThemeOptions'),
+			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getLayoutOptions'),
 			'eval'             => array(
 				'mandatory' => true,
 				'tl_class'  => 'w50'
 			),
 			'manyToOne'        => array(
-				'targetEntity' => 'Avisota\Contao\Entity\Theme',
+				'targetEntity' => 'Avisota\Contao\Entity\Layout',
 				'joinColumns'  => array(
 					array(
-						'name'                 => 'theme',
+						'name'                 => 'layout',
 						'referencedColumnName' => 'id',
 					),
 				),

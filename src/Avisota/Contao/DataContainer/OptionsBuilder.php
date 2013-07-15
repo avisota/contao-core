@@ -29,6 +29,18 @@ class OptionsBuilder extends \System
 		return static::$instance;
 	}
 
+	static function getLayoutOptions()
+	{
+		$layoutRepository = EntityHelper::getRepository('Avisota\Contao:Layout');
+		$layouts = $layoutRepository->findBy(array(), array('title' => 'ASC'));
+		$options = array();
+		/** @var \Avisota\Contao\Entity\Layout $layout */
+		foreach ($layouts as $layout) {
+			$options[$layout->getTheme()->getTitle()][$layout->getId()] = $layout->getTitle();
+		}
+		return $options;
+	}
+
 	static function getMailingListOptions()
 	{
 		$mailingListRepository = EntityHelper::getRepository('Avisota\Contao:MailingList');
@@ -153,25 +165,27 @@ class OptionsBuilder extends \System
 		return $options;
 	}
 
-	static function getMessagesStructOptions()
+	static function getMessagesBaseTemplateOptions()
 	{
-		static::getInstance()->loadLanguageFile('avisota_message_struct');
+		static::getInstance()->loadLanguageFile('avisota_message_base_template');
 
 		$options = array();
-		foreach ($GLOBALS['AVISOTA_MESSAGE_STRUCT'] as $group => $structs) {
-			if (isset($GLOBALS['TL_LANG']['avisota_message_struct'][$group])) {
-				$groupLabel = $GLOBALS['TL_LANG']['avisota_message_struct'][$group];
+		foreach ($GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'] as $group => $baseTemplates) {
+			if (isset($GLOBALS['TL_LANG']['avisota_message_base_template'][$group])) {
+				$groupLabel = $GLOBALS['TL_LANG']['avisota_message_base_template'][$group];
 			}
 			else {
 				$groupLabel = $group;
 			}
-			foreach ($structs as $name => $struct) {
-				if (isset($GLOBALS['TL_LANG']['avisota_message_struct'][$name])) {
-					$label = $GLOBALS['TL_LANG']['avisota_message_struct'][$name];
+			foreach ($baseTemplates as $name => $baseTemplate) {
+				if (isset($GLOBALS['TL_LANG']['avisota_message_base_template'][$name])) {
+					$label = $GLOBALS['TL_LANG']['avisota_message_base_template'][$name];
 				}
 				else {
 					$label = $name;
 				}
+
+				$label .= sprintf(' [%s]', strtoupper($baseTemplate['mode']));
 
 				$options[$groupLabel][$group . ':' . $name] = $label;
 			}

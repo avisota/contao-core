@@ -49,6 +49,11 @@ $GLOBALS['TL_DCA']['orm_avisota_layout'] = array
 			(
 				'class'  => 'Contao\Doctrine\ORM\DataContainer\General\EntityData',
 				'source' => 'orm_avisota_layout'
+			),
+			'parent'  => array
+			(
+				'class'  => 'Contao\Doctrine\ORM\DataContainer\General\EntityData',
+				'source' => 'orm_avisota_theme'
 			)
 		),
 		'controller'     => 'GeneralControllerDefault',
@@ -81,10 +86,12 @@ $GLOBALS['TL_DCA']['orm_avisota_layout'] = array
 	(
 		'sorting'           => array
 		(
-			'mode'        => 1,
-			'flag'        => 1,
-			'fields'      => array('title'),
-			'panelLayout' => 'limit'
+			'mode'                  => 4,
+			'flag'                  => 1,
+			'fields'                => array('title'),
+			'panelLayout'           => 'filter;search,limit',
+			'headerFields'          => array('title'),
+			'child_record_callback' => array('Avisota\Contao\DataContainer\Layout', 'addElement')
 		),
 		'label'             => array
 		(
@@ -140,7 +147,7 @@ $GLOBALS['TL_DCA']['orm_avisota_layout'] = array
 		(
 			'theme'     => array('title', 'alias', 'preview'),
 			'template'  => array('stylesheets'),
-			'structure' => array('struct', 'allowedCellContents'),
+			'structure' => array('baseTemplate', 'allowedCellContents', 'clearStyles'),
 			'expert'    => array(':hide', 'templateDirectory')
 		)
 	),
@@ -241,12 +248,12 @@ $GLOBALS['TL_DCA']['orm_avisota_layout'] = array
 			),
 			'field'            => array(),
 		),
-		'struct'              => array
+		'baseTemplate'              => array
 		(
-			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_layout']['struct'],
+			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_layout']['baseTemplate'],
 			'exclude'          => true,
 			'inputType'        => 'select',
-			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getMessagesStructOptions'),
+			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getMessagesBaseTemplateOptions'),
 			'eval'             => array(
 				'mandatory'          => true,
 				'includeBlankOption' => true,
@@ -269,6 +276,12 @@ $GLOBALS['TL_DCA']['orm_avisota_layout'] = array
 			'setter_callback'  => array(
 				array('Avisota\Contao\DataContainer\Layout', 'setterCallbackAllowedCellContents')
 			),
+		),
+		'clearStyles' => array
+		(
+			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_layout']['clearStyles'],
+			'exclude'          => true,
+			'inputType'        => 'checkbox',
 		),
 		/*
 		'template_html'     => array

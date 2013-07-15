@@ -53,6 +53,12 @@ $GLOBALS['TL_EVENT_SUBSCRIBERS']['avisota-subscription-log'] = 'Avisota\Contao\S
 
 
 /**
+ * Load base templates
+ */
+require __DIR__ . '/baseTemplates.php';
+
+
+/**
  * Include dynamic generated informations
  */
 if (file_exists(__DIR__ . '/dynamics.php')) {
@@ -233,7 +239,7 @@ $GLOBALS['BE_MOD'] = array_merge(
 					 'orm_avisota_message_content',
 					 'orm_avisota_message_create_from_draft'
 				 ),
-				 'send'       => array('Avisota', 'send'),
+				 'send'       => array('Avisota\Contao\Preview', 'sendMessage'),
 				 'icon'       => 'system/modules/avisota/html/newsletter.png',
 				 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
 			 ),
@@ -331,28 +337,30 @@ $GLOBALS['FE_MOD']['avisota']['avisota_reader']       = 'Avisota\Contao\Module\R
 $GLOBALS['TL_NLE'] = array_merge_recursive(
 	array
 	(
-	'texts'    => array
+	'texts'  => array
 	(
-		'headline' => 'NewsletterHeadline',
-		'text'     => 'NewsletterText',
-		'list'     => 'NewsletterList',
-		'table'    => 'NewsletterTable'
+		'headline' => 'Avisota\Contao\Message\Element\Headline',
+		'text'     => 'Avisota\Contao\Message\Element\Text',
+		'list'     => 'Avisota\Contao\Message\Element\List',
+		'table'    => 'Avisota\Contao\Message\Element\Table'
 	),
-	'links'    => array
+	'links'  => array
 	(
-		'hyperlink' => 'NewsletterHyperlink'
+		'hyperlink' => 'Avisota\Contao\Message\Element\Hyperlink'
 	),
-	'images'   => array
+	'images' => array
 	(
-		'image'   => 'NewsletterImage',
-		'gallery' => 'NewsletterGallery'
+		'image'   => 'Avisota\Contao\Message\Element\Image',
+		'gallery' => 'Avisota\Contao\Message\Element\Gallery'
 	),
+	/*
 	'includes' => array
 	(
-		'news'    => 'NewsletterNews',
-		'events'  => 'NewsletterEvent',
-		'article' => 'NewsletterArticleTeaser'
+		'news'    => 'Avisota\Contao\Message\Element\News',
+		'events'  => 'Avisota\Contao\Message\Element\Event',
+		'article' => 'Avisota\Contao\Message\Element\ArticleTeaser'
 	)
+	*/
 	),
 	is_array($GLOBALS['TL_NLE']) ? $GLOBALS['TL_NLE'] : array()
 );
@@ -500,66 +508,3 @@ else if (TL_MODE == 'BE') {
 	* /
 }
 */
-
-$GLOBALS['AVISOTA_MESSAGE_STRUCT']['templates']['3col-basic3column'] = array(
-    'template' => 'system/modules/avisota/templates/3col-basic3column.html',
-    'cells' => array(
-        'title' => array(
-            'xpath' => '/html/head/meta[@property="og:title"]/@content|/html/head/title',
-            'content' => '##newsletter.subject##',
-        ),
-        'teaser' => array(
-            'xpath' => '//div[@mc:edit="std_preheader_content"]',
-            'content' => '##newsletter.description##',
-            'ifEmptyRemove' => '//div[@mc:edit="std_preheader_content"]/..',
-        ),
-        'viewonline' => array(
-            'xpath' => '//div[@mc:edit="std_preheader_links"]',
-            'content' => '##view_online_link##',
-        ),
-        'header' => array(
-            'xpath' => '//table[@id="templateContainer"]//img[@mc:edit="header_image"]/..',
-            'content' => '{{image::##theme.headerImage##}}',
-        ),
-        'col1' => array(
-            'xpath' => '//div[@id="templateBody"]//td[@class="leftColumnContent"]',
-            'wrapContent' => '<table border="0" cellpadding="20" cellspacing="0" width="100%"></table>',
-            'wrapRow' => '<tr><td valign="top"></td></tr>',
-			'preferedElements' => array('image'),
-        ),
-        'col2' => array(
-            'xpath' => '//table[@id="templateBody"]//td[@class="centerColumnContent"]',
-            'wrapContent' => '<table border="0" cellpadding="20" cellspacing="0" width="100%"></table>',
-            'wrapRow' => '<tr><td valign="top"></td></tr>',
-			'preferedElements' => array('text'),
-        ),
-        'col3' => array(
-            'xpath' => '//table[@id="templateBody"]//td[@class="rightColumnContent"]',
-            'wrapContent' => '<table border="0" cellpadding="20" cellspacing="0" width="100%"></table>',
-            'wrapRow' => '<tr><td valign="top"></td></tr>',
-			'preferedElements' => array('image'),
-        ),
-        'footer' => array(
-            'xpath' => '//table[@id="templateFooter"]//td[@class="footerContent"]',
-        ),
-    ),
-    'formation' => array(
-        array(
-			'cells' => array(
-            	'teaser' => array(),
-			),
-        ),
-        array(
-			'cells' => array(
-				'col1' => array(),
-				'col2' => array(),
-				'col3' => array(),
-			),
-        ),
-        array(
-			'cells' => array(
-            	'footer' => array(),
-			),
-        ),
-    )
-);

@@ -14,6 +14,9 @@
  */
 
 
+namespace Avisota\Contao\Message\Element;
+
+
 /**
  * Class Text
  *
@@ -22,7 +25,7 @@
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    Avisota
  */
-class NewsletterText extends Element
+class Text extends NewsletterElement
 {
 
 	/**

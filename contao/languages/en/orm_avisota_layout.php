@@ -33,16 +33,8 @@ $GLOBALS['TL_LANG']['orm_avisota_layout']['stylesheets']       = array(
 	'Stylesheets',
 	'Please chose the stylesheets to used in this layout.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_layout']['template_html']     = array(
-	'HTML email template',
-	'Please chose the basic html email template.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_layout']['template_plain']    = array(
-	'Plain email template',
-	'Please chose the basic plain email template.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_layout']['struct']             = array(
-	'Structure',
+$GLOBALS['TL_LANG']['orm_avisota_layout']['baseTemplate']             = array(
+	'Base template',
 	'Chose the basic structure and template for this layout.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_layout']['allowedCellContents']             = array(
