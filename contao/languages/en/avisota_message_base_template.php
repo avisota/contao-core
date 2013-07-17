@@ -19,5 +19,8 @@
  */
 $GLOBALS['TL_LANG']['avisota_message_base_template']['templates']            = 'Templates (non-responsive)';
 $GLOBALS['TL_LANG']['avisota_message_base_template']['3col-basic3column']    = 'Basic 3 Columns';
+$GLOBALS['TL_LANG']['avisota_message_base_template']['transactional-basic']  = 'Basic Transactional';
+
 $GLOBALS['TL_LANG']['avisota_message_base_template']['templates-responsive'] = 'Templates (responsive)';
+
 $GLOBALS['TL_LANG']['avisota_message_base_template']['templates-plain']      = 'Templates (plain text)';

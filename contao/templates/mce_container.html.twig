@@ -1,0 +1,24 @@
+{% set space = space|deserialize(true) %}
+{% set cssID = cssID|deserialize(true) %}
+
+{% set class = 'mce_' ~ type %}
+{% if cssID[1] %}
+	{% set class = class ~ ' ' ~ cssID[1] %}
+{% endif %}
+
+{% set id = cssID[0] %}
+
+{% set style = '' %}
+{% if space[0] %}
+	{% set style = style ~ 'margin-top:' ~ space[0] ~ 'px;' %}
+{% endif %}
+{% if space[1] %}
+	{% set style = style ~ 'margin-bottom:' ~ space[1] ~ 'px;' %}
+{% endif %}
+
+<table class="{{ class }}"{#
+	#}{% if id %} id="{{ id }}"{% endif %}{#
+	#}{% if style %} style="{{ style }}"{% endif %} {#
+	#}width="100%" border="0" cellpadding="0" cellspacing="0">
+	{% block content %}{% endblock %}
+</table>

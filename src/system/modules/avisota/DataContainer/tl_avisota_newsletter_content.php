@@ -408,31 +408,6 @@ class orm_avisota_message_content extends Backend
 		return array_unique($areas);
 	}
 
-
-	/**
-	 * Update this data container.
-	 *
-	 * @param unknown_type $name
-	 */
-	public function myLoadDataContainer($name)
-	{
-		if ($name == 'orm_avisota_message_content') {
-			if ($this->Input->get('table') == 'orm_avisota_message_content' && $this->Input->get('act') == 'edit') {
-				if (!$this->hasMultipleNewsletterAreas($this->Input->get('id'))) {
-					foreach ($GLOBALS['TL_DCA']['orm_avisota_message_content']['palettes'] as $k => $v) {
-						$GLOBALS['TL_DCA']['orm_avisota_message_content']['palettes'][$k] = str_replace(
-							',cell',
-							'',
-							$v
-						);
-					}
-					$GLOBALS['TL_DCA']['orm_avisota_message_content']['fields']['cell']['filter'] = false;
-				}
-			}
-		}
-	}
-
-
 	/**
 	 * Get all articles and return them as array (article alias)
 	 *
@@ -504,6 +479,3 @@ class orm_avisota_message_content extends Backend
 			) . '</a>';
 	}
 }
-
-// add hook
-$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('orm_avisota_message_content', 'myLoadDataContainer');

@@ -15,7 +15,9 @@
 
 namespace Avisota\Contao\Entity;
 
+use Avisota\Contao\Event\ResolveStylesheetEvent;
 use Contao\Doctrine\ORM\Entity;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 abstract class AbstractMessage extends Entity
 {
@@ -38,20 +40,26 @@ abstract class AbstractMessage extends Entity
 	{
 		$category = $this->getCategory();
 
-		switch ($category->getLayoutMode()) {
-			case 'byMessage':
-				$layout = $this->getLayout();
-				break;
+		if ($category->getBoilerplates() ||
+			$category->getLayoutMode() == 'byMessage'
+		) {
+			if ($this instanceof Proxy) {
+				$this->__load();
+			}
 
-			case 'byMessageOrCategory':
-				$layout = $this->getLayout();
-				if ($layout) {
-					break;
-				}
-
-			case 'byCategory':
+			$layout = $this->layout;
+		}
+		else if ($category->getLayoutMode() == 'byMessageOrCategory') {
+			$layout = $this->getLayout();
+			if (!$layout) {
 				$layout = $category->getLayout();
-				break;
+			}
+		}
+		else if ($category->getLayoutMode() == 'byCategory') {
+			$layout = $category->getLayout();
+		}
+		else {
+			throw new \RuntimeException('Could not find layout for message ' . $this->getId());
 		}
 
 		return $layout;

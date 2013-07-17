@@ -41,6 +41,10 @@ $GLOBALS['TL_LANG']['orm_avisota_layout']['allowedCellContents']             = a
 	'Allowed contents',
 	'Choose the allowed contents for each cell (empty to reset to defaults).'
 );
+$GLOBALS['TL_LANG']['orm_avisota_layout']['clearStyles']             = array(
+	'Remove global styles',
+	'Remove the global styles from the template.'
+);
 
 
 /**

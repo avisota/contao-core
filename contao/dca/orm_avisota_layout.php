@@ -185,6 +185,7 @@ $GLOBALS['TL_DCA']['orm_avisota_layout'] = array
 			'manyToOne' => array(
 				'index'        => true,
 				'targetEntity' => 'Avisota\Contao\Entity\Theme',
+				'cascade'      => array('persist', 'detach', 'merge', 'refresh'),
 				'inversedBy'   => 'layouts',
 				'joinColumns'  => array(
 					array(
@@ -241,7 +242,7 @@ $GLOBALS['TL_DCA']['orm_avisota_layout'] = array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_layout']['stylesheets'],
 			'inputType'        => 'checkboxWizard',
-			'options_callback' => array('Avisota\Contao\DataContainer\Theme', 'getStylesheets'),
+			'options_callback' => array('Avisota\Contao\DataContainer\Layout', 'getStylesheets'),
 			'eval'             => array(
 				'tl_class' => 'clr',
 				'multiple' => true,

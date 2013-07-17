@@ -31,6 +31,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_subscription'] = array
 		(
 			'oneToOne' => array(
 				'targetEntity' => 'Avisota\Contao\Entity\Recipient',
+				'cascade'      => array('persist', 'detach', 'merge', 'refresh'),
 				'joinColumns'     => array(
 					array(
 						'name' => 'recipient',

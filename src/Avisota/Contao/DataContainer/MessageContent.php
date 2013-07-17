@@ -15,6 +15,9 @@
 
 namespace Avisota\Contao\DataContainer;
 
+use Avisota\Contao\Message\Renderer;
+use Contao\Doctrine\ORM\EntityHelper;
+
 class MessageContent extends \Backend
 {
 
@@ -65,11 +68,11 @@ class MessageContent extends \Backend
 			case 'copyAll':
 				// Check access to the parent element if a content element is moved
 				if (($this->Input->get('act') == 'cutAll' || $this->Input->get(
-					'act'
-				) == 'copyAll') && !$this->checkAccessToElement(
-					$this->Input->get('pid'),
-					($this->Input->get('mode') == 2)
-				)
+							'act'
+						) == 'copyAll') && !$this->checkAccessToElement(
+						$this->Input->get('pid'),
+						($this->Input->get('mode') == 2)
+					)
 				) {
 					$this->log(
 						'Access to element ID ' . $this->Input->get('pid') . ' denied!',
@@ -84,7 +87,10 @@ class MessageContent extends \Backend
 					->execute(CURRENT_ID);
 
 				$session                   = $this->Session->getData();
-				$session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'], $contentElement->fetchEach('id'));
+				$session['CURRENT']['IDS'] = array_intersect(
+					$session['CURRENT']['IDS'],
+					$contentElement->fetchEach('id')
+				);
 				$this->Session->setData($session);
 				break;
 
@@ -167,8 +173,8 @@ class MessageContent extends \Backend
 
 		// Set root IDs
 		if (!is_array($user->avisota_newsletter_categories) || count(
-			$user->avisota_newsletter_categories
-		) < 1
+				$user->avisota_newsletter_categories
+			) < 1
 		) {
 			$root = array(0);
 		}
@@ -235,25 +241,6 @@ class MessageContent extends \Backend
 
 
 	/**
-	 * Return all newsletter elements as array
-	 *
-	 * @return array
-	 */
-	public function getMessageElements()
-	{
-		$groups = array();
-
-		foreach ($GLOBALS['TL_NLE'] as $k => $v) {
-			foreach (array_keys($v) as $kk) {
-				$groups[$k][] = $kk;
-			}
-		}
-
-		return $groups;
-	}
-
-
-	/**
 	 * Return all gallery templates as array
 	 *
 	 * @param object
@@ -266,7 +253,11 @@ class MessageContent extends \Backend
 		$article = $this->Database
 			->prepare("SELECT pid FROM tl_article WHERE id=?")
 			->limit(1)
-			->execute($dc->getCurrentModel()->getProperty('pid'));
+			->execute(
+				$dc
+					->getCurrentModel()
+					->getProperty('pid')
+			);
 
 		// Inherit the page settings
 		$page = $this->getPageDetails($article->pid);
@@ -291,25 +282,20 @@ class MessageContent extends \Backend
 	 */
 	public function addElement($contentData)
 	{
-		$key = $contentData['invisible'] ? 'unpublished' : 'published';
+		/** @var Renderer $renderer */
+		$renderer = $GLOBALS['container']['avisota.renderer'];
 
-		return '
-<div class="cte_type ' . $key . '">' .
-			(isset($GLOBALS['TL_LANG']['NLE'][$contentData['type']][0]) ? $GLOBALS['TL_LANG']['NLE'][$contentData['type']][0]
-				: $contentData['type']) .
-			($contentData['protected']
-				? ' (' . $GLOBALS['TL_LANG']['MSC']['protected'] . ')'
-				: ($contentData['guests']
-					? ' (' . $GLOBALS['TL_LANG']['MSC']['guests'] . ')' : '')) .
-			($this->hasMultipleMessageAreas($contentData) ? sprintf(
-				' <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>',
-				isset($GLOBALS['TL_LANG']['orm_avisota_message_content']['cell'][$contentData['cell']])
-					? $GLOBALS['TL_LANG']['orm_avisota_message_content']['cell'][$contentData['cell']] : $contentData['cell']
-			) : '') .
-			'</div>
-<div class="limit_height' . (!$GLOBALS['TL_CONFIG']['doNotCollapse'] ? ' h64' : '') . ' block">
-<table>' . /* $this->Content->getMessageElement($contentData['id']) . */ '</table>
-</div>' . "\n";
+		$contentRepository = EntityHelper::getRepository('Avisota\Contao:MessageContent');
+		$content = $contentRepository->find($contentData['id']);
+
+		$key = $contentData['invisible'] ? 'unpublished' : 'published';
+		$element = $renderer->renderElement(Renderer::MODE_HTML, $content);
+
+		$contentData['key'] = $key;
+		$contentData['element'] = $element;
+
+		$template = new \TwigTemplate('be_mce_element', 'html5');
+		return $template->parse($contentData);
 	}
 
 
@@ -385,65 +371,6 @@ class MessageContent extends \Backend
 
 
 	/**
-	 * Check if there are more than the default 'body' cell.
-	 *
-	 * @param DataContainer $dc
-	 */
-	public function hasMultipleMessageAreas($dc)
-	{
-		$areas = $this->dcaGetMessageAreas($dc);
-		return count($areas) > 1;
-	}
-
-
-	/**
-	 * Get a list of areas from the parent category.
-	 */
-	public function dcaGetMessageAreas($dc)
-	{
-		return array('body[1]');
-
-		// TODO
-		$category = $this->Database
-			->prepare(
-			"SELECT c.* FROM orm_avisota_message_category c INNER JOIN orm_avisota_message n ON c.id=n.pid INNER JOIN orm_avisota_message_content nle ON n.id=nle.pid WHERE nle.id=?"
-		)
-			->execute(is_array($dc) ? $dc['id'] : (is_object($dc) ? $dc->id : $dc));
-		if ($category->next()) {
-			$areas = array_filter(array_merge(array('body'), trimsplit(',', $category->areas)));
-		}
-		else {
-			$areas = array('body');
-		}
-		return array_unique($areas);
-	}
-
-
-	/**
-	 * Update this data container.
-	 *
-	 * @param unknown_type $name
-	 */
-	public function myLoadDataContainer($name)
-	{
-		if ($name == 'orm_avisota_message_content') {
-			if ($this->Input->get('table') == 'orm_avisota_message_content' && $this->Input->get('act') == 'edit') {
-				if (!$this->hasMultipleMessageAreas($this->Input->get('id'))) {
-					foreach ($GLOBALS['TL_DCA']['orm_avisota_message_content']['palettes'] as $k => $v) {
-						$GLOBALS['TL_DCA']['orm_avisota_message_content']['palettes'][$k] = str_replace(
-							',cell',
-							'',
-							$v
-						);
-					}
-					$GLOBALS['TL_DCA']['orm_avisota_message_content']['fields']['cell']['filter'] = false;
-				}
-			}
-		}
-	}
-
-
-	/**
 	 * Get all articles and return them as array (article alias)
 	 *
 	 * @param object
@@ -452,7 +379,7 @@ class MessageContent extends \Backend
 	 */
 	public function getArticleAlias(DataContainer $dc)
 	{
-		$pids  = array();
+		$pids    = array();
 		$aliases = array();
 
 		$user = \BackendUser::getInstance();
@@ -485,9 +412,9 @@ class MessageContent extends \Backend
 
 			while ($alias->next()) {
 				$aliases[$alias->parent][$alias->id] = $alias->title . ' (' . (strlen(
-					$GLOBALS['TL_LANG']['tl_article'][$alias->inColumn]
-				) ? $GLOBALS['TL_LANG']['tl_article'][$alias->inColumn]
-					: $alias->inColumn) . ', ID ' . $alias->id . ')';
+						$GLOBALS['TL_LANG']['tl_article'][$alias->inColumn]
+					) ? $GLOBALS['TL_LANG']['tl_article'][$alias->inColumn]
+						: $alias->inColumn) . ', ID ' . $alias->id . ')';
 			}
 		}
 

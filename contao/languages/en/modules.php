@@ -26,6 +26,10 @@ $GLOBALS['TL_LANG']['MOD']['avisota_settings']          = array(
 	'Avisota system settings',
 	'Manage basic avisota system settings'
 );
+$GLOBALS['TL_LANG']['MOD']['avisota_salutation']          = array(
+	'Salutation',
+	'Manage salutations.'
+);
 $GLOBALS['TL_LANG']['MOD']['avisota_config:recipient']  = array('Recipient config');
 $GLOBALS['TL_LANG']['MOD']['avisota_mailing_list']      = array(
 	'Mailing lists',

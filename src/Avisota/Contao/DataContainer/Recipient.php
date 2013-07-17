@@ -90,7 +90,7 @@ class Recipient extends \Backend
 		$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(';
 		$label .= sprintf(
 			$GLOBALS['TL_LANG']['orm_avisota_recipient']['addedOn'][2],
-			$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $recipientData['addedOn'])
+			$recipientData['addedOn']->format($GLOBALS['TL_CONFIG']['datimFormat'])
 		);
 		if ($recipientData['addedBy'] > 0) {
 			$user = $database

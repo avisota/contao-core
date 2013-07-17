@@ -1,0 +1,25 @@
+
+{% if _lang.NLE[type] %}
+	{% set label = _lang.NLE[type][0] %}
+{% else %}
+	{% set label = type %}
+{% endif %}
+
+{% if _lang.orm_avisota_message_content.cell[cell] %}
+	{% set cellName = _lang.orm_avisota_message_content.cell[cell] %}
+{% else %}
+	{% set cellName = cell %}
+{% endif %}
+
+<div class="cte_type {{ key }}">
+	{{ label }}
+	<span style="color:#b3b3b3; padding:0 6px;">{{ cellName }}</span>
+	{% if protected %}
+		({{ _lang.MSC.protected }})
+	{% elseif guests %}
+		({{ _lang.MSC.guests }})
+	{% endif %}
+</div>
+<div class="limit_height{% if _config.doNotCollapse %} h64{% endif %} block">
+	{{ element }}
+</div>

@@ -15,32 +15,29 @@
 
 
 /**
- * Table orm_avisota_theme
- * Entity Avisota\Contao:Theme
+ * Table orm_avisota_salutation_group
+ * Entity Avisota\Contao:SalutationGroup
  */
-$GLOBALS['TL_DCA']['orm_avisota_theme'] = array
+$GLOBALS['TL_DCA']['orm_avisota_salutation_group'] = array
 (
 	// Entity
-	'entity'          => array(
+	'entity'                => array(
 		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_UUID
 	),
 	// Config
-	'config'          => array
+	'config'                => array
 	(
-		'dataContainer'     => 'General',
-		'ctable'            => array('orm_avisota_layout'),
-		'enableVersioning'  => true,
-		'onload_callback'   => array
+		'dataContainer'    => 'General',
+		'ctable'           => array('orm_avisota_salutation'),
+		'switchToEdit'     => true,
+		'enableVersioning' => true,
+		'onload_callback'  => array
 		(
-			array('Avisota\Contao\DataContainer\Theme', 'checkPermission')
-		),
-		'onsubmit_callback' => array
-		(
-			array('Avisota\Contao\Backend', 'regenerateDynamics')
+			array('Avisota\Contao\DataContainer\SalutationGroup', 'checkPermission')
 		)
 	),
 	// DataContainer
-	'dca_config'      => array
+	'dca_config'            => array
 	(
 		'callback'       => 'GeneralCallbackDefault',
 		'data_provider'  => array
@@ -48,7 +45,7 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 			'default' => array
 			(
 				'class'  => 'Contao\Doctrine\ORM\DataContainer\General\EntityData',
-				'source' => 'orm_avisota_theme'
+				'source' => 'orm_avisota_salutation_group'
 			)
 		),
 		'controller'     => 'GeneralControllerDefault',
@@ -56,11 +53,11 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 		'childCondition' => array(
 			array(
 				'from'   => 'self',
-				'to'     => 'orm_avisota_layout',
+				'to'     => 'orm_avisota_salutation',
 				'setOn'  => array
 				(
 					array(
-						'to_field'   => 'theme',
+						'to_field'   => 'salutationGroup',
 						'from_field' => 'id',
 					),
 				),
@@ -68,7 +65,7 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 				(
 					array
 					(
-						'local'     => 'theme',
+						'local'     => 'salutationGroup',
 						'remote'    => 'id',
 						'operation' => '=',
 					)
@@ -77,14 +74,14 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 		)
 	),
 	// List
-	'list'            => array
+	'list'                  => array
 	(
 		'sorting'           => array
 		(
 			'mode'        => 1,
 			'flag'        => 1,
 			'fields'      => array('title'),
-			'panelLayout' => 'limit'
+			'panelLayout' => 'search,limit'
 		),
 		'label'             => array
 		(
@@ -93,6 +90,13 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 		),
 		'global_operations' => array
 		(
+			'generate' => array
+			(
+				'label' => &$GLOBALS['TL_LANG']['orm_avisota_salutation_group']['generate'],
+				'href'       => 'key=generate',
+				'class'      => 'header_avisota_generate_salutation',
+				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="g"'
+			),
 			'all' => array
 			(
 				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
@@ -103,58 +107,53 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 		),
 		'operations'        => array
 		(
-			'edit'    => array
+			'edit'       => array
 			(
-				'label' => &$GLOBALS['TL_LANG']['orm_avisota_theme']['edit'],
-				'href'  => 'act=edit',
-				'icon'  => 'edit.gif'
+				'label' => &$GLOBALS['TL_LANG']['orm_avisota_salutation_group']['edit'],
+				'href'  => 'table=orm_avisota_salutation',
+				'icon'  => 'edit.gif',
 			),
-			'copy'    => array
+			'editheader' => array
 			(
-				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_theme']['copy'],
+				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_salutation_group']['editheader'],
+				'href'            => 'act=edit',
+				'icon'            => 'header.gif',
+				'button_callback' => array('Avisota\Contao\DataContainer\MessageCategory', 'editHeader'),
+			),
+			'copy'       => array
+			(
+				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_salutation_group']['copy'],
 				'href'            => 'act=copy',
 				'icon'            => 'copy.gif',
 				'attributes'      => 'onclick="Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\Contao\DataContainer\Theme', 'copyCategory')
+				'button_callback' => array('Avisota\Contao\DataContainer\MessageCategory', 'copyCategory')
 			),
-			'delete'  => array
+			'delete'     => array
 			(
-				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_theme']['delete'],
+				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_salutation_group']['delete'],
 				'href'            => 'act=delete',
 				'icon'            => 'delete.gif',
 				'attributes'      => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\Contao\DataContainer\Theme', 'deleteCategory')
+				'button_callback' => array('Avisota\Contao\DataContainer\MessageCategory', 'deleteCategory')
 			),
-			'show'    => array
+			'show'       => array
 			(
-				'label' => &$GLOBALS['TL_LANG']['orm_avisota_theme']['show'],
+				'label' => &$GLOBALS['TL_LANG']['orm_avisota_salutation_group']['show'],
 				'href'  => 'act=show',
 				'icon'  => 'show.gif'
-			),
-			'layouts' => array
-			(
-				'label' => &$GLOBALS['TL_LANG']['orm_avisota_theme']['layouts'],
-				'href'  => 'table=orm_avisota_layout',
-				'icon'  => 'system/modules/avisota/assets/images/layout.png'
 			)
 		),
 	),
 	// Palettes
-	'metapalettes'    => array
+	'metapalettes'          => array
 	(
-		'default' => array
+		'default'      => array
 		(
-			'theme'     => array('title', 'alias', 'preview'),
-			'structure' => array('areas'),
-			'template'  => array('stylesheets'),
-			'expert'    => array(':hide', 'templateDirectory')
-		)
+			'category'   => array('title', 'alias'),
+		),
 	),
-	// Subpalettes
-	'metasubpalettes' => array
-	(),
 	// Fields
-	'fields'          => array
+	'fields'                => array
 	(
 		'id'                => array(
 			'field' => array(
@@ -176,22 +175,24 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 				'timestampable' => array('on' => 'update')
 			)
 		),
-		'layouts'           => array
+		'salutations'          => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['layouts'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_salutation_group']['salutations'],
 			'eval'      => array(
 				'doNotShow' => true,
 			),
 			'oneToMany' => array(
-				'targetEntity' => 'Avisota\Contao\Entity\Layout',
+				'targetEntity' => 'Avisota\Contao\Entity\Salutation',
 				'cascade'      => array('all'),
-				'mappedBy'     => 'theme',
-				'orderBy'      => array('title' => 'ASC')
+				'mappedBy'     => 'salutationGroup',
+				// 'orphanRemoval' => false,
+				// 'isCascadeRemove' => false,
+				'orderBy'      => array('sorting' => 'ASC')
 			),
 		),
 		'title'             => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_theme']['title'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_salutation_group']['title'],
 			'exclude'   => true,
 			'search'    => true,
 			'inputType' => 'text',
@@ -203,7 +204,7 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 		),
 		'alias'             => array
 		(
-			'label'           => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['alias'],
+			'label'           => &$GLOBALS['TL_LANG']['orm_avisota_salutation_group']['alias'],
 			'exclude'         => true,
 			'search'          => true,
 			'inputType'       => 'text',
@@ -219,17 +220,5 @@ $GLOBALS['TL_DCA']['orm_avisota_theme'] = array
 				array('Contao\Doctrine\ORM\Helper', 'generateAlias')
 			)
 		),
-		'templateDirectory' => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_theme']['templateDirectory'],
-			'exclude'   => true,
-			'inputType' => 'fileTree',
-			'eval'      => array(
-				'tl_class'  => 'clr',
-				'fieldType' => 'radio',
-				'path'      => 'templates'
-			),
-			'field'     => array(),
-		)
 	)
 );

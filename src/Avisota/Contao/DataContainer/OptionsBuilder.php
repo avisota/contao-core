@@ -17,10 +17,13 @@ namespace Avisota\Contao\DataContainer;
 
 use Contao\Doctrine\ORM\EntityHelper;
 
-class OptionsBuilder extends \System
+class OptionsBuilder extends \Controller
 {
 	static protected $instance;
 
+	/**
+	 * @return OptionsBuilder
+	 */
 	static public function getInstance()
 	{
 		if (!static::$instance) {
@@ -32,11 +35,13 @@ class OptionsBuilder extends \System
 	static function getLayoutOptions()
 	{
 		$layoutRepository = EntityHelper::getRepository('Avisota\Contao:Layout');
-		$layouts = $layoutRepository->findBy(array(), array('title' => 'ASC'));
-		$options = array();
+		$layouts          = $layoutRepository->findBy(array(), array('title' => 'ASC'));
+		$options          = array();
 		/** @var \Avisota\Contao\Entity\Layout $layout */
 		foreach ($layouts as $layout) {
-			$options[$layout->getTheme()->getTitle()][$layout->getId()] = $layout->getTitle();
+			$options[$layout
+				->getTheme()
+				->getTitle()][$layout->getId()] = $layout->getTitle();
 		}
 		return $options;
 	}
@@ -44,8 +49,8 @@ class OptionsBuilder extends \System
 	static function getMailingListOptions()
 	{
 		$mailingListRepository = EntityHelper::getRepository('Avisota\Contao:MailingList');
-		$mailingLists = $mailingListRepository->findBy(array(), array('title' => 'ASC'));
-		$options = array();
+		$mailingLists          = $mailingListRepository->findBy(array(), array('title' => 'ASC'));
+		$options               = array();
 		/** @var \Avisota\Contao\Entity\MailingList $mailingList */
 		foreach ($mailingLists as $mailingList) {
 			$options[$mailingList->getId()] = $mailingList->getTitle();
@@ -56,13 +61,17 @@ class OptionsBuilder extends \System
 	static function getMessageOptions()
 	{
 		$messageRepository = EntityHelper::getRepository('Avisota\Contao:Message');
-		$messages = $messageRepository->findBy(array(), array('sendOn' => 'DESC'));
-		$options = array();
+		$messages          = $messageRepository->findBy(array(), array('sendOn' => 'DESC'));
+		$options           = array();
 		/** @var \Avisota\Contao\Entity\Message $message */
 		foreach ($messages as $message) {
-			$options[$message->getCategory()->getTitle()][$message->getId()] = sprintf(
+			$options[$message
+				->getCategory()
+				->getTitle()][$message->getId()] = sprintf(
 				'[%s] %s',
-				$message->getSendOn() ? $message->getSendOn()->format($GLOBALS['TL_CONFIG']['datimFormat']) : '-',
+				$message->getSendOn() ? $message
+					->getSendOn()
+					->format($GLOBALS['TL_CONFIG']['datimFormat']) : '-',
 				$message->getSubject()
 			);
 		}
@@ -72,8 +81,8 @@ class OptionsBuilder extends \System
 	static function getMessageCategoryOptions()
 	{
 		$messageCategoryRepository = EntityHelper::getRepository('Avisota\Contao:MessageCategory');
-		$messageCategories = $messageCategoryRepository->findBy(array(), array('title' => 'ASC'));
-		$options = array();
+		$messageCategories         = $messageCategoryRepository->findBy(array(), array('title' => 'ASC'));
+		$options                   = array();
 		/** @var \Avisota\Contao\Entity\MessageCategory $messageCategory */
 		foreach ($messageCategories as $messageCategory) {
 			$options[$messageCategory->getId()] = $messageCategory->getTitle();
@@ -84,8 +93,8 @@ class OptionsBuilder extends \System
 	static function getQueueOptions()
 	{
 		$queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
-		$queues = $queueRepository->findBy(array(), array('title' => 'ASC'));
-		$options = array();
+		$queues          = $queueRepository->findBy(array(), array('title' => 'ASC'));
+		$options         = array();
 		/** @var \Avisota\Contao\Entity\Queue $queue */
 		foreach ($queues as $queue) {
 			$options[$queue->getId()] = $queue->getTitle();
@@ -96,8 +105,11 @@ class OptionsBuilder extends \System
 	static function getRecipientOptions()
 	{
 		$recipientRepository = EntityHelper::getRepository('Avisota\Contao:Recipient');
-		$recipients = $recipientRepository->findBy(array(), array('firstname' => 'ASC', 'lastname' => 'ASC', 'email' => 'ASC'));
-		$options = array();
+		$recipients          = $recipientRepository->findBy(
+			array(),
+			array('firstname' => 'ASC', 'lastname' => 'ASC', 'email' => 'ASC')
+		);
+		$options             = array();
 		/** @var \Avisota\Contao\Entity\Recipient $recipient */
 		foreach ($recipients as $recipient) {
 			if ($recipient->getFirstname() && $recipient->getLastname()) {
@@ -132,8 +144,8 @@ class OptionsBuilder extends \System
 	static function getRecipientSourceOptions()
 	{
 		$recipientSourceRepository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
-		$recipientSources = $recipientSourceRepository->findBy(array(), array('title' => 'ASC'));
-		$options = array();
+		$recipientSources          = $recipientSourceRepository->findBy(array(), array('title' => 'ASC'));
+		$options                   = array();
 		/** @var \Avisota\Contao\Entity\RecipientSource $recipientSource */
 		foreach ($recipientSources as $recipientSource) {
 			$options[$recipientSource->getId()] = $recipientSource->getTitle();
@@ -144,8 +156,8 @@ class OptionsBuilder extends \System
 	static function getThemeOptions()
 	{
 		$themeRepository = EntityHelper::getRepository('Avisota\Contao:Theme');
-		$themes = $themeRepository->findBy(array(), array('title' => 'ASC'));
-		$options = array();
+		$themes          = $themeRepository->findBy(array(), array('title' => 'ASC'));
+		$options         = array();
 		/** @var \Avisota\Contao\Entity\Theme $theme */
 		foreach ($themes as $theme) {
 			$options[$theme->getId()] = $theme->getTitle();
@@ -156,8 +168,8 @@ class OptionsBuilder extends \System
 	static function getTransportOptions()
 	{
 		$transportRepository = EntityHelper::getRepository('Avisota\Contao:Transport');
-		$transports = $transportRepository->findBy(array(), array('title' => 'ASC'));
-		$options = array();
+		$transports          = $transportRepository->findBy(array(), array('title' => 'ASC'));
+		$options             = array();
 		/** @var \Avisota\Contao\Entity\Transport $transport */
 		foreach ($transports as $transport) {
 			$options[$transport->getId()] = $transport->getTitle();
@@ -167,7 +179,8 @@ class OptionsBuilder extends \System
 
 	static function getMessagesBaseTemplateOptions()
 	{
-		static::getInstance()->loadLanguageFile('avisota_message_base_template');
+		static::getInstance()
+			->loadLanguageFile('avisota_message_base_template');
 
 		$options = array();
 		foreach ($GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'] as $group => $baseTemplates) {
@@ -192,4 +205,96 @@ class OptionsBuilder extends \System
 		}
 		return $options;
 	}
+
+	static function getRecipientFieldOptions()
+	{
+		static::getInstance()
+			->loadLanguageFile('orm_avisota_recipient');
+		static::getInstance()
+			->loadDataContainer('orm_avisota_recipient');
+
+		$options = array();
+		foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'] as $fieldName => $fieldConfig) {
+			if (!empty($fieldConfig['inputType'])) {
+				$options[$fieldName] = $fieldConfig['label'][0];
+			}
+		}
+		return $options;
+	}
+
+	/**
+	 * Return all newsletter elements as array
+	 *
+	 * @return array
+	 */
+	static public function getMessageContentTypes($dc)
+	{
+		$groups = array();
+		if ($dc instanceof \DC_General && $dc->getCurrentModel()) {
+			/** @var \Avisota\Contao\Entity\MessageContent $content */
+			$content = $dc
+				->getCurrentModel()
+				->getEntity();
+			$cell = $content->getCell();
+
+			if ($cell) {
+				$cell = preg_replace('~\[\d+\]$~', '', $cell);
+				$layout  = $content
+					->getMessage()
+					->getLayout();
+
+				$allowedCellContents = $layout->getAllowedCellContents();
+
+				foreach ($GLOBALS['TL_NLE'] as $k => $v) {
+					foreach (array_keys($v) as $kk) {
+						if (in_array($cell . ':' . $kk, $allowedCellContents)) {
+							$groups[$k][] = $kk;
+						}
+					}
+				}
+			}
+		}
+
+		return $groups;
+	}
+
+	/**
+	 * Get a list of areas from the parent category.
+	 *
+	 * @param \DC_General $dc
+	 */
+	static public function getMessageContentCells($dc)
+	{
+		if ($dc instanceof \DC_General && $dc->getCurrentModel()) {
+			/** @var \Avisota\Contao\Entity\MessageContent $content */
+			$content = $dc
+				->getCurrentModel()
+				->getEntity();
+			$layout  = $content
+				->getMessage()
+				->getLayout();
+
+			list($baseTemplateGroup, $baseTemplateName) = explode(':', $layout->getBaseTemplate());
+			$baseTemplate = $GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$baseTemplateGroup][$baseTemplateName];
+			$cells        = $baseTemplate['cells'];
+			$rows         = isset($baseTemplate['rows']) ? $baseTemplate['rows'] : array();
+
+			$repeatableCells = array();
+			foreach ($rows as $row) {
+				$repeatableCells = array_merge($repeatableCells, $row['affectedCells']);
+			}
+
+			$cellNames = array();
+			foreach ($cells as $cellName => $cell) {
+				if (!isset($cell['content'])) {
+					$cellNames[] = $cellName . '[1]';
+				}
+			}
+
+			return $cellNames;
+		}
+
+		return array();
+	}
+
 }

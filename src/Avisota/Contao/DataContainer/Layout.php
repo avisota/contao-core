@@ -15,6 +15,10 @@
 
 namespace Avisota\Contao\DataContainer;
 
+use Avisota\Contao\Event\CollectStylesheetsEvent;
+use Avisota\Contao\Event\CollectThemeStylesheetsEvent;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
 class Layout
 {
 	/**
@@ -37,35 +41,41 @@ class Layout
 	 */
 	static public function getCellContentOptions($layout)
 	{
+		$options = array();
+
 		if ($layout instanceof \DC_General) {
 			$layout = $layout->getCurrentModel()->getEntity();
 		}
+
 		list($group, $baseTemplate) = explode(':', $layout->getBaseTemplate());
-		$config = $GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$group][$baseTemplate];
+		if (isset($GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$group][$baseTemplate])) {
+			$config = $GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$group][$baseTemplate];
 
-		$options = array();
-		foreach ($config['cells'] as $cellName => $cellConfig) {
-			if (!isset($cellConfig['content'])) {
-				foreach ($GLOBALS['TL_NLE'] as $elementGroup => $elements) {
-					if (isset($GLOBALS['TL_LANG']['NLE'][$elementGroup])) {
-						$elementGroupLabel = $GLOBALS['TL_LANG']['NLE'][$elementGroup];
-					}
-					else {
-						$elementGroupLabel = $elementGroup;
-					}
-					foreach ($elements as $elementName => $elementClass) {
-						if (isset($GLOBALS['TL_LANG']['NLE'][$elementName])) {
-							$elementLabel = $GLOBALS['TL_LANG']['NLE'][$elementName][0];
-						}
-						else {
-							$elementLabel = $elementName;
-						}
+			if (isset($config['cells'])) {
+				foreach ($config['cells'] as $cellName => $cellConfig) {
+					if (!isset($cellConfig['content'])) {
+						foreach ($GLOBALS['TL_NLE'] as $elementGroup => $elements) {
+							if (isset($GLOBALS['TL_LANG']['NLE'][$elementGroup])) {
+								$elementGroupLabel = $GLOBALS['TL_LANG']['NLE'][$elementGroup];
+							}
+							else {
+								$elementGroupLabel = $elementGroup;
+							}
+							foreach ($elements as $elementName => $elementClass) {
+								if (isset($GLOBALS['TL_LANG']['NLE'][$elementName])) {
+									$elementLabel = $GLOBALS['TL_LANG']['NLE'][$elementName][0];
+								}
+								else {
+									$elementLabel = $elementName;
+								}
 
-						$options[$cellName][$cellName . ':' . $elementName] = sprintf(
-							'[%s] %s',
-							$elementGroupLabel,
-							$elementLabel
-						);
+								$options[$cellName][$cellName . ':' . $elementName] = sprintf(
+									'[%s] %s',
+									$elementGroupLabel,
+									$elementLabel
+								);
+							}
+						}
 					}
 				}
 			}
@@ -76,21 +86,26 @@ class Layout
 
 	static public function getDefaultSelectedCellContentElements($layout)
 	{
+		$value = array();
+
 		if ($layout instanceof \DC_General) {
 			$layout = $layout->getCurrentModel()->getEntity();
 		}
-		list($group, $baseTemplate) = explode(':', $layout->getBaseTemplate());
-		$config = $GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$group][$baseTemplate];
 
-		$value = array();
-		foreach ($config['cells'] as $cellName => $cellConfig) {
-			if (isset($cellConfig['preferedElements'])) {
-				foreach ($cellConfig['preferedElements'] as $elementName) {
-					$value[] = $cellName . ':' . $elementName;
+		list($group, $baseTemplate) = explode(':', $layout->getBaseTemplate());
+		if (isset($GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$group][$baseTemplate])) {
+			$config = $GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$group][$baseTemplate];
+
+			if (isset($config['cells'])) {
+				foreach ($config['cells'] as $cellName => $cellConfig) {
+					if (isset($cellConfig['preferedElements'])) {
+						foreach ($cellConfig['preferedElements'] as $elementName) {
+							$value[] = $cellName . ':' . $elementName;
+						}
+					}
 				}
 			}
 		}
-
 		return $value;
 	}
 
@@ -120,5 +135,32 @@ class Layout
 		}
 
 		return $value;
+	}
+
+
+	public function getStylesheets($dc)
+	{
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+		$database = \Database::getInstance();
+
+		$stylesheets = new \ArrayObject();
+
+		$theme = $database->query("SELECT * FROM tl_theme ORDER BY name");
+
+		while ($theme->next()) {
+			$stylesheet = $database
+				->prepare("SELECT * FROM tl_style_sheet WHERE pid=?")
+				->execute($theme->id);
+			while ($stylesheet->next()) {
+				$stylesheets['system/scripts/' . $stylesheet->name . '.css'] = '<span style="color:#A6A6A6">' . $theme->name . ': </span>' . $stylesheet->name . '<span style="color:#A6A6A6">.css</span>';
+			}
+
+			$eventDispatcher->dispatch('avisota-layout-collect-theme-stylesheets', new CollectThemeStylesheetsEvent($theme->row(), $stylesheets));
+		}
+
+		$eventDispatcher->dispatch('avisota-layout-collect-stylesheets', new CollectStylesheetsEvent($stylesheets));
+
+		return $stylesheets->getArrayCopy();
 	}
 }

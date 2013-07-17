@@ -15,26 +15,18 @@
 
 namespace Avisota\Contao\DataContainer;
 
-use Avisota\Contao\Theme as AvisotaTheme;
+use Avisota\Contao\Entity\RecipientSource;
+use Avisota\Contao\Entity\Salutation;
+use Contao\Doctrine\ORM\EntityHelper;
 
-class Theme extends \Backend
+class SalutationGroup extends \Controller
 {
-	/**
-	 * Import the back end user object
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->import('BackendUser', 'User');
-	}
-
-
 	/**
 	 * Check permissions to edit table tl_newsletter_channel
 	 */
 	public function checkPermission()
 	{
-		return; // TODO
+		return;
 
 		if ($this->User->isAdmin) {
 			return;
@@ -42,8 +34,8 @@ class Theme extends \Backend
 
 		// Set root IDs
 		if (!is_array($this->User->avisota_newsletter_categories) || count(
-			$this->User->avisota_newsletter_categories
-		) < 1
+				$this->User->avisota_newsletter_categories
+			) < 1
 		) {
 			$root = array(0);
 		}
@@ -51,11 +43,11 @@ class Theme extends \Backend
 			$root = $this->User->avisota_newsletter_categories;
 		}
 
-		$GLOBALS['TL_DCA']['orm_avisota_theme']['list']['sorting']['root'] = $root;
+		$GLOBALS['TL_DCA']['orm_avisota_message_category']['list']['sorting']['root'] = $root;
 
 		// Check permissions to add channels
 		if (!$this->User->hasAccess('create', 'avisota_newsletter_category_permissions')) {
-			$GLOBALS['TL_DCA']['orm_avisota_theme']['config']['closed'] = true;
+			$GLOBALS['TL_DCA']['orm_avisota_message_category']['config']['closed'] = true;
 		}
 
 		// Check current action
@@ -70,17 +62,17 @@ class Theme extends \Backend
 				if (!in_array($this->Input->get('id'), $root)) {
 					$newRecord = $this->Session->get('new_records');
 
-					if (is_array($newRecord['orm_avisota_theme']) && in_array(
-						$this->Input->get('id'),
-						$newRecord['orm_avisota_theme']
-					)
+					if (is_array($newRecord['orm_avisota_message_category']) && in_array(
+							$this->Input->get('id'),
+							$newRecord['orm_avisota_message_category']
+						)
 					) {
 						// Add permissions on user level
 						if ($this->User->inherit == 'custom' || !$this->User->groups[0]) {
 							$user = $this->Database
 								->prepare(
-								"SELECT avisota_newsletter_categories, avisota_newsletter_category_permissions FROM tl_user WHERE id=?"
-							)
+									"SELECT avisota_newsletter_categories, avisota_newsletter_category_permissions FROM tl_user WHERE id=?"
+								)
 								->limit(1)
 								->execute($this->User->id);
 
@@ -89,9 +81,9 @@ class Theme extends \Backend
 							);
 
 							if (is_array($newsletterCategoryPermissions) && in_array(
-								'create',
-								$newsletterCategoryPermissions
-							)
+									'create',
+									$newsletterCategoryPermissions
+								)
 							) {
 								$newsletterCategories   = deserialize($user->avisota_newsletter_categories);
 								$newsletterCategories[] = $this->Input->get('id');
@@ -106,8 +98,8 @@ class Theme extends \Backend
 						elseif ($this->User->groups[0] > 0) {
 							$group = $this->Database
 								->prepare(
-								"SELECT avisota_newsletter_categories, avisota_newsletter_category_permissions FROM tl_user_group WHERE id=?"
-							)
+									"SELECT avisota_newsletter_categories, avisota_newsletter_category_permissions FROM tl_user_group WHERE id=?"
+								)
 								->limit(1)
 								->execute($this->User->groups[0]);
 
@@ -116,9 +108,9 @@ class Theme extends \Backend
 							);
 
 							if (is_array($newsletterCategoryPermissions) && in_array(
-								'create',
-								$newsletterCategoryPermissions
-							)
+									'create',
+									$newsletterCategoryPermissions
+								)
 							) {
 								$newsletterCategories   = deserialize($group->avisota_newsletter_categories);
 								$newsletterCategories[] = $this->Input->get('id');
@@ -141,14 +133,14 @@ class Theme extends \Backend
 			case 'delete':
 			case 'show':
 				if (!in_array($this->Input->get('id'), $root) || ($this->Input->get(
-					'act'
-				) == 'delete' && !$this->User->hasAccess('delete', 'avisota_newsletter_category_permissions'))
+							'act'
+						) == 'delete' && !$this->User->hasAccess('delete', 'avisota_newsletter_category_permissions'))
 				) {
 					$this->log(
 						'Not enough permissions to ' . $this->Input->get(
 							'act'
 						) . ' avisota newsletter category ID "' . $this->Input->get('id') . '"',
-						'orm_avisota_theme checkPermission',
+						'orm_avisota_message_category checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -160,9 +152,9 @@ class Theme extends \Backend
 			case 'overrideAll':
 				$session = $this->Session->getData();
 				if ($this->Input->get('act') == 'deleteAll' && !$this->User->hasAccess(
-					'delete',
-					'avisota_newsletter_category_permissions'
-				)
+						'delete',
+						'avisota_newsletter_category_permissions'
+					)
 				) {
 					$session['CURRENT']['IDS'] = array();
 				}
@@ -176,7 +168,7 @@ class Theme extends \Backend
 				if (strlen($this->Input->get('act'))) {
 					$this->log(
 						'Not enough permissions to ' . $this->Input->get('act') . ' avisota newsletter categories',
-						'orm_avisota_theme checkPermission',
+						'orm_avisota_message_category checkPermission',
 						TL_ERROR
 					);
 					$this->redirect('contao/main.php?act=error');
@@ -185,72 +177,32 @@ class Theme extends \Backend
 		}
 	}
 
-
-	/**
-	 * Return the edit header button
-	 *
-	 * @param array
-	 * @param string
-	 * @param string
-	 * @param string
-	 * @param string
-	 * @param string
-	 *
-	 * @return string
-	 */
-	public function editHeader($row, $href, $label, $title, $icon, $attributes)
+	public function generate()
 	{
-		return ($this->User->isAdmin || count(preg_grep('/^orm_avisota_theme::/', $this->User->alexf)) > 0)
-			? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
-				$title
-			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
-	}
+		$entityManager = EntityHelper::getEntityManager();
 
+		$this->loadLanguageFile('avisota_salutation');
+		$this->loadLanguageFile('orm_avisota_salutation_group');
 
-	/**
-	 * Return the copy channel button
-	 *
-	 * @param array
-	 * @param string
-	 * @param string
-	 * @param string
-	 * @param string
-	 * @param string
-	 *
-	 * @return string
-	 */
-	public function copyCategory($row, $href, $label, $title, $icon, $attributes)
-	{
-		return ($this->User->isAdmin || $this->User->hasAccess('create', 'avisota_newsletter_category_permissions'))
-			? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
-				$title
-			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> '
-			: $this->generateImage(
-				preg_replace('/\.gif$/i', '_.gif', $icon)
-			) . ' ';
-	}
+		$predefinedSalutations = $GLOBALS['TL_LANG']['avisota_salutation'];
 
+		$salutationGroup = new \Avisota\Contao\Entity\SalutationGroup();
+		$salutationGroup->setTitle('Default group generated at ' . date($GLOBALS['TL_CONFIG']['datimFormat']));
+		$sorting = 64;
+		foreach ($predefinedSalutations as $predefinedSalutation) {
+			$salutation = new Salutation();
+			$salutation->fromArray($predefinedSalutation);
+			$salutation->setSalutationGroup($salutationGroup);
+			$salutation->setSorting($sorting);
+			$salutationGroup->addSalutation($salutation);
+			$sorting *= 2;
+		}
 
-	/**
-	 * Return the delete channel button
-	 *
-	 * @param array
-	 * @param string
-	 * @param string
-	 * @param string
-	 * @param string
-	 * @param string
-	 *
-	 * @return string
-	 */
-	public function deleteCategory($row, $href, $label, $title, $icon, $attributes)
-	{
-		return ($this->User->isAdmin || $this->User->hasAccess('delete', 'avisota_newsletter_category_permissions'))
-			? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
-				$title
-			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> '
-			: $this->generateImage(
-				preg_replace('/\.gif$/i', '_.gif', $icon)
-			) . ' ';
+		$entityManager->persist($salutationGroup);
+		$entityManager->flush($salutationGroup);
+
+		$_SESSION['TL_CONFIRM'][] = $GLOBALS['TL_LANG']['orm_avisota_salutation_group']['group_generated'];
+
+		$this->redirect('contao/main.php?do=avisota_salutation');
 	}
 }

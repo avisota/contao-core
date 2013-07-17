@@ -37,34 +37,31 @@ class Message extends \Controller
 					$newsletter         = $newsletterRepository->find($input->get('id'));
 					$newsletterCategory = $newsletter->getCategory();
 
-					switch ($newsletterCategory->getRecipientsMode()) {
-						case 'byMessageOrCategory':
-							$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['recipient'][] = 'setRecipients';
-							break;
-
-						case 'byMessage':
-							$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['recipient'][] = 'recipients';
-							break;
+					if ($newsletterCategory->getBoilerplates() ||
+						$newsletterCategory->getRecipientsMode() == 'byMessageOrCategory'
+					) {
+						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['recipient'][] = 'setRecipients';
+					}
+					else if ($newsletterCategory->getRecipientsMode() == 'byMessage') {
+						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['recipient'][] = 'recipients';
 					}
 
-					switch ($newsletterCategory->getLayoutMode()) {
-						case 'byMessageOrCategory':
-							$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['layout'][] = 'setLayout';
-							break;
-
-						case 'byMessage':
-							$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['layout'][] = 'layout';
-							break;
+					if ($newsletterCategory->getBoilerplates() ||
+						$newsletterCategory->getLayoutMode() == 'byMessage'
+					) {
+						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['layout'][] = 'layout';
+					}
+					else if ($newsletterCategory->getLayoutMode() == 'byMessageOrCategory') {
+						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['layout'][] = 'setLayout';
 					}
 
-					switch ($newsletterCategory->getTransportMode()) {
-						case 'byMessageOrCategory':
-							$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['transport'][] = 'setTransport';
-							break;
-
-						case 'byMessage':
-							$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['transport'][] = 'transport';
-							break;
+					if ($newsletterCategory->getBoilerplates() ||
+						$newsletterCategory->getTransportMode() == 'byMessageOrCategory'
+					) {
+						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['transport'][] = 'setTransport';
+					}
+					else if ($newsletterCategory->getTransportMode() == 'byMessage') {
+						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['transport'][] = 'transport';
 					}
 				}
 			}

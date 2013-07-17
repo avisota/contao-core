@@ -17,6 +17,10 @@ namespace Avisota\Contao\Message;
 
 use Avisota\Contao\Entity\Message;
 use Avisota\Contao\Entity\MessageContent;
+use Avisota\Contao\Event\InitializeRendererEvent;
+use Avisota\Contao\Event\RendererHeadersEvent;
+use Avisota\Recipient\RecipientInterface;
+use Bit3\TagReplacer\TagReplacer;
 use Contao\Doctrine\ORM\EntityHelper;
 
 /**
@@ -32,20 +36,80 @@ class Renderer
 
 	const MODE_PLAIN = 'plain';
 
-	public function render(Message $message)
+	static public $elementInstances = array();
+
+	protected $tagReplacer;
+
+	function __construct()
 	{
-		$layout = $message->getLayout();
-		list($baseTemplateGroup, $baseTemplateName) = explode(':', $layout->getBaseTemplate());
-		$baseTemplate = $GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$baseTemplateGroup][$baseTemplateName];
+		$this->tagReplacer = new TagReplacer(TagReplacer::FLAG_ENABLE_ALL_INTERNALS);
+
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+		$eventDispatcher->dispatch('avisota-renderer-initialize', new InitializeRendererEvent($this));
+
+		$this->tagReplacer->setUnknownDefaultMode(TagReplacer::MODE_SKIP);
+		$this->tagReplacer->setUnknownTagMode(TagReplacer::MODE_SKIP);
+		$this->tagReplacer->setUnknownTokenMode(TagReplacer::MODE_SKIP);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getTagReplacer()
+	{
+		return $this->tagReplacer;
+	}
+
+	public function render(Message $message, RecipientInterface $recipient = null)
+	{
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		$layout       = $message->getLayout();
+		$baseTemplate = $layout->getBaseTemplateConfig();
 		$cells        = $baseTemplate['cells'];
+		$rows         = isset($baseTemplate['rows']) ? $baseTemplate['rows'] : array();
 		$cellContents = array();
+		$mode         = $baseTemplate['mode'];
+
+		$repeatableCells = array();
+		foreach ($rows as $row) {
+			$repeatableCells = array_merge($repeatableCells, $row['affectedCells']);
+		}
+
+		$reflectionClass = new \ReflectionClass($this);
+		$constants       = $reflectionClass->getConstants();
+		$constantsKeys   = array_keys($constants);
+		$constantsKeys   = array_filter(
+			$constantsKeys,
+			function ($key) {
+				return substr($key, 0, 5) == 'MODE_';
+			}
+		);
+		$constantsKeys   = array_flip($constantsKeys);
+		$constants       = array_intersect_key($constants, $constantsKeys);
+
+		if (!in_array($mode, $constants)) {
+			throw new \RuntimeException('Render mode ' . strtoupper(
+				$mode
+			) . ' not supported by this renderer of type ' . $reflectionClass->getName());
+		}
 
 		foreach ($cells as $cellName => $cellConfig) {
 			if (isset($cellConfig['content'])) {
 				$cellContents[$cellName] = array($cellConfig['content']);
 			}
 			else {
-				$cellContents[$cellName] = $this->renderCell($message, $cellName);
+				for (
+					$i = 1;
+					$i == 1 ||
+					in_array($cellName, $repeatableCells) &&
+					$cellContents[sprintf('%s[%d]', $cellName, $i - 1)]->count();
+					$i++
+				) {
+					$cellContents[$cellName] = $this->renderCell($mode, $message, sprintf('%s[%d]', $cellName, $i));
+				}
 			}
 		}
 
@@ -61,7 +125,7 @@ class Renderer
 
 		if ($layout->getClearStyles()) {
 			$styles = $xpath->query('/html/head/style');
-			for ($i=0; $i<$styles->length; $i++) {
+			for ($i = 0; $i < $styles->length; $i++) {
 				$style = $styles->item($i);
 				$style->parentNode->removeChild($style);
 			}
@@ -208,7 +272,51 @@ class Renderer
 			}
 		}
 
-		return $document->saveHTML();
+		$headers = new \ArrayObject();
+
+		$styles      = new \StringBuilder();
+		$stylesheets = $layout->getStylesheetPaths();
+		foreach ($stylesheets as $stylesheet) {
+			$file = new \File($stylesheet);
+			$css  = $file->getContent();
+			$styles
+				->append($css)
+				->append("\n");
+		}
+		$styles->trim();
+		if ($styles->length()) {
+			$styles->insert(0, "<style>\n");
+			$styles->append("\n</style>");
+			$headers['styles'] = $styles;
+		}
+
+		$eventDispatcher->dispatch('avisota-renderer-headers', new RendererHeadersEvent($this, $message, $headers));
+
+		$headElements = $xpath->query('/html/head', $document->documentElement);
+		$headElement  = $headElements->item(0);
+
+		$headerCode = trim(implode("\n", $headers->getArrayCopy()));
+		if ($headerCode) {
+			$headerDoc = new \DOMDocument();
+			$headerDoc->loadXML('<html>' . $headerCode . '</html>');
+
+			for ($i = 0; $i < $headerDoc->documentElement->childNodes->length; $i++) {
+				$childNode = $headerDoc->documentElement->childNodes->item($i);
+				$childNode = $document->importNode($childNode, true);
+				$headElement->appendChild($childNode);
+			}
+		}
+
+		$html = $document->saveHTML();
+
+		$this->tagReplacer->setToken('category', $message->getCategory());
+		$this->tagReplacer->setToken('message', $message);
+		$this->tagReplacer->setToken('content', null);
+		$this->tagReplacer->setToken('recipient', $recipient);
+
+		$html = $this->tagReplacer->replace($html);
+
+		return $html;
 	}
 
 	/**
@@ -219,7 +327,7 @@ class Renderer
 	 *
 	 * @return \StringBuilder
 	 */
-	public function renderCell(Message $message, $cell)
+	public function renderCell($mode, Message $message, $cell, RecipientInterface $recipient = null)
 	{
 		$entityHelper = EntityHelper::getEntityManager();
 		$queryBuilder = $entityHelper->createQueryBuilder();
@@ -236,7 +344,7 @@ class Renderer
 
 		$elementContents = new \ArrayObject();
 		foreach ($contents as $content) {
-			$elementContents->append(new StringBuilder($this->renderElement($content)));
+			$elementContents->append(new \StringBuilder($this->renderElement($mode, $content, $recipient)));
 		}
 		return $elementContents;
 	}
@@ -247,11 +355,20 @@ class Renderer
 	 * @param MessageContent $content
 	 * @param string         $mode
 	 */
-	public function renderElement(MessageContent $content)
+	public function renderElement($mode, MessageContent $content, RecipientInterface $recipient = null)
 	{
-		$elementClass = static::getElementClass($content->getType());
-		$element      = $elementClass->newInstance($content);
-		return $element->generate();
+		$element = static::getElementInstance($content->getType());
+		return $element->generate($mode, $content);
+	}
+
+	static public function getElementInstance($type)
+	{
+		$elementClass = static::getElementClass($type);
+		if (!isset(static::$elementInstances[$elementClass])) {
+			$reflectionClass                         = new \ReflectionClass($elementClass);
+			static::$elementInstances[$elementClass] = $reflectionClass->newInstance();
+		}
+		return static::$elementInstances[$elementClass];
 	}
 
 	/**
@@ -259,14 +376,14 @@ class Renderer
 	 *
 	 * @param string $type
 	 *
-	 * @return \ReflectionClass
+	 * @return string
 	 * @throws \RuntimeException
 	 */
 	static public function getElementClass($type)
 	{
 		foreach ($GLOBALS['TL_NLE'] as $group => $types) {
 			if (isset($types[$type])) {
-				return new \ReflectionClass($types[$type]);
+				return $types[$type];
 			}
 		}
 

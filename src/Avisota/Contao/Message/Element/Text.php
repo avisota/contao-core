@@ -16,6 +16,11 @@
 
 namespace Avisota\Contao\Message\Element;
 
+use Avisota\Contao\Entity\MessageContent;
+use Avisota\Contao\Message\Renderer;
+use Avisota\Recipient\RecipientInterface;
+use Contao\Doctrine\ORM\Entity;
+
 
 /**
  * Class Text
@@ -25,60 +30,46 @@ namespace Avisota\Contao\Message\Element;
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    Avisota
  */
-class Text extends NewsletterElement
+class Text implements ElementInterface
 {
-
 	/**
-	 * HTML Template
-	 *
 	 * @var string
 	 */
-	protected $templateHTML = 'nle_text_html';
+	const TEMPLATE = 'mce_text';
 
 	/**
-	 * Plain text Template
+	 * Parse and generate the element.
 	 *
-	 * @var string
+	 * @param MessageContent $messageContent
+	 *
+	 * @return string
 	 */
-	protected $templatePlain = 'nle_text_plain';
-
-	/**
-	 * Compile the current element
-	 */
-	protected function compile($mode)
+	public function generate($mode, MessageContent $messageContent, RecipientInterface $recipient = null)
 	{
-		$this->import('String');
+		$space   = deserialize($messageContent->getSpace());
+		$cssID   = deserialize($messageContent->getCssID(), true);
+
+		$headline    = deserialize($messageContent->getHeadline());
+		$hl       = is_array($headline) ? $headline['unit'] : 'h1';
+		$headline = is_array($headline) ? $headline['value'] : $headline;
+
+		$string = \String::getInstance();
+
+		$context = $messageContent->toArray(Entity::REF_INCLUDE);
 
 		switch ($mode) {
-			case NL_HTML:
+			case Renderer::MODE_HTML:
 				// Clean RTE output
-				$this->Template->text = str_ireplace
-				(
-					array('<u>', '</u>', '</p>', '<br /><br />', ' target="_self"'),
-					array('<span style="text-decoration:underline;">', '</span>', "</p>\n", "<br /><br />\n", ''),
-					$this->String->encodeEmail($this->text)
-				);
+				$context['text'] = $string->encodeEmail($context['text']);
 				break;
 
-			case NL_PLAIN:
-				if ($this->plain) {
-					$this->Template->text = $this->plain;
-				}
-				else {
-					$this->Template->text = $this->getPlainFromHTML($this->text);
+			case Renderer::MODE_PLAIN:
+				if (!$context['plain']) {
+					$context['plain'] = $this->getPlainFromHTML($context['plain']);
 				}
 		}
 
-		$this->Template->addImage = false;
-
-		// Add image
-		if ($this->addImage && strlen($this->singleSRC) && is_file(TL_ROOT . '/' . $this->singleSRC)) {
-			$this->addImageToTemplate($this->Template, $this->currentRecordData);
-
-			$this->Template->src = $this->extendURL($this->Template->src);
-			if ($this->Template->href) {
-				$this->Template->href = $this->extendURL($this->Template->href);
-			}
-		}
+		$template = new \TwigTemplate(static::TEMPLATE, $mode);
+		return $template->parse($context);
 	}
 }

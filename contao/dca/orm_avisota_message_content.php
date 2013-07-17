@@ -158,7 +158,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 	(
 		'default'   => array
 		(
-			'type' => array('type')
+			'type' => array('type', 'cell')
 		),
 		'headline'  => array
 		(
@@ -265,6 +265,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 			'manyToOne' => array(
 				'index'        => true,
 				'targetEntity' => 'Avisota\Contao\Entity\Message',
+				'cascade'      => array('persist', 'detach', 'merge', 'refresh'),
 				'inversedBy'   => 'contents',
 				'joinColumns'  => array(
 					array(
@@ -311,9 +312,9 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 			'exclude'          => true,
 			'filter'           => true,
 			'inputType'        => 'select',
-			'options_callback' => array('Avisota\Contao\DataContainer\MessageContent', 'getMessageElements'),
+			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getMessageContentTypes'),
 			'reference'        => &$GLOBALS['TL_LANG']['NLE'],
-			'eval'             => array('helpwizard' => true, 'submitOnChange' => true, 'tl_class' => 'w50')
+			'eval'             => array('includeBlankOption' => true, 'helpwizard' => true, 'submitOnChange' => true, 'tl_class' => 'w50')
 		),
 		'cell'            => array
 		(
@@ -322,9 +323,9 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 			'exclude'          => true,
 			'filter'           => true,
 			'inputType'        => 'select',
-			'options_callback' => array('Avisota\Contao\DataContainer\MessageContent', 'dcaGetMessageAreas'),
+			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getMessageContentCells'),
 			'reference'        => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['cell'],
-			'eval'             => array('mandatory' => true, 'includeBlankOption' => true, 'tl_class' => 'w50')
+			'eval'             => array('mandatory' => true, 'submitOnChange' => true, 'includeBlankOption' => true, 'tl_class' => 'w50')
 		),
 		'headline'        => array
 		(

@@ -25,41 +25,15 @@ define('AVISOTA_ROOT', dirname(__DIR__));
 
 
 /**
- * Entities
+ * Request starttime
  */
-$GLOBALS['DOCTRINE_ENTITY_NAMESPACE_ALIAS']['Avisota\Contao']        = 'Avisota\Contao\Entity';
-$GLOBALS['DOCTRINE_ENTITY_NAMESPACE_MAP']['orm_avisota']             = 'Avisota\Contao\Entity';
-$GLOBALS['DOCTRINE_ENTITY_CLASS']['Avisota\Contao\Entity\Recipient'] = 'Avisota\Contao\Entity\AbstractRecipient';
-$GLOBALS['DOCTRINE_ENTITY_CLASS']['Avisota\Contao\Entity\Message']   = 'Avisota\Contao\Entity\AbstractMessage';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_layout';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_mailing_list';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_message';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_message_category';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_message_content';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_theme';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_queue';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient_blacklist';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient_source';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient_subscription';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_recipient_subscription_log';
-$GLOBALS['DOCTRINE_ENTITIES'][]                                      = 'orm_avisota_transport';
+if (!isset($_SERVER['REQUEST_TIME'])) {
+	$_SERVER['REQUEST_TIME'] = time();
+}
 
 
 /**
- * Events
- */
-$GLOBALS['TL_EVENT_SUBSCRIBERS']['avisota-subscription-log'] = 'Avisota\Contao\SubscriptionLogger';
-
-
-/**
- * Load base templates
- */
-require __DIR__ . '/baseTemplates.php';
-
-
-/**
- * Include dynamic generated informations
+ * Load dynamic generated informations
  */
 if (file_exists(__DIR__ . '/dynamics.php')) {
 	$GLOBALS['AVISOTA_DYNAMICS'] = include(__DIR__ . '/dynamics.php');
@@ -70,103 +44,43 @@ else {
 
 
 /**
- * Update check
+ * Load configs
  */
-/*
-$avisotaUpdateRequired = AvisotaUpdate::getInstance()
-	->hasUpdates();
-*/
+require __DIR__ . '/config-baseTemplates.php';
+require __DIR__ . '/config-backendModules.php';
+require __DIR__ . '/config-contentElements.php';
+require __DIR__ . '/config-entities.php';
+require __DIR__ . '/config-frontendModules.php';
 
 
 /**
- * Request starttime
+ * Events
  */
-if (!isset($_SERVER['REQUEST_TIME'])) {
-	$_SERVER['REQUEST_TIME'] = time();
-}
+$GLOBALS['TL_EVENT_SUBSCRIBERS']['avisota-subscription-log'] = 'Avisota\Contao\SubscriptionLogger';
+
+
+/**
+ * Salutation selection decider
+ */
+$GLOBALS['AVISOTA_SALUTATION_DECIDER'][] = 'Avisota\Contao\Salutation\GenderDecider';
+$GLOBALS['AVISOTA_SALUTATION_DECIDER'][] = 'Avisota\Contao\Salutation\RequiredFieldsDecider';
+$GLOBALS['AVISOTA_SALUTATION_DECIDER'][] = 'Avisota\Contao\Salutation\FieldValueDecider';
 
 
 /**
  * Settings
  */
-$GLOBALS['TL_CONFIG']['avisota_max_send_time']      = ini_get('max_execution_time') > 0 ? floor(
-	0.85 * ini_get('max_execution_time')
-) : 120;
+/*
+// TODO to be removed
+$GLOBALS['TL_CONFIG']['avisota_max_send_time']      = ini_get('max_execution_time') > 0
+	? floor(0.85 * ini_get('max_execution_time')) : 120;
 $GLOBALS['TL_CONFIG']['avisota_max_send_count']     = 100;
 $GLOBALS['TL_CONFIG']['avisota_max_send_timeout']   = 1;
 $GLOBALS['TL_CONFIG']['avisota_notification_time']  = 3;
 $GLOBALS['TL_CONFIG']['avisota_notification_count'] = 3;
 $GLOBALS['TL_CONFIG']['avisota_cleanup_time']       = 14;
+*/
 
-
-/**
- * Salutation
- */
-if (!isset($GLOBALS['TL_CONFIG']['avisota_salutations'])) {
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
-		'salutation' => 'Sehr geehrter Herr',
-		'title'      => true,
-		'firstname'  => true,
-		'lastname'   => true
-	);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
-		'salutation' => 'Sehr geehrte Frau',
-		'title'      => true,
-		'firstname'  => true,
-		'lastname'   => true
-	);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
-		'salutation' => 'Sehr geehrte/-r Herr/Frau',
-		'title'      => true,
-		'firstname'  => true,
-		'lastname'   => true
-	);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
-		'salutation' => 'Sehr geehrter Herr',
-		'title'      => false,
-		'firstname'  => true,
-		'lastname'   => true
-	);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
-		'salutation' => 'Sehr geehrte Frau',
-		'title'      => false,
-		'firstname'  => true,
-		'lastname'   => true
-	);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
-		'salutation' => 'Sehr geehrte/-r Herr/Frau',
-		'title'      => false,
-		'firstname'  => true,
-		'lastname'   => true
-	);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
-		'salutation' => 'Sehr geehrter',
-		'title'      => false,
-		'firstname'  => true,
-		'lastname'   => true
-	);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
-		'salutation' => 'Sehr geehrte',
-		'title'      => false,
-		'firstname'  => true,
-		'lastname'   => true
-	);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
-		'salutation' => 'Sehr geehrte/-r',
-		'title'      => false,
-		'firstname'  => true,
-		'lastname'   => true
-	);
-	$GLOBALS['TL_CONFIG']['avisota_salutations'][] = array(
-		'salutation' => 'Hallo',
-		'title'      => false,
-		'firstname'  => true,
-		'lastname'   => false
-	);
-}
-else if (is_string($GLOBALS['TL_CONFIG']['avisota_salutations'])) {
-	$GLOBALS['TL_CONFIG']['avisota_salutations'] = deserialize($GLOBALS['TL_CONFIG']['avisota_salutations'], true);
-}
 
 /**
  * Page types
@@ -179,191 +93,6 @@ $GLOBALS['TL_PTY']['avisota'] = 'PageAvisotaMailing';
  */
 $GLOBALS['BE_FFL']['upload']                 = 'UploadField';
 $GLOBALS['BE_FFL']['columnAssignmentWizard'] = 'ColumnAssignmentWizard';
-
-
-/**
- * Build custom back end modules
- */
-$customModules = array();
-/*
-$backendUser          = BackendUser::getInstance();
-$database      = Database::getInstance();
-if ($database->fieldExists('showInMenu', 'orm_avisota_message_category')) {
-	$category = $database->query(
-		'SELECT * FROM orm_avisota_message_category WHERE showInMenu=\'1\' ORDER BY title'
-	);
-	while ($category->next()) {
-		$customModules['avisota_newsletter_' . $category->id]          = array(
-			'href'       => 'table=orm_avisota_message&amp;id=' . $category->id,
-			'tables'     => array(
-				'orm_avisota_message_category',
-				'orm_avisota_message',
-				'orm_avisota_message_content',
-				'orm_avisota_message_create_from_draft'
-			),
-			'send'       => array('Avisota', 'send'),
-			'icon'       => $category->menuIcon ? $category->menuIcon
-				: 'system/modules/avisota/html/newsletter.png',
-			'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
-		);
-		$GLOBALS['TL_LANG']['MOD']['avisota_newsletter_' . $category->id] = array($category->title, '');
-	}
-}
-*/
-
-/**
- * Back end modules
- */
-$i                 = array_search('design', array_keys($GLOBALS['BE_MOD']));
-$GLOBALS['BE_MOD'] = array_merge(
-	array_slice($GLOBALS['BE_MOD'], 0, $i),
-	array
-	(
-	'avisota' => array_merge
-	(
-		array(
-			 'avisota_outbox' => array
-			 (
-				 'callback'   => 'AvisotaBackendOutbox',
-				 'icon'       => 'system/modules/avisota/html/outbox.png',
-				 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
-			 )
-		),
-		$customModules,
-		array(
-			 'avisota_newsletter' => array
-			 (
-				 'tables'     => array(
-					 'orm_avisota_message_category',
-					 'orm_avisota_message',
-					 'orm_avisota_message_content',
-					 'orm_avisota_message_create_from_draft'
-				 ),
-				 'send'       => array('Avisota\Contao\Preview', 'sendMessage'),
-				 'icon'       => 'system/modules/avisota/html/newsletter.png',
-				 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
-			 ),
-			 'avisota_recipients' => array
-			 (
-				 'tables'     => array(
-					 'orm_avisota_recipient',
-					 'orm_avisota_recipient_migrate',
-					 'orm_avisota_recipient_import',
-					 'orm_avisota_recipient_export',
-					 'orm_avisota_recipient_remove',
-					 'orm_avisota_recipient_notify'
-				 ),
-				 'icon'       => 'system/modules/avisota/html/recipients.png',
-				 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css',
-				 'javascript' => 'system/modules/avisota/assets/css/backend.js'
-			 )
-		)
-	)
-	),
-	array_slice($GLOBALS['BE_MOD'], $i)
-);
-
-$GLOBALS['BE_MOD']['system'] = array_merge(
-	$GLOBALS['BE_MOD']['system'],
-	array(
-		 'avisota_config'           => array
-		 (
-			 'icon'          => 'system/modules/avisota/assets/images/avisota_config.png',
-			 'stylesheet'    => 'system/modules/avisota/assets/css/stylesheet.css',
-			 'nested-config' => array(
-				 'headline' => false
-			 )
-		 ),
-		 'avisota_settings'         => array
-		 (
-			 'nested'     => 'avisota_config',
-			 'tables'     => array('tl_avisota_settings'),
-			 'icon'       => 'system/modules/avisota/assets/images/settings.png',
-			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
-		 ),
-		 'avisota_mailing_list'     => array
-		 (
-			 'nested'     => 'avisota_config:recipient',
-			 'tables'     => array('orm_avisota_mailing_list'),
-			 'icon'       => 'system/modules/avisota/assets/images/mailing_list.png',
-			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
-		 ),
-		 'avisota_recipient_source' => array
-		 (
-			 'nested'     => 'avisota_config:recipient',
-			 'tables'     => array('orm_avisota_recipient_source'),
-			 'icon'       => 'system/modules/avisota/assets/images/recipient_source.png',
-			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
-		 ),
-		 'avisota_theme'            => array
-		 (
-			 'nested'     => 'avisota_config:newsletter',
-			 'tables'     => array('orm_avisota_theme', 'orm_avisota_layout'),
-			 'icon'       => 'system/modules/avisota/assets/images/theme.png',
-			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
-		 ),
-		 'avisota_queue'            => array
-		 (
-			 'nested'     => 'avisota_config:transport',
-			 'tables'     => array('orm_avisota_queue'),
-			 'icon'       => 'system/modules/avisota/assets/images/queue.png',
-			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
-		 ),
-		 'avisota_transport'        => array
-		 (
-			 'nested'     => 'avisota_config:transport',
-			 'tables'     => array('orm_avisota_transport'),
-			 'icon'       => 'system/modules/avisota/assets/images/transport.png',
-			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
-		 ),
-	)
-);
-
-// TODO gray out outbox if nothink in there!
-
-/**
- * Front end modules
- */
-$GLOBALS['FE_MOD']['avisota']['avisota_subscribe']    = 'Avisota\Contao\Module\Subscribe';
-$GLOBALS['FE_MOD']['avisota']['avisota_unsubscribe']  = 'Avisota\Contao\Module\Unsubscribe';
-$GLOBALS['FE_MOD']['avisota']['avisota_subscription'] = 'Avisota\Contao\Module\Subscription';
-$GLOBALS['FE_MOD']['avisota']['avisota_list']         = 'Avisota\Contao\Module\List';
-$GLOBALS['FE_MOD']['avisota']['avisota_reader']       = 'Avisota\Contao\Module\Reader';
-
-
-/**
- * Message elements
- */
-$GLOBALS['TL_NLE'] = array_merge_recursive(
-	array
-	(
-	'texts'  => array
-	(
-		'headline' => 'Avisota\Contao\Message\Element\Headline',
-		'text'     => 'Avisota\Contao\Message\Element\Text',
-		'list'     => 'Avisota\Contao\Message\Element\List',
-		'table'    => 'Avisota\Contao\Message\Element\Table'
-	),
-	'links'  => array
-	(
-		'hyperlink' => 'Avisota\Contao\Message\Element\Hyperlink'
-	),
-	'images' => array
-	(
-		'image'   => 'Avisota\Contao\Message\Element\Image',
-		'gallery' => 'Avisota\Contao\Message\Element\Gallery'
-	),
-	/*
-	'includes' => array
-	(
-		'news'    => 'Avisota\Contao\Message\Element\News',
-		'events'  => 'Avisota\Contao\Message\Element\Event',
-		'article' => 'Avisota\Contao\Message\Element\ArticleTeaser'
-	)
-	*/
-	),
-	is_array($GLOBALS['TL_NLE']) ? $GLOBALS['TL_NLE'] : array()
-);
 
 
 /**
