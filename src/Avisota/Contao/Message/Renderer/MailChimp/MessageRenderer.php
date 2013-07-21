@@ -13,24 +13,19 @@
  * @filesource
  */
 
-namespace Avisota\Contao\Message;
+namespace Avisota\Contao\Message\Renderer\MailChimp;
 
 use Avisota\Contao\Entity\Message;
 use Avisota\Contao\Entity\MessageContent;
-use Avisota\Contao\Event\InitializeRendererEvent;
+use Avisota\Contao\Event\InitializeMessageRendererEvent;
 use Avisota\Contao\Event\RendererHeadersEvent;
+use Avisota\Contao\Message\Renderer\MessageContentRendererChain;
+use Avisota\Contao\Message\Renderer\MessageRendererInterface;
 use Avisota\Recipient\RecipientInterface;
 use Bit3\TagReplacer\TagReplacer;
 use Contao\Doctrine\ORM\EntityHelper;
 
-/**
- * Class Renderer
- *
- * @copyright  bit3 UG 2013
- * @author     Tristan Lins <tristan.lins@bit3.de>
- * @package    Avisota
- */
-class Renderer
+class MessageRenderer implements MessageRendererInterface
 {
 	const MODE_HTML = 'html';
 
@@ -40,13 +35,15 @@ class Renderer
 
 	protected $tagReplacer;
 
+	protected $contentRenderer;
+
 	function __construct()
 	{
 		$this->tagReplacer = new TagReplacer(TagReplacer::FLAG_ENABLE_ALL_INTERNALS);
 
 		/** @var EventDispatcher $eventDispatcher */
 		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-		$eventDispatcher->dispatch('avisota-renderer-initialize', new InitializeRendererEvent($this));
+		$eventDispatcher->dispatch('avisota-renderer-initialize', new InitializeMessageRendererEvent($this));
 
 		$this->tagReplacer->setUnknownDefaultMode(TagReplacer::MODE_SKIP);
 		$this->tagReplacer->setUnknownTagMode(TagReplacer::MODE_SKIP);
@@ -61,17 +58,33 @@ class Renderer
 		return $this->tagReplacer;
 	}
 
-	public function render(Message $message, RecipientInterface $recipient = null)
+	/**
+	 * @return \Avisota\Contao\Message\Renderer\MessageContentRendererChain
+	 */
+	public function getContentRenderer()
+	{
+		if (!$this->contentRenderer) {
+			$this->contentRenderer = new MessageContentRendererChain($GLOBALS['AVISOTA_CONTENT_RENDERER']['mailChimp']);
+		}
+		return $this->contentRenderer;
+	}
+
+	public function renderMessage(Message $message, RecipientInterface $recipient = null)
 	{
 		/** @var EventDispatcher $eventDispatcher */
 		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
 		$layout       = $message->getLayout();
-		$baseTemplate = $layout->getBaseTemplateConfig();
-		$cells        = $baseTemplate['cells'];
-		$rows         = isset($baseTemplate['rows']) ? $baseTemplate['rows'] : array();
+
+		list($templateGroup, $templateName) = explode(':', $this->getMailchimpTemplate());
+		if (!isset($GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE'][$templateGroup][$templateName])) {
+			throw new \RuntimeException('Mailchimp template ' . $templateGroup . '/' . $templateName . ' was not found!');
+		}
+		$mailChimpTemplate = $GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE'][$templateGroup][$templateName];
+		$cells        = $mailChimpTemplate['cells'];
+		$rows         = isset($mailChimpTemplate['rows']) ? $mailChimpTemplate['rows'] : array();
 		$cellContents = array();
-		$mode         = $baseTemplate['mode'];
+		$mode         = $mailChimpTemplate['mode'];
 
 		$repeatableCells = array();
 		foreach ($rows as $row) {
@@ -113,7 +126,7 @@ class Renderer
 			}
 		}
 
-		$template = file_get_contents(TL_ROOT . '/' . $baseTemplate['template']);
+		$template = file_get_contents(TL_ROOT . '/' . $mailChimpTemplate['template']);
 
 		$template = str_replace('mc:', 'mc__', $template);
 
@@ -148,7 +161,7 @@ class Renderer
 				$nodes = $xpath->query(str_replace('mc:', 'mc__', $expression), $document->documentElement);
 
 				if (!$nodes->length) {
-					throw new \RuntimeException('Node ' . $expression . ' not found in ' . $baseTemplate['template']);
+					throw new \RuntimeException('Node ' . $expression . ' not found in ' . $mailChimpTemplate['template']);
 				}
 
 				for ($i = 0; $i < $nodes->length; $i++) {
@@ -224,7 +237,7 @@ class Renderer
 				$targetNodes = $xpath->query(str_replace('mc:', 'mc__', $expression), $document->documentElement);
 
 				if (!$targetNodes->length) {
-					throw new \RuntimeException('Node ' . $expression . ' not found in ' . $baseTemplate['template']);
+					throw new \RuntimeException('Node ' . $expression . ' not found in ' . $mailChimpTemplate['template']);
 				}
 
 				for ($i = 0; $i < $targetNodes->length; $i++) {
@@ -350,43 +363,33 @@ class Renderer
 	}
 
 	/**
-	 * Render a content element.
+	 * Render a single message content element.
 	 *
-	 * @param MessageContent $content
-	 * @param string         $mode
+	 * @param MessageContent     $content
+	 * @param RecipientInterface $recipient
+	 *
+	 * @return string
 	 */
-	public function renderElement($mode, MessageContent $content, RecipientInterface $recipient = null)
+	public function renderContent(MessageContent $content, RecipientInterface $recipient = null)
 	{
-		$element = static::getElementInstance($content->getType());
-		return $element->generate($mode, $content);
+		// TODO: Implement renderContent() method.
 	}
 
-	static public function getElementInstance($type)
+	public function canRenderMessage(Message $message, RecipientInterface $recipient = null)
 	{
-		$elementClass = static::getElementClass($type);
-		if (!isset(static::$elementInstances[$elementClass])) {
-			$reflectionClass                         = new \ReflectionClass($elementClass);
-			static::$elementInstances[$elementClass] = $reflectionClass->newInstance();
-		}
-		return static::$elementInstances[$elementClass];
+		return $message->getLayout()->getType() == 'mailChimp';
 	}
 
 	/**
-	 * Return the element class.
+	 * Check if this renderer can render the given message content element.
 	 *
-	 * @param string $type
+	 * @param MessageContent     $content
+	 * @param RecipientInterface $recipient
 	 *
-	 * @return string
-	 * @throws \RuntimeException
+	 * @return bool
 	 */
-	static public function getElementClass($type)
+	public function canRenderContent(MessageContent $content, RecipientInterface $recipient = null)
 	{
-		foreach ($GLOBALS['TL_NLE'] as $group => $types) {
-			if (isset($types[$type])) {
-				return $types[$type];
-			}
-		}
-
-		throw new \RuntimeException('Could not found message element type ' . $type);
+		return $this->getContentRenderer()->canRenderContent($content, $recipient);
 	}
 }

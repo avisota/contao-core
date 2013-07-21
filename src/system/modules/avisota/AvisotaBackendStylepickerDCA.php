@@ -85,16 +85,16 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 	}
 
 	/**
-	 * Load newsletter content elements from $GLOBALS['TL_NLE']
+	 * Load newsletter content elements from $GLOBALS['TL_MCE']
 	 *
 	 * @return array
 	 */
 	public function getAvisotaNewsletterContentElements()
 	{
 		$contentElements = array();
-		foreach ($GLOBALS['TL_NLE'] as $key => $arr) {
-			foreach ($arr as $elementName => $val) {
-				array_push($contentElements, $elementName);
+		foreach ($GLOBALS['TL_MCE'] as $elementGroup => $elements) {
+			foreach ($elements as $elementType) {
+				array_push($contentElements, $elementType);
 			}
 		}
 

@@ -44,13 +44,4 @@ abstract class AbstractLayout extends Entity
 		
 		return $paths;
 	}
-
-	public function getBaseTemplateConfig()
-	{
-		list($baseTemplateGroup, $baseTemplateName) = explode(':', $this->getBaseTemplate());
-		if (!isset($GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$baseTemplateGroup][$baseTemplateName])) {
-			throw new \RuntimeException('Base template ' . $baseTemplateGroup . '/' . $baseTemplateName . ' was not found!');
-		}
-		return $GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$baseTemplateGroup][$baseTemplateName];
-	}
 }

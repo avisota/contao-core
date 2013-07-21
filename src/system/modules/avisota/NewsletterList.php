@@ -46,7 +46,7 @@ class NewsletterList extends Element
 	protected function compile($mode)
 	{
 		$items = array();
-		$itemContents    = deserialize($this->listitems);
+		$itemContents    = deserialize($this->listItems);
 
 		if ($mode == NL_HTML) {
 			$limit = count($itemContents) - 1;
@@ -60,7 +60,7 @@ class NewsletterList extends Element
 			}
 
 			$this->Template->items = $items;
-			$this->Template->tag   = ($this->listtype == 'ordered') ? 'ol' : 'ul';
+			$this->Template->tag   = ($this->listType == 'ordered') ? 'ol' : 'ul';
 		}
 		else {
 			$this->Template->items = $itemContents;

@@ -26,23 +26,23 @@ $GLOBALS['TL_LANG']['PTY']['avisota'] = array(
 /**
  * Newsletter content elements
  */
-$GLOBALS['TL_LANG']['NLE']['texts']     = 'Text-Elemente';
-$GLOBALS['TL_LANG']['NLE']['headline']  = array('Überschrift', 'Erzeugt eine Überschrift (h1 - h6).');
-$GLOBALS['TL_LANG']['NLE']['text']      = array('Text', 'Erzeugt ein Rich-Text-Element.');
-$GLOBALS['TL_LANG']['NLE']['list']      = array('Aufzählung', 'Erzeugt eine geordnete oder ungeordnete Liste.');
-$GLOBALS['TL_LANG']['NLE']['table']     = array('Tabelle', 'Erzeugt eine optional sortierbare Tabelle.');
-$GLOBALS['TL_LANG']['NLE']['links']     = 'Link-Elemente';
-$GLOBALS['TL_LANG']['NLE']['hyperlink'] = array('Hyperlink', 'Erzeugt einen Verweis auf eine andere Webseite.');
-$GLOBALS['TL_LANG']['NLE']['images']    = 'Bild-Elemente';
-$GLOBALS['TL_LANG']['NLE']['image']     = array('Bild', 'Erzeugt ein einzelnes Bild.');
-$GLOBALS['TL_LANG']['NLE']['gallery']   = array('Galerie', 'Erzeugt eine Bildergalerie.');
-$GLOBALS['TL_LANG']['NLE']['files']     = 'Datei Elemente';
-$GLOBALS['TL_LANG']['NLE']['download']  = array('Download', 'Erzeugt einen Link zum Download einer Datei.');
-$GLOBALS['TL_LANG']['NLE']['downloads'] = array('Downloads', 'Erzeugt mehrere Links zum Download von Dateien.');
-$GLOBALS['TL_LANG']['NLE']['includes']  = 'Include-Elemente';
-$GLOBALS['TL_LANG']['NLE']['news']      = array('Nachricht', 'Fügt einen Nachrichten-Teaser ein.');
-$GLOBALS['TL_LANG']['NLE']['events']    = array('Events', 'Fügt Event-Teaser ein.');
-$GLOBALS['TL_LANG']['NLE']['article']   = array('Artikel', 'Fügt einen Artikel-Teaser ein.');
+$GLOBALS['TL_LANG']['MCE']['texts']     = 'Text-Elemente';
+$GLOBALS['TL_LANG']['MCE']['headline']  = array('Überschrift', 'Erzeugt eine Überschrift (h1 - h6).');
+$GLOBALS['TL_LANG']['MCE']['text']      = array('Text', 'Erzeugt ein Rich-Text-Element.');
+$GLOBALS['TL_LANG']['MCE']['list']      = array('Aufzählung', 'Erzeugt eine geordnete oder ungeordnete Liste.');
+$GLOBALS['TL_LANG']['MCE']['table']     = array('Tabelle', 'Erzeugt eine optional sortierbare Tabelle.');
+$GLOBALS['TL_LANG']['MCE']['links']     = 'Link-Elemente';
+$GLOBALS['TL_LANG']['MCE']['hyperlink'] = array('Hyperlink', 'Erzeugt einen Verweis auf eine andere Webseite.');
+$GLOBALS['TL_LANG']['MCE']['images']    = 'Bild-Elemente';
+$GLOBALS['TL_LANG']['MCE']['image']     = array('Bild', 'Erzeugt ein einzelnes Bild.');
+$GLOBALS['TL_LANG']['MCE']['gallery']   = array('Galerie', 'Erzeugt eine Bildergalerie.');
+$GLOBALS['TL_LANG']['MCE']['files']     = 'Datei Elemente';
+$GLOBALS['TL_LANG']['MCE']['download']  = array('Download', 'Erzeugt einen Link zum Download einer Datei.');
+$GLOBALS['TL_LANG']['MCE']['downloads'] = array('Downloads', 'Erzeugt mehrere Links zum Download von Dateien.');
+$GLOBALS['TL_LANG']['MCE']['includes']  = 'Include-Elemente';
+$GLOBALS['TL_LANG']['MCE']['news']      = array('Nachricht', 'Fügt einen Nachrichten-Teaser ein.');
+$GLOBALS['TL_LANG']['MCE']['events']    = array('Events', 'Fügt Event-Teaser ein.');
+$GLOBALS['TL_LANG']['MCE']['article']   = array('Artikel', 'Fügt einen Artikel-Teaser ein.');
 
 
 /**

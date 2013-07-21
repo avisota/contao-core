@@ -33,15 +33,17 @@ class Preview
 	 */
 	public function sendMessage($dc, $table)
 	{
+		global $container;
+
 		$input = \Input::getInstance();
 		$messageRepository = EntityHelper::getRepository('Avisota\Contao:Message');
 
 		$messageId = $input->get('id');
 		$message = $messageRepository->find($messageId);
 
-		$renderer = new Renderer();
+		$renderer = $container['avisota.renderer'];
 		header('Content-Type: text/html; charset=utf-8');
-		echo $renderer->render($message);
+		echo $renderer->renderMessage($message);
 		exit;
 	}
 }

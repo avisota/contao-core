@@ -47,29 +47,29 @@ class Layout
 			$layout = $layout->getCurrentModel()->getEntity();
 		}
 
-		list($group, $baseTemplate) = explode(':', $layout->getBaseTemplate());
-		if (isset($GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$group][$baseTemplate])) {
-			$config = $GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$group][$baseTemplate];
+		list($group, $mailChimpTemplate) = explode(':', $layout->getMailchimpTemplate());
+		if (isset($GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE'][$group][$mailChimpTemplate])) {
+			$config = $GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE'][$group][$mailChimpTemplate];
 
 			if (isset($config['cells'])) {
 				foreach ($config['cells'] as $cellName => $cellConfig) {
 					if (!isset($cellConfig['content'])) {
-						foreach ($GLOBALS['TL_NLE'] as $elementGroup => $elements) {
-							if (isset($GLOBALS['TL_LANG']['NLE'][$elementGroup])) {
-								$elementGroupLabel = $GLOBALS['TL_LANG']['NLE'][$elementGroup];
+						foreach ($GLOBALS['TL_MCE'] as $elementGroup => $elements) {
+							if (isset($GLOBALS['TL_LANG']['MCE'][$elementGroup])) {
+								$elementGroupLabel = $GLOBALS['TL_LANG']['MCE'][$elementGroup];
 							}
 							else {
 								$elementGroupLabel = $elementGroup;
 							}
-							foreach ($elements as $elementName => $elementClass) {
-								if (isset($GLOBALS['TL_LANG']['NLE'][$elementName])) {
-									$elementLabel = $GLOBALS['TL_LANG']['NLE'][$elementName][0];
+							foreach ($elements as $elementType) {
+								if (isset($GLOBALS['TL_LANG']['MCE'][$elementType])) {
+									$elementLabel = $GLOBALS['TL_LANG']['MCE'][$elementType][0];
 								}
 								else {
-									$elementLabel = $elementName;
+									$elementLabel = $elementType;
 								}
 
-								$options[$cellName][$cellName . ':' . $elementName] = sprintf(
+								$options[$cellName][$cellName . ':' . $elementType] = sprintf(
 									'[%s] %s',
 									$elementGroupLabel,
 									$elementLabel
@@ -92,15 +92,22 @@ class Layout
 			$layout = $layout->getCurrentModel()->getEntity();
 		}
 
-		list($group, $baseTemplate) = explode(':', $layout->getBaseTemplate());
-		if (isset($GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$group][$baseTemplate])) {
-			$config = $GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$group][$baseTemplate];
+		list($group, $mailChimpTemplate) = explode(':', $layout->getMailchimpTemplate());
+		if (isset($GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE'][$group][$mailChimpTemplate])) {
+			$config = $GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE'][$group][$mailChimpTemplate];
 
 			if (isset($config['cells'])) {
 				foreach ($config['cells'] as $cellName => $cellConfig) {
 					if (isset($cellConfig['preferedElements'])) {
 						foreach ($cellConfig['preferedElements'] as $elementName) {
 							$value[] = $cellName . ':' . $elementName;
+						}
+					}
+					else {
+						foreach ($GLOBALS['TL_MCE'] as $elements) {
+							foreach ($elements as $elementType) {
+								$value[] = $cellName . ':' . $elementType;
+							}
 						}
 					}
 				}

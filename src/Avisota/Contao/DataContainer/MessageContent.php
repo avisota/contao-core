@@ -15,7 +15,7 @@
 
 namespace Avisota\Contao\DataContainer;
 
-use Avisota\Contao\Message\Renderer;
+use Avisota\Contao\Message\Renderer\MessageRendererInterface;
 use Contao\Doctrine\ORM\EntityHelper;
 
 class MessageContent extends \Backend
@@ -229,7 +229,7 @@ class MessageContent extends \Backend
 	 *
 	 * @return string
 	 */
-	public function pagePicker(DataContainer $dc)
+	public function pagePicker(\DataContainer $dc)
 	{
 		$fieldId = 'ctrl_' . $dc->field . (($this->Input->get('act') == 'editAll') ? '_' . $dc->id : '');
 		return ' ' . $this->generateImage(
@@ -282,14 +282,14 @@ class MessageContent extends \Backend
 	 */
 	public function addElement($contentData)
 	{
-		/** @var Renderer $renderer */
+		/** @var MessageRendererInterface $renderer */
 		$renderer = $GLOBALS['container']['avisota.renderer'];
 
 		$contentRepository = EntityHelper::getRepository('Avisota\Contao:MessageContent');
 		$content = $contentRepository->find($contentData['id']);
 
 		$key = $contentData['invisible'] ? 'unpublished' : 'published';
-		$element = $renderer->renderElement(Renderer::MODE_HTML, $content);
+		$element = $renderer->renderContent($content);
 
 		$contentData['key'] = $key;
 		$contentData['element'] = $element;

@@ -2,14 +2,14 @@
 
 <?php endif; // headline
 
-if ($this->listtype == 'ordered'):
+if ($this->listType == 'ordered'):
 	$index = 0;
 else:
 	$prefix = '• ';
 endif;
 
 foreach ($this->items as $item):
-	if ($this->listtype == 'ordered'):
+	if ($this->listType == 'ordered'):
 		$index ++;
 		$prefix = $index . '. ';
 	endif;

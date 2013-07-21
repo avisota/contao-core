@@ -81,11 +81,11 @@ $GLOBALS['TL_LANG']['orm_avisota_message_content']['caption']         = array(
 	'Caption ',
 	'Here you can enter a short line of text that appears below the picture.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_message_content']['listtype']        = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_content']['listType']        = array(
 	'List Type ',
 	' Please choose the type of list.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_message_content']['listitems']       = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_content']['listItems']       = array(
 	'List Items ',
 	'If JavaScript is disabled, you must save your changes before you change the order.'
 );

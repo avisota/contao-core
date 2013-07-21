@@ -238,27 +238,6 @@ class AvisotaNewsletterContent extends Controller
 
 
 	/**
-	 * Find a newsletter content element in the TL_NLE array and return its value
-	 *
-	 * @param string
-	 *
-	 * @return mixed
-	 */
-	public function findNewsletterElement($name)
-	{
-		foreach ($GLOBALS['TL_NLE'] as $v) {
-			foreach ($v as $kk => $vv) {
-				if ($kk == $name) {
-					return $vv;
-				}
-			}
-		}
-
-		return '';
-	}
-
-
-	/**
 	 * Extend image src and a href.
 	 */
 	public function replaceAndExtendURLs($htmlContent)

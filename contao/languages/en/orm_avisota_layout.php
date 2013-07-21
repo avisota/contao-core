@@ -17,6 +17,10 @@
 /**
  * Fields
  */
+$GLOBALS['TL_LANG']['orm_avisota_layout']['type']             = array(
+	'Type',
+	'Please choose the layout type.'
+);
 $GLOBALS['TL_LANG']['orm_avisota_layout']['title']             = array(
 	'Title',
 	'Please enter the layout title.'
@@ -33,8 +37,8 @@ $GLOBALS['TL_LANG']['orm_avisota_layout']['stylesheets']       = array(
 	'Stylesheets',
 	'Please chose the stylesheets to used in this layout.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_layout']['baseTemplate']             = array(
-	'Base template',
+$GLOBALS['TL_LANG']['orm_avisota_layout']['mailChimpTemplate']             = array(
+	'Mailchimp template',
 	'Chose the basic structure and template for this layout.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_layout']['allowedCellContents']             = array(
@@ -54,6 +58,12 @@ $GLOBALS['TL_LANG']['orm_avisota_layout']['layout_legend']     = 'Layout';
 $GLOBALS['TL_LANG']['orm_avisota_layout']['structure_legend'] = 'Structure and content';
 $GLOBALS['TL_LANG']['orm_avisota_layout']['template_legend']  = 'Template settings';
 $GLOBALS['TL_LANG']['orm_avisota_layout']['expert_legend']    = 'Experts settings';
+
+
+/**
+ * Reference
+ */
+$GLOBALS['TL_LANG']['orm_avisota_layout']['mailChimp']    = 'MailChimp';
 
 
 /**

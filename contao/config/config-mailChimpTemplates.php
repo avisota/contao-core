@@ -13,7 +13,7 @@
  * @filesource
  */
 
-$GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE']['templates']['3col-basic3column'] = array(
+$GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE']['templates']['3col-basic3column'] = array(
 	'mode'      => 'html',
 	'template'  => 'system/modules/avisota/blueprints/templates/3col-basic3column.html',
 	'cells'     => array(
@@ -75,7 +75,7 @@ $GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE']['templates']['3col-basic3column'] = ar
 	)
 );
 
-$GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE']['templates']['transactional-basic'] = array(
+$GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE']['templates']['transactional-basic'] = array(
 	'mode'      => 'html',
 	'template'  => 'system/modules/avisota/blueprints/templates/transactional_basic.html',
 	'cells'     => array(

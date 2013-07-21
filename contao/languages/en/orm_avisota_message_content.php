@@ -67,10 +67,10 @@ $GLOBALS['TL_LANG']['orm_avisota_message_content']['floating']        = array(
 $GLOBALS['TL_LANG']['orm_avisota_message_content']['caption']         = array(
 	'Image caption', 'Here you can enter a short text that will be displayed below the image.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_message_content']['listtype']        = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_content']['listType']        = array(
 	'List type', 'Please choose the type of list.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_message_content']['listitems']       = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_content']['listItems']       = array(
 	'List items', 'If JavaScript is disabled, make sure to save your changes before modifying the order.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_message_content']['tableitems']      = array(

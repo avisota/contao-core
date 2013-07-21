@@ -15,23 +15,23 @@
 
 namespace Avisota\Contao\Event;
 
-use Avisota\Contao\Message\Renderer;
+use Avisota\Contao\Message\Renderer\MessageRendererInterface;
 use Symfony\Component\EventDispatcher\Event;
 
-class InitializeRendererEvent extends Event
+class InitializeMessageRendererEvent extends Event
 {
 	/**
-	 * @var \Avisota\Contao\Message\Renderer
+	 * @var MessageRendererInterface
 	 */
 	protected $renderer;
 
-	function __construct(Renderer $renderer)
+	function __construct(MessageRendererInterface $renderer)
 	{
 		$this->renderer = $renderer;
 	}
 
 	/**
-	 * @return \Avisota\Contao\Message\Renderer
+	 * @return MessageRendererInterface
 	 */
 	public function getRenderer()
 	{

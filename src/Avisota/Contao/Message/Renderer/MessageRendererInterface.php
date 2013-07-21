@@ -16,9 +16,28 @@
 namespace Avisota\Contao\Message\Renderer;
 
 use Avisota\Contao\Entity\Message;
+use Avisota\Contao\Entity\MessageContent;
 use Avisota\Recipient\RecipientInterface;
 
-interface MessageRendererInterface
+interface MessageRendererInterface extends MessageContentRendererInterface
 {
-    public function render(Message $message, RecipientInterface $recipient = null);
+	/**
+	 * Render a complete message.
+	 *
+	 * @param Message            $message
+	 * @param RecipientInterface $recipient
+	 *
+	 * @return string
+	 */
+	public function renderMessage(Message $message, RecipientInterface $recipient = null);
+
+	/**
+	 * Check if this renderer can render the given message.
+	 *
+	 * @param Message            $message
+	 * @param RecipientInterface $recipient
+	 *
+	 * @return bool
+	 */
+	public function canRenderMessage(Message $message, RecipientInterface $recipient = null);
 }

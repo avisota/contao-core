@@ -26,7 +26,7 @@ class tl_stylepicker4ward_avisota_callback
 				'options_callback' => array('AvisotaBackendStylepickerDCA', 'getAvisotaNewsletterContentElements'),
 				'load_callback'    => array(array('AvisotaBackendStylepickerDCA', 'loadAvisotaNewsletterCEs')),
 				'save_callback'    => array(array('AvisotaBackendStylepickerDCA', 'saveAvisotaNewsletterCEs')),
-				'reference'        => &$GLOBALS['TL_LANG']['NLE'],
+				'reference'        => &$GLOBALS['TL_LANG']['MCE'],
 				'eval'             => array(
 					'multiple'       => true,
 					'doNotSaveEmpty' => true,

@@ -1,0 +1,24 @@
+
+{% macro margins(margin) %}{#
+	#}{% if margin.top %}margin-top:{{ margin.top }}{{ margin.unit }};{% endif %}{#
+	#}{% if margin.right %}margin-right:{{ margin.right }}{{ margin.unit }};{% endif %}{#
+	#}{% if margin.bottom %}margin-bottom:{{ margin.bottom }}{{ margin.unit }};{% endif %}{#
+	#}{% if margin.left %}margin-left:{{ margin.left }}{{ margin.unit }};{% endif %}{#
+#}{% endmacro %}
+
+{% macro image(src, attributes) %}
+	{% spaceless %}
+		<figure class="image_container{% if attributes.float == 'left' or attributes.float == 'right' %} float_{{ attributes.float }}{% endif %}"{#
+			#}{% if attributes.margin or attributes.float %} {#
+			#}style="{{ _self.margins(attributes.margin) }}{#
+			#}{% if attributes.float %}float:{{ attributes.float }};{% endif %}"{% endif %}>
+			{% if attributes.url %}<a href="{{ attributes.url }}" title="{{ attributes.alt }}" target="_blank">{% endif %}
+			{{ image(src, attributes.size[0], attributes.size[1], attributes.size[2], attributes.alt) }}
+			{% if attributes.url %}</a>{% endif %}
+
+			{% if attributes.caption %}
+				<figcaption class="caption" style="line-height: normal;">{{ attributes.caption }}</figcaption>
+			{% endif %}
+		</figure>
+	{% endspaceless %}
+{% endmacro %}

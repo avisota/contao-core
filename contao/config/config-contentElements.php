@@ -17,33 +17,33 @@
 /**
  * Message elements
  */
-$GLOBALS['TL_NLE'] = array_merge_recursive(
+$GLOBALS['TL_MCE'] = array_merge_recursive(
 	array
 	(
 	'texts'  => array
 	(
-		'headline' => 'Avisota\Contao\Message\Element\Headline',
-		'text'     => 'Avisota\Contao\Message\Element\Text',
-		'list'     => 'Avisota\Contao\Message\Element\List',
-		'table'    => 'Avisota\Contao\Message\Element\Table'
+		'headline',
+		'text',
+		'list',
+		'table'
 	),
 	'links'  => array
 	(
-		'hyperlink' => 'Avisota\Contao\Message\Element\Hyperlink'
+		'hyperlink'
 	),
 	'images' => array
 	(
-		'image'   => 'Avisota\Contao\Message\Element\Image',
-		'gallery' => 'Avisota\Contao\Message\Element\Gallery'
+		'image',
+		'gallery'
 	),
 	/*
 	'includes' => array
 	(
-		'news'    => 'Avisota\Contao\Message\Element\News',
-		'events'  => 'Avisota\Contao\Message\Element\Event',
-		'article' => 'Avisota\Contao\Message\Element\ArticleTeaser'
+		'news',
+		'events',
+		'article'
 	)
 	*/
 	),
-	is_array($GLOBALS['TL_NLE']) ? $GLOBALS['TL_NLE'] : array()
+	is_array($GLOBALS['TL_MCE']) ? $GLOBALS['TL_MCE'] : array()
 );

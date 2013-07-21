@@ -187,6 +187,8 @@ foreach ($GLOBALS['AVISOTA_DYNAMICS'] as $type => $records) {
 /**
  * Define message renderer
  */
-$container['avisota.renderer'] = function() {
-	return new \Avisota\Contao\Message\Renderer();
-};
+$container['avisota.renderer'] = $container->share(
+	function() {
+		return new \Avisota\Contao\Message\Renderer\MessageRendererChain($GLOBALS['AVISOTA_MESSAGE_RENDERER']);
+	}
+);

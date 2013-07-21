@@ -177,28 +177,36 @@ class OptionsBuilder extends \Controller
 		return $options;
 	}
 
-	static function getMessagesBaseTemplateOptions()
+	static function getLayoutTypeOptions()
+	{
+		$options = array_keys($GLOBALS['AVISOTA_MESSAGE_RENDERER']);
+		$position = array_search('backend', $options);
+		unset($options[$position]);
+		return array_values($options);
+	}
+
+	static function getMailChimpTemplateOptions()
 	{
 		static::getInstance()
-			->loadLanguageFile('avisota_message_base_template');
+			->loadLanguageFile('avisota_mailchimp_template');
 
 		$options = array();
-		foreach ($GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'] as $group => $baseTemplates) {
-			if (isset($GLOBALS['TL_LANG']['avisota_message_base_template'][$group])) {
-				$groupLabel = $GLOBALS['TL_LANG']['avisota_message_base_template'][$group];
+		foreach ($GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE'] as $group => $mailChimpTemplates) {
+			if (isset($GLOBALS['TL_LANG']['avisota_mailchimp_template'][$group])) {
+				$groupLabel = $GLOBALS['TL_LANG']['avisota_mailchimp_template'][$group];
 			}
 			else {
 				$groupLabel = $group;
 			}
-			foreach ($baseTemplates as $name => $baseTemplate) {
-				if (isset($GLOBALS['TL_LANG']['avisota_message_base_template'][$name])) {
-					$label = $GLOBALS['TL_LANG']['avisota_message_base_template'][$name];
+			foreach ($mailChimpTemplates as $name => $mailChimpTemplate) {
+				if (isset($GLOBALS['TL_LANG']['avisota_mailchimp_template'][$name])) {
+					$label = $GLOBALS['TL_LANG']['avisota_mailchimp_template'][$name];
 				}
 				else {
 					$label = $name;
 				}
 
-				$label .= sprintf(' [%s]', strtoupper($baseTemplate['mode']));
+				$label .= sprintf(' [%s]', strtoupper($mailChimpTemplate['mode']));
 
 				$options[$groupLabel][$group . ':' . $name] = $label;
 			}
@@ -245,10 +253,10 @@ class OptionsBuilder extends \Controller
 
 				$allowedCellContents = $layout->getAllowedCellContents();
 
-				foreach ($GLOBALS['TL_NLE'] as $k => $v) {
-					foreach (array_keys($v) as $kk) {
-						if (in_array($cell . ':' . $kk, $allowedCellContents)) {
-							$groups[$k][] = $kk;
+				foreach ($GLOBALS['TL_MCE'] as $elementGroup => $elements) {
+					foreach ($elements as $elementType) {
+						if (in_array($cell . ':' . $elementType, $allowedCellContents)) {
+							$groups[$elementGroup][] = $elementType;
 						}
 					}
 				}
@@ -274,10 +282,10 @@ class OptionsBuilder extends \Controller
 				->getMessage()
 				->getLayout();
 
-			list($baseTemplateGroup, $baseTemplateName) = explode(':', $layout->getBaseTemplate());
-			$baseTemplate = $GLOBALS['AVISOTA_MESSAGE_BASE_TEMPLATE'][$baseTemplateGroup][$baseTemplateName];
-			$cells        = $baseTemplate['cells'];
-			$rows         = isset($baseTemplate['rows']) ? $baseTemplate['rows'] : array();
+			list($templateGroup, $templateName) = explode(':', $layout->getMailchimpTemplate());
+			$mailChimpTemplate = $GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE'][$templateGroup][$templateName];
+			$cells        = $mailChimpTemplate['cells'];
+			$rows         = isset($mailChimpTemplate['rows']) ? $mailChimpTemplate['rows'] : array();
 
 			$repeatableCells = array();
 			foreach ($rows as $row) {

@@ -20,5 +20,23 @@ use Avisota\Recipient\RecipientInterface;
 
 interface MessageContentRendererInterface
 {
-    public function render(MessageContent $content, RecipientInterface $recipient = null);
+	/**
+	 * Render a single message content element.
+	 *
+	 * @param MessageContent     $content
+	 * @param RecipientInterface $recipient
+	 *
+	 * @return string
+	 */
+	public function renderContent(MessageContent $content, RecipientInterface $recipient = null);
+
+	/**
+	 * Check if this renderer can render the given message content element.
+	 *
+	 * @param MessageContent     $content
+	 * @param RecipientInterface $recipient
+	 *
+	 * @return bool
+	 */
+	public function canRenderContent(MessageContent $content, RecipientInterface $recipient = null);
 }

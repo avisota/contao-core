@@ -46,11 +46,12 @@ else {
 /**
  * Load configs
  */
-require __DIR__ . '/config-baseTemplates.php';
-require __DIR__ . '/config-backendModules.php';
-require __DIR__ . '/config-contentElements.php';
-require __DIR__ . '/config-entities.php';
-require __DIR__ . '/config-frontendModules.php';
+require TL_ROOT . '/system/modules/avisota/config/config-backendModules.php';
+require TL_ROOT . '/system/modules/avisota/config/config-contentElements.php';
+require TL_ROOT . '/system/modules/avisota/config/config-entities.php';
+require TL_ROOT . '/system/modules/avisota/config/config-frontendModules.php';
+require TL_ROOT . '/system/modules/avisota/config/config-mailChimpTemplates.php';
+require TL_ROOT . '/system/modules/avisota/config/config-renderer.php';
 
 
 /**

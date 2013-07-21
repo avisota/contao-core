@@ -238,7 +238,7 @@ class orm_avisota_message_content extends Backend
 	{
 		$groups = array();
 
-		foreach ($GLOBALS['TL_NLE'] as $k => $v) {
+		foreach ($GLOBALS['TL_MCE'] as $k => $v) {
 			foreach (array_keys($v) as $kk) {
 				$groups[$k][] = $kk;
 			}
@@ -290,7 +290,7 @@ class orm_avisota_message_content extends Backend
 
 		return '
 <div class="cte_type ' . $key . '">' .
-			(isset($GLOBALS['TL_LANG']['NLE'][$contentData['type']][0]) ? $GLOBALS['TL_LANG']['NLE'][$contentData['type']][0]
+			(isset($GLOBALS['TL_LANG']['MCE'][$contentData['type']][0]) ? $GLOBALS['TL_LANG']['MCE'][$contentData['type']][0]
 				: $contentData['type']) .
 			($contentData['protected']
 				? ' (' . $GLOBALS['TL_LANG']['MSC']['protected'] . ')'

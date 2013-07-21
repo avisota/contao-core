@@ -141,15 +141,21 @@ $GLOBALS['TL_DCA']['orm_avisota_layout'] = array
 		),
 	),
 	// Palettes
+	'palettes' => array(
+		'__selector__' => array('type')
+	),
 	'metapalettes'    => array
 	(
 		'default' => array
 		(
-			'theme'     => array('title', 'alias', 'preview'),
-			'template'  => array('stylesheets'),
-			'structure' => array('baseTemplate', 'allowedCellContents', 'clearStyles'),
+			'theme'     => array('type', 'title', 'alias', 'preview'),
+		),
+		'mailChimp' => array
+		(
+			'theme'     => array('type', 'title', 'alias', 'preview'),
+			'template' => array('mailChimpTemplate', 'allowedCellContents', 'clearStyles', 'stylesheets'),
 			'expert'    => array(':hide', 'templateDirectory')
-		)
+		),
 	),
 	// Subpalettes
 	'metasubpalettes' => array
@@ -194,6 +200,19 @@ $GLOBALS['TL_DCA']['orm_avisota_layout'] = array
 					)
 				)
 			)
+		),
+		'type'              => array
+		(
+			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_layout']['type'],
+			'exclude'          => true,
+			'inputType'        => 'select',
+			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getLayoutTypeOptions'),
+			'reference'        => &$GLOBALS['TL_LANG']['orm_avisota_layout'],
+			'eval'             => array(
+				'mandatory'          => true,
+				'includeBlankOption' => true,
+				'submitOnChange'     => true,
+			),
 		),
 		'title'               => array
 		(
@@ -249,12 +268,12 @@ $GLOBALS['TL_DCA']['orm_avisota_layout'] = array
 			),
 			'field'            => array(),
 		),
-		'baseTemplate'              => array
+		'mailChimpTemplate'              => array
 		(
-			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_layout']['baseTemplate'],
+			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_layout']['mailChimpTemplate'],
 			'exclude'          => true,
 			'inputType'        => 'select',
-			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getMessagesBaseTemplateOptions'),
+			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getMailChimpTemplateOptions'),
 			'eval'             => array(
 				'mandatory'          => true,
 				'includeBlankOption' => true,

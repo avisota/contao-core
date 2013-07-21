@@ -175,7 +175,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 		'list'      => array
 		(
 			'type'   => array('type', 'cell', 'headline'),
-			'list'   => array('listtype', 'listitems'),
+			'list'   => array('listType', 'listItems'),
 			'expert' => array(':hide', 'cssID', 'space')
 		),
 		'table'     => array
@@ -308,18 +308,16 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 		'type'            => array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['type'],
-			'default'          => 'text',
 			'exclude'          => true,
 			'filter'           => true,
 			'inputType'        => 'select',
 			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getMessageContentTypes'),
-			'reference'        => &$GLOBALS['TL_LANG']['NLE'],
+			'reference'        => &$GLOBALS['TL_LANG']['MCE'],
 			'eval'             => array('includeBlankOption' => true, 'helpwizard' => true, 'submitOnChange' => true, 'tl_class' => 'w50')
 		),
 		'cell'            => array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['cell'],
-			'default'          => 'body',
 			'exclude'          => true,
 			'filter'           => true,
 			'inputType'        => 'select',
@@ -446,17 +444,17 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 			'reference' => &$GLOBALS['TL_LANG']['MSC'],
 			'eval'      => array('mandatory' => true, 'tl_class' => 'w50')
 		),
-		'listtype'        => array
+		'listType'        => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['listtype'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['listType'],
 			'exclude'   => true,
 			'inputType' => 'select',
 			'options'   => array('ordered', 'unordered'),
 			'reference' => &$GLOBALS['TL_LANG']['orm_avisota_message_content']
 		),
-		'listitems'       => array
+		'listItems'       => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['listitems'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message_content']['listItems'],
 			'exclude'   => true,
 			'inputType' => 'listWizard',
 			'eval'      => array('allowHtml' => true)
