@@ -1,0 +1,27 @@
+{% extends 'avisota/message/renderer/mailchimp/mce_container.html.twig' %}
+{% import "avisota/message/renderer/mailchimp/mce_macros.html.twig" as mce %}
+
+{% set headline = headline|deserialize(true) %}
+{% set hl = headline.unit ? headline.unit : 'h1' %}
+{% set headline = headline.value %}
+
+{% set list = listType == 'ordered' ? 'ol' : 'ul' %}
+
+{% block content %}
+	{% spaceless %}
+		{% if headline %}
+			<tr>
+				<td><{{ hl }}>{{ headline }}</{{ hl }}></td>
+			</tr>
+		{% endif %}
+		<tr>
+			<td>
+				<{{ list }}>
+				{% for item in listItems %}
+					<li>{{ item }}</li>
+				{% endfor %}
+				</{{ list }}>
+			</td>
+		</tr>
+	{% endspaceless %}
+{% endblock %}

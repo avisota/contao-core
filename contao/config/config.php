@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -65,7 +65,6 @@ $GLOBALS['TL_EVENT_SUBSCRIBERS']['avisota-subscription-log'] = 'Avisota\Contao\S
  */
 $GLOBALS['AVISOTA_SALUTATION_DECIDER'][] = 'Avisota\Contao\Salutation\GenderDecider';
 $GLOBALS['AVISOTA_SALUTATION_DECIDER'][] = 'Avisota\Contao\Salutation\RequiredFieldsDecider';
-$GLOBALS['AVISOTA_SALUTATION_DECIDER'][] = 'Avisota\Contao\Salutation\FieldValueDecider';
 
 
 /**
@@ -136,8 +135,8 @@ $GLOBALS['AVISOTA_TRANSPORT']['service'] = 'Avisota\Transport\Service';
 //$GLOBALS['TL_HOOKS']['avisotaMailingListLabel'][] = array('AvisotaBackend', 'hookAvisotaMailingListLabel');
 //$GLOBALS['TL_HOOKS']['getUserNavigation'][]       = array('AvisotaBackend', 'hookGetUserNavigation');
 //$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('orm_avisota_message_content', 'myLoadDataContainer');
-$GLOBALS['TL_HOOKS']['nestedMenuPreContent'][]  = array('Avisota\Contao\Backend', 'hookNestedMenuPreContent');
-$GLOBALS['TL_HOOKS']['nestedMenuPostContent'][] = array('Avisota\Contao\Backend', 'hookNestedMenuPostContent');
+$GLOBALS['TL_HOOKS']['nestedMenuPreContent'][]  = array('Avisota\Contao\Backend\NestedMenu', 'hookNestedMenuPreContent');
+$GLOBALS['TL_HOOKS']['nestedMenuPostContent'][] = array('Avisota\Contao\Backend\NestedMenu', 'hookNestedMenuPostContent');
 
 
 /**

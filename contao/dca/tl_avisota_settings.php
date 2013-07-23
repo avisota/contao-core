@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -38,7 +38,6 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 	(
 		'default' => array(
 			'recipients'   => array(
-				'avisota_salutations',
 				'avisota_dont_disable_recipient_on_failure',
 				'avisota_dont_disable_member_on_failure'
 			),

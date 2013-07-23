@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -266,35 +266,25 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 			'eval'      => array(
 				'mandatory'      => true,
 				'submitOnChange' => true,
-				'tl_class'       => 'w50'
+				'tl_class'       => 'clr w50'
 			)
 		),
 		'recipients'        => array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_message_category']['recipients'],
-			'inputType'        => 'checkbox',
-			'options_callback' => array('Avisota\Contao\DataContainer\MessageCategory', 'getRecipients'),
+			'inputType'        => 'select',
+			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getRecipientSourceOptions'),
 			'eval'             => array(
 				'mandatory' => true,
-				'multiple'  => true,
-				'tl_class'  => 'clr'
+				'tl_class'  => 'w50'
 			),
-			'manyToMany'       => array(
+			'manyToOne'       => array(
 				'targetEntity' => 'Avisota\Contao\Entity\RecipientSource',
 				'cascade'      => array('all'),
-				'joinTable'    => array(
-					'name'               => 'orm_avisota_message_category_recipients',
-					'joinColumns'        => array(
-						array(
-							'name'                 => 'messageCategory',
-							'referencedColumnName' => 'id',
-						),
-					),
-					'inverseJoinColumns' => array(
-						array(
-							'name'                 => 'recipient',
-							'referencedColumnName' => 'id',
-						),
+				'joinColumns'    => array(
+					array(
+						'name'                 => 'recipientSource',
+						'referencedColumnName' => 'id',
 					),
 				),
 			),

@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -31,8 +31,8 @@ $GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE']['templates']['3col-basic3column'] = array
 			'content' => '##view_online_link##',
 		),
 		'header'     => array(
-			'xpath'   => '//table[@id="templateHeader"]//img[@mc:edit="header_image"]/..',
-			'content' => '{{image::{{token::theme.headerImage}}}}',
+			'xpath'            => '//table[@id="templateHeader"]//img[@mc:edit="header_image"]/..',
+			'preferedElements' => array('image'),
 		),
 		'col1'       => array(
 			'xpath'       => '//table[@id="templateBody"]//td[@class="leftColumnContent"]',
@@ -50,8 +50,8 @@ $GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE']['templates']['3col-basic3column'] = array
 			'wrapRow'     => '<tr><td valign="top"></td></tr>',
 		),
 		'footer'     => array(
-			'xpath'   => '//table[@id="templateFooter"]//td[@class="footerContent"]',
-			'content' => '##message.footer##'
+			'xpath'            => '//table[@id="templateFooter"]//td[@class="footerContent"]',
+			'preferedElements' => array('text', 'image'),
 		),
 	),
 	'formation' => array(
@@ -84,8 +84,8 @@ $GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE']['templates']['transactional-basic'] = arr
 			'content' => '##message.subject##',
 		),
 		'header'   => array(
-			'xpath'   => '//table[@id="templateHeader"]//img[@mc:edit="header_image"]/..',
-			'content' => '{{image::{{token::theme.headerImage}}}}',
+			'xpath'            => '//table[@id="templateHeader"]//img[@mc:edit="header_image"]/..',
+			'preferedElements' => array('image'),
 		),
 		'col1'     => array(
 			'xpath' => '//table[@id="templateBody"]//td[@class="bodyContent"]',
@@ -99,8 +99,8 @@ $GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE']['templates']['transactional-basic'] = arr
 			'content' => '##link.text##',
 		),
 		'footer'   => array(
-			'xpath'   => '//table[@id="templateFooter"]//td[@class="footerContent"]',
-			'content' => '##message.footer##'
+			'xpath'            => '//table[@id="templateFooter"]//td[@class="footerContent"]',
+			'preferedElements' => array('text', 'image'),
 		),
 	),
 	'formation' => array(

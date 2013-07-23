@@ -9,17 +9,17 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
 namespace Avisota\Contao\Message\Renderer;
 
 use Avisota\Contao\Entity\Message;
-use Avisota\Contao\Entity\MessageContent;
+use Avisota\Contao\Message\Renderer\PreRenderedMessageTemplateInterface;
 use Avisota\Recipient\RecipientInterface;
 
-interface MessageRendererInterface extends MessageContentRendererInterface
+interface MessagePreRendererInterface extends MessageContentPreRendererInterface
 {
 	/**
 	 * Render a complete message.
@@ -27,9 +27,9 @@ interface MessageRendererInterface extends MessageContentRendererInterface
 	 * @param Message            $message
 	 * @param RecipientInterface $recipient
 	 *
-	 * @return string
+	 * @return PreRenderedMessageTemplateInterface
 	 */
-	public function renderMessage(Message $message, RecipientInterface $recipient = null);
+	public function renderMessage(Message $message);
 
 	/**
 	 * Check if this renderer can render the given message.
@@ -39,5 +39,5 @@ interface MessageRendererInterface extends MessageContentRendererInterface
 	 *
 	 * @return bool
 	 */
-	public function canRenderMessage(Message $message, RecipientInterface $recipient = null);
+	public function canRenderMessage(Message $message);
 }

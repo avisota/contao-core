@@ -9,13 +9,13 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
 namespace Avisota\Contao\Event;
 
-use Avisota\Contao\Message\Renderer\MessageContentRendererInterface;
+use Avisota\Contao\Message\Renderer\MessageContentPreRendererInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 class InitializeMessageContentRendererEvent extends Event
@@ -25,7 +25,7 @@ class InitializeMessageContentRendererEvent extends Event
 	 */
 	protected $renderer;
 
-	function __construct(MessageContentRendererInterface $renderer)
+	function __construct(MessageContentPreRendererInterface $renderer)
 	{
 		$this->renderer = $renderer;
 	}

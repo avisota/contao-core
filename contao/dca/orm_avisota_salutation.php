@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -137,14 +137,13 @@ $GLOBALS['TL_DCA']['orm_avisota_salutation'] = array
 		'default' => array
 		(
 			'salutation' => array('salutation'),
-			'filter'     => array('enableGenderFilter', 'enableRequiredFieldsFilter', 'enableFieldValuesFilter')
+			'filter'     => array('enableGenderFilter', 'enableRequiredFieldsFilter')
 		),
 	),
 	'metasubpalettes' => array
 	(
 		'enableGenderFilter'         => array('genderFilter'),
 		'enableRequiredFieldsFilter' => array('requiredFieldsFilter'),
-		'enableFieldValuesFilter'    => array('fieldValuesFilter'),
 	),
 	// Fields
 	'fields'          => array
@@ -236,58 +235,6 @@ $GLOBALS['TL_DCA']['orm_avisota_salutation'] = array
 				'multiple'  => true
 			),
 			'field'            => array('nullable' => true),
-		),
-		'enableFieldValuesFilter'    => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_salutation']['enableFieldValuesFilter'],
-			'exclude'   => true,
-			'inputType' => 'checkbox',
-			'eval'      => array('submitOnChange' => true),
-		),
-		'fieldValuesFilter'          => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_salutation']['fieldValuesFilter'],
-			'exclude'   => true,
-			'inputType' => 'multiColumnWizard',
-			'eval'      => array(
-				'mandatory'    => true,
-				'multiple'     => true,
-				'columnFields' => array
-				(
-					'field' => array
-					(
-						'label'            => &$GLOBALS['TL_LANG']['orm_avisota_salutation']['fieldValuesFilter_field'],
-						'exclude'          => true,
-						'inputType'        => 'select',
-						'options_callback' => array(
-							'Avisota\Contao\DataContainer\OptionsBuilder',
-							'getRecipientFieldOptions'
-						),
-						'eval'             => array(
-							'mandatory'          => true,
-							'style'              => 'width:250px',
-							'includeBlankOption' => true,
-							'chosen'             => true
-						)
-					),
-					'value' => array
-					(
-						'label'     => &$GLOBALS['TL_LANG']['orm_avisota_salutation']['fieldValuesFilter_value'],
-						'exclude'   => true,
-						'inputType' => 'text',
-						'eval'      => array('style' => 'width:180px')
-					),
-					'rgxp'  => array
-					(
-						'label'     => &$GLOBALS['TL_LANG']['orm_avisota_salutation']['fieldValuesFilter_rgxp'],
-						'exclude'   => true,
-						'inputType' => 'checkbox',
-						'eval'      => array('style' => 'width:40px')
-
-					),
-				),
-			),
-			'field'     => array('type' => 'serialized', 'nullable' => true),
 		),
 	)
 );

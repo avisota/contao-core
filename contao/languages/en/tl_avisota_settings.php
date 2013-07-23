@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -17,11 +17,6 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations'] = array(
-	'Salutations',
-	'Please enter the available salutations and choose the used name parts.'
-);
-
 // subscription
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_subscribe_mail']   = array(
 	'Subscription mail',
@@ -106,7 +101,3 @@ $GLOBALS['TL_LANG']['tl_avisota_settings']['notification_legend']            = '
 $GLOBALS['TL_LANG']['tl_avisota_settings']['cleanup_legend']                 = 'Cleanup';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['transport_legend']               = 'Transport';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['developer_legend']               = 'Developer';
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_salutation'] = array('Salutation');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_title']      = array('Title');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_firstname']  = array('First name');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_lastname']   = array('Last name');

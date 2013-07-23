@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -72,7 +72,7 @@ $GLOBALS['BE_MOD'] = array_merge(
 					 'orm_avisota_message_content',
 					 'orm_avisota_message_create_from_draft'
 				 ),
-				 'send'       => array('Avisota\Contao\Preview', 'sendMessage'),
+				 'send'       => array('Avisota\Contao\Backend\Preview', 'sendMessage'),
 				 'icon'       => 'system/modules/avisota/html/newsletter.png',
 				 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
 			 ),

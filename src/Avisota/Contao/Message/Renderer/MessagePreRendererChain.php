@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -19,7 +19,7 @@ use Avisota\Contao\Entity\Message;
 use Avisota\Contao\Entity\MessageContent;
 use Avisota\Recipient\RecipientInterface;
 
-class MessageRendererChain implements MessageRendererInterface
+class MessagePreRendererChain implements MessagePreRendererInterface
 {
 	protected $messageRendererChain = array();
 
@@ -38,7 +38,7 @@ class MessageRendererChain implements MessageRendererInterface
 					$childRendererInstance = $childRendererClass->newInstance();
 					$this->addRenderer($childRendererInstance, $priority);
 				}
-				else if ($messageRenderer instanceof MessageRendererInterface) {
+				else if ($messageRenderer instanceof MessagePreRendererInterface) {
 					$this->addRenderer($childRendererInstance, $priority);
 				}
 				else {
@@ -56,7 +56,7 @@ class MessageRendererChain implements MessageRendererInterface
 	 * @param MessageRendererInterface $renderer The message renderer to add.
 	 * @param int                      $priority Higher value means, that the renderer is more prefered.
 	 */
-	public function addRenderer(MessageRendererInterface $renderer, $priority = 0)
+	public function addRenderer(MessagePreRendererInterface $renderer, $priority = 0)
 	{
 		$this->removeRenderer($renderer);
 
@@ -76,7 +76,7 @@ class MessageRendererChain implements MessageRendererInterface
 	 *
 	 * @param MessageRendererInterface $renderer The message renderer to remove.
 	 */
-	public function removeRenderer(MessageRendererInterface $renderer)
+	public function removeRenderer(MessagePreRendererInterface $renderer)
 	{
 		$hash = spl_object_hash($renderer);
 		foreach ($this->messageRendererChain as &$list) {
@@ -87,7 +87,7 @@ class MessageRendererChain implements MessageRendererInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function renderMessage(Message $message, RecipientInterface $recipient = null)
+	public function renderMessage(Message $message)
 	{
 		foreach ($this->messageRendererChain as $list) {
 			/** @var MessageRendererInterface $renderer */
@@ -104,7 +104,7 @@ class MessageRendererChain implements MessageRendererInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function renderContent(MessageContent $content, RecipientInterface $recipient = null)
+	public function renderContent(MessageContent $content)
 	{
 		foreach ($this->messageRendererChain as $list) {
 			foreach ($list as $renderer) {
@@ -120,7 +120,7 @@ class MessageRendererChain implements MessageRendererInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function canRenderMessage(Message $message, RecipientInterface $recipient = null)
+	public function canRenderMessage(Message $message)
 	{
 		foreach ($this->messageRendererChain as $list) {
 			foreach ($list as $renderer) {
@@ -135,7 +135,7 @@ class MessageRendererChain implements MessageRendererInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function canRenderContent(MessageContent $content, RecipientInterface $recipient = null)
+	public function canRenderContent(MessageContent $content)
 	{
 		foreach ($this->messageRendererChain as $list) {
 			foreach ($list as $renderer) {

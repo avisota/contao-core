@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -27,25 +27,6 @@ class MessageCategory extends \Backend
 	{
 		parent::__construct();
 		$this->import('BackendUser', 'User');
-	}
-
-	/**
-	 * Get options list of recipients.
-	 *
-	 * @return array
-	 */
-	public function getRecipients($prefixSourceId = false)
-	{
-		$recipientSourceRepository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
-		/** @var RecipientSource[] $recipientSources */
-		$recipientSources = $recipientSourceRepository->findAll();
-		$options = array();
-
-		foreach ($recipientSources as $recipientSource) {
-			$options[$recipientSource->getId()] = $recipientSource->getTitle();
-		}
-
-		return $options;
 	}
 
 	/**

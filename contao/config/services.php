@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -189,6 +189,6 @@ foreach ($GLOBALS['AVISOTA_DYNAMICS'] as $type => $records) {
  */
 $container['avisota.renderer'] = $container->share(
 	function() {
-		return new \Avisota\Contao\Message\Renderer\MessageRendererChain($GLOBALS['AVISOTA_MESSAGE_RENDERER']);
+		return new \Avisota\Contao\Message\Renderer\MessagePreRendererChain($GLOBALS['AVISOTA_MESSAGE_RENDERER']);
 	}
 );

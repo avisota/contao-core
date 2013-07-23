@@ -1,0 +1,19 @@
+{% extends 'avisota/message/renderer/mailchimp/mce_container.html.twig' %}
+{% import "avisota/message/renderer/mailchimp/mce_macros.html.twig" as mce %}
+
+{% set headline = headline|deserialize(true) %}
+{% set hl = headline.unit ? headline.unit : 'h1' %}
+{% set headline = headline.value %}
+
+{% block content %}
+	{% spaceless %}
+		{% if headline %}
+			<tr>
+				<td><{{ hl }}>{{ headline }}</{{ hl }}></td>
+			</tr>
+		{% endif %}
+		<tr>
+			<td>{{ mce.image(singleSRC, { 'alt': alt, 'size': size, 'margin': imagemargin, 'url': imageUrl, 'caption': caption }) }}</td>
+		</tr>
+	{% endspaceless %}
+{% endblock %}

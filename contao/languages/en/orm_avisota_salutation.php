@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -21,17 +21,21 @@ $GLOBALS['TL_LANG']['orm_avisota_salutation']['salutation']           = array(
 	'Salutation',
 	'Please enter the salutation.'
 );
+$GLOBALS['TL_LANG']['orm_avisota_salutation']['enableGenderFilter']         = array(
+	'Filter by Gender',
+	'Choose to enable this salutation only for a specific gender.'
+);
 $GLOBALS['TL_LANG']['orm_avisota_salutation']['genderFilter']         = array(
 	'Gender',
 	'Please select the gender that is required for this salutation.'
 );
+$GLOBALS['TL_LANG']['orm_avisota_salutation']['enableRequiredFieldsFilter']         = array(
+	'Filter by required fields',
+	'Choose to enable this salutation only if selected fields are filled.'
+);
 $GLOBALS['TL_LANG']['orm_avisota_salutation']['requiredFieldsFilter'] = array(
 	'Required fields',
 	'Please select the fields that are required for this salutation.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_salutation']['fieldValuesFilter']    = array(
-	'Field value',
-	'Please select and type in value filters. If you select REGEXP the value is interpreted as regular expression. For non regexp values, you can use * as wildcard.'
 );
 
 
@@ -47,9 +51,6 @@ $GLOBALS['TL_LANG']['orm_avisota_salutation']['filter_legend']     = 'Filter set
  */
 $GLOBALS['TL_LANG']['orm_avisota_salutation']['gender']['male']          = 'Male';
 $GLOBALS['TL_LANG']['orm_avisota_salutation']['gender']['female']        = 'Female';
-$GLOBALS['TL_LANG']['orm_avisota_salutation']['fieldValuesFilter_field'] = 'Field';
-$GLOBALS['TL_LANG']['orm_avisota_salutation']['fieldValuesFilter_value'] = 'Value';
-$GLOBALS['TL_LANG']['orm_avisota_salutation']['fieldValuesFilter_rgxp']  = 'REGEXP';
 
 
 /**

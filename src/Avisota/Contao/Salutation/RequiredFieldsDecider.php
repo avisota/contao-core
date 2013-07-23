@@ -9,11 +9,11 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
-namespace Avisota\Contao\Salutation;
+namespace Avisota\Contao\Business\Salutation;
 
 use Avisota\Contao\Entity\Salutation;
 use Avisota\Recipient\RecipientInterface;

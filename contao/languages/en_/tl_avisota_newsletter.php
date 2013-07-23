@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -78,9 +78,6 @@ $GLOBALS['TL_LANG']['orm_avisota_message']['live']              = 'Update Previe
 $GLOBALS['TL_LANG']['orm_avisota_message']['preview']           = 'Preview';
 $GLOBALS['TL_LANG']['orm_avisota_message']['sendConfirm']       = 'Newsletter Sent Confirmation';
 $GLOBALS['TL_LANG']['orm_avisota_message']['unsubscribe']       = 'Unsubscribe from Newsletter';
-$GLOBALS['TL_LANG']['orm_avisota_message']['salutation']        = 'Dear/-r';
-$GLOBALS['TL_LANG']['orm_avisota_message']['salutation_male']   = 'Dear Sir';
-$GLOBALS['TL_LANG']['orm_avisota_message']['salutation_female'] = 'Dear Miss';
 
 /**
  * Reference
@@ -118,5 +115,4 @@ $GLOBALS['TL_LANG']['orm_avisota_message']['editheader'] = array(
 /**
  * Personalisation
  */
-$GLOBALS['TL_LANG']['orm_avisota_message']['anonymous']['salutation'] = 'Dear/-r';
-$GLOBALS['TL_LANG']['orm_avisota_message']['anonymous']['name']       = 'Subscriber/-in';
+$GLOBALS['TL_LANG']['orm_avisota_message']['anonymous']['name'] = 'Subscriber/-in';

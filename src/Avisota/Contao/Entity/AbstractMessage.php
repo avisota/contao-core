@@ -9,17 +9,18 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
 namespace Avisota\Contao\Entity;
 
 use Avisota\Contao\Event\ResolveStylesheetEvent;
+use Contao\Doctrine\ORM\AliasableInterface;
 use Contao\Doctrine\ORM\Entity;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-abstract class AbstractMessage extends Entity
+abstract class AbstractMessage extends Entity implements AliasableInterface
 {
 	/**
 	 * @var string
@@ -34,6 +35,38 @@ abstract class AbstractMessage extends Entity
 	}
 
 	/**
+	 * Get recipients
+	 *
+	 * @return RecipientSource
+	 */
+	public function getRecipients()
+	{
+		$category = $this->getCategory();
+
+		if ($category->getBoilerplates() ||
+			$category->getRecipientMode() == 'byMessage'
+		) {
+			$recipients = $this->recipients;
+		}
+		else if ($category->getRecipientMode() == 'byMessageOrCategory') {
+			$recipients = $this->recipients;
+			if (!$recipients) {
+				$recipients = $category->getRecipients();
+			}
+		}
+		else if ($category->getRecipientMode() == 'byCategory') {
+			$recipients = $category->getRecipients();
+		}
+		else {
+			throw new \RuntimeException('Could not find recipients for message ' . $this->getId());
+		}
+
+		return $this->callGetterCallbacks('recipients', $recipients);
+	}
+
+	/**
+	 * Get layout
+	 *
 	 * @return Layout
 	 */
 	public function getLayout()
@@ -43,14 +76,10 @@ abstract class AbstractMessage extends Entity
 		if ($category->getBoilerplates() ||
 			$category->getLayoutMode() == 'byMessage'
 		) {
-			if ($this instanceof Proxy) {
-				$this->__load();
-			}
-
 			$layout = $this->layout;
 		}
 		else if ($category->getLayoutMode() == 'byMessageOrCategory') {
-			$layout = $this->getLayout();
+			$layout = $this->layout;
 			if (!$layout) {
 				$layout = $category->getLayout();
 			}
@@ -62,6 +91,44 @@ abstract class AbstractMessage extends Entity
 			throw new \RuntimeException('Could not find layout for message ' . $this->getId());
 		}
 
-		return $layout;
+		return $this->callGetterCallbacks('layout', $layout);
+	}
+
+    /**
+     * Get transport
+     *
+     * @return Transport
+     */
+    public function getTransport()
+    {
+		$category = $this->getCategory();
+
+		if ($category->getBoilerplates() ||
+			$category->getTransportMode() == 'byMessage'
+		) {
+			$transport = $this->transport;
+		}
+		else if ($category->getTransportMode() == 'byMessageOrCategory') {
+			$transport = $this->transport;
+			if (!$transport) {
+				$transport = $category->getTransport();
+			}
+		}
+		else if ($category->getTransportMode() == 'byCategory') {
+			$transport = $category->getTransport();
+		}
+		else {
+			throw new \RuntimeException('Could not find transport for message ' . $this->getId());
+		}
+
+		return $this->callGetterCallbacks('transport', $transport);
+    }
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getAliasParentValue()
+	{
+		return $this->getSubject();
 	}
 }

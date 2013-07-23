@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -18,7 +18,7 @@ namespace Avisota\Contao\Message\Renderer;
 use Avisota\Contao\Entity\MessageContent;
 use Avisota\Recipient\RecipientInterface;
 
-class MessageContentRendererChain implements MessageContentRendererInterface
+class MessageContentPreRendererChain implements MessageContentPreRendererInterface
 {
 	protected $contentRendererChain = array();
 
@@ -37,7 +37,7 @@ class MessageContentRendererChain implements MessageContentRendererInterface
 					$childRendererInstance = $childRendererClass->newInstance();
 					$this->addContentRenderer($childRendererInstance, $priority);
 				}
-				else if ($contentRenderer instanceof MessageRendererInterface) {
+				else if ($contentRenderer instanceof MessagePreRendererInterface) {
 					$this->addContentRenderer($childRendererInstance, $priority);
 				}
 				else {
@@ -50,7 +50,7 @@ class MessageContentRendererChain implements MessageContentRendererInterface
 		}
 	}
 
-	public function addContentRenderer(MessageContentRendererInterface $renderer, $priority = 0)
+	public function addContentRenderer(MessageContentPreRendererInterface $renderer, $priority = 0)
 	{
 		$this->removeContentRenderer($renderer);
 
@@ -65,7 +65,7 @@ class MessageContentRendererChain implements MessageContentRendererInterface
 		krsort($this->contentRendererChain);
 	}
 
-	public function removeContentRenderer(MessageContentRendererInterface $renderer)
+	public function removeContentRenderer(MessageContentPreRendererInterface $renderer)
 	{
 		$hash = spl_object_hash($renderer);
 		foreach ($this->contentRendererChain as &$list) {
@@ -76,7 +76,7 @@ class MessageContentRendererChain implements MessageContentRendererInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function renderContent(MessageContent $content, RecipientInterface $recipient = null)
+	public function renderContent(MessageContent $content)
 	{
 		foreach ($this->contentRendererChain as $list) {
 			/** @var MessageContentRendererInterface $renderer */
@@ -93,7 +93,7 @@ class MessageContentRendererChain implements MessageContentRendererInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function canRenderContent(MessageContent $content, RecipientInterface $recipient = null)
+	public function canRenderContent(MessageContent $content)
 	{
 		foreach ($this->contentRendererChain as $list) {
 			foreach ($list as $renderer) {

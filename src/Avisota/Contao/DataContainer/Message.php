@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -31,36 +31,44 @@ class Message extends \Controller
 			$database->tableExists('orm_avisota_message_category')
 		) {
 			try {
+				$messageCategory = false;
+				if ($input->get('act') == 'create') {
+					$messageCategoryRepository = EntityHelper::getRepository('Avisota\Contao:MessageCategory');
+					/** @var \Avisota\Contao\Entity\Message $message */
+					$messageCategory = $messageCategoryRepository->find($input->get('pid'));
+				}
 				if ($input->get('act') == 'edit') {
-					$newsletterRepository = EntityHelper::getRepository('Avisota\Contao:Message');
+					$messageRepository = EntityHelper::getRepository('Avisota\Contao:Message');
 					/** @var \Avisota\Contao\Entity\Message $newsletter */
-					$newsletter         = $newsletterRepository->find($input->get('id'));
-					$newsletterCategory = $newsletter->getCategory();
+					$message         = $messageRepository->find($input->get('id'));
+					$messageCategory = $message->getCategory();
+				}
 
-					if ($newsletterCategory->getBoilerplates() ||
-						$newsletterCategory->getRecipientsMode() == 'byMessageOrCategory'
+				if ($messageCategory) {
+					if ($messageCategory->getBoilerplates() ||
+						$messageCategory->getRecipientsMode() == 'byMessageOrCategory'
 					) {
 						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['recipient'][] = 'setRecipients';
 					}
-					else if ($newsletterCategory->getRecipientsMode() == 'byMessage') {
+					else if ($messageCategory->getRecipientsMode() == 'byMessage') {
 						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['recipient'][] = 'recipients';
 					}
 
-					if ($newsletterCategory->getBoilerplates() ||
-						$newsletterCategory->getLayoutMode() == 'byMessage'
+					if ($messageCategory->getBoilerplates() ||
+						$messageCategory->getLayoutMode() == 'byMessage'
 					) {
 						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['layout'][] = 'layout';
 					}
-					else if ($newsletterCategory->getLayoutMode() == 'byMessageOrCategory') {
+					else if ($messageCategory->getLayoutMode() == 'byMessageOrCategory') {
 						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['layout'][] = 'setLayout';
 					}
 
-					if ($newsletterCategory->getBoilerplates() ||
-						$newsletterCategory->getTransportMode() == 'byMessageOrCategory'
+					if ($messageCategory->getBoilerplates() ||
+						$messageCategory->getTransportMode() == 'byMessageOrCategory'
 					) {
 						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['transport'][] = 'setTransport';
 					}
-					else if ($newsletterCategory->getTransportMode() == 'byMessage') {
+					else if ($messageCategory->getTransportMode() == 'byMessage') {
 						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['transport'][] = 'transport';
 					}
 				}
@@ -300,19 +308,21 @@ class Message extends \Controller
 
 		$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['recipients'][0];
 		if ($newsletterCategory->getRecipientsMode() != 'byMessage') {
-			$add[$key] = array();
 			$fallback  = $newsletterCategory->getRecipientsMode() == 'byMessageOrCategory';
 
 			/** @var RecipientSource $recipientSource */
-			foreach ($newsletterCategory->getRecipients() as $recipientSource) {
-				$add[$key][] = sprintf(
+			$recipientSource = $newsletterCategory->getRecipients();
+			if ($recipientSource) {
+				$add[$key] = sprintf(
 					'<a href="contao/main.php?do=avisota_recipient_source&act=edit&id=%d">%s</a>%s',
 					$recipientSource->getId(),
 					$recipientSource->getTitle(),
 					$fallback ? ' ' . $GLOBALS['TL_LANG']['orm_avisota_message']['fallback'] : ''
 				);
 			}
-			$add[$key] = implode('<br>', $add[$key]);
+			else {
+				unset($add[$key]);
+			}
 		}
 		else {
 			unset($add[$key]);

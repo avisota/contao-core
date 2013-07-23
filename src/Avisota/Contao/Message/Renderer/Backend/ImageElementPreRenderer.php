@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -30,12 +30,12 @@ use Contao\Doctrine\ORM\Entity;
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    Avisota
  */
-class HyperlinkElementRenderer implements Renderer\MessageContentRendererInterface
+class ImageElementPreRenderer implements Renderer\MessageContentPreRendererInterface
 {
 	/**
 	 * @var string
 	 */
-	const TEMPLATE = 'avisota/message/renderer/backend/mce_hyperlink';
+	const TEMPLATE = 'avisota/message/renderer/backend/mce_image';
 
 	/**
 	 * Render a single message content element.
@@ -45,7 +45,7 @@ class HyperlinkElementRenderer implements Renderer\MessageContentRendererInterfa
 	 *
 	 * @return string
 	 */
-	public function renderContent(MessageContent $content, RecipientInterface $recipient = null)
+	public function renderContent(MessageContent $content)
 	{
 		$context = $content->toArray(Entity::REF_INCLUDE);
 		$template = new \TwigTemplate(static::TEMPLATE, 'html');
@@ -60,8 +60,8 @@ class HyperlinkElementRenderer implements Renderer\MessageContentRendererInterfa
 	 *
 	 * @return bool
 	 */
-	public function canRenderContent(MessageContent $content, RecipientInterface $recipient = null)
+	public function canRenderContent(MessageContent $content)
 	{
-		return $content->getType() == 'hyperlink';
+		return $content->getType() == 'image';
 	}
 }

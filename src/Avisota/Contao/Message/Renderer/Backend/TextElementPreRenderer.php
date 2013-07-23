@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -30,12 +30,12 @@ use Contao\Doctrine\ORM\Entity;
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    Avisota
  */
-class ImageElementRenderer implements Renderer\MessageContentRendererInterface
+class TextElementPreRenderer implements Renderer\MessageContentPreRendererInterface
 {
 	/**
 	 * @var string
 	 */
-	const TEMPLATE = 'avisota/message/renderer/backend/mce_image';
+	const TEMPLATE = 'avisota/message/renderer/backend/mce_text';
 
 	/**
 	 * Render a single message content element.
@@ -45,7 +45,7 @@ class ImageElementRenderer implements Renderer\MessageContentRendererInterface
 	 *
 	 * @return string
 	 */
-	public function renderContent(MessageContent $content, RecipientInterface $recipient = null)
+	public function renderContent(MessageContent $content)
 	{
 		$context = $content->toArray(Entity::REF_INCLUDE);
 		$template = new \TwigTemplate(static::TEMPLATE, 'html');
@@ -60,8 +60,8 @@ class ImageElementRenderer implements Renderer\MessageContentRendererInterface
 	 *
 	 * @return bool
 	 */
-	public function canRenderContent(MessageContent $content, RecipientInterface $recipient = null)
+	public function canRenderContent(MessageContent $content)
 	{
-		return $content->getType() == 'image';
+		return $content->getType() == 'text';
 	}
 }

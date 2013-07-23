@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    Avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 

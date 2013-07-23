@@ -9,12 +9,12 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
 
-namespace Avisota\Contao\Message\Renderer\Backend;
+namespace Avisota\Contao\Message\Renderer\MailChimp;
 
 use Avisota\Contao\Entity\MessageContent;
 use Avisota\Contao\Message\Renderer;
@@ -30,12 +30,12 @@ use Contao\Doctrine\ORM\Entity;
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    Avisota
  */
-class HeadlineElementRenderer implements Renderer\MessageContentRendererInterface
+class TableElementPreRenderer implements Renderer\MessageContentPreRendererInterface
 {
 	/**
 	 * @var string
 	 */
-	const TEMPLATE = 'avisota/message/renderer/backend/mce_headline';
+	const TEMPLATE = 'avisota/message/renderer/mailchimp/mce_table';
 
 	/**
 	 * Render a single message content element.
@@ -45,7 +45,7 @@ class HeadlineElementRenderer implements Renderer\MessageContentRendererInterfac
 	 *
 	 * @return string
 	 */
-	public function renderContent(MessageContent $content, RecipientInterface $recipient = null)
+	public function renderContent(MessageContent $content)
 	{
 		$context = $content->toArray(Entity::REF_INCLUDE);
 		$template = new \TwigTemplate(static::TEMPLATE, 'html');
@@ -60,8 +60,8 @@ class HeadlineElementRenderer implements Renderer\MessageContentRendererInterfac
 	 *
 	 * @return bool
 	 */
-	public function canRenderContent(MessageContent $content, RecipientInterface $recipient = null)
+	public function canRenderContent(MessageContent $content)
 	{
-		return $content->getType() == 'headline';
+		return $content->getType() == 'table';
 	}
 }

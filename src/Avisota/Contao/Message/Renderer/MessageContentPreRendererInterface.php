@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -18,7 +18,7 @@ namespace Avisota\Contao\Message\Renderer;
 use Avisota\Contao\Entity\MessageContent;
 use Avisota\Recipient\RecipientInterface;
 
-interface MessageContentRendererInterface
+interface MessageContentPreRendererInterface
 {
 	/**
 	 * Render a single message content element.
@@ -26,9 +26,9 @@ interface MessageContentRendererInterface
 	 * @param MessageContent     $content
 	 * @param RecipientInterface $recipient
 	 *
-	 * @return string
+	 * @return mixed
 	 */
-	public function renderContent(MessageContent $content, RecipientInterface $recipient = null);
+	public function renderContent(MessageContent $content);
 
 	/**
 	 * Check if this renderer can render the given message content element.
@@ -38,5 +38,5 @@ interface MessageContentRendererInterface
 	 *
 	 * @return bool
 	 */
-	public function canRenderContent(MessageContent $content, RecipientInterface $recipient = null);
+	public function canRenderContent(MessageContent $content);
 }

@@ -1,0 +1,58 @@
+{% extends 'avisota/message/renderer/mailchimp/mce_container.html.twig' %}
+{% import "avisota/message/renderer/mailchimp/mce_macros.html.twig" as mce %}
+
+{% set headline = headline|deserialize(true) %}
+{% set hl = headline.unit ? headline.unit : 'h1' %}
+{% set headline = headline.value %}
+
+{% block content %}
+	{% spaceless %}
+		{% if headline %}
+			<tr>
+				<td><{{ hl }}>{{ headline }}</{{ hl }}></td>
+			</tr>
+		{% endif %}
+		<tr>
+			<td>
+				<table summary="{{ summary }}">
+					{% set start = 0 %}
+					{% set end = thead|length %}
+					{% if thead %}
+						<thead>
+						{% set row = tableitems|first %}
+						{% set start = 1 %}
+						{% set end = end - 1 %}
+						<tr>
+							{% for cell in row %}
+								<th>{{ cell }}</th>
+							{% endfor %}
+						</tr>
+						</thead>
+					{% endif %}
+
+					{% if tfoot %}
+						<tfoot>
+						{% set row = tableitems|last %}
+						{% set end = end - 1 %}
+						<tr>
+							{% for cell in row %}
+								<th>{{ cell }}</th>
+							{% endfor %}
+						</tr>
+						</tfoot>
+					{% endif %}
+
+					<tbody>
+					{% for row in tableitems|slice(start, end) %}
+						<tr>
+							{% for cell in row %}
+								<th>{{ cell }}</th>
+							{% endfor %}
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	{% endspaceless %}
+{% endblock %}

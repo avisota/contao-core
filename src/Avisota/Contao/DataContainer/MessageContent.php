@@ -9,13 +9,13 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
 namespace Avisota\Contao\DataContainer;
 
-use Avisota\Contao\Message\Renderer\MessageRendererInterface;
+use Avisota\Contao\Message\Renderer\MessagePreRendererInterface;
 use Contao\Doctrine\ORM\EntityHelper;
 
 class MessageContent extends \Backend
@@ -289,12 +289,21 @@ class MessageContent extends \Backend
 		$content = $contentRepository->find($contentData['id']);
 
 		$key = $contentData['invisible'] ? 'unpublished' : 'published';
-		$element = $renderer->renderContent($content);
+
+		try {
+			$element = $renderer->renderContent($content);
+		}
+		catch (\Exception $exception) {
+			$element = sprintf(
+				"<span style=\"color:red\">%s</span>",
+				$exception->getMessage()
+			);
+		}
 
 		$contentData['key'] = $key;
 		$contentData['element'] = $element;
 
-		$template = new \TwigTemplate('be_mce_element', 'html5');
+		$template = new \TwigTemplate('avisota/backend/mce_element', 'html5');
 		return $template->parse($contentData);
 	}
 

@@ -9,7 +9,7 @@
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota
- * @license    LGPL
+ * @license    LGPL-3.0+
  * @filesource
  */
 
@@ -35,11 +35,3 @@ $GLOBALS['TL_LANG']['MCE']['article']   = array('Article', 'Includes another art
 $GLOBALS['TL_LANG']['MCE']['alias']     = array('Content element', 'Includes another content element.');
 $GLOBALS['TL_LANG']['MCE']['module']    = array('Module', 'Includes a front end module.');
 $GLOBALS['TL_LANG']['MCE']['teaser']    = array('Article teaser', 'Displays the teaser text of an article.');
-
-
-/**
- * Miscellaneous
- */
-$GLOBALS['TL_LANG']['MSC']['delete_no_blacklist'] = 'Löschen ohne Blacklist-Eintrag';
-$GLOBALS['TL_LANG']['MSC']['schedule']            = 'Versand planen';
-$GLOBALS['TL_LANG']['MSC']['send']                = 'Versenden';

@@ -46,8 +46,16 @@
 	padding: 2px 0 3px 20px;
 }
 
-
-
+/**
+ * View and send dialog
+ */
+#avisota_message_preview iframe.avisota_message_preview {
+	border: 1px inset #bbb;
+}
+#avisota_message_preview p.new_window {
+	text-align: right;
+	padding: 2em 0;
+}
 
 
 
