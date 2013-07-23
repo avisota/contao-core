@@ -180,8 +180,6 @@ class OptionsBuilder extends \Controller
 	static function getLayoutTypeOptions()
 	{
 		$options = array_keys($GLOBALS['AVISOTA_MESSAGE_RENDERER']);
-		$position = array_search('backend', $options);
-		unset($options[$position]);
 		return array_values($options);
 	}
 

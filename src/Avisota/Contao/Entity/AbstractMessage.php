@@ -44,17 +44,17 @@ abstract class AbstractMessage extends Entity implements AliasableInterface
 		$category = $this->getCategory();
 
 		if ($category->getBoilerplates() ||
-			$category->getRecipientMode() == 'byMessage'
+			$category->getRecipientsMode() == 'byMessage'
 		) {
 			$recipients = $this->recipients;
 		}
-		else if ($category->getRecipientMode() == 'byMessageOrCategory') {
+		else if ($category->getRecipientsMode() == 'byMessageOrCategory') {
 			$recipients = $this->recipients;
 			if (!$recipients) {
 				$recipients = $category->getRecipients();
 			}
 		}
-		else if ($category->getRecipientMode() == 'byCategory') {
+		else if ($category->getRecipientsMode() == 'byCategory') {
 			$recipients = $category->getRecipients();
 		}
 		else {

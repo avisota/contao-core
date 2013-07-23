@@ -189,6 +189,11 @@ foreach ($GLOBALS['AVISOTA_DYNAMICS'] as $type => $records) {
  */
 $container['avisota.renderer'] = $container->share(
 	function() {
-		return new \Avisota\Contao\Message\Renderer\MessagePreRendererChain($GLOBALS['AVISOTA_MESSAGE_RENDERER']);
+		if (TL_MODE == 'BE') {
+			return new \Avisota\Contao\Message\Renderer\Backend\MessagePreRenderer();
+		}
+		else {
+			return new \Avisota\Contao\Message\Renderer\MessagePreRendererChain($GLOBALS['AVISOTA_MESSAGE_RENDERER']);
+		}
 	}
 );

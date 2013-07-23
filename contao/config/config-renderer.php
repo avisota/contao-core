@@ -17,7 +17,6 @@
 /**
  * Message renderer
  */
-$GLOBALS['AVISOTA_MESSAGE_RENDERER']['backend']   = array('Avisota\Contao\Message\Renderer\Backend\MessagePreRenderer', 100);
 $GLOBALS['AVISOTA_MESSAGE_RENDERER']['mailChimp'] = 'Avisota\Contao\Message\Renderer\MailChimp\MessagePreRenderer';
 
 
