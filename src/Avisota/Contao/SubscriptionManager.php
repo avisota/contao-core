@@ -69,7 +69,6 @@ class SubscriptionManager
 					return false;
 				}
 				$recipient = new Recipient();
-				$recipient->setTstamp(new \DateTime());
 				$store = true;
 			}
 			$recipient->fromArray($recipientIdentity);
@@ -186,7 +185,7 @@ class SubscriptionManager
 	 * @param null|array                 $lists
 	 * <em>null</em> to globally subscribe, or array of mailing lists to subscribe to.
 	 *
-	 * @return array
+	 * @return RecipientSubscription[]
 	 */
 	public function subscribe(
 		$recipient,
@@ -284,24 +283,26 @@ class SubscriptionManager
 
 		$recipient = $this->resolveRecipient($recipient);
 
-		if (!$recipient) {
+		if (!$recipient || empty($token)) {
 			return false;
 		}
 
 		$queryBuilder  = $entityManager->createQueryBuilder();
-		$subscriptions = $queryBuilder
+		$query = $queryBuilder
 			->select('s')
 			->from('Avisota\Contao:RecipientSubscription', 's')
 			->where('s.recipient=:recipient')
 			->andWhere(
 				$queryBuilder
 					->expr()
-					->in('s.list', ':token')
+					->in('s.token', ':token')
 			)
+			->andWhere('s.confirmed=:confirmed')
 			->setParameter(':recipient', $recipient->getId())
 			->setParameter(':token', $token)
-			->getQuery()
-			->getResult();
+			->setParameter(':confirmed', false)
+			->getQuery();
+		$subscriptions = $query->getResult();
 
 		/** @var RecipientSubscription $subscription */
 		foreach ($subscriptions as $subscription) {

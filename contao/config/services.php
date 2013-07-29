@@ -57,14 +57,19 @@ $container['avisota.logger.default.level'] = function($container) {
 	return $container['logger.default.level'];
 };
 
-// transport log default level
-$container['avisota.logger.default.level.transport'] = function($container) {
-	return $container['avisota.logger.default.level'];
+// queue log default level
+$container['avisota.logger.default.level.queue'] = function($container) {
+	return $container['logger.default.level'];
 };
 
 // subscription log default level
 $container['avisota.logger.default.level.subscription'] = function($container) {
 	return 'debug';
+};
+
+// transport log default level
+$container['avisota.logger.default.level.transport'] = function($container) {
+	return $container['avisota.logger.default.level'];
 };
 
 /**
@@ -76,14 +81,19 @@ $container['avisota.logger.default.handlers'] = new ArrayObject(
 	array('avisota.logger.handler.general')
 );
 
-// transport log default handlers
-$container['avisota.logger.default.handlers.transport'] = new ArrayObject(
-	array('avisota.logger.handler.transport', 'avisota.logger.handler.general')
+// queue log default handlers
+$container['avisota.logger.default.handlers.queue'] = new ArrayObject(
+	array('avisota.logger.handler.queue', 'avisota.logger.handler.general')
 );
 
 // subscription log default handlers
 $container['avisota.logger.default.handlers.subscription'] = new ArrayObject(
 	array('avisota.logger.handler.subscription', 'avisota.logger.handler.general')
+);
+
+// transport log default handlers
+$container['avisota.logger.default.handlers.transport'] = new ArrayObject(
+	array('avisota.logger.handler.transport', 'avisota.logger.handler.general')
 );
 
 /**
@@ -99,12 +109,12 @@ $container['avisota.logger.handler.general'] = $container->share(
 	}
 );
 
-// transport log handler
-$container['avisota.logger.handler.transport'] = $container->share(
+// queue log handler
+$container['avisota.logger.handler.queue'] = $container->share(
 	function($container) {
-		$factory = $container['logger.factory.handler.rotatingFile'];
+		$factory = $container['logger.factory.handler.stream'];
 
-		return $factory('avisota.transport.log', $container['avisota.logger.default.level.transport']);
+		return $factory('avisota.queue.log', $container['avisota.logger.default.level.queue']);
 	}
 );
 
@@ -114,6 +124,15 @@ $container['avisota.logger.handler.subscription'] = $container->share(
 		$factory = $container['logger.factory.handler.stream'];
 
 		return $factory('avisota.subscription.log', $container['avisota.logger.default.level.subscription']);
+	}
+);
+
+// transport log handler
+$container['avisota.logger.handler.transport'] = $container->share(
+	function($container) {
+		$factory = $container['logger.factory.handler.rotatingFile'];
+
+		return $factory('avisota.transport.log', $container['avisota.logger.default.level.transport']);
 	}
 );
 
@@ -129,10 +148,10 @@ $container['avisota.logger'] = function($container) {
 	return $logger;
 };
 
-// transport log
-$container['avisota.logger.transport'] = function($container) {
+// queue log
+$container['avisota.logger.queue'] = function($container) {
 	$factory = $container['logger.factory'];
-	$logger = $factory('avisota.transport', $container['avisota.logger.default.handlers.transport']);
+	$logger = $factory('avisota.queue', $container['avisota.logger.default.handlers.queue']);
 
 	return $logger;
 };
@@ -145,44 +164,79 @@ $container['avisota.logger.subscription'] = function($container) {
 	return $logger;
 };
 
+// transport log
+$container['avisota.logger.transport'] = function($container) {
+	$factory = $container['logger.factory'];
+	$logger = $factory('avisota.transport', $container['avisota.logger.default.handlers.transport']);
+
+	return $logger;
+};
+
 /**
  * Define dynamic services
  */
+$container['avisota.service-factory'] = $container->share(
+	function($container) {
+		return new \Avisota\Contao\ServiceFactory();
+	}
+);
+
 foreach ($GLOBALS['AVISOTA_DYNAMICS'] as $type => $records) {
-	foreach ($records as $id => $alias) {
-		if (!empty($alias)) {
+	foreach ($records as $record) {
+		if ($type == 'queue' ||
+			$type == 'recipientSource' ||
+			$type == 'transport'
+		) {
+			$id = $record['id'];
+
 			// register service
-			$container[sprintf('avisota.%s.%s', $type, $alias)] = function ($container) use ($type, $id) {
-				throw new RuntimeException('Service factory not implemented yet!');
-			};
-
-			$container[sprintf('avisota.logger.%s.%s.level', $type, $alias)] = function($container) {
-				return $container['avisota.logger.default.level'];
-			};
-
-			$container[sprintf('avisota.logger.%s.%s.handler', $type, $alias)] = $container->share(
-				function($container) use ($type, $alias) {
-					$factory = $container['logger.factory.handler.stream'];
-
-					return $factory(
-						sprintf('avisota.%s.%s.log', $type, $alias),
-						$container[sprintf('avisota.logger.%s.%s.level', $type, $alias)]
-					);
+			$container[sprintf('avisota.%s.%s', $type, $record['id'])] = $container->share(
+				function ($container) use ($type, $id) {
+					/** @var \Avisota\Contao\ServiceFactory $factory */
+					$factory = $container['avisota.service-factory'];
+					return $factory->createService($type, $id);
 				}
 			);
 
-			$container[sprintf('avisota.logger.%s.%s', $type, $alias)] = function($container) use ($type, $alias) {
-				$handlers = $container['avisota.logger.transport.default.handlers'];
-				$handlers[] = sprintf('avisota.logger.%s.%s.handler', $type, $alias);
-
-				$factory = $container['logger.factory'];
-				$logger = $factory('avisota.transport', $handlers);
-
-				return $logger;
+			// register service
+			$container[sprintf('avisota.%s.%s', $type, $record['alias'])] = function ($container) use ($type, $id) {
+				return $container[sprintf('avisota.%s.%s', $type, $id)];
 			};
 		}
 	}
 }
+
+/**
+ * Define transport renderer
+ */
+$container['avisota.transport.renderer'] = $container->share(
+	function() {
+		$chain = new \Avisota\Renderer\MessageRendererChain();
+
+		foreach ($GLOBALS['AVISOTA_TRANSPORT_RENDERER'] as $renderer) {
+			$priority = 0;
+
+			// priority support
+			if (is_array($renderer) && count($renderer) == 2 && is_int($renderer[1])) {
+				list($renderer, $priority) = $renderer;
+			}
+
+			// factory support
+			if (is_callable($renderer)) {
+				$renderer = call_user_func($renderer);
+			}
+
+			// instanciate class
+			if (is_string($renderer)) {
+				$renderer = new $renderer();
+			}
+
+			$chain->addRenderer($renderer, $priority);
+		}
+
+		return $chain;
+	}
+);
 
 /**
  * Define message renderer

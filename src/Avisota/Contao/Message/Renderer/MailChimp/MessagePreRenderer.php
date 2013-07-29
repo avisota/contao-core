@@ -119,6 +119,8 @@ class MessagePreRenderer implements MessagePreRendererInterface
 				}
 			}
 
+			$clearedCells = array();
+
 			foreach ($cells as $cellName => $cellConfig) {
 				$replace = isset($cellConfig['replace']) && $cellConfig['replace'];
 
@@ -212,7 +214,7 @@ class MessagePreRenderer implements MessagePreRendererInterface
 							for ($i = 0; $i < $cellContentDoc->documentElement->firstChild->childNodes->length; $i++) {
 								$childNode = $cellContentDoc->documentElement->firstChild->childNodes->item($i);
 								$childNode = $wrapContentDoc->importNode($childNode, true);
-								$wrapContentDoc->appendChild($childNode);
+								$wrapElement->appendChild($childNode);
 							}
 
 							$cellContentDoc = $wrapContentDoc;
@@ -240,9 +242,12 @@ class MessagePreRenderer implements MessagePreRendererInterface
 							else {
 								// if not replace, empty target node
 								if (!$replace) {
-									while ($targetNode->childNodes->length) {
-										$childNode = $targetNode->childNodes->item(0);
-										$targetNode->removeChild($childNode);
+									if (!in_array($cellName, $clearedCells)) {
+										while ($targetNode->childNodes->length) {
+											$childNode = $targetNode->childNodes->item(0);
+											$targetNode->removeChild($childNode);
+										}
+										$clearedCells[] = $cellName;
 									}
 								}
 

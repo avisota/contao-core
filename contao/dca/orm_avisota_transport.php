@@ -21,11 +21,11 @@
 $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 (
 	// Entity
-	'entity' => array(
+	'entity'          => array(
 		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_UUID
 	),
 	// Config
-	'config'       => array
+	'config'          => array
 	(
 		'dataContainer'     => 'General',
 		'enableVersioning'  => true,
@@ -38,7 +38,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 		)
 	),
 	// DataContainer
-	'dca_config'   => array
+	'dca_config'      => array
 	(
 		'callback'      => 'GeneralCallbackDefault',
 		'data_provider' => array
@@ -53,7 +53,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 		'view'          => 'GeneralViewDefault'
 	),
 	// List
-	'list'         => array
+	'list'            => array
 	(
 		'sorting'           => array
 		(
@@ -100,24 +100,23 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 		),
 	),
 	// Palettes
-	'palettes'     => array(
+	'palettes'        => array(
 		'__selector__' => array('type', 'swiftUseSmtp')
 	),
 	// Meta Palettes
-	'metapalettes' => array
+	'metapalettes'    => array
 	(
 		'default'          => array(
 			'transport' => array('type')
 		),
 		'swift'            => array(
 			'transport' => array('title', 'alias', 'type'),
-			'sender'    => array('sender', 'senderName'),
-			'reply'     => array('replyTo', 'replyToName'),
+			'contact'   => array('fromAddress', 'fromName', 'setSender', 'setReplyTo'),
 			'swift'     => array('swiftUseSmtp')
 		),
 		'swiftswiftSmtpOn' => array(
 			'transport' => array('title', 'alias', 'type'),
-			'sender'    => array('sender', 'senderName'),
+			'contact'   => array('fromAddress', 'fromName', 'setSender', 'setReplyTo'),
 			'swift'     => array(
 				'swiftUseSmtp',
 				'swiftSmtpHost',
@@ -127,29 +126,33 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'swiftSmtpPort'
 			)
 		),
-		'service'            => array(
+		'service'          => array(
 			'transport' => array('title', 'alias', 'type'),
 			'service'   => array('serviceName')
 		),
 	),
+	'metasubpalettes' => array(
+		'setSender'  => array('senderAddress', 'senderName'),
+		'setReplyTo' => array('replyToAddress', 'replyToName'),
+	),
 	// Fields
-	'fields'       => array
+	'fields'          => array
 	(
-		'id' => array(
+		'id'            => array(
 			'field' => array(
-				'id' => true,
-				'type' => 'string',
-				'length' => '36',
+				'id'      => true,
+				'type'    => 'string',
+				'length'  => '36',
 				'options' => array('fixed' => true),
 			)
 		),
-		'createdAt'                                 => array(
+		'createdAt'     => array(
 			'field' => array(
 				'type'          => 'datetime',
 				'timestampable' => array('on' => 'create')
 			)
 		),
-		'updatedAt'                                => array(
+		'updatedAt'     => array(
 			'field' => array(
 				'type'          => 'datetime',
 				'timestampable' => array('on' => 'update')
@@ -178,13 +181,13 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'tl_class'  => 'w50'
 			)
 		),
-		'alias'                                     => array
+		'alias'         => array
 		(
-			'label'         => &$GLOBALS['TL_LANG']['orm_avisota_transport']['alias'],
-			'exclude'       => true,
-			'search'        => true,
-			'inputType'     => 'text',
-			'eval'          => array(
+			'label'           => &$GLOBALS['TL_LANG']['orm_avisota_transport']['alias'],
+			'exclude'         => true,
+			'search'          => true,
+			'inputType'       => 'text',
+			'eval'            => array(
 				'rgxp'              => 'alnum',
 				'unique'            => true,
 				'spaceToUnderscore' => true,
@@ -196,9 +199,9 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				array('Contao\Doctrine\ORM\Helper', 'generateAlias')
 			)
 		),
-		'sender'        => array
+		'fromAddress'          => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_transport']['sender'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_transport']['fromAddress'],
 			'exclude'   => true,
 			'search'    => true,
 			'filter'    => true,
@@ -207,10 +210,47 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'rgxp'           => 'email',
 				'maxlength'      => 128,
 				'decodeEntities' => true,
+				'mandatory'      => true,
 				'tl_class'       => 'w50'
 			),
-			'field' => array(
+			'field'     => array(),
+		),
+		'fromName'      => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_transport']['fromName'],
+			'exclude'   => true,
+			'search'    => true,
+			'sorting'   => true,
+			'flag'      => 11,
+			'inputType' => 'text',
+			'eval'      => array(
+				'decodeEntities' => true,
+				'maxlength'      => 128,
+				'tl_class'       => 'w50'
 			),
+			'field'     => array(),
+		),
+		'setSender'     => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_transport']['setSender'],
+			'inputType' => 'checkbox',
+			'eval'      => array('tl_class' => 'clr m12', 'submitOnChange' => true)
+		),
+		'senderAddress'        => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_transport']['senderAddress'],
+			'exclude'   => true,
+			'search'    => true,
+			'filter'    => true,
+			'inputType' => 'text',
+			'eval'      => array(
+				'rgxp'           => 'email',
+				'maxlength'      => 128,
+				'decodeEntities' => true,
+				'mandatory'      => true,
+				'tl_class'       => 'w50'
+			),
+			'field'     => array(),
 		),
 		'senderName'    => array
 		(
@@ -225,12 +265,17 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'maxlength'      => 128,
 				'tl_class'       => 'w50'
 			),
-			'field' => array(
-			),
+			'field'     => array(),
 		),
-		'replyTo'       => array
+		'setReplyTo'    => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_transport']['replyTo'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_transport']['setReplyTo'],
+			'inputType' => 'checkbox',
+			'eval'      => array('tl_class' => 'clr m12', 'submitOnChange' => true)
+		),
+		'replyToAddress'       => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_transport']['replyToAddress'],
 			'exclude'   => true,
 			'search'    => true,
 			'filter'    => true,
@@ -239,10 +284,10 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'rgxp'           => 'email',
 				'maxlength'      => 128,
 				'decodeEntities' => true,
+				'mandatory'      => true,
 				'tl_class'       => 'w50'
 			),
-			'field' => array(
-			),
+			'field'     => array(),
 		),
 		'replyToName'   => array
 		(
@@ -257,8 +302,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'maxlength'      => 128,
 				'tl_class'       => 'w50'
 			),
-			'field' => array(
-			),
+			'field'     => array(),
 		),
 		// swift mailer
 		'swiftUseSmtp'  => array
@@ -286,8 +330,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'doNotShow' => true,
 				'tl_class'  => 'w50'
 			),
-			'field' => array(
-			),
+			'field'     => array(),
 		),
 		'swiftSmtpUser' => array
 		(
@@ -300,8 +343,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'doNotShow'      => true,
 				'tl_class'       => 'w50'
 			),
-			'field' => array(
-			),
+			'field'     => array(),
 		),
 		'swiftSmtpPass' => array
 		(
@@ -314,8 +356,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'doNotShow'      => true,
 				'tl_class'       => 'w50'
 			),
-			'field' => array(
-			),
+			'field'     => array(),
 		),
 		'swiftSmtpEnc'  => array
 		(
@@ -331,8 +372,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'doNotShow'          => true,
 				'tl_class'           => 'w50'
 			),
-			'field' => array(
-			),
+			'field'     => array(),
 		),
 		'swiftSmtpPort' => array
 		(
@@ -348,7 +388,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'tl_class'  => 'w50'
 			)
 		),
-		'serviceName'         => array
+		'serviceName'   => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_transport']['serviceName'],
 			'inputType' => 'text',
@@ -357,8 +397,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'maxlength' => 255,
 				'tl_class'  => 'w50'
 			),
-			'field' => array(
-			),
+			'field'     => array(),
 		),
 	)
 );

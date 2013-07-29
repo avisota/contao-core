@@ -27,13 +27,17 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 	// Config
 	'config'                => array
 	(
-		'dataContainer'    => 'General',
-		'ctable'           => array('orm_avisota_message'),
-		'switchToEdit'     => true,
-		'enableVersioning' => true,
-		'onload_callback'  => array
+		'dataContainer'     => 'General',
+		'ctable'            => array('orm_avisota_message'),
+		'switchToEdit'      => true,
+		'enableVersioning'  => true,
+		'onload_callback'   => array
 		(
 			array('Avisota\Contao\DataContainer\MessageCategory', 'checkPermission')
+		),
+		'onsubmit_callback' => array
+		(
+			array('Avisota\Contao\Backend', 'regenerateDynamics')
 		)
 	),
 	// DataContainer
@@ -186,7 +190,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 		(
 			'byCategory'          => array('queue'),
 			'byMessageOrCategory' => array('queue')
-		)
+		),
 	),
 	// Fields
 	'fields'                => array
@@ -278,10 +282,10 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 				'mandatory' => true,
 				'tl_class'  => 'w50'
 			),
-			'manyToOne'       => array(
+			'manyToOne'        => array(
 				'targetEntity' => 'Avisota\Contao\Entity\RecipientSource',
 				'cascade'      => array('all'),
-				'joinColumns'    => array(
+				'joinColumns'  => array(
 					array(
 						'name'                 => 'recipientSource',
 						'referencedColumnName' => 'id',

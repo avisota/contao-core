@@ -15,9 +15,12 @@
 
 namespace Avisota\Contao\Entity;
 
+use Avisota\Recipient\RecipientInterface;
 use Contao\Doctrine\ORM\Entity;
 
-abstract class AbstractRecipient extends Entity
+abstract class AbstractRecipient
+	extends Entity
+	implements RecipientInterface
 {
 	/**
 	 * @var string
@@ -35,10 +38,56 @@ abstract class AbstractRecipient extends Entity
 	}
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function getEmail()
+	{
+		return $this->email;
+	}
+
+	/**
 	 * @param string $email
 	 */
 	public function setEmail($email)
 	{
 		$this->email = strtolower($email);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function hasDetails()
+	{
+		return true;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function get($name)
+	{
+		return $this->__get($name);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getDetails()
+	{
+		return $this->toArray();
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getKeys()
+	{
+		$reflectionClass = new \ReflectionClass($this);
+		$properties = $reflectionClass->getProperties();
+		$keys = array();
+		foreach ($properties as $property) {
+			$keys[] = $property->getName();
+		}
+		return $keys;
 	}
 }

@@ -52,45 +52,39 @@ $GLOBALS['BE_MOD'] = array_merge(
 	array_slice($GLOBALS['BE_MOD'], 0, $i),
 	array
 	(
-	'avisota' => array_merge
-	(
-		array(
-			 'avisota_outbox' => array
-			 (
-				 'callback'   => 'AvisotaBackendOutbox',
-				 'icon'       => 'system/modules/avisota/html/outbox.png',
-				 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
-			 )
-		),
-		$dynamicModules,
-		array(
-			 'avisota_newsletter' => array
-			 (
-				 'tables'     => array(
-					 'orm_avisota_message_category',
-					 'orm_avisota_message',
-					 'orm_avisota_message_content',
-					 'orm_avisota_message_create_from_draft'
-				 ),
-				 'send'       => array('Avisota\Contao\Backend\Preview', 'sendMessage'),
-				 'icon'       => 'system/modules/avisota/html/newsletter.png',
-				 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
+	'avisota' => array(
+		 'avisota_outbox' => array
+		 (
+			 'callback'   => 'AvisotaBackendOutbox',
+			 'icon'       => 'system/modules/avisota/html/outbox.png',
+			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
+		 ),
+		 'avisota_newsletter' => array
+		 (
+			 'tables'     => array(
+				 'orm_avisota_message_category',
+				 'orm_avisota_message',
+				 'orm_avisota_message_content',
+				 'orm_avisota_message_create_from_draft'
 			 ),
-			 'avisota_recipients' => array
-			 (
-				 'tables'     => array(
-					 'orm_avisota_recipient',
-					 'orm_avisota_recipient_migrate',
-					 'orm_avisota_recipient_import',
-					 'orm_avisota_recipient_export',
-					 'orm_avisota_recipient_remove',
-					 'orm_avisota_recipient_notify'
-				 ),
-				 'icon'       => 'system/modules/avisota/html/recipients.png',
-				 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css',
-				 'javascript' => 'system/modules/avisota/assets/css/backend.js'
-			 )
-		)
+			 'send'       => array('Avisota\Contao\Backend\Preview', 'sendMessage'),
+			 'icon'       => 'system/modules/avisota/html/newsletter.png',
+			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
+		 ),
+		 'avisota_recipients' => array
+		 (
+			 'tables'     => array(
+				 'orm_avisota_recipient',
+				 'orm_avisota_recipient_migrate',
+				 'orm_avisota_recipient_import',
+				 'orm_avisota_recipient_export',
+				 'orm_avisota_recipient_remove',
+				 'orm_avisota_recipient_notify'
+			 ),
+			 'icon'       => 'system/modules/avisota/html/recipients.png',
+			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css',
+			 'javascript' => 'system/modules/avisota/assets/css/backend.js'
+		 ),
 	)
 	),
 	array_slice($GLOBALS['BE_MOD'], $i)

@@ -66,6 +66,11 @@ class Subscribe extends AbstractRecipientForm
 
 	protected function submit(array $recipientData, array $mailingLists, \TwigFrontendTemplate $template)
 	{
-		return $this->handleSubscribeSubmit($recipientData, $mailingLists);
+		return $this->handleSubscribeSubmit(
+			$recipientData,
+			$mailingLists,
+			$this->avisota_subscribe_mail,
+			$this->avisota_transport
+		);
 	}
 }

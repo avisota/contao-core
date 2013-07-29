@@ -21,11 +21,11 @@
 $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 (
 	// Entity
-	'entity' => array(
+	'entity'          => array(
 		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_UUID
 	),
 	// Config
-	'config'       => array
+	'config'          => array
 	(
 		'dataContainer'     => 'General',
 		'enableVersioning'  => true,
@@ -38,7 +38,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 		)
 	),
 	// DataContainer
-	'dca_config'   => array
+	'dca_config'      => array
 	(
 		'callback'      => 'GeneralCallbackDefault',
 		'data_provider' => array
@@ -53,7 +53,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 		'view'          => 'GeneralViewDefault'
 	),
 	// List
-	'list'         => array
+	'list'            => array
 	(
 		'sorting'           => array
 		(
@@ -100,47 +100,48 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 		),
 	),
 	// Palettes
-	'palettes'     => array(
+	'palettes'        => array(
 		'__selector__' => array('type')
 	),
 	// Meta Palettes
-	'metapalettes' => array
+	'metapalettes'    => array
 	(
-		'default'          => array(
+		'default'        => array(
 			'queue' => array('type'),
 		),
-		'simpleDatabase'          => array(
-			'queue' => array('type', 'title', 'alias'),
-			'send'  => array('allowManualSending', 'scheduledSending')
+		'simpleDatabase' => array(
+			'queue'  => array('type', 'title', 'alias'),
+			'config' => array('simpleDatabaseQueueTable'),
+			'send'   => array('allowManualSending', 'scheduledSending')
 		),
 	),
 	'metasubpalettes' => array(
 		'scheduledSending' => array('sendingTime')
 	),
 	// Fields
-	'fields'       => array
+	'fields'          => array
 	(
-		'id' => array(
+		'id'                       => array(
 			'field' => array(
-				'id' => true,
-				'type' => 'string',
-				'length' => '36',
+				'id'      => true,
+				'type'    => 'string',
+				'length'  => '36',
 				'options' => array('fixed' => true),
 			)
 		),
-		'createdAt'                                 => array(
+		'createdAt'                => array(
 			'field' => array(
 				'type'          => 'datetime',
 				'timestampable' => array('on' => 'create')
 			)
 		),
-		'updatedAt'                                => array(
+		'updatedAt'                => array(
 			'field' => array(
 				'type'          => 'datetime',
 				'timestampable' => array('on' => 'update')
 			)
 		),
-		'type'                                  => array
+		'type'                     => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['type'],
 			'inputType' => 'select',
@@ -153,7 +154,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 				'includeBlankOption' => true,
 			)
 		),
-		'title'         => array
+		'title'                    => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['title'],
 			'inputType' => 'text',
@@ -165,20 +166,20 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 				'tl_class'  => 'w50'
 			)
 		),
-		'alias'                                     => array
+		'alias'                    => array
 		(
-			'label'         => &$GLOBALS['TL_LANG']['orm_avisota_queue']['alias'],
-			'exclude'       => true,
-			'search'        => true,
-			'inputType'     => 'text',
-			'eval'          => array(
+			'label'           => &$GLOBALS['TL_LANG']['orm_avisota_queue']['alias'],
+			'exclude'         => true,
+			'search'          => true,
+			'inputType'       => 'text',
+			'eval'            => array(
 				'rgxp'              => 'alnum',
 				'unique'            => true,
 				'spaceToUnderscore' => true,
 				'maxlength'         => 128,
 				'tl_class'          => 'w50'
 			),
-			'load_callback' => array
+			'load_callback'   => array
 			(
 				array('Avisota\Contao\DataContainer\Queue', 'rememberAlias')
 			),
@@ -187,12 +188,22 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 				array('Contao\Doctrine\ORM\Helper', 'generateAlias')
 			)
 		),
-		'allowManualSending'         => array
+		'simpleDatabaseQueueTable' => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['simpleDatabaseQueueTable'],
+			'inputType' => 'text',
+			'eval'      => array(
+				'mandatory' => true,
+				'maxlength' => 255,
+				'tl_class'  => 'm12 w50'
+			)
+		),
+		'allowManualSending'       => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['allowManualSending'],
 			'inputType' => 'checkbox',
 			'eval'      => array(
-				'tl_class'  => 'm12 w50'
+				'tl_class' => 'm12 w50'
 			)
 		),
 		'scheduledSending'         => array
@@ -201,15 +212,15 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 			'inputType' => 'checkbox',
 			'eval'      => array(
 				'submitOnChange' => true,
-				'tl_class'  => 'clr m12 w50'
+				'tl_class'       => 'clr m12 w50'
 			)
 		),
-		'sendingTime'         => array
+		'sendingTime'              => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['sendingTime'],
 			'inputType' => 'checkbox',
 			'eval'      => array(
-				'tl_class'  => 'clr m12 w50'
+				'tl_class' => 'clr m12 w50'
 			)
 		),
 	)

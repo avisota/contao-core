@@ -67,6 +67,11 @@ class Unsubscribe extends AbstractRecipientForm
 
 	protected function submit(array $recipientData, array $mailingLists, \TwigFrontendTemplate $template)
 	{
-		return $this->handleUnsubscribeSubmit($recipientData, $mailingLists, $template);
+		return $this->handleUnsubscribeSubmit(
+			$recipientData,
+			$mailingLists,
+			$this->avisota_unsubscribe_mail,
+			$this->avisota_transport
+		);
 	}
 }

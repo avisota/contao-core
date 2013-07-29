@@ -314,6 +314,8 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				)
 			),
 			'field'     => array(
+				'type'     => 'serialized',
+				'length'   => 65532,
 				'nullable' => true,
 			),
 		),

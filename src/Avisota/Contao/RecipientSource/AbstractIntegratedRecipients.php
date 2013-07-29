@@ -29,16 +29,6 @@ use Avisota\Recipient\MutableRecipient;
 abstract class AbstractIntegratedRecipients implements RecipientSourceInterface
 {
 	/**
-	 * @var array
-	 */
-	protected $config;
-
-	public function __construct($configData)
-	{
-		$this->config = $configData;
-	}
-
-	/**
 	 * {@inheritdoc}
 	 */
 	public function getRecipients()

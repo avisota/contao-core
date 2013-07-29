@@ -13,13 +13,17 @@
  * @filesource
  */
 
-$GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array('Avisota\Contao\DataContainer\Module', 'onload_callback');
+$GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array(
+	'Avisota\Contao\DataContainer\Module',
+	'onload_callback'
+);
 
 $GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_subscribe']    = array
 (
 	'title'                => array('name', 'headline', 'type'),
 	'avisota_subscription' => array('avisota_show_lists', 'avisota_lists', 'avisota_recipient_fields'),
-	'template'             => array('tableless', 'avisota_template_subscribe'),
+	'frontend'             => array('tableless', 'avisota_template_subscribe'),
+	'message'              => array('avisota_subscribe_mail', 'avisota_transport'),
 	'protected'            => array(':hide', 'protected'),
 	'expert'               => array(
 		':hide',
@@ -35,6 +39,7 @@ $GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_unsubscribe']  = array
 	'title'                => array('name', 'headline', 'type'),
 	'avisota_subscription' => array('avisota_show_lists', 'avisota_lists'),
 	'template'             => array('tableless', 'avisota_template_unsubscribe'),
+	'message'              => array('avisota_unsubscribe_mail', 'avisota_transport'),
 	'protected'            => array(':hide', 'protected'),
 	'expert'               => array(
 		':hide',
@@ -49,7 +54,11 @@ $GLOBALS['TL_DCA']['tl_module']['metapalettes']['avisota_subscription'] = array
 (
 	'title'                => array('name', 'headline', 'type'),
 	'avisota_subscription' => array('avisota_show_lists', 'avisota_lists', 'avisota_recipient_fields'),
-	'template'             => array('tableless', 'avisota_template_subscription'),
+	'template'             => array(
+		'tableless',
+		'avisota_template_subscription',
+	),
+	'message'              => array('avisota_subscribe_mail', 'avisota_unsubscribe_mail', 'avisota_transport'),
 	'protected'            => array(':hide', 'protected'),
 	'expert'               => array(
 		':hide',
@@ -100,6 +109,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_recipient_fields'] = array
 	'eval'             => array('multiple' => true)
 );
 
+/*
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_subscription_sender_name'] = array
 (
 	'exclude'   => true,
@@ -107,7 +117,9 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_subscription_sender_name'] = 
 	'inputType' => 'text',
 	'eval'      => array('tl_class' => 'w50')
 );
+*/
 
+/*
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_subscription_sender'] = array
 (
 	'exclude'   => true,
@@ -115,6 +127,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_subscription_sender'] = array
 	'inputType' => 'text',
 	'eval'      => array('rgxp' => 'email', 'tl_class' => 'w50')
 );
+*/
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_show_lists'] = array
 (
@@ -131,6 +144,45 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_lists'] = array
 	'inputType'        => 'checkbox',
 	'options_callback' => array('Avisota\Contao\DataContainer\Module', 'getLists'),
 	'eval'             => array('multiple' => true)
+);
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_subscribe_mail'] = array
+(
+	'exclude'          => true,
+	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_subscribe_mail'],
+	'inputType'        => 'select',
+	'options_callback' => array('Avisota\Contao\DataContainer\Settings', 'getBoilerplateMessages'),
+	'eval'             => array(
+		'mandatory'          => true,
+		'includeBlankOption' => true,
+		'tl_class'           => 'w50 clr'
+	)
+);
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_unsubscribe_mail'] = array
+(
+	'exclude'          => true,
+	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_unsubscribe_mail'],
+	'inputType'        => 'select',
+	'options_callback' => array('Avisota\Contao\DataContainer\Settings', 'getBoilerplateMessages'),
+	'eval'             => array(
+		'mandatory'          => true,
+		'includeBlankOption' => true,
+		'tl_class'           => 'w50 clr'
+	)
+);
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['avisota_transport'] = array
+(
+	'exclude'          => true,
+	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_transport'],
+	'inputType'        => 'select',
+	'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getTransportOptions'),
+	'eval'             => array(
+		'mandatory'          => true,
+		'includeBlankOption' => true,
+		'tl_class'           => 'w50 clr'
+	)
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_subscribe_confirmation_page'] = array
@@ -211,6 +263,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_view_page'] = array
 	'eval'      => array('fieldType' => 'radio')
 );
 
+/*
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_selectable_lists'] = array
 (
 	'exclude'          => true,
@@ -219,7 +272,9 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_selectable_lists'] = array
 	'options_callback' => array('Avisota\Contao\DataContainer\Module', 'getLists'),
 	'eval'             => array('multiple' => true)
 );
+*/
 
+/*
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_confirm_on_activate'] = array
 (
 	'exclude'   => true,
@@ -227,6 +282,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_confirm_on_activate'] = array
 	'inputType' => 'checkbox',
 	'eval'      => array()
 );
+*/
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_form_target'] = array
 (

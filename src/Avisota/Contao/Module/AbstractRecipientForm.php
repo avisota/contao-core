@@ -17,7 +17,11 @@ namespace Avisota\Contao\Module;
 
 use Avisota\Contao\Entity\MailingList;
 use Avisota\Contao\Entity\Recipient;
+use Avisota\Contao\Message\PreRenderedMessageTemplateInterface;
+use Avisota\Contao\Message\Renderer\MessagePreRendererInterface;
 use Avisota\Contao\SubscriptionManager;
+use Avisota\Recipient\MutableRecipient;
+use Avisota\Transport\TransportInterface;
 use Contao\Doctrine\ORM\EntityHelper;
 
 /**
@@ -78,8 +82,12 @@ abstract class AbstractRecipientForm extends \TwigModule
 		return parent::generate();
 	}
 
-	protected function handleSubscribeSubmit(array $recipientData, array $mailingLists)
-	{
+	protected function handleSubscribeSubmit(
+		array $recipientData,
+		array $mailingLists,
+		$mailBoilerplateId,
+		$transportId
+	) {
 		$subscriptionManager = new SubscriptionManager();
 		$subscriptions       = $subscriptionManager->subscribe(
 			$recipientData,
@@ -88,6 +96,34 @@ abstract class AbstractRecipientForm extends \TwigModule
 		);
 
 		if (count($subscriptions)) {
+			$this->loadLanguageFile('avisota_subscription');
+
+			$tokens = array();
+			foreach ($subscriptions as $subscription) {
+				$tokens[] = $subscription->getToken();
+			}
+
+			$parameters = array(
+				'email' => $recipientData['email'],
+				'token' => implode(',', $tokens),
+			);
+
+			$url = \Environment::getInstance()->request;
+			$url .= (strpos($url, '?') === false ? '?' : '&');
+			$url .= http_build_query($parameters);
+
+			$subscription = $subscriptions[0];
+			$recipient    = $subscription->getRecipient();
+
+			// TODO
+			$newsletterData         = array();
+			$newsletterData['link'] = array(
+				'url'  => $url,
+				'text' => $GLOBALS['TL_LANG']['avisota_subscription']['confirmSubscription'],
+			);
+
+			$this->sendMessage($recipient, $mailBoilerplateId, $transportId, $newsletterData);
+
 			return array('confirm', $GLOBALS['TL_LANG']['avisota_subscription']['subscribed'], true);
 		}
 
@@ -124,7 +160,9 @@ abstract class AbstractRecipientForm extends \TwigModule
 
 	protected function handleUnsubscribeSubmit(
 		array $recipientData,
-		array $mailingLists
+		array $mailingLists,
+		$mailBoilerplateId,
+		$transportId
 	) {
 		$recipientRepository = EntityHelper::getRepository('Avisota\Contao:Recipient');
 
@@ -136,17 +174,40 @@ abstract class AbstractRecipientForm extends \TwigModule
 		}
 
 		$subscriptionManager = new SubscriptionManager();
-		$subscriptions = $subscriptionManager->unsubscribe(
+		$subscriptions       = $subscriptionManager->unsubscribe(
 			$recipient,
 			$mailingLists
 		);
 
-
 		if (count($subscriptions)) {
+			// TODO
+			$newsletterData = array();
+			$this->sendMessage($recipient, $mailBoilerplateId, $transportId, $newsletterData);
+
 			return array('confirm', $GLOBALS['TL_LANG']['avisota_subscription']['unsubscribed'], true);
 		}
 
 		return array('notfound', $GLOBALS['TL_LANG']['avisota_subscription']['notSubscribed'], false);
+	}
+
+	protected function sendMessage($recipient, $mailBoilerplateId, $transportId, $newsletterData)
+	{
+		$messageRepository = EntityHelper::getRepository('Avisota\Contao:Message');
+		$messageEntity     = $messageRepository->find($mailBoilerplateId);
+
+		if (!$messageEntity) {
+			throw new \RuntimeException('Could not find message id ' . $mailBoilerplateId);
+		}
+
+		/** @var MessagePreRendererInterface $renderer */
+		$renderer           = $GLOBALS['container']['avisota.renderer'];
+		$preRenderedMessage = $renderer->renderMessage($messageEntity);
+		$message            = $preRenderedMessage->render($recipient, $newsletterData);
+
+		/** @var TransportInterface $transport */
+		$transport = $GLOBALS['container']['avisota.transport.' . $transportId];
+
+		$transport->send($message);
 	}
 
 	/**
@@ -332,7 +393,7 @@ abstract class AbstractRecipientForm extends \TwigModule
 			if ($lists && count($lists)) {
 				$this->loadLanguageFile('avisota_subscription');
 				$template->messageClass = 'confirm_subscription';
-				$template->message      = $GLOBALS['TL_LANG']['avisota_subscription']['confirmSubscription'];
+				$template->message      = $GLOBALS['TL_LANG']['avisota_subscription']['subscribeConfirmation'];
 			}
 		}
 

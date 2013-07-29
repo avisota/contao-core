@@ -57,7 +57,7 @@ $GLOBALS['TL_LANG']['orm_avisota_message_category']['queue']             = array
 	'Queue',
 	'Please chose the preselected queue.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_message_category']['boilerplates']        = array(
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['boilerplates']      = array(
 	'Contains boilerplates',
 	'This category contain boilerplate mailings.'
 );
@@ -93,7 +93,7 @@ $GLOBALS['TL_LANG']['orm_avisota_message_category']['expert_legend']     = 'Expe
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['orm_avisota_message_category']['byCategory']             = 'only in category';
+$GLOBALS['TL_LANG']['orm_avisota_message_category']['byCategory']          = 'only in category';
 $GLOBALS['TL_LANG']['orm_avisota_message_category']['byMessageOrCategory'] = 'preselected in category, overwriteable in newsletter';
 $GLOBALS['TL_LANG']['orm_avisota_message_category']['byMessage']           = 'only in newsletter';
 

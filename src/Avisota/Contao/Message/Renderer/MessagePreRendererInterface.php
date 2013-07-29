@@ -16,7 +16,7 @@
 namespace Avisota\Contao\Message\Renderer;
 
 use Avisota\Contao\Entity\Message;
-use Avisota\Contao\Message\Renderer\PreRenderedMessageTemplateInterface;
+use Avisota\Contao\Message\PreRenderedMessageTemplateInterface;
 use Avisota\Recipient\RecipientInterface;
 
 interface MessagePreRendererInterface extends MessageContentPreRendererInterface

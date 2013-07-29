@@ -623,7 +623,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 		'field'     => array(
 			'nullable' => true,
 			'type'     => 'serialized',
-			'length'   => 65532
+			'length'   => 65532,
 		)
 	),
 	'articleAlias'    => array

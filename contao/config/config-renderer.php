@@ -15,6 +15,12 @@
 
 
 /**
+ * Transport renderer
+ */
+$GLOBALS['AVISOTA_TRANSPORT_RENDERER']['native'] = 'Avisota\Renderer\NativeMessageRenderer';
+
+
+/**
  * Message renderer
  */
 $GLOBALS['AVISOTA_MESSAGE_RENDERER']['mailChimp'] = 'Avisota\Contao\Message\Renderer\MailChimp\MessagePreRenderer';

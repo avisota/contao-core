@@ -17,31 +17,47 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['orm_avisota_transport']['type']        = array(
+$GLOBALS['TL_LANG']['orm_avisota_transport']['type']           = array(
 	'Transport type',
 	'Please chose the transport type.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_transport']['title']       = array(
+$GLOBALS['TL_LANG']['orm_avisota_transport']['title']          = array(
 	'Title',
 	'Please enter the transport module title.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_transport']['alias']       = array(
+$GLOBALS['TL_LANG']['orm_avisota_transport']['alias']          = array(
 	'Alias',
 	'The transport module alias is a unique reference to the transport module which can be used instead of its ID.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_transport']['sender']      = array(
+$GLOBALS['TL_LANG']['orm_avisota_transport']['fromAddress']    = array(
+	'From address',
+	'Please enter the from address.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_transport']['fromName']       = array(
+	'From name',
+	'Please enter the from name.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_transport']['setSender']      = array(
+	'Set sender address',
+	'Set the sender for this newsletter.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_transport']['senderAddress']  = array(
 	'Sender address',
 	'Please enter the sender address.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_transport']['senderName']  = array(
+$GLOBALS['TL_LANG']['orm_avisota_transport']['senderName']     = array(
 	'Sender name',
 	'Please enter the sender name.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_transport']['replyTo']     = array(
+$GLOBALS['TL_LANG']['orm_avisota_transport']['setReplyTo']     = array(
+	'Set reply address',
+	'Set the reply to for this newsletter.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_transport']['replyToAddress'] = array(
 	'Reply address',
 	'Please enter the reply address.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_transport']['replyToName'] = array(
+$GLOBALS['TL_LANG']['orm_avisota_transport']['replyToName']    = array(
 	'Reply name',
 	'Please enter the reply name.'
 );
@@ -70,7 +86,7 @@ $GLOBALS['TL_LANG']['orm_avisota_transport']['swiftSmtpPort'] = array(
 	'SMTP port number',
 	'Please enter the port number of the SMTP server.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_transport']['serviceName'] = array(
+$GLOBALS['TL_LANG']['orm_avisota_transport']['serviceName']   = array(
 	'Service name',
 	'Please enter the service name.'
 );
@@ -80,10 +96,9 @@ $GLOBALS['TL_LANG']['orm_avisota_transport']['serviceName'] = array(
  * Legends
  */
 $GLOBALS['TL_LANG']['orm_avisota_transport']['transport_legend'] = 'Transport module';
-$GLOBALS['TL_LANG']['orm_avisota_transport']['sender_legend']    = 'Sender';
-$GLOBALS['TL_LANG']['orm_avisota_transport']['reply_legend']     = 'Reply';
+$GLOBALS['TL_LANG']['orm_avisota_transport']['contact_legend']   = 'From, Sender and Reply to settings';
 $GLOBALS['TL_LANG']['orm_avisota_transport']['swift_legend']     = 'Swift PHP Mailer';
-$GLOBALS['TL_LANG']['orm_avisota_transport']['service_legend']     = 'Service';
+$GLOBALS['TL_LANG']['orm_avisota_transport']['service_legend']   = 'Service';
 
 
 /**
@@ -93,7 +108,7 @@ $GLOBALS['TL_LANG']['orm_avisota_transport']['swift']                   = 'Swift
 $GLOBALS['TL_LANG']['orm_avisota_transport']['swiftSmtpSystemSettings'] = 'Use system settings';
 $GLOBALS['TL_LANG']['orm_avisota_transport']['swiftSmtpOn']             = 'Send e-mails via SMTP';
 $GLOBALS['TL_LANG']['orm_avisota_transport']['swiftSmtpOff']            = 'Send e-mails via PHP';
-$GLOBALS['TL_LANG']['orm_avisota_transport']['service']                   = 'Custom service';
+$GLOBALS['TL_LANG']['orm_avisota_transport']['service']                 = 'Custom service';
 
 
 /**

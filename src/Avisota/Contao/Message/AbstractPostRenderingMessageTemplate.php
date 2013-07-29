@@ -71,16 +71,13 @@ abstract class AbstractPostRenderingMessageTemplate implements PreRenderedMessag
 	/**
 	 * {@inheritdoc}
 	 */
-	public function render(RecipientInterface $recipient, array $additionalData = array())
+	public function render(RecipientInterface $recipient = null, array $additionalData = array())
 	{
 		$content = $this->parseContent($recipient, $additionalData);
 
 		$swiftMessage = new \Swift_Message();
 
-		$name = $recipient->get('name');
-		if (empty($name)) {
-			$name = trim($recipient->get('firstname') . ' ' . $recipient->get('lastname'));
-		}
+		$name = trim($recipient->get('firstname') . ' ' . $recipient->get('lastname'));
 
 		$swiftMessage->setTo($recipient->getEmail(), $name);
 		$swiftMessage->setSubject($this->message->getSubject());

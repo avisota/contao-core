@@ -94,13 +94,13 @@ abstract class AbstractMessage extends Entity implements AliasableInterface
 		return $this->callGetterCallbacks('layout', $layout);
 	}
 
-    /**
-     * Get transport
-     *
-     * @return Transport
-     */
-    public function getTransport()
-    {
+	/**
+	 * Get transport
+	 *
+	 * @return Transport
+	 */
+	public function getTransport()
+	{
 		$category = $this->getCategory();
 
 		if ($category->getBoilerplates() ||
@@ -122,7 +122,37 @@ abstract class AbstractMessage extends Entity implements AliasableInterface
 		}
 
 		return $this->callGetterCallbacks('transport', $transport);
-    }
+	}
+
+	/**
+	 * Get queue
+	 *
+	 * @return Queue
+	 */
+	public function getQueue()
+	{
+		$category = $this->getCategory();
+
+		if ($category->getBoilerplates() ||
+			$category->getQueueMode() == 'byMessage'
+		) {
+			$queue = $this->queue;
+		}
+		else if ($category->getQueueMode() == 'byMessageOrCategory') {
+			$queue = $this->queue;
+			if (!$queue) {
+				$queue = $category->getQueue();
+			}
+		}
+		else if ($category->getQueueMode() == 'byCategory') {
+			$queue = $category->getQueue();
+		}
+		else {
+			throw new \RuntimeException('Could not find queue for message ' . $this->getId());
+		}
+
+		return $this->callGetterCallbacks('queue', $queue);
+	}
 
 	/**
 	 * {@inheritdoc}

@@ -15,6 +15,10 @@
 
 namespace Avisota\Contao;
 
+use Avisota\Contao\Entity\MessageCategory;
+use Contao\Doctrine\ORM\EntityHelper;
+use Doctrine\ORM\EntityRepository;
+
 /**
  * Class Backend
  *
@@ -48,23 +52,60 @@ class Backend extends \Controller
 
 	public function regenerateDynamics()
 	{
-		$database = \Database::getInstance();
 		$dynamics = array();
 
-		foreach (
-			array(
-				'orm_avisota_mailing_list',
-				'orm_avisota_recipient_source',
-				'orm_avisota_theme',
-				'orm_avisota_transport',
-				'orm_avisota_queue'
-			) as $table
-		) {
-			$key = substr($table, 11);
-			$resultSet = $database->query('SELECT * FROM ' . $table);
-			while ($resultSet->next()) {
-				$dynamics[$key][$resultSet->id] = $resultSet->alias;
+		// $mailingListRepository     = EntityHelper::getRepository('Avisota\Contao:MailingList');
+		$recipientSourceRepository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
+		// $themeRepository           = EntityHelper::getRepository('Avisota\Contao:Theme');
+		$transportRepository       = EntityHelper::getRepository('Avisota\Contao:Transport');
+		$queueRepository           = EntityHelper::getRepository('Avisota\Contao:Queue');
+
+		/** @var EntityRepository[] $repositories */
+		$repositories = array(
+			// $mailingListRepository,
+			$queueRepository,
+			$recipientSourceRepository,
+			// $themeRepository,
+			$transportRepository,
+		);
+
+		foreach ($repositories as $repository) {
+			$entityName = $repository->getClassName();
+			$entityName = str_replace('Avisota\\Contao\\Entity\\', '', $entityName);
+			$entityName = lcfirst($entityName);
+			$entities = $repository->findAll();
+
+			$dynamics[$entityName] = array();
+			foreach ($entities as $entity) {
+				$dynamics[$entityName][] = array(
+					'id'    => $entity->id(),
+					'alias' => $entity->getAlias(),
+					'title' => $entity->getTitle(),
+				);
 			}
+		}
+
+		$queryBuilder = EntityHelper::getEntityManager()
+			->createQueryBuilder();
+		$query        = $queryBuilder
+			->select('c')
+			->from('Avisota\Contao:MessageCategory', 'c')
+			->where('c.showInMenu=:showInMenu')
+			->andWhere('c.boilerplates=:boilerplates')
+			->setParameter(':showInMenu', true)
+			->setParameter(':boilerplates', false)
+			->orderBy('c.title')
+			->getQuery();
+		$categories   = $query->getResult();
+
+		$dynamics['category'] = array();
+		/** @var MessageCategory $category */
+		foreach ($categories as $category) {
+			$dynamics['category'][] = array(
+				'id'    => $category->id(),
+				'label' => $category->getTitle(),
+				'icon'  => $category->getUseCustomMenuIcon() ? $category->getMenuIcon() : false
+			);
 		}
 
 		$array = var_export($dynamics, true);

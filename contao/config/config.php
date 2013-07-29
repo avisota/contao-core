@@ -105,21 +105,21 @@ $GLOBALS['BE_FFL']['newschooser']  = 'WidgetNewschooser';
 /**
  * Recipient sources
  */
-$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['integrated']                 = 'Avisota\Contao\RecipientSource\IntegratedRecipients';
-$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['integrated_by_mailing_list'] = 'Avisota\Contao\RecipientSource\IntegratedRecipientsByMailingList';
-$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['csv_file']                   = 'Avisota\RecipientSource\CSVFile';
+$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['integrated']                 = 'Avisota\Contao\RecipientSource\IntegratedRecipientsFactory';
+$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['integrated_by_mailing_list'] = 'Avisota\Contao\RecipientSource\IntegratedRecipientsByMailingListFactory';
+// $GLOBALS['AVISOTA_RECIPIENT_SOURCE']['csv_file']                   = 'Avisota\Contao\RecipientSource\CSVFileFactory';
 
 
 /**
  * Queues
  */
-$GLOBALS['AVISOTA_QUEUE']['simpleDatabase'] = 'Avisota\Queue\SimpleDatabaseQueue';
+$GLOBALS['AVISOTA_QUEUE']['simpleDatabase'] = 'Avisota\Contao\Queue\SimpleDatabaseQueueFactory';
 
 /**
  * Transport modules
  */
-$GLOBALS['AVISOTA_TRANSPORT']['swift']   = 'Avisota\Transport\Swift';
-$GLOBALS['AVISOTA_TRANSPORT']['service'] = 'Avisota\Transport\Service';
+$GLOBALS['AVISOTA_TRANSPORT']['swift']   = 'Avisota\Contao\Transport\SwiftTransportFactory';
+$GLOBALS['AVISOTA_TRANSPORT']['service'] = 'Avisota\Contao\Transport\ServiceTransportFactory';
 
 
 /**
@@ -135,8 +135,28 @@ $GLOBALS['AVISOTA_TRANSPORT']['service'] = 'Avisota\Transport\Service';
 //$GLOBALS['TL_HOOKS']['avisotaMailingListLabel'][] = array('AvisotaBackend', 'hookAvisotaMailingListLabel');
 //$GLOBALS['TL_HOOKS']['getUserNavigation'][]       = array('AvisotaBackend', 'hookGetUserNavigation');
 //$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('orm_avisota_message_content', 'myLoadDataContainer');
-$GLOBALS['TL_HOOKS']['nestedMenuPreContent'][]  = array('Avisota\Contao\Backend\NestedMenu', 'hookNestedMenuPreContent');
-$GLOBALS['TL_HOOKS']['nestedMenuPostContent'][] = array('Avisota\Contao\Backend\NestedMenu', 'hookNestedMenuPostContent');
+$GLOBALS['TL_HOOKS']['getUserNavigation']['avisota-custom-menu']     = array(
+	'Avisota\Contao\Backend\CustomMenu',
+	'hookGetUserNavigation'
+);
+$GLOBALS['TL_HOOKS']['loadLanguageFile']['avisota-custom-menu']      = array(
+	'Avisota\Contao\Backend\CustomMenu',
+	'hookLoadLanguageFile'
+);
+$GLOBALS['TL_HOOKS']['nestedMenuPreContent']['avisota-nested-menu']  = array(
+	'Avisota\Contao\Backend\NestedMenu',
+	'hookNestedMenuPreContent'
+);
+$GLOBALS['TL_HOOKS']['nestedMenuPostContent']['avisota-nested-menu'] = array(
+	'Avisota\Contao\Backend\NestedMenu',
+	'hookNestedMenuPostContent'
+);
+
+
+/**
+ * Lazy hooks
+ */
+\Avisota\Contao\Backend\CustomMenu::lazyInit();
 
 
 /**

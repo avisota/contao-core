@@ -13,7 +13,7 @@
  * @filesource
  */
 
-namespace Avisota\Contao\Business\Salutation;
+namespace Avisota\Contao\Salutation;
 
 use Avisota\Contao\Entity\Salutation;
 use Avisota\Recipient\RecipientInterface;

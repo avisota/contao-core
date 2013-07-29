@@ -192,7 +192,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 			'newsletter' => array('subject', 'alias', 'language'),
 			'meta'       => array('description', 'keywords'),
 			'recipient'  => array(),
-			'layout'      => array(),
+			'layout'     => array(),
 			'transport'  => array(),
 			'attachment' => array('addFile'),
 		),
@@ -201,7 +201,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 	'metasubpalettes' => array
 	(
 		'setRecipients' => array('recipients'),
-		'setLayout'      => array('layout'),
+		'setLayout'     => array('layout'),
 		'setTransport'  => array('transport'),
 		'addFile'       => array('files')
 	),
@@ -348,10 +348,10 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				'mandatory' => true,
 				'tl_class'  => 'w50'
 			),
-			'manyToOne'       => array(
+			'manyToOne'        => array(
 				'targetEntity' => 'Avisota\Contao\Entity\RecipientSource',
 				'cascade'      => array('all'),
-				'joinColumns'    => array(
+				'joinColumns'  => array(
 					array(
 						'name'                 => 'recipientSource',
 						'referencedColumnName' => 'id',
@@ -359,13 +359,13 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				),
 			),
 		),
-		'setLayout'      => array
+		'setLayout'     => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['setLayout'],
 			'inputType' => 'checkbox',
 			'eval'      => array('tl_class' => 'clr m12 w50', 'submitOnChange' => true)
 		),
-		'layout'         => array
+		'layout'        => array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_message']['layout'],
 			'inputType'        => 'select',
@@ -430,8 +430,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				'filesOnly' => true,
 				'mandatory' => true
 			),
-			'field'     => array(
-			),
+			'field'     => array(),
 		),
 		'sendOn'        => array
 		(
