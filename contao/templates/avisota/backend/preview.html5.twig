@@ -4,8 +4,6 @@
 		   accesskey="b">{{ _lang.MSC.backBT }}</a>
 	</div>
 
-	{{ messages() }}
-
 	<h2 class="sub_headline">{{ _lang.avisota_message_preview.headline }}</h2>
 
 	<div class="tl_listing_container parent_view">
@@ -46,11 +44,13 @@
 		</div>
 	</div>
 
+	{{ messages() }}
+
 	<form action="system/modules/avisota/web/preview.php" id="avisota_message_preview" target="preview" class="tl_form"
 		  method="get">
 		<input name="id" value="{{ message.id }}" type="hidden">
 
-		<div class="tl_formbody_edit preview">
+		<div class="tl_listing_container preview">
 			<iframe class="avisota_message_preview" id="preview" name="preview" scrolling="auto" width="100%"
 					height="600"
 					src="system/modules/avisota/web/preview.php?id={{ message.id }}"></iframe>
@@ -63,8 +63,8 @@
 		</div>
 	</form>
 
-	<form action="{{ _env.request }}" id="avisota_message_schedule" class="tl_form"
-		  method="post">
+	<form action="system/modules/avisota/web/send.php" id="avisota_message_schedule" class="tl_form"
+		  method="get">
 		<input name="id" value="{{ message.id }}" type="hidden">
 		<input name="REQUEST_TOKEN" value="{{ REQUEST_TOKEN }}" type="hidden">
 

@@ -58,6 +58,11 @@ $GLOBALS['TL_LANG']['avisota_message_preview']['preview']           = 'Send prev
 $GLOBALS['TL_LANG']['avisota_message_preview']['schedule']           = 'Schedule sending';
 
 
+/**
+ * Messages
+ */
+$GLOBALS['TL_LANG']['avisota_message_preview']['previewSend'] = 'Preview send to %s';
+
 
 /*
 $GLOBALS['TL_LANG']['avisota_message_preview']['from']              = 'Absender';
