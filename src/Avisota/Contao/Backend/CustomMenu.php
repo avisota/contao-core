@@ -100,7 +100,13 @@ class CustomMenu extends \BackendModule
 					}
 				}
 				else if ($table == 'orm_avisota_message_content') {
-					if ($input->get('act')) {
+					$act = $input->get('act');
+					if ($act == 'create') {
+						$messageRepository = EntityHelper::getRepository('Avisota\Contao:Message');
+						$message = $messageRepository->find($input->get('pid'));
+						$id = $message->getCategory()->id();
+					}
+					else if ($act) {
 						$contentRepository = EntityHelper::getRepository('Avisota\Contao:MessageContent');
 						$content = $contentRepository->find($id);
 						$id = $content->getMessage()->getCategory()->id();
