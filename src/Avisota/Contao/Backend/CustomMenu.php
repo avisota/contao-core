@@ -53,8 +53,8 @@ class CustomMenu extends \BackendModule
 	static public function init()
 	{
 		$beModules = array();
-		if (isset($GLOBALS['AVISOTA_DYNAMICS']['categories']) && is_array($GLOBALS['AVISOTA_DYNAMICS']['categories'])) {
-			foreach ($GLOBALS['AVISOTA_DYNAMICS']['categories'] as $category) {
+		if (isset($GLOBALS['AVISOTA_DYNAMICS']['category']) && is_array($GLOBALS['AVISOTA_DYNAMICS']['category'])) {
+			foreach ($GLOBALS['AVISOTA_DYNAMICS']['category'] as $category) {
 				$beModules['avisota_category_' . $category['id']] = array(
 					'callback' => 'Avisota\Contao\Backend\CustomMenu',
 					'icon'     => $category['icon'] ?: 'system/modules/avisota/html/newsletter.png',
@@ -73,8 +73,8 @@ class CustomMenu extends \BackendModule
 
 	static public function hookLoadLanguageFile($file)
 	{
-		if (isset($GLOBALS['AVISOTA_DYNAMICS']['categories']) && is_array($GLOBALS['AVISOTA_DYNAMICS']['categories']) && $file == 'modules') {
-			foreach ($GLOBALS['AVISOTA_DYNAMICS']['categories'] as $category) {
+		if (isset($GLOBALS['AVISOTA_DYNAMICS']['category']) && is_array($GLOBALS['AVISOTA_DYNAMICS']['category']) && $file == 'modules') {
+			foreach ($GLOBALS['AVISOTA_DYNAMICS']['category'] as $category) {
 				$GLOBALS['TL_LANG']['MOD']['avisota_category_' . $category['id']] = $category['label'];
 			}
 		}
