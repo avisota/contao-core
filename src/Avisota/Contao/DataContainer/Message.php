@@ -307,7 +307,7 @@ class Message extends \Controller
 		$newsletterCategory = $newsletterCategoryRepository->find($dc->id);
 
 		$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['recipients'][0];
-		if ($newsletterCategory->getRecipientsMode() != 'byMessage') {
+		if (!$newsletterCategory->getBoilerplates() && $newsletterCategory->getRecipientsMode() != 'byMessage') {
 			$fallback  = $newsletterCategory->getRecipientsMode() == 'byMessageOrCategory';
 
 			/** @var RecipientSource $recipientSource */
@@ -329,7 +329,7 @@ class Message extends \Controller
 		}
 
 		$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['layout'][0];
-		if ($newsletterCategory->getLayoutMode() != 'byMessage') {
+		if (!$newsletterCategory->getBoilerplates() && $newsletterCategory->getLayoutMode() != 'byMessage') {
 			$add[$key] = $newsletterCategory
 				->getLayout()
 				->getTitle();
@@ -342,7 +342,7 @@ class Message extends \Controller
 		}
 
 		$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['transport'][0];
-		if ($newsletterCategory->getTransportMode() != 'byMessage') {
+		if (!$newsletterCategory->getBoilerplates() && $newsletterCategory->getTransportMode() != 'byMessage') {
 			$add[$key] = $newsletterCategory
 				->getTransport()
 				->getTitle();
