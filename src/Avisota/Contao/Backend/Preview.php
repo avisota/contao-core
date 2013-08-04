@@ -26,6 +26,9 @@ class Preview extends \Controller
 	 */
 	public function sendMessage($dc, $table)
 	{
+		$this->loadLanguageFile('avisota_message_preview');
+		$this->loadLanguageFile('orm_avisota_message');
+
 		$input             = \Input::getInstance();
 		$messageRepository = EntityHelper::getRepository('Avisota\Contao:Message');
 
@@ -43,18 +46,17 @@ class Preview extends \Controller
 			);
 		}
 
-		$this->loadLanguageFile('avisota_message_preview');
-		$this->loadLanguageFile('orm_avisota_message');
-
-		$database = \Database::getInstance();
-		$users    = $database
-			->query('SELECT * FROM tl_user ORDER BY name')
-			->fetchAllAssoc();
+		$modules = new \StringBuilder();
+		/** @var \Avisota\Contao\Send\SendModuleInterface $module */
+		foreach ($GLOBALS['AVISOTA_SEND_MODULE'] as $className) {
+			$class = new \ReflectionClass($className);
+			$module = $class->newInstance();
+			$modules->append($module->run($message));
+		}
 
 		$context = array(
 			'message' => $message,
-			'referer' => $this->getReferer(true),
-			'users'   => $users,
+			'modules' => $modules,
 		);
 
 		$template = new \TwigTemplate('avisota/backend/preview', 'html5');

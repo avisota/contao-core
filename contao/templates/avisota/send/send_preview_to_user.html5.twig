@@ -1,0 +1,41 @@
+
+<form action="system/modules/avisota/web/send_preview_to_user.php" class="tl_form tl_form_avisota_inline"
+	  method="get">
+	<input name="id" value="{{ message.id }}" type="hidden">
+	<input name="REQUEST_TOKEN" value="{{ REQUEST_TOKEN }}" type="hidden">
+
+	<fieldset id="pal_preview_to_user_legend" class="tl_box block">
+		<legend onclick="AjaxRequest.toggleFieldset(this,'preview_to_user_legend','avisota_message_preview_to_user')">
+			{{ _lang.avisota_message_preview.previewToUser }}
+		</legend>
+
+		<div class="tl_formbody_edit">
+			<div class="tl_tbox block">
+				<div class="widget">
+					<h3>
+						<label for="ctrl_recipient_user"{% if userMissing %} class="error"{% endif %}>{{ _lang.avisota_message_preview.sendPreviewToUser[0] }}</label>
+					</h3>
+					<select name="recipient_user" id="ctrl_recipient_user" class="tl_select"
+							onfocus="Backend.getScrollOffset();">
+						{% for user in users %}
+							<option value="{{ user.id }}"{% if _user.id == user.id %} selected="selected"{% endif %}>
+								{{ user.name }} &lt;{{ user.email }}&gt;
+							</option>
+						{% endfor %}
+					</select>
+
+					<p class="tl_help tl_tip{% if userMissing %} tl_error{% endif %}">{{ _lang.avisota_message_preview.sendPreviewToUser[1] }}</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="tl_formbody_submit">
+			<div class="tl_submit_container">
+				<button id="btn-preview-to-user" name="preview-to-user" class="tl_submit" accesskey="p" type="submit" value="preview">
+					<img style="display: none;" src="system/modules/avisota/html/loading.gif"
+						 alt=""/> {{ _lang.avisota_message_preview.sendPreview }}
+				</button>
+			</div>
+		</div>
+	</fieldset>
+</form>

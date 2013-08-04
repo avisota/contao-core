@@ -57,6 +57,12 @@
 	padding: 2em 0 1em;
 	margin-bottom: 0;
 }
+.tl_form_avisota_inline legend {
+	margin: 0 18px;
+}
+.tl_form_avisota_inline:last-of-type fieldset {
+	padding-bottom: 0;
+}
 
 
 

@@ -17,6 +17,8 @@ namespace Avisota\Contao\RecipientSource;
 
 use Avisota\Contao\Entity\Recipient;
 use Contao\Doctrine\ORM\EntityHelper;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class AvisotaRecipientSourceIntegratedRecipients
@@ -29,11 +31,9 @@ use Contao\Doctrine\ORM\EntityHelper;
 class IntegratedRecipients extends AbstractIntegratedRecipients
 {
 	/**
-	 * {@inheritdoc}
+	 * @return QueryBuilder
 	 */
-	protected function loadRecipients()
+	protected function prepareQuery(QueryBuilder $queryBuilder)
 	{
-		$recipientRepository = EntityHelper::getRepository('Avisota\Contao:Recipient');
-		return $recipientRepository->findAll();
 	}
 }

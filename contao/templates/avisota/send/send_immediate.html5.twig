@@ -1,0 +1,32 @@
+
+<form action="system/modules/avisota/web/send_immediate.php" class="tl_form tl_form_avisota_inline" method="get">
+	<input name="id" value="{{ message.id }}" type="hidden">
+
+	<fieldset id="pal_avisota_send_immediate" class="tl_box block">
+		<legend onclick="AjaxRequest.toggleFieldset(this,'send','avisota_send_immediate')">
+			{{ _lang.avisota_send_immediate.headline }}
+		</legend>
+
+		<script>
+			var confirmationMessage = {{ _lang.avisota_send_immediate.confirmation|json_encode }};
+		</script>
+
+		<div class="tl_formbody_edit">
+			<div class="tl_tbox block">
+				<p class="tl_help tl_tip">{{ _lang.avisota_send_immediate.help|format(count) }}</p>
+			</div>
+		</div>
+
+		<div class="tl_formbody_submit">
+			<div class="tl_submit_container">
+				<button id="btn-send" name="action" class="tl_submit" accesskey="s"
+						type="submit"
+						value="schedule"
+						onclick="return confirm(confirmationMessage);">
+					<img style="display: none;" src="system/modules/avisota/html/loading.gif"
+						 alt=""/> {{ _lang.avisota_send_immediate.action }}
+				</button>
+			</div>
+		</div>
+	</fieldset>
+</form>

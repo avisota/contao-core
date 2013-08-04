@@ -1,0 +1,17 @@
+
+<form action="system/modules/avisota/web/preview.php" id="avisota_message_preview" target="preview" class="tl_form"
+	  method="get">
+	<input name="id" value="{{ message.id }}" type="hidden">
+
+	<div class="tl_listing_container preview">
+		<iframe class="avisota_message_preview" id="preview" name="preview" scrolling="auto" width="100%"
+				height="600"
+				src="system/modules/avisota/web/preview.php?id={{ message.id }}"></iframe>
+		<br>
+
+		<p class="new_window">
+			<a href="system/modules/avisota/web/preview.php?id={{ message.id }}" class="tl_submit"
+			   target="_blank">{{ _lang.avisota_message_preview.previewInNewWindow }}</a>
+		</p>
+	</div>
+</form>

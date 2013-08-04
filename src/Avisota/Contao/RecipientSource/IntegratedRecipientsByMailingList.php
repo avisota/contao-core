@@ -18,6 +18,7 @@ namespace Avisota\Contao\RecipientSource;
 use Avisota\Contao\Entity\MailingList;
 use Avisota\Contao\Entity\Recipient;
 use Contao\Doctrine\ORM\EntityHelper;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * Class AvisotaRecipientSourceIntegratedRecipients
@@ -43,9 +44,9 @@ class IntegratedRecipientsByMailingList extends AbstractIntegratedRecipients
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return QueryBuilder
 	 */
-	protected function loadRecipients()
+	protected function prepareQuery(\Doctrine\ORM\QueryBuilder $queryBuilder)
 	{
 		if (empty($this->mailingLists)) {
 			return array();
@@ -54,18 +55,15 @@ class IntegratedRecipientsByMailingList extends AbstractIntegratedRecipients
 		$entityManager = EntityHelper::getEntityManager();
 		$queryBuilder = $entityManager->createQueryBuilder();
 
-		$mailingListIds = array();
+		$mailingListIds = array(0);
 		foreach ($this->mailingLists as $mailingList) {
 			$mailingListIds[] = $mailingList->id();
 		}
 
-		return $queryBuilder
-			->select('r')
-			->from('Avisota\Contao:Recipient', 'r')
+		 $queryBuilder
 			->innerJoin('Avisota\Contao:RecipientSubscription', 's.recipient=r.id')
 			->where($queryBuilder->expr()->in('s.list', '?1'))
-			->setParameter(1, $mailingListIds)
-			->getQuery()
-			->getResult();
+			->setParameter(1, $mailingListIds);
 	}
+
 }

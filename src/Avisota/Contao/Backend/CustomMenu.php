@@ -82,63 +82,71 @@ class CustomMenu extends \BackendModule
 
 	static public function hookGetUserNavigation(array $navigation, $showAll)
 	{
-		if (TL_MODE == 'BE' && !$showAll) {
-			$input = \Input::getInstance();
-			$do    = $input->get('do');
-			$table = $input->get('table');
-			$id = $input->get('id');
+		if (TL_MODE == 'BE') {
+			$GLOBALS['TL_CSS']['avisota-be-global'] = 'system/modules/avisota/assets/css/be_global.css';
 
-			if ($do == 'avisota_newsletter') {
-				if ($table == 'orm_avisota_message_category') {
-					// the $id is already the category id
-				}
-				else if ($table == 'orm_avisota_message') {
-					if ($input->get('key') == 'send') {
-						$messageRepository = EntityHelper::getRepository('Avisota\Contao:Message');
-						$message = $messageRepository->find($id);
-						$id = $message->getCategory()->id();
+			if (Outbox::isEmpty()) {
+				$navigation['avisota']['modules']['avisota_outbox']['class'] .= ' avisota_outbox_empty';
+			}
+
+			if (!$showAll) {
+				$input = \Input::getInstance();
+				$do    = $input->get('do');
+				$table = $input->get('table');
+				$id = $input->get('id');
+
+				if ($do == 'avisota_newsletter') {
+					if ($table == 'orm_avisota_message_category') {
+						// the $id is already the category id
 					}
-				}
-				else if ($table == 'orm_avisota_message_content') {
-					$act = $input->get('act');
-					if ($act == 'create') {
-						$messageRepository = EntityHelper::getRepository('Avisota\Contao:Message');
-						$message = $messageRepository->find($input->get('pid'));
-						$id = $message->getCategory()->id();
+					else if ($table == 'orm_avisota_message') {
+						if ($input->get('key') == 'send') {
+							$messageRepository = EntityHelper::getRepository('Avisota\Contao:Message');
+							$message = $messageRepository->find($id);
+							$id = $message->getCategory()->id();
+						}
 					}
-					else if ($act) {
-						$contentRepository = EntityHelper::getRepository('Avisota\Contao:MessageContent');
-						$content = $contentRepository->find($id);
-						$id = $content->getMessage()->getCategory()->id();
+					else if ($table == 'orm_avisota_message_content') {
+						$act = $input->get('act');
+						if ($act == 'create') {
+							$messageRepository = EntityHelper::getRepository('Avisota\Contao:Message');
+							$message = $messageRepository->find($input->get('pid'));
+							$id = $message->getCategory()->id();
+						}
+						else if ($act) {
+							$contentRepository = EntityHelper::getRepository('Avisota\Contao:MessageContent');
+							$content = $contentRepository->find($id);
+							$id = $content->getMessage()->getCategory()->id();
+						}
+						else {
+							$messageRepository = EntityHelper::getRepository('Avisota\Contao:Message');
+							$message = $messageRepository->find($id);
+							$id = $message->getCategory()->id();
+						}
 					}
 					else {
-						$messageRepository = EntityHelper::getRepository('Avisota\Contao:Message');
-						$message = $messageRepository->find($id);
-						$id = $message->getCategory()->id();
+						return $navigation;
 					}
-				}
-				else {
-					return $navigation;
-				}
 
-				$foundCustomEntry = false;
+					$foundCustomEntry = false;
 
-				$menu = &$navigation['avisota'];
-				foreach ($menu['modules'] as $name => &$module) {
-					if ($name == 'avisota_category_' . $id) {
-						$module['class'] .= ' active';
-						$foundCustomEntry = true;
+					$menu = &$navigation['avisota'];
+					foreach ($menu['modules'] as $name => &$module) {
+						if ($name == 'avisota_category_' . $id) {
+							$module['class'] .= ' active';
+							$foundCustomEntry = true;
+						}
 					}
-				}
 
-				if ($foundCustomEntry) {
-					$classes = explode(' ', $menu['modules']['avisota_newsletter']['class']);
-					$classes = array_map('trim', $classes);
-					$pos = array_search('active', $classes);
-					if ($pos !== false) {
-						unset($classes[$pos]);
+					if ($foundCustomEntry) {
+						$classes = explode(' ', $menu['modules']['avisota_newsletter']['class']);
+						$classes = array_map('trim', $classes);
+						$pos = array_search('active', $classes);
+						if ($pos !== false) {
+							unset($classes[$pos]);
+						}
+						$menu['modules']['avisota_newsletter']['class'] = implode(' ', $classes);
 					}
-					$menu['modules']['avisota_newsletter']['class'] = implode(' ', $classes);
 				}
 			}
 		}

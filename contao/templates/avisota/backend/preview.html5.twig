@@ -46,83 +46,9 @@
 
 	{{ messages() }}
 
-	<form action="system/modules/avisota/web/preview.php" id="avisota_message_preview" target="preview" class="tl_form"
-		  method="get">
-		<input name="id" value="{{ message.id }}" type="hidden">
-
-		<div class="tl_listing_container preview">
-			<iframe class="avisota_message_preview" id="preview" name="preview" scrolling="auto" width="100%"
-					height="600"
-					src="system/modules/avisota/web/preview.php?id={{ message.id }}"></iframe>
-			<br>
-
-			<p class="new_window">
-				<a href="system/modules/avisota/web/preview.php?id={{ message.id }}" class="tl_submit"
-				   target="_blank">{{ _lang.avisota_message_preview.previewInNewWindow }}</a>
-			</p>
-		</div>
-	</form>
-
-	<form action="system/modules/avisota/web/send.php" id="avisota_message_schedule" class="tl_form"
-		  method="get">
-		<input name="id" value="{{ message.id }}" type="hidden">
-		<input name="REQUEST_TOKEN" value="{{ REQUEST_TOKEN }}" type="hidden">
-
-		<div class="tl_formbody_edit">
-
-			<div class="tl_tbox block">
-				<div class="w50">
-					<h3>
-						<label for="ctrl_recipient_user">{{ _lang.avisota_message_preview.sendPreviewToUser[0] }}</label>
-					</h3>
-					<select name="recipient_user" id="ctrl_recipient_user" class="tl_select"
-							onfocus="Backend.getScrollOffset();">
-						{% for user in users %}
-							<option value="{{ user.id }}"{% if _user.id == user.id %} selected="selected"{% endif %}>
-								{{ user.name }} &lt;{{ user.email }}&gt;
-							</option>
-						{% endfor %}
-					</select>
-
-					<p class="tl_help tl_tip">{{ _lang.avisota_message_preview.sendPreviewToUser[1] }}</p>
-				</div>
-
-				{% if _user.isAdmin or _user.hasAccess('send', 'avisota_newsletter_permissions') %}
-					<div class="w50">
-						<h3>
-							<label for="ctrl_recipient_email">{{ _lang.avisota_message_preview.sendPreviewToEmail[0] }}</label>
-						</h3>
-						<input name="recipient_email" id="ctrl_recipient_email" value="" class="tl_text"
-							   onfocus="Backend.getScrollOffset();" type="text"/>
-
-						<p class="tl_help tl_tip">{{ _lang.avisota_message_preview.sendPreviewToEmail[1] }}</p>
-					</div>
-				{% endif %}
-
-				<div class="clr"></div>
-			</div>
-		</div>
-
-		<div class="tl_formbody_submit">
-
-			<div class="tl_submit_container">
-				<button id="btnPreview" name="action" class="tl_submit" accesskey="p" type="submit" value="preview">
-					<img style="display: none;" src="system/modules/avisota/html/loading.gif"
-						 alt=""/> {{ _lang.avisota_message_preview.preview }}
-				</button>
-				{% if _user.isAdmin or _user.hasAccess('send', 'avisota_newsletter_permissions') %}
-					<button style="float:right" id="btnSchedule" name="action" class="tl_submit" accesskey="s"
-							type="submit"
-							value="schedule">
-						<img style="display: none;" src="system/modules/avisota/html/loading.gif"
-							 alt=""/> {{ _lang.avisota_message_preview.schedule }}
-					</button>
-				{% endif %}
-			</div>
-
-		</div>
-	</form>
+	{{ modules }}
 {% endspaceless %}
+
 <script>
 	// add listener to email input field, that disable the user select field
 	$('ctrl_recipient_email').addEvent('keyup', function () {

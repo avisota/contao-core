@@ -68,6 +68,15 @@ $GLOBALS['AVISOTA_SALUTATION_DECIDER'][] = 'Avisota\Contao\Salutation\RequiredFi
 
 
 /**
+ * Send modules
+ */
+$GLOBALS['AVISOTA_SEND_MODULE']['avisota_preview']          = 'Avisota\Contao\Send\PreviewModule';
+$GLOBALS['AVISOTA_SEND_MODULE']['avisota_preview_to_user']  = 'Avisota\Contao\Send\SendPreviewToUserModule';
+$GLOBALS['AVISOTA_SEND_MODULE']['avisota_preview_to_email'] = 'Avisota\Contao\Send\SendPreviewToEmailModule';
+$GLOBALS['AVISOTA_SEND_MODULE']['avisota_send_immediate']   = 'Avisota\Contao\Send\SendImmediateModule';
+
+
+/**
  * Settings
  */
 /*
