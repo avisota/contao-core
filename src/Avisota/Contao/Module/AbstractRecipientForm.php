@@ -77,7 +77,7 @@ abstract class AbstractRecipientForm extends \TwigModule
 
 		// Deserialize module configuration
 		$this->avisota_recipient_fields = deserialize($this->avisota_recipient_fields, true);
-		$this->avisota_lists            = array_filter(array_map('intval', deserialize($this->avisota_lists, true)));
+		$this->avisota_lists            = array_filter(deserialize($this->avisota_lists, true));
 
 		return parent::generate();
 	}
