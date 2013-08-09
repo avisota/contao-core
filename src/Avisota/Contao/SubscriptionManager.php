@@ -115,11 +115,12 @@ class SubscriptionManager
 
 		$lists = array_map(
 			function ($list) {
-				if (is_numeric($list)) {
-					return 'mailing_list:' . $list;
-				}
-				else if ($list instanceof MailingList) {
+				if ($list instanceof MailingList) {
 					return 'mailing_list:' . $list->getId();
+				}
+				// TODO better use a regex here, but I´m not sure what ids could be possible
+				else if ($list !== 'global') {
+					return 'mailing_list:' . $list;
 				}
 				return $list;
 			},
@@ -357,7 +358,7 @@ class SubscriptionManager
 					 'list'      => $list
 				)
 			);
-
+			
 			if ($subscription) {
 				if ($options ^ static::OPT_NO_BLACKLIST) {
 					$blacklist = $blacklistRepository->findOneBy(

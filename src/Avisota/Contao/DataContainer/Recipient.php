@@ -213,13 +213,18 @@ class Recipient extends \Backend
 					$opt |= SubscriptionManager::OPT_NO_CONFIRMATION;
 					break;
 			}
-
+			
 			$subscriptionManager = new SubscriptionManager();
-			$subscriptionManager->subscribe(
+			$subscriptions = $subscriptionManager->subscribe(
 				$dc->getCurrentModel()->getProperty('email'),
 				$_SESSION['avisotaMailingLists'],
 				$opt
 			);
+			
+			if ($subscriptions && $_SESSION['avisotaSubscriptionAction'] == 'sendOptIn')
+			{
+				// TODO send OptInMail
+			}
 
 			unset ($_SESSION['avisotaMailingLists'], $_SESSION['avisotaSubscriptionAction']);
 		}
@@ -271,11 +276,9 @@ class Recipient extends \Backend
 		if (TL_MODE == 'FE') {
 			return $lists;
 		}
-
 		$subscriptionManager = new SubscriptionManager();
 		$input = \Input::getInstance();
-
-		$email = $input->post('email');
+		$email = $dc->getCurrentModel()->getProperty('email');
 		$lists = deserialize($lists, true);
 
 		$blacklists = $subscriptionManager->isBlacklisted($email, $lists);
@@ -343,6 +346,7 @@ class Recipient extends \Backend
 			return;
 		}
 
+		$arrSubscritions = array();
 		$entityManager = EntityHelper::getEntityManager();
 		$queryBuilder = $entityManager->createQueryBuilder();
 		$mailingListIds = $queryBuilder
@@ -359,8 +363,12 @@ class Recipient extends \Backend
 			->setParameter(':recipientId', $dc->id)
 			->getQuery()
 			->getResult();
-
-		return $mailingListIds;
+				
+		foreach ($mailingListIds as $list)
+		{
+			$arrSubscritions[] = $list['id'];
+		}
+		return $arrSubscritions;
 		/*
 		$database = \Database::getInstance();
 
@@ -384,12 +392,28 @@ class Recipient extends \Backend
 	 *
 	 * @return null
 	 */
-	public function saveMailingLists($value)
+	public function saveMailingLists($value, $dc)
 	{
 		if (TL_MODE == 'FE') {
 			return $value;
 		}
+		//get existing subscriptions
+		$arrLists = $this->loadMailingLists($value, $dc);
+		
+		//check for subscriptions for removal
+		$arrRemove = array_diff($arrLists, $value);
+		if ($arrRemove)
+		{
 
+			//remove unchecked subscriptions
+			$subscriptionManager = new SubscriptionManager();
+			$subscriptions       = $subscriptionManager->unsubscribe(
+				$dc->getCurrentModel()->getProperty('email'),
+				$arrRemove
+			);
+		}
+		
+		//save new subscriptions for submit callback
 		$_SESSION['avisotaMailingLists'] = $value;
 		return null;
 	}
