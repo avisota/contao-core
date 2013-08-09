@@ -281,7 +281,15 @@ class Recipient extends \Backend
 		$email = $dc->getCurrentModel()->getProperty('email');
 		$lists = deserialize($lists, true);
 
-		$blacklists = $subscriptionManager->isBlacklisted($email, $lists);
+		// Check for blacklists. If the recipient is new, this test will throw an
+		// exception, because the recipient was not written to the db at this point.
+		try {
+			$blacklists = $subscriptionManager->isBlacklisted($email, $lists);
+		}
+		catch (\RuntimeException $e)
+		{
+			return $lists;
+		}
 
 		if ($blacklists) {
 			$k = array_map(
