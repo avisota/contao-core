@@ -27,6 +27,7 @@ $GLOBALS['DOCTRINE_ENTITY_CLASS']['Avisota\Contao\Entity\Message']   = 'Avisota\
 
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_layout';
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_mailing_list';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_member_subscription';
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_message';
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_message_category';
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_message_content';
