@@ -16,7 +16,7 @@ namespace Avisota\Contao\DataContainer;
 
 use Avisota\Contao\Entity\MailingList;
 use Avisota\Contao\Entity\RecipientBlacklist;
-use Avisota\Contao\SubscriptionManager;
+use Avisota\Contao\MemberSubscriptionManager;
 use Contao\Doctrine\ORM\EntityHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
@@ -39,22 +39,23 @@ class Member extends \Backend
 	{
 
 		if (isset($_SESSION['avisotaSubscriptionAction']) && isset($_SESSION['avisotaMailingLists'])) {
-			$opt = SubscriptionManager::OPT_IGNORE_BLACKLIST;
+			$opt = MemberSubscriptionManager::OPT_IGNORE_BLACKLIST;
 
 			switch ($_SESSION['avisotaSubscriptionAction']) {
 				case 'activateSubscription':
-					$opt |= SubscriptionManager::OPT_ACTIVATE;
+					$opt |= MemberSubscriptionManager::OPT_ACTIVATE;
 					break;
 				case 'doNothink':
-					$opt |= SubscriptionManager::OPT_NO_CONFIRMATION;
+					$opt |= MemberSubscriptionManager::OPT_NO_CONFIRMATION;
 					break;
 			}
 			
 			$input = \Input::getInstance();
-			
-			$subscriptionManager = new SubscriptionManager();
+
+
+			$subscriptionManager = new MemberSubscriptionManager();
 			$subscriptions = $subscriptionManager->subscribe(
-				$input->email,
+				$input->post('email'),
 				$_SESSION['avisotaMailingLists'],
 				$opt
 			);
@@ -65,7 +66,8 @@ class Member extends \Backend
 			}
 		}
 		unset ($_SESSION['avisotaMailingLists'], $_SESSION['avisotaSubscriptionAction']);
-		exit();
+
+
 	}
 
 	/**
@@ -75,14 +77,14 @@ class Member extends \Backend
 	{
 		$input = \Input::getInstance();
 
-		$options = SubscriptionManager::OPT_UNSUBSCRIBE_GLOBAL;
+		$options = MemberSubscriptionManager::OPT_UNSUBSCRIBE_GLOBAL;
 		if ($input->get('blacklist') == 'false') {
-			$options |= SubscriptionManager::OPT_NO_BLACKLIST;
+			$options |= MemberSubscriptionManager::OPT_NO_BLACKLIST;
 		}
 
-		$subscriptionManager = new SubscriptionManager();
+		$subscriptionManager = new MemberSubscriptionManager();
 		$subscriptionManager->unsubscribe(
-			$input->email,
+			$input->post('email'),
 			null,
 			$options
 		);
@@ -114,13 +116,16 @@ class Member extends \Backend
 		if (TL_MODE == 'FE') {
 			return $lists;
 		}
-		$subscriptionManager = new SubscriptionManager();
+		// TODO reweite checks for members - also need blacklist table for members
+		return $lists;
+		/*
+		$subscriptionManager = new MemberSubscriptionManager();
 		$input = \Input::getInstance();
-		$email = $input->email;
+		$email = $input->post('email');
 		$lists = deserialize($lists, true);
 
-		// Check for blacklists. If the recipient is new, this test will throw an
-		// exception, because the recipient was not written to the db at this point.
+		// Check for blacklists. If the member is new, this test will throw an
+		// exception, because the member was not written to the db at this point.
 		try {
 			$blacklists = $subscriptionManager->isBlacklisted($email, $lists);
 		}
@@ -132,8 +137,8 @@ class Member extends \Backend
 		if ($blacklists) {
 			$k = array_map(
 				function ($blacklist) {
-					/** @var RecipientBlacklist $blacklist */
-					return $blacklist->getList();
+					/** @var RecipiMemberentBlacklist $blacklist */
+					/*return $blacklist->getList();
 				},
 				$blacklists
 			);
@@ -162,7 +167,7 @@ class Member extends \Backend
 				$titles = array_map(
 					function ($mailingList) {
 						/** @var MailingList $mailingList */
-						return $mailingList->getTitle();
+					/*	return $mailingList->getTitle();
 					},
 					$mailingLists
 				);
@@ -176,7 +181,8 @@ class Member extends \Backend
 				);
 			}
 		}
-		return $lists;
+		return $lists;*/
+
 	}
 
 	/**
@@ -199,17 +205,18 @@ class Member extends \Backend
 			->select('l.id')
 			->from('Avisota\Contao:MailingList', 'l')
 			->innerJoin(
-				'Avisota\Contao:RecipientSubscription',
+				'Avisota\Contao:MemberSubscription',
 				's',
 				Join::WITH,
 				$queryBuilder->expr()->eq($queryBuilder->expr()->concat(':mailingListPrefix', 'l.id'), 's.list')
 			)
-			->where('s.recipient=:recipientId')
+			->where('s.member=:memberId')
 			->setParameter(':mailingListPrefix', 'mailing_list:')
-			->setParameter(':recipientId', $dc->id)
-			->getQuery()
-			->getResult();
-				
+			->setParameter(':memberId', $dc->id)
+			->getQuery();
+			//->getResult();
+
+
 		foreach ($mailingListIds as $list)
 		{
 			$arrSubscritions[] = $list['id'];
@@ -243,6 +250,8 @@ class Member extends \Backend
 		if (TL_MODE == 'FE') {
 			return $value;
 		}
+		
+		$value = (is_array($value))? $value : (array) $value;
 
 		//get existing subscriptions
 		$arrLists = $this->loadMailingLists($value, $dc);
@@ -255,9 +264,9 @@ class Member extends \Backend
 			$input = \Input::getInstance();
 			
 			//remove unchecked subscriptions
-			$subscriptionManager = new SubscriptionManager();
+			$subscriptionManager = new MemberSubscriptionManager();
 			$subscriptions       = $subscriptionManager->unsubscribe(
-				$input->email,
+				$input->post('email'),
 				$arrRemove
 			);
 		}
