@@ -348,7 +348,7 @@ class MemberSubscriptionManager extends \Controller
         $blacklistRepository    = $entityManager->getRepository('Avisota\Contao:RecipientBlacklist');
 
         /** @var EventDispatcher $eventDispatcher */
-        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+        $eventDispatcher        = $GLOBALS['container']['event-dispatcher'];
 
         if ($options & static::OPT_UNSUBSCRIBE_GLOBAL)
         {
@@ -357,7 +357,7 @@ class MemberSubscriptionManager extends \Controller
         }
 
         $recipient = $this->resolveRecipient($recipient);
-        $lists     = $this->resolveLists($lists, true);
+        $lists     = $this->resolveLists($lists, false);
 
         if (!$recipient)
         {
@@ -367,11 +367,14 @@ class MemberSubscriptionManager extends \Controller
         $subscriptions = array();
 
         foreach ($lists as $list)
-        {
+        {            
+
             $subscription = $subscriptionRepository->findOneBy(
                     array(
-                        'recipient' => $recipient->getId(),
-                        'list'      => $list
+                        'member' => $recipient->id,
+                        'list'   => $list
+
+
                     )
             );
 
@@ -381,14 +384,15 @@ class MemberSubscriptionManager extends \Controller
                 {
                     $blacklist = $blacklistRepository->findOneBy(
                             array(
-                                'email' => md5(strtolower($recipient->getEmail())),
+                                'email' => md5(strtolower($recipient->email)),
                                 'list'  => $list
                             )
                     );
+
                     if (!$blacklist)
                     {
                         $blacklist = new RecipientBlacklist();
-                        $blacklist->setEmail(md5(strtolower($recipient->getEmail())));
+                        $blacklist->setEmail(md5(strtolower($recipient->email)));
                         $blacklist->setList($list);
                         $entityManager->persist($blacklist);
                     }
@@ -398,21 +402,24 @@ class MemberSubscriptionManager extends \Controller
 
                 $subscriptions[] = $subscription;
 
-                $eventDispatcher->dispatch(
-                        'avisota-recipient-unsubscribe', new UnsubscribeEvent($recipient, $subscription, $blacklist)
-                );
+//                    $eventDispatcher->dispatch(
+//                            'avisota-recipient-unsubscribe', new UnsubscribeEvent($recipient, $subscription, $blacklist)
+//                    );
+
             }
         }
 
         $entityManager->flush();
+        
 
         $remainingSubscriptions = $subscriptionRepository
-                ->findBy(array('recipient' => $recipient->getId()));
+                ->findBy(array('member' => $recipient->id));
+
         if (!$remainingSubscriptions || !count($remainingSubscriptions))
         {
-            $eventDispatcher->dispatch('avisota-recipient-remove', new RecipientEvent($recipient));
-            $entityManager->remove($recipient);
-            $entityManager->flush();
+//                $eventDispatcher->dispatch('avisota-recipient-remove', new RecipientEvent($recipient));
+//            $entityManager->remove($recipient);
+//            $entityManager->flush();
         }
 
         if ($options ^ static::OPT_NO_CONFIRMATION)

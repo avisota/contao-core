@@ -213,8 +213,8 @@ class Member extends \Backend
 			->where('s.member=:memberId')
 			->setParameter(':mailingListPrefix', 'mailing_list:')
 			->setParameter(':memberId', $dc->id)
-			->getQuery();
-			//->getResult();
+			->getQuery()
+			->getResult();
 
 
 		foreach ($mailingListIds as $list)
@@ -251,6 +251,8 @@ class Member extends \Backend
 			return $value;
 		}
 		
+
+		$value = deserialize($value);
 		$value = (is_array($value))? $value : (array) $value;
 
 		//get existing subscriptions
