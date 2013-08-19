@@ -213,10 +213,14 @@ class Recipient extends \Backend
 					$opt |= SubscriptionManager::OPT_NO_CONFIRMATION;
 					break;
 			}
-			
-			$subscriptionManager = new SubscriptionManager();
-			$subscriptions = $subscriptionManager->subscribe(
-				$dc->getCurrentModel()->getProperty('email'),
+
+			$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
+			$recipient = $subscriptionManager->resolveRecipient(
+				'Avisota\Contao:Recipient',
+				$dc->getCurrentModel()->getProperty('email')
+			);
+			$subscriptionManager->subscribe(
+				$recipient,
 				$_SESSION['avisotaMailingLists'],
 				$opt
 			);
@@ -242,9 +246,13 @@ class Recipient extends \Backend
 			$options |= SubscriptionManager::OPT_NO_BLACKLIST;
 		}
 
-		$subscriptionManager = new SubscriptionManager();
+			$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
+			$recipient = $subscriptionManager->resolveRecipient(
+				'Avisota\Contao:Recipient',
+				$dc->getCurrentModel()->getProperty('email')
+			);
 		$subscriptionManager->unsubscribe(
-			$dc->getCurrentModel()->getProperty('email'),
+			$recipient,
 			null,
 			$options
 		);

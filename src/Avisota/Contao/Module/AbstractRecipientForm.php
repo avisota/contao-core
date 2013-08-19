@@ -88,9 +88,13 @@ abstract class AbstractRecipientForm extends \TwigModule
 		$mailBoilerplateId,
 		$transportId
 	) {
-		$subscriptionManager = new SubscriptionManager();
+		$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
+		$recipient           = $subscriptionManager->resolveRecipient(
+			'Avisota\Contao:Recipient',
+			$recipientData
+		);
 		$subscriptions       = $subscriptionManager->subscribe(
-			$recipientData,
+			$recipient,
 			$mailingLists,
 			SubscriptionManager::OPT_IGNORE_BLACKLIST
 		);
@@ -148,7 +152,7 @@ abstract class AbstractRecipientForm extends \TwigModule
 		if ($token) {
 			$tokens = explode(',', $token);
 
-			$subscriptionManager = new SubscriptionManager();
+			$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
 			return $subscriptionManager->confirm(
 				$recipient,
 				$tokens
@@ -173,7 +177,7 @@ abstract class AbstractRecipientForm extends \TwigModule
 			return false;
 		}
 
-		$subscriptionManager = new SubscriptionManager();
+		$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
 		$subscriptions       = $subscriptionManager->unsubscribe(
 			$recipient,
 			$mailingLists

@@ -13,7 +13,7 @@
  * @filesource
  */
 
-namespace Avisota\Contao;
+namespace Avisota\Contao\Subscription;
 
 use Avisota\Contao\Entity\MailingList;
 use Avisota\Contao\Entity\Recipient;
@@ -27,34 +27,23 @@ use Contao\Doctrine\ORM\EntityHelper;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
- * Class SubscriptionManager
- *
- * Manager for subscriptions.
- *
- * Accessible via DI container key avisota.subscription.
- * <pre>
- * global $container;
- * $subscriptionManager = $container->get('avisota.subscription');
- * </pre>
+ * Class RecipientSubscriptionManager
  *
  * @package Avisota
  */
-class SubscriptionManager
+class RecipientSubscriptionManager implements SubscriptionManagerInterface
 {
-	const BLACKLIST_GLOBAL = 'global';
-
-	const OPT_IGNORE_BLACKLIST = 1;
-
-	const OPT_NO_BLACKLIST = 2;
-
-	const OPT_UNSUBSCRIBE_GLOBAL = 4;
-
-	const OPT_ACTIVATE = 8;
-
-	const OPT_NO_CONFIRMATION = 16;
-
-	public function resolveRecipient($recipientIdentity, $createIfNotExists = false)
+	/**
+	 * {@inheritdoc}
+	 */
+	public function resolveRecipient($recipientClass, $recipientIdentity, $createIfNotExists = false)
 	{
+		if ($recipientClass != 'Avisota\Contao\Entity\Recipient' &&
+			$recipientClass != 'Avisota\Contao:Recipient'
+		) {
+			return false;
+		}
+
 		$entityManager = EntityHelper::getEntityManager();
 		$repository    = $entityManager->getRepository('Avisota\Contao\Entity\Recipient');
 
@@ -105,48 +94,17 @@ class SubscriptionManager
 		return $recipient;
 	}
 
-	protected function resolveLists($lists, $includeGlobal = false)
-	{
-		$lists = (array) $lists;
-
-		if ($includeGlobal && !in_array(static::BLACKLIST_GLOBAL, $lists)) {
-			$lists[] = static::BLACKLIST_GLOBAL;
-		}
-
-		$lists = array_map(
-			function ($list) {
-				if ($list instanceof MailingList) {
-					return 'mailing_list:' . $list->getId();
-				}
-				// TODO better use a regex here, but I´m not sure what ids could be possible
-				else if ($list !== 'global') {
-					return 'mailing_list:' . $list;
-				}
-				return $list;
-			},
-			$lists
-		);
-
-		return array_values($lists);
-	}
-
 	/**
-	 * Check if a recipient is blacklisted.
-	 *
-	 * @param string|array $recipient Recipient email address or array of recipient details.
-	 * @param null|array   $lists     Array of mailing lists to check the blacklist status
-	 *
-	 * @return bool|RecipientBlacklist[]
-	 * Return <em>false</em> if the recipient is not blacklisted.
-	 * Return an array of blacklisted lists, if <em>$lists</em> is given.
-	 * Return <em>true</em> if the recipient is globally blacklisted, even if <em>$lists</em> is provided.
+	 * {@inheritdoc}
 	 */
 	public function isBlacklisted($recipient, $lists = null)
 	{
+		global $container;
+
 		$entityManager = EntityHelper::getEntityManager();
 
-		$recipient = $this->resolveRecipient($recipient);
-		$lists     = $this->resolveLists($lists, true);
+		$recipient = $this->resolveRecipient('Avisota\Contao:Recipient', $recipient);
+		$lists     = $container['avisota.subscription']->resolveLists($lists, true);
 
 		if (!$recipient) {
 			return false;
@@ -178,29 +136,23 @@ class SubscriptionManager
 	}
 
 	/**
-	 * Add a new subscription or update existing.
-	 *
-	 * @param array|int|string|Recipient $recipient
-	 * Recipient data (array of details, useful to create a new recipient),
-	 * numeric id, email adress or recipient entity..
-	 * @param null|array                 $lists
-	 * <em>null</em> to globally subscribe, or array of mailing lists to subscribe to.
-	 *
-	 * @return RecipientSubscription[]
+	 * {@inheritdoc}
 	 */
 	public function subscribe(
 		$recipient,
 		$lists = null,
 		$options = 0
 	) {
+		global $container;
+
 		$entityManager          = EntityHelper::getEntityManager();
 		$subscriptionRepository = $entityManager->getRepository('Avisota\Contao:RecipientSubscription');
 
 		/** @var EventDispatcher $eventDispatcher */
 		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-		$recipient = $this->resolveRecipient($recipient, true);
-		$lists     = $this->resolveLists($lists, true);
+		$recipient = $this->resolveRecipient('Avisota\Contao:Recipient', $recipient, true);
+		$lists     = $container['avisota.subscription']->resolveLists($lists, true);
 
 		$blacklists = $this->isBlacklisted($recipient, $lists);
 		if ($blacklists) {
@@ -263,15 +215,7 @@ class SubscriptionManager
 	}
 
 	/**
-	 * Confirm subscription.
-	 *
-	 * @param array|int|string|Recipient $recipient
-	 * Recipient data (array of details, useful to create a new recipient),
-	 * numeric id, email adress or recipient entity..
-	 * @param null|array                 $lists
-	 * <em>null</em> to globally subscribe, or array of mailing lists to subscribe to.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function confirm(
 		$recipient,
@@ -282,7 +226,7 @@ class SubscriptionManager
 		/** @var EventDispatcher $eventDispatcher */
 		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-		$recipient = $this->resolveRecipient($recipient);
+		$recipient = $this->resolveRecipient('Avisota\Contao:Recipient', $recipient);
 
 		if (!$recipient || empty($token)) {
 			return false;
@@ -323,13 +267,12 @@ class SubscriptionManager
 	}
 
 	/**
-	 * Remove subscription.
-	 *
-	 * @param string|array $recipient Recipient email address or array of recipient details.
-	 * @param null|array   $lists     <em>null</em> to globally unsubscribe from all mailing lists, or array of mailing lists to unsubscribe from.
+	 * {@inheritdoc}
 	 */
 	public function unsubscribe($recipient, $lists = null, $options = 0)
 	{
+		global $container;
+
 		$entityManager          = EntityHelper::getEntityManager();
 		$subscriptionRepository = $entityManager->getRepository('Avisota\Contao:RecipientSubscription');
 		$blacklistRepository    = $entityManager->getRepository('Avisota\Contao:RecipientBlacklist');
@@ -342,8 +285,8 @@ class SubscriptionManager
 			$lists          = $listRepository->findAll();
 		}
 
-		$recipient = $this->resolveRecipient($recipient);
-		$lists     = $this->resolveLists($lists, true);
+		$recipient = $this->resolveRecipient('Avisota\Contao:Recipient', $recipient);
+		$lists     = $container['avisota.subscription']->resolveLists($lists, true);
 
 		if (!$recipient) {
 			return false;
@@ -401,5 +344,13 @@ class SubscriptionManager
 		}
 
 		return $subscriptions;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function canHandle($recipient)
+	{
+		return $recipient instanceof Recipient;
 	}
 }
