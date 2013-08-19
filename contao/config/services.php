@@ -15,12 +15,59 @@
 
 
 /**
- * Define subscription manager
+ * Define subscription managers
  */
 
+$container['avisota.subscription.recipient'] = $container->share(
+	function ($container) {
+		return new \Avisota\Contao\Subscription\RecipientSubscriptionManager();
+	}
+);
+
+$container['avisota.subscription.member'] = $container->share(
+	function ($container) {
+		return new \Avisota\Contao\Subscription\MemberSubscriptionManager();
+	}
+);
+
+$container['avisota.subscription.managers'] = new ArrayObject(
+	array(
+		'avisota.subscription.recipient',
+		'avisota.subscription.member',
+	)
+);
+
 $container['avisota.subscription'] = $container->share(
-	function($container) {
-		return new \Avisota\Contao\SubscriptionManager();
+	function ($container) {
+		$chain = new \Avisota\Contao\Subscription\RootSubscriptionManager();
+
+		foreach ($container['avisota.subscription.managers'] as $subscriptionManager) {
+			$priority = 0;
+
+			// priority support
+			if (is_array($subscriptionManager) && count($subscriptionManager) == 2 && is_int($subscriptionManager[1])) {
+				list($subscriptionManager, $priority) = $subscriptionManager;
+			}
+
+			// factory support
+			if (is_callable($subscriptionManager)) {
+				$subscriptionManager = call_user_func($subscriptionManager);
+			}
+
+			// service support
+			if (is_string($subscriptionManager) && isset($container[$subscriptionManager])) {
+				$subscriptionManager = $container[$subscriptionManager];
+			}
+
+			// instanciate class
+			if (is_string($subscriptionManager)) {
+				$subscriptionManager = new $subscriptionManager();
+			}
+
+			$chain->addSubscriptionManager($subscriptionManager, $priority);
+		}
+
+		return $chain;
 	}
 );
 
@@ -29,7 +76,7 @@ $container['avisota.subscription'] = $container->share(
  */
 
 $container['avisota.salutation.decider'] = $container->share(
-	function($container) {
+	function ($container) {
 		$decider = new \Avisota\Contao\Salutation\ChainDecider();
 
 		foreach ($GLOBALS['AVISOTA_SALUTATION_DECIDER'] as $deciderClass) {
@@ -41,7 +88,7 @@ $container['avisota.salutation.decider'] = $container->share(
 );
 
 $container['avisota.salutation.selector'] = $container->share(
-	function($container) {
+	function ($container) {
 		$selector = new \Avisota\Contao\Salutation\Selector();
 		$selector->setDecider($container['avisota.salutation.decider']);
 		return $selector;
@@ -53,22 +100,22 @@ $container['avisota.salutation.selector'] = $container->share(
  */
 
 // avisota log default level
-$container['avisota.logger.default.level'] = function($container) {
+$container['avisota.logger.default.level'] = function ($container) {
 	return $container['logger.default.level'];
 };
 
 // queue log default level
-$container['avisota.logger.default.level.queue'] = function($container) {
+$container['avisota.logger.default.level.queue'] = function ($container) {
 	return $container['logger.default.level'];
 };
 
 // subscription log default level
-$container['avisota.logger.default.level.subscription'] = function($container) {
+$container['avisota.logger.default.level.subscription'] = function ($container) {
 	return 'debug';
 };
 
 // transport log default level
-$container['avisota.logger.default.level.transport'] = function($container) {
+$container['avisota.logger.default.level.transport'] = function ($container) {
 	return $container['avisota.logger.default.level'];
 };
 
@@ -102,7 +149,7 @@ $container['avisota.logger.default.handlers.transport'] = new ArrayObject(
 
 // avisota log handler
 $container['avisota.logger.handler.general'] = $container->share(
-	function($container) {
+	function ($container) {
 		$factory = $container['logger.factory.handler.rotatingFile'];
 
 		return $factory('avisota.log', $container['avisota.logger.default.level']);
@@ -111,7 +158,7 @@ $container['avisota.logger.handler.general'] = $container->share(
 
 // queue log handler
 $container['avisota.logger.handler.queue'] = $container->share(
-	function($container) {
+	function ($container) {
 		$factory = $container['logger.factory.handler.stream'];
 
 		return $factory('avisota.queue.log', $container['avisota.logger.default.level.queue']);
@@ -120,7 +167,7 @@ $container['avisota.logger.handler.queue'] = $container->share(
 
 // subscription log handler
 $container['avisota.logger.handler.subscription'] = $container->share(
-	function($container) {
+	function ($container) {
 		$factory = $container['logger.factory.handler.stream'];
 
 		return $factory('avisota.subscription.log', $container['avisota.logger.default.level.subscription']);
@@ -129,7 +176,7 @@ $container['avisota.logger.handler.subscription'] = $container->share(
 
 // transport log handler
 $container['avisota.logger.handler.transport'] = $container->share(
-	function($container) {
+	function ($container) {
 		$factory = $container['logger.factory.handler.rotatingFile'];
 
 		return $factory('avisota.transport.log', $container['avisota.logger.default.level.transport']);
@@ -141,33 +188,33 @@ $container['avisota.logger.handler.transport'] = $container->share(
  */
 
 // avisota log
-$container['avisota.logger'] = function($container) {
+$container['avisota.logger'] = function ($container) {
 	$factory = $container['logger.factory'];
-	$logger = $factory('avisota', $container['avisota.logger.default.handlers']);
+	$logger  = $factory('avisota', $container['avisota.logger.default.handlers']);
 
 	return $logger;
 };
 
 // queue log
-$container['avisota.logger.queue'] = function($container) {
+$container['avisota.logger.queue'] = function ($container) {
 	$factory = $container['logger.factory'];
-	$logger = $factory('avisota.queue', $container['avisota.logger.default.handlers.queue']);
+	$logger  = $factory('avisota.queue', $container['avisota.logger.default.handlers.queue']);
 
 	return $logger;
 };
 
 // subscription log
-$container['avisota.logger.subscription'] = function($container) {
+$container['avisota.logger.subscription'] = function ($container) {
 	$factory = $container['logger.factory'];
-	$logger = $factory('avisota.subscription', $container['avisota.logger.default.handlers.subscription']);
+	$logger  = $factory('avisota.subscription', $container['avisota.logger.default.handlers.subscription']);
 
 	return $logger;
 };
 
 // transport log
-$container['avisota.logger.transport'] = function($container) {
+$container['avisota.logger.transport'] = function ($container) {
 	$factory = $container['logger.factory'];
-	$logger = $factory('avisota.transport', $container['avisota.logger.default.handlers.transport']);
+	$logger  = $factory('avisota.transport', $container['avisota.logger.default.handlers.transport']);
 
 	return $logger;
 };
@@ -176,7 +223,7 @@ $container['avisota.logger.transport'] = function($container) {
  * Define dynamic services
  */
 $container['avisota.service-factory'] = $container->share(
-	function($container) {
+	function ($container) {
 		return new \Avisota\Contao\ServiceFactory();
 	}
 );
@@ -210,7 +257,7 @@ foreach ($GLOBALS['AVISOTA_DYNAMICS'] as $type => $records) {
  * Define transport renderer
  */
 $container['avisota.transport.renderer'] = $container->share(
-	function() {
+	function () {
 		$chain = new \Avisota\Renderer\MessageRendererChain();
 
 		foreach ($GLOBALS['AVISOTA_TRANSPORT_RENDERER'] as $renderer) {
@@ -242,7 +289,7 @@ $container['avisota.transport.renderer'] = $container->share(
  * Define message renderer
  */
 $container['avisota.renderer'] = $container->share(
-	function() {
+	function () {
 		if (TL_MODE == 'BE') {
 			return new \Avisota\Contao\Message\Renderer\Backend\MessagePreRenderer();
 		}
