@@ -26,7 +26,7 @@ $GLOBALS['TL_DCA']['tl_member']['fields']['avisota_lists'] = array
 	'label'            => &$GLOBALS['TL_LANG']['tl_member']['avisota_lists'],
 	'inputType'        => 'checkbox',
 	'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getMailingListOptions'),
-	'load_callback'    => array(array('Avisota\Contao\DataContainer\Recipient', 'loadMailingLists')),
+	'load_callback'    => array(array('Avisota\Contao\DataContainer\Member', 'loadMailingLists')),
 	'save_callback'    => array
 	(
 		array('Avisota\Contao\DataContainer\Member', 'validateBlacklist'),

@@ -24,6 +24,11 @@ $container['avisota.subscription'] = $container->share(
 	}
 );
 
+$container['avisota.subscription.member'] = $container->share(
+	function($container) {
+		return new \Avisota\Contao\MemberSubscriptionManager();
+	}
+);
 /**
  * Define salutation decider and selector
  */
