@@ -17,7 +17,7 @@ namespace Avisota\Contao\DataContainer;
 
 use Avisota\Contao\Entity\MailingList;
 use Avisota\Contao\Entity\RecipientBlacklist;
-use Avisota\Contao\SubscriptionManager;
+use Avisota\Contao\Subscription\SubscriptionManagerInterface;
 use Contao\Doctrine\ORM\EntityHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
@@ -203,14 +203,14 @@ class Recipient extends \Backend
 	public function onsubmit_callback($dc)
 	{
 		if (isset($_SESSION['avisotaSubscriptionAction']) && isset($_SESSION['avisotaMailingLists'])) {
-			$opt = SubscriptionManager::OPT_IGNORE_BLACKLIST;
+			$opt = SubscriptionManagerInterface::OPT_IGNORE_BLACKLIST;
 
 			switch ($_SESSION['avisotaSubscriptionAction']) {
 				case 'activateSubscription':
-					$opt |= SubscriptionManager::OPT_ACTIVATE;
+					$opt |= SubscriptionManagerInterface::OPT_ACTIVATE;
 					break;
 				case 'doNothink':
-					$opt |= SubscriptionManager::OPT_NO_CONFIRMATION;
+					$opt |= SubscriptionManagerInterface::OPT_NO_CONFIRMATION;
 					break;
 			}
 
@@ -241,9 +241,9 @@ class Recipient extends \Backend
 	{
 		$input = \Input::getInstance();
 
-		$options = SubscriptionManager::OPT_UNSUBSCRIBE_GLOBAL;
+		$options = SubscriptionManagerInterface::OPT_UNSUBSCRIBE_GLOBAL;
 		if ($input->get('blacklist') == 'false') {
-			$options |= SubscriptionManager::OPT_NO_BLACKLIST;
+			$options |= SubscriptionManagerInterface::OPT_NO_BLACKLIST;
 		}
 
 			$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
@@ -284,7 +284,7 @@ class Recipient extends \Backend
 		if (TL_MODE == 'FE') {
 			return $lists;
 		}
-		$subscriptionManager = new SubscriptionManager();
+		$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
 		$input = \Input::getInstance();
 		$email = $dc->getCurrentModel()->getProperty('email');
 		$lists = deserialize($lists, true);
@@ -379,11 +379,11 @@ class Recipient extends \Backend
 			->setParameter(':recipientId', $dc->id)
 			->getQuery()
 			->getResult();
-				
 		foreach ($mailingListIds as $list)
 		{
 			$arrSubscritions[] = $list['id'];
 		}
+
 		return $arrSubscritions;
 		/*
 		$database = \Database::getInstance();
@@ -422,9 +422,14 @@ class Recipient extends \Backend
 		{
 
 			//remove unchecked subscriptions
-			$subscriptionManager = new SubscriptionManager();
+			$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
+			$recipient = $subscriptionManager->resolveRecipient(
+				'Avisota\Contao:Recipient',
+				$dc->getCurrentModel()->getProperty('email')
+			);
+
 			$subscriptions       = $subscriptionManager->unsubscribe(
-				$dc->getCurrentModel()->getProperty('email'),
+				$recipient,
 				$arrRemove
 			);
 		}

@@ -19,7 +19,7 @@ use Avisota\Contao\Entity\MailingList;
 use Avisota\Contao\Entity\Recipient;
 use Avisota\Contao\Message\PreRenderedMessageTemplateInterface;
 use Avisota\Contao\Message\Renderer\MessagePreRendererInterface;
-use Avisota\Contao\SubscriptionManager;
+use Avisota\Contao\Subscription\SubscriptionManagerInterface;
 use Avisota\Recipient\MutableRecipient;
 use Avisota\Transport\TransportInterface;
 use Contao\Doctrine\ORM\EntityHelper;
@@ -91,12 +91,13 @@ abstract class AbstractRecipientForm extends \TwigModule
 		$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
 		$recipient           = $subscriptionManager->resolveRecipient(
 			'Avisota\Contao:Recipient',
-			$recipientData
+			$recipientData,
+			true
 		);
 		$subscriptions       = $subscriptionManager->subscribe(
 			$recipient,
 			$mailingLists,
-			SubscriptionManager::OPT_IGNORE_BLACKLIST
+			SubscriptionManagerInterface::OPT_IGNORE_BLACKLIST
 		);
 
 		if (count($subscriptions)) {

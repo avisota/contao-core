@@ -146,7 +146,7 @@ class SubscriptionManagerChain implements SubscriptionManagerInterface
 		foreach ($this->chain as $subscriptionManagers) {
 			foreach ($subscriptionManagers as $subscriptionManager) {
 				if ($subscriptionManager->canHandle($recipient)) {
-					return $subscriptionManager->isBlacklisted($recipient, $lists, $options);
+					return $subscriptionManager->unsubscribe($recipient, $lists, $options);
 				}
 			}
 		}
