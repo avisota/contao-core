@@ -16,7 +16,7 @@ namespace Avisota\Contao\DataContainer;
 
 use Avisota\Contao\Entity\MailingList;
 use Avisota\Contao\Entity\RecipientBlacklist;
-use Avisota\Contao\MemberSubscriptionManager;
+use Avisota\Contao\Subscription\MemberSubscriptionManager;
 use Contao\Doctrine\ORM\EntityHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
