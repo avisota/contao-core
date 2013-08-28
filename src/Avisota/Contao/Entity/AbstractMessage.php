@@ -95,36 +95,6 @@ abstract class AbstractMessage extends Entity implements AliasableInterface
 	}
 
 	/**
-	 * Get transport
-	 *
-	 * @return Transport
-	 */
-	public function getTransport()
-	{
-		$category = $this->getCategory();
-
-		if ($category->getBoilerplates() ||
-			$category->getTransportMode() == 'byMessage'
-		) {
-			$transport = $this->transport;
-		}
-		else if ($category->getTransportMode() == 'byMessageOrCategory') {
-			$transport = $this->transport;
-			if (!$transport) {
-				$transport = $category->getTransport();
-			}
-		}
-		else if ($category->getTransportMode() == 'byCategory') {
-			$transport = $category->getTransport();
-		}
-		else {
-			throw new \RuntimeException('Could not find transport for message ' . $this->getId());
-		}
-
-		return $this->callGetterCallbacks('transport', $transport);
-	}
-
-	/**
 	 * Get queue
 	 *
 	 * @return Queue

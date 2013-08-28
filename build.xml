@@ -1,31 +1,25 @@
 <project name="Avisota" default="build">
-	<target name="clean">
-		<delete dir="${basedir}/build"/>
-	</target>
-
-	<target name="prepare">
-		<mkdir dir="${basedir}/build"/>
-		<mkdir dir="${basedir}/build/logs"/>
-	</target>
-
-	<target name="phpcs">
-		<exec dir="${basedir}"
-			  executable="${basedir}/vendor/bin/phpcs"
-			  output="${basedir}/build/logs/checkstyle.xml"
-			  failonerror="false">
-			<arg line="-d 'error_reporting=E_ALL|~E_DEPRECATED|~E_NOTICE'
-			 		   --standard=${basedir}/vendor/bit3/php-coding-standard/Bit3/ruleset.xml
-			 		   --extensions=php
-			 		   src"/>
-		</exec>
-	</target>
-
+	<!--
+	    we have no tests at the moment :-\
 	<target name="phpunit">
 		<exec dir="${basedir}" executable="phpunit" failonerror="true">
 			<arg line="--coverage-text
 					   --configuration ${basedir}/phpunit.xml.dist"/>
 		</exec>
 	</target>
+	-->
 
-	<target name="build" depends="clean,prepare,phpcs,phpunit"/>
+	<target name="phpcs">
+		<exec dir="${basedir}" executable="vendor/bin/phpcs" failonerror="true">
+			<arg line="--standard=${basedir}/vendor/bit3/php-coding-standard/phpcs/Bit3/ruleset.xml ${basedir}/src"/>
+		</exec>
+	</target>
+
+	<target name="phpmd">
+		<exec dir="${basedir}" executable="vendor/bin/phpmd" failonerror="true">
+			<arg line="${basedir}/src text ${basedir}/vendor/bit3/php-coding-standard/phpmd/ruleset.xml"/>
+		</exec>
+	</target>
+
+	<target name="build" depends="phpcs,phpmd"/>
 </project>

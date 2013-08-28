@@ -17,16 +17,6 @@
 /**
  * Fields
  */
-// subscription
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_subscribe_mail']   = array(
-	'Subscription mail',
-	'Please chose the subscription mail boilerplate.'
-);
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_unsubscribe_mail'] = array(
-	'Unsubscribe mail',
-	'Please chose the unsubscribe mail boilerplate.'
-);
-
 // notification
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_send_notification']                = array(
 	'Send notification',
@@ -60,18 +50,6 @@ $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_default_transport']         
 	'Default transport module',
 	'Please choose the default transport module.'
 );
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_max_send_time']                     = array(
-	'Sending time',
-	'Please enter the maximum time in seconds for each cycle.'
-);
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_max_send_count']                    = array(
-	'Sending count',
-	'Please enter the maximum number of mails send per cycle.'
-);
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_max_send_timeout']                  = array(
-	'Cycle pause',
-	'Please enter the time in seconds between each cycle.'
-);
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_dont_disable_recipient_on_failure'] = array(
 	'Don\'t disable failed recipients <strong style="color:red">REMOVE</strong>',
 	'Deaktiviert die Deaktivierung von Abonnenten, wenn der Versand an sie fehlgeschlagen ist.'
@@ -95,8 +73,6 @@ $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_email'] = array(
  * Legend
  */
 $GLOBALS['TL_LANG']['tl_avisota_settings']['edit']                           = 'Avisota system settings';
-$GLOBALS['TL_LANG']['tl_avisota_settings']['recipients_legend']              = 'Recipients';
-$GLOBALS['TL_LANG']['tl_avisota_settings']['subscription_legend']            = 'Subscription';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['notification_legend']            = 'Notification';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['cleanup_legend']                 = 'Cleanup';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['transport_legend']               = 'Transport';

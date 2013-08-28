@@ -41,10 +41,6 @@ $GLOBALS['TL_LANG']['orm_avisota_message_category']['theme']          = array(
 	'Layout',
 	'Wählen Sie hier das Layouts aus.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_message_category']['transportMode']  = array(
-	'Transportmodul Auswahl',
-	'Wählen Sie hier wie die Auswahl des Transportmoduls möglich sein soll.'
-);
 $GLOBALS['TL_LANG']['orm_avisota_message_category']['transport']      = array(
 	'Transportmodul',
 	'Wählen Sie hier das Transportmodul aus.'

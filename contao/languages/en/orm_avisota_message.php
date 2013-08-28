@@ -57,13 +57,13 @@ $GLOBALS['TL_LANG']['orm_avisota_message']['layout']    = array(
 	'Layout',
 	'Please chose the layout for this newsletter.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_message']['setTransport']  = array(
-	'Assign transport module',
-	'Assign a transport module to this newsletter.'
+$GLOBALS['TL_LANG']['orm_avisota_message']['setQueue'] = array(
+	'Select queue',
+	'Select the queue for this newsletter.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_message']['transport']     = array(
-	'Transport module',
-	'Please chose the transport module.'
+$GLOBALS['TL_LANG']['orm_avisota_message']['queue']    = array(
+	'Queue',
+	'Please chose the queue for this newsletter.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_message']['tstamp']        = array(
 	'Revision date',
@@ -78,7 +78,7 @@ $GLOBALS['TL_LANG']['orm_avisota_message']['newsletter_legend'] = 'Message';
 $GLOBALS['TL_LANG']['orm_avisota_message']['meta_legend']       = 'Details';
 $GLOBALS['TL_LANG']['orm_avisota_message']['recipient_legend']  = 'Recipient';
 $GLOBALS['TL_LANG']['orm_avisota_message']['theme_legend']      = 'Theme settings';
-$GLOBALS['TL_LANG']['orm_avisota_message']['transport_legend']  = 'Transport settings';
+$GLOBALS['TL_LANG']['orm_avisota_message']['queue_legend']      = 'Queue settings';
 $GLOBALS['TL_LANG']['orm_avisota_message']['attachment_legend'] = 'Attachments';
 
 

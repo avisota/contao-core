@@ -8,9 +8,11 @@
 		 convertWarningsToExceptions="true"
 		 processIsolation="true"
 		 strict="true">
+	<!--
 	<testsuites>
 		<testsuite name="AvisotaTestSuite">
 			<directory suffix="Test.php">test/</directory>
 		</testsuite>
 	</testsuites>
+	-->
 </phpunit>

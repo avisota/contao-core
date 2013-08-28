@@ -40,7 +40,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 	// DataContainer
 	'dca_config'      => array
 	(
-		'callback'      => 'GeneralCallbackDefault',
+		'callback'      => 'DcGeneral\Callbacks\ContaoStyleCallbacks',
 		'data_provider' => array
 		(
 			'default' => array
@@ -49,8 +49,8 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'source' => 'orm_avisota_transport'
 			)
 		),
-		'controller'    => 'GeneralControllerDefault',
-		'view'          => 'GeneralViewDefault'
+		'controller'    => 'DcGeneral\Controller\DefaultController',
+		'view'          => 'DcGeneral\View\DefaultView'
 	),
 	// List
 	'list'            => array

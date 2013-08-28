@@ -29,6 +29,22 @@ $GLOBALS['TL_LANG']['orm_avisota_queue']['alias']                    = array(
 	'Alias',
 	'The queue alias is a unique reference to the queue which can be used instead of its ID.'
 );
+$GLOBALS['TL_LANG']['orm_avisota_queue']['transport']                = array(
+	'Transport module',
+	'Please chose the transport module.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_queue']['maxSendTime']              = array(
+	'Sending time',
+	'Please enter the maximum time in seconds for each cycle.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_queue']['maxSendCount']             = array(
+	'Sending count',
+	'Please enter the maximum number of mails send per cycle.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_queue']['sendPause']                = array(
+	'Cycle pause',
+	'Please enter the time in seconds between each cycle.'
+);
 $GLOBALS['TL_LANG']['orm_avisota_queue']['simpleDatabaseQueueTable'] = array(
 	'Table name',
 	'Please enter a table name for the queue. The table should <strong>not</strong> start with <em>tl_</em> or <em>orm_</em>!'
@@ -50,9 +66,10 @@ $GLOBALS['TL_LANG']['orm_avisota_queue']['sendingTime']              = array(
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['orm_avisota_queue']['queue_legend']  = 'Queue';
-$GLOBALS['TL_LANG']['orm_avisota_queue']['config_legend'] = 'Queue Configuration';
-$GLOBALS['TL_LANG']['orm_avisota_queue']['send_legend']   = 'Sending';
+$GLOBALS['TL_LANG']['orm_avisota_queue']['queue_legend']     = 'Queue';
+$GLOBALS['TL_LANG']['orm_avisota_queue']['transport_legend'] = 'Transport settings';
+$GLOBALS['TL_LANG']['orm_avisota_queue']['config_legend']    = 'Queue settings';
+$GLOBALS['TL_LANG']['orm_avisota_queue']['send_legend']      = 'Sending';
 
 
 /**

@@ -16,9 +16,13 @@
 namespace Avisota\Contao\Backend;
 
 use Avisota\Contao\Entity\Queue;
+use Avisota\Contao\Event\PreQueueExecuteEvent;
 use Avisota\Contao\Message\Renderer;
+use Avisota\Queue\ExecutionConfig;
 use Avisota\Queue\QueueInterface;
 use Contao\Doctrine\ORM\EntityHelper;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Outbox extends \TwigBackendModule
 {
@@ -33,10 +37,16 @@ class Outbox extends \TwigBackendModule
 
 		/** @var QueueInterface $queue */
 		foreach ($queueDataCollection as $queueData) {
-			$serviceName = sprintf('avisota.queue.%s', $queueData->getId());
-			$queue       = $container[$serviceName];
+			try {
+				$serviceName = sprintf('avisota.queue.%s', $queueData->getId());
+				$queue       = $container[$serviceName];
 
-			$length += $queue->length();
+				$length += $queue->length();
+			}
+			catch (\InvalidArgumentException $e) {
+				// silently hide Identifier "..." is not defined
+				trigger_error($e->getMessage(), E_USER_NOTICE);
+			}
 		}
 
 		return $length == 0;
@@ -52,15 +62,85 @@ class Outbox extends \TwigBackendModule
 	 */
 	protected function compile()
 	{
-		global $container;
-
 		$this->loadLanguageFile('avisota_outbox');
 
-		$queueRepository     = EntityHelper::getRepository('Avisota\Contao:Queue');
+		$queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
+
+		$this->executeQueue($queueRepository);
+		$this->addQueuesToTemplate($queueRepository);
+	}
+
+	protected function executeQueue(EntityRepository $queueRepository)
+	{
+		global $container;
+
+		$input = \Input::getInstance();
+
+		$executeId = $input->get('execute');
+		if ($executeId) {
+			/** @var Queue $queueData */
+			$queueData = $queueRepository->find($executeId);
+
+			if (!$queueData->getAllowManualSending()) {
+				return;
+			}
+
+			$serviceName = sprintf('avisota.queue.%s', $queueData->getId());
+			/** @var QueueInterface $queue */
+			$queue = $container[$serviceName];
+
+			$action = $input->get('action');
+			if ($action == 'run') {
+				$this->runQueue($queueData, $queue);
+			}
+
+			$this->Template->setName('avisota/backend/outbox_execute');
+			$this->Template->queue = $queue;
+		}
+	}
+
+	protected function runQueue(Queue $queueData, QueueInterface $queue)
+	{
+		global $container;
+
+		$transportServiceName = sprintf(
+			'avisota.transport.%s',
+			$queueData
+				->getTransport()
+				->getId()
+		);
+		$transport            = $container[$transportServiceName];
+
+		$config = new ExecutionConfig();
+		if ($queueData->getMaxSendTime() > 0) {
+			$config->setTimeLimit($queueData->getMaxSendTime());
+		}
+		if ($queueData->getMaxSendCount() > 0) {
+			$config->setMessageLimit($queueData->getMaxSendCount());
+		}
+
+		$event = new PreQueueExecuteEvent($queue, $transport, $config);
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+		$eventDispatcher->dispatch(PreQueueExecuteEvent::NAME, $event);
+
+		$queue     = $event->getQueue();
+		$transport = $event->getTransport();
+		$config    = $event->getTransport();
+
+		$status = $queue->execute($transport, $config);
+
+
+	}
+
+	protected function addQueuesToTemplate(EntityRepository $queueRepository)
+	{
+		global $container;
+
+		/** @var Queue[] $queueDataCollection */
 		$queueDataCollection = $queueRepository->findAll();
 		$items               = array();
 
-		/** @var Queue $queueData */
 		/** @var QueueInterface $queue */
 		foreach ($queueDataCollection as $queueData) {
 			$serviceName = sprintf('avisota.queue.%s', $queueData->getId());

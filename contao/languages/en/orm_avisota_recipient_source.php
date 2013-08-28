@@ -29,6 +29,10 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter']  = array(
 	'Enable filters',
 	'Enable filters on this recipient source. The available filters depend on the specific module.'
 );
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['salutation']  = array(
+	'Salutation',
+	'Please chose the salution used by this recipient source.'
+);
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['disable'] = array(
 	'Disabled',
 	'Temporary disable this recipient source for transport.'
@@ -127,6 +131,7 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['expert_legend']     = 'Expe
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_legend'] = 'Avisota integrated recipients';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member_legend']     = 'Contao members';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFile_legend']    = 'CSV file';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['details_legend']    = 'Details settings';
 
 
 /**

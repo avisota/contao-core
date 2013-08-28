@@ -15,7 +15,9 @@
 
 namespace Avisota\Contao\DataContainer;
 
+use Avisota\Contao\Entity\SalutationGroup;
 use Contao\Doctrine\ORM\EntityHelper;
+use DcGeneral\DC_General;
 
 class OptionsBuilder extends \Controller
 {
@@ -236,9 +238,10 @@ class OptionsBuilder extends \Controller
 	static public function getMessageContentTypes($dc)
 	{
 		$groups = array();
-		if ($dc instanceof \DC_General && $dc->getCurrentModel()) {
+		if ($dc instanceof DC_General && $dc->getEnvironment()->getCurrentModel()) {
 			/** @var \Avisota\Contao\Entity\MessageContent $content */
 			$content = $dc
+				->getEnvironment()
 				->getCurrentModel()
 				->getEntity();
 			$cell = $content->getCell();
@@ -267,13 +270,14 @@ class OptionsBuilder extends \Controller
 	/**
 	 * Get a list of areas from the parent category.
 	 *
-	 * @param \DC_General $dc
+	 * @param DC_General $dc
 	 */
 	static public function getMessageContentCells($dc)
 	{
-		if ($dc instanceof \DC_General && $dc->getCurrentModel()) {
+		if ($dc instanceof DC_General && $dc->getEnvironment()->getCurrentModel()) {
 			/** @var \Avisota\Contao\Entity\MessageContent $content */
 			$content = $dc
+				->getEnvironment()
 				->getCurrentModel()
 				->getEntity();
 			$layout  = $content
@@ -303,4 +307,25 @@ class OptionsBuilder extends \Controller
 		return array();
 	}
 
+	/**
+	 * Get a list of salutation groups.
+	 *
+	 * @param DC_General $dc
+	 */
+	static public function getSalutationGroups($dc)
+	{
+		if ($dc instanceof DC_General && $dc->getEnvironment()->getCurrentModel()) {
+			$salutationGroupRepository = EntityHelper::getRepository('Avisota\Contao:SalutationGroup');
+			/** @var SalutationGroup[] $salutationGroups */
+			$salutationGroups = $salutationGroupRepository->findAll();
+
+			$options = array();
+			foreach ($salutationGroups as $salutationGroup) {
+				$options[$salutationGroup->getId()] = $salutationGroup->getTitle();
+			}
+			return $options;
+		}
+
+		return array();
+	}
 }

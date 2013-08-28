@@ -19,6 +19,7 @@ use Avisota\Contao\Entity\MailingList;
 use Avisota\Contao\Entity\RecipientBlacklist;
 use Avisota\Contao\SubscriptionManager;
 use Contao\Doctrine\ORM\EntityHelper;
+use DcGeneral\DC_General;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
 
@@ -198,7 +199,7 @@ class Recipient extends \Backend
 	}
 
 	/**
-	 * @param \DC_General $dc
+	 * @param DC_General $dc
 	 */
 	public function onsubmit_callback($dc)
 	{
@@ -217,7 +218,7 @@ class Recipient extends \Backend
 			$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
 			$recipient = $subscriptionManager->resolveRecipient(
 				'Avisota\Contao:Recipient',
-				$dc->getCurrentModel()->getProperty('email')
+				$dc->getEnvironment()->getCurrentModel()->getProperty('email')
 			);
 			$subscriptionManager->subscribe(
 				$recipient,
@@ -244,7 +245,7 @@ class Recipient extends \Backend
 			$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
 			$recipient = $subscriptionManager->resolveRecipient(
 				'Avisota\Contao:Recipient',
-				$dc->getCurrentModel()->getProperty('email')
+				$dc->getEnvironment()->getCurrentModel()->getProperty('email')
 			);
 		$subscriptionManager->unsubscribe(
 			$recipient,

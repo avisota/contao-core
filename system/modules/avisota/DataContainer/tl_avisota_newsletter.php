@@ -57,16 +57,6 @@ class orm_avisota_message extends Backend
 						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['theme'][] = 'theme';
 						break;
 				}
-
-				switch ($category->transportMode) {
-					case 'byNewsletterOrCategory':
-						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['transport'][] = 'setTransport';
-						break;
-
-					case 'byNewsletter':
-						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['transport'][] = 'transport';
-						break;
-				}
 			}
 		}
 		else {
@@ -90,13 +80,6 @@ class orm_avisota_message extends Backend
 					case 'byNewsletterOrCategory':
 					case 'byCategory':
 						$GLOBALS['TL_DCA']['orm_avisota_message']['list']['sorting']['headerFields'][] = 'theme';
-						break;
-				}
-
-				switch ($category->transportMode) {
-					case 'byNewsletterOrCategory':
-					case 'byCategory':
-						$GLOBALS['TL_DCA']['orm_avisota_message']['list']['sorting']['headerFields'][] = 'transport';
 						break;
 				}
 			}
@@ -340,18 +323,10 @@ class orm_avisota_message extends Backend
 
 		$add[$key] = implode('<br>', $add[$key]);
 
-
 		if ($category->themeMode == 'byNewsletterOrCategory') {
 			$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['theme'][0];
 			$add[$key] .= ' ' . $GLOBALS['TL_LANG']['orm_avisota_message']['fallback'];
 		}
-
-
-		if ($category->transportMode == 'byNewsletterOrCategory') {
-			$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['transport'][0];
-			$add[$key] .= ' ' . $GLOBALS['TL_LANG']['orm_avisota_message']['fallback'];
-		}
-
 
 		return $add;
 	}

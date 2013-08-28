@@ -25,7 +25,7 @@
 					<td class="tl_file_list">{{ queue.title }}</td>
 					<td class="tl_file_list">{{ queue.length }}</td>
 					<td class="tl_file_list">
-						{% if queue.length %}
+						{% if queue.length and queue.allowManualSending %}
 							<a href="contao/main.php?do=avisota_outbox&amp;execute={{ queue.id }}" title="{{ _lang.avisota_outbox.action_execute }}">
 								{{ image('system/modules/avisota/assets/images/queue_execute.png') }}
 							</a>

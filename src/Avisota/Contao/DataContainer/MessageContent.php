@@ -17,6 +17,7 @@ namespace Avisota\Contao\DataContainer;
 
 use Avisota\Contao\Message\Renderer\MessagePreRendererInterface;
 use Contao\Doctrine\ORM\EntityHelper;
+use DcGeneral\DC_General;
 
 class MessageContent extends \Backend
 {
@@ -247,7 +248,7 @@ class MessageContent extends \Backend
 	 *
 	 * @return array
 	 */
-	public function getGalleryTemplates(\DC_General $dc)
+	public function getGalleryTemplates(DC_General $dc)
 	{
 		// Get the page ID
 		$article = $this->Database
@@ -255,6 +256,7 @@ class MessageContent extends \Backend
 			->limit(1)
 			->execute(
 				$dc
+					->getEnvironment()
 					->getCurrentModel()
 					->getProperty('pid')
 			);

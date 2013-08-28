@@ -84,7 +84,7 @@ class RecipientSource extends \Backend
 	 */
 	public function onsubmit_callback($dc)
 	{
-		if ($dc->getCurrentModel()->getProperty('sorting') == 0) {
+		if ($dc->getEnvironment()->getCurrentModel()->getProperty('sorting') == 0) {
 			$source = $this->Database
 				->execute("SELECT MAX(sorting) as sorting FROM orm_avisota_recipient_source");
 			$this->Database

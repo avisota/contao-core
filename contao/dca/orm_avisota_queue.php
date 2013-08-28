@@ -40,7 +40,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 	// DataContainer
 	'dca_config'      => array
 	(
-		'callback'      => 'GeneralCallbackDefault',
+		'callback'      => 'DcGeneral\Callbacks\ContaoStyleCallbacks',
 		'data_provider' => array
 		(
 			'default' => array
@@ -49,8 +49,8 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 				'source' => 'orm_avisota_queue'
 			)
 		),
-		'controller'    => 'GeneralControllerDefault',
-		'view'          => 'GeneralViewDefault'
+		'controller'    => 'DcGeneral\Controller\DefaultController',
+		'view'          => 'DcGeneral\View\DefaultView'
 	),
 	// List
 	'list'            => array
@@ -64,7 +64,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 		'label'             => array
 		(
 			'fields' => array('title', 'type'),
-			'format' => '%s <span style="color:#b3b3b3; padding-left:3px;">(%s)</span>'
+			'format' => '%s <span style="color:#b3b3b3; padding-left:3px;">(%s)</span><br>'
 		),
 		'global_operations' => array
 		(
@@ -110,14 +110,18 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 			'queue' => array('type'),
 		),
 		'simpleDatabase' => array(
-			'queue'  => array('type', 'title', 'alias'),
-			'config' => array('simpleDatabaseQueueTable'),
-			'send'   => array('allowManualSending', 'scheduledSending')
+			'queue'     => array('type', 'title', 'alias'),
+			'transport' => array(
+				'transport',
+				'maxSendTime',
+				'maxSendCount',
+				'sendPause',
+			),
+			'config'    => array('simpleDatabaseQueueTable'),
+			'send'      => array('allowManualSending')
 		),
 	),
-	'metasubpalettes' => array(
-		'scheduledSending' => array('sendingTime')
-	),
+	'metasubpalettes' => array(),
 	// Fields
 	'fields'          => array
 	(
@@ -188,6 +192,61 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 				array('Contao\Doctrine\ORM\Helper', 'generateAlias')
 			)
 		),
+		'transport'                => array
+		(
+			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_queue']['transport'],
+			'inputType'        => 'select',
+			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getTransportOptions'),
+			'eval'             => array(
+				'mandatory'          => true,
+				'includeBlankOption' => true,
+				'tl_class'           => 'w50'
+			),
+			'manyToOne'        => array(
+				'targetEntity' => 'Avisota\Contao\Entity\Transport',
+				'cascade'      => array('all'),
+				'joinColumns'  => array(
+					array(
+						'name'                 => 'transport',
+						'referencedColumnName' => 'id',
+					),
+				),
+			),
+		),
+		'maxSendTime'              => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['maxSendTime'],
+			'default'   => ini_get('max_execution_time') > 0
+				? floor(0.85 * ini_get('max_execution_time'))
+				: 60,
+			'inputType' => 'text',
+			'eval'      => array(
+				'mandatory' => true,
+				'rgxp'      => 'digit',
+				'tl_class'  => 'w50'
+			)
+		),
+		'maxSendCount'             => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['maxSendCount'],
+			'default'   => 100,
+			'inputType' => 'text',
+			'eval'      => array(
+				'mandatory' => true,
+				'rgxp'      => 'digit',
+				'tl_class'  => 'w50'
+			)
+		),
+		'sendPause'                => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['sendPause'],
+			'inputType' => 'text',
+			'eval'      => array(
+				'mandatory' => true,
+				'rgxp'      => 'digit',
+				'tl_class'  => 'w50'
+			)
+		),
 		'simpleDatabaseQueueTable' => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['simpleDatabaseQueueTable'],
@@ -201,26 +260,11 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 		'allowManualSending'       => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['allowManualSending'],
+			'default'   => true,
 			'inputType' => 'checkbox',
 			'eval'      => array(
-				'tl_class' => 'm12 w50'
-			)
-		),
-		'scheduledSending'         => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['scheduledSending'],
-			'inputType' => 'checkbox',
-			'eval'      => array(
-				'submitOnChange' => true,
-				'tl_class'       => 'clr m12 w50'
-			)
-		),
-		'sendingTime'              => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['sendingTime'],
-			'inputType' => 'checkbox',
-			'eval'      => array(
-				'tl_class' => 'clr m12 w50'
+				'mandatory' => true,
+				'tl_class'  => 'm12 w50'
 			)
 		),
 	)

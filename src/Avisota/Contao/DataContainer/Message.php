@@ -64,12 +64,12 @@ class Message extends \Controller
 					}
 
 					if ($messageCategory->getBoilerplates() ||
-						$messageCategory->getTransportMode() == 'byMessageOrCategory'
+						$messageCategory->getQueueMode() == 'byMessageOrCategory'
 					) {
-						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['transport'][] = 'setTransport';
+						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['queue'][] = 'setQueue';
 					}
-					else if ($messageCategory->getTransportMode() == 'byMessage') {
-						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['transport'][] = 'transport';
+					else if ($messageCategory->getQueueMode() == 'byMessage') {
+						$GLOBALS['TL_DCA']['orm_avisota_message']['metapalettes']['default']['queue'][] = 'queue';
 					}
 				}
 			}
@@ -341,12 +341,12 @@ class Message extends \Controller
 			unset($add[$key]);
 		}
 
-		$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['transport'][0];
-		if (!$newsletterCategory->getBoilerplates() && $newsletterCategory->getTransportMode() != 'byMessage') {
+		$key = $GLOBALS['TL_LANG']['orm_avisota_message_category']['queue'][0];
+		if (!$newsletterCategory->getBoilerplates() && $newsletterCategory->getQueueMode() != 'byMessage') {
 			$add[$key] = $newsletterCategory
-				->getTransport()
+				->getQueue()
 				->getTitle();
-			if ($newsletterCategory->getTransportMode() == 'byMessageOrCategory') {
+			if ($newsletterCategory->getQueueMode() == 'byMessageOrCategory') {
 				$add[$key] .= ' ' . $GLOBALS['TL_LANG']['orm_avisota_message']['fallback'];
 			}
 		}

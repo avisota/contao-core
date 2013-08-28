@@ -37,14 +37,17 @@
 		"bit3/contao-event-dispatcher": "~2.3",
 		"bit3/php-string-builder": "~1",
 		"bit3/tag-replacer": "~1",
+		"symfony/http-foundation": "2.3.*",
 		"menatwork/contao-multicolumnwizard": "~3",
 		"metamodels/dc_general": "~1.0.0"
 	},
 	"require-dev":{
 		"phpunit/phpunit":"3.7.*",
 		"squizlabs/php_codesniffer":"1.*",
-		"bit3/php-coding-standard":"@dev"
+		"bit3/php-coding-standard":"~2.2"
 	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"conflict": {
 		"contao-legacy/avisota": "*",
 		"contao-legacy/avisota2": "*"
@@ -56,12 +59,12 @@
 	},
 	"extra": {
 		"contao": {
-			"symlinks": {
+			"sources": {
 				"contao": "system/modules/avisota"
 			}
 		},
 		"branch-alias": {
-			"dev-master": "2.x-dev"
+			"dev-master": "2.0.x-dev"
 		}
 	}
 }

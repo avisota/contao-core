@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 	// DataContainer
 	'dca_config'      => array
 	(
-		'callback'       => 'GeneralCallbackDefault',
+		'callback'       => 'DcGeneral\Callbacks\ContaoStyleCallbacks',
 		'data_provider'  => array
 		(
 			'default' => array
@@ -58,8 +58,8 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				'source' => 'orm_avisota_message_category'
 			)
 		),
-		'controller'     => 'GeneralControllerDefault',
-		'view'           => 'GeneralViewDefault',
+		'controller'     => 'DcGeneral\Controller\DefaultController',
+		'view'           => 'DcGeneral\View\DefaultView',
 		'childCondition' => array(
 			array(
 				'from'   => 'orm_avisota_message_category',
@@ -193,7 +193,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 			'meta'       => array('description', 'keywords'),
 			'recipient'  => array(),
 			'layout'     => array(),
-			'transport'  => array(),
+			'queue'      => array(),
 			'attachment' => array('addFile'),
 		),
 	),
@@ -202,7 +202,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 	(
 		'setRecipients' => array('recipients'),
 		'setLayout'     => array('layout'),
-		'setTransport'  => array('transport'),
+		'setQueue'      => array('queue'),
 		'addFile'       => array('files')
 	),
 	// Fields
@@ -385,27 +385,28 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				),
 			),
 		),
-		'setTransport'  => array
+		'setQueue'     => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['setTransport'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_message']['setQueue'],
 			'inputType' => 'checkbox',
 			'eval'      => array('tl_class' => 'clr m12 w50', 'submitOnChange' => true)
 		),
-		'transport'     => array
+		'queue'             => array
 		(
-			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_message']['transport'],
+			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_message']['queue'],
 			'inputType'        => 'select',
-			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getTransportOptions'),
+			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getQueueOptions'),
 			'eval'             => array(
-				'mandatory' => true,
-				'tl_class'  => 'w50'
+				'mandatory'          => true,
+				'includeBlankOption' => true,
+				'tl_class'           => 'w50'
 			),
 			'manyToOne'        => array(
-				'targetEntity' => 'Avisota\Contao\Entity\Transport',
+				'targetEntity' => 'Avisota\Contao\Entity\Queue',
 				'cascade'      => array('all'),
 				'joinColumns'  => array(
 					array(
-						'name'                 => 'transport',
+						'name'                 => 'queue',
 						'referencedColumnName' => 'id',
 					),
 				),

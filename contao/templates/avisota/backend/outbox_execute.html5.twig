@@ -1,0 +1,15 @@
+{% spaceless %}
+	<div id="tl_buttons">
+		<a href="{{ referer }}" class="header_back" title="{{ _lang.MSC.backBT }}"
+		   accesskey="b">{{ _lang.MSC.backBT }}</a>
+	</div>
+
+	<h2 class="sub_headline">{{ _lang.avisota_outbox.headline }}</h2>
+
+	{{ messages() }}
+
+	<div class="tl_listing_container list_view">
+
+	</div>
+
+{% endspaceless %}

@@ -34,7 +34,7 @@ $GLOBALS['TL_DCA']['orm_avisota_salutation'] = array
 	// DataContainer
 	'dca_config'      => array
 	(
-		'callback'       => 'GeneralCallbackDefault',
+		'callback'       => 'DcGeneral\Callbacks\ContaoStyleCallbacks',
 		'data_provider'  => array
 		(
 			'default' => array
@@ -48,8 +48,8 @@ $GLOBALS['TL_DCA']['orm_avisota_salutation'] = array
 				'source' => 'orm_avisota_salutation_group'
 			)
 		),
-		'controller'     => 'GeneralControllerDefault',
-		'view'           => 'GeneralViewDefault',
+		'controller'     => 'DcGeneral\Controller\DefaultController',
+		'view'           => 'DcGeneral\View\DefaultView',
 		'childCondition' => array(
 			array(
 				'from'   => 'orm_avisota_salutation_group',

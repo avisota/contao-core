@@ -17,11 +17,12 @@ namespace Avisota\Contao\Backend;
 
 use Avisota\Contao\Message\Renderer;
 use Contao\Doctrine\ORM\EntityHelper;
+use DcGeneral\DC_General;
 
 class Preview extends \Controller
 {
 	/**
-	 * @param \DC_General $dc
+	 * @param DC_General $dc
 	 * @param string      $table
 	 */
 	public function sendMessage($dc, $table)

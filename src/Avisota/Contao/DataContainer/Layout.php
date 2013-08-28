@@ -17,6 +17,7 @@ namespace Avisota\Contao\DataContainer;
 
 use Avisota\Contao\Event\CollectStylesheetsEvent;
 use Avisota\Contao\Event\CollectThemeStylesheetsEvent;
+use DcGeneral\DC_General;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Layout
@@ -37,14 +38,14 @@ class Layout
 	}
 
 	/**
-	 * @param \DC_General|\Avisota\Contao\Entity\Layout $layout
+	 * @param DC_General|\Avisota\Contao\Entity\Layout $layout
 	 */
 	static public function getCellContentOptions($layout)
 	{
 		$options = array();
 
-		if ($layout instanceof \DC_General) {
-			$layout = $layout->getCurrentModel()->getEntity();
+		if ($layout instanceof DC_General) {
+			$layout = $layout->getEnvironment()->getCurrentModel()->getEntity();
 		}
 
 		list($group, $mailChimpTemplate) = explode(':', $layout->getMailchimpTemplate());
@@ -84,12 +85,17 @@ class Layout
 		return $options;
 	}
 
+	/**
+	 * @param DC_General|\Avisota\Contao\Entity\Layout $layout
+	 *
+	 * @return array
+	 */
 	static public function getDefaultSelectedCellContentElements($layout)
 	{
 		$value = array();
 
-		if ($layout instanceof \DC_General) {
-			$layout = $layout->getCurrentModel()->getEntity();
+		if ($layout instanceof DC_General) {
+			$layout = $layout->getEnvironment()->getCurrentModel()->getEntity();
 		}
 
 		list($group, $mailChimpTemplate) = explode(':', $layout->getMailchimpTemplate());
