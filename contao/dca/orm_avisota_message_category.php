@@ -56,7 +56,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 		'view'           => 'DcGeneral\View\DefaultView',
 		'childCondition' => array(
 			array(
-				'from'   => 'self',
+				'from'   => 'orm_avisota_message_category',
 				'to'     => 'orm_avisota_message',
 				'setOn'  => array
 				(

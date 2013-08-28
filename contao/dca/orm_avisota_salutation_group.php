@@ -52,7 +52,7 @@ $GLOBALS['TL_DCA']['orm_avisota_salutation_group'] = array
 		'view'           => 'DcGeneral\View\DefaultView',
 		'childCondition' => array(
 			array(
-				'from'   => 'self',
+				'from'   => 'orm_avisota_salutation_group',
 				'to'     => 'orm_avisota_salutation',
 				'setOn'  => array
 				(

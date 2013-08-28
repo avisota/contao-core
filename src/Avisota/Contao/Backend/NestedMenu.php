@@ -60,9 +60,11 @@ class NestedMenu extends \Controller
 				'copyright' => 'Avisota newsletter and mailing system &copy; 2013 bit3 UG and all <a href="https://github.com/avisota/contao/graphs/contributors" target="_blank">contributors</a>',
 				'disclaimer' => 'Avisota use icons from the <a href="http://www.famfamfam.com/" target="_blank">famfamfam silk icons</a> and <a href="http://www.picol.org/" target="_blank">Picol Vector icons</a>.',
 			);
+			/*
 			if (!in_array('avisota-business', $config->getActiveModules())) {
 				$context['business'] = $GLOBALS['TL_LANG']['avisota_promotion']['business'];
 			}
+			*/
 
 			$template = new \TwigTemplate('avisota/backend/config_footer', 'html5');
 			return $template->parse($context);

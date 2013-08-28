@@ -61,7 +61,7 @@ $GLOBALS['TL_DCA']['orm_avisota_layout'] = array
 		'childCondition' => array(
 			array(
 				'from'   => 'orm_avisota_theme',
-				'to'     => 'self',
+				'to'     => 'orm_avisota_layout',
 				'setOn'  => array
 				(
 					array(

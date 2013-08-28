@@ -53,7 +53,7 @@ $GLOBALS['TL_DCA']['orm_avisota_salutation'] = array
 		'childCondition' => array(
 			array(
 				'from'   => 'orm_avisota_salutation_group',
-				'to'     => 'self',
+				'to'     => 'orm_avisota_salutation',
 				'setOn'  => array
 				(
 					array(

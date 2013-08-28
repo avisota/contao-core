@@ -23,6 +23,8 @@ use Avisota\Queue\QueueInterface;
 use Contao\Doctrine\ORM\EntityHelper;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class Outbox extends \TwigBackendModule
 {
@@ -89,48 +91,14 @@ class Outbox extends \TwigBackendModule
 			/** @var QueueInterface $queue */
 			$queue = $container[$serviceName];
 
-			$action = $input->get('action');
-			if ($action == 'run') {
-				$this->runQueue($queueData, $queue);
-			}
-
 			$this->Template->setName('avisota/backend/outbox_execute');
-			$this->Template->queue = $queue;
+			$this->Template->queue  = $queue;
+			$this->Template->config = $queueData->toArray();
+
+			$GLOBALS['TL_CSS'][] = 'system/modules/avisota/assets/css/be_outbox.css';
+			$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/avisota/assets/js/Number.js';
+			$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/avisota/assets/js/be_outbox.js';
 		}
-	}
-
-	protected function runQueue(Queue $queueData, QueueInterface $queue)
-	{
-		global $container;
-
-		$transportServiceName = sprintf(
-			'avisota.transport.%s',
-			$queueData
-				->getTransport()
-				->getId()
-		);
-		$transport            = $container[$transportServiceName];
-
-		$config = new ExecutionConfig();
-		if ($queueData->getMaxSendTime() > 0) {
-			$config->setTimeLimit($queueData->getMaxSendTime());
-		}
-		if ($queueData->getMaxSendCount() > 0) {
-			$config->setMessageLimit($queueData->getMaxSendCount());
-		}
-
-		$event = new PreQueueExecuteEvent($queue, $transport, $config);
-		/** @var EventDispatcher $eventDispatcher */
-		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-		$eventDispatcher->dispatch(PreQueueExecuteEvent::NAME, $event);
-
-		$queue     = $event->getQueue();
-		$transport = $event->getTransport();
-		$config    = $event->getTransport();
-
-		$status = $queue->execute($transport, $config);
-
-
 	}
 
 	protected function addQueuesToTemplate(EntityRepository $queueRepository)

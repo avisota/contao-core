@@ -41,7 +41,7 @@ $GLOBALS['TL_LANG']['orm_avisota_queue']['maxSendCount']             = array(
 	'Sending count',
 	'Please enter the maximum number of mails send per cycle.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_queue']['sendPause']                = array(
+$GLOBALS['TL_LANG']['orm_avisota_queue']['cyclePause']                = array(
 	'Cycle pause',
 	'Please enter the time in seconds between each cycle.'
 );

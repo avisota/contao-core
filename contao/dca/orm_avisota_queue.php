@@ -115,7 +115,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 				'transport',
 				'maxSendTime',
 				'maxSendCount',
-				'sendPause',
+				'cyclePause',
 			),
 			'config'    => array('simpleDatabaseQueueTable'),
 			'send'      => array('allowManualSending')
@@ -237,9 +237,10 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 				'tl_class'  => 'w50'
 			)
 		),
-		'sendPause'                => array
+		'cyclePause'                => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['sendPause'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['cyclePause'],
+			'default'   => 10,
 			'inputType' => 'text',
 			'eval'      => array(
 				'mandatory' => true,

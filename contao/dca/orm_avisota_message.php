@@ -63,7 +63,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 		'childCondition' => array(
 			array(
 				'from'   => 'orm_avisota_message_category',
-				'to'     => 'self',
+				'to'     => 'orm_avisota_message',
 				'setOn'  => array
 				(
 					array(
@@ -82,7 +82,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message'] = array
 				)
 			),
 			array(
-				'from'   => 'self',
+				'from'   => 'orm_avisota_message',
 				'to'     => 'orm_avisota_message_content',
 				'setOn'  => array
 				(

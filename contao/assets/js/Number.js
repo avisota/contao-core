@@ -1,9 +1,22 @@
-Number.prototype.formatTime = function() {
+Number.prototype.formatTime = function(forceMinutes, forceHours) {
 	var i = Math.abs(parseInt(this));
 	var s = parseInt(i % 60);
 	var m = parseInt((i / 60) % 60);
 	var h = parseInt((i / 3600) % 60);
-	var v = (h>0 ? h + ':' : '') + ((m<10 ? '0' : '') + m + ':') + ((s<10 ? '0' : '') + s);
+	var v = '';
+	if (forceHours || h > 0) {
+		v += h + ':';
+	}
+	if (v || forceMinutes || m > 0) {
+		if (v && m<10) {
+			v += '0';
+		}
+		v += m + ':';
+	}
+	if (v && s<10) {
+		v += '0';
+	}
+	v += s;
 	if (this < 0) {
 		v = '<span class="negative">-' + v + '<span>';
 	}

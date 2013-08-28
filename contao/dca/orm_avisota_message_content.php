@@ -57,7 +57,7 @@ $GLOBALS['TL_DCA']['orm_avisota_message_content'] = array
 		'childCondition' => array(
 			array(
 				'from'   => 'orm_avisota_message',
-				'to'     => 'self',
+				'to'     => 'orm_avisota_message_content',
 				'setOn'  => array
 				(
 					array(

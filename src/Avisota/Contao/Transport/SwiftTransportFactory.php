@@ -19,6 +19,7 @@ use Avisota\Contao\Entity\Transport;
 use Avisota\Contao\Message\Renderer\FromOverwriteMessageRenderer;
 use Avisota\Contao\Message\Renderer\ReplyToOverwriteMessageRenderer;
 use Avisota\Contao\Message\Renderer\SenderOverwriteMessageRenderer;
+use Avisota\Contao\Message\Renderer\ToOverwriteMessageRenderer;
 use Avisota\Renderer\NativeMessageRenderer;
 use Avisota\Transport\SwiftTransport;
 
@@ -95,6 +96,14 @@ class SwiftTransportFactory implements TransportFactoryInterface
 			$transport->getFromAddress(),
 			$transport->getFromName()
 		);
+
+		if ($GLOBALS['TL_CONFIG']['avisota_developer_mode']) {
+			$renderer = new ToOverwriteMessageRenderer(
+				$renderer,
+				$GLOBALS['TL_CONFIG']['avisota_developer_email'],
+				null
+			);
+		}
 
 		return new SwiftTransport($swiftMailer, $renderer);
 	}
