@@ -90,11 +90,6 @@ class qeueue_execute extends AbstractQueueWebRunner
 			$jsonData['failed']  += count($stat->getFailedRecipients());
 		}
 
-		if (rand(1,2) == 1) {
-			$jsonData['failed'] = $jsonData['success'];
-			$jsonData['success'] = 0;
-		}
-
 		$response = new JsonResponse($jsonData);
 		$response->prepare($request);
 		return $response;

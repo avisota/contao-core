@@ -51,13 +51,5 @@
 		</div>
 	</div>
 
-	<script>
-		window.addEvent('load',function() {
-			setTimeout(
-					function(){
-						new Outbox({{ queue.length|json_encode }},{{ config.id|json_encode }},{{ config.maxSendTime|json_encode }},{{ config.cyclePause|json_encode }});
-					},
-					10000
-			)
-		});</script>
+	<script>window.addEvent('load',function(){new Outbox({{ queue.length|json_encode }},{{ config.id|json_encode }},{{ config.maxSendTime|json_encode }},{{ config.cyclePause|json_encode }});});</script>
 {% endspaceless %}
