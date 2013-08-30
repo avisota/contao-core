@@ -17,7 +17,7 @@ namespace Avisota\Contao\DataContainer;
 
 use Avisota\Contao\Entity\MailingList;
 use Avisota\Contao\Entity\RecipientBlacklist;
-use Avisota\Contao\SubscriptionManager;
+use Avisota\Contao\Subscription\SubscriptionManagerInterface;
 use Contao\Doctrine\ORM\EntityHelper;
 use DcGeneral\DC_General;
 use Doctrine\ORM\EntityManager;
@@ -204,14 +204,14 @@ class Recipient extends \Backend
 	public function onsubmit_callback($dc)
 	{
 		if (isset($_SESSION['avisotaSubscriptionAction']) && isset($_SESSION['avisotaMailingLists'])) {
-			$opt = SubscriptionManager::OPT_IGNORE_BLACKLIST;
+			$opt = SubscriptionManagerInterface::OPT_IGNORE_BLACKLIST;
 
 			switch ($_SESSION['avisotaSubscriptionAction']) {
 				case 'activateSubscription':
-					$opt |= SubscriptionManager::OPT_ACTIVATE;
+					$opt |= SubscriptionManagerInterface::OPT_ACTIVATE;
 					break;
 				case 'doNothink':
-					$opt |= SubscriptionManager::OPT_NO_CONFIRMATION;
+					$opt |= SubscriptionManagerInterface::OPT_NO_CONFIRMATION;
 					break;
 			}
 
@@ -225,6 +225,11 @@ class Recipient extends \Backend
 				$_SESSION['avisotaMailingLists'],
 				$opt
 			);
+			
+			if ($subscriptions && $_SESSION['avisotaSubscriptionAction'] == 'sendOptIn')
+			{
+				// TODO send OptInMail
+			}
 
 			unset ($_SESSION['avisotaMailingLists'], $_SESSION['avisotaSubscriptionAction']);
 		}
@@ -237,9 +242,9 @@ class Recipient extends \Backend
 	{
 		$input = \Input::getInstance();
 
-		$options = SubscriptionManager::OPT_UNSUBSCRIBE_GLOBAL;
+		$options = SubscriptionManagerInterface::OPT_UNSUBSCRIBE_GLOBAL;
 		if ($input->get('blacklist') == 'false') {
-			$options |= SubscriptionManager::OPT_NO_BLACKLIST;
+			$options |= SubscriptionManagerInterface::OPT_NO_BLACKLIST;
 		}
 
 			$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
@@ -280,14 +285,20 @@ class Recipient extends \Backend
 		if (TL_MODE == 'FE') {
 			return $lists;
 		}
-
-		$subscriptionManager = new SubscriptionManager();
+		$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
 		$input = \Input::getInstance();
-
-		$email = $input->post('email');
+		$email = $dc->getCurrentModel()->getProperty('email');
 		$lists = deserialize($lists, true);
 
-		$blacklists = $subscriptionManager->isBlacklisted($email, $lists);
+		// Check for blacklists. If the recipient is new, this test will throw an
+		// exception, because the recipient was not written to the db at this point.
+		try {
+			$blacklists = $subscriptionManager->isBlacklisted($email, $lists);
+		}
+		catch (\RuntimeException $e)
+		{
+			return $lists;
+		}
 
 		if ($blacklists) {
 			$k = array_map(
@@ -352,6 +363,7 @@ class Recipient extends \Backend
 			return;
 		}
 
+		$arrSubscritions = array();
 		$entityManager = EntityHelper::getEntityManager();
 		$queryBuilder = $entityManager->createQueryBuilder();
 		$mailingListIds = $queryBuilder
@@ -368,8 +380,12 @@ class Recipient extends \Backend
 			->setParameter(':recipientId', $dc->id)
 			->getQuery()
 			->getResult();
+		foreach ($mailingListIds as $list)
+		{
+			$arrSubscritions[] = $list['id'];
+		}
 
-		return $mailingListIds;
+		return $arrSubscritions;
 		/*
 		$database = \Database::getInstance();
 
@@ -393,12 +409,33 @@ class Recipient extends \Backend
 	 *
 	 * @return null
 	 */
-	public function saveMailingLists($value)
+	public function saveMailingLists($value, $dc)
 	{
 		if (TL_MODE == 'FE') {
 			return $value;
 		}
+		//get existing subscriptions
+		$arrLists = $this->loadMailingLists($value, $dc);
+		
+		//check for subscriptions for removal
+		$arrRemove = array_diff($arrLists, $value);
+		if ($arrRemove)
+		{
 
+			//remove unchecked subscriptions
+			$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
+			$recipient = $subscriptionManager->resolveRecipient(
+				'Avisota\Contao:Recipient',
+				$dc->getCurrentModel()->getProperty('email')
+			);
+
+			$subscriptions       = $subscriptionManager->unsubscribe(
+				$recipient,
+				$arrRemove
+			);
+		}
+		
+		//save new subscriptions for submit callback
 		$_SESSION['avisotaMailingLists'] = $value;
 		return null;
 	}

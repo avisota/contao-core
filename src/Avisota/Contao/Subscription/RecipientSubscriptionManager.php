@@ -39,7 +39,7 @@ class RecipientSubscriptionManager implements SubscriptionManagerInterface
 	public function resolveRecipient($recipientClass, $recipientIdentity, $createIfNotExists = false)
 	{
 		if ($recipientClass != 'Avisota\Contao\Entity\Recipient' &&
-			$recipientClass != 'Avisota\Contao:Recipient'
+			$recipientClass != 'Avisota\Contao:Recipient' 
 		) {
 			return false;
 		}
@@ -301,7 +301,7 @@ class RecipientSubscriptionManager implements SubscriptionManagerInterface
 					 'list'      => $list
 				)
 			);
-
+			
 			if ($subscription) {
 				if ($options ^ static::OPT_NO_BLACKLIST) {
 					$blacklist = $blacklistRepository->findOneBy(
@@ -351,6 +351,7 @@ class RecipientSubscriptionManager implements SubscriptionManagerInterface
 	 */
 	public function canHandle($recipient)
 	{
-		return $recipient instanceof Recipient;
+		//this manager can handle the Recipient class and an email string
+		return ($recipient instanceof Recipient) || is_string($recipient);
 	}
 }

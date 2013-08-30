@@ -164,7 +164,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 		'default' => array
 		(
 			'recipient' => array('email'),
-			/* 'subscription' => array('lists', 'subscriptionAction'), */
+			'subscription' => array('lists', 'subscriptionAction'),
 			'personals' => array('salutation', 'title', 'firstname', 'lastname', 'gender'),
 			'tracing'   => array('permitPersonalTracing')
 		)
@@ -220,7 +220,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getMailingListOptions'),
 			'eval'             => array(
 				'multiple'       => true,
-				'doNotSaveEmpty' => true,
+				'doNotSaveEmpty' => false,
 				'doNotCopy'      => true,
 				'doNotShow'      => true,
 				'tl_class'       => 'clr'
@@ -240,10 +240,10 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 		(
 			'label'         => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['subscriptionAction'],
 			'inputType'     => 'select',
-			'options'       => array('sendConfirmation', 'activateSubscription', 'doNothink'),
+			'options'       => array('sendConfirmation', 'activateSubscription', 'doNothink', 'sendOptIn'),
 			'reference'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient'],
 			'eval'          => array(
-				'doNotSaveEmpty' => true,
+				'doNotSaveEmpty' => false,
 				'doNotCopy'      => true,
 				'doNotShow'      => true
 			),
