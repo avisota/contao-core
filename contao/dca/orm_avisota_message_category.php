@@ -273,8 +273,9 @@ $GLOBALS['TL_DCA']['orm_avisota_message_category'] = array
 			'inputType'        => 'select',
 			'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getRecipientSourceOptions'),
 			'eval'             => array(
-				'mandatory' => true,
-				'tl_class'  => 'w50'
+				'mandatory'          => true,
+				'includeBlankOption' => true,
+				'tl_class'           => 'w50'
 			),
 			'manyToOne'        => array(
 				'targetEntity' => 'Avisota\Contao\Entity\RecipientSource',

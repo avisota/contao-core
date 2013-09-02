@@ -23,9 +23,8 @@ class Preview extends \Controller
 {
 	/**
 	 * @param DC_General $dc
-	 * @param string      $table
 	 */
-	public function sendMessage($dc, $table)
+	public function sendMessage(DC_General $dc)
 	{
 		$this->loadLanguageFile('avisota_message_preview');
 		$this->loadLanguageFile('orm_avisota_message');

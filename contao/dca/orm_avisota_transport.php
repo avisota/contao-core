@@ -234,7 +234,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_transport']['setSender'],
 			'inputType' => 'checkbox',
-			'eval'      => array('tl_class' => 'clr m12', 'submitOnChange' => true)
+			'eval'      => array('tl_class' => 'w50 clr m12', 'submitOnChange' => true)
 		),
 		'senderAddress'        => array
 		(
@@ -248,7 +248,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'maxlength'      => 128,
 				'decodeEntities' => true,
 				'mandatory'      => true,
-				'tl_class'       => 'w50'
+				'tl_class'       => 'clr w50'
 			),
 			'field'     => array(),
 		),
@@ -271,7 +271,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_transport']['setReplyTo'],
 			'inputType' => 'checkbox',
-			'eval'      => array('tl_class' => 'clr m12', 'submitOnChange' => true)
+			'eval'      => array('tl_class' => 'w50 clr m12', 'submitOnChange' => true)
 		),
 		'replyToAddress'       => array
 		(
@@ -285,7 +285,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'maxlength'      => 128,
 				'decodeEntities' => true,
 				'mandatory'      => true,
-				'tl_class'       => 'w50'
+				'tl_class'       => 'clr w50'
 			),
 			'field'     => array(),
 		),

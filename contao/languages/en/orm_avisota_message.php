@@ -25,6 +25,10 @@ $GLOBALS['TL_LANG']['orm_avisota_message']['alias']         = array(
 	'Alias',
 	'The newsletter alias is a unique reference to the newsletter which can be called instead of its ID.'
 );
+$GLOBALS['TL_LANG']['orm_avisota_message']['language']   = array(
+	'Language',
+	'Please select the newsletter language.'
+);
 $GLOBALS['TL_LANG']['orm_avisota_message']['description']   = array(
 	'Description',
 	'Please enter a short description for this newsletter.'

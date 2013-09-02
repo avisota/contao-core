@@ -155,22 +155,8 @@ class Layout
 	{
 		/** @var EventDispatcher $eventDispatcher */
 		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-		$database = \Database::getInstance();
 
 		$stylesheets = new \ArrayObject();
-
-		$theme = $database->query("SELECT * FROM tl_theme ORDER BY name");
-
-		while ($theme->next()) {
-			$stylesheet = $database
-				->prepare("SELECT * FROM tl_style_sheet WHERE pid=?")
-				->execute($theme->id);
-			while ($stylesheet->next()) {
-				$stylesheets['system/scripts/' . $stylesheet->name . '.css'] = '<span style="color:#A6A6A6">' . $theme->name . ': </span>' . $stylesheet->name . '<span style="color:#A6A6A6">.css</span>';
-			}
-
-			$eventDispatcher->dispatch('avisota-layout-collect-theme-stylesheets', new CollectThemeStylesheetsEvent($theme->row(), $stylesheets));
-		}
 
 		$eventDispatcher->dispatch('avisota-layout-collect-stylesheets', new CollectStylesheetsEvent($stylesheets));
 

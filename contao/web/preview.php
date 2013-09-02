@@ -52,7 +52,19 @@ class preview
 		$user = BackendUser::getInstance();
 		$user->authenticate();
 
-		$recipient = new \Avisota\Recipient\MutableRecipient($user->email, $user->getData());
+		// TODO HACK
+		// see https://github.com/contao/core/pull/6146
+		if (version_compare(VERSION, '3', '>=')) {
+			$class = new ReflectionClass($user);
+			$property = $class->getProperty('arrData');
+			$property->setAccessible(true);
+			$data = $property->getValue($user);
+		}
+		else {
+			$data = $user->getData();
+		}
+
+		$recipient = new \Avisota\Recipient\MutableRecipient($user->email, $data);
 
 		$additionalData = array(
 			'view_online_link' => 'system/modules/avisota/web/preview.php?id=' . $message->getId(),

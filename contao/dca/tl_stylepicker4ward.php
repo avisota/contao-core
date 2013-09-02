@@ -13,4 +13,4 @@
  * @filesource
  */
 
-$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('tl_stylepicker4ward_avisota_callback', 'hookLoadDataContainer');
+// $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('tl_stylepicker4ward_avisota_callback', 'hookLoadDataContainer');

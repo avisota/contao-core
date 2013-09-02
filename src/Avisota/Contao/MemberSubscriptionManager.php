@@ -23,7 +23,9 @@ use Avisota\Contao\Event\ConfirmSubscriptionEvent;
 use Avisota\Contao\Event\RecipientEvent;
 use Avisota\Contao\Event\SubscribeEvent;
 use Avisota\Contao\Event\UnsubscribeEvent;
+use Avisota\Contao\Subscription\SubscriptionManagerInterface;
 use Contao\Doctrine\ORM\EntityHelper;
+use Model\Collection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
@@ -39,22 +41,14 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  *
  * @package Avisota
  */
-class MemberSubscriptionManager extends \Controller
+class MemberSubscriptionManager extends \Controller implements SubscriptionManagerInterface
 {
-    const BLACKLIST_GLOBAL       = 'global';
-    
-    const OPT_IGNORE_BLACKLIST   = 1;
-    
-    const OPT_NO_BLACKLIST       = 2;
-    
-    const OPT_UNSUBSCRIBE_GLOBAL = 4;
-    
-    const OPT_ACTIVATE           = 8;
-    
-    const OPT_NO_CONFIRMATION    = 16;
+	public function __construct()
+	{
+		parent::__construct();
+	}
 
-    
-    public function resolveRecipient($recipientIdentity, $createIfNotExists = false)
+	public function resolveRecipient($recipientClass, $recipientIdentity, $createIfNotExists = false)
     {
         // new recipient
         if (is_array($recipientIdentity))
@@ -456,4 +450,25 @@ class MemberSubscriptionManager extends \Controller
         return $arrReturn;
     }
 
+	/**
+	 * Check if this subscription manager can handle the recipient.
+	 *
+	 * @param $recipient
+	 *
+	 * @return bool
+	 */
+	public function canHandle($recipient)
+	{
+		if ($recipient instanceof \Database_Result) {
+			// TODO
+		}
+		else if ($recipient instanceof \MemberModel) {
+			return true;
+		}
+		else if ($recipient instanceof Collection && $recipient->current() instanceof \MemberModel) {
+			return true;
+		}
+
+		return false;
+	}
 }

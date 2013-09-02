@@ -103,18 +103,18 @@ $GLOBALS['BE_MOD']['system'] = array_merge(
 			 'icon'       => 'system/modules/avisota/assets/images/theme.png',
 			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
 		 ),
-		 'avisota_transport'        => array
-		 (
-			 'nested'     => 'avisota_config:transport',
-			 'tables'     => array('orm_avisota_transport'),
-			 'icon'       => 'system/modules/avisota/assets/images/transport.png',
-			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
-		 ),
 		 'avisota_queue'            => array
 		 (
 			 'nested'     => 'avisota_config:transport',
 			 'tables'     => array('orm_avisota_queue'),
 			 'icon'       => 'system/modules/avisota/assets/images/queue.png',
+			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
+		 ),
+		 'avisota_transport'        => array
+		 (
+			 'nested'     => 'avisota_config:transport',
+			 'tables'     => array('orm_avisota_transport'),
+			 'icon'       => 'system/modules/avisota/assets/images/transport.png',
 			 'stylesheet' => 'system/modules/avisota/assets/css/stylesheet.css'
 		 ),
 	)

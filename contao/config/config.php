@@ -57,6 +57,8 @@ require TL_ROOT . '/system/modules/avisota/config/config-renderer.php';
 /**
  * Events
  */
+$GLOBALS['TL_EVENTS']['avisota-layout-collect-stylesheets'][] = array('Avisota\Contao\Message\Layout\ContaoStylesheets', 'collectStylesheets');
+$GLOBALS['TL_EVENTS']['avisota-layout-resolve-stylesheet'][]  = array('Avisota\Contao\Message\Layout\ContaoStylesheets', 'resolveStylesheet');
 $GLOBALS['TL_EVENT_SUBSCRIBERS']['avisota-subscription-log'] = 'Avisota\Contao\SubscriptionLogger';
 
 
