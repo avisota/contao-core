@@ -39,15 +39,10 @@ class Outbox extends \TwigBackendModule
 
 		/** @var QueueInterface $queue */
 		foreach ($queueDataCollection as $queueData) {
-			try {
-				$serviceName = sprintf('avisota.queue.%s', $queueData->getId());
+			$serviceName = sprintf('avisota.queue.%s', $queueData->getId());
+			if ($container->offsetExists($serviceName)) {
 				$queue       = $container[$serviceName];
-
 				$length += $queue->length();
-			}
-			catch (\InvalidArgumentException $e) {
-				// silently hide Identifier "..." is not defined
-				trigger_error($e->getMessage(), E_USER_NOTICE);
 			}
 		}
 
