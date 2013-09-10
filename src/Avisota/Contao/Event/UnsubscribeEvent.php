@@ -20,6 +20,8 @@ use Symfony\Component\EventDispatcher\Event;
 
 class UnsubscribeEvent extends Event
 {
+	const NAME = 'Avisota\Contao\Event\Unsubscribe';
+
 	protected $recipient;
 
 	protected $subscription;

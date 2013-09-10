@@ -15,6 +15,7 @@
 
 namespace Avisota\Contao\DataContainer;
 
+use Avisota\Contao\Event\MailingListCreateLabelEvent;
 use Contao\Doctrine\ORM\EntityHelper;
 use Doctrine\ORM\Query;
 
@@ -189,18 +190,15 @@ class MailingList extends \Backend
 	 */
 	public function getLabel($rowData, $label, $dc)
 	{
-		$label = '<div style="padding: 3px 0;"><strong>' . $label . '</strong></div>';
+		$label = new \StringBuilder('<div style="padding: 3px 0;"><strong>' . $label . '</strong></div>');
 
-		if (isset($GLOBALS['TL_HOOKS']['avisotaMailingListLabel']) && is_array(
-				$GLOBALS['TL_HOOKS']['avisotaMailingListLabel']
-			)
-		) {
-			foreach ($GLOBALS['TL_HOOKS']['avisotaMailingListLabel'] as $callback) {
-				$this->import($callback[0]);
-				$label = $this->$callback[0]->$callback[1]($rowData, $label, $dc);
-			}
-		}
-		return $label;
+		$event = new MailingListCreateLabelEvent(new \ArrayObject($rowData), $label);
+
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+		$eventDispatcher->dispatch(MailingListCreateLabelEvent::NAME, $event);
+
+		return (string) $label;
 	}
 
 

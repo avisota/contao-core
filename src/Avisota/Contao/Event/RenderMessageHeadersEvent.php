@@ -19,8 +19,10 @@ use Avisota\Contao\Entity\Message;
 use Avisota\Contao\Message\Renderer;
 use Symfony\Component\EventDispatcher\Event;
 
-class RendererHeadersEvent extends Event
+class RenderMessageHeadersEvent extends Event
 {
+	const NAME = 'Avisota\Contao\Event\RenderMessageHeaders';
+
 	/**
 	 * @var Renderer
 	 */

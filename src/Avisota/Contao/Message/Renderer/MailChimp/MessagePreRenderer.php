@@ -18,7 +18,7 @@ namespace Avisota\Contao\Message\Renderer\MailChimp;
 use Avisota\Contao\Entity\Message;
 use Avisota\Contao\Entity\MessageContent;
 use Avisota\Contao\Event\InitializeMessageRendererEvent;
-use Avisota\Contao\Event\RendererHeadersEvent;
+use Avisota\Contao\Event\RenderMessageHeadersEvent;
 use Avisota\Contao\Message\Renderer\MessageContentPreRendererChain;
 use Avisota\Contao\Message\Renderer\MessagePreRendererInterface;
 use Avisota\Contao\Message\MutablePreRenderedMessageTemplate;
@@ -39,7 +39,7 @@ class MessagePreRenderer implements MessagePreRendererInterface
 	{
 		/** @var EventDispatcher $eventDispatcher */
 		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-		$eventDispatcher->dispatch('avisota-renderer-initialize', new InitializeMessageRendererEvent($this));
+		$eventDispatcher->dispatch(InitializeMessageRendererEvent::NAME, new InitializeMessageRendererEvent($this));
 	}
 
 	/**
@@ -294,7 +294,7 @@ class MessagePreRenderer implements MessagePreRendererInterface
 				$headers['styles'] = $styles;
 			}
 
-			$eventDispatcher->dispatch('avisota-renderer-headers', new RendererHeadersEvent($this, $message, $headers));
+			$eventDispatcher->dispatch(RenderMessageHeadersEvent::NAME, new RenderMessageHeadersEvent($this, $message, $headers));
 
 			$headElements = $xpath->query('/html/head', $document->documentElement);
 			$headElement  = $headElements->item(0);

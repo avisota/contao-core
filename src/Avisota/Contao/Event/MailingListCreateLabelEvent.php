@@ -18,25 +18,39 @@ namespace Avisota\Contao\Event;
 use Avisota\Contao\Message\Renderer;
 use Symfony\Component\EventDispatcher\Event;
 
-class CollectStylesheetsEvent extends Event
+class MailingListCreateLabelEvent extends Event
 {
-	const NAME = 'Avisota\Contao\Event\CollectStylesheets';
+	const NAME = 'Avisota\Contao\Event\MailingListCreateLabel';
 
 	/**
 	 * @var \ArrayObject
 	 */
-	protected $stylesheets;
+	protected $row;
 
-	function __construct(\ArrayObject $stylesheets)
+	/**
+	 * @var \StringBuilder
+	 */
+	protected $label;
+
+	function __construct(\ArrayObject $row, \StringBuilder $label)
 	{
-		$this->stylesheets = $stylesheets;
+		$this->row = $row;
+		$this->label = $label;
 	}
 
 	/**
 	 * @return \ArrayObject
 	 */
-	public function getStylesheets()
+	public function getRow()
 	{
-		return $this->stylesheets;
+		return $this->row;
+	}
+
+	/**
+	 * @return \StringBuilder
+	 */
+	public function getLabel()
+	{
+		return $this->label;
 	}
 }

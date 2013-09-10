@@ -31,7 +31,7 @@ abstract class AbstractLayout extends Entity
 		if ($stylesheets) {
 			foreach ($stylesheets as $stylesheet) {
 				$event = new ResolveStylesheetEvent($stylesheet);
-				$eventDispatcher->dispatch('avisota-layout-resolve-stylesheet', $event);
+				$eventDispatcher->dispatch(ResolveStylesheetEvent::NAME, $event);
 				$stylesheet = $event->getStylesheet();
 
 				if (!file_exists(TL_ROOT . '/' . $stylesheet)) {

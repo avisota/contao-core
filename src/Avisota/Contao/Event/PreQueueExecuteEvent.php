@@ -23,7 +23,7 @@ use Symfony\Component\EventDispatcher\Event;
 
 class PreQueueExecuteEvent extends Event
 {
-	const NAME = 'avisota-pre-queue-execute';
+	const NAME = 'Avisota\Contao\Event\PreQueueExecute';
 
 	/**
 	 * @var QueueInterface

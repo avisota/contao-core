@@ -18,22 +18,7 @@ namespace Avisota\Contao\Event;
 use Avisota\Contao\Entity\Recipient;
 use Symfony\Component\EventDispatcher\Event;
 
-class RecipientEvent extends Event
+class RemoveRecipientEvent extends RecipientEvent
 {
-	const NAME = 'Avisota\Contao\Event\Recipient';
-
-	protected $recipient;
-
-	function __construct(Recipient $recipient)
-	{
-		$this->recipient = $recipient;
-	}
-
-	/**
-	 * @return Recipient
-	 */
-	public function getRecipient()
-	{
-		return $this->recipient;
-	}
+	const NAME = 'Avisota\Contao\Event\RemoveRecipient';
 }

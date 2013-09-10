@@ -201,36 +201,6 @@ input.ma-loading {
 	background-position: right center;
 }
 
-/** --- Tracking ------------------------------------------------------------ */
-#stats {
-	margin: 0 18px;
-}
-#chart,
-#chart_links {
-	margin-bottom: 18px;
-}
-.empty_stats {
-	padding: 18px 0;
-}
-#newsletters {
-	margin: 0 18px;
-}
-#links {
-	margin: 0 18px;
-}
-th.number,
-td.number {
-	text-align: right;
-}
-table.jqplot-table-legend {
-	margin-top: 54px !important;
-}
-div.slidedownload {
-	text-align: right;
-	overflow: hidden;
-	margin-bottom: 18px;
-}
-
 /** --- Update -------------------------------------------------------------- */
 .header_more {
 	background: url("../../html/more.png") no-repeat scroll left center transparent;

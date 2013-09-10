@@ -71,7 +71,7 @@ class MemberSubscriptionManager extends \Controller implements SubscriptionManag
               if ($store) {
               /** @var EventDispatcher $eventDispatcher */
             /* $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-              $eventDispatcher->dispatch('avisota-recipient-create', new RecipientEvent($recipient));
+              $eventDispatcher->dispatch(CreateRecipientEvent::NAME, new CreateRecipientEvent($recipient));
 
               $entityManager->persist($recipient);
               $entityManager->flush();
@@ -320,7 +320,7 @@ class MemberSubscriptionManager extends \Controller implements SubscriptionManag
             $entityManager->persist($subscription);
 
             $eventDispatcher->dispatch(
-                    'avisota-recipient-confirm-subscription', new ConfirmSubscriptionEvent($recipient, $subscription)
+                    ConfirmSubscriptionEvent::NAME, new ConfirmSubscriptionEvent($recipient, $subscription)
             );
         }
 
@@ -411,7 +411,7 @@ class MemberSubscriptionManager extends \Controller implements SubscriptionManag
 
         if (!$remainingSubscriptions || !count($remainingSubscriptions))
         {
-//                $eventDispatcher->dispatch('avisota-recipient-remove', new RecipientEvent($recipient));
+//                $eventDispatcher->dispatch(RemoveRecipientEvent::NAME, new RemoveRecipientEvent($recipient));
 //            $entityManager->remove($recipient);
 //            $entityManager->flush();
         }

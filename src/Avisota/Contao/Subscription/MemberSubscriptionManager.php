@@ -225,7 +225,7 @@ class MemberSubscriptionManager implements SubscriptionManagerInterface
             $entityManager->persist($subscription);
 
             $eventDispatcher->dispatch(
-                    'avisota-recipient-confirm-subscription', new ConfirmSubscriptionEvent($recipient, $subscription)
+                    ConfirmSubscriptionEvent::NAME, new ConfirmSubscriptionEvent($recipient, $subscription)
             );
         }
 
@@ -317,7 +317,7 @@ class MemberSubscriptionManager implements SubscriptionManagerInterface
 
         if (!$remainingSubscriptions || !count($remainingSubscriptions))
         {
-//                $eventDispatcher->dispatch('avisota-recipient-remove', new RecipientEvent($recipient));
+//                $eventDispatcher->dispatch(RemoveRecipientEvent::NAME, new RemoveRecipientEvent($recipient));
 //            $entityManager->remove($recipient);
 //            $entityManager->flush();
         }

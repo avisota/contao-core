@@ -24,6 +24,32 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_subscription'] = array
 	'entity' => array(
 		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_NONE
 	),
+	// Config
+	'config'       => array
+	(
+		'dataContainer'     => 'General',
+		'forceEdit'         => true,
+	),
+	// DataContainer
+	'dca_config'   => array
+	(
+		'callback'      => 'DcGeneral\Callbacks\ContaoStyleCallbacks',
+		'data_provider' => array
+		(
+			'default' => array
+			(
+				'class'  => 'Contao\Doctrine\ORM\DataContainer\General\EntityData',
+				'source' => 'orm_avisota_recipient'
+			),
+			'tl_user' => array
+			(
+				'class'  => 'GeneralDataDefault',
+				'source' => 'tl_user'
+			),
+		),
+		'controller'    => 'DcGeneral\Controller\DefaultController',
+		'view'          => 'DcGeneral\View\DefaultView'
+	),
 	// Fields
 	'fields' => array
 	(

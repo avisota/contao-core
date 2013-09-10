@@ -16,7 +16,6 @@
 namespace Avisota\Contao\DataContainer;
 
 use Avisota\Contao\Event\CollectStylesheetsEvent;
-use Avisota\Contao\Event\CollectThemeStylesheetsEvent;
 use DcGeneral\DC_General;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -158,7 +157,7 @@ class Layout
 
 		$stylesheets = new \ArrayObject();
 
-		$eventDispatcher->dispatch('avisota-layout-collect-stylesheets', new CollectStylesheetsEvent($stylesheets));
+		$eventDispatcher->dispatch(CollectStylesheetsEvent::NAME, new CollectStylesheetsEvent($stylesheets));
 
 		return $stylesheets->getArrayCopy();
 	}

@@ -120,7 +120,6 @@ class Recipient extends \Backend
 		if ($subscriptions) {
 			/** @var MailingList $subscription */
 			foreach ($subscriptions as $subscription) {
-				/*
 				$label .= '<li>';
 				$label .= '<a href="javascript:void(0);" onclick="if ($(this).getProperty(\'data-confirmed\') || confirm(' . specialchars(
 					json_encode($GLOBALS['TL_LANG']['orm_avisota_recipient']['confirmManualActivation'])
@@ -160,7 +159,6 @@ class Recipient extends \Backend
 					$label .= ')</span>';
 				}
 				$label .= '</li>';
-				*/
 			}
 		}
 

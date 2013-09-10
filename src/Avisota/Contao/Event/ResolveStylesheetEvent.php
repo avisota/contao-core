@@ -20,6 +20,8 @@ use Symfony\Component\EventDispatcher\Event;
 
 class ResolveStylesheetEvent extends Event
 {
+	const NAME = 'Avisota\Contao\Event\ResolveStylesheet';
+
 	/**
 	 * @var string
 	 */

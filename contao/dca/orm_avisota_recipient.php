@@ -165,7 +165,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 		(
 			'recipient' => array('email'),
 			'personals' => array('salutation', 'title', 'firstname', 'lastname', 'gender'),
-			'tracing'   => array('permitPersonalTracing')
 		)
 	),
 	// Fields
@@ -216,8 +215,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['salutation'],
 			'exclude'   => true,
-			'filter'    => true,
-			'sorting'   => true,
 			'flag'      => 1,
 			'inputType' => 'select',
 			'options'   => array(),
@@ -292,7 +289,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['gender'],
 			'exclude'   => true,
 			'filter'    => true,
-			'sorting'   => true,
 			'inputType' => 'select',
 			'options'   => array('male', 'female'),
 			'reference' => &$GLOBALS['TL_LANG']['MSC'],
@@ -306,26 +302,10 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 			'field'     => array(
 			),
 		),
-		'permitPersonalTracing' => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['permitPersonalTracing'],
-			'exclude'   => true,
-			'filter'    => true,
-			'inputType' => 'checkbox',
-			'eval'      => array(
-				'importable' => true,
-				'exportable' => true,
-				'feEditable' => true,
-				'tl_class'   => 'clr m12'
-			),
-			'field'     => array(
-			),
-		),
 		'addedOn'               => array
 		(
 			'label'   => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['addedOn'],
 			'filter'  => true,
-			'sorting' => true,
 			'flag'    => 8,
 			'eval'    => array(
 				'importable' => true,
@@ -343,7 +323,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 			'label'      => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['addedBy'],
 			'default'    => $this->User->id,
 			'filter'     => true,
-			'sorting'    => true,
 			'flag'       => 1,
 			'foreignKey' => 'tl_user.name',
 			'eval'       => array(

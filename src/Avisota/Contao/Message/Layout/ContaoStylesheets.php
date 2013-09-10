@@ -39,7 +39,7 @@ class ContaoStylesheets
 				$stylesheets['contao:' . $stylesheet->name] = '<span style="color:#A6A6A6;display:inline">' . $theme->name . ': </span>' . $stylesheet->name . '<span style="color:#A6A6A6;display:inline">.css</span>';
 			}
 
-			$eventDispatcher->dispatch('avisota-layout-collect-theme-stylesheets', new CollectThemeStylesheetsEvent($theme->row(), $stylesheets));
+			$eventDispatcher->dispatch(CollectThemeStylesheetsEvent::NAME, new CollectThemeStylesheetsEvent($theme->row(), $stylesheets));
 		}
 	}
 

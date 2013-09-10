@@ -16,7 +16,9 @@
 namespace Avisota\Contao;
 
 use Avisota\Contao\Event\ConfirmSubscriptionEvent;
+use Avisota\Contao\Event\CreateRecipientEvent;
 use Avisota\Contao\Event\RecipientEvent;
+use Avisota\Contao\Event\RemoveRecipientEvent;
 use Avisota\Contao\Event\SubscribeEvent;
 use Avisota\Contao\Event\UnsubscribeEvent;
 use Psr\Log\LoggerInterface;
@@ -30,11 +32,11 @@ class SubscriptionLogger implements EventSubscriberInterface
 	public static function getSubscribedEvents()
 	{
 		return array(
-			'avisota-recipient-subscribe'            => 'subscribe',
-			'avisota-recipient-confirm-subscription' => 'confirm',
-			'avisota-recipient-unsubscribe'          => 'unsubscribe',
-			'avisota-recipient-create'               => 'create',
-			'avisota-recipient-remove'               => 'remove',
+			SubscribeEvent::NAME           => 'subscribe',
+			ConfirmSubscriptionEvent::NAME => 'confirm',
+			UnsubscribeEvent::NAME         => 'unsubscribe',
+			CreateRecipientEvent::NAME     => 'create',
+			RemoveRecipientEvent::NAME     => 'remove',
 		);
 	}
 

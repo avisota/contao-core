@@ -20,6 +20,8 @@ use Symfony\Component\EventDispatcher\Event;
 
 class ConfirmSubscriptionEvent extends Event
 {
+	const NAME = 'Avisota\Contao\Event\ConfirmSubscription';
+
 	protected $recipient;
 
 	protected $subscription;

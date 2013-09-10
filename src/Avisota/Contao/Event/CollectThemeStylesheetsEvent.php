@@ -20,6 +20,8 @@ use Symfony\Component\EventDispatcher\Event;
 
 class CollectThemeStylesheetsEvent extends CollectStylesheetsEvent
 {
+	const NAME = 'Avisota\Contao\Event\CollectThemeStylesheets';
+
 	/**
 	 * @var array
 	 */

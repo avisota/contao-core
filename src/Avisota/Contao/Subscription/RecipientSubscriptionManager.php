@@ -20,7 +20,9 @@ use Avisota\Contao\Entity\Recipient;
 use Avisota\Contao\Entity\RecipientBlacklist;
 use Avisota\Contao\Entity\RecipientSubscription;
 use Avisota\Contao\Event\ConfirmSubscriptionEvent;
+use Avisota\Contao\Event\CreateRecipientEvent;
 use Avisota\Contao\Event\RecipientEvent;
+use Avisota\Contao\Event\RemoveRecipientEvent;
 use Avisota\Contao\Event\SubscribeEvent;
 use Avisota\Contao\Event\UnsubscribeEvent;
 use Contao\Doctrine\ORM\EntityHelper;
@@ -64,7 +66,7 @@ class RecipientSubscriptionManager implements SubscriptionManagerInterface
 			if ($store) {
 				/** @var EventDispatcher $eventDispatcher */
 				$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-				$eventDispatcher->dispatch('avisota-recipient-create', new RecipientEvent($recipient));
+				$eventDispatcher->dispatch(CreateRecipientEvent::NAME, new CreateRecipientEvent($recipient));
 
 				$entityManager->persist($recipient);
 				$entityManager->flush();
@@ -195,7 +197,7 @@ class RecipientSubscriptionManager implements SubscriptionManagerInterface
 				$entityManager->persist($subscription);
 
 				$eventDispatcher->dispatch(
-					'avisota-recipient-subscribe',
+					SubscribeEvent::NAME,
 					new SubscribeEvent($recipient, $subscription)
 				);
 			}
@@ -256,7 +258,7 @@ class RecipientSubscriptionManager implements SubscriptionManagerInterface
 			$entityManager->persist($subscription);
 
 			$eventDispatcher->dispatch(
-				'avisota-recipient-confirm-subscription',
+				ConfirmSubscriptionEvent::NAME,
 				new ConfirmSubscriptionEvent($recipient, $subscription)
 			);
 		}
@@ -323,7 +325,7 @@ class RecipientSubscriptionManager implements SubscriptionManagerInterface
 				$subscriptions[] = $subscription;
 
 				$eventDispatcher->dispatch(
-					'avisota-recipient-unsubscribe',
+					UnsubscribeEvent::NAME,
 					new UnsubscribeEvent($recipient, $subscription, $blacklist)
 				);
 			}
@@ -334,7 +336,7 @@ class RecipientSubscriptionManager implements SubscriptionManagerInterface
 		$remainingSubscriptions = $subscriptionRepository
 			->findBy(array('recipient' => $recipient->getId()));
 		if (!$remainingSubscriptions || !count($remainingSubscriptions)) {
-			$eventDispatcher->dispatch('avisota-recipient-remove', new RecipientEvent($recipient));
+			$eventDispatcher->dispatch(RemoveRecipientEvent::NAME, new RemoveRecipientEvent($recipient));
 			$entityManager->remove($recipient);
 			$entityManager->flush();
 		}

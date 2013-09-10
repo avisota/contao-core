@@ -53,18 +53,6 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient']['gender']                  = array(
 	'Gender',
 	'Please choose the recipients gender.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient']['permitPersonalTracing']   = array(
-	'Personenbezogene Profilbildung <span style="color:red">REMOVE</span>',
-	'Der Abonnent hat seine Erlaubnis zur Erfassung eines personenbezogenen Profils erteilt.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_recipient']['permitPersonalTracingFE'] = array(
-	'Datenschutz <span style="color:red">REMOVE</span>',
-	'Ja, ich willige der Erhebung, Verarbeitung und Nutzung meiner personenbezogenen Daten gemäß der <a href="%s" onclick="window.open(this.href); return false;">Datenschutzrichtlinie</a> ein.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_recipient']['token']                   = array(
-	'Token <span style="color:red">REMOVE</span>',
-	'The double opt-in confirmation token.'
-);
 $GLOBALS['TL_LANG']['orm_avisota_recipient']['addedOn']                 = array(
 	'Added on',
 	'Date of subscription.',

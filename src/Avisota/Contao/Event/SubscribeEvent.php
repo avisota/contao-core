@@ -21,6 +21,8 @@ use Symfony\Component\EventDispatcher\Event;
 
 class SubscribeEvent extends Event
 {
+	const NAME = 'Avisota\Contao\Event\Subscribe';
+
 	protected $recipient;
 
 	protected $subscription;

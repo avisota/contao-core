@@ -20,6 +20,8 @@ use Symfony\Component\EventDispatcher\Event;
 
 class InitializeMessageContentRendererEvent extends Event
 {
+	const NAME = 'Avisota\Contao\Event\InitializeMessageContentRenderer';
+
 	/**
 	 * @var MessageContentRendererInterface
 	 */

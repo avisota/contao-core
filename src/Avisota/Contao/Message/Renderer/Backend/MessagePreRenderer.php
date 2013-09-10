@@ -18,7 +18,7 @@ namespace Avisota\Contao\Message\Renderer\Backend;
 use Avisota\Contao\Entity\Message;
 use Avisota\Contao\Entity\MessageContent;
 use Avisota\Contao\Event\InitializeMessageRendererEvent;
-use Avisota\Contao\Event\RendererHeadersEvent;
+use Avisota\Contao\Event\RenderMessageHeadersEvent;
 use Avisota\Contao\Message\Renderer\MessageContentPreRendererChain;
 use Avisota\Contao\Message\Renderer\MessageContentPreRendererInterface;
 use Avisota\Contao\Message\Renderer\MessagePreRendererInterface;
@@ -44,7 +44,7 @@ class MessagePreRenderer implements MessagePreRendererInterface
 
 		/** @var EventDispatcher $eventDispatcher */
 		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-		$eventDispatcher->dispatch('avisota-renderer-initialize', new InitializeMessageRendererEvent($this));
+		$eventDispatcher->dispatch(InitializeMessageRendererEvent::NAME, new InitializeMessageRendererEvent($this));
 
 		$this->tagReplacer->setUnknownDefaultMode(TagReplacer::MODE_SKIP);
 		$this->tagReplacer->setUnknownTagMode(TagReplacer::MODE_SKIP);
