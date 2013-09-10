@@ -17,59 +17,63 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['type']    = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['type']         = array(
 	'Recipient source module',
 	'Please choose the module that provide recipient data.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['title']   = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['title']        = array(
 	'Name',
 	'Please enter a name for this recipient source.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter']  = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['mailingLists'] = array(
+	'Mailing lists',
+	'Please choose the selected mailing lists.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter']       = array(
 	'Enable filters',
 	'Enable filters on this recipient source. The available filters depend on the specific module.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['salutation']  = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['salutation']   = array(
 	'Salutation',
 	'Please chose the salution used by this recipient source.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['disable'] = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['disable']      = array(
 	'Disabled',
 	'Temporary disable this recipient source for transport.'
 );
 // integrated recipients
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedBy']                        = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedBy']                              = array(
 	'Select recipient&hellip;',
 	'Please choose how recipients are selected.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedMailingLists']              = array(
-	'Mailing lists',
-	'Please choose the selected mailing lists.'
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedRecipientManageSubscriptionPage'] = array(
+	'Subscription management page',
+	'Please choose the subscription management page.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedMailingListsRecipients']    = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedMailingListsRecipients']          = array(
 	'Mailing lists',
 	'Please choose the selected mailing lists. Only recipients that subscribe selected mailing lists are available.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedAllowSingleListSelection']  = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedAllowSingleListSelection']        = array(
 	'Allow single select mailing lists',
 	'Allow the writer to single select mailing lists from this recipient source.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedAllowSingleSelection']      = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedAllowSingleSelection']            = array(
 	'Allow single select recipients',
 	'Allow the writer to single select recipients from this recipient source.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedDetails']                   = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedDetails']                         = array(
 	'Fetch details from&hellip;',
 	'Please choose where the details should be fetched from.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumns']           = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumns']                 = array(
 	'Column filter',
 	'Filter the recipients by columns.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumnsField']      = array('Column');
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumnsComparator'] = array('Comparator');
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumnsValue']      = array('Value');
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumnsNoEscape']   = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumnsField']            = array('Column');
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumnsComparator']       = array('Comparator');
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumnsValue']            = array('Value');
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumnsNoEscape']         = array(
 	'SQL',
 	'Use value as native SQL (&rarr; the value will not excaped).'
 );
@@ -137,9 +141,10 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['details_legend']    = 'Deta
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated'] = 'Avisota integrated recipients';
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member']     = 'Contao members';
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csv_file']   = 'CSV file';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated']                 = 'Avisota integrated recipients';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_by_mailing_list'] = 'Avisota integrated recipients selected by mailing list';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member']                     = 'Contao members';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csv_file']                   = 'CSV file';
 
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_details']        = 'Avisota integrated recipients';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member_details']            = 'Contao members';
