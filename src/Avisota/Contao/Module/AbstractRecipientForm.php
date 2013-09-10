@@ -113,7 +113,7 @@ abstract class AbstractRecipientForm extends \TwigModule
 				'token' => implode(',', $tokens),
 			);
 
-			$url = \Environment::getInstance()->request;
+			$url = \Environment::getInstance()->base . \Environment::getInstance()->request;
 			$url .= (strpos($url, '?') === false ? '?' : '&');
 			$url .= http_build_query($parameters);
 
