@@ -115,7 +115,7 @@ class orm_avisota_recipient_notify extends Backend
 		$options   = array();
 		$recipient = $this->Database->execute("SELECT * FROM orm_avisota_recipient ORDER BY email");
 		while ($recipient->next()) {
-			$label = trim($recipient->firstname . ' ' . $recipient->lastname);
+			$label = trim($recipient->forename . ' ' . $recipient->surname);
 			if (strlen($label)) {
 				$label .= ' &lt;' . $recipient->email . '&gt;';
 			}

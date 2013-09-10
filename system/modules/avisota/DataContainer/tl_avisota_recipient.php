@@ -27,7 +27,7 @@ class orm_avisota_recipient extends Backend
 
 	public function getLabel($recipientData, $label, DataContainer $dc)
 	{
-		$label = trim($recipientData['firstname'] . ' ' . $recipientData['lastname']);
+		$label = trim($recipientData['forename'] . ' ' . $recipientData['surname']);
 		if (strlen($label)) {
 			$label .= ' &lt;' . $recipientData['email'] . '&gt;';
 		}

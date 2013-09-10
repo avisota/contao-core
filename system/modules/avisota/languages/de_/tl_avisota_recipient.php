@@ -41,11 +41,11 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient']['title']                   = array(
 	'Titel',
 	'Hier können Sie den Titel eingeben.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient']['firstname']               = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient']['forename']               = array(
 	'Vorname',
 	'Hier können Sie den Vornamen eingeben.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient']['lastname']                = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient']['surname']                = array(
 	'Nachname',
 	'Hier können Sie den Nachnamen eingeben.'
 );

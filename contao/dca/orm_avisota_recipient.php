@@ -76,7 +76,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 		),
 		'label'             => array
 		(
-			'fields'         => array('firstname', 'lastname', 'email'),
+			'fields'         => array('forename', 'surname', 'email'),
 			'format'         => '%s %s &lt;%s&gt;',
 			'label_callback' => array('Avisota\Contao\DataContainer\Recipient', 'getLabel')
 		),
@@ -164,7 +164,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 		'default' => array
 		(
 			'recipient' => array('email'),
-			'personals' => array('salutation', 'title', 'firstname', 'lastname', 'gender'),
+			'personals' => array('salutation', 'title', 'forename', 'surname', 'gender'),
 		)
 	),
 	// Fields
@@ -179,12 +179,14 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 			),
 		),
 		'createdAt'             => array(
+			'label'         => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['createdAt'],
 			'field' => array(
 				'type'          => 'datetime',
 				'timestampable' => array('on' => 'create')
 			)
 		),
 		'updatedAt'             => array(
+			'label'         => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['updatedAt'],
 			'field' => array(
 				'type'          => 'datetime',
 				'timestampable' => array('on' => 'update')
@@ -248,9 +250,9 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 			'field'     => array(
 			),
 		),
-		'firstname'             => array
+		'forename'             => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['firstname'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['forename'],
 			'exclude'   => true,
 			'search'    => true,
 			'sorting'   => true,
@@ -266,9 +268,9 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 			'field'     => array(
 			),
 		),
-		'lastname'              => array
+		'surname'              => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['lastname'],
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['surname'],
 			'exclude'   => true,
 			'search'    => true,
 			'sorting'   => true,

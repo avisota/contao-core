@@ -130,7 +130,7 @@ class MemberGroup implements RecipientSourceInterface
 					'SELECT m.* FROM tl_member m
 							   INNER JOIN tl_member_to_mailing_list t ON t.member=m.id
 							   WHERE t.list IN (' . implode(',', $ids) . ')
-							   ORDER BY IF(firstname, firstname, IF(lastname, lastname, email)), lastname'
+							   ORDER BY IF(forename, forename, IF(surname, surname, email)), surname'
 				);
 
 			case 'memberByGroupMembers':
@@ -144,7 +144,7 @@ class MemberGroup implements RecipientSourceInterface
 						'SELECT m.* FROM tl_member m
 								   INNER JOIN tl_member_to_group t ON t.member_id=m.id
 								   WHERE t.group_id IN (' . implode(',', $ids) . ')
-								   ORDER BY IF(firstname, firstname, IF(lastname, lastname, email)), lastname'
+								   ORDER BY IF(forename, forename, IF(surname, surname, email)), surname'
 					);
 				}
 
@@ -152,14 +152,14 @@ class MemberGroup implements RecipientSourceInterface
 				if (!isset($member)) {
 					$member = $database
 						->execute(
-						"SELECT * FROM tl_member ORDER BY IF(firstname, firstname, IF(lastname, lastname, email)), lastname"
+						"SELECT * FROM tl_member ORDER BY IF(forename, forename, IF(surname, surname, email)), surname"
 					);
 				}
 
 				$time = time();
 				$options = array();
 				while ($member->next()) {
-					$name = trim($member->firstname . ' ' . $member->lastname);
+					$name = trim($member->forename . ' ' . $member->surname);
 					if (!$name && $member->login) {
 						$name = $member->login;
 					}

@@ -17,21 +17,15 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['orm_avisota_recipient']['confirmed']               = array(
-	'Confirmed',
-	'This account has been confirmed.'
+$GLOBALS['TL_LANG']['orm_avisota_recipient']['createdAt']               = array(
+	'Created at'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient']['updatedAt']               = array(
+	'Last modified at'
 );
 $GLOBALS['TL_LANG']['orm_avisota_recipient']['email']                   = array(
 	'Email',
 	'Please enter the email address.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_recipient']['lists']                   = array(
-	'Mailing lists',
-	'Please choose the subscribed mailing lists.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_recipient']['subscriptionAction']      = array(
-	'Activation',
-	'Please choose the activation method for subscriptions on new mailing lists.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_recipient']['salutation']              = array(
 	'Salutation',
@@ -41,12 +35,12 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient']['title']                   = array(
 	'Title',
 	'Please enter the recipients title.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient']['firstname']               = array(
+$GLOBALS['TL_LANG']['orm_avisota_recipient']['forename']               = array(
 	'Forename',
 	'Please enter the recipients forename.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient']['lastname']                = array(
-	'Surename',
+$GLOBALS['TL_LANG']['orm_avisota_recipient']['surname']                = array(
+	'Surname',
 	'Please enter the recipients surname.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_recipient']['gender']                  = array(
@@ -63,6 +57,21 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient']['addedBy']                 = array(
 	'Contao user who added this recipient.',
 	' by %s',
 	'by a deleted user'
+);
+
+
+// TODO remove
+$GLOBALS['TL_LANG']['orm_avisota_recipient']['confirmed']               = array(
+	'Confirmed',
+	'This account has been confirmed.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient']['lists']                   = array(
+	'Mailing lists',
+	'Please choose the subscribed mailing lists.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient']['subscriptionAction']      = array(
+	'Activation',
+	'Please choose the activation method for subscriptions on new mailing lists.'
 );
 
 

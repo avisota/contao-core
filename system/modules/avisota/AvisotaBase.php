@@ -137,12 +137,12 @@ class AvisotaBase extends Controller
 	{
 		$this->loadLanguageFile('orm_avisota_message');
 
-		list($firstName, $lastName) = $this->splitFriendlyName($this->User->name);
+		list($forename, $surname) = $this->splitFriendlyName($this->User->name);
 
 		$recipient            = new AvisotaRecipient();
 		$recipient->email     = $this->User->email;
-		$recipient->firstname = $firstName;
-		$recipient->lastname  = $lastName;
+		$recipient->forename = $forename;
+		$recipient->surname  = $surname;
 		$recipient->source    = '0';
 
 		return $recipient;
@@ -158,14 +158,14 @@ class AvisotaBase extends Controller
 	 */
 	public function finalizeRecipientArray(&$recipientData)
 	{
-		// set the firstname and lastname field if missing
-		if (empty($recipientData['firstname']) && empty($recipientData['lastname']) && !empty($recipientData['name'])) {
-			list($recipientData['firstname'], $recipientData['lastname']) = explode(' ', $recipientData['name'], 2);
+		// set the forename and surname field if missing
+		if (empty($recipientData['forename']) && empty($recipientData['surname']) && !empty($recipientData['name'])) {
+			list($recipientData['forename'], $recipientData['surname']) = explode(' ', $recipientData['name'], 2);
 		}
 
 		// set the name field, if missing
-		if (empty($recipientData['name']) && !(empty($recipientData['firstname']) && empty($recipientData['lastname']))) {
-			$recipientData['name'] = trim($recipientData['firstname'] . ' ' . $recipientData['lastname']);
+		if (empty($recipientData['name']) && !(empty($recipientData['forename']) && empty($recipientData['surname']))) {
+			$recipientData['name'] = trim($recipientData['forename'] . ' ' . $recipientData['surname']);
 		}
 
 		// set the fullname field, if missing
@@ -174,8 +174,8 @@ class AvisotaBase extends Controller
 		}
 
 		// set the shortname field, if missing
-		if (empty($recipientData['shortname']) && !empty($recipientData['firstname'])) {
-			$recipientData['shortname'] = $recipientData['firstname'];
+		if (empty($recipientData['shortname']) && !empty($recipientData['forename'])) {
+			$recipientData['shortname'] = $recipientData['forename'];
 		}
 
 		// a recipient is anonymous, if he has no name

@@ -14,61 +14,61 @@
  */
 
 $GLOBALS['TL_LANG']['avisota_salutation'][] = array(
-	'salutation'                 => 'Dear Sir ##title## ##firstname## ##lastname##',
+	'salutation'                 => 'Dear Sir ##title## ##forename## ##surname##',
 	'enableGenderFilter'         => true,
 	'genderFilter'               => 'male',
 	'enableRequiredFieldsFilter' => true,
-	'requiredFieldsFilter'       => array('title', 'firstname', 'lastname'),
+	'requiredFieldsFilter'       => array('title', 'forename', 'surname'),
 );
 $GLOBALS['TL_LANG']['avisota_salutation'][] = array(
-	'salutation'                 => 'Dear Madam ##title## ##firstname## ##lastname##',
+	'salutation'                 => 'Dear Madam ##title## ##forename## ##surname##',
 	'enableGenderFilter'         => true,
 	'genderFilter'               => 'female',
 	'enableRequiredFieldsFilter' => true,
-	'requiredFieldsFilter'       => array('title', 'firstname', 'lastname'),
+	'requiredFieldsFilter'       => array('title', 'forename', 'surname'),
 );
 $GLOBALS['TL_LANG']['avisota_salutation'][] = array(
-	'salutation'                 => 'Dear Sir ##firstname## ##lastname##',
+	'salutation'                 => 'Dear Sir ##forename## ##surname##',
 	'enableGenderFilter'         => true,
 	'genderFilter'               => 'male',
 	'enableRequiredFieldsFilter' => true,
-	'requiredFieldsFilter'       => array('firstname', 'lastname'),
+	'requiredFieldsFilter'       => array('forename', 'surname'),
 );
 $GLOBALS['TL_LANG']['avisota_salutation'][] = array(
-	'salutation'                 => 'Dear Madam ##firstname## ##lastname##',
+	'salutation'                 => 'Dear Madam ##forename## ##surname##',
 	'enableGenderFilter'         => true,
 	'genderFilter'               => 'female',
 	'enableRequiredFieldsFilter' => true,
-	'requiredFieldsFilter'       => array('firstname', 'lastname'),
+	'requiredFieldsFilter'       => array('forename', 'surname'),
 );
 $GLOBALS['TL_LANG']['avisota_salutation'][] = array(
-	'salutation'                 => 'Dear Sir ##lastname##',
+	'salutation'                 => 'Dear Sir ##surname##',
 	'enableGenderFilter'         => true,
 	'genderFilter'               => 'male',
 	'enableRequiredFieldsFilter' => true,
-	'requiredFieldsFilter'       => array('lastname'),
+	'requiredFieldsFilter'       => array('surname'),
 );
 $GLOBALS['TL_LANG']['avisota_salutation'][] = array(
-	'salutation'                 => 'Dear Madam ##lastname##',
+	'salutation'                 => 'Dear Madam ##surname##',
 	'enableGenderFilter'         => true,
 	'genderFilter'               => 'female',
 	'enableRequiredFieldsFilter' => true,
-	'requiredFieldsFilter'       => array('lastname'),
+	'requiredFieldsFilter'       => array('surname'),
 );
 $GLOBALS['TL_LANG']['avisota_salutation'][] = array(
-	'salutation'                 => 'Dear Sir or Madam ##title## ##firstname## ##lastname##',
+	'salutation'                 => 'Dear Sir or Madam ##title## ##forename## ##surname##',
 	'enableRequiredFieldsFilter' => true,
-	'requiredFieldsFilter'       => array('title', 'firstname', 'lastname')
+	'requiredFieldsFilter'       => array('title', 'forename', 'surname')
 );
 $GLOBALS['TL_LANG']['avisota_salutation'][] = array(
-	'salutation'                 => 'Dear Sir or Madam ##firstname## ##lastname##',
+	'salutation'                 => 'Dear Sir or Madam ##forename## ##surname##',
 	'enableRequiredFieldsFilter' => true,
-	'requiredFieldsFilter'       => array('firstname', 'lastname')
+	'requiredFieldsFilter'       => array('forename', 'surname')
 );
 $GLOBALS['TL_LANG']['avisota_salutation'][] = array(
-	'salutation'                 => 'Dear Sir or Madam ##lastname##',
+	'salutation'                 => 'Dear Sir or Madam ##surname##',
 	'enableRequiredFieldsFilter' => true,
-	'requiredFieldsFilter'       => array('lastname')
+	'requiredFieldsFilter'       => array('surname')
 );
 $GLOBALS['TL_LANG']['avisota_salutation'][] = array(
 	'salutation' => 'Dear subscriber'

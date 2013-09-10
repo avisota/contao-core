@@ -77,7 +77,7 @@ abstract class AbstractPostRenderingMessageTemplate implements PreRenderedMessag
 
 		$swiftMessage = new \Swift_Message();
 
-		$name = trim($recipient->get('firstname') . ' ' . $recipient->get('lastname'));
+		$name = trim($recipient->get('forename') . ' ' . $recipient->get('surname'));
 
 		$swiftMessage->setTo($recipient->getEmail(), $name);
 		$swiftMessage->setSubject($this->message->getSubject());

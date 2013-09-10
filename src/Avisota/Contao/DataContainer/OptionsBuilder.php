@@ -109,30 +109,30 @@ class OptionsBuilder extends \Controller
 		$recipientRepository = EntityHelper::getRepository('Avisota\Contao:Recipient');
 		$recipients          = $recipientRepository->findBy(
 			array(),
-			array('firstname' => 'ASC', 'lastname' => 'ASC', 'email' => 'ASC')
+			array('forename' => 'ASC', 'surname' => 'ASC', 'email' => 'ASC')
 		);
 		$options             = array();
 		/** @var \Avisota\Contao\Entity\Recipient $recipient */
 		foreach ($recipients as $recipient) {
-			if ($recipient->getFirstname() && $recipient->getLastname()) {
+			if ($recipient->getForename() && $recipient->getSurname()) {
 				$options[$recipient->getId()] = sprintf(
 					'%s, %s &lt;%s&gt;',
-					$recipient->getLastname(),
-					$recipient->getFirstname(),
+					$recipient->getSurname(),
+					$recipient->getForename(),
 					$recipient->getEmail()
 				);
 			}
-			else if ($recipient->getFirstname()) {
+			else if ($recipient->getForename()) {
 				$options[$recipient->getId()] = sprintf(
 					'%s &lt;%s&gt;',
-					$recipient->getFirstname(),
+					$recipient->getForename(),
 					$recipient->getEmail()
 				);
 			}
-			else if ($recipient->getLastname()) {
+			else if ($recipient->getSurname()) {
 				$options[$recipient->getId()] = sprintf(
 					'%s &lt;%s&gt;',
-					$recipient->getLastname(),
+					$recipient->getSurname(),
 					$recipient->getEmail()
 				);
 			}

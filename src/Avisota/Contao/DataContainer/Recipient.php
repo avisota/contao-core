@@ -81,7 +81,7 @@ class Recipient extends \Backend
 	{
 		$database = \Database::getInstance();
 
-		$label = trim($recipientData['firstname'] . ' ' . $recipientData['lastname']);
+		$label = trim($recipientData['forename'] . ' ' . $recipientData['surname']);
 		if (strlen($label)) {
 			$label .= ' &lt;' . $recipientData['email'] . '&gt;';
 		}

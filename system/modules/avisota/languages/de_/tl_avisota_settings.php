@@ -116,5 +116,5 @@ $GLOBALS['TL_LANG']['tl_avisota_settings']['transport_legend']               = '
 $GLOBALS['TL_LANG']['tl_avisota_settings']['developer_legend']               = 'Entwickler';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_salutation'] = array('Anrede');
 $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_title']      = array('Titel');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_firstname']  = array('Vorname');
-$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_lastname']   = array('Nachname');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_forename']   = array('Vorname');
+$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_salutations_surname']    = array('Nachname');
