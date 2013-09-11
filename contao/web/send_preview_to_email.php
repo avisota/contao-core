@@ -67,6 +67,7 @@ class send_preview_to_email extends \Avisota\Contao\Send\AbstractWebRunner
 
 		/** @var TransportInterface $transport */
 		$transport = $GLOBALS['container']['avisota.transport.' . $message
+			->getQueue()
 			->getTransport()
 			->getId()];
 
