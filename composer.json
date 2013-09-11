@@ -23,6 +23,7 @@
 	},
 	"require":{
 		"php":">=5.3",
+		"contao-community-alliance/composer-installer": ">=1.6",
 		"contao/core": ">=2.11.11,<3.2",
 		"avisota/core": "~1",
 		"bit3/contao-dependency-container": "~1",
