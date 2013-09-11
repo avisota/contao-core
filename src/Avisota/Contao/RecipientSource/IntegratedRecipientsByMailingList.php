@@ -38,7 +38,7 @@ class IntegratedRecipientsByMailingList extends AbstractIntegratedRecipients
 	/**
 	 * @param MailingList[] $mailingLists
 	 */
-	public function __construct(array $mailingLists)
+	public function __construct($mailingLists)
 	{
 		$this->mailingLists = $mailingLists;
 	}

@@ -72,6 +72,7 @@ $GLOBALS['TL_LANG']['avisota_message_preview']['helpSendNow']        = 'Send thi
  */
 $GLOBALS['TL_LANG']['avisota_message_preview']['previewSend'] = 'Preview send to %s';
 $GLOBALS['TL_LANG']['avisota_message_preview']['confirmSend'] = 'Are you sure you wan\'t to send this newsletter now? The sending process will start immediately!';
+$GLOBALS['TL_LANG']['avisota_message_preview']['messagesEnqueued'] = '(turn %2$d) %1$d messages enqueued.';
 
 
 /*

@@ -73,7 +73,7 @@ $GLOBALS['TL_EVENTS'][\Avisota\Contao\Event\ResolveSubscriptionNameEvent::NAME][
 	'Avisota\Contao\Recipient\Subscription',
 	'resolveSubscriptionName'
 );
-$GLOBALS['TL_EVENTS'][\Avisota\Contao\Event\CollectSubscriptionListsEvent::NAME][]          = array(
+$GLOBALS['TL_EVENTS'][\Avisota\Contao\Event\CollectSubscriptionListsEvent::NAME][]         = array(
 	'Avisota\Contao\Recipient\Subscription',
 	'collectSubscriptionLists'
 );
@@ -137,6 +137,7 @@ $GLOBALS['BE_FFL']['newschooser']  = 'WidgetNewschooser';
 $GLOBALS['AVISOTA_RECIPIENT_SOURCE']['integrated']                 = 'Avisota\Contao\RecipientSource\IntegratedRecipientsFactory';
 $GLOBALS['AVISOTA_RECIPIENT_SOURCE']['integrated_by_mailing_list'] = 'Avisota\Contao\RecipientSource\IntegratedRecipientsByMailingListFactory';
 // $GLOBALS['AVISOTA_RECIPIENT_SOURCE']['csv_file']                   = 'Avisota\Contao\RecipientSource\CSVFileFactory';
+$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['dummy'] = 'Avisota\Contao\RecipientSource\DummyFactory';
 
 
 /**

@@ -139,7 +139,13 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 			'csvFile' => array('csvFileSrc', 'csvColumnAssignment'),
 			'details' => array('salutation'),
 			'expert'  => array('disable'),
-		)
+		),
+		'dummy'                      => array(
+			'source'  => array('title', 'alias', 'type'),
+			'dummy'   => array('dummyMinCount', 'dummyMaxCount'),
+			'details' => array('salutation'),
+			'expert'  => array('disable'),
+		),
 	),
 	// Fields
 	'fields'       => array
@@ -180,6 +186,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				'mandatory'          => true,
 				'submitOnChange'     => true,
 				'includeBlankOption' => true,
+				'helpwizard'         => true,
 				'tl_class'           => 'w50'
 			)
 		),
@@ -319,6 +326,35 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				'type'     => 'serialized',
 				'length'   => 65532,
 				'nullable' => true,
+			),
+		),
+		// dummy source
+		'dummyMinCount'                             => array
+		(
+			'default'   => false,
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummyMinCount'],
+			'inputType' => 'text',
+			'eval'      => array(
+				'mandatory' => true,
+				'tl_class'  => 'w50',
+				'rgxp'      => 'digit',
+			),
+			'field'     => array(
+				'type' => 'integer',
+			),
+		),
+		'dummyMaxCount'                             => array
+		(
+			'default'   => false,
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummyMaxCount'],
+			'inputType' => 'text',
+			'eval'      => array(
+				'mandatory' => true,
+				'tl_class'  => 'w50',
+				'rgxp'      => 'digit',
+			),
+			'field'     => array(
+				'type' => 'integer',
 			),
 		),
 		// details settings

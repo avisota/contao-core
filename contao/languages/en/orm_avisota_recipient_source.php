@@ -124,6 +124,15 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignment']      
 );
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentColumn'] = array('Column');
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentField']  = array('Assign');
+// dummy source
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummyMinCount'] = array(
+	'Min count',
+	'Please type in the minimum count of generated recipients.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummyMaxCount'] = array(
+	'Max count',
+	'Please type in the maximum count of generated recipients.'
+);
 
 
 /**
@@ -135,16 +144,29 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['expert_legend']     = 'Expe
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_legend'] = 'Avisota integrated recipients';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member_legend']     = 'Contao members';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFile_legend']    = 'CSV file';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummy_legend']      = 'Generator settings';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['details_legend']    = 'Details settings';
 
 
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated']                 = 'Avisota integrated recipients';
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_by_mailing_list'] = 'Avisota integrated recipients selected by mailing list';
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member']                     = 'Contao members';
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csv_file']                   = 'CSV file';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated']                 = array(
+	'Avisota integrated recipients'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_by_mailing_list'] = array(
+	'Avisota integrated recipients selected by mailing list'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member']                     = array(
+	'Contao members'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csv_file']                   = array(
+	'CSV file'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummy']                      = array(
+	'Random generator (for testing only!)',
+	'Randomly generate recipients from a predefined set of forenames, surnames and domains. This recipient source is useful for testing. Please keep in mind that all emails are just generated. They should not exists, but there is no guarantee! This recipient source should only used in combination with a dummy transport or with the developer mode.'
+);
 
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_details']        = 'Avisota integrated recipients';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member_details']            = 'Contao members';
