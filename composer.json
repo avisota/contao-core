@@ -40,7 +40,8 @@
 		"bit3/tag-replacer": "~1",
 		"symfony/http-foundation": "2.3.*",
 		"menatwork/contao-multicolumnwizard": "~3",
-		"metamodels/dc_general": "~1.0.0"
+		"metamodels/dc_general": "~1.0.0",
+		"swiftmailer/swiftmailer": ">=4,<6"
 	},
 	"require-dev":{
 		"phpunit/phpunit":"3.7.*",
