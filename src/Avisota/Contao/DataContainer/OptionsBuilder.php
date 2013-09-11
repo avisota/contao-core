@@ -16,8 +16,10 @@
 namespace Avisota\Contao\DataContainer;
 
 use Avisota\Contao\Entity\SalutationGroup;
+use Avisota\Contao\Event\CollectSubscriptionListsEvent;
 use Contao\Doctrine\ORM\EntityHelper;
 use DcGeneral\DC_General;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class OptionsBuilder extends \Controller
 {
@@ -327,5 +329,21 @@ class OptionsBuilder extends \Controller
 		}
 
 		return array();
+	}
+
+	static public function getSubscriptionListOptions()
+	{
+		global $container;
+
+		$options = new \ArrayObject();
+		$options['global'] = 'global';
+
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $container['event-dispatcher'];
+
+		$event = new CollectSubscriptionListsEvent($options);
+		$eventDispatcher->dispatch(CollectSubscriptionListsEvent::NAME, $event);
+
+		return $options->getArrayCopy();
 	}
 }

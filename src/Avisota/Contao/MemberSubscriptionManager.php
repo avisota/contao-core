@@ -193,9 +193,6 @@ class MemberSubscriptionManager extends \Controller implements SubscriptionManag
         $entityManager          = EntityHelper::getEntityManager();
         $subscriptionRepository = $entityManager->getRepository('Avisota\Contao:MemberSubscription');
         
-        /** @var EventDispatcher $eventDispatcher */
-        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-
         $recipient  = $this->resolveRecipient($recipient, false);
         $lists      = $this->resolveLists($this->clearList($lists), true);
         $blacklists = $this->isBlacklisted($recipient, $lists);

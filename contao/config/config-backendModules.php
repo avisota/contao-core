@@ -41,7 +41,8 @@ $GLOBALS['BE_MOD'] = array_merge(
 			 'avisota_recipients' => array(
 				 'tables'     => array(
 					 'orm_avisota_recipient',
-					 'orm_avisota_recipient_migrate',
+					 'orm_avisota_recipient_subscription',
+					 'mem_avisota_recipient_migrate',
 					 'orm_avisota_recipient_import',
 					 'orm_avisota_recipient_export',
 					 'orm_avisota_recipient_remove',

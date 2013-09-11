@@ -81,28 +81,23 @@
 	padding: 2px 0 3px 20px;
 }
 
-.header_recipient_tools {
-	background: url("../../html/recipient_tools.png") no-repeat scroll left center transparent;
-	padding: 2px 0 3px 20px;
-}
-
 .header_recipient_migrate {
-	background: url("../../html/recipient_migrate.png") no-repeat scroll left center transparent;
+	background: url("../images/recipient_migrate.png") no-repeat scroll left center transparent;
 	padding: 2px 0 3px 20px;
 }
 
 .header_recipient_import {
-	background: url("../../html/recipient_import.png") no-repeat scroll left center transparent;
+	background: url("../images/recipient_import.png") no-repeat scroll left center transparent;
 	padding: 2px 0 3px 20px;
 }
 
 .header_recipient_export {
-	background: url("../../html/recipient_export.png") no-repeat scroll left center transparent;
+	background: url("../images/recipient_export.png") no-repeat scroll left center transparent;
 	padding: 2px 0 3px 20px;
 }
 
 .header_recipient_remove {
-	background: url("../../html/recipient_remove.png") no-repeat scroll left center transparent;
+	background: url("../images/recipient_remove.png") no-repeat scroll left center transparent;
 	padding: 2px 0 3px 20px;
 }
 

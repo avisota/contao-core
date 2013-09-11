@@ -74,7 +74,7 @@ class RecipientSubscriptionManager implements SubscriptionManagerInterface
 		}
 
 		// by id
-		else if (preg_match('#^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$#', $recipientIdentity)) {
+		else if (is_string($recipientIdentity) && preg_match('#^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$#', $recipientIdentity)) {
 			/** @var \Avisota\Contao\Entity\Recipient $recipient */
 			$recipient = $repository->find($recipientIdentity);
 		}

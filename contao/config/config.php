@@ -57,9 +57,27 @@ require TL_ROOT . '/system/modules/avisota/config/config-renderer.php';
 /**
  * Events
  */
-$GLOBALS['TL_EVENTS'][\Avisota\Contao\Event\CollectStylesheetsEvent::NAME][] = array('Avisota\Contao\Message\Layout\ContaoStylesheets', 'collectStylesheets');
-$GLOBALS['TL_EVENTS'][\Avisota\Contao\Event\ResolveStylesheetEvent::NAME][]  = array('Avisota\Contao\Message\Layout\ContaoStylesheets', 'resolveStylesheet');
-$GLOBALS['TL_EVENT_SUBSCRIBERS']['avisota-subscription-log'] = 'Avisota\Contao\SubscriptionLogger';
+$GLOBALS['TL_EVENTS'][\Avisota\Contao\Event\CollectStylesheetsEvent::NAME][]               = array(
+	'Avisota\Contao\Message\Layout\ContaoStylesheets',
+	'collectStylesheets'
+);
+$GLOBALS['TL_EVENTS'][\Avisota\Contao\Event\ResolveStylesheetEvent::NAME][]                = array(
+	'Avisota\Contao\Message\Layout\ContaoStylesheets',
+	'resolveStylesheet'
+);
+$GLOBALS['TL_EVENTS'][\Avisota\Contao\Event\RecipientMigrateCollectPersonalsEvent::NAME][] = array(
+	'Avisota\Contao\Recipient\Migrate',
+	'collectPersonalsFromMembers'
+);
+$GLOBALS['TL_EVENTS'][\Avisota\Contao\Event\ResolveSubscriptionNameEvent::NAME][]          = array(
+	'Avisota\Contao\Recipient\Subscription',
+	'resolveSubscriptionName'
+);
+$GLOBALS['TL_EVENTS'][\Avisota\Contao\Event\CollectSubscriptionListsEvent::NAME][]          = array(
+	'Avisota\Contao\Recipient\Subscription',
+	'collectSubscriptionLists'
+);
+$GLOBALS['TL_EVENT_SUBSCRIBERS']['avisota-subscription-log']                               = 'Avisota\Contao\SubscriptionLogger';
 
 
 /**

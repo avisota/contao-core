@@ -17,12 +17,15 @@ namespace Avisota\Contao\DataContainer;
 
 use Avisota\Contao\Entity\MailingList;
 use Avisota\Contao\Entity\RecipientBlacklist;
+use Avisota\Contao\Entity\RecipientSubscription;
+use Avisota\Contao\Event\ResolveSubscriptionNameEvent;
 use Avisota\Contao\Subscription\SubscriptionManagerInterface;
 use Contao\Doctrine\ORM\EntityHelper;
 use DcGeneral\DC_General;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Recipient extends \Backend
 {
@@ -44,7 +47,7 @@ class Recipient extends \Backend
 			return;
 		}
 
-		$input = \Input::getInstance();
+		$input    = \Input::getInstance();
 		$database = \Database::getInstance();
 
 		/*
@@ -71,14 +74,19 @@ class Recipient extends \Backend
 	}
 
 	/**
-	 * @param array $recipientData
-	 * @param string $label
-	 * @param \DataContainer $dc
+	 * @param array      $recipientData
+	 * @param string     $label
+	 * @param DC_General $dc
 	 *
 	 * @return string
 	 */
-	public function getLabel($recipientData, $label, $dc)
+	public function getLabel($recipientData, $label, DC_General $dc)
 	{
+		global $container;
+
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $container['event-dispatcher'];
+
 		$database = \Database::getInstance();
 
 		$label = trim($recipientData['forename'] . ' ' . $recipientData['surname']);
@@ -108,56 +116,32 @@ class Recipient extends \Backend
 		$label .= '<ul style="margin-top: 3px;">';
 
 		$entityManager = EntityHelper::getEntityManager();
-		$queryBuilder = $entityManager->createQueryBuilder();
+		$queryBuilder  = $entityManager->createQueryBuilder();
 		$subscriptions = $queryBuilder
 			->select('s')
 			->from('Avisota\Contao:RecipientSubscription', 's')
 			->where('s.recipient=?1')
-			->setParameter(1, $dc->id)
+			->setParameter(1, $recipientData['id'])
 			->getQuery()
 			->getResult();
 
 		if ($subscriptions) {
-			/** @var MailingList $subscription */
+			/** @var RecipientSubscription $subscription */
 			foreach ($subscriptions as $subscription) {
+				$event = new ResolveSubscriptionNameEvent($subscription);
+				$eventDispatcher->dispatch(ResolveSubscriptionNameEvent::NAME, $event);
+
 				$label .= '<li>';
-				$label .= '<a href="javascript:void(0);" onclick="if ($(this).getProperty(\'data-confirmed\') || confirm(' . specialchars(
-					json_encode($GLOBALS['TL_LANG']['orm_avisota_recipient']['confirmManualActivation'])
-				) . ')) Avisota.toggleConfirmation(this);" data-recipient="' . $recipientData['id'] . '" data-list="' . $subscription->getId() . '" data-confirmed="' . ($list->confirmed
-					? '1' : '') . '">';
 				$label .= $this->generateImage(
 					sprintf(
 						'system/themes/%s/images/%s.gif',
 						$this->getTheme(),
-						$list->confirmed ? 'visible' : 'invisible'
+						$subscription->getConfirmed() ? 'visible' : 'invisible'
 					),
 					''
 				);
-				$label .= '</a> ';
-				$label .= $list->title;
-				if ($list->confirmationSent || $list->reminderSent) {
-					$label .= ' <span style="color:#b3b3b3; padding-left:3px;">(';
-					if ($list->reminderCount > 1) {
-						$label .= sprintf(
-							$GLOBALS['TL_LANG']['orm_avisota_recipient']['remindersSent'],
-							$list->reminderCount,
-							$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
-						);
-					}
-					else if ($list->reminderSent > 0) {
-						$label .= sprintf(
-							$GLOBALS['TL_LANG']['orm_avisota_recipient']['reminderSent'],
-							$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
-						);
-					}
-					else if ($list->confirmationSent > 0) {
-						$label .= sprintf(
-							$GLOBALS['TL_LANG']['orm_avisota_recipient']['confirmationSent'],
-							$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'])
-						);
-					}
-					$label .= ')</span>';
-				}
+				$label .= '&nbsp;';
+				$label .= $event->getSubscriptionName();
 				$label .= '</li>';
 			}
 		}
@@ -176,7 +160,7 @@ class Recipient extends \Backend
 			return;
 		}
 
-		$input = \Input::getInstance();
+		$input    = \Input::getInstance();
 		$database = \Database::getInstance();
 
 		if ($input->get('act') == 'toggleConfirmation') {
@@ -211,9 +195,12 @@ class Recipient extends \Backend
 
 		try {
 			$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
-			$recipient = $subscriptionManager->resolveRecipient(
+			$recipient           = $subscriptionManager->resolveRecipient(
 				'Avisota\Contao:Recipient',
-				$dc->getEnvironment()->getCurrentModel()->getProperty('email')
+				$dc
+					->getEnvironment()
+					->getCurrentModel()
+					->getProperty('email')
 			);
 			$subscriptionManager->unsubscribe(
 				$recipient,
@@ -264,7 +251,7 @@ class Recipient extends \Backend
 			$root = $this->User->avisota_recipient_lists;
 		}
 
-		$input = \Input::getInstance();
+		$input    = \Input::getInstance();
 		$database = \Database::getInstance();
 
 		$id = strlen($input->get('id')) ? $input->get('id') : CURRENT_ID;
@@ -309,9 +296,9 @@ class Recipient extends \Backend
 		switch ($input->get('act')) {
 			case 'create':
 				if (!strlen($input->get('pid')) || !in_array(
-					$input->get('pid'),
-					$root
-				) || !$this->User->hasAccess('create', 'avisota_recipient_permissions')
+						$input->get('pid'),
+						$root
+					) || !$this->User->hasAccess('create', 'avisota_recipient_permissions')
 				) {
 					$this->log(
 						'Not enough permissions to create newsletters recipients in list ID "' . $input->get(
