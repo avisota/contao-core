@@ -15,4 +15,4 @@
 
 
 // Override callback
-$GLOBALS['TL_DCA']['tl_article']['list']['sorting']['paste_button_callback'][0] = 'tl_article_avisota';
+//$GLOBALS['TL_DCA']['tl_article']['list']['sorting']['paste_button_callback'][0] = 'tl_article_avisota';
