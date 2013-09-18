@@ -63,7 +63,9 @@ class IntegratedRecipientsByMailingList extends AbstractIntegratedRecipients
 		 $queryBuilder
 			->innerJoin('Avisota\Contao:RecipientSubscription', 's.recipient=r.id')
 			->where($queryBuilder->expr()->in('s.list', '?1'))
-			->setParameter(1, $mailingListIds);
+			->andWhere('s.confirmed=?2')
+			->setParameter(1, $mailingListIds)
+			->setParameter(2, true);
 	}
 
 }
