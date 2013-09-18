@@ -48,16 +48,13 @@ class IntegratedRecipientsByMailingList extends AbstractIntegratedRecipients
 	 */
 	protected function prepareQuery(\Doctrine\ORM\QueryBuilder $queryBuilder)
 	{
-		$entityManager = EntityHelper::getEntityManager();
-		$queryBuilder = $entityManager->createQueryBuilder();
-
-		$mailingListIds = array(0);
+		$mailingListIds = array('0');
 		foreach ($this->mailingLists as $mailingList) {
-			$mailingListIds[] = $mailingList->id();
+			$mailingListIds[] = 'mailing_list:' . $mailingList->id();
 		}
 
-		 $queryBuilder
-			->innerJoin('Avisota\Contao:RecipientSubscription', 's.recipient=r.id')
+		$queryBuilder
+			->innerJoin('Avisota\Contao:RecipientSubscription', 's', 'WITH', 's.recipient=r.id')
 			->where($queryBuilder->expr()->in('s.list', '?1'))
 			->andWhere('s.confirmed=?2')
 			->setParameter(1, $mailingListIds)
