@@ -48,10 +48,6 @@ class IntegratedRecipientsByMailingList extends AbstractIntegratedRecipients
 	 */
 	protected function prepareQuery(\Doctrine\ORM\QueryBuilder $queryBuilder)
 	{
-		if (empty($this->mailingLists)) {
-			return array();
-		}
-
 		$entityManager = EntityHelper::getEntityManager();
 		$queryBuilder = $entityManager->createQueryBuilder();
 
