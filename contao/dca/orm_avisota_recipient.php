@@ -36,10 +36,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 			array('Avisota\Contao\DataContainer\Recipient', 'filterByMailingLists'),
 			array('Avisota\Contao\DataContainer\Recipient', 'onload_callback')
 		),
-		'onsubmit_callback' => array
-		(
-			array('Avisota\Contao\DataContainer\Recipient', 'onsubmit_callback')
-		),
 		'ondelete_callback' => array
 		(
 			array('Avisota\Contao\DataContainer\Recipient', 'ondelete_callback')
