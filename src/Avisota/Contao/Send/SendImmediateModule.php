@@ -32,16 +32,21 @@ class SendImmediateModule extends \Controller implements SendModuleInterface
 		$this->loadLanguageFile('avisota_send_immediate');
 
 		$recipientSourceData = $message->getRecipients();
-		$serviceName         = sprintf('avisota.recipientSource.%s', $recipientSourceData->getId());
-		/** @var RecipientSourceInterface $recipientSource */
-		$recipientSource     = $container[$serviceName];
 
-		$template = new \TwigTemplate('avisota/send/send_immediate', 'html5');
-		return $template->parse(
-			array(
-				 'message' => $message,
-				 'count'   => $recipientSource->countRecipients(),
-			)
-		);
+		if ($recipientSourceData) {
+			$serviceName         = sprintf('avisota.recipientSource.%s', $recipientSourceData->getId());
+			/** @var RecipientSourceInterface $recipientSource */
+			$recipientSource     = $container[$serviceName];
+
+			$template = new \TwigTemplate('avisota/send/send_immediate', 'html5');
+			return $template->parse(
+				array(
+					 'message' => $message,
+					 'count'   => $recipientSource->countRecipients(),
+				)
+			);
+		}
+
+		return '';
 	}
 }
