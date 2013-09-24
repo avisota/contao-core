@@ -32,7 +32,9 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 		'enableVersioning'  => true,
 		'onload_callback'   => array
 		(
-			array('Avisota\Contao\DataContainer\Recipient', 'checkPermission'),
+			// we don´t have an permission management yet so don´t check permissions. 
+			// It might throw an error if the user is not an admin.
+			//array('Avisota\Contao\DataContainer\Recipient', 'checkPermission'),
 			array('Avisota\Contao\DataContainer\Recipient', 'filterByMailingLists'),
 			array('Avisota\Contao\DataContainer\Recipient', 'onload_callback')
 		),
