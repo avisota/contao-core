@@ -396,6 +396,10 @@ abstract class AbstractRecipientForm extends \TwigModule
 			$lists = $this->handleSubscribeTokens();
 
 			if ($lists && count($lists)) {
+				//redirect to confirmation page if set
+				if ($this->avisota_subscribe_confirmation_page) {
+					$this->redirectToFrontendPage($this->avisota_subscribe_confirmation_page);
+				}
 				$this->loadLanguageFile('avisota_subscription');
 				$template->messageClass = 'confirm_subscription';
 				$template->message      = $GLOBALS['TL_LANG']['avisota_subscription']['subscribeConfirmation'];
