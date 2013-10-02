@@ -189,6 +189,10 @@ abstract class AbstractRecipientForm extends \TwigModule
 			$newsletterData = array();
 			$this->sendMessage($recipient, $mailBoilerplateId, $transportId, $newsletterData);
 
+			 //redirect to confirmation page if set 
+			if ($this->avisota_unsubscribe_confirmation_page) { 
+				$this->redirectToFrontendPage($this->avisota_unsubscribe_confirmation_page);
+			}
 			return array('confirm', $GLOBALS['TL_LANG']['avisota_subscription']['unsubscribed'], true);
 		}
 
