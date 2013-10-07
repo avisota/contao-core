@@ -353,7 +353,7 @@ class RecipientSubscriptionManager implements SubscriptionManagerInterface
 	 */
 	public function canHandle($recipient)
 	{
-		//this manager can handle the Recipient class and an email string
-		return ($recipient instanceof Recipient) || is_string($recipient);
+		//this manager can handle the Recipient class, an array containing an email field and an email string
+		return ($recipient instanceof Recipient) || is_string($recipient) || (is_array($recipient) && $recipient['email']);
 	}
 }
