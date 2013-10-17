@@ -136,6 +136,7 @@ $GLOBALS['BE_FFL']['newschooser']  = 'WidgetNewschooser';
  */
 $GLOBALS['AVISOTA_RECIPIENT_SOURCE']['integrated']                 = 'Avisota\Contao\RecipientSource\IntegratedRecipientsFactory';
 $GLOBALS['AVISOTA_RECIPIENT_SOURCE']['integrated_by_mailing_list'] = 'Avisota\Contao\RecipientSource\IntegratedRecipientsByMailingListFactory';
+//$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['integrated_member_by_mailing_list'] = 'Avisota\Contao\RecipientSource\IntegratedRecipientsAndMembersByMailingListFactory';
 // $GLOBALS['AVISOTA_RECIPIENT_SOURCE']['csv_file']                   = 'Avisota\Contao\RecipientSource\CSVFileFactory';
 $GLOBALS['AVISOTA_RECIPIENT_SOURCE']['dummy'] = 'Avisota\Contao\RecipientSource\DummyFactory';
 
@@ -205,10 +206,10 @@ $GLOBALS['TL_PERMISSIONS'][] = 'avisota_newsletter_permissions';
 /**
  * Cron
  */
-/*
+
 $GLOBALS['TL_CRON']['daily'][] = array('AvisotaBackend', 'cronCleanupRecipientList');
 $GLOBALS['TL_CRON']['daily'][] = array('AvisotaBackend', 'cronNotifyRecipients');
-*/
+
 
 /**
  * folderurl support

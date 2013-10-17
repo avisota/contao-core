@@ -213,10 +213,18 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_subscription'] = array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_subscription']['reminderCount'],
 			'field' => array(
-				'type'     => 'timestamp',
+				'type'     => 'integer',
 				'nullable' => true,
 			)
 		),
+		'subscriptionModule'    => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_subscription']['subscriptionModule'],
+			'field' => array(
+				'type'     => 'integer',
+				'nullable' => true,
+			)
+		),		
 		'confirmed'        => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_subscription']['confirmed'],

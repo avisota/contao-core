@@ -80,7 +80,8 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 		),
 		'global_operations' => array
 		(
-			'all'     => array
+			// unused functions or broken at the moment - so do not show them
+			/*'all'     => array
 			(
 				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
 				'href'       => 'act=select',
@@ -114,7 +115,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'href'       => 'table=orm_avisota_recipient_remove&amp;act=edit',
 				'class'      => 'header_recipient_remove recipient_tool',
 				'attributes' => 'onclick="Backend.getScrollOffset();"'
-			),
+			),*/
 		),
 		'operations'        => array
 		(
@@ -131,14 +132,15 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'icon'            => 'edit.gif',
 				'button_callback' => array('Avisota\Contao\DataContainer\Recipient', 'editRecipient')
 			),
-			'delete'              => array
+			//blacklist do not work properly, so hide the button
+			/*'delete'              => array
 			(
 				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['delete'],
 				'href'            => 'act=delete',
 				'icon'            => 'delete.gif',
 				'attributes'      => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
 				'button_callback' => array('Avisota\Contao\DataContainer\Recipient', 'deleteRecipient')
-			),
+			),*/
 			'delete_no_blacklist' => array
 			(
 				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['delete_no_blacklist'],

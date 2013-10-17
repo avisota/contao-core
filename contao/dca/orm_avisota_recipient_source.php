@@ -134,6 +134,12 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 			'details'    => array('integratedDetails', 'salutation'),
 			'expert'     => array('disable'),
 		),
+		'integrated_member_by_mailing_list' => array(
+			'source'     => array('title', 'alias', 'type'),
+			'integrated' => array('mailingLists', 'integratedRecipientManageSubscriptionPage'),
+			'details'    => array('integratedDetails', 'salutation'),
+			'expert'     => array('disable'),
+		),
 		'csv_file'                   => array(
 			'source'  => array('title', 'alias', 'type'),
 			'csvFile' => array('csvFileSrc', 'csvColumnAssignment'),
