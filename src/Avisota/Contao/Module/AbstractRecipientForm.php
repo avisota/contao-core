@@ -51,7 +51,7 @@ abstract class AbstractRecipientForm extends \TwigModule
 	/**
 	 * Construct the content element
 	 */
-	public function __construct(\Database_Result $module)
+	public function __construct($module)
 	{
 		parent::__construct($module);
 

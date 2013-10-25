@@ -32,7 +32,7 @@ class Unsubscribe extends AbstractRecipientForm
 	 */
 	protected $strTemplate = 'mod_avisota_unsubscribe';
 
-	public function __construct(\Database_Result $module)
+	public function __construct($module)
 	{
 		parent::__construct($module);
 

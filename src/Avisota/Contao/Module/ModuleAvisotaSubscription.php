@@ -31,7 +31,7 @@ class ModuleAvisotaSubscription extends ModuleAvisotaRecipientForm
 	 */
 	protected $strTemplate = 'mod_avisota_subscription';
 
-	public function __construct(Database_Result $module)
+	public function __construct($module)
 	{
 		parent::__construct($module);
 
