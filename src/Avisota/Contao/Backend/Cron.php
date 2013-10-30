@@ -52,6 +52,9 @@ class Cron extends \Controller
 
 	public function cronNotifyRecipients()
 	{
+		//check if notifications should be send
+		if (!$GLOBALS['TL_CONFIG']['avisota_send_notification']) return false;
+
 		$this->loadLanguageFile('avisota_subscription');
 		
 		$entityManager          = EntityHelper::getEntityManager();
@@ -70,39 +73,56 @@ class Cron extends \Controller
 			->setParameter(1, $GLOBALS['TL_CONFIG']['avisota_notification_count']);
 		$queryBuilder->orderBy('r.email');
 		$query = $queryBuilder->getQuery();
+
 		$integratedRecipients = $query->getResult();
-		
 		
 		foreach ($integratedRecipients as $integratedRecipient) {
 			$subscriptions = $subscriptionRepository->findBy(array('recipient' => $integratedRecipient->id, 'confirmed' => 0), array('updatedAt' => 'asc'));
 			$tokens = array();
-			
+			$blnNotify = false;
+
 			foreach ($subscriptions as $subscription) {
 				if (($subscription->updatedAt->getTimestamp() + $resendDate) > $now) continue;
-
+				
+				$blnNotify = true;
 				$tokens[] = $subscription->getToken();
 				$subscription->updatedAt = new \Datetime();
+				$subscription->reminderCount = $subscription->reminderCount +1;
 				$entityManager->persist($subscription);
 			}
-			
-			$parameters = array(
-				'email' => $integratedRecipient->email,
-				'token' => implode(',', $tokens),
-			);
 
-			$url = \Environment::getInstance()->base . \Environment::getInstance()->request;
-			$url .= (strpos($url, '?') === false ? '?' : '&');
-			$url .= http_build_query($parameters);
+			if ($blnNotify)
+			{
+				$subscription = $subscriptions[0];
 
-			$newsletterData         = array();
-			$newsletterData['link'] = array(
-				'url'  => $url,
-				'text' => $GLOBALS['TL_LANG']['avisota_subscription']['confirmSubscription'],
-			);
+				$parameters = array(
+					'email' => $integratedRecipient->email,
+					'token' => implode(',', $tokens),
+				);
 
-			$this->sendMessage($integratedRecipient, $GLOBALS['TL_CONFIG']['avisota_notification_mail'], $GLOBALS['TL_CONFIG']['avisota_default_transport'], $newsletterData);
-			
-			$integratedRecipient->updatedAt = new \DateTime();
+				$arrPage = $this->Database
+						->prepare('SELECT * FROM tl_page WHERE id = (SELECT avisota_form_target FROM tl_module WHERE id = ?)')
+						->limit(1)
+						->execute($subscription->getSubscriptionModule())
+						->fetchAssoc();
+				
+				$objNextPage = $this->getPageDetails($arrPage['id']); 
+				$strUrl		 = $this->generateFrontendUrl($objNextPage->row(), null, $objNextPage->rootLanguage);
+
+				$url = $this->generateFrontendUrl($arrPage);
+				$url .= (strpos($url, '?') === false ? '?' : '&');
+				$url .= http_build_query($parameters);
+
+				$newsletterData         = array();
+				$newsletterData['link'] = array(
+					'url'  => $url,
+					'text' => $GLOBALS['TL_LANG']['avisota_subscription']['confirmSubscription'],
+				);
+
+				$this->sendMessage($integratedRecipient, $GLOBALS['TL_CONFIG']['avisota_notification_mail'], $GLOBALS['TL_CONFIG']['avisota_default_transport'], $newsletterData);
+
+				$integratedRecipient->updatedAt = new \DateTime();
+			}
 
 		}
 		

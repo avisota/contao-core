@@ -88,6 +88,7 @@ abstract class AbstractRecipientForm extends \TwigModule
 		$mailBoilerplateId,
 		$transportId
 	) {
+		$entityManager       = EntityHelper::getEntityManager();
 		$subscriptionManager = $GLOBALS['container']['avisota.subscription'];
 		$recipient           = $subscriptionManager->resolveRecipient(
 			'Avisota\Contao:Recipient',
@@ -106,7 +107,11 @@ abstract class AbstractRecipientForm extends \TwigModule
 			$tokens = array();
 			foreach ($subscriptions as $subscription) {
 				$tokens[] = $subscription->getToken();
+				$subscription->setSubscriptionModule($this->id);
+				$entityManager->persist($subscription);
 			}
+
+			$entityManager->flush();
 
 			$parameters = array(
 				'email' => $recipientData['email'],
