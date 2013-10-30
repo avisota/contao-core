@@ -90,10 +90,13 @@ class send_immediate extends \Avisota\Contao\Send\AbstractWebRunner
 				'turn' => $turn + 1,
 			);
 			$url = sprintf(
-				'Location: %ssystem/modules/avisota/web/send_immediate.php?%s',
+				'%ssystem/modules/avisota/web/send_immediate.php?%s',
 				$environment->base,
 				http_build_query($parameters)
 			);
+			//ToDo: this is just a hotfix to replace the browser redirect which will break after 10-20 redirects
+			//I know this is ugly but works until we find a better solution
+			echo '<html><head><meta http-equiv="refresh" content="2; URL=' . $url .'"></head><body>Still generating...</body></html>';
 		}
 		else {
 			$parameters = array(
