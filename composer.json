@@ -62,6 +62,12 @@
 		"contao": {
 			"sources": {
 				"contao": "system/modules/avisota"
+			},
+			"transifex": {
+				"project": "avisota-contao",
+				"prefix": "contao-",
+				"languages_cto": "contao/languages",
+				"languages_tx": ".tx"
 			}
 		},
 		"branch-alias": {
