@@ -52,6 +52,7 @@ require TL_ROOT . '/system/modules/avisota/config/config-entities.php';
 require TL_ROOT . '/system/modules/avisota/config/config-frontendModules.php';
 require TL_ROOT . '/system/modules/avisota/config/config-mailChimpTemplates.php';
 require TL_ROOT . '/system/modules/avisota/config/config-renderer.php';
+require TL_ROOT . '/system/modules/avisota/config/config-salutations.php';
 
 
 /**
@@ -78,13 +79,6 @@ $GLOBALS['TL_EVENTS'][\Avisota\Contao\Event\CollectSubscriptionListsEvent::NAME]
 	'collectSubscriptionLists'
 );
 $GLOBALS['TL_EVENT_SUBSCRIBERS']['avisota-subscription-log']                               = 'Avisota\Contao\SubscriptionLogger';
-
-
-/**
- * Salutation selection decider
- */
-$GLOBALS['AVISOTA_SALUTATION_DECIDER'][] = 'Avisota\Contao\Salutation\GenderDecider';
-$GLOBALS['AVISOTA_SALUTATION_DECIDER'][] = 'Avisota\Contao\Salutation\RequiredFieldsDecider';
 
 
 /**

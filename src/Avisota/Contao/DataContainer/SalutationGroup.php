@@ -184,14 +184,15 @@ class SalutationGroup extends \Controller
 		$this->loadLanguageFile('avisota_salutation');
 		$this->loadLanguageFile('orm_avisota_salutation_group');
 
-		$predefinedSalutations = $GLOBALS['TL_LANG']['avisota_salutation'];
+		$predefinedSalutations = $GLOBALS['AVISOTA_SALUTATION'];
 
 		$salutationGroup = new \Avisota\Contao\Entity\SalutationGroup();
 		$salutationGroup->setTitle('Default group generated at ' . date($GLOBALS['TL_CONFIG']['datimFormat']));
 		$sorting = 64;
-		foreach ($predefinedSalutations as $predefinedSalutation) {
+		foreach ($predefinedSalutations as $index => $predefinedSalutation) {
 			$salutation = new Salutation();
 			$salutation->fromArray($predefinedSalutation);
+			$salutation->setSalutation($GLOBALS['TL_LANG']['avisota_salutation'][$index]);
 			$salutation->setSalutationGroup($salutationGroup);
 			$salutation->setSorting($sorting);
 			$salutationGroup->addSalutation($salutation);
