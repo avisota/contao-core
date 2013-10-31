@@ -14,6 +14,9 @@
  */
 
 use Avisota\Contao\Entity\Message;
+use Avisota\Contao\Entity\MessageHistory;
+use Avisota\Contao\Entity\MessageHistoryDetails;
+use Contao\Doctrine\ORM\EntityHelper;
 
 $dir = dirname(isset($_SERVER['SCRIPT_FILENAME']) ? $_SERVER['SCRIPT_FILENAME'] : __FILE__);
 
@@ -41,12 +44,16 @@ class send_immediate extends \Avisota\Contao\Send\AbstractWebRunner
 
 		$input = \Input::getInstance();
 
+		$entityManager		= EntityHelper::getEntityManager();
+		$historyRepository	= $entityManager->getRepository('Avisota\Contao\Entity\MessageHistory');
+
 		$queueData   = $message->getQueue();
 		$serviceName = sprintf('avisota.queue.%s', $queueData->getId());
 		$queue       = $container[$serviceName];
 
 		$recipientSourceData = $message->getRecipients();
 		$serviceName         = sprintf('avisota.recipientSource.%s', $recipientSourceData->getId());
+
 		/** @var RecipientSourceInterface $recipientSource */
 		$recipientSource = $container[$serviceName];
 
@@ -68,6 +75,21 @@ class send_immediate extends \Avisota\Contao\Send\AbstractWebRunner
 			$turn = 0;
 		}
 
+		// get the history
+		$history = $input->get('history');
+		if ($history) {
+			$history = $historyRepository->findOneBy(array('id' => $history));
+		}
+
+		//create a new history if none was found
+		if (!$history) {
+			$history = new MessageHistory();
+			$history->setId($this->createUUID());
+			$history->setMessage($message);
+
+			$entityManager->persist($history);
+		}
+
 		$queueHelper = new \Avisota\Queue\QueueHelper();
 		$queueHelper->setQueue($queue);
 		$queueHelper->setRecipientSource($recipientSource);
@@ -86,14 +108,19 @@ class send_immediate extends \Avisota\Contao\Send\AbstractWebRunner
 			);
 
 			$parameters = array(
-				'id'   => $message->getId(),
-				'turn' => $turn + 1,
+				'id' 		=> $message->getId(),
+				'turn'		=> $turn + 1,
+				'history'	=> $history->getId(),
 			);
 			$url = sprintf(
 				'%ssystem/modules/avisota/web/send_immediate.php?%s',
 				$environment->base,
 				http_build_query($parameters)
 			);
+
+			$history->setMailCount($count);
+
+			$entityManager->flush();
 			//ToDo: this is just a hotfix to replace the browser redirect which will break after 10-20 redirects
 			//I know this is ugly but works until we find a better solution
 			echo '<html><head><meta http-equiv="refresh" content="2; URL=' . $url .'"></head><body>Still generating...</body></html>';
@@ -112,6 +139,14 @@ class send_immediate extends \Avisota\Contao\Send\AbstractWebRunner
 
 		header($url);
 		exit;
+	}
+
+	function createUUID() {
+		return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+		  mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+		  mt_rand(0, 0x0fff) | 0x4000,
+		  mt_rand(0, 0x3fff) | 0x8000,
+		  mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff));
 	}
 }
 

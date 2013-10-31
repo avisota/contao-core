@@ -24,6 +24,7 @@ $GLOBALS['DOCTRINE_ENTITY_NAMESPACE_MAP']['orm_avisota'] = 'Avisota\Contao\Entit
 $GLOBALS['DOCTRINE_ENTITY_CLASS']['Avisota\Contao\Entity\Layout']    = 'Avisota\Contao\Entity\AbstractLayout';
 $GLOBALS['DOCTRINE_ENTITY_CLASS']['Avisota\Contao\Entity\Recipient'] = 'Avisota\Contao\Entity\AbstractRecipient';
 $GLOBALS['DOCTRINE_ENTITY_CLASS']['Avisota\Contao\Entity\Message']   = 'Avisota\Contao\Entity\AbstractMessage';
+$GLOBALS['DOCTRINE_ENTITY_CLASS']['Avisota\Contao\Entity\MessageHistory']   = 'Avisota\Contao\Entity\AbstractMessageHistory';
 
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_layout';
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_mailing_list';
@@ -31,6 +32,8 @@ $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_member_subscription';
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_message';
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_message_category';
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_message_content';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_message_history';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_message_history_details';
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_theme';
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_queue';
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_recipient';
