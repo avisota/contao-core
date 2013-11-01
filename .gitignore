@@ -12,6 +12,7 @@ nbproject/
 
 # runtime files
 contao/config/dynamics.php
+.tx/
 
 # dependencies
 build
