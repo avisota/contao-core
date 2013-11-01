@@ -23,7 +23,7 @@ $GLOBALS['TL_LANG']['orm_avisota_queue']['type']                     = array(
 );
 $GLOBALS['TL_LANG']['orm_avisota_queue']['title']                    = array(
 	'Title',
-	'Please enter the transport module title.'
+	'Please enter the queue title.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_queue']['alias']                    = array(
 	'Alias',
