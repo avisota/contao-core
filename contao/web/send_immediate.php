@@ -91,6 +91,7 @@ class send_immediate extends \Avisota\Contao\Send\AbstractWebRunner
 		}
 
 		$queueHelper = new \Avisota\Queue\QueueHelper();
+		$queueHelper->setEventDispatcher($GLOBALS['container']['event-dispatcher']);
 		$queueHelper->setQueue($queue);
 		$queueHelper->setRecipientSource($recipientSource);
 		$queueHelper->setMessageTemplate($messageTemplate);
