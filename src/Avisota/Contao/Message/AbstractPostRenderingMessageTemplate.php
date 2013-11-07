@@ -16,9 +16,7 @@
 namespace Avisota\Contao\Message;
 
 use Avisota\Contao\Entity\Message;
-use Avisota\Contao\Entity\MessageContent;
 use Avisota\Contao\ReplaceInsertTagsHook;
-use Avisota\Message\NativeMessage;
 use Avisota\Recipient\RecipientInterface;
 use Bit3\TagReplacer\TagReplacer;
 

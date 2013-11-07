@@ -16,9 +16,6 @@
 namespace Avisota\Contao\Message;
 
 use Avisota\Contao\Entity\Message;
-use Avisota\Contao\Entity\MessageContent;
-use Avisota\Message\NativeMessage;
-use Avisota\Recipient\RecipientInterface;
 
 class MutablePreRenderedMessageTemplate extends AbstractPostRenderingMessageTemplate
 {
