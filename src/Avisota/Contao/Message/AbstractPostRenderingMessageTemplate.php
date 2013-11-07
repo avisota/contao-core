@@ -16,9 +16,14 @@
 namespace Avisota\Contao\Message;
 
 use Avisota\Contao\Entity\Message;
+use Avisota\Contao\Event\PostRenderMessageTemplateEvent;
+use Avisota\Contao\Event\PostRenderMessageTemplatePreviewEvent;
+use Avisota\Contao\Event\PreRenderMessageTemplateEvent;
+use Avisota\Contao\Event\PreRenderMessageTemplatePreviewEvent;
 use Avisota\Contao\ReplaceInsertTagsHook;
 use Avisota\Recipient\RecipientInterface;
 use Bit3\TagReplacer\TagReplacer;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 abstract class AbstractPostRenderingMessageTemplate implements PreRenderedMessageTemplateInterface
 {
@@ -63,7 +68,25 @@ abstract class AbstractPostRenderingMessageTemplate implements PreRenderedMessag
 	 */
 	public function renderPreview(RecipientInterface $recipient, array $additionalData = array())
 	{
-		return $this->parseContent($recipient, $additionalData);
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		// dispatch a pre render event
+		$event = new PreRenderMessageTemplatePreviewEvent($this->message, $this, $recipient, $additionalData);
+		$eventDispatcher->dispatch($event::NAME, $event);
+
+		// fetch updates on additional data
+		$additionalData = $event->getAdditionalData();
+
+		$content = $this->parseContent($recipient, $additionalData);
+
+		// dispatch a post render event
+		$event = new PostRenderMessageTemplatePreviewEvent($this->message, $this, $recipient, $additionalData, $content);
+		$eventDispatcher->dispatch($event::NAME, $event);
+
+		$content = $event->getPreview();
+
+		return $content;
 	}
 
 	/**
@@ -71,6 +94,16 @@ abstract class AbstractPostRenderingMessageTemplate implements PreRenderedMessag
 	 */
 	public function render(RecipientInterface $recipient = null, array $additionalData = array())
 	{
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		// dispatch a pre render event
+		$event = new PreRenderMessageTemplateEvent($this->message, $this, $recipient, $additionalData);
+		$eventDispatcher->dispatch($event::NAME, $event);
+
+		// fetch updates on additional data
+		$additionalData = $event->getAdditionalData();
+
 		$content = $this->parseContent($recipient, $additionalData);
 
 		$swiftMessage = new \Swift_Message();
@@ -82,6 +115,12 @@ abstract class AbstractPostRenderingMessageTemplate implements PreRenderedMessag
 		$swiftMessage->setBody($content, $this->getContentType(), $this->getContentEncoding());
 		$swiftMessage->setDescription($this->message->getDescription());
 
-		return new ContaoAwareNativeMessage($swiftMessage, $this->message, array($recipient));
+		$message = new ContaoAwareNativeMessage($swiftMessage, $this->message, array($recipient));
+
+		// dispatch a post render event
+		$event = new PostRenderMessageTemplateEvent($this->message, $this, $recipient, $additionalData, $message);
+		$eventDispatcher->dispatch($event::NAME, $event);
+
+		return $message;
 	}
 }
