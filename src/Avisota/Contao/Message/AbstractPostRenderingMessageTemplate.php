@@ -84,6 +84,6 @@ abstract class AbstractPostRenderingMessageTemplate implements PreRenderedMessag
 		$swiftMessage->setBody($content, $this->getContentType(), $this->getContentEncoding());
 		$swiftMessage->setDescription($this->message->getDescription());
 
-		return new NativeMessage($swiftMessage);
+		return new ContaoAwareNativeMessage($swiftMessage, $this->message, array($recipient));
 	}
 }
