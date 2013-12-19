@@ -127,7 +127,7 @@ abstract class AbstractRecipientForm extends \TwigModule
 
 			// TODO
 			$newsletterData         = array();
-			$newsletterData['link'] = array(
+			$newsletterData['link'] = (object) array(
 				'url'  => $url,
 				'text' => $GLOBALS['TL_LANG']['avisota_subscription']['confirmSubscription'],
 			);
