@@ -50,48 +50,74 @@ class Cron extends \Controller
 		$this->import('Database');
 	}
 
+	/**
+	 * Send a notify for the option. 
+	 * Only send XXX mails per run.
+	 *  
+	 * @return void
+	 */
 	public function cronNotifyRecipients()
 	{
-		//check if notifications should be send
-		if (!$GLOBALS['TL_CONFIG']['avisota_send_notification']) return false;
+		// Check if notifications should be send.
+		if (!$GLOBALS['TL_CONFIG']['avisota_send_notification'])
+		{
+			return false;
+		}
 
 		$this->loadLanguageFile('avisota_subscription');
-		
-		$entityManager          = EntityHelper::getEntityManager();
-		$subscriptionRepository = $entityManager->getRepository('Avisota\Contao:RecipientSubscription');
-		
-		$resendDate = $GLOBALS['TL_CONFIG']['avisota_notification_time'] * 24 * 60 * 60;
-		$now = time();
-		
+
+		$entityManager           = EntityHelper::getEntityManager();
+		$subscriptionRepository  = $entityManager->getRepository('Avisota\Contao:RecipientSubscription');
+		$intCountSend            = 0;
+
+		$resendDate  = $GLOBALS['TL_CONFIG']['avisota_notification_time'] * 24 * 60 * 60;
+		$now         = time();
+
+		// Get all recipients.
 		$queryBuilder = EntityHelper::getEntityManager()->createQueryBuilder();
 		$queryBuilder
-			->select('r')
-			->from('Avisota\Contao:Recipient', 'r')
-			->innerJoin('Avisota\Contao:RecipientSubscription', 's', 'WITH', 's.recipient=r.id')
-			->where('s.confirmed=0')
-			->andWhere('s.reminderCount < ?1')
-			->setParameter(1, $GLOBALS['TL_CONFIG']['avisota_notification_count']);
+				->select('r')
+				->from('Avisota\Contao:Recipient', 'r')
+				->innerJoin('Avisota\Contao:RecipientSubscription', 's', 'WITH', 's.recipient=r.id')
+				->where('s.confirmed=0')
+				->andWhere('s.reminderCount < ?1')
+				->setParameter(1, $GLOBALS['TL_CONFIG']['avisota_notification_count']);
 		$queryBuilder->orderBy('r.email');
-		$query = $queryBuilder->getQuery();
-
+		
+		// Execute Query.
+		$query                = $queryBuilder->getQuery();
 		$integratedRecipients = $query->getResult();
 		
-		foreach ($integratedRecipients as $integratedRecipient) {
+		// Check each recipient with open subscription.
+		foreach ($integratedRecipients as $integratedRecipient)
+		{
 			$subscriptions = $subscriptionRepository->findBy(array('recipient' => $integratedRecipient->id, 'confirmed' => 0), array('updatedAt' => 'asc'));
-			$tokens = array();
-			$blnNotify = false;
+			$tokens        = array();
+			$blnNotify     = false;
 
-			foreach ($subscriptions as $subscription) {
-				if (($subscription->updatedAt->getTimestamp() + $resendDate) > $now) continue;
-				
+			foreach ($subscriptions as $subscription)
+			{
+				// Check if we are over the $resendDate date.
+				if (($subscription->updatedAt->getTimestamp() + $resendDate) > $now)
+				{
+					continue;
+				}
+
+				// Set some data.
 				$blnNotify = true;
-				$tokens[] = $subscription->getToken();
-				$subscription->updatedAt = new \Datetime();
-				$subscription->reminderCount = $subscription->reminderCount +1;
+				$tokens[]  = $subscription->getToken();
+
+				// Update the subscription.
+				$subscription->updatedAt     = new \Datetime();
+				$subscription->reminderSent  = new \Datetime();
+				$subscription->reminderCount = $subscription->reminderCount + 1;
+
+				// Save.
 				$entityManager->persist($subscription);
 			}
 
-			if ($blnNotify)
+			// Check if we have to send a notify and if we have a subscription module.
+			if ($blnNotify && $subscription->getSubscriptionModule())
 			{
 				$subscription = $subscriptions[0];
 
@@ -105,27 +131,44 @@ class Cron extends \Controller
 						->limit(1)
 						->execute($subscription->getSubscriptionModule())
 						->fetchAssoc();
-				
-				$objNextPage = $this->getPageDetails($arrPage['id']); 
-				$strUrl		 = $this->generateFrontendUrl($objNextPage->row(), null, $objNextPage->rootLanguage);
+
+				$objNextPage = $this->getPageDetails($arrPage['id']);
+				$strUrl      = $this->generateFrontendUrl($objNextPage->row(), null, $objNextPage->rootLanguage);
 
 				$url = $this->generateFrontendUrl($arrPage);
 				$url .= (strpos($url, '?') === false ? '?' : '&');
 				$url .= http_build_query($parameters);
 
 				$newsletterData         = array();
-				$newsletterData['link'] = array(
-					'url'  => $url,
-					'text' => $GLOBALS['TL_LANG']['avisota_subscription']['confirmSubscription'],
+				$newsletterData['link'] = (object) array(
+							'url' => \Environment::getInstance()->base . $url,
+							'text' => $GLOBALS['TL_LANG']['avisota_subscription']['confirmSubscription'],
 				);
 
-				$this->sendMessage($integratedRecipient, $GLOBALS['TL_CONFIG']['avisota_notification_mail'], $GLOBALS['TL_CONFIG']['avisota_default_transport'], $newsletterData);
+				// Try to send the email.
+				try
+				{
+					$this->sendMessage($integratedRecipient, $GLOBALS['TL_CONFIG']['avisota_notification_mail'], $GLOBALS['TL_CONFIG']['avisota_default_transport'], $newsletterData);
+				}
+				catch (\Exception $exc)
+				{
+					$this->log(sprintf('Unable to send reminder to "%s" with error message - %s', $integratedRecipient->email, $exc->getMessage()), __CLASS__ . ' | ' . __FUNCTION__, TL_ERROR);
+				}
 
+				// Update recipient;
 				$integratedRecipient->updatedAt = new \DateTime();
+
+				// Set counter.
+				$intCountSend++;
 			}
 
+			// Send only 5 mails per run.
+			if ($intCountSend >= 5)
+			{
+				break;
+			}
 		}
-		
+
 		$entityManager->flush();
 	}
 	
@@ -134,7 +177,7 @@ class Cron extends \Controller
 		
 		$entityManager          = EntityHelper::getEntityManager();
 		$subscriptionRepository = $entityManager->getRepository('Avisota\Contao:RecipientSubscription');
-		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+		$eventDispatcher        = $GLOBALS['container']['event-dispatcher'];
 
 		$cleanupDate = new \DateTime();
 		$cleanupDate->setTimezone(new \DateTimeZone(date_default_timezone_get()));
@@ -165,13 +208,23 @@ class Cron extends \Controller
 		}
 	}
 	
-	
+	/**
+	 * Send mail.
+	 * 
+	 * @param type $recipient
+	 * @param type $mailBoilerplateId
+	 * @param type $transportId
+	 * @param type $newsletterData
+	 * 
+	 * @throws \RuntimeException
+	 */
 	protected function sendMessage($recipient, $mailBoilerplateId, $transportId, $newsletterData)
 	{
 		$messageRepository = EntityHelper::getRepository('Avisota\Contao:Message');
 		$messageEntity     = $messageRepository->find($mailBoilerplateId);
 
-		if (!$messageEntity) {
+		if (!$messageEntity)
+		{
 			throw new \RuntimeException('Could not find message id ' . $mailBoilerplateId);
 		}
 
