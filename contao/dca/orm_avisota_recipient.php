@@ -334,5 +334,19 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient'] = array
 				'nullable' => true,
 			),
 		),
+		'lists' => array
+		(
+			'label' => &$GLOBALS['TL_LANG']['orm_avisota_recipient']['lists'],
+			'inputType' => 'checkbox',
+			'eval' => array(
+					'mandatory'      => true,
+					'multiple'       => true,
+					'doNotSaveEmpty' => true,
+					'doNotCopy'      => true,
+					'doNotShow'      => true,
+					'tl_class'       => 'clr'
+			),
+			'field' => false,
+		),
 	)
 );

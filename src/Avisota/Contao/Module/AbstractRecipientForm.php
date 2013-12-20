@@ -391,6 +391,11 @@ abstract class AbstractRecipientForm extends \TwigModule
 
 		$messageKey = 'MESSAGE_' . strtoupper(get_class($this)) . '_' . $this->id;
 		if ($this->Input->post('FORM_SUBMIT') == $this->formName && !$doNotSubmit) {
+			// change the lists options
+			if ($this->avisota_show_lists) {
+				$mailingLists = $recipientData['lists'];
+				unset($recipientData['lists']);
+			}
 			$_SESSION[$messageKey] = $this->submit($recipientData, $mailingLists, $template);
 			$this->reload();
 		}
