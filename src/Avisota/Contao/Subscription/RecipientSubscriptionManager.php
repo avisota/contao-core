@@ -125,7 +125,7 @@ class RecipientSubscriptionManager implements SubscriptionManagerInterface
 			$queryBuilder->setParameter($index + 2, $list);
 		}
 
-		$queryBuilder->orWhere('(' . implode(' OR ', $whereList) . ')');
+		$queryBuilder->andWhere('(' . implode(' OR ', $whereList) . ')');
 
 		$query            = $queryBuilder->getQuery();
 		$blacklistEntries = $query->getResult();

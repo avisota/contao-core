@@ -99,7 +99,7 @@ class send_immediate extends \Avisota\Contao\Send\AbstractWebRunner
 
 		$count = $queueHelper->enqueue(30, $turn * 30);
 
-		if ($count) {
+		if ($count || ($turn * 30 + 30) < $recipientSource->countRecipients()) {
 			$this->loadLanguageFile('avisota_message_preview');
 
 			$_SESSION['TL_CONFIRM'][] = sprintf(

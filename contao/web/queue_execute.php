@@ -18,7 +18,6 @@ use Avisota\Contao\Event\PreQueueExecuteEvent;
 use Avisota\Contao\Queue\AbstractQueueWebRunner;
 use Avisota\Queue\ExecutionConfig;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 $dir = dirname(isset($_SERVER['SCRIPT_FILENAME']) ? $_SERVER['SCRIPT_FILENAME'] : __FILE__);
 

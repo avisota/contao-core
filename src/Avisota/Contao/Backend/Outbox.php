@@ -16,15 +16,10 @@
 namespace Avisota\Contao\Backend;
 
 use Avisota\Contao\Entity\Queue;
-use Avisota\Contao\Event\PreQueueExecuteEvent;
 use Avisota\Contao\Message\Renderer;
-use Avisota\Queue\ExecutionConfig;
 use Avisota\Queue\QueueInterface;
 use Contao\Doctrine\ORM\EntityHelper;
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 class Outbox extends \TwigBackendModule
 {
