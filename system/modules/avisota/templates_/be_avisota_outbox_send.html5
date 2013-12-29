@@ -67,8 +67,8 @@
 	</table>
 </div>
 
-<script type="text/javascript" src="system/modules/avisota/assets/css/Number.js"></script>
-<script type="text/javascript" src="system/modules/avisota/assets/css/outbox.js"></script>
+<script type="text/javascript" src="assets/avisota-core/css/Number.js"></script>
+<script type="text/javascript" src="assets/avisota-core/css/outbox.js"></script>
 <script type="text/javascript">
 window.addEvent('load', function() {
 	new Outbox(<?php echo json_encode($this->outbox); ?>,

@@ -84,7 +84,7 @@ class CustomMenu extends \BackendModule
 	{
 		if (TL_MODE == 'BE') {
 			try {
-				$GLOBALS['TL_CSS']['avisota-be-global'] = 'system/modules/avisota/assets/css/be_global.css';
+				$GLOBALS['TL_CSS']['avisota-be-global'] = 'assets/avisota-core/css/be_global.css';
 
 				if (Outbox::isEmpty()) {
 					$navigation['avisota']['modules']['avisota_outbox']['class'] .= ' avisota_outbox_empty';

@@ -1,0 +1,55 @@
+{% spaceless %}
+	<div id="tl_buttons">
+		<a href="{{ referer }}" class="header_back" title="{{ _lang.MSC.backBT }}"
+		   accesskey="b">{{ _lang.MSC.backBT }}</a>
+	</div>
+
+	<h2 class="sub_headline">{{ _lang.avisota_outbox.execute|format(config.title) }}</h2>
+
+	{{ messages() }}
+
+	<div class="tl_listing_container initializing" id="avisota_outbox">
+		<div class="avisota_outbox_instruction">
+			<div class="avisota_progress_initializing"><img src="assets/avisota-core/images/queue_execute_initialize.gif"> {{ _lang.avisota_outbox.progress_initializing }}</div>
+			<div class="avisota_progress_running"><img src="assets/avisota-core/images/queue_execute_send.gif"> {{ _lang.avisota_outbox.progress_running }}</div>
+			<div class="avisota_progress_pause"><img src="assets/avisota-core/images/queue_execute_waiting.gif"> {{ _lang.avisota_outbox.progress_pause }}</div>
+			<div class="avisota_progress_finish">{{ _lang.avisota_outbox.progress_finish }}</div>
+			<div class="avisota_progress_error">{{ _lang.avisota_outbox.progress_error }}</div>
+		</div>
+
+		<div id="avisota_outbox_exception">
+			<div id="avisota_outbox_exception_text"></div>
+		</div>
+
+		<div class="avisota_outbox_stats">
+			<div class="failed">
+				<span id="avisota_outbox_execution_failed">0</span>
+				<label>{{ _lang.avisota_outbox.col_failed }}</label>
+			</div>
+			<div class="success">
+				<span id="avisota_outbox_execution_success">0</span>
+				<label>{{ _lang.avisota_outbox.col_success }}</label>
+			</div>
+			<div class="open">
+				<span id="avisota_outbox_execution_open">{{ queue.length }}</span>
+				<label>{{ _lang.avisota_outbox.col_open }}</label>
+			</div>
+			<div class="timeout">
+				<span id="avisota_outbox_execution_timeout">0:00</span>
+				<label>{{ _lang.avisota_outbox.col_timeout }}</label>
+			</div>
+			<div class="duration">
+				<span id="avisota_outbox_execution_duration">0:00:00</span>
+				<label>{{ _lang.avisota_outbox.col_duration }}</label>
+			</div>
+		</div>
+
+		<div class="avisota_outbox_progress">
+			<div id="avisota_outbox_progress_failed" class="progress-bar progress-bar-failed" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+			<div id="avisota_outbox_progress_success" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+			<div id="avisota_outbox_progress_working" class="progress-bar progress-bar-open" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+		</div>
+	</div>
+
+	<script>window.addEvent('load',function(){new Outbox({{ queue.length|json_encode }},{{ config.id|json_encode }},{{ config.maxSendTime|json_encode }},{{ config.cyclePause|json_encode }});});</script>
+{% endspaceless %}

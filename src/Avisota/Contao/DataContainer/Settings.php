@@ -42,35 +42,4 @@ class Settings extends \Backend
 	{
 		return $GLOBALS['TL_LANG']['tl_avisota_settings']['missing_highstock'];
 	}
-
-	/**
-	 * @param \DataContainer $dc
-	 *
-	 * @return array
-	 */
-	public function getBoilerplateMessages($dc)
-	{
-		$entityManager = EntityHelper::getEntityManager();
-		$queryBuilder = $entityManager->createQueryBuilder();
-
-		/** @var Message[] $messages */
-		$messages = $queryBuilder
-			->select('m')
-			->from('Avisota\Contao:Message', 'm')
-			->innerJoin('Avisota\Contao:MessageCategory', 'c', 'c.id=m.category')
-			->where('c.boilerplates=:boilerplate')
-			->orderBy('c.title', 'ASC')
-			->addOrderBy('m.subject', 'ASC')
-			->setParameter(':boilerplate', true)
-			->getQuery()
-			->getResult();
-
-		$options = array();
-
-		foreach ($messages as $message) {
-			$options[$message->getCategory()->getTitle()][$message->getId()] = $message->getSubject();
-		}
-
-		return $options;
-	}
 }

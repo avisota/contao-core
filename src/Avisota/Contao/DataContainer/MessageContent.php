@@ -240,41 +240,6 @@ class MessageContent extends \Backend
 		);
 	}
 
-
-	/**
-	 * Return all gallery templates as array
-	 *
-	 * @param object
-	 *
-	 * @return array
-	 */
-	public function getGalleryTemplates(DC_General $dc)
-	{
-		// Get the page ID
-		$article = $this->Database
-			->prepare("SELECT pid FROM tl_article WHERE id=?")
-			->limit(1)
-			->execute(
-				$dc
-					->getEnvironment()
-					->getCurrentModel()
-					->getProperty('pid')
-			);
-
-		// Inherit the page settings
-		$page = $this->getPageDetails($article->pid);
-
-		// Get the theme ID
-		$layout = $this->Database
-			->prepare("SELECT pid FROM tl_layout WHERE id=?")
-			->limit(1)
-			->execute($page->layout);
-
-		// Return all gallery templates
-		return $this->getTemplateGroup('nl_gallery_', $layout->pid);
-	}
-
-
 	/**
 	 * Add the type of content element
 	 *
@@ -380,57 +345,6 @@ class MessageContent extends \Backend
 		*/
 	}
 
-
-	/**
-	 * Get all articles and return them as array (article alias)
-	 *
-	 * @param object
-	 *
-	 * @return array
-	 */
-	public function getArticleAlias(DataContainer $dc)
-	{
-		$pids    = array();
-		$aliases = array();
-
-		$user = \BackendUser::getInstance();
-
-		if (!$user->isAdmin) {
-			foreach ($user->pagemounts as $id) {
-				$pids[] = $id;
-				$pids   = array_merge($pids, $this->getChildRecords($id, 'tl_page', true));
-			}
-
-			if (empty($pids)) {
-				return $aliases;
-			}
-
-			$alias = $this->Database->execute(
-				"SELECT a.id, a.title, a.inColumn, p.title AS parent FROM tl_article a LEFT JOIN tl_page p ON p.id=a.pid WHERE a.pid IN(" . implode(
-					',',
-					array_map('intval', array_unique($pids))
-				) . ") ORDER BY parent, a.sorting"
-			);
-		}
-		else {
-			$alias = $this->Database->execute(
-				"SELECT a.id, a.title, a.inColumn, p.title AS parent FROM tl_article a LEFT JOIN tl_page p ON p.id=a.pid ORDER BY parent, a.sorting"
-			);
-		}
-
-		if ($alias->numRows) {
-			$this->loadLanguageFile('tl_article');
-
-			while ($alias->next()) {
-				$aliases[$alias->parent][$alias->id] = $alias->title . ' (' . (strlen(
-						$GLOBALS['TL_LANG']['tl_article'][$alias->inColumn]
-					) ? $GLOBALS['TL_LANG']['tl_article'][$alias->inColumn]
-						: $alias->inColumn) . ', ID ' . $alias->id . ')';
-			}
-		}
-
-		return $aliases;
-	}
 
 
 	/**

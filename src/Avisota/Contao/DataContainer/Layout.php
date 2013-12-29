@@ -38,54 +38,6 @@ class Layout
 
 	/**
 	 * @param DC_General|\Avisota\Contao\Entity\Layout $layout
-	 */
-	static public function getCellContentOptions($layout)
-	{
-		$options = array();
-
-		if ($layout instanceof DC_General) {
-			$layout = $layout->getEnvironment()->getCurrentModel()->getEntity();
-		}
-
-		list($group, $mailChimpTemplate) = explode(':', $layout->getMailchimpTemplate());
-		if (isset($GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE'][$group][$mailChimpTemplate])) {
-			$config = $GLOBALS['AVISOTA_MAILCHIMP_TEMPLATE'][$group][$mailChimpTemplate];
-
-			if (isset($config['cells'])) {
-				foreach ($config['cells'] as $cellName => $cellConfig) {
-					if (!isset($cellConfig['content'])) {
-						foreach ($GLOBALS['TL_MCE'] as $elementGroup => $elements) {
-							if (isset($GLOBALS['TL_LANG']['MCE'][$elementGroup])) {
-								$elementGroupLabel = $GLOBALS['TL_LANG']['MCE'][$elementGroup];
-							}
-							else {
-								$elementGroupLabel = $elementGroup;
-							}
-							foreach ($elements as $elementType) {
-								if (isset($GLOBALS['TL_LANG']['MCE'][$elementType])) {
-									$elementLabel = $GLOBALS['TL_LANG']['MCE'][$elementType][0];
-								}
-								else {
-									$elementLabel = $elementType;
-								}
-
-								$options[$cellName][$cellName . ':' . $elementType] = sprintf(
-									'[%s] %s',
-									$elementGroupLabel,
-									$elementLabel
-								);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return $options;
-	}
-
-	/**
-	 * @param DC_General|\Avisota\Contao\Entity\Layout $layout
 	 *
 	 * @return array
 	 */
@@ -93,6 +45,7 @@ class Layout
 	{
 		$value = array();
 
+		/*
 		if ($layout instanceof DC_General) {
 			$layout = $layout->getEnvironment()->getCurrentModel()->getEntity();
 		}
@@ -118,6 +71,8 @@ class Layout
 				}
 			}
 		}
+		*/
+
 		return $value;
 	}
 
@@ -147,18 +102,5 @@ class Layout
 		}
 
 		return $value;
-	}
-
-
-	public function getStylesheets($dc)
-	{
-		/** @var EventDispatcher $eventDispatcher */
-		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-
-		$stylesheets = new \ArrayObject();
-
-		$eventDispatcher->dispatch(CollectStylesheetsEvent::NAME, new CollectStylesheetsEvent($stylesheets));
-
-		return $stylesheets->getArrayCopy();
 	}
 }

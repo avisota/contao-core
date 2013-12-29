@@ -31,45 +31,6 @@ class Module extends \Backend
 		\MetaPalettes::appendFields('tl_module', 'personalData', 'config', array('avisota_selectable_lists'));
 	}
 
-	/**
-	 * Get the category options
-	 *
-	 * @return array
-	 */
-	public function getCategories()
-	{
-		$category = $this->Database
-			->execute("SELECT * FROM orm_avisota_message_category ORDER BY title");
-		$lists     = array();
-		while ($category->next()) {
-			$lists[$category->id] = $category->title;
-		}
-		return $lists;
-	}
-
-	/**
-	 * Get the lists options.
-	 *
-	 * @return array
-	 */
-	public function getLists()
-	{
-		$list = $this->Database->execute(
-			"
-				SELECT
-					*
-				FROM
-					`orm_avisota_mailing_list`
-				ORDER BY
-					`title`"
-		);
-		$lists = array();
-		while ($list->next()) {
-			$lists[$list->id] = $list->title;
-		}
-		return $lists;
-	}
-
 	public function getTemplates(\DataContainer $dc)
 	{
 		// Return all templates
@@ -99,22 +60,6 @@ class Module extends \Backend
 		}
 
 		return \TwigHelper::getTemplateGroup($templatePrefix, $dc->activeRecord->pid);
-	}
-
-	public function getEditableRecipientProperties()
-	{
-		$return = array();
-
-		$this->loadLanguageFile('orm_avisota_recipient');
-		$this->loadDataContainer('orm_avisota_recipient');
-
-		foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'] as $k => $v) {
-			if ($v['eval']['feEditable']) {
-				$return[$k] = $GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'][$k]['label'][0];
-			}
-		}
-
-		return $return;
 	}
 
 

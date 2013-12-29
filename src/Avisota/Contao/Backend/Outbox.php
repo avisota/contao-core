@@ -85,9 +85,9 @@ class Outbox extends \TwigBackendModule
 			$this->Template->queue  = $queue;
 			$this->Template->config = $queueData->toArray();
 
-			$GLOBALS['TL_CSS'][] = 'system/modules/avisota/assets/css/be_outbox.css';
-			$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/avisota/assets/js/Number.js';
-			$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/avisota/assets/js/be_outbox.js';
+			$GLOBALS['TL_CSS'][] = 'assets/avisota-core/css/be_outbox.css';
+			$GLOBALS['TL_JAVASCRIPT'][] = 'assets/avisota-core/js/Number.js';
+			$GLOBALS['TL_JAVASCRIPT'][] = 'assets/avisota-core/js/be_outbox.js';
 		}
 	}
 
