@@ -8,24 +8,14 @@
  *
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @package    avisota
+ * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
  */
 
 
 /**
- * Constants
- */
-define('AVISOTA_VERSION', '2.0.0');
-define('AVISOTA_RELEASE', 'alpha1');
-define('NL_HTML', 'html');
-define('NL_PLAIN', 'plain');
-define('AVISOTA_ROOT', dirname(__DIR__));
-
-
-/**
- * Request starttime
+ * Request start time
  */
 if (!isset($_SERVER['REQUEST_TIME'])) {
 	$_SERVER['REQUEST_TIME'] = time();
@@ -44,14 +34,85 @@ else {
 
 
 /**
- * Load configs
+ * Static back end modules
  */
-require TL_ROOT . '/system/modules/avisota-core/config/config-backendModules.php';
-require TL_ROOT . '/system/modules/avisota-core/config/config-contentElements.php';
-require TL_ROOT . '/system/modules/avisota-core/config/config-entities.php';
-require TL_ROOT . '/system/modules/avisota-core/config/config-frontendModules.php';
-require TL_ROOT . '/system/modules/avisota-core/config/config-renderer.php';
-require TL_ROOT . '/system/modules/avisota-core/config/config-salutations.php';
+$i                 = array_search('design', array_keys($GLOBALS['BE_MOD']));
+$GLOBALS['BE_MOD'] = array_merge(
+	array_slice($GLOBALS['BE_MOD'], 0, $i),
+	array('avisota' => array()),
+	array_slice($GLOBALS['BE_MOD'], $i)
+);
+
+$GLOBALS['BE_MOD']['avisota']['avisota_config']           = array
+(
+	'icon'          => 'assets/avisota-core/images/avisota_config.png',
+	'stylesheet'    => 'assets/avisota-core/css/stylesheet.css',
+	'nested-config' => array(
+		'headline' => false
+	)
+);
+$GLOBALS['BE_MOD']['avisota']['avisota_settings']         = array
+(
+	'nested'     => 'avisota_config',
+	'tables'     => array('tl_avisota_settings'),
+	'icon'       => 'assets/avisota-core/images/settings.png',
+	'stylesheet' => 'assets/avisota-core/css/stylesheet.css'
+);
+$GLOBALS['BE_MOD']['avisota']['avisota_mailing_list']     = array
+(
+	'nested'     => 'avisota_config:recipient',
+	'tables'     => array('orm_avisota_mailing_list'),
+	'icon'       => 'assets/avisota-core/images/mailing_list.png',
+	'stylesheet' => 'assets/avisota-core/css/stylesheet.css'
+);
+$GLOBALS['BE_MOD']['avisota']['avisota_recipient_source'] = array
+(
+	'nested'     => 'avisota_config:recipient',
+	'tables'     => array('orm_avisota_recipient_source'),
+	'icon'       => 'assets/avisota-core/images/recipient_source.png',
+	'stylesheet' => 'assets/avisota-core/css/stylesheet.css'
+);
+$GLOBALS['BE_MOD']['avisota']['avisota_queue']            = array
+(
+	'nested'     => 'avisota_config:transport',
+	'tables'     => array('orm_avisota_queue'),
+	'icon'       => 'assets/avisota-core/images/queue.png',
+	'stylesheet' => 'assets/avisota-core/css/stylesheet.css'
+);
+$GLOBALS['BE_MOD']['avisota']['avisota_transport']        = array
+(
+	'nested'     => 'avisota_config:transport',
+	'tables'     => array('orm_avisota_transport'),
+	'icon'       => 'assets/avisota-core/images/transport.png',
+	'stylesheet' => 'assets/avisota-core/css/stylesheet.css'
+);
+
+
+/**
+ * Entities
+ */
+$GLOBALS['DOCTRINE_ENTITY_NAMESPACE_ALIAS']['Avisota\Contao'] = 'Avisota\Contao\Entity';
+
+$GLOBALS['DOCTRINE_ENTITY_NAMESPACE_MAP']['orm_avisota'] = 'Avisota\Contao\Entity';
+
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_mailing_list';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_queue';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_transport';
+
+/**
+ * Front end modules
+ */
+$GLOBALS['FE_MOD']['avisota']['avisota_subscribe']    = 'Avisota\Contao\Module\Subscribe';
+$GLOBALS['FE_MOD']['avisota']['avisota_unsubscribe']  = 'Avisota\Contao\Module\Unsubscribe';
+$GLOBALS['FE_MOD']['avisota']['avisota_subscription'] = 'Avisota\Contao\Module\Subscription';
+$GLOBALS['FE_MOD']['avisota']['avisota_list']         = 'Avisota\Contao\Module\List';
+$GLOBALS['FE_MOD']['avisota']['avisota_reader']       = 'Avisota\Contao\Module\Reader';
+
+
+/**
+ * Transport renderer
+ */
+$GLOBALS['AVISOTA_TRANSPORT_RENDERER']['native'] = 'Avisota\Renderer\NativeMessageRenderer';
 
 
 /**
