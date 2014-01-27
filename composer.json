@@ -49,8 +49,7 @@
 	"prefer-stable": true,
 	"conflict": {
 		"contao-legacy/avisota": "*",
-		"contao-legacy/avisota2": "*",
-		"avisota/contao": "*"
+		"contao-legacy/avisota2": "*"
 	},
 	"autoload": {
 		"psr-0": {
