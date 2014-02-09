@@ -13,7 +13,7 @@
  * @filesource
  */
 
-use ContaoCommunityAlliance\Contao\EventDispatcher\Factory\CreateOptionsEventCallbackFactory;
+use ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory;
 
 /**
  * Table orm_avisota_queue

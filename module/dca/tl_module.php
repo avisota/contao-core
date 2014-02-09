@@ -13,7 +13,7 @@
  * @filesource
  */
 
-use ContaoCommunityAlliance\Contao\EventDispatcher\Factory\CreateOptionsEventCallbackFactory;
+use ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory;
 
 $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array(
 	'Avisota\Contao\Core\DataContainer\Module',
