@@ -23,17 +23,6 @@ if (!isset($_SERVER['REQUEST_TIME'])) {
 
 
 /**
- * Load dynamic generated informations
- */
-if (file_exists(__DIR__ . '/dynamics.php')) {
-	$GLOBALS['AVISOTA_DYNAMICS'] = include(__DIR__ . '/dynamics.php');
-}
-else {
-	$GLOBALS['AVISOTA_DYNAMICS'] = array();
-}
-
-
-/**
  * Static back end modules
  */
 $i                 = array_search('design', array_keys($GLOBALS['BE_MOD']));
