@@ -8,16 +8,16 @@
  *
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @package    avisota
+ * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
  */
 
 
-namespace Avisota\Contao\Message\Element;
+namespace Avisota\Contao\Core\Message\Element;
 
 use Avisota\Contao\Entity\MessageContent;
-use Avisota\Contao\Message\Renderer;
+use Avisota\Contao\Core\Message\Renderer;
 use Avisota\Recipient\RecipientInterface;
 
 
@@ -27,7 +27,7 @@ use Avisota\Recipient\RecipientInterface;
  *
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @package    Avisota
+ * @package    avisota/contao-core
  */
 class ElementTemplate
 {

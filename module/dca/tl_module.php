@@ -16,7 +16,7 @@
 use ContaoCommunityAlliance\Contao\EventDispatcher\Factory\CreateOptionsEventCallbackFactory;
 
 $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array(
-	'Avisota\Contao\DataContainer\Module',
+	'Avisota\Contao\Core\DataContainer\Module',
 	'onload_callback'
 );
 
@@ -178,7 +178,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_transport'] = array
 	'exclude'          => true,
 	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_transport'],
 	'inputType'        => 'select',
-	'options_callback' => array('Avisota\Contao\DataContainer\OptionsBuilder', 'getTransportOptions'),
+	'options_callback' => array('Avisota\Contao\Core\DataContainer\OptionsBuilder', 'getTransportOptions'),
 	'eval'             => array(
 		'mandatory'          => true,
 		'includeBlankOption' => true,
@@ -252,7 +252,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_list_template'] = array
 	'exclude'          => true,
 	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_list_template'],
 	'inputType'        => 'select',
-	'options_callback' => array('Avisota\Contao\DataContainer\Module', 'getTemplates'),
+	'options_callback' => array('Avisota\Contao\Core\DataContainer\Module', 'getTemplates'),
 	'eval'             => array('mandatory' => true, 'tl_class' => 'w50')
 );
 
@@ -270,7 +270,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_selectable_lists'] = array
 	'exclude'          => true,
 	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_selectable_lists'],
 	'inputType'        => 'checkbox',
-	'options_callback' => array('Avisota\Contao\DataContainer\Module', 'getLists'),
+	'options_callback' => array('Avisota\Contao\Core\DataContainer\Module', 'getLists'),
 	'eval'             => array('multiple' => true)
 );
 */

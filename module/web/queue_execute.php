@@ -14,8 +14,8 @@
  */
 
 use Avisota\Contao\Entity\Queue;
-use Avisota\Contao\Event\PreQueueExecuteEvent;
-use Avisota\Contao\Queue\AbstractQueueWebRunner;
+use Avisota\Contao\Core\Event\PreQueueExecuteEvent;
+use Avisota\Contao\Core\Queue\AbstractQueueWebRunner;
 use Avisota\Queue\ExecutionConfig;
 use Symfony\Component\HttpFoundation\JsonResponse;
 

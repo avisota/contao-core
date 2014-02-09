@@ -8,12 +8,12 @@
  *
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @package    avisota
+ * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
  */
 
-namespace Avisota\Contao\RecipientSource;
+namespace Avisota\Contao\Core\RecipientSource;
 
 /**
  * Class AvisotaRecipientSourceMemberGroup
@@ -21,7 +21,7 @@ namespace Avisota\Contao\RecipientSource;
  *
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @package    Avisota
+ * @package    avisota/contao-core
  */
 class MemberGroup implements RecipientSourceInterface
 {

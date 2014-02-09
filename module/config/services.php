@@ -20,7 +20,7 @@
 
 $container['avisota.subscription.recipient'] = $container->share(
 	function ($container) {
-		return new \Avisota\Contao\Subscription\RecipientSubscriptionManager();
+		return new \Avisota\Contao\Core\Subscription\RecipientSubscriptionManager();
 	}
 );
 
@@ -32,7 +32,7 @@ $container['avisota.subscription.managers'] = new ArrayObject(
 
 $container['avisota.subscription'] = $container->share(
 	function ($container) {
-		$chain = new \Avisota\Contao\Subscription\RootSubscriptionManager();
+		$chain = new \Avisota\Contao\Core\Subscription\RootSubscriptionManager();
 
 		foreach ($container['avisota.subscription.managers'] as $subscriptionManager) {
 			$priority = 0;
@@ -70,7 +70,7 @@ $container['avisota.subscription'] = $container->share(
 
 $container['avisota.salutation.decider'] = $container->share(
 	function ($container) {
-		$decider = new \Avisota\Contao\Salutation\ChainDecider();
+		$decider = new \Avisota\Contao\Core\Salutation\ChainDecider();
 
 		foreach ($GLOBALS['AVISOTA_SALUTATION_DECIDER'] as $deciderClass) {
 			$decider->addDecider(new $deciderClass());
@@ -82,7 +82,7 @@ $container['avisota.salutation.decider'] = $container->share(
 
 $container['avisota.salutation.selector'] = $container->share(
 	function ($container) {
-		$selector = new \Avisota\Contao\Salutation\Selector();
+		$selector = new \Avisota\Contao\Core\Salutation\Selector();
 		$selector->setDecider($container['avisota.salutation.decider']);
 		return $selector;
 	}
@@ -217,7 +217,7 @@ $container['avisota.logger.transport'] = function ($container) {
  */
 $container['avisota.service-factory'] = $container->share(
 	function ($container) {
-		return new \Avisota\Contao\ServiceFactory();
+		return new \Avisota\Contao\Core\ServiceFactory();
 	}
 );
 
@@ -232,7 +232,7 @@ foreach ($GLOBALS['AVISOTA_DYNAMICS'] as $type => $records) {
 			// register service
 			$container[sprintf('avisota.%s.%s', $type, $record['id'])] = $container->share(
 				function ($container) use ($type, $id) {
-					/** @var \Avisota\Contao\ServiceFactory $factory */
+					/** @var \Avisota\Contao\Core\ServiceFactory $factory */
 					$factory = $container['avisota.service-factory'];
 					return $factory->createService($type, $id);
 				}
@@ -284,10 +284,10 @@ $container['avisota.transport.renderer'] = $container->share(
 $container['avisota.renderer'] = $container->share(
 	function () {
 		if (TL_MODE == 'BE') {
-			return new \Avisota\Contao\Message\Renderer\Backend\MessagePreRenderer();
+			return new \Avisota\Contao\Core\Message\Renderer\Backend\MessagePreRenderer();
 		}
 		else {
-			return new \Avisota\Contao\Message\Renderer\MessagePreRendererChain($GLOBALS['AVISOTA_MESSAGE_RENDERER']);
+			return new \Avisota\Contao\Core\Message\Renderer\MessagePreRendererChain($GLOBALS['AVISOTA_MESSAGE_RENDERER']);
 		}
 	}
 );

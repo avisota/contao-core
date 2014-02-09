@@ -34,7 +34,7 @@ if (!is_file($dir . '/system/initialize.php')) {
 define('TL_MODE', 'FE');
 require($dir . '/system/initialize.php');
 
-class send_immediate extends \Avisota\Contao\Send\AbstractWebRunner
+class send_immediate extends \Avisota\Contao\Core\Send\AbstractWebRunner
 {
 	protected function execute(Message $message, \BackendUser $user)
 	{
@@ -55,7 +55,7 @@ class send_immediate extends \Avisota\Contao\Send\AbstractWebRunner
 		/** @var \Avisota\RecipientSource\RecipientSourceInterface $recipientSource */
 		$recipientSource = $container[$serviceName];
 
-		/** @var \Avisota\Contao\Message\Renderer\MessagePreRendererInterface $renderer */
+		/** @var \Avisota\Contao\Core\Message\Renderer\MessagePreRendererInterface $renderer */
 		$renderer        = $container['avisota.renderer'];
 		$messageTemplate = $renderer->renderMessage($message);
 
@@ -79,7 +79,7 @@ class send_immediate extends \Avisota\Contao\Send\AbstractWebRunner
 			$loop = uniqid();
 		}
 
-		$event = new \Avisota\Contao\Event\PreSendImmediateEvent($message, $turn, $loop);
+		$event = new \Avisota\Contao\Core\Event\PreSendImmediateEvent($message, $turn, $loop);
 		$eventDispatcher->dispatch('avisota.pre-send-immediate', $event);
 
 		$queueHelper = new \Avisota\Queue\QueueHelper();
@@ -91,7 +91,7 @@ class send_immediate extends \Avisota\Contao\Send\AbstractWebRunner
 
 		$count = $queueHelper->enqueue(30, $turn * 30);
 
-		$event = new \Avisota\Contao\Event\PostSendImmediateEvent($count, $message, $turn, $loop);
+		$event = new \Avisota\Contao\Core\Event\PostSendImmediateEvent($count, $message, $turn, $loop);
 		$eventDispatcher->dispatch('avisota.post-send-immediate', $event);
 
 		if ($count || ($turn * 30 + 30) < $recipientSource->countRecipients()) {

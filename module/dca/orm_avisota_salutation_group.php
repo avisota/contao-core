@@ -33,7 +33,7 @@ $GLOBALS['TL_DCA']['orm_avisota_salutation_group'] = array
 		'enableVersioning' => true,
 		'onload_callback'  => array
 		(
-			array('Avisota\Contao\DataContainer\SalutationGroup', 'checkPermission')
+			array('Avisota\Contao\Core\DataContainer\SalutationGroup', 'checkPermission')
 		)
 	),
 	// DataContainer
@@ -118,7 +118,7 @@ $GLOBALS['TL_DCA']['orm_avisota_salutation_group'] = array
 				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_salutation_group']['editheader'],
 				'href'            => 'act=edit',
 				'icon'            => 'header.gif',
-				'button_callback' => array('Avisota\Contao\DataContainer\MessageCategory', 'editHeader'),
+				'button_callback' => array('Avisota\Contao\Core\DataContainer\MessageCategory', 'editHeader'),
 			),
 			'copy'       => array
 			(
@@ -126,7 +126,7 @@ $GLOBALS['TL_DCA']['orm_avisota_salutation_group'] = array
 				'href'            => 'act=copy',
 				'icon'            => 'copy.gif',
 				'attributes'      => 'onclick="Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\Contao\DataContainer\MessageCategory', 'copyCategory')
+				'button_callback' => array('Avisota\Contao\Core\DataContainer\MessageCategory', 'copyCategory')
 			),
 			'delete'     => array
 			(
@@ -134,7 +134,7 @@ $GLOBALS['TL_DCA']['orm_avisota_salutation_group'] = array
 				'href'            => 'act=delete',
 				'icon'            => 'delete.gif',
 				'attributes'      => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\Contao\DataContainer\MessageCategory', 'deleteCategory')
+				'button_callback' => array('Avisota\Contao\Core\DataContainer\MessageCategory', 'deleteCategory')
 			),
 			'show'       => array
 			(

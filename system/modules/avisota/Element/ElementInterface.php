@@ -8,13 +8,13 @@
  *
  * @copyright  bit3 UG 2013
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @package    avisota
+ * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
  */
 
 
-namespace Avisota\Contao\Message\Element;
+namespace Avisota\Contao\Core\Message\Element;
 
 use Avisota\Contao\Entity\MessageContent;
 use Avisota\Recipient\RecipientInterface;

@@ -33,7 +33,7 @@ if (!is_file($dir . '/system/initialize.php')) {
 define('TL_MODE', 'FE');
 require($dir . '/system/initialize.php');
 
-class send_preview_to_user extends \Avisota\Contao\Send\AbstractWebRunner
+class send_preview_to_user extends \Avisota\Contao\Core\Send\AbstractWebRunner
 {
 	protected function execute(Message $message, \BackendUser $user)
 	{
@@ -72,7 +72,7 @@ class send_preview_to_user extends \Avisota\Contao\Send\AbstractWebRunner
 
 		$additionalData = array('view_online_link' => $url);
 
-		/** @var \Avisota\Contao\Message\Renderer\MessagePreRendererInterface $renderer */
+		/** @var \Avisota\Contao\Core\Message\Renderer\MessagePreRendererInterface $renderer */
 		$renderer        = $container['avisota.renderer'];
 		$messageTemplate = $renderer->renderMessage($message);
 		$messageMail     = $messageTemplate->render($recipient, $additionalData);

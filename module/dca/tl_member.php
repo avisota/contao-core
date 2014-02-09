@@ -21,18 +21,18 @@ $GLOBALS['TL_DCA']['tl_member']['config']['onload_callback'][]   = array('Avisot
 $GLOBALS['TL_DCA']['tl_member']['config']['onload_callback'][]   = array('tl_member_avisota', 'onload_callback');
 $GLOBALS['TL_DCA']['tl_member']['config']['onsubmit_callback'][] = array('tl_member_avisota', 'onsubmit_callback');
 */
-$GLOBALS['TL_DCA']['tl_member']['config']['onsubmit_callback'][] = array('Avisota\Contao\DataContainer\Member', 'onsubmit_callback');
+$GLOBALS['TL_DCA']['tl_member']['config']['onsubmit_callback'][] = array('Avisota\Contao\Core\DataContainer\Member', 'onsubmit_callback');
 
 $GLOBALS['TL_DCA']['tl_member']['fields']['avisota_lists'] = array
 (
 	'label'            => &$GLOBALS['TL_LANG']['tl_member']['avisota_lists'],
 	'inputType'        => 'checkbox',
 	'options_callback' => CreateOptionsEventCallbackFactory::createCallback('avisota.create-mailing-list-options'),
-	'load_callback'    => array(array('Avisota\Contao\DataContainer\Member', 'loadMailingLists')),
+	'load_callback'    => array(array('Avisota\Contao\Core\DataContainer\Member', 'loadMailingLists')),
 	'save_callback'    => array
 	(
-		array('Avisota\Contao\DataContainer\Member', 'validateBlacklist'),
-		array('Avisota\Contao\DataContainer\Member', 'saveMailingLists')
+		array('Avisota\Contao\Core\DataContainer\Member', 'validateBlacklist'),
+		array('Avisota\Contao\Core\DataContainer\Member', 'saveMailingLists')
 	),
 	'eval'             => array
 	(
@@ -53,7 +53,7 @@ $GLOBALS['TL_DCA']['tl_member']['fields']['avisota_subscriptionAction']    = arr
 		'doNotCopy'      => true,
 		'doNotShow'      => true
 	),
-	'save_callback' => array(array('Avisota\Contao\DataContainer\Member', 'saveSubscriptionAction')),
+	'save_callback' => array(array('Avisota\Contao\Core\DataContainer\Member', 'saveSubscriptionAction')),
 	'field'         => false,
 );
 

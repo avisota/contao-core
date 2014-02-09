@@ -31,11 +31,11 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 		'enableVersioning'  => true,
 		'onload_callback'   => array
 		(
-			array('Avisota\Contao\DataContainer\MailingList', 'checkPermission')
+			array('Avisota\Contao\Core\DataContainer\MailingList', 'checkPermission')
 		),
 		'onsubmit_callback' => array
 		(
-			array('Avisota\Contao\Backend', 'regenerateDynamics')
+			array('Avisota\Contao\Core\Backend', 'regenerateDynamics')
 		)
 	),
 	// DataContainer
@@ -67,7 +67,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 		(
 			'fields'         => array('title'),
 			'format'         => '%s',
-			'label_callback' => array('Avisota\Contao\DataContainer\MailingList', 'getLabel')
+			'label_callback' => array('Avisota\Contao\Core\DataContainer\MailingList', 'getLabel')
 		),
 		'global_operations' => array
 		(
@@ -86,7 +86,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['edit'],
 				'href'            => 'act=edit',
 				'icon'            => 'edit.gif',
-				'button_callback' => array('Avisota\Contao\DataContainer\MailingList', 'editList')
+				'button_callback' => array('Avisota\Contao\Core\DataContainer\MailingList', 'editList')
 			),
 			'copy'   => array
 			(
@@ -94,7 +94,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 				'href'            => 'act=copy',
 				'icon'            => 'copy.gif',
 				'attributes'      => 'onclick="Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\Contao\DataContainer\MailingList', 'copyCategory')
+				'button_callback' => array('Avisota\Contao\Core\DataContainer\MailingList', 'copyCategory')
 			),
 			'delete' => array
 			(
@@ -102,7 +102,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 				'href'            => 'act=delete',
 				'icon'            => 'delete.gif',
 				'attributes'      => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-				'button_callback' => array('Avisota\Contao\DataContainer\MailingList', 'deleteCategory')
+				'button_callback' => array('Avisota\Contao\Core\DataContainer\MailingList', 'deleteCategory')
 			),
 			'show'   => array
 			(

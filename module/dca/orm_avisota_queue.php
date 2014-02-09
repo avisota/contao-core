@@ -31,11 +31,11 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 		'dataContainer'     => 'General',
 		'enableVersioning'  => true,
 		'onload_callback'   => array(
-			array('Avisota\Contao\DataContainer\Queue', 'onload_callback')
+			array('Avisota\Contao\Core\DataContainer\Queue', 'onload_callback')
 		),
 		'onsubmit_callback' => array(
-			array('Avisota\Contao\DataContainer\Queue', 'onsubmit_callback'),
-			array('Avisota\Contao\Backend', 'regenerateDynamics')
+			array('Avisota\Contao\Core\DataContainer\Queue', 'onsubmit_callback'),
+			array('Avisota\Contao\Core\Backend', 'regenerateDynamics')
 		)
 	),
 	// DataContainer
@@ -186,7 +186,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 			),
 			'load_callback'   => array
 			(
-				array('Avisota\Contao\DataContainer\Queue', 'rememberAlias')
+				array('Avisota\Contao\Core\DataContainer\Queue', 'rememberAlias')
 			),
 			'setter_callback' => array
 			(
