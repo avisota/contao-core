@@ -7,7 +7,7 @@
  * PHP version 5
  *
  * @copyright  MEN AT WORK 2013
- * @package    avisota/contao-core/contao-core
+ * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
  */
