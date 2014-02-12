@@ -114,7 +114,6 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 		'default' => array
 		(
 			'list'   => array('title', 'alias'),
-			'expert' => array('integratedRecipientManageSubscriptionPage')
 		)
 	),
 	// Fields
