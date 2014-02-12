@@ -38,8 +38,6 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 	'metapalettes'          => array
 	(
 		'default' => array(
-			'notification' => array('avisota_send_notification'),
-			'cleanup'      => array('avisota_do_cleanup'),
 			'transport'    => array('avisota_default_transport'),
 			'developer'    => array('avisota_developer_mode')
 		)
@@ -47,12 +45,6 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 	// Subpalettes
 	'metasubpalettes'       => array
 	(
-		'avisota_send_notification' => array(
-			'avisota_notification_time',
-			'avisota_notification_count',
-			'avisota_notification_mail'
-		),
-		'avisota_do_cleanup'        => array('avisota_cleanup_time'),
 		'avisota_developer_mode'    => array('avisota_developer_email'),
 	),
 	'metasubselectpalettes' => array
@@ -65,72 +57,6 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 	// Fields
 	'fields'                => array
 	(
-		'avisota_send_notification'                 => array
-		(
-			'exclude'   => true,
-			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_send_notification'],
-			'inputType' => 'checkbox',
-			'eval'      => array(
-				'submitOnChange' => true,
-				'tl_class'       => 'clr'
-			)
-		),
-		'avisota_notification_time'                 => array
-		(
-			'exclude'   => true,
-			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_notification_time'],
-			'inputType' => 'text',
-			'eval'      => array(
-				'mandatory' => true,
-				'rgxp'      => 'digit',
-				'tl_class'  => 'w50'
-			)
-		),
-		'avisota_notification_count'                => array
-		(
-			'exclude'   => true,
-			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_notification_count'],
-			'inputType' => 'text',
-			'eval'      => array(
-				'mandatory' => true,
-				'rgxp'      => 'digit',
-				'tl_class'  => 'w50'
-			)
-		),
-		'avisota_notification_mail'                 => array
-		(
-			'exclude'          => true,
-			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_notification_mail'],
-			'inputType'        => 'select',
-			'options_callback' => CreateOptionsEventCallbackFactory::createCallback('avisota.create-boilerplate-message-options'),
-			'eval'             => array(
-				'mandatory'          => true,
-				'includeBlankOption' => true,
-				'tl_class'           => 'w50'
-			)
-		),
-		'avisota_do_cleanup'                        => array
-		(
-			'exclude'   => true,
-			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_do_cleanup'],
-			'inputType' => 'checkbox',
-			'eval'      => array(
-				'submitOnChange' => true,
-				'tl_class'       => 'm12 w50 clr'
-			)
-		),
-		'avisota_cleanup_time'                      => array
-		(
-			'exclude'   => true,
-			'label'     => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_cleanup_time'],
-			'default'   => 7,
-			'inputType' => 'text',
-			'eval'      => array(
-				'mandatory' => true,
-				'rgxp'      => 'digit',
-				'tl_class'  => 'w50'
-			)
-		),
 		'avisota_default_transport'                 => array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_default_transport'],
