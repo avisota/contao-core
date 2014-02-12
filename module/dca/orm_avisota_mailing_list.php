@@ -33,10 +33,6 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 		(
 			array('Avisota\Contao\Core\DataContainer\MailingList', 'checkPermission')
 		),
-		'onsubmit_callback' => array
-		(
-			array('Avisota\Contao\Core\Backend', 'regenerateDynamics')
-		)
 	),
 	// DataContainer
 	'dca_config'   => array

@@ -212,6 +212,11 @@ $GLOBALS['AVISOTA_TRANSPORT']['service'] = 'Avisota\Contao\Transport\ServiceTran
 //$GLOBALS['TL_HOOKS']['getUserNavigation'][]       = array('AvisotaBackend', 'hookGetUserNavigation');
 //$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('orm_avisota_message_content', 'myLoadDataContainer');
 
+$GLOBALS['TL_HOOKS']['initializeDependencyContainer']['avisota-services'] = array(
+	'Avisota\Contao\Core\ServiceFactory',
+	'init'
+);
+
 $GLOBALS['TL_HOOKS']['getUserNavigation']['avisota-custom-menu']     = array(
 	'Avisota\Contao\Core\Backend\CustomMenu',
 	'hookGetUserNavigation'

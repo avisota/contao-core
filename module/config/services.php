@@ -120,31 +120,6 @@ $container['avisota.service-factory'] = $container->share(
 	}
 );
 
-foreach ($GLOBALS['AVISOTA_DYNAMICS'] as $type => $records) {
-	foreach ($records as $record) {
-		if ($type == 'queue' ||
-			$type == 'recipientSource' ||
-			$type == 'transport'
-		) {
-			$id = $record['id'];
-
-			// register service
-			$container[sprintf('avisota.%s.%s', $type, $record['id'])] = $container->share(
-				function ($container) use ($type, $id) {
-					/** @var \Avisota\Contao\Core\ServiceFactory $factory */
-					$factory = $container['avisota.service-factory'];
-					return $factory->createService($type, $id);
-				}
-			);
-
-			// register service
-			$container[sprintf('avisota.%s.%s', $type, $record['alias'])] = function ($container) use ($type, $id) {
-				return $container[sprintf('avisota.%s.%s', $type, $id)];
-			};
-		}
-	}
-}
-
 /**
  * Define transport renderer
  */

@@ -15,38 +15,58 @@
 
 namespace Avisota\Contao\Core;
 
+use Avisota\Contao\Core\DataContainer\RecipientSource;
 use Avisota\Contao\Entity\Queue;
 use Avisota\Contao\Core\Queue\QueueFactoryInterface;
 use Avisota\Contao\Core\RecipientSource\RecipientSourceFactoryInterface;
+use Avisota\Contao\Entity\Transport;
+use Avisota\Contao\Transport\TransportFactoryInterface;
 use Contao\Doctrine\ORM\EntityHelper;
 
 class ServiceFactory
 {
-	public function createService($type, $id)
+	/**
+	 * @param \Pimple $container
+	 */
+	public function init($container)
 	{
-		switch ($type) {
-			case 'queue';
-				return $this->createQueue($id);
-				break;
-			case 'recipientSource';
-				return $this->createRecipientSource($id);
-				break;
-			case 'transport';
-				return $this->createTransport($id);
-				break;
+		$factory = $this;
+
+		$queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
+		/** @var Queue[] $queues */
+		$queues = $queueRepository->findAll();
+
+		foreach ($queues as $queue) {
+			$container[sprintf('avisota.queue.%s', $queue->getId())] = $container->share(
+				function ($container) use ($queue, $factory) {
+					return $factory->createQueue($queue);
+				}
+			);
+
+			$container[sprintf('avisota.queue.%s', $queue->getId())] = function($container) use ($queue) {
+				return $container[sprintf('avisota.queue.%s', $queue->getId())];
+			};
+		}
+
+		$transportRepository = EntityHelper::getRepository('Avisota\Contao:Transport');
+		/** @var Transport[] $transports */
+		$transports = $transportRepository->findAll();
+
+		foreach ($transports as $transport) {
+			$container[sprintf('avisota.transport.%s', $transport->getId())] = $container->share(
+				function ($container) use ($transport, $factory) {
+					return $factory->createQueue($transport);
+				}
+			);
+
+			$container[sprintf('avisota.transport.%s', $transport->getId())] = function($container) use ($transport) {
+				return $container[sprintf('avisota.transport.%s', $transport->getId())];
+			};
 		}
 	}
 
-	public function createQueue($id)
+	public function createQueue(Queue $queue)
 	{
-		$queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
-		/** @var Queue $queue */
-		$queue = $queueRepository->find($id);
-
-		if (!$queue) {
-			return null;
-		}
-
 		$queueFactoryClass = new \ReflectionClass($GLOBALS['AVISOTA_QUEUE'][$queue->getType()]);
 		/** @var QueueFactoryInterface $queueFactory */
 		$queueFactory = $queueFactoryClass->newInstance();
@@ -54,31 +74,8 @@ class ServiceFactory
 		return $queueFactory->createQueue($queue);
 	}
 
-	public function createRecipientSource($id)
+	public function createTransport(Transport $transport)
 	{
-		$recipientSourceRepository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
-		$recipientSource = $recipientSourceRepository->find($id);
-
-		if (!$recipientSource) {
-			return null;
-		}
-
-		$recipientSourceFactoryClass = new \ReflectionClass($GLOBALS['AVISOTA_RECIPIENT_SOURCE'][$recipientSource->getType()]);
-		/** @var RecipientSourceFactoryInterface $recipientSourceFactory */
-		$recipientSourceFactory = $recipientSourceFactoryClass->newInstance();
-
-		return $recipientSourceFactory->createRecipientSource($recipientSource);
-	}
-
-	public function createTransport($id)
-	{
-		$transportRepository = EntityHelper::getRepository('Avisota\Contao:Transport');
-		$transport = $transportRepository->find($id);
-
-		if (!$transport) {
-			return null;
-		}
-
 		$transportFactoryClass = new \ReflectionClass($GLOBALS['AVISOTA_TRANSPORT'][$transport->getType()]);
 		/** @var TransportFactoryInterface $transportFactory */
 		$transportFactory = $transportFactoryClass->newInstance();
