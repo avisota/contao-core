@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 		(
 			'default' => array
 			(
-				'class'  => 'Contao\Doctrine\ORM\DataContainer\General\EntityData',
+				'class'  => 'Contao\Doctrine\ORM\DataContainer\General\EntityDataProvider',
 				'source' => 'orm_avisota_transport'
 			)
 		),
