@@ -15,6 +15,8 @@
 
 namespace Avisota\Contao\Core\DataContainer;
 
+use DcGeneral\DC_General;
+
 class Queue extends \Backend
 {
 	/**
@@ -39,6 +41,12 @@ class Queue extends \Backend
 	{
 	}
 
+	/**
+	 * @param string $alias
+	 * @param DC_General $dc
+	 *
+	 * @return mixed
+	 */
 	public function rememberAlias($alias, $dc)
 	{
 		$_SESSION['AVISOTA_QUEUE_ALIAS'][$dc->id] = $alias;
