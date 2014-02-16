@@ -32,36 +32,40 @@ class ServiceFactory
 	{
 		$factory = $this;
 
-		$queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
-		/** @var Queue[] $queues */
-		$queues = $queueRepository->findAll();
+		if (class_exists('Avisota\Contao\Entity\Queue')) {
+			$queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
+			/** @var Queue[] $queues */
+			$queues = $queueRepository->findAll();
 
-		foreach ($queues as $queue) {
-			$container[sprintf('avisota.queue.%s', $queue->getId())] = $container->share(
-				function ($container) use ($queue, $factory) {
-					return $factory->createQueue($queue);
-				}
-			);
+			foreach ($queues as $queue) {
+				$container[sprintf('avisota.queue.%s', $queue->getId())] = $container->share(
+					function ($container) use ($queue, $factory) {
+						return $factory->createQueue($queue);
+					}
+				);
 
-			$container[sprintf('avisota.queue.%s', $queue->getId())] = function($container) use ($queue) {
-				return $container[sprintf('avisota.queue.%s', $queue->getId())];
-			};
+				$container[sprintf('avisota.queue.%s', $queue->getId())] = function($container) use ($queue) {
+					return $container[sprintf('avisota.queue.%s', $queue->getId())];
+				};
+			}
 		}
 
-		$transportRepository = EntityHelper::getRepository('Avisota\Contao:Transport');
-		/** @var Transport[] $transports */
-		$transports = $transportRepository->findAll();
+		if (class_exists('Avisota\Contao\Entity\Transport')) {
+			$transportRepository = EntityHelper::getRepository('Avisota\Contao:Transport');
+			/** @var Transport[] $transports */
+			$transports = $transportRepository->findAll();
 
-		foreach ($transports as $transport) {
-			$container[sprintf('avisota.transport.%s', $transport->getId())] = $container->share(
-				function ($container) use ($transport, $factory) {
-					return $factory->createQueue($transport);
-				}
-			);
+			foreach ($transports as $transport) {
+				$container[sprintf('avisota.transport.%s', $transport->getId())] = $container->share(
+					function ($container) use ($transport, $factory) {
+						return $factory->createQueue($transport);
+					}
+				);
 
-			$container[sprintf('avisota.transport.%s', $transport->getId())] = function($container) use ($transport) {
-				return $container[sprintf('avisota.transport.%s', $transport->getId())];
-			};
+				$container[sprintf('avisota.transport.%s', $transport->getId())] = function($container) use ($transport) {
+					return $container[sprintf('avisota.transport.%s', $transport->getId())];
+				};
+			}
 		}
 	}
 
