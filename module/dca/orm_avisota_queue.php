@@ -133,13 +133,15 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 		'createdAt'                => array(
 			'field' => array(
 				'type'          => 'datetime',
-				'timestampable' => array('on' => 'create')
+				'nullable'      => true,
+				'timestampable' => array('on' => 'create'),
 			)
 		),
 		'updatedAt'                => array(
 			'field' => array(
 				'type'          => 'datetime',
-				'timestampable' => array('on' => 'update')
+				'nullable'      => true,
+				'timestampable' => array('on' => 'update'),
 			)
 		),
 		'type'                     => array

@@ -145,12 +145,14 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 		'createdAt'     => array(
 			'field' => array(
 				'type'          => 'datetime',
+				'nullable'      => true,
 				'timestampable' => array('on' => 'create')
 			)
 		),
 		'updatedAt'     => array(
 			'field' => array(
 				'type'          => 'datetime',
+				'nullable'      => true,
 				'timestampable' => array('on' => 'update')
 			)
 		),
@@ -175,7 +177,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'mandatory' => true,
 				'maxlength' => 255,
 				'tl_class'  => 'w50'
-			)
+			),
 		),
 		'alias'         => array
 		(
@@ -193,7 +195,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 			'setter_callback' => array
 			(
 				array('Contao\Doctrine\ORM\Helper', 'generateAlias')
-			)
+			),
 		),
 		'fromAddress'          => array
 		(
