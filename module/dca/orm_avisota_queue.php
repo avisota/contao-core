@@ -203,7 +203,6 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 			),
 			'manyToOne'        => array(
 				'targetEntity' => 'Avisota\Contao\Entity\Transport',
-				'cascade'      => array('all'),
 				'joinColumns'  => array(
 					array(
 						'name'                 => 'transport',

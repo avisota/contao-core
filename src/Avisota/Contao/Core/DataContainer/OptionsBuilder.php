@@ -20,6 +20,7 @@ use Avisota\Contao\Core\Event\CollectStylesheetsEvent;
 use Avisota\Contao\Core\Event\CollectSubscriptionListsEvent;
 use Contao\Doctrine\ORM\EntityHelper;
 use ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEvent;
+use DcGeneral\Contao\Compatibility\DcCompat;
 use DcGeneral\DC_General;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -52,7 +53,6 @@ class OptionsBuilder implements EventSubscriberInterface
 			'avisota.create-recipient-field-options'             => 'createRecipientFieldOptions',
 			'avisota.create-recipient-source-options'            => 'createRecipientSourceOptions',
 			'avisota.create-recipient-options'                   => 'createRecipientOptions',
-			'avisota.create-salutation-group-options'            => 'createSalutationGroups',
 			'avisota.create-subscribe-module-template-options'   => 'createSubscribeModuleTemplateOptions',
 			'avisota.create-subscription-list-options'           => 'createSubscriptionListOptions',
 			'avisota.create-subscription-template-options'       => 'createSubscriptionModuleTemplateOptions',
@@ -579,34 +579,6 @@ class OptionsBuilder implements EventSubscriberInterface
 			}
 		}
 		return $options;
-	}
-
-	public function createSalutationGroups(CreateOptionsEvent $event)
-	{
-		$this->getSalutationGroups($event->getDataContainer(), $event->getOptions());
-	}
-
-	/**
-	 * Get a list of salutation groups.
-	 *
-	 * @param DC_General $dc
-	 */
-	public function getSalutationGroups($dc, $options = array())
-	{
-		if ($dc instanceof DC_General && $dc->getEnvironment()
-				->getCurrentModel()
-		) {
-			$salutationGroupRepository = EntityHelper::getRepository('Avisota\Contao:SalutationGroup');
-			/** @var SalutationGroup[] $salutationGroups */
-			$salutationGroups = $salutationGroupRepository->findAll();
-
-			foreach ($salutationGroups as $salutationGroup) {
-				$options[$salutationGroup->getId()] = $salutationGroup->getTitle();
-			}
-			return $options;
-		}
-
-		return array();
 	}
 
 	public function createSubscribeModuleTemplateOptions(CreateOptionsEvent $event)

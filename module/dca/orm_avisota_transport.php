@@ -54,8 +54,8 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 		'sorting'           => array
 		(
 			'mode'   => 1,
-			'flag'   => 11,
-			'fields' => array('type', 'title')
+			'flag'   => 1,
+			'fields' => array('title', 'type')
 		),
 		'label'             => array
 		(

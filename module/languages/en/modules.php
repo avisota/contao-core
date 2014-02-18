@@ -21,7 +21,7 @@ $GLOBALS['TL_LANG']['MOD']['avisota']                   = array('Avisota newslet
 $GLOBALS['TL_LANG']['MOD']['avisota_outbox']            = array('Outbox');
 $GLOBALS['TL_LANG']['MOD']['avisota_newsletter']        = array('Messages');
 $GLOBALS['TL_LANG']['MOD']['avisota_recipients']        = array('Recipients');
-$GLOBALS['TL_LANG']['MOD']['avisota_config']            = array('Avisota settings');
+$GLOBALS['TL_LANG']['MOD']['avisota_config']            = array('Settings');
 $GLOBALS['TL_LANG']['MOD']['avisota_settings']          = array(
 	'Avisota system settings',
 	'Manage basic avisota system settings'
@@ -48,6 +48,7 @@ $GLOBALS['TL_LANG']['MOD']['avisota_theme']             = array(
 $GLOBALS['TL_LANG']['MOD']['avisota_config:transport']  = array('Transport config');
 $GLOBALS['TL_LANG']['MOD']['avisota_transport']         = array('Transports', 'Manager transport modules.');
 $GLOBALS['TL_LANG']['MOD']['avisota_queue']             = array('Queues', 'Manager transport queues.');
+$GLOBALS['TL_LANG']['MOD']['avisota_support']           = array('Support');
 
 
 /**

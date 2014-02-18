@@ -13,11 +13,5 @@
  * @filesource
  */
 
-namespace Avisota\Contao\Core\Send;
 
-use Avisota\Contao\Entity\Message;
-
-interface SendModuleInterface
-{
-	public function run(Message $message);
-}
+$GLOBALS['TL_LANG']['avisota_support']['headline'] = 'Get support';

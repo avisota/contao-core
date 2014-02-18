@@ -75,6 +75,12 @@ $GLOBALS['BE_MOD']['avisota']['avisota_transport']        = array
 	'icon'       => 'assets/avisota-core/images/transport.png',
 	'stylesheet' => 'assets/avisota-core/css/stylesheet.css'
 );
+$GLOBALS['BE_MOD']['avisota']['avisota_support']          = array
+(
+	'icon'       => 'assets/avisota-core/images/avisota_support.png',
+	'stylesheet' => 'assets/avisota-core/css/stylesheet.css',
+	'callback'   => 'Avisota\Contao\Core\Backend\Support',
+);
 
 
 /**
@@ -85,17 +91,9 @@ $GLOBALS['DOCTRINE_ENTITY_NAMESPACE_ALIAS']['Avisota\Contao'] = 'Avisota\Contao\
 $GLOBALS['DOCTRINE_ENTITY_NAMESPACE_MAP']['orm_avisota'] = 'Avisota\Contao\Entity';
 
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_mailing_list';
+$GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_recipient_source';
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_queue';
 $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_transport';
-
-/**
- * Front end modules
- */
-$GLOBALS['FE_MOD']['avisota']['avisota_subscribe']    = 'Avisota\Contao\Core\Message\Subscribe';
-$GLOBALS['FE_MOD']['avisota']['avisota_unsubscribe']  = 'Avisota\Contao\Core\Message\Unsubscribe';
-$GLOBALS['FE_MOD']['avisota']['avisota_subscription'] = 'Avisota\Contao\Core\Message\Subscription';
-$GLOBALS['FE_MOD']['avisota']['avisota_list']         = 'Avisota\Contao\Core\Message\List';
-$GLOBALS['FE_MOD']['avisota']['avisota_reader']       = 'Avisota\Contao\Core\Message\Reader';
 
 
 /**
@@ -107,39 +105,7 @@ $GLOBALS['AVISOTA_TRANSPORT_RENDERER']['native'] = 'Avisota\Renderer\NativeMessa
 /**
  * Events
  */
-$GLOBALS['TL_EVENTS']['avisota/message.collect-stylesheets'][] = array(
-	'Avisota\Contao\Core\Message\Layout\ContaoStylesheets',
-	'collectStylesheets'
-);
-$GLOBALS['TL_EVENTS']['avisota/message.resolve-stylesheet'][]  = array(
-	'Avisota\Contao\Core\Message\Layout\ContaoStylesheets',
-	'resolveStylesheet'
-);
-$GLOBALS['TL_EVENTS']['avisota/recipient.migrate-recipient'][] = array(
-	'Avisota\Contao\Recipient\Migrate',
-	'collectPersonalsFromMembers'
-);
-$GLOBALS['TL_EVENTS']['avisota/subscription.resolve-name'][]   = array(
-	'Avisota\Contao\Recipient\Subscription',
-	'resolveSubscriptionName'
-);
-$GLOBALS['TL_EVENTS']['avisota/subscription.collect-lists'][]  = array(
-	'Avisota\Contao\Recipient\Subscription',
-	'collectSubscriptionLists'
-);
-
-$GLOBALS['TL_EVENT_SUBSCRIBERS']['avisota-subscription-log'] = 'Avisota\Contao\Core\SubscriptionLogger';
-$GLOBALS['TL_EVENT_SUBSCRIBERS']['avisota-options-builder']  = 'Avisota\Contao\Core\DataContainer\OptionsBuilder';
-
-
-/**
- * Send modules
- */
-$GLOBALS['AVISOTA_SEND_MODULE']['avisota_preview']          = 'Avisota\Contao\Core\Send\PreviewModule';
-$GLOBALS['AVISOTA_SEND_MODULE']['avisota_preview_to_user']  = 'Avisota\Contao\Core\Send\SendPreviewToUserModule';
-$GLOBALS['AVISOTA_SEND_MODULE']['avisota_preview_to_email'] = 'Avisota\Contao\Core\Send\SendPreviewToEmailModule';
-$GLOBALS['AVISOTA_SEND_MODULE']['avisota_send_immediate']   = 'Avisota\Contao\Core\Send\SendImmediateModule';
-
+$GLOBALS['TL_EVENT_SUBSCRIBERS']['avisota-dc-options-builder'] = 'Avisota\Contao\Core\DataContainer\OptionsBuilder';
 
 /**
  * Settings
@@ -159,7 +125,8 @@ $GLOBALS['TL_CONFIG']['avisota_cleanup_time']       = 14;
 /**
  * Page types
  */
-$GLOBALS['TL_PTY']['avisota'] = 'PageAvisotaMailing';
+// TODO to be removed
+// $GLOBALS['TL_PTY']['avisota'] = 'PageAvisotaMailing';
 
 
 /**
@@ -172,19 +139,16 @@ $GLOBALS['BE_FFL']['columnAssignmentWizard'] = 'ColumnAssignmentWizard';
 /**
  * Widgets
  */
-$GLOBALS['BE_FFL']['eventchooser'] = 'WidgetEventchooser';
-$GLOBALS['BE_FFL']['newschooser']  = 'WidgetNewschooser';
+// TODO to be removed
+// $GLOBALS['BE_FFL']['eventchooser'] = 'WidgetEventchooser';
+// $GLOBALS['BE_FFL']['newschooser']  = 'WidgetNewschooser';
 
 
 /**
  * Recipient sources
  */
-$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['integrated']                 = 'Avisota\Contao\Core\RecipientSource\IntegratedRecipientsFactory';
-$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['integrated_by_mailing_list'] = 'Avisota\Contao\Core\RecipientSource\IntegratedRecipientsByMailingListFactory';
-//$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['integrated_member_by_mailing_list'] = 'Avisota\Contao\Core\RecipientSource\IntegratedRecipientsAndMembersByMailingListFactory';
-// $GLOBALS['AVISOTA_RECIPIENT_SOURCE']['csv_file']                   = 'Avisota\Contao\Core\RecipientSource\CSVFileFactory';
-$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['dummy'] = 'Avisota\Contao\Core\RecipientSource\DummyFactory';
-
+$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['csv_file'] = 'Avisota\Contao\Core\RecipientSource\CSVFileFactory';
+$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['dummy']    = 'Avisota\Contao\Core\RecipientSource\DummyFactory';
 
 /**
  * Queues
@@ -216,15 +180,6 @@ $GLOBALS['TL_HOOKS']['initializeDependencyContainer']['avisota-services'] = arra
 	'Avisota\Contao\Core\ServiceFactory',
 	'init'
 );
-
-$GLOBALS['TL_HOOKS']['getUserNavigation']['avisota-custom-menu']     = array(
-	'Avisota\Contao\Core\Backend\CustomMenu',
-	'hookGetUserNavigation'
-);
-$GLOBALS['TL_HOOKS']['loadLanguageFile']['avisota-custom-menu']      = array(
-	'Avisota\Contao\Core\Backend\CustomMenu',
-	'hookLoadLanguageFile'
-);
 $GLOBALS['TL_HOOKS']['nestedMenuPreContent']['avisota-nested-menu']  = array(
 	'Avisota\Contao\Core\Backend\NestedMenu',
 	'hookNestedMenuPreContent'
@@ -233,13 +188,6 @@ $GLOBALS['TL_HOOKS']['nestedMenuPostContent']['avisota-nested-menu'] = array(
 	'Avisota\Contao\Core\Backend\NestedMenu',
 	'hookNestedMenuPostContent'
 );
-
-
-/**
- * Lazy hooks
- */
-\Avisota\Contao\Core\Backend\CustomMenu::lazyInit();
-
 
 /**
  * Custom user permissions.

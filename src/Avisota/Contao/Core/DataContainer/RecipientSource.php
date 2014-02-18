@@ -16,24 +16,21 @@
 namespace Avisota\Contao\Core\DataContainer;
 
 use Contao\Doctrine\ORM\EntityHelper;
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
+use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
+use DcGeneral\Event\PrePersistModelEvent;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class RecipientSource extends \Backend
+class RecipientSource
 {
-	/**
-	 * Import the back end user object
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->import('BackendUser', 'User');
-	}
-
 	/**
 	 * @param \DataContainer $dc
 	 */
 	public function onload_callback($dc)
 	{
-		$source = $this->Database
+		$source = \Database::getInstance()
 			->prepare("SELECT * FROM orm_avisota_recipient_source WHERE id=?")
 			->execute($dc->id);
 
@@ -79,20 +76,6 @@ class RecipientSource extends \Backend
 		}
 	}
 
-	/**
-	 * @param \DataContainer $dc
-	 */
-	public function onsubmit_callback($dc)
-	{
-		if ($dc->getEnvironment()->getCurrentModel()->getProperty('sorting') == 0) {
-			$source = $this->Database
-				->execute("SELECT MAX(sorting) as sorting FROM orm_avisota_recipient_source");
-			$this->Database
-				->prepare("UPDATE orm_avisota_recipient_source SET sorting=? WHERE id=?")
-				->execute($source->sorting > 0 ? $source->sorting * 2 : 128, $dc->id);
-		}
-	}
-
 
 	/**
 	 * Check permissions to edit table orm_avisota_recipient_source
@@ -121,8 +104,10 @@ class RecipientSource extends \Backend
 	 */
 	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
 	{
-		if (strlen($this->Input->get('tid'))) {
-			$this->toggleVisibility($this->Input->get('tid'), ($this->Input->get('state') == 1));
+		$input = \Input::getInstance();
+
+		if (strlen($input->get('tid'))) {
+			$this->toggleVisibility($input->get('tid'), ($input->get('state') == 1));
 			$this->redirect($this->getReferer());
 		}
 
@@ -191,8 +176,17 @@ class RecipientSource extends \Backend
 
 	public function getRecipientColumns()
 	{
-		$this->loadLanguageFile('orm_avisota_recipient');
-		$this->loadDataContainer('orm_avisota_recipient');
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		$eventDispatcher->dispatch(
+			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+			new LoadLanguageFileEvent('orm_avisota_recipient')
+		);
+		$eventDispatcher->dispatch(
+			ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER,
+			new LoadDataContainerEvent('orm_avisota_recipient')
+		);
 
 		$options = array();
 
@@ -208,8 +202,17 @@ class RecipientSource extends \Backend
 
 	public function getRecipientFilterColumns()
 	{
-		$this->loadLanguageFile('orm_avisota_recipient');
-		$this->loadDataContainer('orm_avisota_recipient');
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		$eventDispatcher->dispatch(
+			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+			new LoadLanguageFileEvent('orm_avisota_recipient')
+		);
+		$eventDispatcher->dispatch(
+			ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER,
+			new LoadDataContainerEvent('orm_avisota_recipient')
+		);
 
 		$options = array();
 
@@ -223,8 +226,17 @@ class RecipientSource extends \Backend
 
 	public function getMemberFilterColumns()
 	{
-		$this->loadLanguageFile('tl_member');
-		$this->loadDataContainer('tl_member');
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		$eventDispatcher->dispatch(
+			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+			new LoadLanguageFileEvent('tl_member')
+		);
+		$eventDispatcher->dispatch(
+			ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER,
+			new LoadDataContainerEvent('tl_member')
+		);
 
 		$options = array();
 
