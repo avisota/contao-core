@@ -34,8 +34,8 @@
 		"contao-community-alliance/events-cron": "*",
 		"contao-community-alliance/events-create-options": "*",
 		"menatwork/contao-multicolumnwizard": "~3",
-		"bit3/contao-doctrine-orm": "~1.1",
-		"bit3/contao-doctrine-orm-timestampable": "~1.1",
+		"bit3/contao-doctrine-orm": "~2",
+		"bit3/contao-doctrine-orm-timestampable": "~2",
 		"bit3/contao-nested-menu": "~1",
 		"bit3/contao-twig": "~1.6",
 		"bit3/contao-meta-palettes": "~1",
@@ -63,7 +63,7 @@
 		"contao": {
 			"sources": {
 				"module": "system/modules/avisota-core",
-				"assets": "assets/avisota-core"
+				"assets": "assets/avisota/core"
 			},
 			"transifex": {
 				"project": "avisota-contao",

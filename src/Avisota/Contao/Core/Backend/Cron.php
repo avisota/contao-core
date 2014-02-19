@@ -17,8 +17,10 @@ namespace Avisota\Contao\Core\Backend;
 use Avisota\Contao\Entity\MailingList;
 use Avisota\Contao\Entity\Recipient;
 use Avisota\Contao\Core\Event\RemoveRecipientEvent;
+use Avisota\Contao\Message\Core\Renderer\MessageRenderer;
 use Avisota\Recipient\MutableRecipient;
 use Avisota\RecipientSource\RecipientSourceInterface;
+use Avisota\Transport\TransportInterface;
 use Contao\Doctrine\ORM\EntityHelper;
 use Doctrine\ORM\Query;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -70,8 +72,8 @@ class Cron extends \Controller
 			throw new \RuntimeException('Could not find message id ' . $mailBoilerplateId);
 		}
 
-		/** @var MessagePreRendererInterface $renderer */
-		$renderer           = $GLOBALS['container']['avisota.renderer'];
+		/** @var MessageRenderer $renderer */
+		$renderer           = $GLOBALS['container']['avisota.message.renderer'];
 		$preRenderedMessage = $renderer->renderMessage($messageEntity);
 		$message            = $preRenderedMessage->render($recipient, $newsletterData);
 

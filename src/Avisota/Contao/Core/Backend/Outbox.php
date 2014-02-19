@@ -36,7 +36,7 @@ class Outbox extends \TwigBackendModule
 		foreach ($queueDataCollection as $queueData) {
 			$serviceName = sprintf('avisota.queue.%s', $queueData->getId());
 			if ($container->offsetExists($serviceName)) {
-				$queue       = $container[$serviceName];
+				$queue = $container[$serviceName];
 				$length += $queue->length();
 			}
 		}
@@ -85,9 +85,9 @@ class Outbox extends \TwigBackendModule
 			$this->Template->queue  = $queue;
 			$this->Template->config = $queueData->toArray();
 
-			$GLOBALS['TL_CSS'][] = 'assets/avisota-core/css/be_outbox.css';
-			$GLOBALS['TL_JAVASCRIPT'][] = 'assets/avisota-core/js/Number.js';
-			$GLOBALS['TL_JAVASCRIPT'][] = 'assets/avisota-core/js/be_outbox.js';
+			$GLOBALS['TL_CSS'][]        = 'assets/avisota/core/css/be_outbox.css';
+			$GLOBALS['TL_JAVASCRIPT'][] = 'assets/avisota/core/js/Number.js';
+			$GLOBALS['TL_JAVASCRIPT'][] = 'assets/avisota/core/js/be_outbox.js';
 		}
 	}
 
@@ -104,12 +104,12 @@ class Outbox extends \TwigBackendModule
 			$serviceName = sprintf('avisota.queue.%s', $queueData->getId());
 			$queue       = $container[$serviceName];
 
-			$item           = $queueData->toArray();
-			$item['length'] = $queue->length();
+			$item['meta']  = $queueData;
+			$item['queue'] = $queue;
 
 			$items[] = $item;
 		}
 
-		$this->Template->queues = $items;
+		$this->Template->items = $items;
 	}
 }

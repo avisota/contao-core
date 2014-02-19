@@ -136,7 +136,7 @@ class AvisotaUpdate extends BackendModule
 			exit;
 		}
 
-		$GLOBALS['TL_JAVASCRIPT']['avisota_update'] = 'assets/avisota-core/css/avisota_update.js';
+		$GLOBALS['TL_JAVASCRIPT']['avisota_update'] = 'assets/avisota/core/css/avisota_update.js';
 
 		return parent::generate();
 	}

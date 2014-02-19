@@ -8,7 +8,7 @@
 	$combiner = new Combiner();
 	$combiner->add('system/themes/'. $this->theme .'/basic.css');
 	$combiner->add('system/themes/'. $this->theme .'/main.css');
-	$combiner->add('assets/avisota-core/css/avisotaCompatibilityController.css');
+	$combiner->add('assets/avisota/core/css/avisotaCompatibilityController.css');
 	echo $combiner->getCombinedFile();
 ?>" media="all">
 <!--[if IE]><link rel="stylesheet" href="<?php echo TL_SCRIPT_URL; ?>system/themes/<?php echo $this->theme; ?>/iefixes.css" media="screen"><![endif]-->

@@ -298,8 +298,8 @@ class orm_avisota_message_content extends Backend
 					? ' (' . $GLOBALS['TL_LANG']['MSC']['guests'] . ')' : '')) .
 			($this->hasMultipleNewsletterAreas($contentData) ? sprintf(
 				' <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>',
-				isset($GLOBALS['TL_LANG']['orm_avisota_message_content']['cell'][$contentData['cell']])
-					? $GLOBALS['TL_LANG']['orm_avisota_message_content']['cell'][$contentData['cell']] : $contentData['cell']
+				isset($GLOBALS['TL_LANG']['orm_avisota_message_content']['cells'][$contentData['cell']])
+					? $GLOBALS['TL_LANG']['orm_avisota_message_content']['cells'][$contentData['cell']] : $contentData['cell']
 			) : '') .
 			'</div>
 <div class="limit_height' . (!$GLOBALS['TL_CONFIG']['doNotCollapse'] ? ' h64' : '') . ' block">

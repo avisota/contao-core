@@ -44,7 +44,7 @@ class NestedMenu extends \Controller
 		if ($do == 'avisota_config') {
 			return sprintf(
 				'<div class="avisota-logo"><a href="http://avisota.org" target="_blank">%s</a></div>',
-				$this->generateImage('assets/avisota-core/images/logo.png', 'Avisota newsletter and mailing system')
+				$this->generateImage('assets/avisota/core/images/logo.png', 'Avisota newsletter and mailing system')
 			);
 		}
 	}

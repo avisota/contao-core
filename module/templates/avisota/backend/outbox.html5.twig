@@ -20,17 +20,17 @@
 				<th class="tl_folder_tlist">{{ _lang.avisota_outbox.col_length }}</th>
 				<th class="tl_folder_tlist">{{ _lang.avisota_outbox.col_action }}</th>
 			</tr>
-			{% for index, queue in queues %}
+			{% for index, item in items %}
 				<tr class="{{ index % 2 == 0 ? 'even' : 'odd' }}" onmouseover="Theme.hoverRow(this,1)" onmouseout="Theme.hoverRow(this,0)">
-					<td class="tl_file_list">{{ queue.title }}</td>
-					<td class="tl_file_list">{{ queue.length }}</td>
+					<td class="tl_file_list">{{ item.meta.title }}</td>
+					<td class="tl_file_list">{{ item.queue.length }}</td>
 					<td class="tl_file_list">
-						{% if queue.length and queue.allowManualSending %}
-							<a href="contao/main.php?do=avisota_outbox&amp;execute={{ queue.id }}" title="{{ _lang.avisota_outbox.action_execute }}">
-								{{ image('assets/avisota-core/images/queue_execute.png') }}
+						{% if item.length and item.meta.allowManualSending %}
+							<a href="contao/main.php?do=avisota_outbox&amp;execute={{ item.meta.id }}" title="{{ _lang.avisota_outbox.action_execute }}">
+								{{ image('assets/avisota/core/images/queue_execute.png') }}
 							</a>
 						{% else %}
-							{{ image('assets/avisota-core/images/queue_execute_.png') }}
+							{{ image('assets/avisota/core/images/queue_execute_.png') }}
 						{% endif %}
 					</td>
 				</tr>
