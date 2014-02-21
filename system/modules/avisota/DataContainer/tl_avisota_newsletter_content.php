@@ -78,7 +78,7 @@ class orm_avisota_message_content extends Backend
 					$this->redirect('contao/main.php?act=error');
 				}
 
-				$contentElement = $this->Database
+				$contentElement = \Database::getInstance()
 					->prepare("SELECT id FROM orm_avisota_message_content WHERE pid=?")
 					->execute(CURRENT_ID);
 
@@ -131,7 +131,7 @@ class orm_avisota_message_content extends Backend
 		}
 
 		if (!$isPid) {
-			$content = $this->Database
+			$content = \Database::getInstance()
 				->prepare("SELECT * FROM orm_avisota_message_content WHERE id=?")
 				->execute($id);
 			if ($content->next()) {
@@ -147,7 +147,7 @@ class orm_avisota_message_content extends Backend
 			}
 		}
 
-		$newsletter = $this->Database
+		$newsletter = \Database::getInstance()
 			->prepare("SELECT * FROM orm_avisota_message WHERE id=?")
 			->execute($id);
 		if ($newsletter->next()) {
@@ -258,7 +258,7 @@ class orm_avisota_message_content extends Backend
 	public function getGalleryTemplates(DataContainer $dc)
 	{
 		// Get the page ID
-		$article = $this->Database
+		$article = \Database::getInstance()
 			->prepare("SELECT pid FROM tl_article WHERE id=?")
 			->limit(1)
 			->execute($dc->activeRecord->pid);
@@ -267,7 +267,7 @@ class orm_avisota_message_content extends Backend
 		$page = $this->getPageDetails($article->pid);
 
 		// Get the theme ID
-		$layout = $this->Database
+		$layout = \Database::getInstance()
 			->prepare("SELECT pid FROM tl_layout WHERE id=?")
 			->limit(1)
 			->execute($page->layout);
@@ -366,7 +366,7 @@ class orm_avisota_message_content extends Backend
 		}
 
 		// Update the database
-		$this->Database
+		\Database::getInstance()
 			->prepare(
 			"UPDATE orm_avisota_message_content SET tstamp=" . time() . ", invisible='" . ($visible ? ''
 				: 1) . "' WHERE id=?"
@@ -394,7 +394,7 @@ class orm_avisota_message_content extends Backend
 	 */
 	public function dcaGetNewsletterAreas($dc)
 	{
-		$category = $this->Database
+		$category = \Database::getInstance()
 			->prepare(
 			"SELECT c.* FROM orm_avisota_message_category c INNER JOIN orm_avisota_message n ON c.id=n.pid INNER JOIN orm_avisota_message_content nle ON n.id=nle.pid WHERE nle.id=?"
 		)
@@ -430,7 +430,7 @@ class orm_avisota_message_content extends Backend
 				return $aliases;
 			}
 
-			$alias = $this->Database->execute(
+			$alias = \Database::getInstance()->execute(
 				"SELECT a.id, a.title, a.inColumn, p.title AS parent FROM tl_article a LEFT JOIN tl_page p ON p.id=a.pid WHERE a.pid IN(" . implode(
 					',',
 					array_map('intval', array_unique($pids))
@@ -438,7 +438,7 @@ class orm_avisota_message_content extends Backend
 			);
 		}
 		else {
-			$alias = $this->Database->execute(
+			$alias = \Database::getInstance()->execute(
 				"SELECT a.id, a.title, a.inColumn, p.title AS parent FROM tl_article a LEFT JOIN tl_page p ON p.id=a.pid ORDER BY parent, a.sorting"
 			);
 		}

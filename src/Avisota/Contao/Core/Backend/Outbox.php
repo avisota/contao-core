@@ -19,7 +19,10 @@ use Avisota\Contao\Entity\Queue;
 use Avisota\Contao\Core\Message\Renderer;
 use Avisota\Queue\QueueInterface;
 use Contao\Doctrine\ORM\EntityHelper;
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Outbox extends \TwigBackendModule
 {
@@ -54,7 +57,13 @@ class Outbox extends \TwigBackendModule
 	 */
 	protected function compile()
 	{
-		$this->loadLanguageFile('avisota_outbox');
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		$eventDispatcher->dispatch(
+			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+			new LoadLanguageFileEvent('avisota_outbox')
+		);
 
 		$queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
 

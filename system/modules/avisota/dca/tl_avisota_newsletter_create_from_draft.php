@@ -47,7 +47,7 @@ class orm_avisota_message_create_from_draft extends Backend
 		$subject  = $dc->getData('subject');
 		$draftId    = $dc->getData('draft');
 
-		$newsletterDraft = $this->Database
+		$newsletterDraft = \Database::getInstance()
 			->prepare("SELECT * FROM orm_avisota_message_draft WHERE id=?")
 			->execute($draftId);
 		if ($newsletterDraft->next()) {
@@ -70,14 +70,14 @@ class orm_avisota_message_create_from_draft extends Backend
 				$value .= '?';
 			}
 
-			$newsletter = $this->Database
+			$newsletter = \Database::getInstance()
 				->prepare(
 				"INSERT INTO orm_avisota_message (" . implode(",", array_keys($newsletterDraftData)) . ") VALUES ($value)"
 			)
 				->execute($newsletterDraftData);
 			$newsletterId         = $newsletter->insertId;
 
-			$content = $this->Database
+			$content = \Database::getInstance()
 				->prepare("SELECT * FROM orm_avisota_message_draft_content WHERE pid=?")
 				->execute($draftId);
 
@@ -102,7 +102,7 @@ class orm_avisota_message_create_from_draft extends Backend
 					$value .= '?';
 				}
 
-				$newsletter = $this->Database
+				$newsletter = \Database::getInstance()
 					->prepare(
 					"INSERT INTO orm_avisota_message_content (" . implode(
 						",",

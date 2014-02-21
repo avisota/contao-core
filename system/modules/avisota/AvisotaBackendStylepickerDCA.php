@@ -63,7 +63,7 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 	public function loadAvisotaNewsletterCEs($val, $dc)
 	{
 		$return  = array();
-		$targets = $this->Database
+		$targets = \Database::getInstance()
 			->prepare('SELECT DISTINCT(cond) FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=?')
 			->execute($dc->id, 'orm_avisota_message_content');
 		while ($targets->next()) {
@@ -75,7 +75,7 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 	public function loadAvisotaNewsletterCE_Rows($val, $dc)
 	{
 		$return  = array();
-		$targets = $this->Database
+		$targets = \Database::getInstance()
 			->prepare('SELECT DISTINCT(sec) FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=?')
 			->execute($dc->id, 'orm_avisota_message_content');
 		while ($targets->next()) {
@@ -110,7 +110,7 @@ class AvisotaBackendStylepickerDCA extends tl_stylepicker4ward
 	{
 		$ret = array('body');
 
-		$category = $this->Database
+		$category = \Database::getInstance()
 			->query('SELECT * FROM orm_avisota_message_category WHERE areas!=\'\'');
 		while ($category->next()) {
 			$ret = array_merge(

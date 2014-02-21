@@ -59,7 +59,7 @@ class WidgetNewschooser extends Widget
 			$this->value = array();
 		}
 
-		$news = $this->Database
+		$news = \Database::getInstance()
 			->prepare(
 			'SELECT n.id, n.headline, n.time, a.title AS archive
 												FROM tl_news AS n

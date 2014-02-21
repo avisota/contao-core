@@ -99,7 +99,7 @@ class ModuleAvisotaList extends Module
 		$limit  = $this->perPage;
 		$offset = $pageId * $limit;
 
-		$newsletter = $this->Database
+		$newsletter = \Database::getInstance()
 			->prepare(
 			"SELECT * FROM orm_avisota_message WHERE sendOn > 0 AND pid IN (" . implode(
 				',',
@@ -126,7 +126,7 @@ class ModuleAvisotaList extends Module
 			}
 			else {
 				if (!isset($viewOnlineCache[$newsletter->pid])) {
-					$category = $this->Database
+					$category = \Database::getInstance()
 						->prepare("SELECT * FROM orm_avisota_message_category WHERE id=?")
 						->execute($newsletter->pid);
 
@@ -155,7 +155,7 @@ class ModuleAvisotaList extends Module
 		$template->newsletters = $newsletterDataSets;
 		$this->Template->list     = $template->parse();
 
-		$newsletter = $this->Database
+		$newsletter = \Database::getInstance()
 			->prepare(
 			"SELECT COUNT(id) as `count` FROM orm_avisota_message WHERE sendOn > 0 AND pid IN (" . implode(
 				',',

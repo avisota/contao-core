@@ -130,7 +130,7 @@ class AvisotaNewsletterContent extends Controller
 			return '';
 		}
 
-		$element = $this->Database
+		$element = \Database::getInstance()
 			->prepare(
 			"
 				SELECT
@@ -147,7 +147,7 @@ class AvisotaNewsletterContent extends Controller
 			return '';
 		}
 
-		$newsletter = $this->Database
+		$newsletter = \Database::getInstance()
 			->prepare(
 			"
 				SELECT
@@ -159,7 +159,7 @@ class AvisotaNewsletterContent extends Controller
 		)
 			->execute($element->pid);
 
-		$category = $this->Database
+		$category = \Database::getInstance()
 			->prepare(
 			"
 				SELECT
@@ -276,7 +276,7 @@ class AvisotaNewsletterContent extends Controller
 		$row = null;
 
 		// get the newsletter category jump to page
-		$category = $this->Database
+		$category = \Database::getInstance()
 			->prepare(
 			"
 				SELECT

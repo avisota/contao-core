@@ -82,7 +82,7 @@ class ModuleAvisotaReader extends Module
 	{
 		$id = $this->Input->get('items');
 
-		$newsletter = $this->Database
+		$newsletter = \Database::getInstance()
 			->prepare(
 			"SELECT * FROM orm_avisota_message WHERE (id=? OR alias=?) AND pid IN (" . implode(
 				',',
@@ -92,7 +92,7 @@ class ModuleAvisotaReader extends Module
 			->execute($id, $id);
 
 		if ($newsletter->next()) {
-			$category = $this->Database
+			$category = \Database::getInstance()
 				->prepare("SELECT * FROM orm_avisota_message_category WHERE id=?")
 				->execute($newsletter->pid);
 			if ($category->next()) {

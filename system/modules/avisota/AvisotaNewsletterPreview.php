@@ -124,7 +124,7 @@ class AvisotaNewsletterPreview extends Backend
 		// find the newsletter
 		$id = $this->Input->get('id');
 
-		$newsletter = $this->Database
+		$newsletter = \Database::getInstance()
 			->prepare(
 			"
 						SELECT
@@ -142,7 +142,7 @@ class AvisotaNewsletterPreview extends Backend
 		}
 
 		// find the newsletter category
-		$category = $this->Database
+		$category = \Database::getInstance()
 			->prepare(
 			"
 						SELECT

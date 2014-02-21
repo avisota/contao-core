@@ -90,7 +90,7 @@ class orm_avisota_recipient_remove extends Backend
 
 		if (count($params)) {
 			// Check whether the e-mail address exists
-			$resultSet = $this->Database
+			$resultSet = \Database::getInstance()
 				->prepare(
 				"DELETE FROM orm_avisota_recipient WHERE pid=? AND email IN (" . implode(',', $placeHolders) . ")"
 			)

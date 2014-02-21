@@ -77,7 +77,7 @@ class ArticleTeaser extends Element
 	 */
 	protected function loadArticle()
 	{
-		$article = $this->Database
+		$article = \Database::getInstance()
 			->prepare("SELECT * FROM tl_article WHERE id=?")
 			->execute($this->articleAlias);
 		if ($article->next()) {

@@ -127,7 +127,7 @@ class AvisotaNewsletterTransport extends Backend
 	 */
 	protected function findNewsletter($id)
 	{
-		$this->newsletter = $this->Database
+		$this->newsletter = \Database::getInstance()
 			->prepare("SELECT * FROM orm_avisota_message WHERE id=?")
 			->execute($id);
 
@@ -137,7 +137,7 @@ class AvisotaNewsletterTransport extends Backend
 		}
 
 		// find the newsletter category
-		$this->category = $this->Database
+		$this->category = \Database::getInstance()
 			->prepare("SELECT * FROM orm_avisota_message_category WHERE id=?")
 			->execute($this->newsletter->pid);
 
@@ -204,7 +204,7 @@ class AvisotaNewsletterTransport extends Backend
 			}
 		}
 		else {
-			$user = $this->Database
+			$user = \Database::getInstance()
 				->prepare("SELECT * FROM tl_user WHERE id=?")
 				->execute($this->Input->post('recipient_user'));
 			if ($user->next()) {
@@ -266,7 +266,7 @@ class AvisotaNewsletterTransport extends Backend
 
 		$time = time();
 
-		$outboxId = $this->Database
+		$outboxId = \Database::getInstance()
 			->prepare("INSERT INTO orm_avisota_message_outbox %s")
 			->set(array('pid' => $this->newsletter->id, 'tstamp' => $time))
 			->execute()
@@ -279,7 +279,7 @@ class AvisotaNewsletterTransport extends Backend
 				switch ($matches[1]) {
 					case 'list':
 						$idTemp = $matches[2];
-						$this->Database
+						\Database::getInstance()
 							->prepare(
 							"
 							INSERT INTO
@@ -305,7 +305,7 @@ class AvisotaNewsletterTransport extends Backend
 
 					case 'mgroup':
 						$idTemp = $matches[2];
-						$this->Database
+						\Database::getInstance()
 							->prepare(
 							"
 							INSERT INTO
@@ -346,7 +346,7 @@ class AvisotaNewsletterTransport extends Backend
 	 */
 	protected function send()
 	{
-		$outbox = $this->Database
+		$outbox = \Database::getInstance()
 			->prepare("SELECT * FROM orm_avisota_message_outbox WHERE id=?")
 			->execute($this->Input->post('id'));
 
@@ -369,7 +369,7 @@ class AvisotaNewsletterTransport extends Backend
 		$startTime   = time();
 
 		// get recipients
-		$recipient = $this->Database
+		$recipient = \Database::getInstance()
 			->prepare(
 			"SELECT
 					*
@@ -387,7 +387,7 @@ class AvisotaNewsletterTransport extends Backend
 		// Send newsletter
 		if ($recipient->numRows > 0) {
 			if (!$this->newsletter->sendOn) {
-				$this->Database
+				\Database::getInstance()
 					->prepare(
 					"
 						UPDATE
@@ -407,7 +407,7 @@ class AvisotaNewsletterTransport extends Backend
 
 				// add recipient details
 				if ($recipient->source == 'list') {
-					$data = $this->Database
+					$data = \Database::getInstance()
 						->prepare("SELECT * FROM orm_avisota_recipient WHERE id=?")
 						->execute($recipient->recipientID);
 					if ($data->next()) {
@@ -417,7 +417,7 @@ class AvisotaNewsletterTransport extends Backend
 
 				// add member details
 				if ($recipient->source == 'mgroup') {
-					$data = $this->Database
+					$data = \Database::getInstance()
 						->prepare("SELECT * FROM tl_member WHERE id=?")
 						->execute($recipient->recipientID);
 					if ($data->next()) {
@@ -426,7 +426,7 @@ class AvisotaNewsletterTransport extends Backend
 				}
 				// merge member details
 				else if ($GLOBALS['TL_CONFIG']['avisota_merge_member_details']) {
-					$data = $this->Database
+					$data = \Database::getInstance()
 						->prepare("SELECT * FROM tl_member WHERE email=?")
 						->execute($recipient->email);
 					if ($data->next()) {
@@ -465,14 +465,14 @@ class AvisotaNewsletterTransport extends Backend
 				else {
 					$fails[] = $recipient->row();
 
-					$this->Database
+					\Database::getInstance()
 						->prepare("UPDATE orm_avisota_message_outbox_recipient SET failed='1' WHERE id=?")
 						->execute($recipient->id);
 
 					// disable recipient from list
 					if ($recipient->source == 'list') {
 						if (!$GLOBALS['TL_CONFIG']['avisota_dont_disable_recipient_on_failure']) {
-							$this->Database
+							\Database::getInstance()
 								->prepare("UPDATE orm_avisota_recipient SET confirmed='' WHERE id=?")
 								->execute($recipient->recipientID);
 							$this->log(
@@ -486,7 +486,7 @@ class AvisotaNewsletterTransport extends Backend
 					// disable member
 					else if ($recipient->source == 'mgroup') {
 						if (!$GLOBALS['TL_CONFIG']['avisota_dont_disable_member_on_failure']) {
-							$this->Database
+							\Database::getInstance()
 								->prepare("UPDATE tl_member SET disable='1' WHERE id=?")
 								->execute($recipient->recipientID);
 							$this->log(
@@ -498,7 +498,7 @@ class AvisotaNewsletterTransport extends Backend
 					}
 				}
 
-				$this->Database
+				\Database::getInstance()
 					->prepare("UPDATE orm_avisota_message_outbox_recipient SET send=? WHERE id=?")
 					->execute(time(), $recipient->id);
 			}

@@ -76,7 +76,7 @@ class AvisotaInsertTag extends Controller
 						case 'unsubscribe_url':
 							$alias = false;
 							if ($currentRecipient['source'] == 'list') {
-								$recipientList = $this->Database
+								$recipientList = \Database::getInstance()
 									->prepare("SELECT * FROM orm_avisota_mailing_list WHERE id=?")
 									->execute($currentRecipient['sourceID']);
 								if (!$recipientList->next()) {
@@ -133,7 +133,7 @@ class AvisotaInsertTag extends Controller
 			case 'newsletter_latest_url':
 				if (strlen($tagParts[1])) {
 					$id = "'" . implode("','", trimsplit(',', $tagParts[1])) . "'";
-					$newsletter = $this->Database
+					$newsletter = \Database::getInstance()
 						->prepare(
 						"
 						SELECT
@@ -157,7 +157,7 @@ class AvisotaInsertTag extends Controller
 						->execute();
 					if ($newsletter->next()) {
 						if (strlen($tagParts[2])) {
-							$page = $this->Database
+							$page = \Database::getInstance()
 								->prepare(
 								"
 								SELECT

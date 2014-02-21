@@ -41,7 +41,7 @@ class orm_avisota_recipient extends Backend
 			$this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'], $recipientData['addedOn'])
 		);
 		if ($recipientData['addedBy'] > 0) {
-			$user = $this->Database
+			$user = \Database::getInstance()
 				->prepare("SELECT * FROM tl_user WHERE id=?")
 				->execute($recipientData['addedBy']);
 			$label .= sprintf(
@@ -53,7 +53,7 @@ class orm_avisota_recipient extends Backend
 
 		$label .= '<ul style="margin-top: 3px;">';
 
-		$list = $this->Database
+		$list = \Database::getInstance()
 			->prepare(
 			"SELECT ml.*, rtml.confirmed, rtml.confirmationSent, rtml.reminderSent, rtml.reminderCount FROM orm_avisota_mailing_list ml INNER JOIN orm_avisota_recipient_to_mailing_list rtml ON ml.id=rtml.list WHERE rtml.recipient=? ORDER BY ml.title"
 		)
@@ -115,7 +115,7 @@ class orm_avisota_recipient extends Backend
 			$recipientId = $this->Input->get('recipient');
 			$listId      = $this->Input->get('list');
 
-			$this->Database
+			\Database::getInstance()
 				->prepare("UPDATE orm_avisota_recipient_to_mailing_list SET confirmed=? WHERE recipient=? AND list=?")
 				->execute($this->Input->get('confirmed') ? '1' : '', $recipientId, $listId);
 
@@ -169,7 +169,7 @@ class orm_avisota_recipient extends Backend
 
 			// execute query
 			if (count($values)) {
-				$this->Database
+				\Database::getInstance()
 					->prepare(
 					"INSERT INTO orm_avisota_recipient_blacklist (tstamp, pid, email)
 							   VALUES " . implode(',', $values) . "
@@ -212,7 +212,7 @@ class orm_avisota_recipient extends Backend
 		$blacklisted = AvisotaIntegratedRecipient::checkBlacklisted($email, $listIds);
 
 		if ($blacklisted) {
-			$blacklist = $this->Database
+			$blacklist = \Database::getInstance()
 				->execute(
 				"SELECT * FROM orm_avisota_mailing_list
 				           WHERE id IN (" . implode(',', $blacklisted) . ")
@@ -241,7 +241,7 @@ class orm_avisota_recipient extends Backend
 			return;
 		}
 
-		return $this->Database
+		return \Database::getInstance()
 			->prepare(
 			"SELECT * FROM orm_avisota_recipient_to_mailing_list WHERE recipient=?"
 				. ($confirmed !== null ? ' AND confirmed=?' : '')
@@ -354,7 +354,7 @@ class orm_avisota_recipient extends Backend
 			case 'paste':
 			case 'delete':
 			case 'toggle':
-				$recipient = $this->Database
+				$recipient = \Database::getInstance()
 					->prepare("SELECT pid FROM orm_avisota_recipient WHERE id=?")
 					->limit(1)
 					->execute($id);
@@ -431,7 +431,7 @@ class orm_avisota_recipient extends Backend
 					$this->redirect('contao/main.php?act=error');
 				}
 
-				$recipient = $this->Database
+				$recipient = \Database::getInstance()
 					->prepare("SELECT id FROM orm_avisota_recipient WHERE pid=?")
 					->execute($id);
 

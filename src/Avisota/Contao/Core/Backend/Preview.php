@@ -17,7 +17,10 @@ namespace Avisota\Contao\Core\Backend;
 
 use Avisota\Contao\Core\Message\Renderer;
 use Contao\Doctrine\ORM\EntityHelper;
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use DcGeneral\DC_General;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Preview extends \Controller
 {
@@ -26,8 +29,17 @@ class Preview extends \Controller
 	 */
 	public function sendMessage(DC_General $dc)
 	{
-		$this->loadLanguageFile('avisota_message_preview');
-		$this->loadLanguageFile('orm_avisota_message');
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		$eventDispatcher->dispatch(
+			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+			new LoadLanguageFileEvent('avisota_message_preview')
+		);
+		$eventDispatcher->dispatch(
+			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+			new LoadLanguageFileEvent('orm_avisota_message')
+		);
 
 		$input             = \Input::getInstance();
 		$messageRepository = EntityHelper::getRepository('Avisota\Contao:Message');

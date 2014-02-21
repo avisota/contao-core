@@ -104,7 +104,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		}
 
 		// fetch existing data
-		$recipient = $this->Database
+		$recipient = \Database::getInstance()
 			->prepare("SELECT * FROM orm_avisota_recipient WHERE $field=?");
 		// fetch uncached, e.g. if store is called before
 		if ($uncached) {
@@ -181,7 +181,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			$insertSet[] = '0';
 		}
 
-		$this->Database
+		\Database::getInstance()
 			->prepare(
 			sprintf(
 				'INSERT INTO orm_avisota_recipient SET addedOn=?, addedBy=?, %1$s ON DUPLICATE KEY UPDATE %1$s',
@@ -217,7 +217,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 	{
 		return array_map(
 			'intval',
-			$this->Database
+			\Database::getInstance()
 				->prepare("SELECT * FROM orm_avisota_recipient_to_mailing_list rtml WHERE recipient=?")
 				->execute($this->id)
 				->fetchEach('list')
@@ -262,14 +262,14 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 				$args[]   = $this->id;
 				$args[]   = $listId;
 			}
-			$this->Database
+			\Database::getInstance()
 				->prepare(
 				"INSERT INTO orm_avisota_recipient_to_mailing_list (recipient, list) VALUES " . implode(', ', $values)
 			)
 				->execute($args);
 
 			// clean up blacklist
-			$this->Database
+			\Database::getInstance()
 				->prepare(
 				"DELETE FROM orm_avisota_recipient_blacklist WHERE email=? AND pid IN (" . implode(',', $lists) . ")"
 			)
@@ -317,7 +317,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 			$args[]  = $token;
 		}
 
-		$list = $this->Database
+		$list = \Database::getInstance()
 			->prepare(
 			"SELECT l.* FROM orm_avisota_recipient_to_mailing_list t
 					   INNER JOIN orm_avisota_mailing_list l
@@ -337,7 +337,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 				TL_INFO
 			);
 
-			$this->Database
+			\Database::getInstance()
 				->prepare("UPDATE orm_avisota_recipient_to_mailing_list SET confirmed=? WHERE recipient=? AND list=?")
 				->execute(1, $this->id, $list->id);
 		}
@@ -376,7 +376,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 		$this->loadLanguageFile('avisota_subscription');
 
-		$list = $this->Database
+		$list = \Database::getInstance()
 			->prepare(
 			"SELECT l.* FROM orm_avisota_recipient_to_mailing_list t
 					   INNER JOIN orm_avisota_mailing_list l
@@ -431,14 +431,14 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 					TL_INFO
 				);
 
-				$this->Database
+				\Database::getInstance()
 					->prepare("DELETE FROM orm_avisota_recipient_to_mailing_list WHERE recipient=? AND list=?")
 					->execute($this->id, $listData['id']);
 			}
 		}
 
 		// delete recipient
-		$list = $this->Database
+		$list = \Database::getInstance()
 			->prepare(
 			"SELECT COUNT(t.list) AS c FROM orm_avisota_recipient_to_mailing_list t
 					   WHERE t.recipient=?"
@@ -456,7 +456,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 		}
 
 		if ($list->c == 0) {
-			$this->Database
+			\Database::getInstance()
 				->prepare("DELETE FROM orm_avisota_recipient WHERE id=?")
 				->execute($this->id);
 		}
@@ -490,7 +490,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 		$time = time();
 
-		$list = $this->Database
+		$list = \Database::getInstance()
 			->prepare(
 			"SELECT l.* FROM orm_avisota_recipient_to_mailing_list t
 					   INNER JOIN orm_avisota_mailing_list l
@@ -565,7 +565,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 					TL_INFO
 				);
 
-				$this->Database
+				\Database::getInstance()
 					->prepare(
 					"UPDATE orm_avisota_recipient_to_mailing_list SET confirmationSent=?, token=? WHERE recipient=? AND list=?"
 				)
@@ -617,7 +617,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 
 		$reminderTime = $GLOBALS['TL_CONFIG']['avisota_notification_time'] * 24 * 60 * 60;
 
-		$list = $this->Database
+		$list = \Database::getInstance()
 			->prepare(
 			"SELECT l.* FROM orm_avisota_recipient_to_mailing_list t
 					   INNER JOIN orm_avisota_mailing_list l
@@ -706,7 +706,7 @@ class AvisotaIntegratedRecipient extends AvisotaRecipient
 					TL_INFO
 				);
 
-				$this->Database
+				\Database::getInstance()
 					->prepare(
 					"UPDATE orm_avisota_recipient_to_mailing_list SET reminderSent=?, reminderCount=reminderCount+1, token=? WHERE recipient=? AND list=?"
 				)

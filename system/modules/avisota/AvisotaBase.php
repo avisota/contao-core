@@ -75,7 +75,7 @@ class AvisotaBase extends Controller
 		if ($recipients && preg_match('#^list:(\d+)$#', $recipients['outbox_source'], $matches)) {
 			// the dummy list, used on preview
 			if ($matches[1] > 0) {
-				$recipientList = $this->Database
+				$recipientList = \Database::getInstance()
 					->prepare(
 					"
 						SELECT
@@ -348,7 +348,7 @@ class AvisotaBase extends Controller
 
 		// Add the theme templates folder
 		if ($themeId > 0) {
-			$theme = $this->Database
+			$theme = \Database::getInstance()
 				->prepare("SELECT * FROM orm_avisota_message_theme WHERE id=?")
 				->limit(1)
 				->execute($themeId);

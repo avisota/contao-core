@@ -129,7 +129,7 @@ class orm_avisota_recipient_export extends Backend
 		);
 
 		// search for the list
-		$list = $this->Database
+		$list = \Database::getInstance()
 			->prepare("SELECT * FROM orm_avisota_mailing_list WHERE id=?")
 			->execute($this->Input->get('id'));
 
@@ -155,7 +155,7 @@ class orm_avisota_recipient_export extends Backend
 		fputcsv($temporaryFile->handle, $labels, $delimiter, $enclosure);
 
 		// write recipient rows
-		$recipient = $this->Database
+		$recipient = \Database::getInstance()
 			->prepare("SELECT * FROM orm_avisota_recipient WHERE pid=?")
 			->execute($this->Input->get('id'));
 		while ($recipient->next()) {

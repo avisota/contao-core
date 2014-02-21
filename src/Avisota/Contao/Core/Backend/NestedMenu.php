@@ -15,6 +15,10 @@
 
 namespace Avisota\Contao\Core\Backend;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
 class NestedMenu extends \Controller
 {
 	/**
@@ -52,12 +56,17 @@ class NestedMenu extends \Controller
 	public function hookNestedMenuPostContent($do)
 	{
 		if ($do == 'avisota_config') {
-			$config = \Config::getInstance();
-			$this->loadLanguageFile('avisota_promotion');
+			/** @var EventDispatcher $eventDispatcher */
+			$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+			$eventDispatcher->dispatch(
+				ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+				new LoadLanguageFileEvent('avisota_promotion')
+			);
 
 			$context = array(
-				'donate' => $GLOBALS['TL_LANG']['avisota_promotion']['donate'],
-				'copyright' => 'Avisota newsletter and mailing system &copy; 2013 bit3 UG and all <a href="https://github.com/avisota/contao/graphs/contributors" target="_blank">contributors</a>',
+				'donate'     => $GLOBALS['TL_LANG']['avisota_promotion']['donate'],
+				'copyright'  => 'Avisota newsletter and mailing system &copy; 2013 bit3 UG and all <a href="https://github.com/avisota/contao/graphs/contributors" target="_blank">contributors</a>',
 				'disclaimer' => 'Avisota use icons from the <a href="http://www.famfamfam.com/" target="_blank">famfamfam silk icons</a> and <a href="http://www.picol.org/" target="_blank">Picol Vector icons</a>.',
 			);
 			/*

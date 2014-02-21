@@ -42,7 +42,7 @@ class AvisotaBackendEditorStyle extends Controller
 		) {
 			$id = $this->Input->get('id');
 
-			$newsletter = $this->Database
+			$newsletter = \Database::getInstance()
 				->prepare(
 				"
 					SELECT
@@ -58,7 +58,7 @@ class AvisotaBackendEditorStyle extends Controller
 			)
 				->execute($id);
 
-			$category = $this->Database
+			$category = \Database::getInstance()
 				->prepare(
 				"
 					SELECT
@@ -72,7 +72,7 @@ class AvisotaBackendEditorStyle extends Controller
 
 			if ($category->viewOnlinePage > 0 && 0) {
 				// the "view online" page does not contains the option to set a layout, use parent page instead
-				$viewOnlinePage = $this->Database
+				$viewOnlinePage = \Database::getInstance()
 					->prepare(
 					"
 						SELECT

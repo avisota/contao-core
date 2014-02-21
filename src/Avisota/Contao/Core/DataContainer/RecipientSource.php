@@ -163,7 +163,7 @@ class RecipientSource
 		}
 
 		// Update the database
-		$this->Database
+		\Database::getInstance()
 			->prepare(
 			"UPDATE orm_avisota_recipient_source SET tstamp=" . time() . ", disable='" . ($isVisible ? ''
 				: 1) . "' WHERE id=?"

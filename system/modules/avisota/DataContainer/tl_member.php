@@ -39,7 +39,7 @@ class tl_member_avisota extends Backend
 		}
 
 		if (empty($listIds)) {
-			$this->Database
+			\Database::getInstance()
 				->prepare("UPDATE tl_member SET avisota_subscribe=? WHERE id=?")
 				->execute('', $userId);
 		}

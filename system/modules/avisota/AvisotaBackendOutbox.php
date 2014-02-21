@@ -156,7 +156,7 @@ class AvisotaBackendOutbox extends BackendModule
 				$where = '';
 		}
 		$recipients = array();
-		$recipient = $this->Database
+		$recipient = \Database::getInstance()
 			->prepare("SELECT * FROM orm_avisota_message_outbox_recipient WHERE pid=? $where ORDER BY email")
 			->limit($sessionData['limit'], $sessionData['offset'])
 			->execute($outbox->id);
@@ -180,10 +180,10 @@ class AvisotaBackendOutbox extends BackendModule
 
 	protected function remove()
 	{
-		$this->Database
+		\Database::getInstance()
 			->prepare("DELETE FROM orm_avisota_message_outbox WHERE id=?")
 			->execute($this->Input->get('id'));
-		$this->Database
+		\Database::getInstance()
 			->prepare("DELETE FROM orm_avisota_message_outbox_recipient WHERE pid=?")
 			->execute($this->Input->get('id'));
 
@@ -222,7 +222,7 @@ class AvisotaBackendOutbox extends BackendModule
 			'incomplete' => array(),
 			'complete'   => array()
 		);
-		$outbox = $this->Database->execute(
+		$outbox = \Database::getInstance()->execute(
 			"
 				SELECT
 					o.id,
@@ -244,7 +244,7 @@ class AvisotaBackendOutbox extends BackendModule
 		while ($outbox->next()) {
 
 			// show source-list-names
-			$resultSet = $this->Database
+			$resultSet = \Database::getInstance()
 				->prepare(
 				'SELECT source, sourceID, COUNT(id) as recipients FROM orm_avisota_message_outbox_recipient WHERE pid=? GROUP BY source'
 			)
@@ -290,7 +290,7 @@ class AvisotaBackendOutbox extends BackendModule
 	{
 		switch ($recipient->source) {
 			case 'list':
-				$list = $this->Database
+				$list = \Database::getInstance()
 					->prepare("SELECT * FROM orm_avisota_mailing_list WHERE id=?")
 					->execute($recipient->sourceID);
 				if ($list->next()) {
@@ -310,7 +310,7 @@ class AvisotaBackendOutbox extends BackendModule
 				}
 
 			case 'mgroup':
-				$memberGroup = $this->Database
+				$memberGroup = \Database::getInstance()
 					->prepare("SELECT * FROM tl_member_group WHERE id=?")
 					->execute($recipient->sourceID);
 				if ($memberGroup->next()) {
@@ -334,7 +334,7 @@ class AvisotaBackendOutbox extends BackendModule
 	protected function getOutbox()
 	{
 		// get the outbox
-		$outbox = $this->Database
+		$outbox = \Database::getInstance()
 			->prepare(
 			"SELECT
 					*,
@@ -357,7 +357,7 @@ class AvisotaBackendOutbox extends BackendModule
 
 	protected function getNewsletter($outbox)
 	{
-		$newsletter = $this->Database
+		$newsletter = \Database::getInstance()
 			->prepare("SELECT * FROM orm_avisota_message WHERE id=?")
 			->execute($outbox->pid);
 

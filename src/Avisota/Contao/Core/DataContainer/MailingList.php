@@ -74,7 +74,7 @@ class MailingList extends \Backend
 					) {
 						// Add permissions on user level
 						if ($this->User->inherit == 'custom' || !$this->User->groups[0]) {
-							$user = $this->Database
+							$user = \Database::getInstance()
 								->prepare(
 									"SELECT avisota_recipient_lists, avisota_recipient_list_permissions FROM tl_user WHERE id=?"
 								)
@@ -93,7 +93,7 @@ class MailingList extends \Backend
 								$newsletterCategories   = deserialize($user->avisota_recipient_lists);
 								$newsletterCategories[] = $this->Input->get('id');
 
-								$this->Database
+								\Database::getInstance()
 									->prepare("UPDATE tl_user SET avisota_recipient_lists=? WHERE id=?")
 									->execute(serialize($newsletterCategories), $this->User->id);
 							}
@@ -101,7 +101,7 @@ class MailingList extends \Backend
 
 						// Add permissions on group level
 						elseif ($this->User->groups[0] > 0) {
-							$group = $this->Database
+							$group = \Database::getInstance()
 								->prepare(
 									"SELECT avisota_recipient_lists, avisota_recipient_list_permissions FROM tl_user_group WHERE id=?"
 								)
@@ -120,7 +120,7 @@ class MailingList extends \Backend
 								$newsletterCategories   = deserialize($group->avisota_recipient_lists);
 								$newsletterCategories[] = $this->Input->get('id');
 
-								$this->Database
+								\Database::getInstance()
 									->prepare("UPDATE tl_user_group SET avisota_recipient_lists=? WHERE id=?")
 									->execute(serialize($newsletterCategories), $this->User->groups[0]);
 							}

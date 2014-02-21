@@ -55,7 +55,7 @@ class AvisotaBackend extends Controller
 	{
 		$recipients = array();
 
-		$source = $this->Database
+		$source = \Database::getInstance()
 			->execute("SELECT * FROM orm_avisota_recipient_source WHERE disable='' ORDER BY sorting");
 		while ($source->next()) {
 			if (isset($GLOBALS['orm_avisota_RECIPIENT_SOURCE'][$source->type])) {
@@ -100,7 +100,7 @@ class AvisotaBackend extends Controller
 
 	public function hookAvisotaMailingListLabel($row, $label, DataContainer $dc)
 	{
-		$result = $this->Database
+		$result = \Database::getInstance()
 			->prepare(
 			"SELECT
 				(SELECT COUNT(rl.recipient) FROM orm_avisota_recipient_to_mailing_list rl WHERE rl.list=?) as total_recipients,
@@ -174,8 +174,8 @@ class AvisotaBackend extends Controller
 			}
 			/*
 			$arrCustomModules = array();
-			if ($this->Database->fieldExists('showInMenu', 'orm_avisota_message_category')) {
-				$objCategory = $this->Database->query('SELECT * FROM orm_avisota_message_category WHERE showInMenu=\'1\' ORDER BY title');
+			if (\Database::getInstance()->fieldExists('showInMenu', 'orm_avisota_message_category')) {
+				$objCategory = \Database::getInstance()->query('SELECT * FROM orm_avisota_message_category WHERE showInMenu=\'1\' ORDER BY title');
 				while ($objCategory->next()) {
 					$arrCustomModules['avisota_newsletter_' . $objCategory->id] = array_slice($arrModules['avisota']['modules']['avisota_newsletter'], 0);
 					if ($objCategory->menuIcon) {
@@ -270,7 +270,7 @@ class AvisotaBackend extends Controller
 			$placeholders[] = '?';
 		}
 
-		$list = $this->Database
+		$list = \Database::getInstance()
 			->prepare(
 			"
 					SELECT

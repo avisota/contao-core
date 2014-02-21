@@ -54,7 +54,7 @@ class NewsletterNews extends Element
 			return;
 		}
 
-		$news = $this->Database
+		$news = \Database::getInstance()
 			->prepare(
 			'SELECT n.*,a.jumpTo,a.title AS section
 				FROM tl_news as n

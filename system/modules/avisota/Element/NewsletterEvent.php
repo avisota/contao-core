@@ -63,7 +63,7 @@ class NewsletterEvent extends Element
 			$eventStartTimes[] = $tmp[1];
 		}
 
-		$event = $this->Database
+		$event = \Database::getInstance()
 			->prepare(
 			'SELECT e.*,c.jumpTo,c.title AS section
 												FROM tl_calendar_events as e

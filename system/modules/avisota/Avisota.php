@@ -106,7 +106,7 @@ class Avisota extends Backend
 	protected function getAllowedUsers()
 	{
 		$users = array();
-		$user = $this->Database->execute("SELECT * FROM tl_user ORDER BY name,email");
+		$user = \Database::getInstance()->execute("SELECT * FROM tl_user ORDER BY name,email");
 		while ($user->next()) {
 			if (!$user->admin && !$this->User->isAdmin) {
 				$groups = array_intersect($this->User->groups, deserialize($user->groups, true));

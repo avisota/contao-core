@@ -17,6 +17,9 @@ namespace Avisota\Contao\Core\DataContainer;
 
 use Avisota\Contao\Core\Event\CollectSubscriptionListsEvent;
 use Contao\Doctrine\ORM\EntityHelper;
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
+use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEvent;
 use DcGeneral\DC_General;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -121,8 +124,17 @@ class OptionsBuilder implements EventSubscriberInterface
 
 	public function getEditableRecipientFieldOptions($options = array())
 	{
-		$this->loadLanguageFile('orm_avisota_recipient');
-		$this->loadDataContainer('orm_avisota_recipient');
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		$eventDispatcher->dispatch(
+			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+			new LoadLanguageFileEvent('orm_avisota_recipient')
+		);
+		$eventDispatcher->dispatch(
+			ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER,
+			new LoadDataContainerEvent('orm_avisota_recipient')
+		);
 
 		foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'] as $fieldName => $fieldConfig) {
 			if ($fieldConfig['eval']['feEditable']) {
@@ -162,7 +174,7 @@ class OptionsBuilder implements EventSubscriberInterface
 		$page = $this->getPageDetails($article->pid);
 
 		// Get the theme ID
-		$layout = $this->Database
+		$layout = \Database::getInstance()
 			->prepare("SELECT pid FROM tl_layout WHERE id=?")
 			->limit(1)
 			->execute($page->layout);
@@ -184,8 +196,17 @@ class OptionsBuilder implements EventSubscriberInterface
 
 	public function getImportableRecipientFieldOptions($options = array())
 	{
-		$this->loadLanguageFile('orm_avisota_recipient');
-		$this->loadDataContainer('orm_avisota_recipient');
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		$eventDispatcher->dispatch(
+			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+			new LoadLanguageFileEvent('orm_avisota_recipient')
+		);
+		$eventDispatcher->dispatch(
+			ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER,
+			new LoadDataContainerEvent('orm_avisota_recipient')
+		);
 
 		foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'] as $fieldName => $fieldConfig) {
 			if ($fieldConfig['eval']['importable']) {
@@ -213,8 +234,17 @@ class OptionsBuilder implements EventSubscriberInterface
 
 	public function getRecipientFieldOptions($options = array())
 	{
-		$this->loadLanguageFile('orm_avisota_recipient');
-		$this->loadDataContainer('orm_avisota_recipient');
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		$eventDispatcher->dispatch(
+			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+			new LoadLanguageFileEvent('orm_avisota_recipient')
+		);
+		$eventDispatcher->dispatch(
+			ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER,
+			new LoadDataContainerEvent('orm_avisota_recipient')
+		);
 
 		foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'] as $fieldName => $fieldConfig) {
 			if (!empty($fieldConfig['inputType'])) {

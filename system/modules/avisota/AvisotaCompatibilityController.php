@@ -66,7 +66,7 @@ class AvisotaCompatibilityController extends Backend
 		$template->charset      = $GLOBALS['TL_CONFIG']['characterSet'];
 		$template->request      = ampersand($this->Environment->request);
 		$template->top          = $GLOBALS['TL_LANG']['MSC']['backToTop'];
-		$template->mysqlVersion = $this->Database->query('SHOW VARIABLES WHERE Variable_name = \'version\'')->Value;
+		$template->mysqlVersion = \Database::getInstance()->query('SHOW VARIABLES WHERE Variable_name = \'version\'')->Value;
 		$template->output();
 	}
 }

@@ -18,6 +18,9 @@ namespace Avisota\Contao\Core\DataContainer;
 use Avisota\Contao\Entity\RecipientSource;
 use Avisota\Contao\Entity\Salutation;
 use Contao\Doctrine\ORM\EntityHelper;
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class SalutationGroup extends \Controller
 {
@@ -69,7 +72,7 @@ class SalutationGroup extends \Controller
 					) {
 						// Add permissions on user level
 						if ($this->User->inherit == 'custom' || !$this->User->groups[0]) {
-							$user = $this->Database
+							$user = \Database::getInstance()
 								->prepare(
 									"SELECT avisota_newsletter_categories, avisota_newsletter_category_permissions FROM tl_user WHERE id=?"
 								)
@@ -88,7 +91,7 @@ class SalutationGroup extends \Controller
 								$newsletterCategories   = deserialize($user->avisota_newsletter_categories);
 								$newsletterCategories[] = $this->Input->get('id');
 
-								$this->Database
+								\Database::getInstance()
 									->prepare("UPDATE tl_user SET avisota_newsletter_categories=? WHERE id=?")
 									->execute(serialize($newsletterCategories), $this->User->id);
 							}
@@ -96,7 +99,7 @@ class SalutationGroup extends \Controller
 
 						// Add permissions on group level
 						elseif ($this->User->groups[0] > 0) {
-							$group = $this->Database
+							$group = \Database::getInstance()
 								->prepare(
 									"SELECT avisota_newsletter_categories, avisota_newsletter_category_permissions FROM tl_user_group WHERE id=?"
 								)
@@ -115,7 +118,7 @@ class SalutationGroup extends \Controller
 								$newsletterCategories   = deserialize($group->avisota_newsletter_categories);
 								$newsletterCategories[] = $this->Input->get('id');
 
-								$this->Database
+								\Database::getInstance()
 									->prepare("UPDATE tl_user_group SET avisota_newsletter_categories=? WHERE id=?")
 									->execute(serialize($newsletterCategories), $this->User->groups[0]);
 							}
@@ -179,12 +182,21 @@ class SalutationGroup extends \Controller
 
 	public function generate()
 	{
-		$entityManager = EntityHelper::getEntityManager();
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-		$this->loadLanguageFile('avisota_salutation');
-		$this->loadLanguageFile('orm_avisota_salutation_group');
+		$eventDispatcher->dispatch(
+			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+			new LoadLanguageFileEvent('avisota_salutation')
+		);
+		$eventDispatcher->dispatch(
+			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+			new LoadLanguageFileEvent('orm_avisota_salutation_group')
+		);
 
 		$predefinedSalutations = $GLOBALS['AVISOTA_SALUTATION'];
+
+		$entityManager = EntityHelper::getEntityManager();
 
 		$salutationGroup = new \Avisota\Contao\Entity\SalutationGroup();
 		$salutationGroup->setTitle('Default group generated at ' . date($GLOBALS['TL_CONFIG']['datimFormat']));

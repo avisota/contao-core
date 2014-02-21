@@ -118,7 +118,7 @@ class WidgetEventchooser extends Widget
 		$endTime   = $startTime + 360 * 3600 * 24;
 
 		// Get events of the current period
-		$event = $this->Database
+		$event = \Database::getInstance()
 			->prepare(
 			"SELECT e.startTime, e.endTime, e.id,e.title, e.recurring, e.recurrences, e.repeatEach, c.title AS calendar
 											   FROM tl_calendar_events AS e

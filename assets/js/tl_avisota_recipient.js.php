@@ -3,15 +3,19 @@ chdir('../../../../');
 define('TL_MODE', 'FE');
 require('system/initialize.php');
 
-class JavaScript extends System {
-	public function __construct() {
-		parent::__construct();
-		$this->loadLanguageFile('orm_avisota_recipient');
-	}
-}
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
+
+/** @var EventDispatcher $eventDispatcher */
+$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+$eventDispatcher->dispatch(
+	ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+	new LoadLanguageFileEvent('orm_avisota_recipient')
+);
 
 header('Content-Type: text/javascript');
-new JavaScript();
 ?>
 window.addEvent('domready', function() {
 	var contextmenu = new Element('div', { id: 'contextmenu' });

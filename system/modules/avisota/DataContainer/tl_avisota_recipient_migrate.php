@@ -63,7 +63,7 @@ class orm_avisota_recipient_migrate extends Backend
 				}
 			}
 
-			$stmt = $this->Database
+			$stmt = \Database::getInstance()
 				->prepare(
 				"INSERT INTO
 						orm_avisota_recipient (pid,tstamp,email" . $insertPersonals . ",confirmed,addedOn,addedBy,token)
@@ -102,7 +102,7 @@ class orm_avisota_recipient_migrate extends Backend
 			);
 
 			if ($force) {
-				$this->Database
+				\Database::getInstance()
 					->prepare(
 					"DELETE FROM
 							orm_avisota_recipient_blacklist

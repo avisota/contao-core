@@ -35,7 +35,7 @@ class orm_avisota_recipient_notify extends Backend
 	{
 		$dc->setData('recipient', $this->Input->get('id'));
 
-		$list = $this->Database
+		$list = \Database::getInstance()
 			->prepare(
 			"SELECT t.confirmationSent, t.reminderSent, t.reminderCount, m.* FROM orm_avisota_recipient_to_mailing_list t
 					   INNER JOIN orm_avisota_mailing_list m ON m.id=t.list
@@ -113,7 +113,7 @@ class orm_avisota_recipient_notify extends Backend
 	public function getRecipients()
 	{
 		$options   = array();
-		$recipient = $this->Database->execute("SELECT * FROM orm_avisota_recipient ORDER BY email");
+		$recipient = \Database::getInstance()->execute("SELECT * FROM orm_avisota_recipient ORDER BY email");
 		while ($recipient->next()) {
 			$label = trim($recipient->forename . ' ' . $recipient->surname);
 			if (strlen($label)) {

@@ -49,7 +49,7 @@ class tl_page_avisota extends tl_page
 	public function sitemapCallback($value, DataContainer $dc)
 	{
 		if (!$dc->activeRecord) {
-			$page = $this->Database
+			$page = \Database::getInstance()
 				->prepare("SELECT * FROM tl_page WHERE id=?")
 				->execute($dc->id);
 			if ($page->next() && $page->type == 'avisota') {
@@ -65,7 +65,7 @@ class tl_page_avisota extends tl_page
 	public function hideCallback($value, DataContainer $dc)
 	{
 		if (!$dc->activeRecord) {
-			$page = $this->Database
+			$page = \Database::getInstance()
 				->prepare("SELECT * FROM tl_page WHERE id=?")
 				->execute($dc->id);
 			if ($page->next() && $page->type == 'avisota') {
@@ -82,13 +82,13 @@ class tl_page_avisota extends tl_page
 	{
 		if ($dc->activeRecord->type == 'avisota') {
 			// note: menu_visibility is a xNavigation field, this is a quick hack
-			$this->Database
+			\Database::getInstance()
 				->prepare(
 				"UPDATE tl_page
 					SET
 						sitemap='map_never',
 						hide=1
-						" . ($this->Database->fieldExists('menu_visibility', 'tl_page')
+						" . (\Database::getInstance()->fieldExists('menu_visibility', 'tl_page')
 					? ", menu_visibility='map_never'" : "") . "
 					WHERE id=?"
 			)
@@ -113,7 +113,7 @@ class tl_page_avisota extends tl_page
 
 			// Check permissions if the user is not an administrator
 			if (!$this->User->isAdmin) {
-				$page = $this->Database
+				$page = \Database::getInstance()
 					->prepare("SELECT * FROM " . $table . " WHERE id=?")
 					->limit(1)
 					->execute($row['pid']);

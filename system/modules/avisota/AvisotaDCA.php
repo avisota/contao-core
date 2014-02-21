@@ -80,7 +80,7 @@ class AvisotaDCA extends Controller
 		}
 		$sql .= ' ORDER BY title';
 
-		$list = $this->Database->execute($sql);
+		$list = \Database::getInstance()->execute($sql);
 
 		$options = array();
 		while ($list->next()) {
@@ -105,7 +105,7 @@ class AvisotaDCA extends Controller
 				break;
 		}
 		if ($id) {
-			$list = $this->Database
+			$list = \Database::getInstance()
 				->prepare("SELECT * FROM orm_avisota_mailing_list WHERE id=?")
 				->execute($id);
 			if ($list->next()) {
@@ -137,7 +137,7 @@ class AvisotaDCA extends Controller
 	{
 		if ($data['avisota_subscribe']) {
 			// TODO rework to send confirmation mail
-			$this->Database
+			\Database::getInstance()
 				->prepare("UPDATE tl_member SET avisota_lists = ? WHERE id = ?")
 				->execute(implode(',', deserialize($moduleRegistration->avisota_selectable_lists, true)), $insertId);
 		}
@@ -162,7 +162,7 @@ class AvisotaDCA extends Controller
 		$lists = deserialize($formData['avisota_lists'], true);
 		if (empty($lists)) {
 			$this->import('Database');
-			$this->Database
+			\Database::getInstance()
 				->prepare("UPDATE tl_member SET avisota_subscribe=? WHERE id=?")
 				->execute('', $user->id);
 		}
@@ -209,7 +209,7 @@ class AvisotaDCA extends Controller
 			}
 
 			// TODO rework to send confirmation mail
-			$this->Database
+			\Database::getInstance()
 				->prepare("UPDATE tl_member SET avisota_lists = ? WHERE id = ?")
 				->execute(implode(',', $lists), $user->id);
 		}

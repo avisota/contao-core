@@ -27,7 +27,7 @@ class orm_avisota_message extends Backend
 	public function updatePalette()
 	{
 		if ($this->Input->get('act') == 'edit') {
-			$category = $this->Database
+			$category = \Database::getInstance()
 				->prepare(
 				'SELECT c.*
 						   FROM orm_avisota_message_category c
@@ -60,7 +60,7 @@ class orm_avisota_message extends Backend
 			}
 		}
 		else {
-			$category = $this->Database
+			$category = \Database::getInstance()
 				->prepare(
 				'SELECT c.*
 						   FROM orm_avisota_message_category c
@@ -125,7 +125,7 @@ class orm_avisota_message extends Backend
 			case 'show':
 				$pid = -1;
 				if ($this->Input->get('id')) {
-					$newsletter = $this->Database
+					$newsletter = \Database::getInstance()
 						->prepare("SELECT * FROM orm_avisota_message WHERE id=?")
 						->execute($this->Input->get('id'));
 					if ($newsletter->next()) {
@@ -390,7 +390,7 @@ class orm_avisota_message extends Backend
 			$value  = standardize($dc->activeRecord->subject);
 		}
 
-		$aliasResultSet = $this->Database
+		$aliasResultSet = \Database::getInstance()
 			->prepare("SELECT id FROM orm_avisota_message WHERE alias=?")
 			->execute($value);
 

@@ -358,7 +358,7 @@ class orm_avisota_recipient_import extends Backend
 
 		$blacklist = array();
 		if ($force) {
-			$this->Database
+			\Database::getInstance()
 				->prepare(
 				"DELETE FROM orm_avisota_recipient_blacklist WHERE pid=? AND email IN (MD5('" . implode(
 					"'),MD5('",
@@ -368,7 +368,7 @@ class orm_avisota_recipient_import extends Backend
 				->execute($this->Input->get('id'));
 		}
 		else {
-			$blacklistResultSet = $this->Database
+			$blacklistResultSet = \Database::getInstance()
 				->prepare(
 				"SELECT * FROM orm_avisota_recipient_blacklist WHERE pid=? AND email IN (MD5('" . implode(
 					"'),MD5('",
@@ -383,7 +383,7 @@ class orm_avisota_recipient_import extends Backend
 
 		// Check whether the e-mail address exists
 		$existingRecipients = array();
-		$existingRecipient = $this->Database
+		$existingRecipient = \Database::getInstance()
 			->prepare(
 			"SELECT id,email FROM orm_avisota_recipient WHERE pid=? AND email IN ('" . implode("','", $emails) . "')"
 		)
@@ -406,7 +406,7 @@ class orm_avisota_recipient_import extends Backend
 				$recipientData['addedOn']   = $time;
 				$recipientData['addedBy']   = $this->User->id;
 				$recipientData['confirmed'] = 1;
-				$this->Database
+				\Database::getInstance()
 					->prepare("INSERT INTO orm_avisota_recipient %s")
 					->set($recipientData)
 					->execute();
@@ -414,7 +414,7 @@ class orm_avisota_recipient_import extends Backend
 				++$totalCount;
 			}
 			else if ($overwrite) {
-				$this->Database
+				\Database::getInstance()
 					->prepare("UPDATE orm_avisota_recipient %s WHERE pid=? AND email=?")
 					->set($recipientData)
 					->execute($this->Input->get('id'), $recipientData['email']);
