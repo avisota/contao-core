@@ -79,7 +79,7 @@ class ServiceFactory
 			foreach ($transports as $transport) {
 				$container[sprintf('avisota.transport.%s', $transport->getId())] = $container->share(
 					function ($container) use ($transport, $factory) {
-						return $factory->createQueue($transport);
+						return $factory->createTransport($transport);
 					}
 				);
 

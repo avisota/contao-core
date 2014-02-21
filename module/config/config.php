@@ -161,8 +161,8 @@ $GLOBALS['AVISOTA_QUEUE']['simpleDatabase'] = 'Avisota\Contao\Core\Queue\SimpleD
 /**
  * Transport modules
  */
-$GLOBALS['AVISOTA_TRANSPORT']['swift']   = 'Avisota\Contao\Transport\SwiftTransportFactory';
-$GLOBALS['AVISOTA_TRANSPORT']['service'] = 'Avisota\Contao\Transport\ServiceTransportFactory';
+$GLOBALS['AVISOTA_TRANSPORT']['swift']   = 'Avisota\Contao\Core\Transport\SwiftTransportFactory';
+$GLOBALS['AVISOTA_TRANSPORT']['service'] = 'Avisota\Contao\Core\Transport\ServiceTransportFactory';
 
 
 /**

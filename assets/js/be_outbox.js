@@ -50,7 +50,7 @@ var Outbox = function (totalCount, queueId, cycleTime, cyclePause) {
 	}
 
 	var request = new Request.JSON({
-		url: 'system/modules/avisota/web/queue_execute.php',
+		url: 'system/modules/avisota-core/web/queue_execute.php',
 		link: 'ignore',
 		onRequest: function () {
 			timeout = parseInt(cycleTime);

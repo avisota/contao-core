@@ -13,7 +13,7 @@
  * @filesource
  */
 
-namespace Avisota\Contao\Transport;
+namespace Avisota\Contao\Core\Transport;
 
 use Avisota\Contao\Entity\Transport;
 
