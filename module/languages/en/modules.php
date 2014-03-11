@@ -15,6 +15,14 @@
 
 
 /**
+ * Module
+ */
+$GLOBALS['TL_LANG']['MOD']['avisota-core'] = array(
+	'Avisota - Core',
+	'Basic integration of Avisota for Contao.'
+);
+
+/**
  * Back end modules
  */
 $GLOBALS['TL_LANG']['MOD']['avisota']                   = array('Avisota newsletter');
