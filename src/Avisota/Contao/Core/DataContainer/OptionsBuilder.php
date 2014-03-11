@@ -37,13 +37,10 @@ class OptionsBuilder implements EventSubscriberInterface
 			'avisota.create-recipient-source-options'            => 'createRecipientSourceOptions',
 			'avisota.create-queue-options'                       => 'createQueueOptions',
 			'avisota.create-transport-options'                   => 'createTransportOptions',
-
 			'avisota.create-editable-recipient-field-options'    => 'createEditableRecipientFieldOptions',
 			'avisota.create-gallery-options'                     => 'createGalleryTemplateOptions',
 			'avisota.create-importable-recipient-field-options'  => 'createImportableRecipientFieldOptions',
 			'avisota.create-reader-module-template-options'      => 'createReaderModuleTemplateOptions',
-			'avisota.create-recipient-field-options'             => 'createRecipientFieldOptions',
-			'avisota.create-recipient-options'                   => 'createRecipientOptions',
 			'avisota.create-subscribe-module-template-options'   => 'createSubscribeModuleTemplateOptions',
 			'avisota.create-subscription-list-options'           => 'createSubscriptionListOptions',
 			'avisota.create-subscription-template-options'       => 'createSubscriptionModuleTemplateOptions',
@@ -114,7 +111,6 @@ class OptionsBuilder implements EventSubscriberInterface
 		}
 		return $options;
 	}
-
 
 
 	public function createEditableRecipientFieldOptions(CreateOptionsEvent $event)
@@ -225,77 +221,6 @@ class OptionsBuilder implements EventSubscriberInterface
 		foreach ($templates as $key => $value) {
 			$options[$key] = $value;
 		}
-	}
-
-	public function createRecipientFieldOptions(CreateOptionsEvent $event)
-	{
-		$this->getRecipientFieldOptions($event->getOptions());
-	}
-
-	public function getRecipientFieldOptions($options = array())
-	{
-		/** @var EventDispatcher $eventDispatcher */
-		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-
-		$eventDispatcher->dispatch(
-			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-			new LoadLanguageFileEvent('orm_avisota_recipient')
-		);
-		$eventDispatcher->dispatch(
-			ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER,
-			new LoadDataContainerEvent('orm_avisota_recipient')
-		);
-
-		foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'] as $fieldName => $fieldConfig) {
-			if (!empty($fieldConfig['inputType'])) {
-				$options[$fieldName] = $fieldConfig['label'][0];
-			}
-		}
-
-		return $options;
-	}
-
-	public function createRecipientOptions(CreateOptionsEvent $event)
-	{
-		$this->getRecipientOptions($event->getOptions());
-	}
-
-	public function getRecipientOptions($options = array())
-	{
-		$recipientRepository = EntityHelper::getRepository('Avisota\Contao:Recipient');
-		$recipients          = $recipientRepository->findBy(
-			array(),
-			array('forename' => 'ASC', 'surname' => 'ASC', 'email' => 'ASC')
-		);
-		/** @var \Avisota\Contao\Entity\Recipient $recipient */
-		foreach ($recipients as $recipient) {
-			if ($recipient->getForename() && $recipient->getSurname()) {
-				$options[$recipient->getId()] = sprintf(
-					'%s, %s &lt;%s&gt;',
-					$recipient->getSurname(),
-					$recipient->getForename(),
-					$recipient->getEmail()
-				);
-			}
-			else if ($recipient->getForename()) {
-				$options[$recipient->getId()] = sprintf(
-					'%s &lt;%s&gt;',
-					$recipient->getForename(),
-					$recipient->getEmail()
-				);
-			}
-			else if ($recipient->getSurname()) {
-				$options[$recipient->getId()] = sprintf(
-					'%s &lt;%s&gt;',
-					$recipient->getSurname(),
-					$recipient->getEmail()
-				);
-			}
-			else {
-				$options[$recipient->getId()] = $recipient->getEmail();
-			}
-		}
-		return $options;
 	}
 
 	public function createSubscribeModuleTemplateOptions(CreateOptionsEvent $event)
