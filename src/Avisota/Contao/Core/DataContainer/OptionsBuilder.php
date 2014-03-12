@@ -15,7 +15,7 @@
 
 namespace Avisota\Contao\Core\DataContainer;
 
-use Avisota\Contao\Core\Event\CollectSubscriptionListsEvent;
+use Avisota\Contao\Subscription\Event\CollectSubscriptionListsEvent;
 use Contao\Doctrine\ORM\EntityHelper;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
