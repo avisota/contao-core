@@ -35,6 +35,8 @@ class ServiceFactory
 		// initialize the entity manager and class loaders
 		$container['doctrine.orm.entityManager'];
 
+		$verbose = TL_MODE == 'BE';
+
 		if (class_exists('Avisota\Contao\Entity\RecipientSource')) {
 			try {
 				$recipientSourceRepository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
@@ -54,7 +56,17 @@ class ServiceFactory
 				}
 			}
 			catch (\Exception $e) {
-				trigger_error($e->getMessage(), E_USER_WARNING);
+				$message = 'Could not create avisota recipient source service:' . PHP_EOL . $e->getMessage();
+
+				if ($e instanceof \ReflectionException) {
+					$message .= PHP_EOL . 'You may need to run the database update!';
+				}
+
+				if ($verbose) {
+					$_SESSION['TL_RAW'][] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
+				}
+
+				log_message($message . PHP_EOL . $e->getTraceAsString());
 			}
 		}
 
@@ -77,7 +89,17 @@ class ServiceFactory
 				}
 			}
 			catch (\Exception $e) {
-				trigger_error($e->getMessage(), E_USER_WARNING);
+				$message = 'Could not create avisota queue service: ' . $e->getMessage();
+
+				if ($e instanceof \ReflectionException) {
+					$message .= PHP_EOL . 'You may need to run the database update!';
+				}
+
+				if ($verbose) {
+					$_SESSION['TL_RAW'][] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
+				}
+
+				log_message($message . PHP_EOL . $e->getTraceAsString());
 			}
 		}
 
@@ -100,7 +122,17 @@ class ServiceFactory
 				}
 			}
 			catch (\Exception $e) {
-				trigger_error($e->getMessage(), E_USER_WARNING);
+				$message = 'Could not create avisota transport service: ' . $e->getMessage();
+
+				if ($e instanceof \ReflectionException) {
+					$message .= PHP_EOL . 'You may need to run the database update!';
+				}
+
+				if ($verbose) {
+					$_SESSION['TL_RAW'][] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
+				}
+
+				log_message($message . PHP_EOL . $e->getTraceAsString());
 			}
 		}
 	}

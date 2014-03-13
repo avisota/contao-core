@@ -16,7 +16,7 @@ namespace Avisota\Contao\Core\Backend;
 
 use Avisota\Contao\Entity\MailingList;
 use Avisota\Contao\Entity\Recipient;
-use Avisota\Contao\Core\Event\RemoveRecipientEvent;
+use Avisota\Contao\SubscriptionRecipient\Event\RemoveRecipientEvent;
 use Avisota\Contao\Message\Core\Renderer\MessageRenderer;
 use Avisota\Recipient\MutableRecipient;
 use Avisota\RecipientSource\RecipientSourceInterface;

@@ -25,10 +25,6 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing_list']['alias']            = array(
 	'Alias',
 	'The mailing list alias is a unique reference to the article which can be called instead of its ID.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['integratedRecipientManageSubscriptionPage']   = array(
-	'Page to manage the subscription to this mailing list',
-	'Please choose the page, where recipient can manage their subscription to this mailing list.'
-);
 
 
 /**

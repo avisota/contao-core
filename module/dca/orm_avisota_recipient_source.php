@@ -22,17 +22,17 @@ use ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallba
 $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 (
 	// Entity
-	'entity'       => array(
+	'entity'          => array(
 		'idGenerator' => \Doctrine\ORM\Mapping\ClassMetadataInfo::GENERATOR_TYPE_UUID
 	),
 	// Config
-	'config'       => array
+	'config'          => array
 	(
 		'dataContainer'    => 'General',
 		'enableVersioning' => true,
 	),
 	// DataContainer
-	'dca_config'   => array
+	'dca_config'      => array
 	(
 		'data_provider' => array
 		(
@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 		),
 	),
 	// List
-	'list'         => array
+	'list'            => array
 	(
 		'sorting'           => array
 		(
@@ -98,11 +98,11 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 		),
 	),
 	// Palettes
-	'palettes'     => array(
+	'palettes'        => array(
 		'__selector__' => array('type')
 	),
 	// Meta Palettes
-	'metapalettes' => array
+	'metapalettes'    => array
 	(
 		'default'  => array(
 			'source' => array('type')
@@ -123,7 +123,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 		),
 	),
 	// Fields
-	'fields'       => array
+	'fields'          => array
 	(
 		'id'                  => array(
 			'field' => array(
@@ -190,50 +190,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				array('Contao\Doctrine\ORM\Helper', 'generateAlias')
 			)
 		),
-		// generic fields
-		'mailingLists'        => array
-		(
-			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['mailingLists'],
-			'inputType'        => 'checkbox',
-			'options_callback' => CreateOptionsEventCallbackFactory::createCallback(
-					'avisota.create-mailing-list-options'
-				),
-			'eval'             => array(
-				'mandatory' => true,
-				'multiple'  => true,
-			),
-			'manyToMany'       => array(
-				'targetEntity' => 'Avisota\Contao\Entity\MailingList',
-				'cascade'      => array('all'),
-				'joinTable'    => array(
-					'name'               => 'orm_avisota_recipient_source_mailing_lists',
-					'joinColumns'        => array(
-						array(
-							'name'                 => 'recipientSource',
-							'referencedColumnName' => 'id',
-						),
-					),
-					'inverseJoinColumns' => array(
-						array(
-							'name'                 => 'mailingList',
-							'referencedColumnName' => 'id',
-						),
-					),
-				),
-			),
-		),
-		/*
-		'viewOnlinePage'                            => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['viewOnlinePage'],
-			'exclude'   => true,
-			'inputType' => 'pageTree',
-			'eval'      => array(
-				'fieldType' => 'radio',
-				'mandatory' => true
-			)
-		),
-		*/
 		// csv source
 		'csvFileSrc'          => array
 		(
@@ -315,6 +271,37 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				'tl_class'       => 'm12',
 				'submitOnChange' => true,
 			)
+		),
+		'mailingLists'        => array
+		(
+			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['mailingLists'],
+			'inputType'        => 'checkbox',
+			'options_callback' => CreateOptionsEventCallbackFactory::createCallback(
+					'avisota.create-mailing-list-options'
+				),
+			'eval'             => array(
+				'mandatory' => true,
+				'multiple'  => true,
+			),
+			'manyToMany'       => array(
+				'targetEntity' => 'Avisota\Contao\Entity\MailingList',
+				'cascade'      => array('all'),
+				'joinTable'    => array(
+					'name'               => 'orm_avisota_recipient_source_mailing_lists',
+					'joinColumns'        => array(
+						array(
+							'name'                 => 'recipientSource',
+							'referencedColumnName' => 'id',
+						),
+					),
+					'inverseJoinColumns' => array(
+						array(
+							'name'                 => 'mailingList',
+							'referencedColumnName' => 'id',
+						),
+					),
+				),
+			),
 		),
 		// expert settings
 		'disable'             => array

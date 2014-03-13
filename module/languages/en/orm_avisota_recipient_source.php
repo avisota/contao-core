@@ -37,42 +37,6 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['disable']      = array(
 	'Disabled',
 	'Temporary disable this recipient source for transport.'
 );
-// integrated recipients
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedBy']                              = array(
-	'Select recipient&hellip;',
-	'Please choose how recipients are selected.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedRecipientManageSubscriptionPage'] = array(
-	'Subscription management page',
-	'Please choose the subscription management page.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedMailingListsRecipients']          = array(
-	'Mailing lists',
-	'Please choose the selected mailing lists. Only recipients that subscribe selected mailing lists are available.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedAllowSingleListSelection']        = array(
-	'Allow single select mailing lists',
-	'Allow the writer to single select mailing lists from this recipient source.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedAllowSingleSelection']            = array(
-	'Allow single select recipients',
-	'Allow the writer to single select recipients from this recipient source.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedDetails']                         = array(
-	'Fetch details from&hellip;',
-	'Please choose where the details should be fetched from.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumns']                 = array(
-	'Column filter',
-	'Filter the recipients by columns.'
-);
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumnsField']            = array('Column');
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumnsComparator']       = array('Comparator');
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumnsValue']            = array('Value');
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedFilterByColumnsNoEscape']         = array(
-	'SQL',
-	'Use value as native SQL (&rarr; the value will not excaped).'
-);
 // members
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberBy']                              = array(
 	'Select members&hellip;',
