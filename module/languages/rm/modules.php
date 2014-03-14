@@ -8,11 +8,13 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-03-11T12:08:26+01:00
+ * last-updated: 2014-03-11T13:55:51+01:00
  */
 
-
+$GLOBALS['TL_LANG']['MOD']['avisota-core']['0']              = 'Avisota - Core';
+$GLOBALS['TL_LANG']['MOD']['avisota-core']['1']              = 'Integraziun da basa dad Avisota per Contao.';
 $GLOBALS['TL_LANG']['MOD']['avisota']['0']                   = 'Newsletter Avisota';
+$GLOBALS['TL_LANG']['MOD']['avisota_config']['0']            = 'Configuraziun';
 $GLOBALS['TL_LANG']['MOD']['avisota_config:newsletter']['0'] = 'Configurar ils messadis';
 $GLOBALS['TL_LANG']['MOD']['avisota_config:recipient']['0']  = 'Configuraziun dals destinaturs';
 $GLOBALS['TL_LANG']['MOD']['avisota_config:transport']['0']  = 'Configuraziun da transport';
@@ -31,6 +33,7 @@ $GLOBALS['TL_LANG']['MOD']['avisota_salutation']['0']        = 'Salids';
 $GLOBALS['TL_LANG']['MOD']['avisota_salutation']['1']        = 'Administrar ils salids.';
 $GLOBALS['TL_LANG']['MOD']['avisota_settings']['0']          = 'Configuraziun da sistem dad Avisota';
 $GLOBALS['TL_LANG']['MOD']['avisota_settings']['1']          = 'Administrar la configuraziun da basa dad Avisota';
+$GLOBALS['TL_LANG']['MOD']['avisota_support']['0']           = 'Agid';
 $GLOBALS['TL_LANG']['MOD']['avisota_theme']['0']             = 'Theme';
 $GLOBALS['TL_LANG']['MOD']['avisota_theme']['1']             = 'Administrar ils themes, inclusivamain ils templates, stylesheets e la configuraziun dal layout da newsletters.';
 $GLOBALS['TL_LANG']['MOD']['avisota_transport']['0']         = 'Transports';
