@@ -8,11 +8,13 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-03-11T12:08:26+01:00
+ * last-updated: 2014-03-11T13:55:51+01:00
  */
 
-
+$GLOBALS['TL_LANG']['MOD']['avisota-core']['0']              = 'Avisota - Core';
+$GLOBALS['TL_LANG']['MOD']['avisota-core']['1']              = 'Basisintegration von Avisota für Contao.';
 $GLOBALS['TL_LANG']['MOD']['avisota']['0']                   = 'Avisota-Newsletter';
+$GLOBALS['TL_LANG']['MOD']['avisota_config']['0']            = 'Einstellungen';
 $GLOBALS['TL_LANG']['MOD']['avisota_config:newsletter']['0'] = 'Nachrichteneinstellungen';
 $GLOBALS['TL_LANG']['MOD']['avisota_config:recipient']['0']  = 'Empfängereinstellungen';
 $GLOBALS['TL_LANG']['MOD']['avisota_config:transport']['0']  = 'Sendeeinstellungen';
@@ -31,6 +33,7 @@ $GLOBALS['TL_LANG']['MOD']['avisota_salutation']['0']        = 'Anreden';
 $GLOBALS['TL_LANG']['MOD']['avisota_salutation']['1']        = 'Bearbeiten Sie Anreden.';
 $GLOBALS['TL_LANG']['MOD']['avisota_settings']['0']          = 'Avisota-Systemeinstellungen';
 $GLOBALS['TL_LANG']['MOD']['avisota_settings']['1']          = 'Bearbeiten Sie die Avisota-Systemeinstellungen';
+$GLOBALS['TL_LANG']['MOD']['avisota_support']['0']           = 'Unterstützung';
 $GLOBALS['TL_LANG']['MOD']['avisota_theme']['0']             = 'Themes';
 $GLOBALS['TL_LANG']['MOD']['avisota_theme']['1']             = 'Verwalten Sie Themes, einschließlich der Templates,  Stylesheets und Layouteinstellungen für Newsletter.';
 $GLOBALS['TL_LANG']['MOD']['avisota_transport']['0']         = 'Transport';
