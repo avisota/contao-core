@@ -76,33 +76,6 @@
 	padding: 2px 0 3px 20px;
 }
 
-.header_recipient_migrate {
-	background: url("../images/recipient_migrate.png") no-repeat scroll left center transparent;
-	padding: 2px 0 3px 20px;
-}
-
-.header_recipient_import {
-	background: url("../images/recipient_import.png") no-repeat scroll left center transparent;
-	padding: 2px 0 3px 20px;
-}
-
-.header_recipient_export {
-	background: url("../images/recipient_export.png") no-repeat scroll left center transparent;
-	padding: 2px 0 3px 20px;
-}
-
-.header_recipient_remove {
-	background: url("../images/recipient_remove.png") no-repeat scroll left center transparent;
-	padding: 2px 0 3px 20px;
-}
-
-#contextmenu .header_recipient_migrate,
-#contextmenu .header_recipient_import,
-#contextmenu .header_recipient_export,
-#contextmenu .header_recipient_remove {
-	padding: 4px 0 5px 20px;
-}
-
 table.outbox {
 	border-collapse: collapse;
 }
