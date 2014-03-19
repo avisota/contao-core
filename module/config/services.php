@@ -112,10 +112,16 @@ $container['avisota.logger.transport'] = function ($container) {
 };
 
 /**
- * Define dynamic services
+ * Define services
  */
+$container['avisota.core.options-builder'] = $container->share(
+	function () {
+		return new Avisota\Contao\Core\DataContainer\OptionsBuilder();
+	}
+);
+
 $container['avisota.service-factory'] = $container->share(
-	function ($container) {
+	function () {
 		return new \Avisota\Contao\Core\ServiceFactory();
 	}
 );

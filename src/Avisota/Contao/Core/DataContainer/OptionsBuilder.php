@@ -15,6 +15,7 @@
 
 namespace Avisota\Contao\Core\DataContainer;
 
+use Avisota\Contao\Core\CoreEvents;
 use Avisota\Contao\Subscription\Event\CollectSubscriptionListsEvent;
 use Contao\Doctrine\ORM\EntityHelper;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
@@ -33,10 +34,10 @@ class OptionsBuilder implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'avisota.create-mailing-list-options'                => 'createMailingListOptions',
-			'avisota.create-recipient-source-options'            => 'createRecipientSourceOptions',
-			'avisota.create-queue-options'                       => 'createQueueOptions',
-			'avisota.create-transport-options'                   => 'createTransportOptions',
+			CoreEvents::CREATE_MAILING_LIST_OPTIONS              => 'createMailingListOptions',
+			CoreEvents::CREATE_RECIPIENT_SOURCE_OPTIONS          => 'createRecipientSourceOptions',
+			CoreEvents::CREATE_QUEUE_OPTIONS                     => 'createQueueOptions',
+			CoreEvents::CREATE_TRANSPORT_OPTIONS                 => 'createTransportOptions',
 			'avisota.create-editable-recipient-field-options'    => 'createEditableRecipientFieldOptions',
 			'avisota.create-gallery-options'                     => 'createGalleryTemplateOptions',
 			'avisota.create-importable-recipient-field-options'  => 'createImportableRecipientFieldOptions',

@@ -108,7 +108,9 @@ $GLOBALS['AVISOTA_TRANSPORT_RENDERER']['native'] = 'Avisota\Renderer\NativeMessa
 /**
  * Events
  */
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Avisota\Contao\Core\DataContainer\OptionsBuilder';
+$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = function() {
+	return $GLOBALS['container']['avisota.core.options-builder'];
+};
 
 /**
  * Settings
