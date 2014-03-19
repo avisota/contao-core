@@ -14,6 +14,8 @@
  */
 
 use ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory;
+use Contao\Doctrine\ORM\OptionsLoadResolver;
+use Contao\Doctrine\ORM\OptionsSaveResolver;
 
 /**
  * Table orm_avisota_recipient_source
@@ -122,10 +124,13 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 			'expert'  => array('disable'),
 		),
 	),
+	'metasubpalettes' => array(
+		'filterByMailingLists' => array('mailingLists'),
+	),
 	// Fields
 	'fields'          => array
 	(
-		'id'                  => array(
+		'id'                   => array(
 			'field' => array(
 				'id'      => true,
 				'type'    => 'string',
@@ -133,21 +138,21 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				'options' => array('fixed' => true),
 			)
 		),
-		'createdAt'           => array(
+		'createdAt'            => array(
 			'field' => array(
 				'type'          => 'datetime',
 				'nullable'      => true,
 				'timestampable' => array('on' => 'create')
 			)
 		),
-		'updatedAt'           => array(
+		'updatedAt'            => array(
 			'field' => array(
 				'type'          => 'datetime',
 				'nullable'      => true,
 				'timestampable' => array('on' => 'update')
 			)
 		),
-		'type'                => array
+		'type'                 => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['type'],
 			'inputType' => 'select',
@@ -161,7 +166,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				'tl_class'           => 'w50'
 			)
 		),
-		'title'               => array
+		'title'                => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['title'],
 			'inputType' => 'text',
@@ -172,7 +177,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				'tl_class'  => 'w50'
 			)
 		),
-		'alias'               => array
+		'alias'                => array
 		(
 			'label'           => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['alias'],
 			'exclude'         => true,
@@ -191,7 +196,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 			)
 		),
 		// csv source
-		'csvFileSrc'          => array
+		'csvFileSrc'           => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileSrc'],
 			'inputType' => 'fileTree',
@@ -204,7 +209,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 			),
 			'field'     => array(),
 		),
-		'csvColumnAssignment' => array
+		'csvColumnAssignment'  => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignment'],
 			'inputType' => 'multiColumnWizard',
@@ -233,7 +238,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 			),
 		),
 		// dummy source
-		'dummyMinCount'       => array
+		'dummyMinCount'        => array
 		(
 			'default'   => false,
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummyMinCount'],
@@ -247,7 +252,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				'type' => 'integer',
 			),
 		),
-		'dummyMaxCount'       => array
+		'dummyMaxCount'        => array
 		(
 			'default'   => false,
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummyMaxCount'],
@@ -262,7 +267,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 			),
 		),
 		// filter settings
-		'filter'              => array
+		'filter'               => array
 		(
 			'default'   => false,
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter'],
@@ -272,7 +277,18 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				'submitOnChange' => true,
 			)
 		),
-		'mailingLists'        => array
+		'filterByMailingLists' => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filterByMailingLists'],
+			'inputType' => 'checkbox',
+			'eval'      => array(
+				'submitOnChange' => true,
+			),
+			'field'     => array(
+				'nullable' => true,
+			),
+		),
+		'mailingLists'         => array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['mailingLists'],
 			'inputType'        => 'checkbox',
@@ -302,9 +318,15 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 					),
 				),
 			),
+			'load_callback' => array(
+				OptionsLoadResolver::create(),
+			),
+			'save_callback' => array(
+				OptionsSaveResolver::create('Avisota\Contao\Entity\MailingList'),
+			),
 		),
 		// expert settings
-		'disable'             => array
+		'disable'              => array
 		(
 			'default'   => false,
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['disable'],

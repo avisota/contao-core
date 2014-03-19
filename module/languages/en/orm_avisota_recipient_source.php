@@ -25,13 +25,17 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['title']        = array(
 	'Name',
 	'Please enter a name for this recipient source.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['mailingLists'] = array(
-	'Mailing lists',
-	'Please choose the selected mailing lists.'
-);
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter']       = array(
 	'Enable filters',
 	'Enable filters on this recipient source. The available filters depend on the specific module.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filterByMailingLists'] = array(
+	'Filter by mailing list subscription',
+	'Enable filter by mailing list subscriptions.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['mailingLists'] = array(
+	'Mailing lists',
+	'Please choose the selected mailing lists.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['disable']      = array(
 	'Disabled',
