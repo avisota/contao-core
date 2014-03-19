@@ -96,10 +96,6 @@ $GLOBALS['TL_DCA']['tl_module']['metasubpalettes']['avisota_send_notification'] 
 	'avisota_template_notification_mail_plain',
 	'avisota_template_notification_mail_html'
 );
-$GLOBALS['TL_DCA']['tl_module']['metasubpalettes']['avisota_do_cleanup']        = array
-(
-	'avisota_cleanup_time'
-);
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_recipient_fields'] = array
 (
