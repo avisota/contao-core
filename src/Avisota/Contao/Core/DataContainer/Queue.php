@@ -15,7 +15,7 @@
 
 namespace Avisota\Contao\Core\DataContainer;
 
-use DcGeneral\DC_General;
+use ContaoCommunityAlliance\DcGeneral\DC_General;
 
 class Queue extends \Backend
 {

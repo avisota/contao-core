@@ -19,7 +19,7 @@ use Contao\Doctrine\ORM\EntityHelper;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
-use DcGeneral\Event\PrePersistModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PrePersistModelEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

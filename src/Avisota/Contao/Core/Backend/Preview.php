@@ -19,7 +19,7 @@ use Avisota\Contao\Core\Message\Renderer;
 use Contao\Doctrine\ORM\EntityHelper;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
-use DcGeneral\DC_General;
+use ContaoCommunityAlliance\DcGeneral\DC_General;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Preview extends \Controller

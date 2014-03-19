@@ -22,7 +22,7 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEvent;
-use DcGeneral\DC_General;
+use ContaoCommunityAlliance\DcGeneral\DC_General;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
