@@ -13,6 +13,7 @@
  * @filesource
  */
 
+use Avisota\Contao\Core\CoreEvents;
 use ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory;
 
 $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array(
@@ -139,7 +140,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_lists'] = array
 	'exclude'          => true,
 	'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_lists'],
 	'inputType'        => 'checkbox',
-	'options_callback' => CreateOptionsEventCallbackFactory::createCallback('avisota.create-mailing-list-options'),
+	'options_callback' => CreateOptionsEventCallbackFactory::createCallback(CoreEvents::CREATE_MAILING_LIST_OPTIONS),
 	'eval'             => array('multiple' => true)
 );
 
