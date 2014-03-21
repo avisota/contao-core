@@ -62,3 +62,4 @@ $GLOBALS['TL_LANG']['MOD']['avisota_support']           = array('Support');
 /**
  * Front end modules
  */
+$GLOBALS['TL_LANG']['FMD']['avisota'] = 'Avisota';
