@@ -123,6 +123,10 @@ class ServiceFactory
 						return $container[sprintf('avisota.transport.%s', $transport->getId())];
 					};
 				}
+
+				$container['avisota.transport.default'] = function($container) {
+					return $container[sprintf('avisota.transport.%s', $GLOBALS['TL_CONFIG']['avisota_default_transport'])];
+				};
 			}
 			catch (\Exception $e) {
 				$message = 'Could not create avisota transport service: ' . $e->getMessage();
