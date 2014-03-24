@@ -28,20 +28,6 @@ class Queue extends \Backend
 	}
 
 	/**
-	 * @param \DataContainer $dc
-	 */
-	public function onload_callback($dc)
-	{
-	}
-
-	/**
-	 * @param \DataContainer $dc
-	 */
-	public function onsubmit_callback($dc)
-	{
-	}
-
-	/**
 	 * @param string $alias
 	 * @param DC_General $dc
 	 *

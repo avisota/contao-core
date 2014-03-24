@@ -30,12 +30,6 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 	(
 		'dataContainer'     => 'General',
 		'enableVersioning'  => true,
-		'onload_callback'   => array(
-			array('Avisota\Contao\Core\DataContainer\Queue', 'onload_callback')
-		),
-		'onsubmit_callback' => array(
-			array('Avisota\Contao\Core\DataContainer\Queue', 'onsubmit_callback'),
-		)
 	),
 	// DataContainer
 	'dca_config'      => array

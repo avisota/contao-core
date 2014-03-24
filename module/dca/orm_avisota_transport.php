@@ -29,12 +29,6 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 	(
 		'dataContainer'     => 'General',
 		'enableVersioning'  => true,
-		'onload_callback'   => array(
-			array('Avisota\Contao\Core\DataContainer\Transport', 'onload_callback')
-		),
-		'onsubmit_callback' => array(
-			array('Avisota\Contao\Core\DataContainer\Transport', 'onsubmit_callback'),
-		)
 	),
 	// DataContainer
 	'dca_config'      => array
