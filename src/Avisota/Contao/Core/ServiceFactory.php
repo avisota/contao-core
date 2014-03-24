@@ -30,6 +30,9 @@ class ServiceFactory
 	 */
 	public function init($container)
 	{
+		// preserve object initialisation order
+		\BackendUser::getInstance();
+
 		$factory = $this;
 
 		// initialize the entity manager and class loaders
