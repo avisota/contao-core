@@ -52,17 +52,4 @@ class Queue extends \Backend
 		$_SESSION['AVISOTA_QUEUE_ALIAS'][$dc->id] = $alias;
 		return $alias;
 	}
-
-
-	/**
-	 * Check permissions to edit table orm_avisota_transport
-	 */
-	public function checkPermission()
-	{
-		if ($this->User->isAdmin) {
-			return;
-		}
-
-		// TODO
-	}
 }

@@ -61,27 +61,4 @@ class Module extends \Backend
 
 		return \TwigHelper::getTemplateGroup($templatePrefix, $dc->activeRecord->pid);
 	}
-
-
-	/**
-	 * Return all subscription templates as array
-	 *
-	 * @param object
-	 *
-	 * @return array
-	 */
-	public function getSubscriptionTemplates(\DataContainer $dc)
-	{
-		$pid = $dc->activeRecord->pid;
-
-		if ($this->Input->get('act') == 'overrideAll') {
-			$pid = $this->Input->get('id');
-		}
-
-		return array_merge
-		(
-			array('mod_avisota_subscription'),
-			$this->getTemplateGroup('subscription_', $pid)
-		);
-	}
 }

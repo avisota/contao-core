@@ -78,19 +78,6 @@ class RecipientSource
 
 
 	/**
-	 * Check permissions to edit table orm_avisota_recipient_source
-	 */
-	public function checkPermission()
-	{
-		if ($this->User->isAdmin) {
-			return;
-		}
-
-		// TODO
-	}
-
-
-	/**
 	 * Return the "toggle visibility" button
 	 *
 	 * @param array

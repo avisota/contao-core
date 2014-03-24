@@ -39,17 +39,4 @@ class Transport extends \Backend
 	public function onsubmit_callback($dc)
 	{
 	}
-
-
-	/**
-	 * Check permissions to edit table orm_avisota_transport
-	 */
-	public function checkPermission()
-	{
-		if ($this->User->isAdmin) {
-			return;
-		}
-
-		// TODO
-	}
 }
