@@ -38,7 +38,7 @@
 		"bit3/contao-doctrine-orm-timestampable": "~2",
 		"bit3/contao-nested-menu": "~1",
 		"bit3/contao-twig": "~1.6",
-		"bit3/contao-meta-palettes": "~1",
+		"bit3/contao-meta-palettes": "~1.6",
 		"bit3/contao-logger": "~1",
 		"bit3/php-string-builder": "~1",
 		"symfony/http-foundation": "~2.3"
