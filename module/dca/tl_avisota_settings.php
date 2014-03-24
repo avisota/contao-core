@@ -61,7 +61,9 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_default_transport'],
 			'inputType'        => 'select',
-			'options_callback' => CreateOptionsEventCallbackFactory::createCallback('avisota.create-transport-options'),
+			'options_callback' => CreateOptionsEventCallbackFactory::createCallback(
+				\Avisota\Contao\Core\CoreEvents::CREATE_TRANSPORT_OPTIONS
+			),
 			'eval'             => array(
 				'mandatory'          => true,
 				'includeBlankOption' => true,
