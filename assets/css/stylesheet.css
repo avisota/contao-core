@@ -71,11 +71,6 @@
 
 
 
-.header_send {
-	background: url("../../html/send.png") no-repeat scroll left center transparent;
-	padding: 2px 0 3px 20px;
-}
-
 table.outbox {
 	border-collapse: collapse;
 }
