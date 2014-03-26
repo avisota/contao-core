@@ -34,6 +34,7 @@
 		"contao-community-alliance/events-cron": "*",
 		"contao-community-alliance/events-create-options": "*",
 		"menatwork/contao-multicolumnwizard": "~3",
+		"bit3/contao-compat": "~1.2",
 		"bit3/contao-doctrine-orm": "~2",
 		"bit3/contao-doctrine-orm-timestampable": "~2",
 		"bit3/contao-nested-menu": "~1",
