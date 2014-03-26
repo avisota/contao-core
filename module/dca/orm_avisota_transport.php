@@ -104,7 +104,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 			'contact'   => array('fromAddress', 'fromName', 'setSender', 'setReplyTo'),
 			'swift'     => array('swiftUseSmtp')
 		),
-		'swiftswiftSmtpOn' => array(
+		'swift|swiftSmtpOn' => array(
 			'transport' => array('title', 'alias', 'type'),
 			'contact'   => array('fromAddress', 'fromName', 'setSender', 'setReplyTo'),
 			'swift'     => array(
@@ -114,7 +114,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
 				'swiftSmtpPass',
 				'swiftSmtpEnc',
 				'swiftSmtpPort'
-			)
+			),
 		),
 		'service'          => array(
 			'transport' => array('title', 'alias', 'type'),
