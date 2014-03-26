@@ -302,7 +302,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 			),
 			'manyToMany'       => array(
 				'targetEntity' => 'Avisota\Contao\Entity\MailingList',
-				'cascade'      => array('all'),
+				'cascade'      => array('persist', 'detach', 'merge', 'refresh'),
 				'joinTable'    => array(
 					'name'               => 'orm_avisota_recipient_source_mailing_lists',
 					'joinColumns'        => array(
