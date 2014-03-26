@@ -96,7 +96,6 @@ class qeueue_execute extends AbstractQueueWebRunner
 	}
 }
 
-sleep(rand(5, 25));
 $request = new Request($_GET, $_POST, array(), $_COOKIE, $_FILES, $_SERVER);
 $qeueue_execute = new qeueue_execute();
 $response = $qeueue_execute->run($request);
