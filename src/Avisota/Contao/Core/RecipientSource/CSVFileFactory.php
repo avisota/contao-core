@@ -37,6 +37,9 @@ class CSVFileFactory implements RecipientSourceFactoryInterface
 			case 'semicolon':
 				$delimiter = ';';
 				break;
+			case 'space':
+				$delimiter = ' ';
+				break;
 			case 'tabulator':
 				$delimiter = "\t";
 				break;

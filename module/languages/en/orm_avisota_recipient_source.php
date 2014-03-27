@@ -96,8 +96,9 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiter'] = array(
 	'Please choose the CSV delimiter.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiters'] = array(
-	'comma' => 'Comma',
+	'comma'     => 'Comma',
 	'separator' => 'Separator',
+	'space'     => 'Space',
 	'tabulator' => 'Tabulator',
 	'linebreak' => 'Line break',
 );
@@ -106,8 +107,8 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileEnclosure'] = array(
 	'Please choose the CSV enclosure.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileEnclosures'] = array(
-	'single' => 'Single quote',
 	'double' => 'Double quote',
+	'single' => 'Single quote',
 );
 // dummy source
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummyMinCount'] = array(
