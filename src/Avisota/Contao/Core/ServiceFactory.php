@@ -31,7 +31,12 @@ class ServiceFactory
 	public function init($container)
 	{
 		// preserve object initialisation order
-		\BackendUser::getInstance();
+		if (TL_MODE == 'FE') {
+			\FrontendUser::getInstance();
+		}
+		else {
+			\BackendUser::getInstance();
+		}
 
 		$factory = $this;
 

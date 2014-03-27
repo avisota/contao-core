@@ -1,0 +1,26 @@
+<div class="tl_listing_container list_view">
+	{% if recipients is not empty %}
+		{% set firstRecipient = recipients|first %}
+
+		<table class="tl_listing showColumns">
+			<thead>
+			<tr>
+				{% for key in firstRecipient.keys %}
+					<th class="tl_folder_tlist">{{ key }}</th>
+				{% endfor %}
+			</tr>
+			</thead>
+			<tbody>
+			{% for recipient in recipients %}
+				<tr>
+					{% for key in firstRecipient.keys %}
+						<td class="tl_file_list">{{ recipient.details[key] }}</td>
+					{% endfor %}
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+		<br>
+	{% endif %}
+	<p><strong>Total:</strong> {{ total }}</p>
+</div>

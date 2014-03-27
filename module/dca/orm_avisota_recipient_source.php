@@ -90,13 +90,19 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['toggle'],
 				'icon'            => 'visible.gif',
 				'attributes'      => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
-				'button_callback' => array('Avisota\Contao\Core\DataContainer\RecipientSource', 'toggleIcon')
+				'button_callback' => array('Avisota\Contao\Core\DataContainer\RecipientSource', 'toggleIcon'),
 			),
 			'show'   => array
 			(
 				'label' => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['show'],
 				'href'  => 'act=show',
-				'icon'  => 'show.gif'
+				'icon'  => 'show.gif',
+			),
+			'list'   => array
+			(
+				'label' => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['list'],
+				'href'  => 'act=list',
+				'icon'  => 'assets/avisota/core/images/recipient_source.png',
 			),
 		),
 	),
@@ -112,7 +118,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 		),
 		'csv_file' => array(
 			'source'  => array('title', 'alias', 'type'),
-			'csvFile' => array('csvFileSrc', 'csvColumnAssignment'),
+			'csvFile' => array('csvFileSrc', 'csvColumnAssignment', 'csvFileDelimiter', 'csvFileEnclosure'),
 			'details' => array(),
 			'filter'  => array('filter'),
 			'expert'  => array('disable'),
@@ -153,20 +159,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				'timestampable' => array('on' => 'update')
 			)
 		),
-		'type'                 => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['type'],
-			'inputType' => 'select',
-			'options'   => array_keys($GLOBALS['AVISOTA_RECIPIENT_SOURCE']),
-			'reference' => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source'],
-			'eval'      => array(
-				'mandatory'          => true,
-				'submitOnChange'     => true,
-				'includeBlankOption' => true,
-				'helpwizard'         => true,
-				'tl_class'           => 'w50'
-			)
-		),
 		'title'                => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['title'],
@@ -180,7 +172,7 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 		),
 		'alias'                => array
 		(
-			'label'           => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['alias'],
+			'label'           => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['alias'],
 			'exclude'         => true,
 			'search'          => true,
 			'inputType'       => 'text',
@@ -194,6 +186,20 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 			'setter_callback' => array
 			(
 				array('Contao\Doctrine\ORM\Helper', 'generateAlias')
+			)
+		),
+		'type'                 => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['type'],
+			'inputType' => 'select',
+			'options'   => array_keys($GLOBALS['AVISOTA_RECIPIENT_SOURCE']),
+			'reference' => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source'],
+			'eval'      => array(
+				'mandatory'          => true,
+				'submitOnChange'     => true,
+				'includeBlankOption' => true,
+				'helpwizard'         => true,
+				'tl_class'           => 'w50 wizard'
 			)
 		),
 		// csv source
@@ -220,15 +226,17 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 						'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentColumn'],
 						'inputType' => 'select',
 						'options'   => range(1, 30),
-						'eval'      => array()
+						'eval'      => array(
+							'mandatory' => true,
+							'style'     => 'width:60px',
+						)
 					),
 					'field'  => array(
-						'label'            => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentField'],
-						'inputType'        => 'select',
-						'options_callback' => CreateOptionsEventCallbackFactory::createCallback(
-								'avisota.create-importable-recipient-field-options'
-							),
-						'eval'             => array()
+						'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentField'],
+						'inputType' => 'text',
+						'eval'      => array(
+							'mandatory' => true,
+						)
 					)
 				)
 			),
@@ -236,6 +244,40 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				'type'     => 'serialized',
 				'length'   => 65532,
 				'nullable' => true,
+			),
+		),
+		'csvFileDelimiter'     => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiter'],
+			'default'   => 'comma',
+			'inputType' => 'select',
+			'options'   => array('comma', 'semicolon', 'tabulator', 'linebreak'),
+			'reference' => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiters'],
+			'eval'      => array(
+				'mandatory' => true,
+				'tl_class'  => 'clr w50',
+			),
+			'field'     => array(
+				'type'    => 'string',
+				'length'  => 9,
+				'options' => array('fixed' => true),
+			),
+		),
+		'csvFileEnclosure'     => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileEnclosure'],
+			'default'   => 'double',
+			'inputType' => 'select',
+			'options'   => array('double', 'single'),
+			'reference' => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileEnclosures'],
+			'eval'      => array(
+				'mandatory' => true,
+				'tl_class'  => 'w50',
+			),
+			'field'     => array(
+				'type'    => 'string',
+				'length'  => 6,
+				'options' => array('fixed' => true),
 			),
 		),
 		// dummy source
@@ -319,10 +361,10 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 					),
 				),
 			),
-			'load_callback' => array(
+			'load_callback'    => array(
 				OptionsLoadResolver::create(),
 			),
-			'save_callback' => array(
+			'save_callback'    => array(
 				OptionsSaveResolver::create('Avisota\Contao\Entity\MailingList'),
 			),
 		),

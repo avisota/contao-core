@@ -15,67 +15,124 @@
 
 namespace Avisota\Contao\Core\DataContainer;
 
+use Avisota\RecipientSource\RecipientSourceInterface;
 use Contao\Doctrine\ORM\EntityHelper;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
+use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PrePersistModelEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class RecipientSource
+class RecipientSource implements EventSubscriberInterface
 {
+	static protected $instance;
+
 	/**
-	 * @param \DataContainer $dc
+	 * @return mixed
 	 */
-	public function onload_callback($dc)
+	static public function getInstance()
 	{
-		$source = \Database::getInstance()
-			->prepare("SELECT * FROM orm_avisota_recipient_source WHERE id=?")
-			->execute($dc->id);
-
-		if ($source->next() && $source->filter) {
-			switch ($source->type) {
-				case 'integrated':
-					MetaPalettes::appendFields(
-						'orm_avisota_recipient_source',
-						'integrated',
-						'filter',
-						array('integratedFilterByColumns')
-					);
-					break;
-
-				case 'member':
-					MetaPalettes::appendFields(
-						'orm_avisota_recipient_source',
-						'member',
-						'filter',
-						array('memberFilterByColumns')
-					);
-					MetaPalettes::appendFields(
-						'orm_avisota_recipient_source',
-						'memberByMailingLists',
-						'filter',
-						array('memberFilterByColumns')
-					);
-					MetaPalettes::appendFields(
-						'orm_avisota_recipient_source',
-						'memberByGroups',
-						'filter',
-						array('memberFilterByColumns')
-					);
-					MetaPalettes::appendFields(
-						'orm_avisota_recipient_source',
-						'memberByAll',
-						'filter',
-						array('memberFilterByColumns')
-					);
-					break;
-
-			}
+		if (static::$instance === null) {
+			static::$instance = new static();
 		}
+		return static::$instance;
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
+	static public function getSubscribedEvents()
+	{
+		return array(
+			EncodePropertyValueFromWidgetEvent::NAME . '[orm_avisota_recipient_source][csvColumnAssignment]' => array('checkCsvColumnUnique', 'checkCsvColumnEmail'),
+			DcGeneralEvents::ACTION => 'handleAction',
+		);
+	}
+
+	public function __construct()
+	{
+		static::$instance = $this;
+	}
+
+	public function checkCsvColumnUnique(EncodePropertyValueFromWidgetEvent $event)
+	{
+		$value = $event->getValue();
+
+		if (!is_array($value)) {
+			$value = deserialize($value, true);
+		}
+
+		$columns = array();
+		$fields  = array();
+
+		foreach ($value as $item) {
+			if (
+				in_array($item['column'], $columns)
+				|| in_array($item['field'], $fields)
+			) {
+				throw new \RuntimeException($GLOBALS['TL_LANG']['orm_avisota_recipient_source']['duplicated_column']);
+			}
+
+			$columns[] = $item['column'];
+			$fields[]  = $item['field'];
+		}
+
+	}
+
+	public function checkCsvColumnEmail(EncodePropertyValueFromWidgetEvent $event)
+	{
+		$value = $event->getValue();
+
+		if (!is_array($value)) {
+			$value = deserialize($value, true);
+		}
+
+		foreach ($value as $item) {
+			if ($item['field'] == 'email') {
+				return;
+			}
+		}
+
+		throw new \RuntimeException($GLOBALS['TL_LANG']['orm_avisota_recipient_source']['missing_email_column']);
+	}
+
+	public function handleAction(ActionEvent $event)
+	{
+		$environment = $event->getEnvironment();
+
+		if ($environment->getDataDefinition()->getName() != 'orm_avisota_recipient_source') {
+			return;
+		}
+
+		$action = $event->getAction();
+
+		if ($action->getName() == 'list') {
+			$input      = $environment->getInputProvider();
+			$id         = IdSerializer::fromSerialized($input->getParameter('id'));
+			$repository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
+
+			/** @var \Avisota\Contao\Entity\RecipientSource $recipientSourceEntity */
+			$recipientSourceEntity = $repository->find($id->getId());
+
+			/** @var RecipientSourceInterface $recipientSource */
+			$recipientSource = $GLOBALS['container'][sprintf('avisota.recipientSource.%s', $recipientSourceEntity->getId())];
+
+			$recipients = $recipientSource->getRecipients(50);
+			$total      = $recipientSource->countRecipients();
+
+			$template = new \TwigBackendTemplate('avisota/backend/recipient_source_list');
+			$template->recipients = $recipients;
+			$template->total      = $total;
+
+			$event->setResponse($template->parse());
+		}
+	}
 
 	/**
 	 * Return the "toggle visibility" button

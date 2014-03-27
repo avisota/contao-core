@@ -87,7 +87,28 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignment']      
 	'Please assign the columns to internal fields.'
 );
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentColumn'] = array('Column');
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentField']  = array('Assign');
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentField']  = array(
+	'Field',
+	'Please type in the assigned field name. E.g. <code>forename</code> or <code>surname</code>. There must be one column <code>email</code> at least!'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiter'] = array(
+	'Delimiter',
+	'Please choose the CSV delimiter.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiters'] = array(
+	'comma' => 'Comma',
+	'separator' => 'Separator',
+	'tabulator' => 'Tabulator',
+	'linebreak' => 'Line break',
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileEnclosure'] = array(
+	'Enclosure',
+	'Please choose the CSV enclosure.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileEnclosures'] = array(
+	'single' => 'Single quote',
+	'double' => 'Double quote',
+);
 // dummy source
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummyMinCount'] = array(
 	'Min count',
@@ -149,8 +170,8 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberByMailingListMembers'
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberByGroupMembers']       = 'by members from selected groups';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberByAllMembers']         = 'by all members';
 
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['duplicated_column']    = 'Columns and rows cannot used twice!';
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['missing_email_column'] = 'You need to assign email to one column!';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['duplicated_column']    = 'Columns and fields cannot used twice!';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['missing_email_column'] = 'You need to assign <code>email</code> to one column!';
 
 
 /**
@@ -163,6 +184,10 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['new']    = array(
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['show']   = array(
 	'Recipient source details',
 	'Show the details of recipient source ID %s'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['list']   = array(
+	'List the recipients',
+	'List the recipients from recipient source ID %s'
 );
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['toggle'] = array(
 	'Toggle disabled status',
