@@ -8,9 +8,10 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-03-11T13:55:51+01:00
+ * last-updated: 2014-03-25T14:17:09+01:00
  */
 
+$GLOBALS['TL_LANG']['FMD']['avisota']                        = 'Avisota';
 $GLOBALS['TL_LANG']['MOD']['avisota-core']['0']              = 'Avisota - Core';
 $GLOBALS['TL_LANG']['MOD']['avisota-core']['1']              = 'Integraziun da basa dad Avisota per Contao.';
 $GLOBALS['TL_LANG']['MOD']['avisota']['0']                   = 'Newsletter Avisota';

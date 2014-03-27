@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-03-11T12:08:26+01:00
+ * last-updated: 2014-03-25T14:17:12+01:00
  */
-
 
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignment']['0']                       = 'Attribuir colonnas';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignment']['1']                       = 'Attribuescha las colonnas als champs interns';
@@ -40,6 +39,8 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['edit']['1']                
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['expert_legend']                                  = 'Configuraziun avanzada';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter']['0']                                    = 'Activar filters';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter']['1']                                    = 'Activar filters sin questa funtauna da destinaturs. Ils filters disponibels dependan dal modul specific.';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filterByMailingLists']['0']                      = 'Filtrar tenor ils abunaments';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filterByMailingLists']['1']                      = 'Activar la pussaivladad da filtrar tenor ils abunaments da glistas dad e-mail.';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter_legend']                                  = 'Configuraziun dal filter';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated']['0']                                = 'Destinaturs integrads en Avisota';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedAllowSingleListSelection']['0']        = 'Lubir da tscherner be ina glista da mail';
