@@ -17,6 +17,8 @@ use Avisota\Contao\Entity\Queue;
 use Avisota\Contao\Core\Event\PreQueueExecuteEvent;
 use Avisota\Contao\Core\Queue\AbstractQueueWebRunner;
 use Avisota\Queue\ExecutionConfig;
+use Avisota\Queue\QueueInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -50,9 +52,9 @@ class qeueue_execute extends AbstractQueueWebRunner
 			return $response;
 		}
 
-			$serviceName = sprintf('avisota.queue.%s', $queueData->getId());
-			/** @var QueueInterface $queue */
-			$queue = $container[$serviceName];
+		$serviceName = sprintf('avisota.queue.%s', $queueData->getId());
+		/** @var QueueInterface $queue */
+		$queue = $container[$serviceName];
 
 		$transportServiceName = sprintf(
 			'avisota.transport.%s',
@@ -87,7 +89,7 @@ class qeueue_execute extends AbstractQueueWebRunner
 		);
 		foreach ($status as $stat) {
 			$jsonData['success'] += $stat->getSuccessfullySend();
-			$jsonData['failed']  += count($stat->getFailedRecipients());
+			$jsonData['failed'] += count($stat->getFailedRecipients());
 		}
 
 		$response = new JsonResponse($jsonData);
@@ -96,7 +98,7 @@ class qeueue_execute extends AbstractQueueWebRunner
 	}
 }
 
-$request = new Request($_GET, $_POST, array(), $_COOKIE, $_FILES, $_SERVER);
-$qeueue_execute = new qeueue_execute();
-$response = $qeueue_execute->run($request);
+$request  = Request::createFromGlobals();
+$runner   = new qeueue_execute();
+$response = $runner->run($request);
 $response->send();
