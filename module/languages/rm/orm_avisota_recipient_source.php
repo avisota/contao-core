@@ -14,7 +14,19 @@
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignment']['0']                       = 'Attribuir colonnas';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignment']['1']                       = 'Attribuescha las colonnas als champs interns';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentColumn']['0']                 = 'Colonnas';
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentField']['0']                  = 'Attribuir';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentField']['0']                  = 'Champ';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentField']['1']                  = 'Endatescha il num da champ assegnà. P.ex <code>prenum</code> u <code>num</code>. Almain ina colonna <code>email</code> sto exister!';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiter']['0']                          = 'Limitader';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiter']['1']                          = 'Tscherna il limitader da CSV.';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiters']['comma']                     = 'Comma';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiters']['linebreak']                 = 'Nova lingia';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiters']['separator']                 = 'Seperatur';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiters']['space']                     = 'Distanza';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiters']['tabulator']                 = 'Tabulatur';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileEnclosure']['0']                          = 'Brancar';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileEnclosure']['1']                          = 'Tscherna il tip da brancar da CSV.';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileEnclosures']['double']                    = 'Virgulettas dublas';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileEnclosures']['single']                    = 'Virgulettas simplas';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileSrc']['0']                                = 'Datoteca da CSV';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileSrc']['1']                                = 'Tscherna la datoteca da CSV';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFile_legend']                                 = 'Datoteca da CSV';
@@ -33,7 +45,7 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummyMaxCount']['1']       
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummyMinCount']['0']                             = 'Dumber minimal';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummyMinCount']['1']                             = 'Endatescha il dumber minimal da destinaturs generads';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummy_legend']                                   = 'Configuraziun dal generatur';
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['duplicated_column']                              = 'Colonnas e lingias na pon betg vegnir utilisadas duas giadas!';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['duplicated_column']                              = 'Colonnas e champs na pon betg vegnir utilisads duas giadas!';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['edit']['0']                                      = 'Modifitgar la funtauna da destinaturs';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['edit']['1']                                      = 'Modifitgar la funtauna da destinaturs cun l\'ID %s';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['expert_legend']                                  = 'Configuraziun avanzada';
@@ -70,6 +82,8 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_by_mailing_list'
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_details']                             = 'Destinaturs integrads en Avisota';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_legend']                              = 'Destinaturs integrads en Avisota';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_member_details']                      = 'Destinaturs integrads en Avisota e commembers da Contao';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['list']['0']                                      = 'Mussar ils destinaturs';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['list']['1']                                      = 'Mussar ils destinaturs da la funtauna da destinaturs cun l\'ID %s';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['mailingLists']['0']                              = 'Glistas da mail';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['mailingLists']['1']                              = 'Tscherna las glistas da mail';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member']['0']                                    = 'Commembers da Contao';
@@ -101,7 +115,7 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberMailingLists']['0']  
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberMailingLists']['1']                        = 'Tscherna las glistas da mail selecziunadas';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member_details']                                 = 'Commembers da Contao';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member_legend']                                  = 'Commembers da Contao';
-$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['missing_email_column']                           = 'Ti stos attribuir email ad ina colonna!';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['missing_email_column']                           = 'Ti stos attribuir  <code>email</code> ad ina colonna!';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['new']['0']                                       = 'Nova funtauna da destinaturs';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['new']['1']                                       = 'Crear ina nova funtauna da destinaturs';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['show']['0']                                      = 'Detagls da la funtauna da destinaturs';
