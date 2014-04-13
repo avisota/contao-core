@@ -50,6 +50,9 @@ class OptionsBuilder implements EventSubscriberInterface
 
 	public function getMailingListOptions($options = array())
 	{
+		if (!is_array($options) && !$options instanceof \ArrayAccess) {
+			$options = array();
+		}
 		$mailingListRepository = EntityHelper::getRepository('Avisota\Contao:MailingList');
 		$mailingLists          = $mailingListRepository->findBy(array(), array('title' => 'ASC'));
 		/** @var \Avisota\Contao\Entity\MailingList $mailingList */
@@ -66,6 +69,9 @@ class OptionsBuilder implements EventSubscriberInterface
 
 	public function getRecipientSourceOptions($options = array())
 	{
+		if (!is_array($options) && !$options instanceof \ArrayAccess) {
+			$options = array();
+		}
 		$recipientSourceRepository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
 		$recipientSources          = $recipientSourceRepository->findBy(array(), array('title' => 'ASC'));
 		/** @var \Avisota\Contao\Entity\RecipientSource $recipientSource */
@@ -82,6 +88,9 @@ class OptionsBuilder implements EventSubscriberInterface
 
 	public function getQueueOptions($options = array())
 	{
+		if (!is_array($options) && !$options instanceof \ArrayAccess) {
+			$options = array();
+		}
 		$queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
 		$queues          = $queueRepository->findBy(array(), array('title' => 'ASC'));
 		/** @var \Avisota\Contao\Entity\Queue $queue */
@@ -102,6 +111,9 @@ class OptionsBuilder implements EventSubscriberInterface
 
 	public function getTransportOptions($options = array())
 	{
+		if (!is_array($options) && !$options instanceof \ArrayAccess) {
+			$options = array();
+		}
 		$transportRepository = EntityHelper::getRepository('Avisota\Contao:Transport');
 		$transports          = $transportRepository->findBy(array(), array('title' => 'ASC'));
 		/** @var \Avisota\Contao\Entity\Transport $transport */
@@ -125,6 +137,10 @@ class OptionsBuilder implements EventSubscriberInterface
 	 */
 	public function getGalleryTemplateOptions(DC_General $dc, $options = array())
 	{
+		if (!is_array($options) && !$options instanceof \ArrayAccess) {
+			$options = array();
+		}
+
 		// Get the page ID
 		$article = \Database::getInstance()
 			->prepare("SELECT pid FROM tl_article WHERE id=?")
