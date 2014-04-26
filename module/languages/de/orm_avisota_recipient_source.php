@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-03-11T12:08:26+01:00
+ * last-updated: 2014-03-25T14:17:12+01:00
  */
-
 
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignment']['0']                       = 'Spalten zuordnen';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignment']['1']                       = 'Bitte ordnen Sie die Spalten den internen Feldern zu.';
@@ -28,6 +27,7 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['disable']['1']             
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['down']['0']                                      = 'Priorität vermindern';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['down']['1']                                      = 'Vermindern Sie die Priorität der Empfängerquelle ID %s.';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummy']['0']                                     = 'Zufallsgenerator (für Testzwecke)';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummy']['1']                                     = 'Zufällig generierte Empfänger aus einer vorgegebenen Menge von Vornamen, Familiennamen und Domänen. Diese Empfänger Quelle eignet sich zum Testen. Bitte beachten Sie, dass alle E-Mails nur generiert werden. Diese sollten nicht existieren, aber es gibt keine Garantie! Diese Empfänger Quelle sollte nur in Kombination mit einem Dummy-Transport oder mit dem Entwickler-Modus verwendet.';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummyMaxCount']['0']                             = 'Höchstanzahl';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummyMaxCount']['1']                             = 'Bitte geben Sie an, wie viele Empfänger höchstens vorhanden sein dürfen.';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummyMinCount']['0']                             = 'Mindestanzahl';
@@ -62,6 +62,7 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedMailingListsRecip
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedMailingListsRecipients']['1']          = 'Bitte wählen Sie die Mailingliste aus. Nur Empfänger, die diese Mailingliste abonniert haben sind verfügbar.';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedRecipientManageSubscriptionPage']['0'] = 'Verwaltungsseite';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedRecipientManageSubscriptionPage']['1'] = 'Bitte wählen Sie die Seite aus, auf der das Abonnement verwalten wird.';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_by_mailing_list']['0']                = 'In Avisota integrierte Empfänger ausgewählt aus der Mailingliste';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_details']                             = 'In Avisota integrierte Empfänger';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_legend']                              = 'In Avisota integrierte Empfänger';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_member_details']                      = 'In Avisota integrierte Empfänger und Contao-Mitglieder';
@@ -69,8 +70,11 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['mailingLists']['0']        
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['mailingLists']['1']                              = 'Bitte wählen Sie eine oder mehrere Mailinglisten aus.';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member']['0']                                    = 'Contao-Mitglieder';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberAllowSingleGroupSelection']['0']           = 'Einzelauswahl von Gruppen erlauben';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberAllowSingleGroupSelection']['1']           = 'Gewähren sie dem Verfasser eine Einzelauswahl der Gruppen aus den Empfänger Quellen';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberAllowSingleMailingListSelection']['0']     = 'Einzelauswahl  von Mailinglisten erlauben';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberAllowSingleMailingListSelection']['1']     = 'Lassen Sie den Verfasser aus den Mailing-Listen einzelne Empfänger auswählen';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberAllowSingleSelection']['0']                = 'Einzelauswahl von Mitgliedern erlauben';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberAllowSingleSelection']['1']                = 'Gewähren sie dem Verfasser die Einzelauswahl der Mitglieder aus der Empfänger Quelle';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberBy']['0']                                  = 'Mitglieder auswählen &hellip;';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberBy']['1']                                  = 'Bitte wählen Sie die Methode zur Mitgliederauswahl.';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberByAllGroups']                              = 'nach allen Gruppen';
@@ -90,6 +94,7 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberFilterByColumnsValue'
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberGroups']['0']                              = 'Gruppen';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberGroups']['1']                              = 'Bitte wählen Sie vorausgewählte Gruppen aus.';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberMailingLists']['0']                        = 'Mailinglisten';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberMailingLists']['1']                        = 'Bitte wählen Sie die ausgewählte Mailingliste';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member_details']                                 = 'Contao-Mitglieder';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member_legend']                                  = 'Contao-Mitglieder';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['new']['0']                                       = 'Neuer Empfängerquelle';
