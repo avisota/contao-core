@@ -13,7 +13,6 @@
  * @filesource
  */
 
-use ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory;
 
 /**
  * Table orm_avisota_queue
@@ -189,7 +188,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_queue']['transport'],
 			'inputType'        => 'select',
-			'options_callback' => CreateOptionsEventCallbackFactory::createCallback('avisota.create-transport-options'),
+			'options_callback' => \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory::createCallback('avisota.create-transport-options'),
 			'eval'             => array(
 				'mandatory'          => true,
 				'includeBlankOption' => true,

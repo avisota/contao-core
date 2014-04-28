@@ -13,10 +13,6 @@
  * @filesource
  */
 
-use Avisota\Contao\Core\CoreEvents;
-use Contao\Doctrine\ORM\OptionsLoadResolver;
-use Contao\Doctrine\ORM\OptionsSaveResolver;
-use ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory;
 
 /**
  * Table orm_avisota_recipient_source
@@ -335,8 +331,8 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['mailingLists'],
 			'inputType'        => 'checkbox',
-			'options_callback' => CreateOptionsEventCallbackFactory::createCallback(
-					CoreEvents::CREATE_MAILING_LIST_OPTIONS
+			'options_callback' => \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory::createCallback(
+					\Avisota\Contao\Core\CoreEvents::CREATE_MAILING_LIST_OPTIONS
 				),
 			'eval'             => array(
 				'mandatory' => true,
@@ -362,10 +358,10 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				),
 			),
 			'load_callback'    => array(
-				OptionsLoadResolver::create(),
+				Contao\Doctrine\ORM\OptionsLoadResolver::create(),
 			),
 			'save_callback'    => array(
-				OptionsSaveResolver::create('Avisota\Contao\Entity\MailingList'),
+				Contao\Doctrine\ORM\OptionsSaveResolver::create('Avisota\Contao\Entity\MailingList'),
 			),
 		),
 		// expert settings
