@@ -83,10 +83,11 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 			),
 			'toggle' => array
 			(
-				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['toggle'],
-				'icon'            => 'visible.gif',
-				'attributes'      => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
-				'button_callback' => array('Avisota\Contao\Core\DataContainer\RecipientSource', 'toggleIcon'),
+				'label'          => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['toggle'],
+				'icon'           => 'visible.gif',
+				'attributes'     => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
+				'toggleProperty' => 'disable',
+				'toggleInverse'  => true,
 			),
 			'show'   => array
 			(
