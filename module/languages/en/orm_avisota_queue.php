@@ -41,7 +41,7 @@ $GLOBALS['TL_LANG']['orm_avisota_queue']['maxSendCount']             = array(
 	'Sending count',
 	'Please enter the maximum number of mails send per cycle.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_queue']['cyclePause']                = array(
+$GLOBALS['TL_LANG']['orm_avisota_queue']['cyclePause']               = array(
 	'Cycle pause',
 	'Please enter the time in seconds between each cycle.'
 );
@@ -97,3 +97,14 @@ $GLOBALS['TL_LANG']['orm_avisota_queue']['delete'] = array(
 	'Delete queue',
 	'Delete queue ID %s'
 );
+$GLOBALS['TL_LANG']['orm_avisota_queue']['clear']  = array(
+	'Clear queue',
+	'Clear queue ID %s'
+);
+
+
+/**
+ * Messages
+ */
+$GLOBALS['TL_LANG']['orm_avisota_queue']['clearConfirm'] = 'Do you realy want to clear the queue?';
+$GLOBALS['TL_LANG']['orm_avisota_queue']['queueCleared'] = 'The queue <em>%s</em> was cleared.';

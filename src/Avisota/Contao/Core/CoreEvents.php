@@ -68,4 +68,15 @@ class CoreEvents
 	 * @api
 	 */
 	const CREATE_TRANSPORT_OPTIONS = 'avisota.create-transport-options';
+
+	/**
+	 * The CREATE_RECIPIENT_SOURCE event occurs when a recipient source service is created.
+	 *
+	 * The event listener method receives a Avisota\Contao\Core\Event\CreateRecipientSourceEvent instance.
+	 *
+	 * @var string
+	 *
+	 * @api
+	 */
+	const CREATE_RECIPIENT_SOURCE = 'avisota.create-recipient-source';
 }

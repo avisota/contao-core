@@ -81,6 +81,13 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 				'icon'       => 'delete.gif',
 				'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 			),
+			'clear' => array
+			(
+				'label'      => &$GLOBALS['TL_LANG']['orm_avisota_queue']['clear'],
+				'href'       => 'act=clear',
+				'icon'       => 'assets/avisota/core/images/clear.png',
+				'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['orm_avisota_queue']['clearConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+			),
 			'show'   => array
 			(
 				'label' => &$GLOBALS['TL_LANG']['orm_avisota_queue']['show'],

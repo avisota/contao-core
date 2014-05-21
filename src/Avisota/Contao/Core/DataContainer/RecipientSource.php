@@ -50,7 +50,10 @@ class RecipientSource implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
-			EncodePropertyValueFromWidgetEvent::NAME . '[orm_avisota_recipient_source][csvColumnAssignment]' => array('checkCsvColumnUnique', 'checkCsvColumnEmail'),
+			EncodePropertyValueFromWidgetEvent::NAME . '[orm_avisota_recipient_source][csvColumnAssignment]' => array(
+				array('checkCsvColumnUnique'),
+				array('checkCsvColumnEmail'),
+			),
 			DcGeneralEvents::ACTION => 'handleAction',
 		);
 	}

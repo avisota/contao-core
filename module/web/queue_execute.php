@@ -40,6 +40,8 @@ if (!is_file($dir . '/system/initialize.php')) {
 define('TL_MODE', 'FE');
 require($dir . '/system/initialize.php');
 
+BackendUser::getInstance();
+
 class qeueue_execute extends AbstractQueueWebRunner
 {
 	protected function execute(Request $request, Queue $queueData, \BackendUser $user)
