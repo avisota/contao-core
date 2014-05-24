@@ -8,14 +8,16 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-03-11T12:08:26+01:00
+ * last-updated: 2014-03-25T14:17:11+01:00
  */
-
 
 $GLOBALS['TL_LANG']['orm_avisota_queue']['alias']['0']                    = 'Alias';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['alias']['1']                    = 'L\'alias da la colonna da spetga è ina referenza unica a la colonna da spetga che po vegnir inditgada empè da la ID.';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['allowManualSending']['0']       = 'Lubir il trametter manual';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['allowManualSending']['1']       = 'Lubir als utilisaders dad exequir manualmain la colonna da spetga ed lur cuntegns';
+$GLOBALS['TL_LANG']['orm_avisota_queue']['clear']['0']                    = 'Svidar la colonna da spetga';
+$GLOBALS['TL_LANG']['orm_avisota_queue']['clear']['1']                    = 'Svidar la colonna da spetga cun l\'ID %s';
+$GLOBALS['TL_LANG']['orm_avisota_queue']['clearConfirm']                  = 'Vuls ti propi svidar la colonna da spetga?';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['config_legend']                 = 'Configuraziun da la colonna da spetga';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['cyclePause']['0']               = 'Pausa da ciclus';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['cyclePause']['1']               = 'Endatescha il temp en secundas tranter mintga ciclus.';
@@ -29,6 +31,7 @@ $GLOBALS['TL_LANG']['orm_avisota_queue']['maxSendTime']['0']              = 'Tem
 $GLOBALS['TL_LANG']['orm_avisota_queue']['maxSendTime']['1']              = 'Endatescha il temp maximal en secundas per mintga ciclus.';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['new']['0']                      = 'Nova colonna da spetga';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['new']['1']                      = 'Crear ina nova colonna da spetga';
+$GLOBALS['TL_LANG']['orm_avisota_queue']['queueCleared']                  = 'La colonna da spetga <em>%s</em> è vegnida svidada.';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['queue_legend']                  = 'Colonna da spetga';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['scheduledSending']['0']         = 'Trametter a temp planisà';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['scheduledSending']['1']         = 'Utilisescha l\'algoritem per il trametter planisà per exequir a temp definì.';
