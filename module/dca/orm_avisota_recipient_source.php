@@ -333,8 +333,9 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['mailingLists'],
 			'inputType'        => 'checkbox',
 			'options_callback' => \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory::createCallback(
-					\Avisota\Contao\Core\CoreEvents::CREATE_MAILING_LIST_OPTIONS
-				),
+				\Avisota\Contao\Core\CoreEvents::CREATE_MAILING_LIST_OPTIONS,
+				'Avisota\Contao\Core\Event\CreateOptionsEvent'
+			),
 			'eval'             => array(
 				'mandatory' => true,
 				'multiple'  => true,
