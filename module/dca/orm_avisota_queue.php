@@ -27,8 +27,8 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 	// Config
 	'config'          => array
 	(
-		'dataContainer'     => 'General',
-		'enableVersioning'  => true,
+		'dataContainer'    => 'General',
+		'enableVersioning' => true,
 	),
 	// DataContainer
 	'dca_config'      => array
@@ -81,7 +81,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 				'icon'       => 'delete.gif',
 				'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 			),
-			'clear' => array
+			'clear'  => array
 			(
 				'label'      => &$GLOBALS['TL_LANG']['orm_avisota_queue']['clear'],
 				'href'       => 'act=clear',
@@ -238,7 +238,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 				'tl_class'  => 'w50'
 			)
 		),
-		'cyclePause'                => array
+		'cyclePause'               => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['cyclePause'],
 			'default'   => 10,
