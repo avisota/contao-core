@@ -27,8 +27,8 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 	// Config
 	'config'          => array
 	(
-		'dataContainer'     => 'General',
-		'enableVersioning'  => true,
+		'dataContainer'    => 'General',
+		'enableVersioning' => true,
 	),
 	// DataContainer
 	'dca_config'      => array
@@ -58,6 +58,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 		),
 		'global_operations' => array
 		(
+			/*
 			'all' => array
 			(
 				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
@@ -65,6 +66,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 				'class'      => 'header_edit_all',
 				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
 			)
+			*/
 		),
 		'operations'        => array
 		(
@@ -81,7 +83,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 				'icon'       => 'delete.gif',
 				'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 			),
-			'clear' => array
+			'clear'  => array
 			(
 				'label'      => &$GLOBALS['TL_LANG']['orm_avisota_queue']['clear'],
 				'href'       => 'act=clear',
@@ -195,7 +197,10 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['orm_avisota_queue']['transport'],
 			'inputType'        => 'select',
-			'options_callback' => \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory::createCallback('avisota.create-transport-options'),
+			'options_callback' => \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory::createCallback(
+				'avisota.create-transport-options',
+				'Avisota\Contao\Core\Event\CreateOptionsEvent'
+			),
 			'eval'             => array(
 				'mandatory'          => true,
 				'includeBlankOption' => true,
@@ -235,7 +240,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
 				'tl_class'  => 'w50'
 			)
 		),
-		'cyclePause'                => array
+		'cyclePause'               => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['cyclePause'],
 			'default'   => 10,

@@ -60,6 +60,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 		),
 		'global_operations' => array
 		(
+			/*
 			'all' => array
 			(
 				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
@@ -67,6 +68,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 				'class'      => 'header_edit_all',
 				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
 			)
+			*/
 		),
 		'operations'        => array
 		(
@@ -79,7 +81,6 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 			'copy'   => array
 			(
 				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['copy'],
-				'href'            => 'act=copy',
 				'icon'            => 'copy.gif',
 				'attributes'      => 'onclick="Backend.getScrollOffset();"',
 			),
