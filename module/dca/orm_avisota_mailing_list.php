@@ -81,7 +81,6 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
 			'copy'   => array
 			(
 				'label'           => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['copy'],
-				'href'            => 'act=copy',
 				'icon'            => 'copy.gif',
 				'attributes'      => 'onclick="Backend.getScrollOffset();"',
 			),
