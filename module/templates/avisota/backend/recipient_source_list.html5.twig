@@ -14,7 +14,7 @@
 			{% for recipient in recipients %}
 				<tr>
 					{% for key in firstRecipient.keys %}
-						<td class="tl_file_list">{{ recipient.details[key] }}</td>
+						<td class="tl_file_list">{{ recipient.details[key]|stringify }}</td>
 					{% endfor %}
 				</tr>
 			{% endfor %}
