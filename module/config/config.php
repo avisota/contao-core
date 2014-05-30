@@ -113,6 +113,7 @@ $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = function() {
 };
 $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Avisota\Contao\Core\DataContainer\Queue';
 $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Avisota\Contao\Core\DataContainer\RecipientSource';
+$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Avisota\Contao\Core\EventSubscriber';
 
 /**
  * Settings
