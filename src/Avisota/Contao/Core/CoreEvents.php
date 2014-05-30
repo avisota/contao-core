@@ -79,4 +79,26 @@ class CoreEvents
 	 * @api
 	 */
 	const CREATE_RECIPIENT_SOURCE = 'avisota.create-recipient-source';
+
+	/**
+	 * The CREATE_FAKE_RECIPIENT event occurs when a fake recipient must be created.
+	 *
+	 * The event listener method receives a Avisota\Contao\Core\Event\CreateFakeRecipientEvent instance.
+	 *
+	 * @var string
+	 *
+	 * @api
+	 */
+	const CREATE_FAKE_RECIPIENT = 'avisota.create-fake-recipient';
+
+	/**
+	 * The CREATE_PUBLIC_EMPTY_RECIPIENT event occurs when a public empty recipient must be created.
+	 *
+	 * The event listener method receives a Avisota\Contao\Core\Event\CreatePublicEmptyRecipientEvent instance.
+	 *
+	 * @var string
+	 *
+	 * @api
+	 */
+	const CREATE_PUBLIC_EMPTY_RECIPIENT = 'avisota.create-public-empty-recipient';
 }
