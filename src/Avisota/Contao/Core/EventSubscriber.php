@@ -30,6 +30,7 @@ class EventSubscriber implements EventSubscriberInterface
 	{
 		return array(
 			CoreEvents::CREATE_FAKE_RECIPIENT         => 'createFakeRecipient',
+			CoreEvents::CREATE_PUBLIC_EMPTY_RECIPIENT => 'createPublicEmptyRecipient',
 		);
 	}
 
@@ -50,5 +51,16 @@ class EventSubscriber implements EventSubscriberInterface
 		}
 
 		$event->setRecipient(new FakeRecipient($locale));
+	}
+
+	public function createPublicEmptyRecipient(CreatePublicEmptyRecipientEvent $event)
+	{
+		if ($event->getRecipient()) {
+			return;
+		}
+
+		$environment = \Environment::getInstance();
+
+		$event->setRecipient(new MutableRecipient('noreply@' . $environment->host));
 	}
 }
