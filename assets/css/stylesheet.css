@@ -227,3 +227,10 @@ fieldset.update legend input {
 	padding: 8px 6px;
 	background: white;
 }
+
+.avisota_recipient_source_listing {
+	overflow: auto;
+}
+.avisota_recipient_source_listing table td {
+	white-space: nowrap;
+}
