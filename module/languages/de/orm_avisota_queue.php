@@ -8,14 +8,16 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-03-11T12:08:26+01:00
+ * last-updated: 2014-03-25T14:17:10+01:00
  */
-
 
 $GLOBALS['TL_LANG']['orm_avisota_queue']['alias']['0']                    = 'Alias';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['alias']['1']                    = 'Der Alias einer Warteschlange ist eine eindeutige Referenz, die anstelle der ID benutzt werden kann.';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['allowManualSending']['0']       = 'Manuellen Versand erlauben';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['allowManualSending']['1']       = 'Erlaubt Benutzern, den Versand aus der Warteschlange manuell anzustoßen und die Inhalte zu senden.';
+$GLOBALS['TL_LANG']['orm_avisota_queue']['clear']['0']                    = 'Warteschlange leeren';
+$GLOBALS['TL_LANG']['orm_avisota_queue']['clear']['1']                    = 'Leeren Sie die Warteschlange ID %s.';
+$GLOBALS['TL_LANG']['orm_avisota_queue']['clearConfirm']                  = 'Möchten Sie die Warteschlange wirklich leeren?';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['config_legend']                 = 'Warteschlangen-Einstellungen';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['cyclePause']['0']               = 'Zyklen-Pause';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['cyclePause']['1']               = 'Bitte geben Sie die Zeit in Sekunden an, die zwischen den Sendezyklen liegen soll.';
@@ -29,6 +31,7 @@ $GLOBALS['TL_LANG']['orm_avisota_queue']['maxSendTime']['0']              = 'Sen
 $GLOBALS['TL_LANG']['orm_avisota_queue']['maxSendTime']['1']              = 'Bitte geben Sie die Maximaldauer in Sekunden an, die dann für jeden Sendezyklus gilt.';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['new']['0']                      = 'Neue Warteschlange';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['new']['1']                      = 'Erstellen Sie eine neue Warteschlange.';
+$GLOBALS['TL_LANG']['orm_avisota_queue']['queueCleared']                  = 'Die Warteschlange <em>%s</em> wurde geleert.';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['queue_legend']                  = 'Warteschlange';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['scheduledSending']['0']         = 'Versand planen';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['scheduledSending']['1']         = 'Den Algorithmus für automatische Ausführung des Versands benutzen.';

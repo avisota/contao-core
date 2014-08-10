@@ -48,6 +48,7 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['edit']['1']                
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['expert_legend']                                  = 'Experteneinstellungen';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter']['0']                                    = 'Filter aktivieren';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter']['1']                                    = 'Aktivieren Sie Filter für diese Empfänger-Quelle. Die verfügbaren Filter hängen vom jeweiligen Modul ab.';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filterByMailingLists']['0']                      = 'Nach Abonnement filtern';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter_legend']                                  = 'Filtereinstellungen';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated']['0']                                = 'In Avisota integrierte Empfänger';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedAllowSingleListSelection']['0']        = 'Einzelauswahl erlauben';
