@@ -15,6 +15,7 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignment']['0'] 
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignment']['1']                       = 'Bitte ordnen Sie die Spalten den internen Feldern zu.';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentColumn']['0']                 = 'Spalte';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentField']['0']                  = 'Feld';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentField']['1']                  = 'Bitte geben Sie den zuzuordnenden Feldnamen an. Beispiel: <code>forename</code> oder <code>surname</code>. Es muss mindestens die Spalte <code>email</code> zugeordnet werden.';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiter']['0']                          = 'Feldbegrenzer';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiter']['1']                          = 'Bitte wählen Sie aus, welches Zeichen die Felder in der CSV-Datei begrenzt.';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileDelimiters']['comma']                     = 'Komma';
@@ -49,6 +50,7 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['expert_legend']            
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter']['0']                                    = 'Filter aktivieren';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter']['1']                                    = 'Aktivieren Sie Filter für diese Empfänger-Quelle. Die verfügbaren Filter hängen vom jeweiligen Modul ab.';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filterByMailingLists']['0']                      = 'Nach Abonnement filtern';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filterByMailingLists']['1']                      = 'Filter nach Abonnements aktivieren';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter_legend']                                  = 'Filtereinstellungen';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated']['0']                                = 'In Avisota integrierte Empfänger';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integratedAllowSingleListSelection']['0']        = 'Einzelauswahl erlauben';
@@ -109,6 +111,7 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberMailingLists']['0']  
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberMailingLists']['1']                        = 'Bitte wählen Sie die ausgewählte Mailingliste';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member_details']                                 = 'Contao-Mitglieder';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member_legend']                                  = 'Contao-Mitglieder';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['missing_email_column']                           = 'Sie müssen <code>email</code> einer Spalte zuweisen!';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['new']['0']                                       = 'Neuer Empfängerquelle';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['new']['1']                                       = 'Fügen Sie eine neue Empfängerquelle hinzu.';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['show']['0']                                      = 'Empfängerquellen-Details';
