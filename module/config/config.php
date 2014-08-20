@@ -201,6 +201,13 @@ $GLOBALS['TL_HOOKS']['getUserNavigation']['avisota-core-custom-menu']     = arra
 );
 
 /**
+ * Recipient synonym fields
+ */
+$GLOBALS['TL_AVISOTA_RECIPIENT_SYNONYM_FIELDS']['forename'] = array('forename', 'firstname');
+$GLOBALS['TL_AVISOTA_RECIPIENT_SYNONYM_FIELDS']['surname']  = array('surname', 'lastname');
+
+
+/**
  * Custom user permissions.
  */
 /*

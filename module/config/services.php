@@ -157,3 +157,12 @@ $container['avisota.transport.renderer'] = $container->share(
 		return $chain;
 	}
 );
+
+/**
+ * Define recipient synonym fields service
+ */
+$container['avisota.recipient.synonymizer'] = $container->share(
+	function() {
+		return new \Avisota\Contao\Core\Recipient\SynonymizerService();
+	}
+);
