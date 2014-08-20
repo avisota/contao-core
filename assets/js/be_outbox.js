@@ -109,6 +109,7 @@ var Outbox = function (totalCount, queueId, cycleTime, cyclePause) {
 					.removeClass('waiting')
 					.addClass('finished');
 
+				window.clearTimeout(timerTrigger);
 				timeout = 0;
 			}
 		},
