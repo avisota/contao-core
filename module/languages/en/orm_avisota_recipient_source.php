@@ -77,6 +77,15 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['memberFilterByColumnsNoEsca
 	'SQL',
 	'Use value as native SQL (&rarr; the value will not excaped).'
 );
+// union
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['unionRecipientSources'] = array(
+	'Recipient source',
+	'Please choose the recipient sources to unify.'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['unionClean']            = array(
+	'Clean mode',
+	'In clean mode duplicate entries will be filtered out. This mode need much more cpu speed and memory and may be slow on big recipient lists!'
+);
 // csv file
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFileSrc']                = array(
 	'CSV file',
@@ -129,6 +138,7 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['filter_legend']     = 'Filt
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['expert_legend']     = 'Experts settings';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_legend'] = 'Avisota integrated recipients';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member_legend']     = 'Contao members';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['union_legend']      = 'Union';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvFile_legend']    = 'CSV file';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['dummy_legend']      = 'Generator settings';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['details_legend']    = 'Details settings';
@@ -145,6 +155,9 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['integrated_by_mailing_list'
 );
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['member']                     = array(
 	'Contao members'
+);
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['union']                      = array(
+	'Union'
 );
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csv_file']                   = array(
 	'CSV file'

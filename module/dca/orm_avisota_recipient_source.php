@@ -115,17 +115,20 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 		'default'  => array(
 			'source' => array('type')
 		),
+		'union'    => array(
+			'source'  => array('title', 'alias', 'type'),
+			'union'   => array('unionRecipientSources', 'unionClean'),
+			'expert'  => array('disable'),
+		),
 		'csv_file' => array(
 			'source'  => array('title', 'alias', 'type'),
 			'csvFile' => array('csvFileSrc', 'csvColumnAssignment', 'csvFileDelimiter', 'csvFileEnclosure'),
-			'details' => array(),
 			'filter'  => array('filter'),
 			'expert'  => array('disable'),
 		),
 		'dummy'    => array(
 			'source'  => array('title', 'alias', 'type'),
 			'dummy'   => array('dummyMinCount', 'dummyMaxCount'),
-			'details' => array(),
 			'filter'  => array('filter'),
 			'expert'  => array('disable'),
 		),
@@ -200,6 +203,31 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
 				'helpwizard'         => true,
 				'tl_class'           => 'w50 wizard'
 			)
+		),
+		// union source
+		'unionRecipientSources'       => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['unionRecipientSources'],
+			'inputType' => 'checkboxWizard',
+			'options_callback' => \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory::createCallback(
+				\Avisota\Contao\Core\CoreEvents::CREATE_RECIPIENT_SOURCE_OPTIONS,
+				'Avisota\Contao\Core\Event\CreateOptionsEvent'
+			),
+			'eval'      => array(
+				'mandatory'  => true,
+				'multiple'   => true,
+			),
+			'field'     => array(
+				'type'     => 'serialized',
+				'length'   => 65532,
+				'nullable' => true,
+			),
+		),
+		'unionClean'  => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['unionClean'],
+			'inputType' => 'checkbox',
+			'field'     => array(),
 		),
 		// csv source
 		'csvFileSrc'           => array

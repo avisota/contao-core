@@ -154,6 +154,7 @@ $GLOBALS['BE_FFL']['columnAssignmentWizard'] = 'ColumnAssignmentWizard';
 /**
  * Recipient sources
  */
+$GLOBALS['AVISOTA_RECIPIENT_SOURCE']['union']    = 'Avisota\Contao\Core\RecipientSource\UnionFactory';
 $GLOBALS['AVISOTA_RECIPIENT_SOURCE']['csv_file'] = 'Avisota\Contao\Core\RecipientSource\CSVFileFactory';
 $GLOBALS['AVISOTA_RECIPIENT_SOURCE']['dummy']    = 'Avisota\Contao\Core\RecipientSource\DummyFactory';
 
