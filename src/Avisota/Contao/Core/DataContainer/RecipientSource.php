@@ -18,12 +18,15 @@ namespace Avisota\Contao\Core\DataContainer;
 use Avisota\RecipientSource\RecipientSourceInterface;
 use Contao\Doctrine\ORM\EntityHelper;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
+use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PrePersistModelEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -116,25 +119,46 @@ class RecipientSource implements EventSubscriberInterface
 		$action = $event->getAction();
 
 		if ($action->getName() == 'list') {
-			$input      = $environment->getInputProvider();
-			$id         = IdSerializer::fromSerialized($input->getParameter('id'));
-			$repository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
-
-			/** @var \Avisota\Contao\Entity\RecipientSource $recipientSourceEntity */
-			$recipientSourceEntity = $repository->find($id->getId());
-
-			/** @var RecipientSourceInterface $recipientSource */
-			$recipientSource = $GLOBALS['container'][sprintf('avisota.recipientSource.%s', $recipientSourceEntity->getId())];
-
-			$recipients = $recipientSource->getRecipients(50);
-			$total      = $recipientSource->countRecipients();
-
-			$template = new \TwigBackendTemplate('avisota/backend/recipient_source_list');
-			$template->recipients = $recipients;
-			$template->total      = $total;
-
-			$event->setResponse($template->parse());
+			$response = $this->handleListAction($environment);
+			$event->setResponse($response);
 		}
+	}
+
+	public function handleListAction(EnvironmentInterface $environment)
+	{
+		$input      = $environment->getInputProvider();
+		$id         = IdSerializer::fromSerialized($input->getParameter('id'));
+		$repository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
+
+		/** @var \Avisota\Contao\Entity\RecipientSource $recipientSourceEntity */
+		$recipientSourceEntity = $repository->find($id->getId());
+
+		/** @var RecipientSourceInterface $recipientSource */
+		$recipientSource = $GLOBALS['container'][sprintf('avisota.recipientSource.%s', $recipientSourceEntity->getId())];
+
+		if ($input->getValue('page')) {
+			/** @var EventDispatcher $eventDispatcher */
+			$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+
+			$addToUrlEvent = new AddToUrlEvent('page=' . (int) $input->getValue('page'));
+			$eventDispatcher->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $addToUrlEvent);
+
+			$redirectEvent = new RedirectEvent($addToUrlEvent->getUrl());
+			$eventDispatcher->dispatch(ContaoEvents::CONTROLLER_REDIRECT, $redirectEvent);
+		}
+
+		$total      = $recipientSource->countRecipients();
+		$page       = $input->getParameter('page') ?: 0;
+		$pages      = ceil($total / 30);
+		$recipients = $recipientSource->getRecipients(30, $page * 30);
+
+		$template = new \TwigBackendTemplate('avisota/backend/recipient_source_list');
+		$template->total      = $total;
+		$template->page       = $page;
+		$template->pages      = $pages;
+		$template->recipients = $recipients;
+
+		return $template->parse();
 	}
 
 	public function getRecipientColumns()
