@@ -127,6 +127,12 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['toggle']['0']              
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['toggle']['1']                                    = 'Activar/deactivar la funtauna cun l\'ID %s';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['type']['0']                                      = 'Modul da funtauna per desintaturs';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['type']['1']                                      = 'Tscherna il modul che porscha las datas dals destinaturs.';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['union']['0']                                     = 'Union';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['unionClean']['0']                                = 'Modus schuber';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['unionClean']['1']                                = 'En il modus schuber vegnan endatazins dublas filtradas. Quest modus dovra bler dapli cpu e memori e pudess esser plaun en per lungas glistas da recipients!';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['unionRecipientSources']['0']                     = 'Funtauna da destinaturs';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['unionRecipientSources']['1']                     = 'Tscherna las funtaunas da destinaturs per unifitgar.';
+$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['union_legend']                                   = 'Union';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['up']['0']                                        = 'Augmentar la prioritad';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['up']['1']                                        = 'Augmentar la prioritad da la funtauna da destinaturs cun l\'ID %s';
 
