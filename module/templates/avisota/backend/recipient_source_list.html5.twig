@@ -1,3 +1,29 @@
+<form action="{{ _env.request }}" class="tl_form" method="post">
+	<div class="tl_formbody">
+		<input type="hidden" name="FORM_SUBMIT" value="tl_filters">
+		<input type="hidden" name="REQUEST_TOKEN" value="{{ REQUEST_TOKEN }}">
+
+		<div class="tl_panel">
+			<div class="tl_submit_panel tl_subpanel">
+				<input type="image" name="filter" id="filter" src="system/themes/{{ _theme }}/images/reload.gif"
+					   class="tl_img_submit" title="" alt="Anwenden">
+			</div>
+
+			<div class="tl_limit tl_subpanel">
+				<strong>{{ _lang.MSC.showOnly }}:</strong>
+				<select name="page" class="tl_select" onchange="this.form.submit()">
+					<option value="page">{{ _lang.MSC.filterRecords }}</option>
+					{% for p in range(0, pages-1) %}
+					<option value="{{ p }}"{% if page == p %} selected=""{% endif %}>{{ (p*30)+1 }} - {{ (p+1)*30 }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="clear"></div>
+		</div>
+	</div>
+</form>
+
 <div class="tl_listing_container list_view avisota_recipient_source_listing">
 	{% if recipients is not empty %}
 		{% set firstRecipient = recipients|first %}
@@ -23,4 +49,19 @@
 		<br>
 	{% endif %}
 	<p><strong>Total:</strong> {{ total }}</p>
+</div>
+
+<div class="pagination pagination-lp">
+	<p>{{ _lang.MSC.totalPages|format(page+1, pages) }}</p>
+	<ul>
+		{% for p in range(0, pages-1) %}
+			<li>
+				{% if page == p %}
+					<span class="current">{{ p+1 }}</span>
+				{% else %}
+					<a href="{{ addToUrl({ "page": p }) }}" class="link" title="">{{ p+1 }}</a>
+				{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
 </div>
