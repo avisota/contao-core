@@ -21,18 +21,18 @@
 	font-size: 14px;
 }
 .nested_menu.avisota_config .promotion a {
-	color: #8ab858;
+	color: inherit;
 }
-.nested_menu.avisota_config .promotion .donate img,
-.nested_menu.avisota_config .promotion .business img {
+.nested_menu.avisota_config .promotion .opensource img,
+.nested_menu.avisota_config .promotion .partners img {
 	float: left;
 	margin-right: .66em;
 }
-.nested_menu.avisota_config .promotion.donate-and-business .donate {
+.nested_menu.avisota_config .promotion .opensource {
 	float: left;
 	width: 49%;
 }
-.nested_menu.avisota_config .promotion .business {
+.nested_menu.avisota_config .promotion .partners {
 	float: right;
 	width: 50%;
 }
