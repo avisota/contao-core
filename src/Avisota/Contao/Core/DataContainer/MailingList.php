@@ -42,7 +42,7 @@ class MailingList extends \Backend
 
 		$event = new MailingListCreateLabelEvent(new \ArrayObject($rowData), $label);
 
-		/** @var EventDispatcher $eventDispatcher */
+		/** @var EventDispatcherInt $eventDispatcher */
 		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 		$eventDispatcher->dispatch(MailingListCreateLabelEvent::NAME, $event);
 

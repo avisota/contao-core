@@ -48,7 +48,11 @@ class NestedMenu extends \Controller
 		if ($do == 'avisota_config') {
 			return sprintf(
 				'<div class="avisota-logo"><a href="http://avisota.org" target="_blank">%s</a></div>',
-				$this->generateImage('assets/avisota/core/images/logo.png', 'Avisota newsletter and mailing system')
+				\Image::getHtml(
+                    'assets/avisota/core/images/logo.svg',
+                    'Avisota newsletter and mailing system',
+                    'width="300"'
+                )
 			);
 		}
 	}
@@ -65,9 +69,15 @@ class NestedMenu extends \Controller
 			);
 
 			$context = array(
-				'donate'     => $GLOBALS['TL_LANG']['avisota_promotion']['donate'],
-				'copyright'  => 'Avisota newsletter and mailing system &copy; 2013 bit3 UG and all <a href="https://github.com/avisota/contao/graphs/contributors" target="_blank">contributors</a>',
-				'disclaimer' => 'Avisota use icons from the <a href="http://www.famfamfam.com/" target="_blank">famfamfam silk icons</a> and <a href="http://www.picol.org/" target="_blank">Picol Vector icons</a>.',
+				'opensource' => $GLOBALS['TL_LANG']['avisota_promotion']['opensource'],
+				'partners'   => $GLOBALS['TL_LANG']['avisota_promotion']['partners'],
+				'copyright'  => 'Avisota newsletter and mailing system &copy; 2013-2014 bit3 UG and all <a href="https://github.com/avisota/contao/graphs/contributors" target="_blank">contributors</a>',
+				'disclaimer' => <<<HTML
+Avisota use icons from the <a href="http://www.famfamfam.com/" target="_blank">famfamfam silk icons</a> and
+<a href="http://www.picol.org/" target="_blank">Picol Vector icons</a>,
+licensed under the <a href="http://creativecommons.org/licenses/by/3.0/">CC-BY-3.0.</a>
+HTML
+            ,
 			);
 
 			$template = new \TwigTemplate('avisota/backend/config_footer', 'html5');
