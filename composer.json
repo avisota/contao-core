@@ -1,93 +1,93 @@
 {
-  "name": "avisota/contao-core",
-  "description": "Avisota newslettersystem for contao",
-  "keywords": [
-    "avisota",
-    "email",
-    "mail",
-    "newsletter",
-    "marketing"
-  ],
-  "type": "contao-module",
-  "homepage": "http://avisota.org",
-  "license": "LGPL-3.0+",
-  "authors": [
-    {
-      "name": "Tristan Lins",
-      "email": "tristan.lins@bit3.de",
-      "homepage": "http://bit3.de",
-      "role": "Developer"
+    "name": "avisota/contao-core",
+    "description": "Avisota newslettersystem for contao",
+    "keywords": [
+        "avisota",
+        "email",
+        "mail",
+        "newsletter",
+        "marketing"
+    ],
+    "type": "contao-module",
+    "homepage": "http://avisota.org",
+    "license": "LGPL-3.0+",
+    "authors": [
+        {
+            "name": "Tristan Lins",
+            "email": "tristan.lins@bit3.de",
+            "homepage": "http://bit3.de",
+            "role": "Developer"
+        },
+        {
+            "name": "Sven Baumann",
+            "email": "baumann.sv@gmail.com",
+            "homepage": "http://avisota.org",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "support@avisota.de",
+        "issues": "https://avisota.atlassian.net/browse/CC",
+        "forum": "https://community.contao.org/de/forumdisplay.php?121-Avisota",
+        "wiki": "http://de.contaowiki.org/Kategorie:Avisota",
+        "irc": "irc://irc.freenode.org/avisota",
+        "source": "https://github.com/avisota/contao-core"
     },
-    {
-      "name": "Sven Baumann",
-      "email": "baumann.sv@gmail.com",
-      "homepage": "http://avisota.org",
-      "role": "Developer"
-    }
-  ],
-  "support": {
-    "email": "support@avisota.de",
-    "issues": "https://avisota.atlassian.net/browse/CC",
-    "forum": "https://community.contao.org/de/forumdisplay.php?121-Avisota",
-    "wiki": "http://de.contaowiki.org/Kategorie:Avisota",
-    "irc": "irc://irc.freenode.org/avisota",
-    "source": "https://github.com/avisota/contao-core"
-  },
-  "require": {
-    "php": ">=5.3",
-    "contao-community-alliance/composer-plugin": "~2.0",
-    "contao/core": ">=2.11.11,<3.5",
-    "avisota/core": "~1.2",
-    "contao-community-alliance/backports-initialize-system": "~1.0",
-    "contao-community-alliance/console": "~1.0",
-    "contao-community-alliance/dc-general": "2.0.0-beta23",
-    "contao-community-alliance/events-contao-bindings": ">=2.0,<4-dev",
-    "contao-community-alliance/dependency-container": "~1.5",
-    "contao-community-alliance/event-dispatcher": "~1.1",
-    "contao-community-alliance/events-cron": "*",
-    "contao-community-alliance/events-create-options": "*",
-    "menatwork/contao-multicolumnwizard": "~3.0",
-    "contaoblackforest/contao-compat": "~1.3",
-    "contaoblackforest/contao-doctrine-orm": ">=2.2.2,<3-dev",
-    "contaoblackforest/contao-doctrine-orm-timestampable": ">=2.0.6",
-    "bit3/contao-nested-menu": "~1.0",
-    "contao-community-alliance/contao-twig": ">=1.11.1,<1.12",
-    "contao-community-alliance/meta-palettes": "~1.0",
-    "contaoblackforest/contao-logger": "~2.0",
-    "bit3/php-string-builder": "~1.0",
-    "symfony/http-foundation": "~2.3"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "3.7.*",
-    "squizlabs/php_codesniffer": "1.*",
-    "bit3/php-coding-standard": "~2.2"
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "conflict": {
-    "contao-legacy/avisota": "*",
-    "contao-legacy/avisota2": "*"
-  },
-  "autoload": {
-    "psr-0": {
-      "Avisota\\Contao\\Core": "src/"
-    }
-  },
-  "extra": {
-    "contao": {
-      "sources": {
-        "module": "system/modules/avisota-core",
-        "assets": "assets/avisota/core"
-      },
-      "transifex": {
-        "project": "avisota-contao",
-        "prefix": "contao-core-",
-        "languages_cto": "module/languages",
-        "languages_tx": ".tx"
-      }
+    "require": {
+        "php": ">=5.3",
+        "contao-community-alliance/composer-plugin": "~2.3",
+        "contao/core": ">=2.11.11,<3.6",
+        "avisota/core": "~1.2",
+        "contao-community-alliance/backports-initialize-system": "~1.0",
+        "contao-community-alliance/console": "~1.0",
+        "contao-community-alliance/dc-general": "dev-develop",
+        "contao-community-alliance/events-contao-bindings": "~3.2",
+        "contao-community-alliance/dependency-container": "~1.8",
+        "contao-community-alliance/event-dispatcher": "~1.3",
+        "contao-community-alliance/events-cron": "~1.0",
+        "contao-community-alliance/events-create-options": "~1.0",
+        "menatwork/contao-multicolumnwizard": "~3.3",
+        "contaoblackforest/contao-compat": "~1.3",
+        "contaoblackforest/contao-doctrine-orm": "~2.3",
+        "contaoblackforest/contao-doctrine-orm-timestampable": "~2.0",
+        "bit3/contao-nested-menu": "~1.1",
+        "contao-community-alliance/contao-twig": "~1.11",
+        "contao-community-alliance/meta-palettes": "~1.9",
+        "contaoblackforest/contao-logger": "~2.0",
+        "bit3/php-string-builder": "~1.1",
+        "symfony/http-foundation": "~2.7"
     },
-    "branch-alias": {
-      "dev-develop": "2.0.x-dev"
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "squizlabs/php_codesniffer": "1.*",
+        "bit3/php-coding-standard": "~2.2"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "conflict": {
+        "contao-legacy/avisota": "*",
+        "contao-legacy/avisota2": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Avisota\\Contao\\Core": "src/"
+        }
+    },
+    "extra": {
+        "contao": {
+            "sources": {
+                "module": "system/modules/avisota-core",
+                "assets": "assets/avisota/core"
+            },
+            "transifex": {
+                "project": "avisota-contao",
+                "prefix": "contao-core-",
+                "languages_cto": "module/languages",
+                "languages_tx": ".tx"
+            }
+        },
+        "branch-alias": {
+            "dev-develop": "2.0.x-dev"
+        }
     }
-  }
 }
