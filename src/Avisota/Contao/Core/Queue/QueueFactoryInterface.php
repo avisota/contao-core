@@ -19,5 +19,5 @@ use Avisota\Contao\Entity\Queue;
 
 interface QueueFactoryInterface
 {
-	public function createQueue(Queue $queueEntity);
+    public function createQueue(Queue $queueEntity);
 }

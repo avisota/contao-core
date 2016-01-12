@@ -23,44 +23,44 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class EventSubscriber implements EventSubscriberInterface
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	static public function getSubscribedEvents()
-	{
-		return array(
-			CoreEvents::CREATE_FAKE_RECIPIENT         => 'createFakeRecipient',
-			CoreEvents::CREATE_PUBLIC_EMPTY_RECIPIENT => 'createPublicEmptyRecipient',
-		);
-	}
+    /**
+     * {@inheritdoc}
+     */
+    static public function getSubscribedEvents()
+    {
+        return array(
+            CoreEvents::CREATE_FAKE_RECIPIENT         => 'createFakeRecipient',
+            CoreEvents::CREATE_PUBLIC_EMPTY_RECIPIENT => 'createPublicEmptyRecipient',
+        );
+    }
 
-	/**
-	 * Create a new fake recipient, if no one is created yet.
-	 *
-	 * @param CreateFakeRecipientEvent $event
-	 */
-	public function createFakeRecipient(CreateFakeRecipientEvent $event)
-	{
-		if ($event->getRecipient()) {
-			return;
-		}
+    /**
+     * Create a new fake recipient, if no one is created yet.
+     *
+     * @param CreateFakeRecipientEvent $event
+     */
+    public function createFakeRecipient(CreateFakeRecipientEvent $event)
+    {
+        if ($event->getRecipient()) {
+            return;
+        }
 
-		$locale = null;
-		if ($event->getMessage()) {
-			$locale = $event->getMessage()->getLanguage();
-		}
+        $locale = null;
+        if ($event->getMessage()) {
+            $locale = $event->getMessage()->getLanguage();
+        }
 
-		$event->setRecipient(new FakeRecipient($locale));
-	}
+        $event->setRecipient(new FakeRecipient($locale));
+    }
 
-	public function createPublicEmptyRecipient(CreatePublicEmptyRecipientEvent $event)
-	{
-		if ($event->getRecipient()) {
-			return;
-		}
+    public function createPublicEmptyRecipient(CreatePublicEmptyRecipientEvent $event)
+    {
+        if ($event->getRecipient()) {
+            return;
+        }
 
-		$environment = \Environment::getInstance();
+        $environment = \Environment::getInstance();
 
-		$event->setRecipient(new MutableRecipient('noreply@' . $environment->host));
-	}
+        $event->setRecipient(new MutableRecipient('noreply@' . $environment->host));
+    }
 }

@@ -19,10 +19,10 @@ use Avisota\Contao\Entity\Transport;
 
 class ServiceTransportFactory implements TransportFactoryInterface
 {
-	public function createTransport(Transport $transport)
-	{
-		global $container;
+    public function createTransport(Transport $transport)
+    {
+        global $container;
 
-		return $container[$transport->getServiceName()];
-	}
+        return $container[$transport->getServiceName()];
+    }
 }

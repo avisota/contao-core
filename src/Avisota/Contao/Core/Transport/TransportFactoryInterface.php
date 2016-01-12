@@ -19,5 +19,5 @@ use Avisota\Contao\Entity\Transport;
 
 interface TransportFactoryInterface
 {
-	public function createTransport(Transport $transport);
+    public function createTransport(Transport $transport);
 }

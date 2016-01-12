@@ -28,156 +28,156 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class OptionsBuilder implements EventSubscriberInterface
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	static public function getSubscribedEvents()
-	{
-		return array(
-			CoreEvents::CREATE_MAILING_LIST_OPTIONS              => 'createMailingListOptions',
-			CoreEvents::CREATE_RECIPIENT_SOURCE_OPTIONS          => 'createRecipientSourceOptions',
-			CoreEvents::CREATE_QUEUE_OPTIONS                     => 'createQueueOptions',
-			CoreEvents::CREATE_TRANSPORT_OPTIONS                 => 'createTransportOptions',
-			'avisota.create-gallery-options'                     => 'createGalleryTemplateOptions',
-			'avisota.create-reader-module-template-options'      => 'createReaderModuleTemplateOptions',
-		);
-	}
+    /**
+     * {@inheritdoc}
+     */
+    static public function getSubscribedEvents()
+    {
+        return array(
+            CoreEvents::CREATE_MAILING_LIST_OPTIONS         => 'createMailingListOptions',
+            CoreEvents::CREATE_RECIPIENT_SOURCE_OPTIONS     => 'createRecipientSourceOptions',
+            CoreEvents::CREATE_QUEUE_OPTIONS                => 'createQueueOptions',
+            CoreEvents::CREATE_TRANSPORT_OPTIONS            => 'createTransportOptions',
+            'avisota.create-gallery-options'                => 'createGalleryTemplateOptions',
+            'avisota.create-reader-module-template-options' => 'createReaderModuleTemplateOptions',
+        );
+    }
 
-	public function createMailingListOptions(CreateOptionsEvent $event)
-	{
-		$this->getMailingListOptions($event->getOptions());
-	}
+    public function createMailingListOptions(CreateOptionsEvent $event)
+    {
+        $this->getMailingListOptions($event->getOptions());
+    }
 
-	public function getMailingListOptions($options = array())
-	{
-		if (!is_array($options) && !$options instanceof \ArrayAccess) {
-			$options = array();
-		}
-		$mailingListRepository = EntityHelper::getRepository('Avisota\Contao:MailingList');
-		$mailingLists          = $mailingListRepository->findBy(array(), array('title' => 'ASC'));
-		/** @var \Avisota\Contao\Entity\MailingList $mailingList */
-		foreach ($mailingLists as $mailingList) {
-			$options[$mailingList->getId()] = $mailingList->getTitle();
-		}
-		return $options;
-	}
+    public function getMailingListOptions($options = array())
+    {
+        if (!is_array($options) && !$options instanceof \ArrayAccess) {
+            $options = array();
+        }
+        $mailingListRepository = EntityHelper::getRepository('Avisota\Contao:MailingList');
+        $mailingLists          = $mailingListRepository->findBy(array(), array('title' => 'ASC'));
+        /** @var \Avisota\Contao\Entity\MailingList $mailingList */
+        foreach ($mailingLists as $mailingList) {
+            $options[$mailingList->getId()] = $mailingList->getTitle();
+        }
+        return $options;
+    }
 
-	public function createRecipientSourceOptions(CreateOptionsEvent $event)
-	{
-		$this->getRecipientSourceOptions($event->getOptions());
-	}
+    public function createRecipientSourceOptions(CreateOptionsEvent $event)
+    {
+        $this->getRecipientSourceOptions($event->getOptions());
+    }
 
-	public function getRecipientSourceOptions($options = array())
-	{
-		if (!is_array($options) && !$options instanceof \ArrayAccess) {
-			$options = array();
-		}
-		$recipientSourceRepository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
-		$recipientSources          = $recipientSourceRepository->findBy(array(), array('title' => 'ASC'));
-		/** @var \Avisota\Contao\Entity\RecipientSource $recipientSource */
-		foreach ($recipientSources as $recipientSource) {
-			$options[$recipientSource->getId()] = $recipientSource->getTitle();
-		}
-		return $options;
-	}
+    public function getRecipientSourceOptions($options = array())
+    {
+        if (!is_array($options) && !$options instanceof \ArrayAccess) {
+            $options = array();
+        }
+        $recipientSourceRepository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
+        $recipientSources          = $recipientSourceRepository->findBy(array(), array('title' => 'ASC'));
+        /** @var \Avisota\Contao\Entity\RecipientSource $recipientSource */
+        foreach ($recipientSources as $recipientSource) {
+            $options[$recipientSource->getId()] = $recipientSource->getTitle();
+        }
+        return $options;
+    }
 
-	public function createQueueOptions(CreateOptionsEvent $event)
-	{
-		$this->getQueueOptions($event->getOptions());
-	}
+    public function createQueueOptions(CreateOptionsEvent $event)
+    {
+        $this->getQueueOptions($event->getOptions());
+    }
 
-	public function getQueueOptions($options = array())
-	{
-		if (!is_array($options) && !$options instanceof \ArrayAccess) {
-			$options = array();
-		}
-		$queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
-		$queues          = $queueRepository->findBy(array(), array('title' => 'ASC'));
-		/** @var \Avisota\Contao\Entity\Queue $queue */
-		foreach ($queues as $queue) {
-			$options[$queue->getId()] = $queue->getTitle();
-		}
-		return $options;
-	}
+    public function getQueueOptions($options = array())
+    {
+        if (!is_array($options) && !$options instanceof \ArrayAccess) {
+            $options = array();
+        }
+        $queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
+        $queues          = $queueRepository->findBy(array(), array('title' => 'ASC'));
+        /** @var \Avisota\Contao\Entity\Queue $queue */
+        foreach ($queues as $queue) {
+            $options[$queue->getId()] = $queue->getTitle();
+        }
+        return $options;
+    }
 
-	public function bypassCreateTransportOptions()
-	{
-	}
+    public function bypassCreateTransportOptions()
+    {
+    }
 
-	public function createTransportOptions(CreateOptionsEvent $event)
-	{
-		$this->getTransportOptions($event->getOptions());
-	}
+    public function createTransportOptions(CreateOptionsEvent $event)
+    {
+        $this->getTransportOptions($event->getOptions());
+    }
 
-	public function getTransportOptions($options = array())
-	{
-		if (!is_array($options) && !$options instanceof \ArrayAccess) {
-			$options = array();
-		}
-		$transportRepository = EntityHelper::getRepository('Avisota\Contao:Transport');
-		$transports          = $transportRepository->findBy(array(), array('title' => 'ASC'));
-		/** @var \Avisota\Contao\Entity\Transport $transport */
-		foreach ($transports as $transport) {
-			$options[$transport->getId()] = $transport->getTitle();
-		}
-		return $options;
-	}
+    public function getTransportOptions($options = array())
+    {
+        if (!is_array($options) && !$options instanceof \ArrayAccess) {
+            $options = array();
+        }
+        $transportRepository = EntityHelper::getRepository('Avisota\Contao:Transport');
+        $transports          = $transportRepository->findBy(array(), array('title' => 'ASC'));
+        /** @var \Avisota\Contao\Entity\Transport $transport */
+        foreach ($transports as $transport) {
+            $options[$transport->getId()] = $transport->getTitle();
+        }
+        return $options;
+    }
 
-	public function createGalleryTemplateOptions(CreateOptionsEvent $event)
-	{
-		$this->getGalleryTemplateOptions($event->getDataContainer(), $event->getOptions());
-	}
+    public function createGalleryTemplateOptions(CreateOptionsEvent $event)
+    {
+        $this->getGalleryTemplateOptions($event->getDataContainer(), $event->getOptions());
+    }
 
-	/**
-	 * Return all gallery templates as array
-	 *
-	 * @param object
-	 *
-	 * @return array
-	 */
-	public function getGalleryTemplateOptions(DC_General $dc, $options = array())
-	{
-		if (!is_array($options) && !$options instanceof \ArrayAccess) {
-			$options = array();
-		}
+    /**
+     * Return all gallery templates as array
+     *
+     * @param object
+     *
+     * @return array
+     */
+    public function getGalleryTemplateOptions(DC_General $dc, $options = array())
+    {
+        if (!is_array($options) && !$options instanceof \ArrayAccess) {
+            $options = array();
+        }
 
-		// Get the page ID
-		$article = \Database::getInstance()
-			->prepare("SELECT pid FROM tl_article WHERE id=?")
-			->limit(1)
-			->execute(
-				$dc
-					->getEnvironment()
-					->getCurrentModel()
-					->getProperty('pid')
-			);
+        // Get the page ID
+        $article = \Database::getInstance()
+            ->prepare("SELECT pid FROM tl_article WHERE id=?")
+            ->limit(1)
+            ->execute(
+                $dc
+                    ->getEnvironment()
+                    ->getCurrentModel()
+                    ->getProperty('pid')
+            );
 
-		// Inherit the page settings
-		$page = $this->getPageDetails($article->pid);
+        // Inherit the page settings
+        $page = $this->getPageDetails($article->pid);
 
-		// Get the theme ID
-		$layout = \Database::getInstance()
-			->prepare("SELECT pid FROM tl_layout WHERE id=?")
-			->limit(1)
-			->execute($page->layout);
+        // Get the theme ID
+        $layout = \Database::getInstance()
+            ->prepare("SELECT pid FROM tl_layout WHERE id=?")
+            ->limit(1)
+            ->execute($page->layout);
 
-		// Return all gallery templates
-		$templateGroup = $this->getTemplateGroup('nl_gallery_', $layout->pid);
+        // Return all gallery templates
+        $templateGroup = $this->getTemplateGroup('nl_gallery_', $layout->pid);
 
-		foreach ($templateGroup as $key => $value) {
-			$options[$key] = $value;
-		}
+        foreach ($templateGroup as $key => $value) {
+            $options[$key] = $value;
+        }
 
-		return $options;
-	}
+        return $options;
+    }
 
-	public function createReaderModuleTemplateOptions(CreateOptionsEvent $event)
-	{
-		$options   = $event->getOptions();
-		$templates = \TwigHelper::getTemplateGroup('avisota_reader_');
+    public function createReaderModuleTemplateOptions(CreateOptionsEvent $event)
+    {
+        $options   = $event->getOptions();
+        $templates = \TwigHelper::getTemplateGroup('avisota_reader_');
 
-		foreach ($templates as $key => $value) {
-			$options[$key] = $value;
-		}
-	}
+        foreach ($templates as $key => $value) {
+            $options[$key] = $value;
+        }
+    }
 }

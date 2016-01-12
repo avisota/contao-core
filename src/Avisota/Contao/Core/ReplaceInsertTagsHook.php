@@ -26,13 +26,13 @@ use Exception;
  */
 class ReplaceInsertTagsHook extends \Controller
 {
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	public function replaceInsertTags($strBuffer, $blnCache = false)
-	{
-		return parent::replaceInsertTags($strBuffer, $blnCache);
-	}
+    public function replaceInsertTags($strBuffer, $blnCache = false)
+    {
+        return parent::replaceInsertTags($strBuffer, $blnCache);
+    }
 }

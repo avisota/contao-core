@@ -20,20 +20,19 @@ use Contao\Doctrine\ORM\EntityHelper;
 
 class CustomMenu
 {
-	static public function hookGetUserNavigation(array $navigation, $showAll)
-	{
-		if (TL_MODE == 'BE' && is_array($navigation['avisota']['modules'])) {
-			try {
-				$GLOBALS['TL_CSS']['avisota-be-global'] = 'assets/avisota/core/css/be_global.css';
+    static public function hookGetUserNavigation(array $navigation, $showAll)
+    {
+        if (TL_MODE == 'BE' && is_array($navigation['avisota']['modules'])) {
+            try {
+                $GLOBALS['TL_CSS']['avisota-be-global'] = 'assets/avisota/core/css/be_global.css';
 
-				if (Outbox::isEmpty()) {
-					$navigation['avisota']['modules']['avisota_outbox']['class'] .= ' avisota_outbox_empty';
-				}
-			}
-			catch (\Exception $exception) {
-				// silently ignore
-			}
-		}
-		return $navigation;
-	}
+                if (Outbox::isEmpty()) {
+                    $navigation['avisota']['modules']['avisota_outbox']['class'] .= ' avisota_outbox_empty';
+                }
+            } catch (\Exception $exception) {
+                // silently ignore
+            }
+        }
+        return $navigation;
+    }
 }

@@ -34,204 +34,204 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class RecipientSource implements EventSubscriberInterface
 {
-	static protected $instance;
+    static protected $instance;
 
-	/**
-	 * @return mixed
-	 */
-	static public function getInstance()
-	{
-		if (static::$instance === null) {
-			static::$instance = new static();
-		}
-		return static::$instance;
-	}
+    /**
+     * @return mixed
+     */
+    static public function getInstance()
+    {
+        if (static::$instance === null) {
+            static::$instance = new static();
+        }
+        return static::$instance;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	static public function getSubscribedEvents()
-	{
-		return array(
-			EncodePropertyValueFromWidgetEvent::NAME . '[orm_avisota_recipient_source][csvColumnAssignment]' => array(
-				array('checkCsvColumnUnique'),
-				array('checkCsvColumnEmail'),
-			),
-			DcGeneralEvents::ACTION => 'handleAction',
-		);
-	}
+    /**
+     * {@inheritdoc}
+     */
+    static public function getSubscribedEvents()
+    {
+        return array(
+            EncodePropertyValueFromWidgetEvent::NAME . '[orm_avisota_recipient_source][csvColumnAssignment]' => array(
+                array('checkCsvColumnUnique'),
+                array('checkCsvColumnEmail'),
+            ),
+            DcGeneralEvents::ACTION                                                                          => 'handleAction',
+        );
+    }
 
-	public function __construct()
-	{
-		static::$instance = $this;
-	}
+    public function __construct()
+    {
+        static::$instance = $this;
+    }
 
-	public function checkCsvColumnUnique(EncodePropertyValueFromWidgetEvent $event)
-	{
-		$value = $event->getValue();
+    public function checkCsvColumnUnique(EncodePropertyValueFromWidgetEvent $event)
+    {
+        $value = $event->getValue();
 
-		if (!is_array($value)) {
-			$value = deserialize($value, true);
-		}
+        if (!is_array($value)) {
+            $value = deserialize($value, true);
+        }
 
-		$columns = array();
-		$fields  = array();
+        $columns = array();
+        $fields  = array();
 
-		foreach ($value as $item) {
-			if (
-				in_array($item['column'], $columns)
-				|| in_array($item['field'], $fields)
-			) {
-				throw new \RuntimeException($GLOBALS['TL_LANG']['orm_avisota_recipient_source']['duplicated_column']);
-			}
+        foreach ($value as $item) {
+            if (
+                in_array($item['column'], $columns)
+                || in_array($item['field'], $fields)
+            ) {
+                throw new \RuntimeException($GLOBALS['TL_LANG']['orm_avisota_recipient_source']['duplicated_column']);
+            }
 
-			$columns[] = $item['column'];
-			$fields[]  = $item['field'];
-		}
+            $columns[] = $item['column'];
+            $fields[]  = $item['field'];
+        }
 
-	}
+    }
 
-	public function checkCsvColumnEmail(EncodePropertyValueFromWidgetEvent $event)
-	{
-		$value = $event->getValue();
+    public function checkCsvColumnEmail(EncodePropertyValueFromWidgetEvent $event)
+    {
+        $value = $event->getValue();
 
-		if (!is_array($value)) {
-			$value = deserialize($value, true);
-		}
+        if (!is_array($value)) {
+            $value = deserialize($value, true);
+        }
 
-		foreach ($value as $item) {
-			if ($item['field'] == 'email') {
-				return;
-			}
-		}
+        foreach ($value as $item) {
+            if ($item['field'] == 'email') {
+                return;
+            }
+        }
 
-		throw new \RuntimeException($GLOBALS['TL_LANG']['orm_avisota_recipient_source']['missing_email_column']);
-	}
+        throw new \RuntimeException($GLOBALS['TL_LANG']['orm_avisota_recipient_source']['missing_email_column']);
+    }
 
-	public function handleAction(ActionEvent $event)
-	{
-		$environment = $event->getEnvironment();
+    public function handleAction(ActionEvent $event)
+    {
+        $environment = $event->getEnvironment();
 
-		if ($environment->getDataDefinition()->getName() != 'orm_avisota_recipient_source') {
-			return;
-		}
+        if ($environment->getDataDefinition()->getName() != 'orm_avisota_recipient_source') {
+            return;
+        }
 
-		$action = $event->getAction();
+        $action = $event->getAction();
 
-		if ($action->getName() == 'list') {
-			$response = $this->handleListAction($environment);
-			$event->setResponse($response);
-		}
-	}
+        if ($action->getName() == 'list') {
+            $response = $this->handleListAction($environment);
+            $event->setResponse($response);
+        }
+    }
 
-	public function handleListAction(EnvironmentInterface $environment)
-	{
-		$input      = $environment->getInputProvider();
-		$id         = IdSerializer::fromSerialized($input->getParameter('id'));
-		$repository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
+    public function handleListAction(EnvironmentInterface $environment)
+    {
+        $input      = $environment->getInputProvider();
+        $id         = IdSerializer::fromSerialized($input->getParameter('id'));
+        $repository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
 
-		/** @var \Avisota\Contao\Entity\RecipientSource $recipientSourceEntity */
-		$recipientSourceEntity = $repository->find($id->getId());
+        /** @var \Avisota\Contao\Entity\RecipientSource $recipientSourceEntity */
+        $recipientSourceEntity = $repository->find($id->getId());
 
-		/** @var RecipientSourceInterface $recipientSource */
-		$recipientSource = $GLOBALS['container'][sprintf('avisota.recipientSource.%s', $recipientSourceEntity->getId())];
+        /** @var RecipientSourceInterface $recipientSource */
+        $recipientSource = $GLOBALS['container'][sprintf('avisota.recipientSource.%s', $recipientSourceEntity->getId())];
 
-		if ($input->getValue('page')) {
-			/** @var EventDispatcher $eventDispatcher */
-			$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+        if ($input->getValue('page')) {
+            /** @var EventDispatcher $eventDispatcher */
+            $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-			$addToUrlEvent = new AddToUrlEvent('page=' . (int) $input->getValue('page'));
-			$eventDispatcher->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $addToUrlEvent);
+            $addToUrlEvent = new AddToUrlEvent('page=' . (int) $input->getValue('page'));
+            $eventDispatcher->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $addToUrlEvent);
 
-			$redirectEvent = new RedirectEvent($addToUrlEvent->getUrl());
-			$eventDispatcher->dispatch(ContaoEvents::CONTROLLER_REDIRECT, $redirectEvent);
-		}
+            $redirectEvent = new RedirectEvent($addToUrlEvent->getUrl());
+            $eventDispatcher->dispatch(ContaoEvents::CONTROLLER_REDIRECT, $redirectEvent);
+        }
 
-		$total      = $recipientSource->countRecipients();
-		$page       = $input->getParameter('page') ?: 0;
-		$pages      = ceil($total / 30);
-		$recipients = $recipientSource->getRecipients(30, $page * 30);
+        $total      = $recipientSource->countRecipients();
+        $page       = $input->getParameter('page') ?: 0;
+        $pages      = ceil($total / 30);
+        $recipients = $recipientSource->getRecipients(30, $page * 30);
 
-		$template = new \TwigBackendTemplate('avisota/backend/recipient_source_list');
-		$template->total      = $total;
-		$template->page       = $page;
-		$template->pages      = $pages;
-		$template->recipients = $recipients;
+        $template             = new \TwigBackendTemplate('avisota/backend/recipient_source_list');
+        $template->total      = $total;
+        $template->page       = $page;
+        $template->pages      = $pages;
+        $template->recipients = $recipients;
 
-		return $template->parse();
-	}
+        return $template->parse();
+    }
 
-	public function getRecipientColumns()
-	{
-		/** @var EventDispatcher $eventDispatcher */
-		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+    public function getRecipientColumns()
+    {
+        /** @var EventDispatcher $eventDispatcher */
+        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-		$eventDispatcher->dispatch(
-			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-			new LoadLanguageFileEvent('orm_avisota_recipient')
-		);
-		$eventDispatcher->dispatch(
-			ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER,
-			new LoadDataContainerEvent('orm_avisota_recipient')
-		);
+        $eventDispatcher->dispatch(
+            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+            new LoadLanguageFileEvent('orm_avisota_recipient')
+        );
+        $eventDispatcher->dispatch(
+            ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER,
+            new LoadDataContainerEvent('orm_avisota_recipient')
+        );
 
-		$options = array();
+        $options = array();
 
-		foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'] as $k => $v) {
-			if ($v['eval']['importable']) {
-				$options[$k] = $v['label'][0];
-			}
-		}
-		asort($options);
+        foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'] as $k => $v) {
+            if ($v['eval']['importable']) {
+                $options[$k] = $v['label'][0];
+            }
+        }
+        asort($options);
 
-		return $options;
-	}
+        return $options;
+    }
 
-	public function getRecipientFilterColumns()
-	{
-		/** @var EventDispatcher $eventDispatcher */
-		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+    public function getRecipientFilterColumns()
+    {
+        /** @var EventDispatcher $eventDispatcher */
+        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-		$eventDispatcher->dispatch(
-			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-			new LoadLanguageFileEvent('orm_avisota_recipient')
-		);
-		$eventDispatcher->dispatch(
-			ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER,
-			new LoadDataContainerEvent('orm_avisota_recipient')
-		);
+        $eventDispatcher->dispatch(
+            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+            new LoadLanguageFileEvent('orm_avisota_recipient')
+        );
+        $eventDispatcher->dispatch(
+            ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER,
+            new LoadDataContainerEvent('orm_avisota_recipient')
+        );
 
-		$options = array();
+        $options = array();
 
-		foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'] as $k => $v) {
-			$options[$k] = $v['label'][0] . ' (' . $k . ')';
-		}
-		asort($options);
+        foreach ($GLOBALS['TL_DCA']['orm_avisota_recipient']['fields'] as $k => $v) {
+            $options[$k] = $v['label'][0] . ' (' . $k . ')';
+        }
+        asort($options);
 
-		return $options;
-	}
+        return $options;
+    }
 
-	public function getMemberFilterColumns()
-	{
-		/** @var EventDispatcher $eventDispatcher */
-		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+    public function getMemberFilterColumns()
+    {
+        /** @var EventDispatcher $eventDispatcher */
+        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-		$eventDispatcher->dispatch(
-			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-			new LoadLanguageFileEvent('tl_member')
-		);
-		$eventDispatcher->dispatch(
-			ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER,
-			new LoadDataContainerEvent('tl_member')
-		);
+        $eventDispatcher->dispatch(
+            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+            new LoadLanguageFileEvent('tl_member')
+        );
+        $eventDispatcher->dispatch(
+            ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER,
+            new LoadDataContainerEvent('tl_member')
+        );
 
-		$options = array();
+        $options = array();
 
-		foreach ($GLOBALS['TL_DCA']['tl_member']['fields'] as $k => $v) {
-			$options[$k] = $v['label'][0] . ' (' . $k . ')';
-		}
-		asort($options);
+        foreach ($GLOBALS['TL_DCA']['tl_member']['fields'] as $k => $v) {
+            $options[$k] = $v['label'][0] . ' (' . $k . ')';
+        }
+        asort($options);
 
-		return $options;
-	}
+        return $options;
+    }
 }

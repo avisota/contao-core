@@ -21,31 +21,31 @@ use Doctrine\ORM\Query;
 
 class MailingList extends \Backend
 {
-	/**
-	 * Import the back end user object
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * Import the back end user object
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 * @param array          $rowData
-	 * @param string         $label
-	 * @param \DataContainer $dc
-	 *
-	 * @return string
-	 */
-	public function getLabel($rowData, $label, $dc)
-	{
-		$label = new \StringBuilder('<div style="padding: 3px 0;"><strong>' . $label . '</strong></div>');
+    /**
+     * @param array          $rowData
+     * @param string         $label
+     * @param \DataContainer $dc
+     *
+     * @return string
+     */
+    public function getLabel($rowData, $label, $dc)
+    {
+        $label = new \StringBuilder('<div style="padding: 3px 0;"><strong>' . $label . '</strong></div>');
 
-		$event = new MailingListCreateLabelEvent(new \ArrayObject($rowData), $label);
+        $event = new MailingListCreateLabelEvent(new \ArrayObject($rowData), $label);
 
-		/** @var EventDispatcherInt $eventDispatcher */
-		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-		$eventDispatcher->dispatch(MailingListCreateLabelEvent::NAME, $event);
+        /** @var EventDispatcherInt $eventDispatcher */
+        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+        $eventDispatcher->dispatch(MailingListCreateLabelEvent::NAME, $event);
 
-		return (string) $label;
-	}
+        return (string) $label;
+    }
 }

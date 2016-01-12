@@ -21,43 +21,43 @@ use Symfony\Component\EventDispatcher\Event;
 
 class CreatePublicEmptyRecipientEvent extends Event
 {
-	/**
-	 * @var Message|null
-	 */
-	protected $message;
+    /**
+     * @var Message|null
+     */
+    protected $message;
 
-	/**
-	 * @var RecipientInterface
-	 */
-	protected $recipient;
+    /**
+     * @var RecipientInterface
+     */
+    protected $recipient;
 
-	function __construct(Message $message = null)
-	{
-		$this->message = $message;
-	}
+    function __construct(Message $message = null)
+    {
+        $this->message = $message;
+    }
 
-	/**
-	 * @return Message|null
-	 */
-	public function getMessage()
-	{
-		return $this->message;
-	}
+    /**
+     * @return Message|null
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
 
-	/**
-	 * @return RecipientInterface
-	 */
-	public function getRecipient()
-	{
-		return $this->recipient;
-	}
+    /**
+     * @return RecipientInterface
+     */
+    public function getRecipient()
+    {
+        return $this->recipient;
+    }
 
-	/**
-	 * @param RecipientInterface $recipient
-	 */
-	public function setRecipient(RecipientInterface $recipient)
-	{
-		$this->recipient = $recipient;
-		return $this;
-	}
+    /**
+     * @param RecipientInterface $recipient
+     */
+    public function setRecipient(RecipientInterface $recipient)
+    {
+        $this->recipient = $recipient;
+        return $this;
+    }
 }

@@ -23,27 +23,27 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UnionFactory implements RecipientSourceFactoryInterface
 {
-	public function createRecipientSource(RecipientSource $recipientSourceData)
-	{
-		global $container;
+    public function createRecipientSource(RecipientSource $recipientSourceData)
+    {
+        global $container;
 
-		$clean              = $recipientSourceData->getUnionClean();
-		$recipientSourceIds = $recipientSourceData->getUnionRecipientSources();
+        $clean              = $recipientSourceData->getUnionClean();
+        $recipientSourceIds = $recipientSourceData->getUnionRecipientSources();
 
-		$unionRecipientSource = new Union();
-		$unionRecipientSource->setClean($clean);
+        $unionRecipientSource = new Union();
+        $unionRecipientSource->setClean($clean);
 
-		foreach ($recipientSourceIds as $recipientSourceId) {
-			$recipientSource = $container[sprintf('avisota.recipientSource.%s', $recipientSourceId)];
-			$unionRecipientSource->addRecipientSource($recipientSource);
-		}
+        foreach ($recipientSourceIds as $recipientSourceId) {
+            $recipientSource = $container[sprintf('avisota.recipientSource.%s', $recipientSourceId)];
+            $unionRecipientSource->addRecipientSource($recipientSource);
+        }
 
-		/** @var EventDispatcherInterface $eventDispatcher */
-		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+        /** @var EventDispatcherInterface $eventDispatcher */
+        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-		$event = new CreateRecipientSourceEvent($recipientSourceData, $unionRecipientSource);
-		$eventDispatcher->dispatch(CoreEvents::CREATE_RECIPIENT_SOURCE, $event);
+        $event = new CreateRecipientSourceEvent($recipientSourceData, $unionRecipientSource);
+        $eventDispatcher->dispatch(CoreEvents::CREATE_RECIPIENT_SOURCE, $event);
 
-		return $event->getRecipientSource();
-	}
+        return $event->getRecipientSource();
+    }
 }

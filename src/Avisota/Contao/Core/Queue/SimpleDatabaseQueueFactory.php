@@ -20,16 +20,16 @@ use Avisota\Queue\SimpleDatabaseQueue;
 
 class SimpleDatabaseQueueFactory implements QueueFactoryInterface
 {
-	public function createQueue(Queue $queue)
-	{
-		global $container;
+    public function createQueue(Queue $queue)
+    {
+        global $container;
 
-		return new SimpleDatabaseQueue(
-			$container['doctrine.connection.default'],
-			$queue->getSimpleDatabaseQueueTable(),
-			true,
-			$container['avisota.logger.queue'],
-			$container['event-dispatcher']
-		);
-	}
+        return new SimpleDatabaseQueue(
+            $container['doctrine.connection.default'],
+            $queue->getSimpleDatabaseQueueTable(),
+            true,
+            $container['avisota.logger.queue'],
+            $container['event-dispatcher']
+        );
+    }
 }

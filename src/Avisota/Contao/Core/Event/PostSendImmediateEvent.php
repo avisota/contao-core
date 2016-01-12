@@ -20,63 +20,63 @@ use Symfony\Component\EventDispatcher\Event;
 
 class PostSendImmediateEvent extends Event
 {
-	/**
-	 * @var int
-	 */
-	protected $count;
+    /**
+     * @var int
+     */
+    protected $count;
 
-	/**
-	 * @var Message
-	 */
-	protected $message;
+    /**
+     * @var Message
+     */
+    protected $message;
 
-	/**
-	 * @var int
-	 */
-	protected $turn;
+    /**
+     * @var int
+     */
+    protected $turn;
 
-	/**
-	 * @var string
-	 */
-	protected $loop;
+    /**
+     * @var string
+     */
+    protected $loop;
 
-	function __construct($count, Message $message, $turn, $loop)
-	{
-		$this->count   = $count;
-		$this->message = $message;
-		$this->turn    = $turn;
-		$this->loop    = $loop;
-	}
+    function __construct($count, Message $message, $turn, $loop)
+    {
+        $this->count   = $count;
+        $this->message = $message;
+        $this->turn    = $turn;
+        $this->loop    = $loop;
+    }
 
-	/**
-	 * @return int
-	 */
-	public function getCount()
-	{
-		return $this->count;
-	}
+    /**
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->count;
+    }
 
-	/**
-	 * @return Message
-	 */
-	public function getMessage()
-	{
-		return $this->message;
-	}
+    /**
+     * @return Message
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
 
-	/**
-	 * @return int
-	 */
-	public function getTurn()
-	{
-		return $this->turn;
-	}
+    /**
+     * @return int
+     */
+    public function getTurn()
+    {
+        return $this->turn;
+    }
 
-	/**
-	 * @return mixed
-	 */
-	public function getLoop()
-	{
-		return $this->loop;
-	}
+    /**
+     * @return mixed
+     */
+    public function getLoop()
+    {
+        return $this->loop;
+    }
 }

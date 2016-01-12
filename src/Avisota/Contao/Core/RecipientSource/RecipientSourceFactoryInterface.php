@@ -19,5 +19,5 @@ use Avisota\Contao\Entity\RecipientSource;
 
 interface RecipientSourceFactoryInterface
 {
-	public function createRecipientSource(RecipientSource $recipientSource);
+    public function createRecipientSource(RecipientSource $recipientSource);
 }
