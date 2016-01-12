@@ -13,12 +13,6 @@
     "license": "LGPL-3.0+",
     "authors": [
         {
-            "name": "Tristan Lins",
-            "email": "tristan.lins@bit3.de",
-            "homepage": "http://bit3.de",
-            "role": "Developer"
-        },
-        {
             "name": "Sven Baumann",
             "email": "baumann.sv@gmail.com",
             "homepage": "http://avisota.org",
@@ -26,7 +20,7 @@
         }
     ],
     "support": {
-        "email": "support@avisota.de",
+        "email": "support@avisota.org",
         "issues": "https://avisota.atlassian.net/browse/CC",
         "forum": "https://community.contao.org/de/forumdisplay.php?121-Avisota",
         "wiki": "http://de.contaowiki.org/Kategorie:Avisota",
