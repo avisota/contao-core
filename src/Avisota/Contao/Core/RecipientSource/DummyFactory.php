@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright © 2016 Sven Baumann
+ * Copyright (C) 2013 Tristan Lins
  *
  * PHP version 5
  *
- * @copyright  way.vision 2015
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  bit3 UG 2013
+ * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -21,18 +21,28 @@ use Avisota\Contao\Entity\RecipientSource;
 use Avisota\RecipientSource\Dummy;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * Class DummyFactory
+ *
+ * @package Avisota\Contao\Core\RecipientSource
+ */
 class DummyFactory implements RecipientSourceFactoryInterface
 {
+	/**
+	 * @param RecipientSource $recipientSourceData
+	 *
+	 * @return \Avisota\RecipientSource\RecipientSourceInterface
+     */
     public function createRecipientSource(RecipientSource $recipientSourceData)
-    {
-        $recipientSource = new Dummy($recipientSourceData->getDummyMinCount(), $recipientSourceData->getDummyMaxCount());
+	{
+		$recipientSource = new Dummy($recipientSourceData->getDummyMinCount(), $recipientSourceData->getDummyMaxCount());
 
-        /** @var EventDispatcherInterface $eventDispatcher */
-        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+		/** @var EventDispatcherInterface $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-        $event = new CreateRecipientSourceEvent($recipientSourceData, $recipientSource);
-        $eventDispatcher->dispatch(CoreEvents::CREATE_RECIPIENT_SOURCE, $event);
+		$event = new CreateRecipientSourceEvent($recipientSourceData, $recipientSource);
+		$eventDispatcher->dispatch(CoreEvents::CREATE_RECIPIENT_SOURCE, $event);
 
-        return $event->getRecipientSource();
-    }
+		return $event->getRecipientSource();
+	}
 }

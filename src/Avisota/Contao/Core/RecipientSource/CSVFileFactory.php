@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright © 2016 Sven Baumann
+ * Copyright (C) 2013 Tristan Lins
  *
  * PHP version 5
  *
- * @copyright  way.vision 2015
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  bit3 UG 2013
+ * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -21,52 +21,62 @@ use Avisota\Contao\Entity\RecipientSource;
 use Avisota\RecipientSource\CSVFile;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * Class CSVFileFactory
+ *
+ * @package Avisota\Contao\Core\RecipientSource
+ */
 class CSVFileFactory implements RecipientSourceFactoryInterface
 {
+	/**
+	 * @param RecipientSource $recipientSourceData
+	 *
+	 * @return \Avisota\RecipientSource\RecipientSourceInterface
+     */
     public function createRecipientSource(RecipientSource $recipientSourceData)
-    {
-        $file      = \Compat::resolveFile($recipientSourceData->getCsvFileSrc());
-        $columns   = array();
-        $delimiter = $recipientSourceData->getCsvFileDelimiter();
-        $enclosure = $recipientSourceData->getCsvFileEnclosure();
+	{
+		$file      = \Compat::resolveFile($recipientSourceData->getCsvFileSrc());
+		$columns   = array();
+		$delimiter = $recipientSourceData->getCsvFileDelimiter();
+		$enclosure = $recipientSourceData->getCsvFileEnclosure();
 
-        foreach ($recipientSourceData->getCsvColumnAssignment() as $item) {
-            $columns[$item['column'] - 1] = $item['field'];
-        }
+		foreach ($recipientSourceData->getCsvColumnAssignment() as $item) {
+			$columns[$item['column'] - 1] = $item['field'];
+		}
 
-        switch ($delimiter) {
-            case 'semicolon':
-                $delimiter = ';';
-                break;
-            case 'space':
-                $delimiter = ' ';
-                break;
-            case 'tabulator':
-                $delimiter = "\t";
-                break;
-            case 'linebreak':
-                $delimiter = "\n";
-                break;
-            default:
-                $delimiter = ',';
-        }
+		switch ($delimiter) {
+			case 'semicolon':
+				$delimiter = ';';
+				break;
+			case 'space':
+				$delimiter = ' ';
+				break;
+			case 'tabulator':
+				$delimiter = "\t";
+				break;
+			case 'linebreak':
+				$delimiter = "\n";
+				break;
+			default:
+				$delimiter = ',';
+		}
 
-        switch ($enclosure) {
-            case 'single':
-                $enclosure = "'";
-                break;
-            default:
-                $enclosure = '"';
-        }
+		switch ($enclosure) {
+			case 'single':
+				$enclosure = "'";
+				break;
+			default:
+				$enclosure = '"';
+		}
 
-        $recipientSource = new CSVFile(TL_ROOT . DIRECTORY_SEPARATOR . $file, $columns, $delimiter, $enclosure);
+		$recipientSource = new CSVFile(TL_ROOT . DIRECTORY_SEPARATOR . $file, $columns, $delimiter, $enclosure);
 
-        /** @var EventDispatcherInterface $eventDispatcher */
-        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+		/** @var EventDispatcherInterface $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-        $event = new CreateRecipientSourceEvent($recipientSourceData, $recipientSource);
-        $eventDispatcher->dispatch(CoreEvents::CREATE_RECIPIENT_SOURCE, $event);
+		$event = new CreateRecipientSourceEvent($recipientSourceData, $recipientSource);
+		$eventDispatcher->dispatch(CoreEvents::CREATE_RECIPIENT_SOURCE, $event);
 
-        return $event->getRecipientSource();
-    }
+		return $event->getRecipientSource();
+	}
 }

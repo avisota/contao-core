@@ -15,6 +15,11 @@
 
 namespace Avisota\Contao\Core\DataContainer;
 
+/**
+ * Class Transport
+ *
+ * @package Avisota\Contao\Core\DataContainer
+ */
 class Transport extends \Backend
 {
     /**

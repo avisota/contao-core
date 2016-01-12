@@ -42,9 +42,19 @@ require($dir . '/system/initialize.php');
 
 BackendUser::getInstance();
 
+/**
+ * Class qeueue_execute
+ */
 class qeueue_execute extends AbstractQueueWebRunner
 {
-	protected function execute(Request $request, Queue $queueData, \BackendUser $user)
+	/**
+	 * @param Request     $request
+	 * @param Queue       $queueData
+	 * @param BackendUser $user
+	 *
+	 * @return JsonResponse
+     */
+    protected function execute(Request $request, Queue $queueData, \BackendUser $user)
 	{
 		global $container;
 

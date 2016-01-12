@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright © 2016 Sven Baumann
+ * Copyright (C) 2013 Tristan Lins
  *
  * PHP version 5
  *
- * @copyright  way.vision 2015
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  bit3 UG 2013
+ * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -19,6 +19,12 @@ use Avisota\Message\MessageInterface;
 use Avisota\Renderer\DelegateMessageRenderer;
 use Avisota\Renderer\MessageRendererInterface;
 
+/**
+ * Class DelegateMessageRenderer
+ *
+ * Implementation of a delegate message renderer.
+ * Primary used as base class for custom implementations.
+ */
 class ToOverwriteMessageRenderer extends DelegateMessageRenderer
 {
 	/**
@@ -31,6 +37,13 @@ class ToOverwriteMessageRenderer extends DelegateMessageRenderer
 	 */
 	protected $toName;
 
+	/**
+	 * DelegateMessageRenderer constructor.
+	 *
+	 * @param MessageRendererInterface $delegate
+	 * @param                          $to
+	 * @param                          $toName
+	 */
 	function __construct(MessageRendererInterface $delegate, $to, $toName)
 	{
 		parent::__construct($delegate);
@@ -40,6 +53,8 @@ class ToOverwriteMessageRenderer extends DelegateMessageRenderer
 
 	/**
 	 * @param string $replyTo
+	 *
+	 * @return $this
 	 */
 	public function setTo($replyTo)
 	{
@@ -57,6 +72,8 @@ class ToOverwriteMessageRenderer extends DelegateMessageRenderer
 
 	/**
 	 * @param string $replyToName
+	 *
+	 * @return $this
 	 */
 	public function setToName($replyToName)
 	{
@@ -73,8 +90,12 @@ class ToOverwriteMessageRenderer extends DelegateMessageRenderer
 	}
 
 	/**
-	 * {@inheritdoc}
-	 */
+	 * Render a message and create a Swift_Message.
+	 *
+	 * @param MessageInterface $message
+	 *
+	 * @return \Swift_Message
+     */
 	public function renderMessage(MessageInterface $message)
 	{
 		$swiftMessage = $this->delegate->renderMessage($message);

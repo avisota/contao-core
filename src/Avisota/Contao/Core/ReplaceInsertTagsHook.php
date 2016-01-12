@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright © 2016 Sven Baumann
+ * Copyright (C) 2013 Tristan Lins
  *
  * PHP version 5
  *
- * @copyright  way.vision 2015
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  bit3 UG 2013
+ * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -20,19 +20,30 @@ use Exception;
 /**
  * Class Backend
  *
- * @copyright  way.vision 2015
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  bit3 UG 2013
+ * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota/contao-core
  */
 class ReplaceInsertTagsHook extends \Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+	/**
+	 * Import the Config and Session instances
+     */
+	public function __construct()
+	{
+		parent::__construct();
+	}
 
-    public function replaceInsertTags($strBuffer, $blnCache = false)
-    {
-        return parent::replaceInsertTags($strBuffer, $blnCache);
-    }
+	/**
+	 * Replace insert tags with their values
+	 *
+	 * @param string  $strBuffer The text with the tags to be replaced
+	 * @param boolean $blnCache  If false, non-cacheable tags will be replaced
+	 *
+	 * @return string The text with the replaced tags
+     */
+	public function replaceInsertTags($strBuffer, $blnCache = false)
+	{
+		return parent::replaceInsertTags($strBuffer, $blnCache);
+	}
 }

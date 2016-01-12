@@ -19,6 +19,15 @@ use Avisota\Message\MessageInterface;
 use Avisota\Renderer\DelegateMessageRenderer;
 use Avisota\Renderer\MessageRendererInterface;
 
+/**
+ * {@inheritDoc}
+ */
+
+/**
+ * Class FromOverwriteMessageRenderer
+ *
+ * @package Avisota\Contao\Core\Message\Renderer
+ */
 class FromOverwriteMessageRenderer extends DelegateMessageRenderer
 {
 	/**
@@ -31,7 +40,17 @@ class FromOverwriteMessageRenderer extends DelegateMessageRenderer
 	 */
 	protected $fromName;
 
-	function __construct(MessageRendererInterface $delegate, $from, $fromName)
+	/**
+	 * {@inheritDoc}
+     */
+	/**
+	 * FromOverwriteMessageRenderer constructor.
+	 *
+	 * @param MessageRendererInterface $delegate
+	 * @param                          $from
+	 * @param                          $fromName
+     */
+    function __construct(MessageRendererInterface $delegate, $from, $fromName)
 	{
 		parent::__construct($delegate);
 		$this->from     = (string) $from;
@@ -40,6 +59,8 @@ class FromOverwriteMessageRenderer extends DelegateMessageRenderer
 
 	/**
 	 * @param string $from
+	 *
+	 * @return $this
 	 */
 	public function setFrom($from)
 	{
@@ -57,6 +78,8 @@ class FromOverwriteMessageRenderer extends DelegateMessageRenderer
 
 	/**
 	 * @param string $fromName
+	 *
+	 * @return $this
 	 */
 	public function setFromName($fromName)
 	{
@@ -73,8 +96,12 @@ class FromOverwriteMessageRenderer extends DelegateMessageRenderer
 	}
 
 	/**
-	 * {@inheritdoc}
-	 */
+	 * Render a message and create a Swift_Message.
+	 *
+	 * @param MessageInterface $message
+	 *
+	 * @return \Swift_Message
+     */
 	public function renderMessage(MessageInterface $message)
 	{
 		$swiftMessage = $this->delegate->renderMessage($message);

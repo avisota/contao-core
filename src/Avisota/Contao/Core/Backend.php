@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright © 2016 Sven Baumann
+ * Copyright (C) 2013 Tristan Lins
  *
  * PHP version 5
  *
- * @copyright  way.vision 2015
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  bit3 UG 2013
+ * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -22,95 +22,98 @@ use Doctrine\ORM\EntityRepository;
 /**
  * Class Backend
  *
- * @copyright  way.vision 2015
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  bit3 UG 2013
+ * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota/contao-core
  */
 class Backend extends \Controller
 {
-    /**
-     * @var Backend
+	/**
+	 * @var Backend
+	 */
+	protected static $instance = null;
+
+	/**
+	 * @static
+	 * @return Backend
+	 */
+	public static function getInstance()
+	{
+		if (self::$instance === null) {
+			self::$instance = new Backend();
+		}
+		return self::$instance;
+	}
+
+	/**
+	 * Import the Config and Session instances
      */
-    protected static $instance = null;
+	protected function __construct()
+	{
+		parent::__construct();
+	}
 
-    /**
-     * @static
-     * @return Backend
-     */
-    public static function getInstance()
-    {
-        if (self::$instance === null) {
-            self::$instance = new Backend();
-        }
-        return self::$instance;
-    }
+	public function regenerateDynamics()
+	{
+		$dynamics = array();
 
-    protected function __construct()
-    {
-        parent::__construct();
-    }
+		// $mailingListRepository     = EntityHelper::getRepository('Avisota\Contao:MailingList');
+		$recipientSourceRepository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
+		// $themeRepository           = EntityHelper::getRepository('Avisota\Contao:Theme');
+		$transportRepository       = EntityHelper::getRepository('Avisota\Contao:Transport');
+		$queueRepository           = EntityHelper::getRepository('Avisota\Contao:Queue');
 
-    public function regenerateDynamics()
-    {
-        $dynamics = array();
+		/** @var EntityRepository[] $repositories */
+		$repositories = array(
+			// $mailingListRepository,
+			$queueRepository,
+			$recipientSourceRepository,
+			// $themeRepository,
+			$transportRepository,
+		);
 
-        // $mailingListRepository     = EntityHelper::getRepository('Avisota\Contao:MailingList');
-        $recipientSourceRepository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
-        // $themeRepository           = EntityHelper::getRepository('Avisota\Contao:Theme');
-        $transportRepository = EntityHelper::getRepository('Avisota\Contao:Transport');
-        $queueRepository     = EntityHelper::getRepository('Avisota\Contao:Queue');
+		foreach ($repositories as $repository) {
+			$entityName = $repository->getClassName();
+			$entityName = str_replace('Avisota\\Contao\\Entity\\', '', $entityName);
+			$entityName = lcfirst($entityName);
+			$entities = $repository->findAll();
 
-        /** @var EntityRepository[] $repositories */
-        $repositories = array(
-            // $mailingListRepository,
-            $queueRepository,
-            $recipientSourceRepository,
-            // $themeRepository,
-            $transportRepository,
-        );
+			$dynamics[$entityName] = array();
+			foreach ($entities as $entity) {
+				$dynamics[$entityName][] = array(
+					'id'    => $entity->id(),
+					'alias' => $entity->getAlias(),
+					'title' => $entity->getTitle(),
+				);
+			}
+		}
 
-        foreach ($repositories as $repository) {
-            $entityName = $repository->getClassName();
-            $entityName = str_replace('Avisota\\Contao\\Entity\\', '', $entityName);
-            $entityName = lcfirst($entityName);
-            $entities   = $repository->findAll();
+		$queryBuilder = EntityHelper::getEntityManager()
+			->createQueryBuilder();
+		$query        = $queryBuilder
+			->select('c')
+			->from('Avisota\Contao:MessageCategory', 'c')
+			->where('c.showInMenu=:showInMenu')
+			->andWhere('c.boilerplates=:boilerplates')
+			->setParameter(':showInMenu', true)
+			->setParameter(':boilerplates', false)
+			->orderBy('c.title')
+			->getQuery();
+		$categories   = $query->getResult();
 
-            $dynamics[$entityName] = array();
-            foreach ($entities as $entity) {
-                $dynamics[$entityName][] = array(
-                    'id'    => $entity->id(),
-                    'alias' => $entity->getAlias(),
-                    'title' => $entity->getTitle(),
-                );
-            }
-        }
+		$dynamics['category'] = array();
+		/** @var MessageCategory $category */
+		foreach ($categories as $category) {
+			$dynamics['category'][] = array(
+				'id'    => $category->id(),
+				'label' => $category->getTitle(),
+				'icon'  => $category->getUseCustomMenuIcon() ? $category->getMenuIcon() : false
+			);
+		}
 
-        $queryBuilder = EntityHelper::getEntityManager()
-            ->createQueryBuilder();
-        $query        = $queryBuilder
-            ->select('c')
-            ->from('Avisota\Contao:MessageCategory', 'c')
-            ->where('c.showInMenu=:showInMenu')
-            ->andWhere('c.boilerplates=:boilerplates')
-            ->setParameter(':showInMenu', true)
-            ->setParameter(':boilerplates', false)
-            ->orderBy('c.title')
-            ->getQuery();
-        $categories   = $query->getResult();
+		$array = var_export($dynamics, true);
 
-        $dynamics['category'] = array();
-        /** @var MessageCategory $category */
-        foreach ($categories as $category) {
-            $dynamics['category'][] = array(
-                'id'    => $category->id(),
-                'label' => $category->getTitle(),
-                'icon'  => $category->getUseCustomMenuIcon() ? $category->getMenuIcon() : false
-            );
-        }
-
-        $array = var_export($dynamics, true);
-
-        $fileContents = <<<EOF
+		$fileContents = <<<EOF
 <?php
 
 return $array;
@@ -118,8 +121,8 @@ return $array;
 
 EOF;
 
-        $tempFile = new \File('system/modules/avisota/config/dynamics.php');
-        $tempFile->write($fileContents);
-        $tempFile->close();
-    }
+		$tempFile = new \File('system/modules/avisota/config/dynamics.php');
+		$tempFile->write($fileContents);
+		$tempFile->close();
+	}
 }

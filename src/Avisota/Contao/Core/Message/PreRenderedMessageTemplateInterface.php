@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright © 2016 Sven Baumann
+ * Copyright (C) 2013 Tristan Lins
  *
  * PHP version 5
  *
- * @copyright  way.vision 2015
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  bit3 UG 2013
+ * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -20,43 +20,50 @@ use Avisota\Contao\Entity\MessageContent;
 use Avisota\Recipient\RecipientInterface;
 use Avisota\Templating\MessageTemplateInterface;
 
+/**
+ * A template to generate a message from.
+ *
+ * @package avisota-core
+ */
 interface PreRenderedMessageTemplateInterface extends MessageTemplateInterface
 {
-    /**
-     * Return the content type.
-     *
-     * @return string
-     */
-    public function getContentType();
+	/**
+	 * Return the content type.
+	 *
+	 * @return string
+	 */
+	public function getContentType();
 
-    /**
-     * Return the content encoding.
-     *
-     * @return string
-     */
-    public function getContentEncoding();
+	/**
+	 * Return the content encoding.
+	 *
+	 * @return string
+	 */
+	public function getContentEncoding();
 
-    /**
-     * Get a name descriptor (file name) for this content,
-     * e.g. "newsletter-hello-world.html".
-     *
-     * @return string
-     */
-    public function getContentName();
+	/**
+	 * Get a name descriptor (file name) for this content,
+	 * e.g. "newsletter-hello-world.html".
+	 *
+	 * @return string
+	 */
+	public function getContentName();
 
-    /**
-     * Get the (binary) content.
-     *
-     * @return string
-     */
-    public function getContent();
+	/**
+	 * Get the (binary) content.
+	 *
+	 * @return string
+	 */
+	public function getContent();
 
-    /**
-     * Render a preview.
-     *
-     * @param RecipientInterface $recipient
-     *
-     * @return mixed The content only, not a message.
-     */
-    public function renderPreview(RecipientInterface $recipient, array $additionalData = array());
+	/**
+	 * Render a preview.
+	 *
+	 * @param RecipientInterface $recipient
+	 *
+	 * @param array              $additionalData
+	 *
+	 * @return mixed The content only, not a message.
+	 */
+	public function renderPreview(RecipientInterface $recipient, array $additionalData = array());
 }

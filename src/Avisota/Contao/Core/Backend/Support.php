@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright © 2016 Sven Baumann
+ * Copyright (C) 2013 Tristan Lins
  *
  * PHP version 5
  *
- * @copyright  way.vision 2015
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  bit3 UG 2013
+ * @author     Tristan Lins <tristan.lins@bit3.de>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -21,26 +21,31 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
+/**
+ * A BackendModule implementation that use Twig as template engine.
+ *
+ * @package ContaoTwig
+ * @author  Tristan Lins <tristan.lins@bit3.de>
+ */
 class Support extends \TwigBackendModule
 {
-    /**
-     * Template
-     *
-     * @var string
-     */
-    protected $strTemplate = 'avisota/backend/support';
+	/**
+	 * Template
+	 * @var string
+	 */
+	protected $strTemplate = 'avisota/backend/support';
 
-    /**
-     * Compile the current element
-     */
-    protected function compile()
-    {
-        /** @var EventDispatcher $eventDispatcher */
-        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+	/**
+	 * Compile the current element
+	 */
+	protected function compile()
+	{
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-        $eventDispatcher->dispatch(
-            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-            new LoadLanguageFileEvent('avisota_support')
-        );
-    }
+		$eventDispatcher->dispatch(
+			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+			new LoadLanguageFileEvent('avisota_support')
+		);
+	}
 }
