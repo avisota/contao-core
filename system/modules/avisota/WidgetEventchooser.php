@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright (C) 2013 Tristan Lins
+ * Copyright © 2016 Sven Baumann
  *
  * PHP version 5
  *
- * @copyright  bit3 UG 2013
- * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @copyright  way.vision 2015
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -18,9 +18,9 @@
  * Class WidgetEventchooser
  *
  * @copyright  4ward.media 2010
- * @copyright  bit3 UG 2013
+ * @copyright  way.vision 2015
  * @author     Christoph Wiechert <christoph.wiechert@4wardmedia.de>
- * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @package    avisota/contao-core
  */
 class WidgetEventchooser extends Widget
