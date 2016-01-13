@@ -21,7 +21,7 @@ use Contao\Doctrine\ORM\EntityHelper;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Message\AddMessageEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DC_General;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
@@ -114,8 +114,9 @@ class Queue extends \Backend implements EventSubscriberInterface
 
 		if ($action->getName() == 'clear') {
 			$input      = $environment->getInputProvider();
-			$id         = IdSerializer::fromSerialized($input->getParameter('id'));
+			$id         = ModelId::fromSerialized($input->getParameter('id'));
 			$repository = EntityHelper::getRepository('Avisota\Contao:Queue');
+			$eventDispatcher = $event->getEnvironment()->getEventDispatcher();
 
 			/** @var \Avisota\Contao\Entity\Queue $queueData */
 			$queueData = $repository->find($id->getId());
@@ -129,10 +130,10 @@ class Queue extends \Backend implements EventSubscriberInterface
 				sprintf($GLOBALS['TL_LANG']['orm_avisota_queue']['queueCleared'], $queueData->getTitle()),
 				AddMessageEvent::TYPE_CONFIRM
 			);
-			$event->getDispatcher()->dispatch(ContaoEvents::MESSAGE_ADD, $message);
+			$eventDispatcher->dispatch(ContaoEvents::MESSAGE_ADD, $message);
 
 			$redirect = new RedirectEvent('contao/main.php?do=avisota_queue&ref=' . TL_REFERER_ID);
-			$event->getDispatcher()->dispatch(ContaoEvents::CONTROLLER_REDIRECT, $redirect);
+			$eventDispatcher->dispatch(ContaoEvents::CONTROLLER_REDIRECT, $redirect);
 		}
 	}
 }

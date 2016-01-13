@@ -24,7 +24,7 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
@@ -170,7 +170,7 @@ class RecipientSource implements EventSubscriberInterface
     public function handleListAction(EnvironmentInterface $environment)
 	{
 		$input      = $environment->getInputProvider();
-		$id         = IdSerializer::fromSerialized($input->getParameter('id'));
+		$id         = ModelId::fromSerialized($input->getParameter('id'));
 		$repository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
 
 		/** @var \Avisota\Contao\Entity\RecipientSource $recipientSourceEntity */

@@ -87,9 +87,9 @@ class Outbox extends \TwigBackendModule
 	{
 		global $container;
 
-		$input = \Input::getInstance();
 
-		$executeId = $input->get('execute');
+
+		$executeId = \Input::get('execute');
 		if ($executeId) {
 			/** @var Queue $queueData */
 			$queueData = $queueRepository->find($executeId);
