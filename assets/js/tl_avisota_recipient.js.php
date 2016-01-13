@@ -1,6 +1,7 @@
 <?php
 chdir('../../../../');
 define('TL_MODE', 'FE');
+/** @noinspection PhpIncludeInspection */
 require('system/initialize.php');
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
