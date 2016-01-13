@@ -190,7 +190,7 @@ class OptionsBuilder implements EventSubscriberInterface
 	/**
 	 * Return all gallery templates as array
 	 *
-	 * @param DC_General $dc
+	 * @param DC_General|\DataContainer $dc
 	 * @param array      $options
 	 *
 	 * @return array
