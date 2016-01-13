@@ -44,7 +44,7 @@ class ToOverwriteMessageRenderer extends DelegateMessageRenderer
      * @param                          $to
      * @param                          $toName
      */
-    function __construct(MessageRendererInterface $delegate, $to, $toName)
+    public function __construct(MessageRendererInterface $delegate, $to, $toName)
     {
         parent::__construct($delegate);
         $this->to     = (string) $to;

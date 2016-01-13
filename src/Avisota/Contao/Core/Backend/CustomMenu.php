@@ -28,7 +28,7 @@ class CustomMenu
      *
      * @return array
      */
-    static public function hookGetUserNavigation(array $navigation, $showAll)
+    public static function hookGetUserNavigation(array $navigation, $showAll)
     {
         if (TL_MODE == 'BE' && is_array($navigation['avisota']['modules'])) {
             try {

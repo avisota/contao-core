@@ -50,7 +50,7 @@ class RecipientSource implements EventSubscriberInterface
     /**
      * @return mixed
      */
-    static public function getInstance()
+    public static function getInstance()
     {
         if (static::$instance === null) {
             static::$instance = new static();
@@ -76,14 +76,15 @@ class RecipientSource implements EventSubscriberInterface
      *
      * @return array The event names to listen to
      */
-    static public function getSubscribedEvents()
+    public static function getSubscribedEvents()
     {
         return array(
             EncodePropertyValueFromWidgetEvent::NAME . '[orm_avisota_recipient_source][csvColumnAssignment]' => array(
                 array('checkCsvColumnUnique'),
                 array('checkCsvColumnEmail'),
             ),
-            DcGeneralEvents::ACTION                                                                          => 'handleAction',
+
+            DcGeneralEvents::ACTION => 'handleAction',
         );
     }
 
@@ -110,8 +111,7 @@ class RecipientSource implements EventSubscriberInterface
         $fields  = array();
 
         foreach ($value as $item) {
-            if (
-                in_array($item['column'], $columns)
+            if (in_array($item['column'], $columns)
                 || in_array($item['field'], $fields)
             ) {
                 throw new \RuntimeException($GLOBALS['TL_LANG']['orm_avisota_recipient_source']['duplicated_column']);
@@ -177,7 +177,8 @@ class RecipientSource implements EventSubscriberInterface
         $recipientSourceEntity = $repository->find($id->getId());
 
         /** @var RecipientSourceInterface $recipientSource */
-        $recipientSource = $GLOBALS['container'][sprintf('avisota.recipientSource.%s', $recipientSourceEntity->getId())];
+        $recipientSource =
+            $GLOBALS['container'][sprintf('avisota.recipientSource.%s', $recipientSourceEntity->getId())];
 
         if ($input->getValue('page')) {
             /** @var EventDispatcher $eventDispatcher */

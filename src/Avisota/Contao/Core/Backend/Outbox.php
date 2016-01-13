@@ -35,7 +35,7 @@ class Outbox extends \TwigBackendModule
     /**
      * @return bool
      */
-    static public function isEmpty()
+    public static function isEmpty()
     {
         global $container;
 

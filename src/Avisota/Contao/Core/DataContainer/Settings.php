@@ -27,10 +27,11 @@ class Settings extends \Backend
         if (!is_dir(TL_ROOT . '/system/modules/avisota/highstock')
             || !is_file(TL_ROOT . '/system/modules/avisota/highstock/js/highstock.js')
         ) {
-            $GLOBALS['TL_DCA']['tl_avisota_settings']['fields']['avisota_chart_highstock_confirm']['input_field_callback'] = array(
-                'tl_avisota_settings',
-                'renderMissingHighstockField'
-            );
+            $GLOBALS['TL_DCA']['tl_avisota_settings']['fields']['avisota_chart_highstock_confirm']['input_field_callback'] =
+                array(
+                    'tl_avisota_settings',
+                    'renderMissingHighstockField'
+                );
         }
     }
 

@@ -44,7 +44,7 @@ class ReplyToOverwriteMessageRenderer extends DelegateMessageRenderer
      * @param                          $replyTo
      * @param                          $replyToName
      */
-    function __construct(MessageRendererInterface $delegate, $replyTo, $replyToName)
+    public function __construct(MessageRendererInterface $delegate, $replyTo, $replyToName)
     {
         parent::__construct($delegate);
         $this->replyTo     = (string) $replyTo;

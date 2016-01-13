@@ -45,7 +45,7 @@ class Queue extends \Backend implements EventSubscriberInterface
     /**
      * @return mixed
      */
-    static public function getInstance()
+    public static function getInstance()
     {
         if (static::$instance === null) {
             static::$instance = new static();
@@ -80,7 +80,7 @@ class Queue extends \Backend implements EventSubscriberInterface
      *
      * @return array The event names to listen to
      */
-    static public function getSubscribedEvents()
+    public static function getSubscribedEvents()
     {
         return array(
             DcGeneralEvents::ACTION => 'handleAction',

@@ -50,7 +50,7 @@ class CreateFakeRecipientEvent extends Event
      *
      * @param Message|null $message
      */
-    function __construct(Message $message = null)
+    public function __construct(Message $message = null)
     {
         $this->message = $message;
     }

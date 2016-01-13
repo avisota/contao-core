@@ -57,15 +57,17 @@ class ServiceFactory
                     $recipientSources = $recipientSourceRepository->findAll();
 
                     foreach ($recipientSources as $recipientSource) {
-                        $container[sprintf('avisota.recipientSource.%s', $recipientSource->getId())] = $container->share(
-                            function ($container) use ($recipientSource, $factory) {
-                                return $factory->createRecipientSource($recipientSource);
-                            }
-                        );
+                        $container[sprintf('avisota.recipientSource.%s', $recipientSource->getId())] =
+                            $container->share(
+                                function ($container) use ($recipientSource, $factory) {
+                                    return $factory->createRecipientSource($recipientSource);
+                                }
+                            );
 
-                        $container[sprintf('avisota.recipientSource.%s', $recipientSource->getAlias())] = function ($container) use ($recipientSource) {
-                            return $container[sprintf('avisota.recipientSource.%s', $recipientSource->getId())];
-                        };
+                        $container[sprintf('avisota.recipientSource.%s', $recipientSource->getAlias())] =
+                            function ($container) use ($recipientSource) {
+                                return $container[sprintf('avisota.recipientSource.%s', $recipientSource->getId())];
+                            };
                     }
                 } catch (\Exception $e) {
                     $message = 'Could not create avisota recipient source service:' . PHP_EOL . $e->getMessage();
@@ -95,9 +97,10 @@ class ServiceFactory
                             }
                         );
 
-                        $container[sprintf('avisota.queue.%s', $queue->getAlias())] = function ($container) use ($queue) {
-                            return $container[sprintf('avisota.queue.%s', $queue->getId())];
-                        };
+                        $container[sprintf('avisota.queue.%s', $queue->getAlias())] =
+                            function ($container) use ($queue) {
+                                return $container[sprintf('avisota.queue.%s', $queue->getId())];
+                            };
                     }
                 } catch (\Exception $e) {
                     $message = 'Could not create avisota queue service: ' . $e->getMessage();
@@ -127,13 +130,17 @@ class ServiceFactory
                             }
                         );
 
-                        $container[sprintf('avisota.transport.%s', $transport->getAlias())] = function ($container) use ($transport) {
-                            return $container[sprintf('avisota.transport.%s', $transport->getId())];
-                        };
+                        $container[sprintf('avisota.transport.%s', $transport->getAlias())] =
+                            function ($container) use ($transport) {
+                                return $container[sprintf('avisota.transport.%s', $transport->getId())];
+                            };
                     }
 
                     $container['avisota.transport.default'] = function ($container) {
-                        return $container[sprintf('avisota.transport.%s', $GLOBALS['TL_CONFIG']['avisota_default_transport'])];
+                        return $container[sprintf(
+                            'avisota.transport.%s',
+                            $GLOBALS['TL_CONFIG']['avisota_default_transport']
+                        )];
                     };
                 } catch (\Exception $e) {
                     $message = 'Could not create avisota transport service: ' . $e->getMessage();
@@ -167,7 +174,8 @@ class ServiceFactory
      */
     public function createRecipientSource(RecipientSource $recipientSource)
     {
-        $recipientSourceFactoryClass = new \ReflectionClass($GLOBALS['AVISOTA_RECIPIENT_SOURCE'][$recipientSource->getType()]);
+        $recipientSourceFactoryClass =
+            new \ReflectionClass($GLOBALS['AVISOTA_RECIPIENT_SOURCE'][$recipientSource->getType()]);
         /** @var RecipientSourceFactoryInterface $recipientSourceFactory */
         $recipientSourceFactory = $recipientSourceFactoryClass->newInstance();
 

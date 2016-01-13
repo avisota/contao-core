@@ -44,7 +44,7 @@ class SenderOverwriteMessageRenderer extends DelegateMessageRenderer
      * @param                          $sender
      * @param                          $senderName
      */
-    function __construct(MessageRendererInterface $delegate, $sender, $senderName)
+    public function __construct(MessageRendererInterface $delegate, $sender, $senderName)
     {
         parent::__construct($delegate);
         $this->sender     = (string) $sender;

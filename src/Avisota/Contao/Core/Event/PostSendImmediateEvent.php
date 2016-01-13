@@ -62,7 +62,7 @@ class PostSendImmediateEvent extends Event
      * @param         $turn
      * @param         $loop
      */
-    function __construct($count, Message $message, $turn, $loop)
+    public function __construct($count, Message $message, $turn, $loop)
     {
         $this->count   = $count;
         $this->message = $message;

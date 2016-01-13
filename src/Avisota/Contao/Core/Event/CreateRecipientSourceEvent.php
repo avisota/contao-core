@@ -52,7 +52,7 @@ class CreateRecipientSourceEvent extends Event
      * @param RecipientSource          $configuration
      * @param RecipientSourceInterface $recipientSource
      */
-    function __construct(RecipientSource $configuration, RecipientSourceInterface $recipientSource)
+    public function __construct(RecipientSource $configuration, RecipientSourceInterface $recipientSource)
     {
         $this->configuration   = $configuration;
         $this->recipientSource = $recipientSource;

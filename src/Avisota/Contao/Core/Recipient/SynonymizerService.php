@@ -28,7 +28,8 @@ class SynonymizerService
      * Find all synonym field names.
      *
      * @param string $fieldName                The field name, where synonyms are searched for.
-     * @param bool   $includeOriginalFieldName If true, the full synonyms list, including the original $fieldName will be returned.
+     * @param bool $includeOriginalFieldName If true, the full synonyms list, including the
+     *                                       original $fieldName will be returned.
      *
      * @return array|false Return an array of synonyms or false if no synonyms where found.
      */
@@ -54,9 +55,11 @@ class SynonymizerService
     }
 
     /**
-     * Write all synonym fields with the same value as the original value into the details array and return the expanded details.
+     * Write all synonym fields with the same value as the original value into the details
+     * array and return the expanded details.
      *
-     * @param array|RecipientInterface $details An array of details from Recipient::getDetails() or the recipient object itself.
+     * @param array|RecipientInterface $details An array of details from Recipient::getDetails()
+     *                                          or the recipient object itself.
      *
      * @return array Return the details expanded with synonym fields.
      */

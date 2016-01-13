@@ -50,7 +50,7 @@ class FromOverwriteMessageRenderer extends DelegateMessageRenderer
      * @param                          $from
      * @param                          $fromName
      */
-    function __construct(MessageRendererInterface $delegate, $from, $fromName)
+    public function __construct(MessageRendererInterface $delegate, $from, $fromName)
     {
         parent::__construct($delegate);
         $this->from     = (string) $from;

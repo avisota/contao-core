@@ -56,7 +56,7 @@ class PreSendImmediateEvent extends Event
      * @param         $turn
      * @param         $loop
      */
-    function __construct(Message $message, $turn, $loop)
+    public function __construct(Message $message, $turn, $loop)
     {
         $this->message = $message;
         $this->turn    = $turn;

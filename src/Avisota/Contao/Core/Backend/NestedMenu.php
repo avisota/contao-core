@@ -89,7 +89,9 @@ class NestedMenu extends \Controller
             $context = array(
                 'opensource' => $GLOBALS['TL_LANG']['avisota_promotion']['opensource'],
                 'partners'   => $GLOBALS['TL_LANG']['avisota_promotion']['partners'],
-                'copyright'  => 'Avisota newsletter and mailing system &copy; 2013-2014 bit3 UG and all <a href="https://github.com/avisota/contao/graphs/contributors" target="_blank">contributors</a>',
+                'copyright'  => 'Avisota newsletter and mailing system &copy; 2013-2014 bit3 UG and all '
+                                . '<a href="https://github.com/avisota/contao/graphs/contributors" '
+                                . 'target="_blank">contributors</a>',
                 'disclaimer' => <<<HTML
 Avisota use icons from the <a href="http://www.famfamfam.com/" target="_blank">famfamfam silk icons</a> and
 <a href="http://www.picol.org/" target="_blank">Picol Vector icons</a>,

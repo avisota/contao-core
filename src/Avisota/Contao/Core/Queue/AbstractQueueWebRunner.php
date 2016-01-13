@@ -29,7 +29,7 @@ abstract class AbstractQueueWebRunner extends \Backend
     /**
      * Load the database object
      */
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
     }

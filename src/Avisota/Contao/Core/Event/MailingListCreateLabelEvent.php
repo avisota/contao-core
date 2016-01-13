@@ -52,7 +52,7 @@ class MailingListCreateLabelEvent extends Event
      * @param \ArrayObject   $row
      * @param \StringBuilder $label
      */
-    function __construct(\ArrayObject $row, \StringBuilder $label)
+    public function __construct(\ArrayObject $row, \StringBuilder $label)
     {
         $this->row   = $row;
         $this->label = $label;

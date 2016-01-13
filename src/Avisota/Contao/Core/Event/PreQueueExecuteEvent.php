@@ -60,7 +60,7 @@ class PreQueueExecuteEvent extends Event
      * @param TransportInterface $transport
      * @param ExecutionConfig    $config
      */
-    function __construct(QueueInterface $queue, TransportInterface $transport, ExecutionConfig $config)
+    public function __construct(QueueInterface $queue, TransportInterface $transport, ExecutionConfig $config)
     {
         $this->queue     = $queue;
         $this->transport = $transport;
