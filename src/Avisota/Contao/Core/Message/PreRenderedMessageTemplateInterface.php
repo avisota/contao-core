@@ -15,7 +15,6 @@
 
 namespace Avisota\Contao\Core\Message;
 
-
 use Avisota\Recipient\RecipientInterface;
 use Avisota\Templating\MessageTemplateInterface;
 

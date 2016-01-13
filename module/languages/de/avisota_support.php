@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Translations are managed using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
@@ -11,6 +12,4 @@
  * last-updated: 2014-03-11T12:08:26+01:00
  */
 
-
 $GLOBALS['TL_LANG']['avisota_support']['headline'] = 'Hilfe bekommen';
-

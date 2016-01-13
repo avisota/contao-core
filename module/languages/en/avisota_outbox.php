@@ -13,7 +13,6 @@
  * @filesource
  */
 
-
 $GLOBALS['TL_LANG']['avisota_outbox']['headline']       = 'Outbox';
 $GLOBALS['TL_LANG']['avisota_outbox']['col_name']       = 'Queue name';
 $GLOBALS['TL_LANG']['avisota_outbox']['col_length']     = 'Length';
@@ -32,4 +31,3 @@ $GLOBALS['TL_LANG']['avisota_outbox']['progress_running']      = 'Sending messag
 $GLOBALS['TL_LANG']['avisota_outbox']['progress_pause']        = 'Waiting for next cycle, do not close the window.';
 $GLOBALS['TL_LANG']['avisota_outbox']['progress_finish']       = 'Finished send, you can now close the window.';
 $GLOBALS['TL_LANG']['avisota_outbox']['progress_error']        = 'An error occurred, execution stopped!';
-

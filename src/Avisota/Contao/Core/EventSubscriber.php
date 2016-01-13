@@ -34,62 +34,61 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class EventSubscriber implements EventSubscriberInterface
 {
-	/**
-	 * Returns an array of event names this subscriber wants to listen to.
-	 *
-	 * The array keys are event names and the value can be:
-	 *
-	 *  * The method name to call (priority defaults to 0)
-	 *  * An array composed of the method name to call and the priority
-	 *  * An array of arrays composed of the method names to call and respective
-	 *    priorities, or 0 if unset
-	 *
-	 * For instance:
-	 *
-	 *  * array('eventName' => 'methodName')
-	 *  * array('eventName' => array('methodName', $priority))
-	 *  * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
-	 *
-	 * @return array The event names to listen to
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
+     *
+     * @return array The event names to listen to
      */
-	static public function getSubscribedEvents()
-	{
-		return array(
-			CoreEvents::CREATE_FAKE_RECIPIENT         => 'createFakeRecipient',
-			CoreEvents::CREATE_PUBLIC_EMPTY_RECIPIENT => 'createPublicEmptyRecipient',
-		);
-	}
+    static public function getSubscribedEvents()
+    {
+        return array(
+            CoreEvents::CREATE_FAKE_RECIPIENT         => 'createFakeRecipient',
+            CoreEvents::CREATE_PUBLIC_EMPTY_RECIPIENT => 'createPublicEmptyRecipient',
+        );
+    }
 
-	/**
-	 * Create a new fake recipient, if no one is created yet.
-	 *
-	 * @param CreateFakeRecipientEvent $event
-	 */
-	public function createFakeRecipient(CreateFakeRecipientEvent $event)
-	{
-		if ($event->getRecipient()) {
-			return;
-		}
-
-		$locale = null;
-		if ($event->getMessage()) {
-			$locale = $event->getMessage()->getLanguage();
-		}
-
-		$event->setRecipient(new FakeRecipient($locale));
-	}
-
-	/**
-	 * @param CreatePublicEmptyRecipientEvent $event
+    /**
+     * Create a new fake recipient, if no one is created yet.
+     *
+     * @param CreateFakeRecipientEvent $event
      */
-	public function createPublicEmptyRecipient(CreatePublicEmptyRecipientEvent $event)
-	{
-		if ($event->getRecipient()) {
-			return;
-		}
+    public function createFakeRecipient(CreateFakeRecipientEvent $event)
+    {
+        if ($event->getRecipient()) {
+            return;
+        }
+
+        $locale = null;
+        if ($event->getMessage()) {
+            $locale = $event->getMessage()->getLanguage();
+        }
+
+        $event->setRecipient(new FakeRecipient($locale));
+    }
+
+    /**
+     * @param CreatePublicEmptyRecipientEvent $event
+     */
+    public function createPublicEmptyRecipient(CreatePublicEmptyRecipientEvent $event)
+    {
+        if ($event->getRecipient()) {
+            return;
+        }
 
 
-
-		$event->setRecipient(new MutableRecipient('noreply@' . \Environment::get('host')));
-	}
+        $event->setRecipient(new MutableRecipient('noreply@' . \Environment::get('host')));
+    }
 }

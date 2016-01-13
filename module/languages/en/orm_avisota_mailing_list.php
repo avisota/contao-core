@@ -13,19 +13,17 @@
  * @filesource
  */
 
-
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['title']            = array(
-	'Name',
-	'Please enter the name of the mailing list.'
+$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['title'] = array(
+    'Name',
+    'Please enter the name of the mailing list.'
 );
-$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['alias']            = array(
-	'Alias',
-	'The mailing list alias is a unique reference to the article which can be called instead of its ID.'
+$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['alias'] = array(
+    'Alias',
+    'The mailing list alias is a unique reference to the article which can be called instead of its ID.'
 );
-
 
 /**
  * Legends
@@ -33,23 +31,22 @@ $GLOBALS['TL_LANG']['orm_avisota_mailing_list']['alias']            = array(
 $GLOBALS['TL_LANG']['orm_avisota_mailing_list']['list_legend']   = 'Mailing list';
 $GLOBALS['TL_LANG']['orm_avisota_mailing_list']['expert_legend'] = 'Expert settings';
 
-
 /**
  * Buttons
  */
 $GLOBALS['TL_LANG']['orm_avisota_mailing_list']['new']    = array('New mailing list', 'Add a new mailing list');
 $GLOBALS['TL_LANG']['orm_avisota_mailing_list']['show']   = array(
-	'Mailing list details',
-	'Show the details of mailing list ID %s'
+    'Mailing list details',
+    'Show the details of mailing list ID %s'
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing_list']['copy']   = array(
-	'Duplicate mailing list',
-	'Duplicate mailing list ID %s'
+    'Duplicate mailing list',
+    'Duplicate mailing list ID %s'
 );
 $GLOBALS['TL_LANG']['orm_avisota_mailing_list']['delete'] = array('Delete mailing list', 'Delete mailing list ID %s');
 $GLOBALS['TL_LANG']['orm_avisota_mailing_list']['edit']   = array(
-	'Edit mailing list',
-	'Edit mailing list ID %s'
+    'Edit mailing list',
+    'Edit mailing list ID %s'
 );
 
 /**

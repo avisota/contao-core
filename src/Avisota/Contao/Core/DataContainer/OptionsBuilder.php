@@ -36,25 +36,25 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class OptionsBuilder implements EventSubscriberInterface
 {
-	/**
-	 * Returns an array of event names this subscriber wants to listen to.
-	 *
-	 * The array keys are event names and the value can be:
-	 *
-	 *  * The method name to call (priority defaults to 0)
-	 *  * An array composed of the method name to call and the priority
-	 *  * An array of arrays composed of the method names to call and respective
-	 *    priorities, or 0 if unset
-	 *
-	 * For instance:
-	 *
-	 *  * array('eventName' => 'methodName')
-	 *  * array('eventName' => array('methodName', $priority))
-	 *  * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
-	 *
-	 * @return array The event names to listen to
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
+     *
+     * @return array The event names to listen to
      */
-	static public function getSubscribedEvents()
+    static public function getSubscribedEvents()
     {
         return array(
             CoreEvents::CREATE_MAILING_LIST_OPTIONS         => 'createMailingListOptions',
@@ -66,18 +66,18 @@ class OptionsBuilder implements EventSubscriberInterface
         );
     }
 
-	/**
-	 * @param CreateOptionsEvent $event
+    /**
+     * @param CreateOptionsEvent $event
      */
-	public function createMailingListOptions(CreateOptionsEvent $event)
+    public function createMailingListOptions(CreateOptionsEvent $event)
     {
         $this->getMailingListOptions($event->getOptions());
     }
 
-	/**
-	 * @param array $options
-	 *
-	 * @return array|\ArrayAccess
+    /**
+     * @param array $options
+     *
+     * @return array|\ArrayAccess
      */
     public function getMailingListOptions($options = array())
     {
@@ -93,18 +93,18 @@ class OptionsBuilder implements EventSubscriberInterface
         return $options;
     }
 
-	/**
-	 * @param CreateOptionsEvent $event
+    /**
+     * @param CreateOptionsEvent $event
      */
-	public function createRecipientSourceOptions(CreateOptionsEvent $event)
+    public function createRecipientSourceOptions(CreateOptionsEvent $event)
     {
         $this->getRecipientSourceOptions($event->getOptions());
     }
 
-	/**
-	 * @param array $options
-	 *
-	 * @return array|\ArrayAccess
+    /**
+     * @param array $options
+     *
+     * @return array|\ArrayAccess
      */
     public function getRecipientSourceOptions($options = array())
     {
@@ -120,18 +120,18 @@ class OptionsBuilder implements EventSubscriberInterface
         return $options;
     }
 
-	/**
-	 * @param CreateOptionsEvent $event
+    /**
+     * @param CreateOptionsEvent $event
      */
-	public function createQueueOptions(CreateOptionsEvent $event)
+    public function createQueueOptions(CreateOptionsEvent $event)
     {
         $this->getQueueOptions($event->getOptions());
     }
 
-	/**
-	 * @param array $options
-	 *
-	 * @return array|\ArrayAccess
+    /**
+     * @param array $options
+     *
+     * @return array|\ArrayAccess
      */
     public function getQueueOptions($options = array())
     {
@@ -151,18 +151,18 @@ class OptionsBuilder implements EventSubscriberInterface
     {
     }
 
-	/**
-	 * @param CreateOptionsEvent $event
+    /**
+     * @param CreateOptionsEvent $event
      */
-	public function createTransportOptions(CreateOptionsEvent $event)
+    public function createTransportOptions(CreateOptionsEvent $event)
     {
         $this->getTransportOptions($event->getOptions());
     }
 
-	/**
-	 * @param array $options
-	 *
-	 * @return array|\ArrayAccess
+    /**
+     * @param array $options
+     *
+     * @return array|\ArrayAccess
      */
     public function getTransportOptions($options = array())
     {
@@ -178,24 +178,24 @@ class OptionsBuilder implements EventSubscriberInterface
         return $options;
     }
 
-	/**
-	 * @param CreateOptionsEvent $event
+    /**
+     * @param CreateOptionsEvent $event
      */
-	public function createGalleryTemplateOptions(CreateOptionsEvent $event)
+    public function createGalleryTemplateOptions(CreateOptionsEvent $event)
     {
         $this->getGalleryTemplateOptions($event->getDataContainer(), $event->getOptions());
     }
 
-	/**
-	 * Return all gallery templates as array
-	 *
-	 * @param DC_General|\DataContainer $dc
-	 * @param array      $options
-	 *
-	 * @return array
-	 * @internal param $object
-	 * Todo if this not in use (template engine contao => twig)
-	 */
+    /**
+     * Return all gallery templates as array
+     *
+     * @param DC_General|\DataContainer $dc
+     * @param array                     $options
+     *
+     * @return array
+     * @internal param $object
+     * Todo if this not in use (template engine contao => twig)
+     */
     public function getGalleryTemplateOptions(DC_General $dc, $options = array())
     {
         if (!is_array($options) && !$options instanceof \ArrayAccess) {
@@ -235,10 +235,10 @@ class OptionsBuilder implements EventSubscriberInterface
         return $options;
     }
 
-	/**
-	 * @param CreateOptionsEvent $event
+    /**
+     * @param CreateOptionsEvent $event
      */
-	public function createReaderModuleTemplateOptions(CreateOptionsEvent $event)
+    public function createReaderModuleTemplateOptions(CreateOptionsEvent $event)
     {
         $options   = $event->getOptions();
         $templates = \TwigHelper::getTemplateGroup('avisota_reader_');

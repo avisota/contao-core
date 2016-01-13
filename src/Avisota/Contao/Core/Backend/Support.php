@@ -15,7 +15,6 @@
 
 namespace Avisota\Contao\Core\Backend;
 
-
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -28,23 +27,24 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 class Support extends \TwigBackendModule
 {
-	/**
-	 * Template
-	 * @var string
-	 */
-	protected $strTemplate = 'avisota/backend/support';
+    /**
+     * Template
+     *
+     * @var string
+     */
+    protected $strTemplate = 'avisota/backend/support';
 
-	/**
-	 * Compile the current element
-	 */
-	protected function compile()
-	{
-		/** @var EventDispatcher $eventDispatcher */
-		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+    /**
+     * Compile the current element
+     */
+    protected function compile()
+    {
+        /** @var EventDispatcher $eventDispatcher */
+        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-		$eventDispatcher->dispatch(
-			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-			new LoadLanguageFileEvent('avisota_support')
-		);
-	}
+        $eventDispatcher->dispatch(
+            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+            new LoadLanguageFileEvent('avisota_support')
+        );
+    }
 }

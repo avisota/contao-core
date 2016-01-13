@@ -1,16 +1,16 @@
 <?php
+
 /**
  * Translations are managed using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/avisota-contao/language/de/
+ * @link    http://help.transifex.com/intro/translating.html
+ * @link    https://www.transifex.com/projects/p/avisota-contao/language/de/
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
  * last-updated: 2014-03-11T12:08:26+01:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_module']['avisota_categories']['0']                    = 'Kategorien';
 $GLOBALS['TL_LANG']['tl_module']['avisota_categories']['1']                    = 'Wählen Sie die Kategorien aus, aus denen die Mailing angezeigt werden sollen.';
@@ -44,4 +44,3 @@ $GLOBALS['TL_LANG']['tl_module']['avisota_unsubscribe_confirmation_page']['0'] =
 $GLOBALS['TL_LANG']['tl_module']['avisota_unsubscribe_confirmation_page']['1'] = 'Bitte wählen Sie die Seite aus, die nach erfolgreicher Abbestellung angezeigt wird.';
 $GLOBALS['TL_LANG']['tl_module']['avisota_view_page']['0']                     = 'Ansichtsseite';
 $GLOBALS['TL_LANG']['tl_module']['avisota_view_page']['1']                     = 'Wählen Sie hier eine Seite aus, auf der die Mailing angezeigt werden soll. Wird keine Seite ausgewählt, wird die in der Kategorie hinterlegte Seite zur Online-Ansicht verwendet.';
-
