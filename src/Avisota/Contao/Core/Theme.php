@@ -77,6 +77,7 @@ class Theme
 
         // Check for a theme folder
         if ($newsletter) {
+            /** @noinspection PhpUndefinedMethodInspection */
             $templateGroup = $newsletter
                 ->getTheme()
                 ->getTemplateDirectory();
