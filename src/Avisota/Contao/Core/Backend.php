@@ -53,6 +53,7 @@ class Backend extends \Controller
 		parent::__construct();
 	}
 
+	//Todo what is this
 	public function regenerateDynamics()
 	{
 		$dynamics = array();
@@ -80,6 +81,7 @@ class Backend extends \Controller
 
 			$dynamics[$entityName] = array();
 			foreach ($entities as $entity) {
+				/** @noinspection PhpUndefinedMethodInspection */
 				$dynamics[$entityName][] = array(
 					'id'    => $entity->id(),
 					'alias' => $entity->getAlias(),
@@ -104,6 +106,7 @@ class Backend extends \Controller
 		$dynamics['category'] = array();
 		/** @var MessageCategory $category */
 		foreach ($categories as $category) {
+			/** @noinspection PhpUndefinedMethodInspection */
 			$dynamics['category'][] = array(
 				'id'    => $category->id(),
 				'label' => $category->getTitle(),
