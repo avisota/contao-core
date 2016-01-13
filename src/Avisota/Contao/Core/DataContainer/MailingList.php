@@ -18,6 +18,7 @@ namespace Avisota\Contao\Core\DataContainer;
 use Avisota\Contao\Core\Event\MailingListCreateLabelEvent;
 use Contao\Doctrine\ORM\EntityHelper;
 use Doctrine\ORM\Query;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class MailingList
@@ -47,7 +48,7 @@ class MailingList extends \Backend
 
 		$event = new MailingListCreateLabelEvent(new \ArrayObject($rowData), $label);
 
-		/** @var EventDispatcherInt $eventDispatcher */
+		/** @var EventDispatcherInterface $eventDispatcher */
 		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 		$eventDispatcher->dispatch(MailingListCreateLabelEvent::NAME, $event);
 

@@ -27,13 +27,13 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 class NestedMenu extends \Controller
 {
 	/**
-	 * @var Backend
+	 * @var \Backend
 	 */
 	protected static $instance = null;
 
 	/**
 	 * @static
-	 * @return Backend
+	 * @return \Backend
 	 */
 	public static function getInstance()
 	{

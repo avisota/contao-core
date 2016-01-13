@@ -16,6 +16,7 @@
 namespace Avisota\Contao\Core\Queue;
 
 use Avisota\Contao\Entity\Queue;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -59,6 +60,7 @@ abstract class AbstractQueueWebRunner extends \Backend
 			return $this->execute($request, $queue, $user);
 		}
 		catch (\Exception $exception) {
+			// Todo i can't find where this output
 			$response = new JsonResponse(
 				array(
 					'error' => sprintf(
