@@ -39,6 +39,7 @@ class SwiftTransportFactory implements TransportFactoryInterface
 	{
 		global $container;
 
+		$swiftTransport = null;
 		switch ($transport->getSwiftUseSmtp()) {
 			case 'swiftSmtpSystemSettings':
 				if ($GLOBALS['TL_CONFIG']['useSMTP']) {
