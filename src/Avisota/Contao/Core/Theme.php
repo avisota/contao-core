@@ -62,6 +62,7 @@ class Theme
      *
      * @return string
      * @throws Exception
+     * @deprecated Avisota uses twig templates
      */
     public function getTemplate($template, $format = 'html5')
     {
@@ -115,6 +116,7 @@ class Theme
         }
 
         // At last browse all module folders in reverse order
+        /** @noinspection PhpDeprecationInspection */
         foreach (array_reverse($config->getActiveModules()) as $module) {
             $pathname = TL_ROOT . '/system/modules/' . $module . '/templates/' . $filename;
 
@@ -145,6 +147,7 @@ class Theme
      *
      * @return array
      * @throws Exception
+     * @deprecated Avisota uses twig templates
      */
     public function getTemplateGroup($prefix, $themeId = 0)
     {
@@ -170,6 +173,7 @@ class Theme
         }
 
         // Add the module templates folders if they exist
+        /** @noinspection PhpDeprecationInspection */
         foreach ($config->getActiveModules() as $moduleName) {
             $folder = TL_ROOT . '/system/modules/' . $moduleName . '/templates';
 
