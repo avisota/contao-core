@@ -24,15 +24,15 @@ use Avisota\Contao\Entity\Transport;
  */
 class ServiceTransportFactory implements TransportFactoryInterface
 {
-	/**
-	 * @param Transport $transport
-	 *
-	 * @return mixed
+    /**
+     * @param Transport $transport
+     *
+     * @return mixed
      */
     public function createTransport(Transport $transport)
-	{
-		global $container;
+    {
+        global $container;
 
-		return $container[$transport->getServiceName()];
-	}
+        return $container[$transport->getServiceName()];
+    }
 }

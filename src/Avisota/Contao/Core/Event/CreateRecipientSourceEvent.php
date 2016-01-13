@@ -36,52 +36,52 @@ use Symfony\Component\EventDispatcher\Event;
 class CreateRecipientSourceEvent extends Event
 {
 
-	/**
-	 * @var RecipientSource
-	 */
-	protected $configuration;
+    /**
+     * @var RecipientSource
+     */
+    protected $configuration;
 
-	/**
-	 * @var RecipientSourceInterface
-	 */
-	protected $recipientSource;
+    /**
+     * @var RecipientSourceInterface
+     */
+    protected $recipientSource;
 
-	/**
-	 * CreateRecipientSourceEvent constructor.
-	 *
-	 * @param RecipientSource          $configuration
-	 * @param RecipientSourceInterface $recipientSource
+    /**
+     * CreateRecipientSourceEvent constructor.
+     *
+     * @param RecipientSource          $configuration
+     * @param RecipientSourceInterface $recipientSource
      */
     function __construct(RecipientSource $configuration, RecipientSourceInterface $recipientSource)
-	{
-		$this->configuration   = $configuration;
-		$this->recipientSource = $recipientSource;
-	}
+    {
+        $this->configuration   = $configuration;
+        $this->recipientSource = $recipientSource;
+    }
 
-	/**
-	 * @return RecipientSource
-	 */
-	public function getConfiguration()
-	{
-		return $this->configuration;
-	}
+    /**
+     * @return RecipientSource
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
+    }
 
-	/**
-	 * @return RecipientSourceInterface
-	 */
-	public function getRecipientSource()
-	{
-		return $this->recipientSource;
-	}
+    /**
+     * @return RecipientSourceInterface
+     */
+    public function getRecipientSource()
+    {
+        return $this->recipientSource;
+    }
 
-	/**
-	 * @param RecipientSourceInterface $recipientSource
-	 *
-	 * @return $this
-	 */
-	public function setRecipientSource(RecipientSourceInterface $recipientSource)
-	{
-		$this->recipientSource = $recipientSource;
-		return $this;
-	}
+    /**
+     * @param RecipientSourceInterface $recipientSource
+     *
+     * @return $this
+     */
+    public function setRecipientSource(RecipientSourceInterface $recipientSource)
+    {
+        $this->recipientSource = $recipientSource;
+        return $this;
+    }
 }

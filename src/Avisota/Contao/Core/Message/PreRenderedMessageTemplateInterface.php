@@ -26,43 +26,43 @@ use Avisota\Templating\MessageTemplateInterface;
  */
 interface PreRenderedMessageTemplateInterface extends MessageTemplateInterface
 {
-	/**
-	 * Return the content type.
-	 *
-	 * @return string
-	 */
-	public function getContentType();
+    /**
+     * Return the content type.
+     *
+     * @return string
+     */
+    public function getContentType();
 
-	/**
-	 * Return the content encoding.
-	 *
-	 * @return string
-	 */
-	public function getContentEncoding();
+    /**
+     * Return the content encoding.
+     *
+     * @return string
+     */
+    public function getContentEncoding();
 
-	/**
-	 * Get a name descriptor (file name) for this content,
-	 * e.g. "newsletter-hello-world.html".
-	 *
-	 * @return string
-	 */
-	public function getContentName();
+    /**
+     * Get a name descriptor (file name) for this content,
+     * e.g. "newsletter-hello-world.html".
+     *
+     * @return string
+     */
+    public function getContentName();
 
-	/**
-	 * Get the (binary) content.
-	 *
-	 * @return string
-	 */
-	public function getContent();
+    /**
+     * Get the (binary) content.
+     *
+     * @return string
+     */
+    public function getContent();
 
-	/**
-	 * Render a preview.
-	 *
-	 * @param RecipientInterface $recipient
-	 *
-	 * @param array              $additionalData
-	 *
-	 * @return mixed The content only, not a message.
-	 */
-	public function renderPreview(RecipientInterface $recipient, array $additionalData = array());
+    /**
+     * Render a preview.
+     *
+     * @param RecipientInterface $recipient
+     *
+     * @param array              $additionalData
+     *
+     * @return mixed The content only, not a message.
+     */
+    public function renderPreview(RecipientInterface $recipient, array $additionalData = array());
 }

@@ -25,48 +25,48 @@ use Avisota\Recipient\RecipientInterface;
  */
 class ContaoAwareNativeMessage extends NativeMessage
 {
-	/**
-	 * The swift message.
-	 *
-	 * @var Message
-	 */
-	protected $contaoMessage;
+    /**
+     * The swift message.
+     *
+     * @var Message
+     */
+    protected $contaoMessage;
 
-	/**
-	 * The contao internal recipients.
-	 *
-	 * @var array|RecipientInterface[]
-	 */
-	protected $internalRecipients;
+    /**
+     * The contao internal recipients.
+     *
+     * @var array|RecipientInterface[]
+     */
+    protected $internalRecipients;
 
-	/**
-	 * @param \Swift_Message $message
-	 * @param Message        $contaoMessage
-	 * @param array          $internalRecipients
-	 *
-	 * @internal param array|\Avisota\Recipient\RecipientInterface[] $recipients
-	 */
-	public function __construct(\Swift_Message $message, Message $contaoMessage, array $internalRecipients)
-	{
-		parent::__construct($message);
+    /**
+     * @param \Swift_Message $message
+     * @param Message        $contaoMessage
+     * @param array          $internalRecipients
+     *
+     * @internal param array|\Avisota\Recipient\RecipientInterface[] $recipients
+     */
+    public function __construct(\Swift_Message $message, Message $contaoMessage, array $internalRecipients)
+    {
+        parent::__construct($message);
 
-		$this->contaoMessage      = $contaoMessage;
-		$this->internalRecipients = $internalRecipients;
-	}
+        $this->contaoMessage      = $contaoMessage;
+        $this->internalRecipients = $internalRecipients;
+    }
 
-	/**
-	 * @return \Avisota\Contao\Entity\Message
-	 */
-	public function getContaoMessage()
-	{
-		return $this->contaoMessage;
-	}
+    /**
+     * @return \Avisota\Contao\Entity\Message
+     */
+    public function getContaoMessage()
+    {
+        return $this->contaoMessage;
+    }
 
-	/**
-	 * @return array|\Avisota\Recipient\RecipientInterface[]
-	 */
-	public function getInternalRecipients()
-	{
-		return $this->internalRecipients;
-	}
+    /**
+     * @return array|\Avisota\Recipient\RecipientInterface[]
+     */
+    public function getInternalRecipients()
+    {
+        return $this->internalRecipients;
+    }
 }

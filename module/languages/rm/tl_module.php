@@ -1,16 +1,16 @@
 <?php
+
 /**
  * Translations are managed using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/avisota-contao/language/rm/
+ * @link    http://help.transifex.com/intro/translating.html
+ * @link    https://www.transifex.com/projects/p/avisota-contao/language/rm/
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
  * last-updated: 2014-03-11T12:08:26+01:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_module']['avisota_categories']['0']                    = 'Categorias';
 $GLOBALS['TL_LANG']['tl_module']['avisota_categories']['1']                    = 'Tscherna las categorias, ord las qualas ils Mailings duain vegnir mussads.';
@@ -44,4 +44,3 @@ $GLOBALS['TL_LANG']['tl_module']['avisota_unsubscribe_confirmation_page']['0'] =
 $GLOBALS['TL_LANG']['tl_module']['avisota_unsubscribe_confirmation_page']['1'] = 'Tscherna la pagina che vegn mussada suenter de-abunar cun success.';
 $GLOBALS['TL_LANG']['tl_module']['avisota_view_page']['0']                     = 'Pagina da visualisaziun';
 $GLOBALS['TL_LANG']['tl_module']['avisota_view_page']['1']                     = 'Tscherna qua ina pagina, sin la quala ils mailings duain vegnir visualisads. Na vegn nagina pagina tsschernida, vegn la pagina nudada en la categoria utilisada per la visualisaziun online';
-

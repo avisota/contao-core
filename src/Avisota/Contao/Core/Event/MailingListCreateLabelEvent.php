@@ -34,43 +34,43 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class MailingListCreateLabelEvent extends Event
 {
-	const NAME = 'Avisota\Contao\Core\Event\MailingListCreateLabel';
+    const NAME = 'Avisota\Contao\Core\Event\MailingListCreateLabel';
 
-	/**
-	 * @var \ArrayObject
-	 */
-	protected $row;
+    /**
+     * @var \ArrayObject
+     */
+    protected $row;
 
-	/**
-	 * @var \StringBuilder
-	 */
-	protected $label;
+    /**
+     * @var \StringBuilder
+     */
+    protected $label;
 
-	/**
-	 * MailingListCreateLabelEvent constructor.
-	 *
-	 * @param \ArrayObject   $row
-	 * @param \StringBuilder $label
+    /**
+     * MailingListCreateLabelEvent constructor.
+     *
+     * @param \ArrayObject   $row
+     * @param \StringBuilder $label
      */
     function __construct(\ArrayObject $row, \StringBuilder $label)
-	{
-		$this->row = $row;
-		$this->label = $label;
-	}
+    {
+        $this->row   = $row;
+        $this->label = $label;
+    }
 
-	/**
-	 * @return \ArrayObject
-	 */
-	public function getRow()
-	{
-		return $this->row;
-	}
+    /**
+     * @return \ArrayObject
+     */
+    public function getRow()
+    {
+        return $this->row;
+    }
 
-	/**
-	 * @return \StringBuilder
-	 */
-	public function getLabel()
-	{
-		return $this->label;
-	}
+    /**
+     * @return \StringBuilder
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
 }

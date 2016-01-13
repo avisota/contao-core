@@ -27,81 +27,81 @@ use Avisota\Renderer\MessageRendererInterface;
  */
 class ReplyToOverwriteMessageRenderer extends DelegateMessageRenderer
 {
-	/**
-	 * @var string
-	 */
-	protected $replyTo;
-
-	/**
-	 * @var string
-	 */
-	protected $replyToName;
-
-	/**
-	 * DelegateMessageRenderer constructor.
-	 *
-	 * @param MessageRendererInterface $delegate
-	 * @param                          $replyTo
-	 * @param                          $replyToName
-	 */
-	function __construct(MessageRendererInterface $delegate, $replyTo, $replyToName)
-	{
-		parent::__construct($delegate);
-		$this->replyTo     = (string) $replyTo;
-		$this->replyToName = (string) $replyToName;
-	}
-
-	/**
-	 * @param string $replyTo
-	 *
-	 * @return $this
-	 */
-	public function setReplyTo($replyTo)
-	{
-		$this->replyTo = (string) $replyTo;
-		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getReplyTo()
-	{
-		return $this->replyTo;
-	}
-
-	/**
-	 * @param string $replyToName
-	 *
-	 * @return $this
-	 */
-	public function setReplyToName($replyToName)
-	{
-		$this->replyToName = (string) $replyToName;
-		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getReplyToName()
-	{
-		return $this->replyToName;
-	}
-
-	/**
-	 * Render a message and create a Swift_Message.
-	 *
-	 * @param MessageInterface $message
-	 *
-	 * @return \Swift_Message
+    /**
+     * @var string
      */
-	public function renderMessage(MessageInterface $message)
-	{
-		$swiftMessage = $this->delegate->renderMessage($message);
+    protected $replyTo;
 
-		$swiftMessage->setReplyTo($this->replyTo, $this->replyToName);
+    /**
+     * @var string
+     */
+    protected $replyToName;
 
-		return $swiftMessage;
-	}
+    /**
+     * DelegateMessageRenderer constructor.
+     *
+     * @param MessageRendererInterface $delegate
+     * @param                          $replyTo
+     * @param                          $replyToName
+     */
+    function __construct(MessageRendererInterface $delegate, $replyTo, $replyToName)
+    {
+        parent::__construct($delegate);
+        $this->replyTo     = (string) $replyTo;
+        $this->replyToName = (string) $replyToName;
+    }
+
+    /**
+     * @param string $replyTo
+     *
+     * @return $this
+     */
+    public function setReplyTo($replyTo)
+    {
+        $this->replyTo = (string) $replyTo;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReplyTo()
+    {
+        return $this->replyTo;
+    }
+
+    /**
+     * @param string $replyToName
+     *
+     * @return $this
+     */
+    public function setReplyToName($replyToName)
+    {
+        $this->replyToName = (string) $replyToName;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReplyToName()
+    {
+        return $this->replyToName;
+    }
+
+    /**
+     * Render a message and create a Swift_Message.
+     *
+     * @param MessageInterface $message
+     *
+     * @return \Swift_Message
+     */
+    public function renderMessage(MessageInterface $message)
+    {
+        $swiftMessage = $this->delegate->renderMessage($message);
+
+        $swiftMessage->setReplyTo($this->replyTo, $this->replyToName);
+
+        return $swiftMessage;
+    }
 }

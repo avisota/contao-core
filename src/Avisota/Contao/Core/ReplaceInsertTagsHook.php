@@ -15,8 +15,6 @@
 
 namespace Avisota\Contao\Core;
 
-
-
 /**
  * Class Backend
  *
@@ -26,24 +24,24 @@ namespace Avisota\Contao\Core;
  */
 class ReplaceInsertTagsHook extends \Controller
 {
-	/**
-	 * Import the Config and Session instances
+    /**
+     * Import the Config and Session instances
      */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 * Replace insert tags with their values
-	 *
-	 * @param string  $strBuffer The text with the tags to be replaced
-	 * @param boolean $blnCache  If false, non-cacheable tags will be replaced
-	 *
-	 * @return string The text with the replaced tags
+    /**
+     * Replace insert tags with their values
+     *
+     * @param string  $strBuffer The text with the tags to be replaced
+     * @param boolean $blnCache  If false, non-cacheable tags will be replaced
+     *
+     * @return string The text with the replaced tags
      */
-	public static function replaceInsertTags($strBuffer, $blnCache = false)
-	{
-		return parent::replaceInsertTags($strBuffer, $blnCache);
-	}
+    public static function replaceInsertTags($strBuffer, $blnCache = false)
+    {
+        return parent::replaceInsertTags($strBuffer, $blnCache);
+    }
 }

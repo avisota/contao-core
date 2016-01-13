@@ -34,56 +34,56 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class PreSendImmediateEvent extends Event
 {
-	/**
-	 * @var Message
-	 */
-	protected $message;
+    /**
+     * @var Message
+     */
+    protected $message;
 
-	/**
-	 * @var int
-	 */
-	protected $turn;
+    /**
+     * @var int
+     */
+    protected $turn;
 
-	/**
-	 * @var string
-	 */
-	protected $loop;
+    /**
+     * @var string
+     */
+    protected $loop;
 
-	/**
-	 * PreSendImmediateEvent constructor.
-	 *
-	 * @param Message $message
-	 * @param         $turn
-	 * @param         $loop
+    /**
+     * PreSendImmediateEvent constructor.
+     *
+     * @param Message $message
+     * @param         $turn
+     * @param         $loop
      */
     function __construct(Message $message, $turn, $loop)
-	{
-		$this->message = $message;
-		$this->turn    = $turn;
-		$this->loop    = $loop;
-	}
+    {
+        $this->message = $message;
+        $this->turn    = $turn;
+        $this->loop    = $loop;
+    }
 
-	/**
-	 * @return Message
-	 */
-	public function getMessage()
-	{
-		return $this->message;
-	}
+    /**
+     * @return Message
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
 
-	/**
-	 * @return int
-	 */
-	public function getTurn()
-	{
-		return $this->turn;
-	}
+    /**
+     * @return int
+     */
+    public function getTurn()
+    {
+        return $this->turn;
+    }
 
-	/**
-	 * @return mixed
-	 */
-	public function getLoop()
-	{
-		return $this->loop;
-	}
+    /**
+     * @return mixed
+     */
+    public function getLoop()
+    {
+        return $this->loop;
+    }
 }

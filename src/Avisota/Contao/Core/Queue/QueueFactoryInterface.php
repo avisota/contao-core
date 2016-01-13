@@ -24,10 +24,10 @@ use Avisota\Contao\Entity\Queue;
  */
 interface QueueFactoryInterface
 {
-	/**
-	 * @param Queue $queueEntity
-	 *
-	 * @return mixed
+    /**
+     * @param Queue $queueEntity
+     *
+     * @return mixed
      */
     public function createQueue(Queue $queueEntity);
 }

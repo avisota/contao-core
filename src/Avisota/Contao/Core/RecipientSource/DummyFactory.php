@@ -28,21 +28,21 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class DummyFactory implements RecipientSourceFactoryInterface
 {
-	/**
-	 * @param RecipientSource $recipientSourceData
-	 *
-	 * @return \Avisota\RecipientSource\RecipientSourceInterface
+    /**
+     * @param RecipientSource $recipientSourceData
+     *
+     * @return \Avisota\RecipientSource\RecipientSourceInterface
      */
     public function createRecipientSource(RecipientSource $recipientSourceData)
-	{
-		$recipientSource = new Dummy($recipientSourceData->getDummyMinCount(), $recipientSourceData->getDummyMaxCount());
+    {
+        $recipientSource = new Dummy($recipientSourceData->getDummyMinCount(), $recipientSourceData->getDummyMaxCount());
 
-		/** @var EventDispatcherInterface $eventDispatcher */
-		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+        /** @var EventDispatcherInterface $eventDispatcher */
+        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-		$event = new CreateRecipientSourceEvent($recipientSourceData, $recipientSource);
-		$eventDispatcher->dispatch(CoreEvents::CREATE_RECIPIENT_SOURCE, $event);
+        $event = new CreateRecipientSourceEvent($recipientSourceData, $recipientSource);
+        $eventDispatcher->dispatch(CoreEvents::CREATE_RECIPIENT_SOURCE, $event);
 
-		return $event->getRecipientSource();
-	}
+        return $event->getRecipientSource();
+    }
 }

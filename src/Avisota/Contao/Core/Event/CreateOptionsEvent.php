@@ -20,26 +20,26 @@ namespace Avisota\Contao\Core\Event;
  */
 class CreateOptionsEvent extends \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEvent
 {
-	protected $preventDefault = false;
+    protected $preventDefault = false;
 
-	/**
-	 * Prevent default listeners.
-	 *
-	 * @return $this
-	 */
-	public function preventDefault()
-	{
-		$this->preventDefault = true;
-		return $this;
-	}
+    /**
+     * Prevent default listeners.
+     *
+     * @return $this
+     */
+    public function preventDefault()
+    {
+        $this->preventDefault = true;
+        return $this;
+    }
 
-	/**
-	 * Determine if default should prevented.
-	 *
-	 * @return bool
-	 */
-	public function isDefaultPrevented()
-	{
-		return $this->preventDefault;
-	}
+    /**
+     * Determine if default should prevented.
+     *
+     * @return bool
+     */
+    public function isDefaultPrevented()
+    {
+        return $this->preventDefault;
+    }
 }

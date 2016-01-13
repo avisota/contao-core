@@ -25,21 +25,21 @@ use Avisota\Queue\SimpleDatabaseQueue;
  */
 class SimpleDatabaseQueueFactory implements QueueFactoryInterface
 {
-	/**
-	 * @param Queue $queue
-	 *
-	 * @return SimpleDatabaseQueue
+    /**
+     * @param Queue $queue
+     *
+     * @return SimpleDatabaseQueue
      */
     public function createQueue(Queue $queue)
-	{
-		global $container;
+    {
+        global $container;
 
-		return new SimpleDatabaseQueue(
-			$container['doctrine.connection.default'],
-			$queue->getSimpleDatabaseQueueTable(),
-			true,
-			$container['avisota.logger.queue'],
-			$container['event-dispatcher']
-		);
-	}
+        return new SimpleDatabaseQueue(
+            $container['doctrine.connection.default'],
+            $queue->getSimpleDatabaseQueueTable(),
+            true,
+            $container['avisota.logger.queue'],
+            $container['event-dispatcher']
+        );
+    }
 }

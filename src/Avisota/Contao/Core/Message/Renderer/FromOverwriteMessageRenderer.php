@@ -30,84 +30,84 @@ use Avisota\Renderer\MessageRendererInterface;
  */
 class FromOverwriteMessageRenderer extends DelegateMessageRenderer
 {
-	/**
-	 * @var string
-	 */
-	protected $from;
-
-	/**
-	 * @var string
-	 */
-	protected $fromName;
-
-	/**
-	 * {@inheritDoc}
+    /**
+     * @var string
      */
-	/**
-	 * FromOverwriteMessageRenderer constructor.
-	 *
-	 * @param MessageRendererInterface $delegate
-	 * @param                          $from
-	 * @param                          $fromName
+    protected $from;
+
+    /**
+     * @var string
+     */
+    protected $fromName;
+
+    /**
+     * {@inheritDoc}
+     */
+    /**
+     * FromOverwriteMessageRenderer constructor.
+     *
+     * @param MessageRendererInterface $delegate
+     * @param                          $from
+     * @param                          $fromName
      */
     function __construct(MessageRendererInterface $delegate, $from, $fromName)
-	{
-		parent::__construct($delegate);
-		$this->from     = (string) $from;
-		$this->fromName = (string) $fromName;
-	}
+    {
+        parent::__construct($delegate);
+        $this->from     = (string) $from;
+        $this->fromName = (string) $fromName;
+    }
 
-	/**
-	 * @param string $from
-	 *
-	 * @return $this
-	 */
-	public function setFrom($from)
-	{
-		$this->from = (string) $from;
-		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getFrom()
-	{
-		return $this->from;
-	}
-
-	/**
-	 * @param string $fromName
-	 *
-	 * @return $this
-	 */
-	public function setFromName($fromName)
-	{
-		$this->fromName = (string) $fromName;
-		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getFromName()
-	{
-		return $this->fromName;
-	}
-
-	/**
-	 * Render a message and create a Swift_Message.
-	 *
-	 * @param MessageInterface $message
-	 *
-	 * @return \Swift_Message
+    /**
+     * @param string $from
+     *
+     * @return $this
      */
-	public function renderMessage(MessageInterface $message)
-	{
-		$swiftMessage = $this->delegate->renderMessage($message);
+    public function setFrom($from)
+    {
+        $this->from = (string) $from;
+        return $this;
+    }
 
-		$swiftMessage->setFrom($this->from, $this->fromName);
+    /**
+     * @return string
+     */
+    public function getFrom()
+    {
+        return $this->from;
+    }
 
-		return $swiftMessage;
-	}
+    /**
+     * @param string $fromName
+     *
+     * @return $this
+     */
+    public function setFromName($fromName)
+    {
+        $this->fromName = (string) $fromName;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFromName()
+    {
+        return $this->fromName;
+    }
+
+    /**
+     * Render a message and create a Swift_Message.
+     *
+     * @param MessageInterface $message
+     *
+     * @return \Swift_Message
+     */
+    public function renderMessage(MessageInterface $message)
+    {
+        $swiftMessage = $this->delegate->renderMessage($message);
+
+        $swiftMessage->setFrom($this->from, $this->fromName);
+
+        return $swiftMessage;
+    }
 }

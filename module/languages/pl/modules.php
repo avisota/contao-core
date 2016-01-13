@@ -1,16 +1,16 @@
 <?php
+
 /**
  * Translations are managed using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/avisota-contao/language/pl/
+ * @link    http://help.transifex.com/intro/translating.html
+ * @link    https://www.transifex.com/projects/p/avisota-contao/language/pl/
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
  * last-updated: 2014-03-11T12:08:26+01:00
  */
-
 
 $GLOBALS['TL_LANG']['MOD']['avisota']['0']                   = 'Newsletter Avisota';
 $GLOBALS['TL_LANG']['MOD']['avisota_config:newsletter']['0'] = 'Konfiguracja wiadomości';
@@ -35,4 +35,3 @@ $GLOBALS['TL_LANG']['MOD']['avisota_theme']['0']             = 'Motyw';
 $GLOBALS['TL_LANG']['MOD']['avisota_theme']['1']             = 'Zarządzaj ustawieniami motywów newslettera, włączając w to pliki szablonów, style i szablony.';
 $GLOBALS['TL_LANG']['MOD']['avisota_transport']['0']         = 'Transporty';
 $GLOBALS['TL_LANG']['MOD']['avisota_transport']['1']         = 'Zarządzaj modułami transportów.';
-

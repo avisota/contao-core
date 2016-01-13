@@ -1,16 +1,16 @@
 <?php
+
 /**
  * Translations are managed using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/avisota-contao/language/rm/
+ * @link    http://help.transifex.com/intro/translating.html
+ * @link    https://www.transifex.com/projects/p/avisota-contao/language/rm/
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
  * last-updated: 2014-03-11T12:08:26+01:00
  */
-
 
 $GLOBALS['TL_LANG']['orm_avisota_transport']['alias']['0']              = 'Alias';
 $GLOBALS['TL_LANG']['orm_avisota_transport']['alias']['1']              = 'L\'alias dal modul da transport è ina referenza unica al modul da transport che po vegnir inditgada empè da la ID.';
@@ -65,4 +65,3 @@ $GLOBALS['TL_LANG']['orm_avisota_transport']['title']['1']              = 'Tsche
 $GLOBALS['TL_LANG']['orm_avisota_transport']['transport_legend']        = 'Modul da transport';
 $GLOBALS['TL_LANG']['orm_avisota_transport']['type']['0']               = 'Tip da transport';
 $GLOBALS['TL_LANG']['orm_avisota_transport']['type']['1']               = 'Tscherna il tip da transport.';
-
