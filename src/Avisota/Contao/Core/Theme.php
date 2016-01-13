@@ -49,7 +49,7 @@ class Theme
      */
     protected function __construct()
     {
-    }
+    }/** @noinspection PhpUndefinedClassInspection */
 
     /**
      * Find a particular template file and return its path
@@ -71,6 +71,7 @@ class Theme
         $template = basename($template);
         $filename = $template . '.html5';
 
+        /** @noinspection PhpUndefinedClassInspection */
         /** @var AvisotaMailing $newsletter */
         global $newsletter;
 
@@ -132,10 +133,11 @@ class Theme
             }
         }
 
+        /** @noinspection PhpUndefinedClassInspection */
         throw new Exception('Could not find template file "' . $filename . '"');
     }
 
-
+    /** @noinspection PhpUndefinedClassInspection */
     /**
      * Return all template files of a particular group as array
      *
