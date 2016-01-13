@@ -195,7 +195,7 @@ class OptionsBuilder implements EventSubscriberInterface
 	 *
 	 * @return array
 	 * @internal param $object
-	 *
+	 * Todo if this not in use (template engine contao => twig)
 	 */
     public function getGalleryTemplateOptions(DC_General $dc, $options = array())
     {
@@ -204,6 +204,7 @@ class OptionsBuilder implements EventSubscriberInterface
         }
 
         // Get the page ID
+        /** @noinspection PhpUndefinedMethodInspection */
         $article = \Database::getInstance()
             ->prepare("SELECT pid FROM tl_article WHERE id=?")
             ->limit(1)
@@ -215,6 +216,7 @@ class OptionsBuilder implements EventSubscriberInterface
             );
 
         // Inherit the page settings
+        /** @noinspection PhpUndefinedMethodInspection */
         $page = $this->getPageDetails($article->pid);
 
         // Get the theme ID
@@ -224,6 +226,7 @@ class OptionsBuilder implements EventSubscriberInterface
             ->execute($page->layout);
 
         // Return all gallery templates
+        /** @noinspection PhpUndefinedMethodInspection */
         $templateGroup = $this->getTemplateGroup('nl_gallery_', $layout->pid);
 
         foreach ($templateGroup as $key => $value) {
