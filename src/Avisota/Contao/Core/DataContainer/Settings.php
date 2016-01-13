@@ -22,6 +22,9 @@ namespace Avisota\Contao\Core\DataContainer;
  */
 class Settings extends \Backend
 {
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function onload_callback()
     {
         if (!is_dir(TL_ROOT . '/system/modules/avisota/highstock')
@@ -40,6 +43,8 @@ class Settings extends \Backend
      * @param                $label
      *
      * @return mixed
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function renderMissingHighstockField($dc, $label)
     {

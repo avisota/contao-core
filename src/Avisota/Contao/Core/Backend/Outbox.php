@@ -64,6 +64,7 @@ class Outbox extends \TwigBackendModule
 
     /**
      * Compile the current element
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function compile()
     {
@@ -83,6 +84,7 @@ class Outbox extends \TwigBackendModule
 
     /**
      * @param EntityRepository $queueRepository
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function executeQueue(EntityRepository $queueRepository)
     {

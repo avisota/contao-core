@@ -28,10 +28,12 @@ class SynonymizerService
      * Find all synonym field names.
      *
      * @param string $fieldName                The field name, where synonyms are searched for.
-     * @param bool $includeOriginalFieldName If true, the full synonyms list, including the
-     *                                       original $fieldName will be returned.
+     * @param bool   $includeOriginalFieldName If true, the full synonyms list, including the
+     *                                         original $fieldName will be returned.
      *
      * @return array|false Return an array of synonyms or false if no synonyms where found.
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function findSynonyms($fieldName, $includeOriginalFieldName = false)
     {
@@ -62,6 +64,7 @@ class SynonymizerService
      *                                          or the recipient object itself.
      *
      * @return array Return the details expanded with synonym fields.
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function expandDetailsWithSynonyms($details)
     {

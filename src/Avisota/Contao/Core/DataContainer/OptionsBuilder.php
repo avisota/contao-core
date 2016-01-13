@@ -78,6 +78,7 @@ class OptionsBuilder implements EventSubscriberInterface
      * @param array $options
      *
      * @return array|\ArrayAccess
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function getMailingListOptions($options = array())
     {
@@ -105,6 +106,7 @@ class OptionsBuilder implements EventSubscriberInterface
      * @param array $options
      *
      * @return array|\ArrayAccess
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function getRecipientSourceOptions($options = array())
     {
@@ -194,6 +196,7 @@ class OptionsBuilder implements EventSubscriberInterface
      *
      * @return array
      * @internal param $object
+     * @SuppressWarnings(PHPMD.ShortVariable)
      * Todo if this not in use (template engine contao => twig)
      */
     public function getGalleryTemplateOptions(DC_General $dc, $options = array())

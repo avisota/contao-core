@@ -92,15 +92,22 @@ class Queue extends \Backend implements EventSubscriberInterface
      * @param DC_General $dc
      *
      * @return mixed
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function rememberAlias($alias, $dc)
     {
-        $_SESSION['AVISOTA_QUEUE_ALIAS'][$dc->id] = $alias;
+        $avisotaQueueAlias = \Session::getInstance()->get('AVISOTA_QUEUE_ALIAS');
+        $avisotaQueueAlias[$dc->id] = $alias;
+        \Session::getInstance()->set('AVISOTA_QUEUE_ALIAS', $avisotaQueueAlias);
+
         return $alias;
     }
 
     /**
      * @param ActionEvent $event
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function handleAction(ActionEvent $event)
     {

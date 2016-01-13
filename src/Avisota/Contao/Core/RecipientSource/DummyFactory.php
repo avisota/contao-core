@@ -32,6 +32,7 @@ class DummyFactory implements RecipientSourceFactoryInterface
      * @param RecipientSource $recipientSourceData
      *
      * @return \Avisota\RecipientSource\RecipientSourceInterface
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function createRecipientSource(RecipientSource $recipientSourceData)
     {

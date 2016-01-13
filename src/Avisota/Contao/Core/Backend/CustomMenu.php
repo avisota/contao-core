@@ -27,6 +27,7 @@ class CustomMenu
      * @param       $showAll
      *
      * @return array
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function hookGetUserNavigation(array $navigation, $showAll)
     {

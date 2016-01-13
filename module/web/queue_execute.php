@@ -45,6 +45,7 @@ BackendUser::getInstance();
 
 /**
  * Class qeueue_execute
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
  */
 class qeueue_execute extends AbstractQueueWebRunner
 {
@@ -54,6 +55,7 @@ class qeueue_execute extends AbstractQueueWebRunner
      * @param BackendUser $user
      *
      * @return JsonResponse
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function execute(Request $request, Queue $queueData, \BackendUser $user)
     {

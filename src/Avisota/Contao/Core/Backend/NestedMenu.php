@@ -55,6 +55,7 @@ class NestedMenu extends \Controller
      * @param $do
      *
      * @return string
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function hookNestedMenuPreContent($do)
     {
@@ -74,6 +75,8 @@ class NestedMenu extends \Controller
      * @param $do
      *
      * @return string
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function hookNestedMenuPostContent($do)
     {

@@ -19,6 +19,7 @@ namespace Avisota\Contao\Core\DataContainer;
  * Class Transport
  *
  * @package Avisota\Contao\Core\DataContainer
+ * @SuppressWarnings(PHPMD.ShortVariables)
  */
 class Transport extends \Backend
 {

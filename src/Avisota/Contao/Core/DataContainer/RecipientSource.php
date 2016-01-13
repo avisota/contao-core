@@ -98,6 +98,7 @@ class RecipientSource implements EventSubscriberInterface
 
     /**
      * @param EncodePropertyValueFromWidgetEvent $event
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function checkCsvColumnUnique(EncodePropertyValueFromWidgetEvent $event)
     {
@@ -125,6 +126,7 @@ class RecipientSource implements EventSubscriberInterface
 
     /**
      * @param EncodePropertyValueFromWidgetEvent $event
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function checkCsvColumnEmail(EncodePropertyValueFromWidgetEvent $event)
     {
@@ -166,6 +168,9 @@ class RecipientSource implements EventSubscriberInterface
      * @param EnvironmentInterface $environment
      *
      * @return string
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function handleListAction(EnvironmentInterface $environment)
     {
@@ -207,6 +212,7 @@ class RecipientSource implements EventSubscriberInterface
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function getRecipientColumns()
     {
@@ -236,6 +242,7 @@ class RecipientSource implements EventSubscriberInterface
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function getRecipientFilterColumns()
     {
@@ -263,6 +270,7 @@ class RecipientSource implements EventSubscriberInterface
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function getMemberFilterColumns()
     {

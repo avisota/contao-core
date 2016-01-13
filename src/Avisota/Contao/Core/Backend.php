@@ -54,6 +54,9 @@ class Backend extends \Controller
     }
 
     //Todo what is this
+    /**
+     * @SuppressWarnings(PHPMD.LongVariable)
+     */
     public function regenerateDynamics()
     {
         $dynamics = array();

@@ -33,6 +33,7 @@ class SwiftTransportFactory implements TransportFactoryInterface
      * @param Transport $transport
      *
      * @return SwiftTransport
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function createTransport(Transport $transport)
     {

@@ -32,6 +32,8 @@ class ServiceFactory
 {
     /**
      * @param \Pimple $container
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function init($container)
     {
@@ -44,6 +46,7 @@ class ServiceFactory
             }
 
             $factory = $this;
+            $session = \Session::getInstance();
 
             // initialize the entity manager and class loaders
             $container['doctrine.orm.entityManager'];
@@ -77,7 +80,9 @@ class ServiceFactory
                     }
 
                     if ($verbose) {
-                        $_SESSION['TL_RAW'][] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
+                        $tlRaw = $session->get('TL_RAW');
+                        $tlRaw[] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
+                        $session->set('TL_RAW', $tlRaw);
                     }
 
                     log_message($message . PHP_EOL . $e->getTraceAsString());
@@ -110,7 +115,9 @@ class ServiceFactory
                     }
 
                     if ($verbose) {
-                        $_SESSION['TL_RAW'][] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
+                        $tlRaw = $session->get('TL_RAW');
+                        $tlRaw[] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
+                        $session->set('TL_RAW', $tlRaw);
                     }
 
                     log_message($message . PHP_EOL . $e->getTraceAsString());
@@ -150,7 +157,9 @@ class ServiceFactory
                     }
 
                     if ($verbose) {
-                        $_SESSION['TL_RAW'][] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
+                        $tlRaw = $session->get('TL_RAW');
+                        $tlRaw[] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
+                        $session->set('TL_RAW', $tlRaw);
                     }
 
                     log_message($message . PHP_EOL . $e->getTraceAsString());
@@ -171,6 +180,8 @@ class ServiceFactory
      * @param RecipientSource $recipientSource
      *
      * @return mixed
+     * @SuppressWarnings(PHPMD.LongVariable)
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function createRecipientSource(RecipientSource $recipientSource)
     {
@@ -186,6 +197,7 @@ class ServiceFactory
      * @param Queue $queue
      *
      * @return mixed
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function createQueue(Queue $queue)
     {
@@ -200,6 +212,8 @@ class ServiceFactory
      * @param Transport $transport
      *
      * @return mixed
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function createTransport(Transport $transport)
     {

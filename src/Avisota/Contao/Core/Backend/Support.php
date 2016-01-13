@@ -36,6 +36,7 @@ class Support extends \TwigBackendModule
 
     /**
      * Compile the current element
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function compile()
     {

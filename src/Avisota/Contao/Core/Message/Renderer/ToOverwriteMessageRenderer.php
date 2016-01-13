@@ -24,6 +24,7 @@ use Avisota\Renderer\MessageRendererInterface;
  *
  * Implementation of a delegate message renderer.
  * Primary used as base class for custom implementations.
+ * @SuppressWarnings(PHPMD.ShortVariable)
  */
 class ToOverwriteMessageRenderer extends DelegateMessageRenderer
 {
