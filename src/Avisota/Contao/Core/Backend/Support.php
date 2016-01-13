@@ -15,8 +15,7 @@
 
 namespace Avisota\Contao\Core\Backend;
 
-use BackendTemplate;
-use Contao\Doctrine\ORM\EntityHelper;
+
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;

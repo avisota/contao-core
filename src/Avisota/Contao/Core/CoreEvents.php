@@ -15,9 +15,6 @@
 
 namespace Avisota\Contao\Core;
 
-use Avisota\Contao\Entity\MessageCategory;
-use Contao\Doctrine\ORM\EntityHelper;
-use Doctrine\ORM\EntityRepository;
 
 /**
  * Class CoreEvents

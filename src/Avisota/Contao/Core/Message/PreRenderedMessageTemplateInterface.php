@@ -15,8 +15,7 @@
 
 namespace Avisota\Contao\Core\Message;
 
-use Avisota\Contao\Entity\Message;
-use Avisota\Contao\Entity\MessageContent;
+
 use Avisota\Recipient\RecipientInterface;
 use Avisota\Templating\MessageTemplateInterface;
 

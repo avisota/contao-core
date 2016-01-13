@@ -20,7 +20,7 @@ use Avisota\Contao\Core\Message\Renderer\FromOverwriteMessageRenderer;
 use Avisota\Contao\Core\Message\Renderer\ReplyToOverwriteMessageRenderer;
 use Avisota\Contao\Core\Message\Renderer\SenderOverwriteMessageRenderer;
 use Avisota\Contao\Core\Message\Renderer\ToOverwriteMessageRenderer;
-use Avisota\Renderer\NativeMessageRenderer;
+
 use Avisota\Transport\SwiftTransport;
 
 /**

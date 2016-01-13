@@ -15,8 +15,6 @@
 
 namespace Avisota\Contao\Core\DataContainer;
 
-use Avisota\Contao\Entity\Message;
-use Contao\Doctrine\ORM\EntityHelper;
 
 /**
  * Class Settings

@@ -15,8 +15,6 @@
 
 namespace Avisota\Contao\Core\Backend;
 
-use BackendTemplate;
-use Contao\Doctrine\ORM\EntityHelper;
 
 /**
  * Class CustomMenu

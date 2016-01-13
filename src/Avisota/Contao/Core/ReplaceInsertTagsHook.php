@@ -15,7 +15,7 @@
 
 namespace Avisota\Contao\Core;
 
-use Exception;
+
 
 /**
  * Class Backend

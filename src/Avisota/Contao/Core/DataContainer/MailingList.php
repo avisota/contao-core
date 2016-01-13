@@ -16,7 +16,7 @@
 namespace Avisota\Contao\Core\DataContainer;
 
 use Avisota\Contao\Core\Event\MailingListCreateLabelEvent;
-use Contao\Doctrine\ORM\EntityHelper;
+
 use Doctrine\ORM\Query;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

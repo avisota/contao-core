@@ -15,7 +15,7 @@
 
 namespace Avisota\Contao\Core\Event;
 
-use Avisota\Contao\Entity\Recipient;
+
 use Avisota\Queue\ExecutionConfig;
 use Avisota\Queue\QueueInterface;
 use Avisota\Transport\TransportInterface;

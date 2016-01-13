@@ -16,14 +16,13 @@
 namespace Avisota\Contao\Core\DataContainer;
 
 use Avisota\Contao\Core\CoreEvents;
-use Avisota\Contao\Subscription\Event\CollectSubscriptionListsEvent;
+
 use Contao\Doctrine\ORM\EntityHelper;
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
-use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
+
+
 use ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\DC_General;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
