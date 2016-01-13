@@ -45,6 +45,7 @@ class Outbox extends \TwigBackendModule
 		$queueDataCollection = $queueRepository->findAll();
 
 		/** @var QueueInterface $queue */
+		/** @var Queue $queueData */
 		foreach ($queueDataCollection as $queueData) {
 			$serviceName = sprintf('avisota.queue.%s', $queueData->getId());
 			if ($container->offsetExists($serviceName)) {
