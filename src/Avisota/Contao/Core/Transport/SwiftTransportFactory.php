@@ -42,43 +42,15 @@ class SwiftTransportFactory implements TransportFactoryInterface
         $swiftTransport = null;
         switch ($transport->getSwiftUseSmtp()) {
             case 'swiftSmtpSystemSettings':
-                if ($GLOBALS['TL_CONFIG']['useSMTP']) {
-                    $swiftTransport = \Swift_SmtpTransport::newInstance(
-                        $GLOBALS['TL_CONFIG']['smtpHost'],
-                        $GLOBALS['TL_CONFIG']['smtpPort']
-                    );
-
-                    if ($GLOBALS['TL_CONFIG']['smtpEnc'] == 'ssl'
-                        || $GLOBALS['TL_CONFIG']['smtpEnc'] == 'tls'
-                    ) {
-                        $swiftTransport->setEncryption($GLOBALS['TL_CONFIG']['smtpEnc']);
-                    }
-
-                    if ($GLOBALS['TL_CONFIG']['smtpUser']) {
-                        $swiftTransport->setUsername($GLOBALS['TL_CONFIG']['smtpUser']);
-                        $swiftTransport->setPassword($GLOBALS['TL_CONFIG']['smtpPass']);
-                    }
-                    break;
-                }
+                $this->setSwiftSMTPFromSystemSettings($swiftTransport);
+                break;
 
             case 'swiftSmtpOff':
-                $swiftTransport = \Swift_MailTransport::newInstance();
+                $this->setSwiftSMTPOff($swiftTransport);
                 break;
 
             case 'swiftSmtpOn':
-                $swiftTransport = \Swift_SmtpTransport::newInstance(
-                    $transport->getSwiftSmtpHost(),
-                    $transport->getSwiftSmtpPort()
-                );
-
-                if ($transport->getSwiftSmtpEnc()) {
-                    $swiftTransport->setEncryption($transport->getSwiftSmtpEnc());
-                }
-
-                if ($transport->getSwiftSmtpUser() && $transport->getSwiftSmtpPass()) {
-                    $swiftTransport->setUsername($transport->getSwiftSmtpUser());
-                    $swiftTransport->setPassword($transport->getSwiftSmtpPass());
-                }
+                $this->setSwiftSMTPOn($swiftTransport, $transport);
                 break;
         }
 
@@ -117,5 +89,52 @@ class SwiftTransportFactory implements TransportFactoryInterface
         }
 
         return new SwiftTransport($swiftMailer, $renderer);
+    }
+
+    protected function setSwiftSMTPFromSystemSettings(&$swiftTransport)
+    {
+        if (!\Config::get('useSMTP')) {
+            $this->setSwiftSMTPOff($swiftTransport);
+
+            return;
+        }
+
+        $swiftTransport = \Swift_SmtpTransport::newInstance(
+            $GLOBALS['TL_CONFIG']['smtpHost'],
+            $GLOBALS['TL_CONFIG']['smtpPort']
+        );
+
+        if ($GLOBALS['TL_CONFIG']['smtpEnc'] == 'ssl'
+            || $GLOBALS['TL_CONFIG']['smtpEnc'] == 'tls'
+        ) {
+            $swiftTransport->setEncryption($GLOBALS['TL_CONFIG']['smtpEnc']);
+        }
+
+        if ($GLOBALS['TL_CONFIG']['smtpUser']) {
+            $swiftTransport->setUsername($GLOBALS['TL_CONFIG']['smtpUser']);
+            $swiftTransport->setPassword($GLOBALS['TL_CONFIG']['smtpPass']);
+        }
+    }
+
+    protected function setSwiftSMTPOff(&$swiftTransport)
+    {
+        $swiftTransport = \Swift_MailTransport::newInstance();
+    }
+
+    protected function setSwiftSMTPOn(&$swiftTransport, Transport $transport)
+    {
+        $swiftTransport = \Swift_SmtpTransport::newInstance(
+            $transport->getSwiftSmtpHost(),
+            $transport->getSwiftSmtpPort()
+        );
+
+        if ($transport->getSwiftSmtpEnc()) {
+            $swiftTransport->setEncryption($transport->getSwiftSmtpEnc());
+        }
+
+        if ($transport->getSwiftSmtpUser() && $transport->getSwiftSmtpPass()) {
+            $swiftTransport->setUsername($transport->getSwiftSmtpUser());
+            $swiftTransport->setPassword($transport->getSwiftSmtpPass());
+        }
     }
 }
