@@ -15,12 +15,12 @@
 
 namespace Avisota\Contao\Core;
 
+use Avisota\Contao\Core\Queue\QueueFactoryInterface;
 use Avisota\Contao\Core\RecipientSource\RecipientSourceFactoryInterface;
 use Avisota\Contao\Core\Transport\TransportFactoryInterface;
-use Avisota\Contao\Core\Queue\QueueFactoryInterface;
+use Avisota\Contao\Entity\Queue;
 use Avisota\Contao\Entity\RecipientSource;
 use Avisota\Contao\Entity\Transport;
-use Avisota\Contao\Entity\Queue;
 use Contao\Doctrine\ORM\EntityHelper;
 
 /**
