@@ -45,131 +45,157 @@ class ServiceFactory
                 \BackendUser::getInstance();
             }
 
-            $factory = $this;
-            $session = \Session::getInstance();
-
             // initialize the entity manager and class loaders
             $container['doctrine.orm.entityManager'];
 
-            $verbose = TL_MODE == 'BE';
+            $this->createRecipientSourceService();
+            $this->createQueueService();
+            $this->createTransportService();
 
-            if (class_exists('Avisota\Contao\Entity\RecipientSource')) {
-                try {
-                    $recipientSourceRepository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
-                    /** @var RecipientSource[] $recipientSources */
-                    $recipientSources = $recipientSourceRepository->findAll();
-
-                    foreach ($recipientSources as $recipientSource) {
-                        $container[sprintf('avisota.recipientSource.%s', $recipientSource->getId())] =
-                            $container->share(
-                                function ($container) use ($recipientSource, $factory) {
-                                    return $factory->createRecipientSource($recipientSource);
-                                }
-                            );
-
-                        $container[sprintf('avisota.recipientSource.%s', $recipientSource->getAlias())] =
-                            function ($container) use ($recipientSource) {
-                                return $container[sprintf('avisota.recipientSource.%s', $recipientSource->getId())];
-                            };
-                    }
-                } catch (\Exception $e) {
-                    $message = 'Could not create avisota recipient source service:' . PHP_EOL . $e->getMessage();
-
-                    if ($e instanceof \ReflectionException) {
-                        $message .= PHP_EOL . 'You may need to run the database update!';
-                    }
-
-                    if ($verbose) {
-                        $tlRaw = $session->get('TL_RAW');
-                        $tlRaw[] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
-                        $session->set('TL_RAW', $tlRaw);
-                    }
-
-                    log_message($message . PHP_EOL . $e->getTraceAsString());
-                }
-            }
-
-            if (class_exists('Avisota\Contao\Entity\Queue')) {
-                try {
-                    $queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
-                    /** @var Queue[] $queues */
-                    $queues = $queueRepository->findAll();
-
-                    foreach ($queues as $queue) {
-                        $container[sprintf('avisota.queue.%s', $queue->getId())] = $container->share(
-                            function ($container) use ($queue, $factory) {
-                                return $factory->createQueue($queue);
-                            }
-                        );
-
-                        $container[sprintf('avisota.queue.%s', $queue->getAlias())] =
-                            function ($container) use ($queue) {
-                                return $container[sprintf('avisota.queue.%s', $queue->getId())];
-                            };
-                    }
-                } catch (\Exception $e) {
-                    $message = 'Could not create avisota queue service: ' . $e->getMessage();
-
-                    if ($e instanceof \ReflectionException) {
-                        $message .= PHP_EOL . 'You may need to run the database update!';
-                    }
-
-                    if ($verbose) {
-                        $tlRaw = $session->get('TL_RAW');
-                        $tlRaw[] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
-                        $session->set('TL_RAW', $tlRaw);
-                    }
-
-                    log_message($message . PHP_EOL . $e->getTraceAsString());
-                }
-            }
-
-            if (class_exists('Avisota\Contao\Entity\Transport')) {
-                try {
-                    $transportRepository = EntityHelper::getRepository('Avisota\Contao:Transport');
-                    /** @var Transport[] $transports */
-                    $transports = $transportRepository->findAll();
-
-                    foreach ($transports as $transport) {
-                        $container[sprintf('avisota.transport.%s', $transport->getId())] = $container->share(
-                            function ($container) use ($transport, $factory) {
-                                return $factory->createTransport($transport);
-                            }
-                        );
-
-                        $container[sprintf('avisota.transport.%s', $transport->getAlias())] =
-                            function ($container) use ($transport) {
-                                return $container[sprintf('avisota.transport.%s', $transport->getId())];
-                            };
-                    }
-
-                    $container['avisota.transport.default'] = function ($container) {
-                        return $container[sprintf(
-                            'avisota.transport.%s',
-                            $GLOBALS['TL_CONFIG']['avisota_default_transport']
-                        )];
-                    };
-                } catch (\Exception $e) {
-                    $message = 'Could not create avisota transport service: ' . $e->getMessage();
-
-                    if ($e instanceof \ReflectionException) {
-                        $message .= PHP_EOL . 'You may need to run the database update!';
-                    }
-
-                    if ($verbose) {
-                        $tlRaw = $session->get('TL_RAW');
-                        $tlRaw[] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
-                        $session->set('TL_RAW', $tlRaw);
-                    }
-
-                    log_message($message . PHP_EOL . $e->getTraceAsString());
-                }
-            }
         } catch (\Exception $e) {
             $message = 'Could not create avisota services: ' . $e->getMessage();
 
             if ($e instanceof \ReflectionException) {
                 $message .= PHP_EOL . 'You may need to run the database update!';
+            }
+
+            log_message($message . PHP_EOL . $e->getTraceAsString());
+        }
+    }
+
+    protected function createRecipientSourceService()
+    {
+        if (!class_exists('Avisota\Contao\Entity\RecipientSource')) {
+            return;
+        }
+
+        global $container;
+        $factory = $this;
+        $verbose = TL_MODE == 'BE';
+        $session = \Session::getInstance();
+
+        try {
+            $recipientSourceRepository = EntityHelper::getRepository('Avisota\Contao:RecipientSource');
+            /** @var RecipientSource[] $recipientSources */
+            $recipientSources = $recipientSourceRepository->findAll();
+
+            foreach ($recipientSources as $recipientSource) {
+                $container[sprintf('avisota.recipientSource.%s', $recipientSource->getId())] =
+                    $container->share(
+                        function ($container) use ($recipientSource, $factory) {
+                            return $factory->createRecipientSource($recipientSource);
+                        }
+                    );
+
+                $container[sprintf('avisota.recipientSource.%s', $recipientSource->getAlias())] =
+                    function ($container) use ($recipientSource) {
+                        return $container[sprintf('avisota.recipientSource.%s', $recipientSource->getId())];
+                    };
+            }
+        } catch (\Exception $e) {
+            $message = 'Could not create avisota recipient source service:' . PHP_EOL . $e->getMessage();
+
+            if ($e instanceof \ReflectionException) {
+                $message .= PHP_EOL . 'You may need to run the database update!';
+            }
+
+            if ($verbose) {
+                $tlRaw   = $session->get('TL_RAW');
+                $tlRaw[] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
+                $session->set('TL_RAW', $tlRaw);
+            }
+
+            log_message($message . PHP_EOL . $e->getTraceAsString());
+        }
+    }
+
+    protected function createQueueService()
+    {
+        if (!class_exists('Avisota\Contao\Entity\Queue')) {
+            return;
+        }
+
+        global $container;
+        $factory = $this;
+        $verbose = TL_MODE == 'BE';
+        $session = \Session::getInstance();
+
+        try {
+            $queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
+            /** @var Queue[] $queues */
+            $queues = $queueRepository->findAll();
+
+            foreach ($queues as $queue) {
+                $container[sprintf('avisota.queue.%s', $queue->getId())] = $container->share(
+                    function ($container) use ($queue, $factory) {
+                        return $factory->createQueue($queue);
+                    }
+                );
+
+                $container[sprintf('avisota.queue.%s', $queue->getAlias())] =
+                    function ($container) use ($queue) {
+                        return $container[sprintf('avisota.queue.%s', $queue->getId())];
+                    };
+            }
+        } catch (\Exception $e) {
+            $message = 'Could not create avisota queue service: ' . $e->getMessage();
+
+            if ($e instanceof \ReflectionException) {
+                $message .= PHP_EOL . 'You may need to run the database update!';
+            }
+
+            if ($verbose) {
+                $tlRaw   = $session->get('TL_RAW');
+                $tlRaw[] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
+                $session->set('TL_RAW', $tlRaw);
+            }
+
+            log_message($message . PHP_EOL . $e->getTraceAsString());
+        }
+    }
+
+    protected function createTransportService()
+    {
+        global $container;
+        $factory = $this;
+        $verbose = TL_MODE == 'BE';
+        $session = \Session::getInstance();
+
+        try {
+            $transportRepository = EntityHelper::getRepository('Avisota\Contao:Transport');
+            /** @var Transport[] $transports */
+            $transports = $transportRepository->findAll();
+
+            foreach ($transports as $transport) {
+                $container[sprintf('avisota.transport.%s', $transport->getId())] = $container->share(
+                    function ($container) use ($transport, $factory) {
+                        return $factory->createTransport($transport);
+                    }
+                );
+
+                $container[sprintf('avisota.transport.%s', $transport->getAlias())] =
+                    function ($container) use ($transport) {
+                        return $container[sprintf('avisota.transport.%s', $transport->getId())];
+                    };
+            }
+
+            $container['avisota.transport.default'] = function ($container) {
+                return $container[sprintf(
+                    'avisota.transport.%s',
+                    $GLOBALS['TL_CONFIG']['avisota_default_transport']
+                )];
+            };
+        } catch (\Exception $e) {
+            $message = 'Could not create avisota transport service: ' . $e->getMessage();
+
+            if ($e instanceof \ReflectionException) {
+                $message .= PHP_EOL . 'You may need to run the database update!';
+            }
+
+            if ($verbose) {
+                $tlRaw   = $session->get('TL_RAW');
+                $tlRaw[] = sprintf('<p class="tl_error">%s</p>', nl2br($message));
+                $session->set('TL_RAW', $tlRaw);
             }
 
             log_message($message . PHP_EOL . $e->getTraceAsString());
