@@ -20,10 +20,6 @@ use Avisota\Renderer\DelegateMessageRenderer;
 use Avisota\Renderer\MessageRendererInterface;
 
 /**
- * {@inheritDoc}
- */
-
-/**
  * Class FromOverwriteMessageRenderer
  *
  * @package Avisota\Contao\Core\Message\Renderer
@@ -40,9 +36,6 @@ class FromOverwriteMessageRenderer extends DelegateMessageRenderer
      */
     protected $fromName;
 
-    /**
-     * {@inheritDoc}
-     */
     /**
      * FromOverwriteMessageRenderer constructor.
      *
