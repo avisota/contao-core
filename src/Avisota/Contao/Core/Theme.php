@@ -31,7 +31,6 @@ class Theme
      */
     private static $instance = null;
 
-
     /**
      * Get singleton instance.
      */
@@ -43,14 +42,14 @@ class Theme
         return self::$instance;
     }
 
-
     /**
      * Singleton
      */
     protected function __construct()
     {
-    }/** @noinspection PhpUndefinedClassInspection */
+    }
 
+    /** @noinspection PhpUndefinedClassInspection */
     /**
      * Find a particular template file and return its path
      *

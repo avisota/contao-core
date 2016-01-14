@@ -88,7 +88,6 @@ class EventSubscriber implements EventSubscriberInterface
             return;
         }
 
-
         $event->setRecipient(new MutableRecipient('noreply@' . \Environment::get('host')));
     }
 }
