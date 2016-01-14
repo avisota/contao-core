@@ -65,6 +65,7 @@ class ServiceFactory
 
     /**
      * create the recipient source service
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     protected function createRecipientSourceService()
     {
@@ -162,6 +163,7 @@ class ServiceFactory
 
     /**
      * Create the transport service
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function createTransportService()
     {

@@ -93,6 +93,7 @@ class SwiftTransportFactory implements TransportFactoryInterface
 
     /**
      * @param $swiftTransport
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function setSwiftSMTPFromSystemSettings(&$swiftTransport)
     {
