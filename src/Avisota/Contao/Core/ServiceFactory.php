@@ -63,6 +63,9 @@ class ServiceFactory
         }
     }
 
+    /**
+     * create the recipient source service
+     */
     protected function createRecipientSourceService()
     {
         if (!class_exists('Avisota\Contao\Entity\RecipientSource')) {
@@ -109,6 +112,9 @@ class ServiceFactory
         }
     }
 
+    /**
+     * create the queue service
+     */
     protected function createQueueService()
     {
         if (!class_exists('Avisota\Contao\Entity\Queue')) {
@@ -154,6 +160,9 @@ class ServiceFactory
         }
     }
 
+    /**
+     * Create the transport service
+     */
     protected function createTransportService()
     {
         global $container;

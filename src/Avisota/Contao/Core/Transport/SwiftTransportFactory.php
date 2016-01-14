@@ -91,6 +91,9 @@ class SwiftTransportFactory implements TransportFactoryInterface
         return new SwiftTransport($swiftMailer, $renderer);
     }
 
+    /**
+     * @param $swiftTransport
+     */
     protected function setSwiftSMTPFromSystemSettings(&$swiftTransport)
     {
         if (!\Config::get('useSMTP')) {
@@ -116,11 +119,18 @@ class SwiftTransportFactory implements TransportFactoryInterface
         }
     }
 
+    /**
+     * @param $swiftTransport
+     */
     protected function setSwiftSMTPOff(&$swiftTransport)
     {
         $swiftTransport = \Swift_MailTransport::newInstance();
     }
 
+    /**
+     * @param           $swiftTransport
+     * @param Transport $transport
+     */
     protected function setSwiftSMTPOn(&$swiftTransport, Transport $transport)
     {
         $swiftTransport = \Swift_SmtpTransport::newInstance(
