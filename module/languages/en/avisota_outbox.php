@@ -2,17 +2,16 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright (C) 2013 Tristan Lins
+ * Copyright © 2016 Sven Baumann
  *
  * PHP version 5
  *
- * @copyright  bit3 UG 2013
- * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @copyright  way.vision 2016
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
  */
-
 
 $GLOBALS['TL_LANG']['avisota_outbox']['headline']       = 'Outbox';
 $GLOBALS['TL_LANG']['avisota_outbox']['col_name']       = 'Queue name';
@@ -32,4 +31,3 @@ $GLOBALS['TL_LANG']['avisota_outbox']['progress_running']      = 'Sending messag
 $GLOBALS['TL_LANG']['avisota_outbox']['progress_pause']        = 'Waiting for next cycle, do not close the window.';
 $GLOBALS['TL_LANG']['avisota_outbox']['progress_finish']       = 'Finished send, you can now close the window.';
 $GLOBALS['TL_LANG']['avisota_outbox']['progress_error']        = 'An error occurred, execution stopped!';
-

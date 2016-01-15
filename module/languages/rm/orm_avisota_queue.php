@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Translations are managed using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/avisota-contao/language/rm/
+ * @link    http://help.transifex.com/intro/translating.html
+ * @link    https://www.transifex.com/projects/p/avisota-contao/language/rm/
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
@@ -50,4 +51,3 @@ $GLOBALS['TL_LANG']['orm_avisota_queue']['transport']['1']                = 'Tsc
 $GLOBALS['TL_LANG']['orm_avisota_queue']['transport_legend']              = 'Configuraziun da transport';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['type']['0']                     = 'Tip';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['type']['1']                     = 'Tscherna il tip da la colonna da spetga';
-

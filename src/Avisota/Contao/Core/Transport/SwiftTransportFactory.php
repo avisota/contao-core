@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright (C) 2013 Tristan Lins
+ * Copyright © 2016 Sven Baumann
  *
  * PHP version 5
  *
- * @copyright  bit3 UG 2013
- * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @copyright  way.vision 2016
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -20,91 +20,132 @@ use Avisota\Contao\Core\Message\Renderer\FromOverwriteMessageRenderer;
 use Avisota\Contao\Core\Message\Renderer\ReplyToOverwriteMessageRenderer;
 use Avisota\Contao\Core\Message\Renderer\SenderOverwriteMessageRenderer;
 use Avisota\Contao\Core\Message\Renderer\ToOverwriteMessageRenderer;
-use Avisota\Renderer\NativeMessageRenderer;
 use Avisota\Transport\SwiftTransport;
 
+/**
+ * Class SwiftTransportFactory
+ *
+ * @package Avisota\Contao\Core\Transport
+ */
 class SwiftTransportFactory implements TransportFactoryInterface
 {
-	public function createTransport(Transport $transport)
-	{
-		global $container;
+    /**
+     * @param Transport $transport
+     *
+     * @return SwiftTransport
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function createTransport(Transport $transport)
+    {
+        global $container;
 
-		switch ($transport->getSwiftUseSmtp()) {
-			case 'swiftSmtpSystemSettings':
-				if ($GLOBALS['TL_CONFIG']['useSMTP']) {
-					$swiftTransport = \Swift_SmtpTransport::newInstance(
-						$GLOBALS['TL_CONFIG']['smtpHost'],
-						$GLOBALS['TL_CONFIG']['smtpPort']
-					);
+        $swiftTransport = null;
+        switch ($transport->getSwiftUseSmtp()) {
+            case 'swiftSmtpSystemSettings':
+                $this->setSwiftSMTPFromSystemSettings($swiftTransport);
+                break;
 
-					if ($GLOBALS['TL_CONFIG']['smtpEnc'] == 'ssl' ||
-						$GLOBALS['TL_CONFIG']['smtpEnc'] == 'tls'
-					) {
-						$swiftTransport->setEncryption($GLOBALS['TL_CONFIG']['smtpEnc']);
-					}
+            case 'swiftSmtpOff':
+                $this->setSwiftSMTPOff($swiftTransport);
+                break;
 
-					if ($GLOBALS['TL_CONFIG']['smtpUser']) {
-						$swiftTransport->setUsername($GLOBALS['TL_CONFIG']['smtpUser']);
-						$swiftTransport->setPassword($GLOBALS['TL_CONFIG']['smtpPass']);
-					}
-					break;
-				}
+            case 'swiftSmtpOn':
+                $this->setSwiftSMTPOn($swiftTransport, $transport);
+                break;
+        }
 
-			case 'swiftSmtpOff':
-				$swiftTransport = \Swift_MailTransport::newInstance();
-				break;
+        $swiftMailer = \Swift_Mailer::newInstance($swiftTransport);
 
-			case 'swiftSmtpOn':
-				$swiftTransport = \Swift_SmtpTransport::newInstance(
-					$transport->getSwiftSmtpHost(),
-					$transport->getSwiftSmtpPort()
-				);
+        $renderer = $container['avisota.transport.renderer'];
 
-				if ($transport->getSwiftSmtpEnc()) {
-					$swiftTransport->setEncryption($transport->getSwiftSmtpEnc());
-				}
+        if ($transport->getSetReplyTo()) {
+            $renderer = new ReplyToOverwriteMessageRenderer(
+                $renderer,
+                $transport->getReplyToAddress(),
+                $transport->getReplyToName()
+            );
+        }
 
-				if ($transport->getSwiftSmtpUser() && $transport->getSwiftSmtpPass()) {
-					$swiftTransport->setUsername($transport->getSwiftSmtpUser());
-					$swiftTransport->setPassword($transport->getSwiftSmtpPass());
-				}
-				break;
-		}
+        if ($transport->getSetSender()) {
+            $renderer = new SenderOverwriteMessageRenderer(
+                $renderer,
+                $transport->getSenderAddress(),
+                $transport->getSenderName()
+            );
+        }
 
-		$swiftMailer = \Swift_Mailer::newInstance($swiftTransport);
+        $renderer = new FromOverwriteMessageRenderer(
+            $renderer,
+            $transport->getFromAddress(),
+            $transport->getFromName()
+        );
 
-		$renderer = $container['avisota.transport.renderer'];
+        if ($GLOBALS['TL_CONFIG']['avisota_developer_mode']) {
+            $renderer = new ToOverwriteMessageRenderer(
+                $renderer,
+                $GLOBALS['TL_CONFIG']['avisota_developer_email'],
+                null
+            );
+        }
 
-		if ($transport->getSetReplyTo()) {
-			$renderer = new ReplyToOverwriteMessageRenderer(
-				$renderer,
-				$transport->getReplyToAddress(),
-				$transport->getReplyToName()
-			);
-		}
+        return new SwiftTransport($swiftMailer, $renderer);
+    }
 
-		if ($transport->getSetSender()) {
-			$renderer = new SenderOverwriteMessageRenderer(
-				$renderer,
-				$transport->getSenderAddress(),
-				$transport->getSenderName()
-			);
-		}
+    /**
+     * @param $swiftTransport
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    protected function setSwiftSMTPFromSystemSettings(&$swiftTransport)
+    {
+        if (!\Config::get('useSMTP')) {
+            $this->setSwiftSMTPOff($swiftTransport);
 
-		$renderer = new FromOverwriteMessageRenderer(
-			$renderer,
-			$transport->getFromAddress(),
-			$transport->getFromName()
-		);
+            return;
+        }
 
-		if ($GLOBALS['TL_CONFIG']['avisota_developer_mode']) {
-			$renderer = new ToOverwriteMessageRenderer(
-				$renderer,
-				$GLOBALS['TL_CONFIG']['avisota_developer_email'],
-				null
-			);
-		}
+        $swiftTransport = \Swift_SmtpTransport::newInstance(
+            $GLOBALS['TL_CONFIG']['smtpHost'],
+            $GLOBALS['TL_CONFIG']['smtpPort']
+        );
 
-		return new SwiftTransport($swiftMailer, $renderer);
-	}
+        if ($GLOBALS['TL_CONFIG']['smtpEnc'] == 'ssl'
+            || $GLOBALS['TL_CONFIG']['smtpEnc'] == 'tls'
+        ) {
+            $swiftTransport->setEncryption($GLOBALS['TL_CONFIG']['smtpEnc']);
+        }
+
+        if ($GLOBALS['TL_CONFIG']['smtpUser']) {
+            $swiftTransport->setUsername($GLOBALS['TL_CONFIG']['smtpUser']);
+            $swiftTransport->setPassword($GLOBALS['TL_CONFIG']['smtpPass']);
+        }
+    }
+
+    /**
+     * @param $swiftTransport
+     */
+    protected function setSwiftSMTPOff(&$swiftTransport)
+    {
+        $swiftTransport = \Swift_MailTransport::newInstance();
+    }
+
+    /**
+     * @param           $swiftTransport
+     * @param Transport $transport
+     */
+    protected function setSwiftSMTPOn(&$swiftTransport, Transport $transport)
+    {
+        $swiftTransport = \Swift_SmtpTransport::newInstance(
+            $transport->getSwiftSmtpHost(),
+            $transport->getSwiftSmtpPort()
+        );
+
+        if ($transport->getSwiftSmtpEnc()) {
+            $swiftTransport->setEncryption($transport->getSwiftSmtpEnc());
+        }
+
+        if ($transport->getSwiftSmtpUser() && $transport->getSwiftSmtpPass()) {
+            $swiftTransport->setUsername($transport->getSwiftSmtpUser());
+            $swiftTransport->setPassword($transport->getSwiftSmtpPass());
+        }
+    }
 }

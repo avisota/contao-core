@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright (C) 2013 Tristan Lins
+ * Copyright © 2016 Sven Baumann
  *
  * PHP version 5
  *
- * @copyright  bit3 UG 2013
- * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @copyright  way.vision 2016
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -21,89 +21,126 @@ use Contao\Doctrine\ORM\EntityHelper;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Message\AddMessageEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DC_General;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * An EventSubscriber knows himself what events he is interested in.
+ * If an EventSubscriber is added to an EventDispatcherInterface, the manager invokes
+ * {@link getSubscribedEvents} and registers the subscriber as a listener for all
+ * returned events.
+ *
+ * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author Jonathan Wage <jonwage@gmail.com>
+ * @author Roman Borschel <roman@code-factory.org>
+ * @author Bernhard Schussek <bschussek@gmail.com>
+ */
 class Queue extends \Backend implements EventSubscriberInterface
 {
-	static protected $instance;
+    static protected $instance;
 
-	/**
-	 * @return mixed
-	 */
-	static public function getInstance()
-	{
-		if (static::$instance === null) {
-			static::$instance = new static();
-		}
-		return static::$instance;
-	}
+    /**
+     * @return mixed
+     */
+    public static function getInstance()
+    {
+        if (static::$instance === null) {
+            static::$instance = new static();
+        }
+        return static::$instance;
+    }
 
-	/**
-	 * Import the back end user object
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		static::$instance = $this;
-	}
+    /**
+     * Import the back end user object
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        static::$instance = $this;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	static public function getSubscribedEvents()
-	{
-		return array(
-			DcGeneralEvents::ACTION => 'handleAction',
-		);
-	}
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
+     *
+     * @return array The event names to listen to
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            DcGeneralEvents::ACTION => 'handleAction',
+        );
+    }
 
-	/**
-	 * @param string $alias
-	 * @param DC_General $dc
-	 *
-	 * @return mixed
-	 */
-	public function rememberAlias($alias, $dc)
-	{
-		$_SESSION['AVISOTA_QUEUE_ALIAS'][$dc->id] = $alias;
-		return $alias;
-	}
+    /**
+     * @param string     $alias
+     * @param DC_General $dc
+     *
+     * @return mixed
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function rememberAlias($alias, $dc)
+    {
+        $avisotaQueueAlias = \Session::getInstance()->get('AVISOTA_QUEUE_ALIAS');
+        $avisotaQueueAlias[$dc->id] = $alias;
+        \Session::getInstance()->set('AVISOTA_QUEUE_ALIAS', $avisotaQueueAlias);
 
-	public function handleAction(ActionEvent $event)
-	{
-		$environment = $event->getEnvironment();
+        return $alias;
+    }
 
-		if ($environment->getDataDefinition()->getName() != 'orm_avisota_queue') {
-			return;
-		}
+    /**
+     * @param ActionEvent $event
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function handleAction(ActionEvent $event)
+    {
+        $environment = $event->getEnvironment();
 
-		$action = $event->getAction();
+        if ($environment->getDataDefinition()->getName() != 'orm_avisota_queue') {
+            return;
+        }
 
-		if ($action->getName() == 'clear') {
-			$input      = $environment->getInputProvider();
-			$id         = IdSerializer::fromSerialized($input->getParameter('id'));
-			$repository = EntityHelper::getRepository('Avisota\Contao:Queue');
+        $action = $event->getAction();
 
-			/** @var \Avisota\Contao\Entity\Queue $queueData */
-			$queueData = $repository->find($id->getId());
+        if ($action->getName() == 'clear') {
+            $input           = $environment->getInputProvider();
+            $id              = ModelId::fromSerialized($input->getParameter('id'));
+            $repository      = EntityHelper::getRepository('Avisota\Contao:Queue');
+            $eventDispatcher = $event->getEnvironment()->getEventDispatcher();
 
-			/** @var QueueInterface $queue */
-			$queue = $GLOBALS['container'][sprintf('avisota.queue.%s', $queueData->getAlias())];
+            /** @var \Avisota\Contao\Entity\Queue $queueData */
+            $queueData = $repository->find($id->getId());
 
-			$queue->execute(new NullTransport());
+            /** @var QueueInterface $queue */
+            $queue = $GLOBALS['container'][sprintf('avisota.queue.%s', $queueData->getAlias())];
 
-			$message = new AddMessageEvent(
-				sprintf($GLOBALS['TL_LANG']['orm_avisota_queue']['queueCleared'], $queueData->getTitle()),
-				AddMessageEvent::TYPE_CONFIRM
-			);
-			$event->getDispatcher()->dispatch(ContaoEvents::MESSAGE_ADD, $message);
+            $queue->execute(new NullTransport());
 
-			$redirect = new RedirectEvent('contao/main.php?do=avisota_queue&ref=' . TL_REFERER_ID);
-			$event->getDispatcher()->dispatch(ContaoEvents::CONTROLLER_REDIRECT, $redirect);
-		}
-	}
+            $message = new AddMessageEvent(
+                sprintf($GLOBALS['TL_LANG']['orm_avisota_queue']['queueCleared'], $queueData->getTitle()),
+                AddMessageEvent::TYPE_CONFIRM
+            );
+            $eventDispatcher->dispatch(ContaoEvents::MESSAGE_ADD, $message);
+
+            $redirect = new RedirectEvent('contao/main.php?do=avisota_queue&ref=' . TL_REFERER_ID);
+            $eventDispatcher->dispatch(ContaoEvents::CONTROLLER_REDIRECT, $redirect);
+        }
+    }
 }

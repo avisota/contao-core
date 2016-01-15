@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright (C) 2013 Tristan Lins
+ * Copyright © 2016 Sven Baumann
  *
  * PHP version 5
  *
- * @copyright  bit3 UG 2013
- * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @copyright  way.vision 2016
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -15,31 +15,50 @@
 
 namespace Avisota\Contao\Core\DataContainer;
 
-use Avisota\Contao\Entity\Message;
-use Contao\Doctrine\ORM\EntityHelper;
-
+/**
+ * Class Settings
+ *
+ * @package Avisota\Contao\Core\DataContainer
+ */
 class Settings extends \Backend
 {
-	public function onload_callback()
-	{
-		if (!is_dir(TL_ROOT . '/system/modules/avisota/highstock')
-			|| !is_file(TL_ROOT . '/system/modules/avisota/highstock/js/highstock.js')
-		) {
-			$GLOBALS['TL_DCA']['tl_avisota_settings']['fields']['avisota_chart_highstock_confirm']['input_field_callback'] = array(
-				'tl_avisota_settings',
-				'renderMissingHighstockField'
-			);
-		}
-	}
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @noinspection PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     * @deprecated use onLoadCallback instead this
+     */
+    public function onload_callback()
+    {
+        $this->onLoadCallback();
+    }
 
-	/**
-	 * @param \DataContainer $dc
-	 * @param $label
-	 *
-	 * @return mixed
-	 */
-	public function renderMissingHighstockField($dc, $label)
-	{
-		return $GLOBALS['TL_LANG']['tl_avisota_settings']['missing_highstock'];
-	}
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function onLoadCallback()
+    {
+        if (!is_dir(TL_ROOT . '/system/modules/avisota/highstock')
+            || !is_file(TL_ROOT . '/system/modules/avisota/highstock/js/highstock.js')
+        ) {
+            $GLOBALS['TL_DCA']['tl_avisota_settings']['fields']['avisota_chart_highstock_confirm']['input_field_callback'] =
+                array(
+                    'tl_avisota_settings',
+                    'renderMissingHighstockField'
+                );
+        }
+    }
+
+    /**
+     * @param \DataContainer $dc
+     * @param                $label
+     *
+     * @return mixed
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     */
+    public function renderMissingHighstockField($dc, $label)
+    {
+        return $GLOBALS['TL_LANG']['tl_avisota_settings']['missing_highstock'];
+    }
 }

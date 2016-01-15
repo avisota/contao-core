@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Translations are managed using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/avisota-contao/language/rm/
+ * @link    http://help.transifex.com/intro/translating.html
+ * @link    https://www.transifex.com/projects/p/avisota-contao/language/rm/
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
@@ -135,4 +136,3 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['unionRecipientSources']['1'
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['union_legend']                                   = 'Union';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['up']['0']                                        = 'Augmentar la prioritad';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['up']['1']                                        = 'Augmentar la prioritad da la funtauna da destinaturs cun l\'ID %s';
-

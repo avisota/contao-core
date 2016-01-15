@@ -21,4 +21,3 @@ $GLOBALS['TL_LANG']['tl_avisota_settings']['avisota_developer_mode']['1']    = '
 $GLOBALS['TL_LANG']['tl_avisota_settings']['developer_legend']               = 'Entwickler';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['edit']                           = 'Avisota-Systemeinstellungen';
 $GLOBALS['TL_LANG']['tl_avisota_settings']['transport_legend']               = 'Transport';
-

@@ -1,236 +1,258 @@
 .nested_menu.avisota_config .avisota-logo {
-	margin: -18px -18px 0;
-	padding: 18px 0;
-	background-color: #494949;
-	text-align: center;
+    margin: -18px -18px 0;
+    padding: 18px 0;
+    background-color: #494949;
+    text-align: center;
 }
+
 .nested_menu.avisota_config .promotion {
-	border: 1px solid #999;
-	box-shadow: 0 0 3px #ccc;
-	border-radius: 3px;
-	margin: 2em 0;
-	padding: 1em;
-	background-image: linear-gradient(top, #f9f9f9, #eee);
-	background-image: -o-linear-gradient(top, #f9f9f9, #eee);
-	background-image: -moz-linear-gradient(top, #f9f9f9, #eee);
-	background-image: -webkit-linear-gradient(top, #f9f9f9, #eee);
-	background-image: -ms-linear-gradient(top, #f9f9f9, #eee);
-	overflow: hidden;
+    border: 1px solid #999;
+    box-shadow: 0 0 3px #ccc;
+    border-radius: 3px;
+    margin: 2em 0;
+    padding: 1em;
+    background-image: linear-gradient(top, #f9f9f9, #eee);
+    background-image: -o-linear-gradient(top, #f9f9f9, #eee);
+    background-image: -moz-linear-gradient(top, #f9f9f9, #eee);
+    background-image: -webkit-linear-gradient(top, #f9f9f9, #eee);
+    background-image: -ms-linear-gradient(top, #f9f9f9, #eee);
+    overflow: hidden;
 }
+
 .nested_menu.avisota_config .promotion * {
-	font-size: 14px;
+    font-size: 14px;
 }
+
 .nested_menu.avisota_config .promotion a {
-	color: inherit;
+    color: inherit;
 }
+
 .nested_menu.avisota_config .promotion .opensource img,
 .nested_menu.avisota_config .promotion .partners img {
-	float: left;
-	margin-right: .66em;
+    float: left;
+    margin-right: .66em;
 }
+
 .nested_menu.avisota_config .promotion .opensource {
-	float: left;
-	width: 49%;
+    float: left;
+    width: 49%;
 }
+
 .nested_menu.avisota_config .promotion .partners {
-	float: right;
-	width: 50%;
+    float: right;
+    width: 50%;
 }
+
 .nested_menu.avisota_config .copyright,
 .nested_menu.avisota_config .disclaimer {
-	margin-top: .5em;
+    margin-top: .5em;
 }
 
 /**
  * View and send dialog
  */
 #avisota_message_preview iframe.avisota_message_preview {
-	border: 1px inset #bbb;
+    border: 1px inset #bbb;
 }
+
 #avisota_message_preview p.new_window {
-	text-align: right;
-	padding: 2em 0 1em;
-	margin-bottom: 0;
+    text-align: right;
+    padding: 2em 0 1em;
+    margin-bottom: 0;
 }
+
 .tl_form_avisota_inline legend {
-	margin: 0 18px;
+    margin: 0 18px;
 }
+
 .tl_form_avisota_inline:last-of-type fieldset {
-	padding-bottom: 0;
+    padding-bottom: 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 table.outbox {
-	border-collapse: collapse;
+    border-collapse: collapse;
 }
 
 table.outbox th,
 table.outbox td {
-	padding: .5em;
-	vertical-align: middle;
-	text-align: left;
+    padding: .5em;
+    vertical-align: middle;
+    text-align: left;
 }
+
 table.outbox th {
-	vertical-align: bottom;
+    vertical-align: bottom;
 }
+
 table.outbox td {
-	border-width: 1px 0;
-	border-style: solid;
-	border-color: #999;
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: #999;
 }
 
 table.outbox td img {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 table.outbox tr:nth-child(odd) td {
-	background-color: #eee;
+    background-color: #eee;
 }
 
 table.outbox tr.row_highlight td {
-	background-color: #efe;
+    background-color: #efe;
 }
 
 table.outbox span.outstanding {
-	font-style: italic;
+    font-style: italic;
 }
 
 table.outbox span.total {
 }
 
 table.outbox span.failed {
-	color: red;
+    color: red;
 }
 
 code {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 button img {
-	vertical-align: -3px;
-	margin-right: 4px;
+    vertical-align: -3px;
+    margin-right: 4px;
 }
+
 select[disabled] {
-	color: #ccc;
+    color: #ccc;
 }
 
 #transport_error {
-	padding: 0 18px 18px;
+    padding: 0 18px 18px;
 }
+
 #transport_error pre {
-	border: 1px solid #008080;
-	background: #C0FFFF;
-	padding: 18px;
+    border: 1px solid #008080;
+    background: #C0FFFF;
+    padding: 18px;
 }
+
 #outbox {
-	padding: 0 18px 18px;
+    padding: 0 18px 18px;
 }
+
 #outbox h2 {
-	margin: 32px 0 9px 0;
-	text-align: left;
+    margin: 32px 0 9px 0;
+    text-align: left;
 }
+
 #outbox th,
 #outbox td {
-	text-align: right;
+    text-align: right;
 }
+
 #outbox th {
-	padding-right: 6px;
+    padding-right: 6px;
 }
+
 #outbox tbody td {
-	font-size: 16px;
+    font-size: 16px;
 }
+
 span.negative {
-	color: #00f;
+    color: #00f;
 }
+
 input.ma-loading {
-	background-image: url(../../html/loading.gif);
-	background-repeat: no-repeat;
-	background-position: right center;
+    background-image: url(../../html/loading.gif);
+    background-repeat: no-repeat;
+    background-position: right center;
 }
 
 /** --- Update -------------------------------------------------------------- */
 .header_more {
-	background: url("../../html/more.png") no-repeat scroll left center transparent;
-	padding: 2px 0 3px 20px;
+    background: url("../../html/more.png") no-repeat scroll left center transparent;
+    padding: 2px 0 3px 20px;
 }
 
 .versions {
-	overflow: hidden;
-	margin: 18px 50px 18px;
+    overflow: hidden;
+    margin: 18px 50px 18px;
 }
+
 .versions .previous,
 .versions .installed {
-	width: 260px;
-	padding: 10px;
-	-webkit-border-radius: 5px;
-	-khtml-border-radius: 5px;
-	-moz-border-radius: 5px;
-	-ie-border-radius: 5px;
-	-o-border-radius: 5px;
-	border-radius: 5px;
-	text-align: center;
+    width: 260px;
+    padding: 10px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ie-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    text-align: center;
 }
+
 .versions .previous {
-	float: left;
-	border: 1px solid #000099;
-	background: #f9f9ff;
+    float: left;
+    border: 1px solid #000099;
+    background: #f9f9ff;
 }
+
 .versions .installed {
-	float: right;
-	border: 1px solid #009900;
-	background: #f9fff9;
+    float: right;
+    border: 1px solid #009900;
+    background: #f9fff9;
 }
+
 .versions .title {
-	display: block;
+    display: block;
 }
+
 .versions .version {
-	display: block;
-	font-weight: bold;
-	font-size: 32px;
+    display: block;
+    font-weight: bold;
+    font-size: 32px;
 }
+
 fieldset.update legend {
-	background-image: none;
+    background-image: none;
 }
+
 fieldset.update legend img,
 fieldset.update legend input {
-	vertical-align: -4px;
+    vertical-align: -4px;
 }
+
 .updates {
-	margin-bottom: 24px;
+    margin-bottom: 24px;
 }
+
 .updates h2 {
-	margin: 2px 0 0;
-	padding: 2px 6px 3px;
-	border: 1px solid #E9E9E9;
-	border-width: 1px 0;
-	background: #F6F6F6;
+    margin: 2px 0 0;
+    padding: 2px 6px 3px;
+    border: 1px solid #E9E9E9;
+    border-width: 1px 0;
+    background: #F6F6F6;
 }
+
 .updates h2 img,
 .updates h2 input {
-	vertical-align: -3px;
+    vertical-align: -3px;
 }
+
 .updates h2 img {
-	margin: 0 2px;
+    margin: 0 2px;
 }
+
 .updates .description {
-	padding: 8px 6px;
-	background: white;
+    padding: 8px 6px;
+    background: white;
 }
 
 .avisota_recipient_source_listing {
-	overflow: auto;
+    overflow: auto;
 }
+
 .avisota_recipient_source_listing table td {
-	white-space: nowrap;
+    white-space: nowrap;
 }

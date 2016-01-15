@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Translations are managed using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
@@ -10,7 +11,6 @@
  *
  * last-updated: 2014-03-11T12:08:26+01:00
  */
-
 
 $GLOBALS['TL_LANG']['orm_avisota_queue']['alias']['0']                    = 'Alias';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['alias']['1']                    = 'Alias kolejki jest unikalnym odwołaniem do kolejki, które może być użyte zamiast ID.';
@@ -47,4 +47,3 @@ $GLOBALS['TL_LANG']['orm_avisota_queue']['transport']['1']                = 'Pro
 $GLOBALS['TL_LANG']['orm_avisota_queue']['transport_legend']              = 'Ustawienia transportu';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['type']['0']                     = 'Typ';
 $GLOBALS['TL_LANG']['orm_avisota_queue']['type']['1']                     = 'Proszę wybrać typ kolejki.';
-

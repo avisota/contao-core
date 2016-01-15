@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright (C) 2013 Tristan Lins
+ * Copyright © 2016 Sven Baumann
  *
  * PHP version 5
  *
- * @copyright  bit3 UG 2013
- * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @copyright  way.vision 2016
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -17,12 +17,22 @@ namespace Avisota\Contao\Core\Transport;
 
 use Avisota\Contao\Entity\Transport;
 
+/**
+ * Class ServiceTransportFactory
+ *
+ * @package Avisota\Contao\Core\Transport
+ */
 class ServiceTransportFactory implements TransportFactoryInterface
 {
-	public function createTransport(Transport $transport)
-	{
-		global $container;
+    /**
+     * @param Transport $transport
+     *
+     * @return mixed
+     */
+    public function createTransport(Transport $transport)
+    {
+        global $container;
 
-		return $container[$transport->getServiceName()];
-	}
+        return $container[$transport->getServiceName()];
+    }
 }

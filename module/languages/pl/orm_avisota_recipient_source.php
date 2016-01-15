@@ -1,16 +1,16 @@
 <?php
+
 /**
  * Translations are managed using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/avisota-contao/language/pl/
+ * @link    http://help.transifex.com/intro/translating.html
+ * @link    https://www.transifex.com/projects/p/avisota-contao/language/pl/
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
  * last-updated: 2014-03-11T12:08:26+01:00
  */
-
 
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignment']['0']                       = 'Przypisz kolumny';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignment']['1']                       = 'Proszę przypisać kolumny do wewnętrznych pól.';
@@ -114,4 +114,3 @@ $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['type']['0']                
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['type']['1']                                      = 'Proszę wybrać moduł źródła danych odbiorców.';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['up']['0']                                        = 'Zwiększ priorytet';
 $GLOBALS['TL_LANG']['orm_avisota_recipient_source']['up']['1']                                        = 'Zwiększ priorytet źródła odbiorców ID %s';
-

@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright (C) 2013 Tristan Lins
+ * Copyright © 2016 Sven Baumann
  *
  * PHP version 5
  *
- * @copyright  bit3 UG 2013
- * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @copyright  way.vision 2016
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -18,7 +18,7 @@
  * Request start time
  */
 if (!isset($_SERVER['REQUEST_TIME'])) {
-	$_SERVER['REQUEST_TIME'] = time();
+    $_SERVER['REQUEST_TIME'] = time();
 }
 
 
@@ -27,64 +27,64 @@ if (!isset($_SERVER['REQUEST_TIME'])) {
  */
 $designModuleIndex = array_search('design', array_keys($GLOBALS['BE_MOD']));
 $GLOBALS['BE_MOD'] = array_merge(
-	array_slice($GLOBALS['BE_MOD'], 0, $designModuleIndex),
-	array('avisota' => array()),
-	array_slice($GLOBALS['BE_MOD'], $designModuleIndex)
+    array_slice($GLOBALS['BE_MOD'], 0, $designModuleIndex),
+    array('avisota' => array()),
+    array_slice($GLOBALS['BE_MOD'], $designModuleIndex)
 );
 
-$GLOBALS['BE_MOD']['avisota']['avisota_outbox']     = array(
-	'callback'   => 'Avisota\Contao\Core\Backend\Outbox',
-	'icon'       => 'assets/avisota/core/images/outbox.png',
-	'stylesheet' => 'assets/avisota/core/css/stylesheet.css'
+$GLOBALS['BE_MOD']['avisota']['avisota_outbox']           = array(
+    'callback'   => 'Avisota\Contao\Core\Backend\Outbox',
+    'icon'       => 'assets/avisota/core/images/outbox.png',
+    'stylesheet' => 'assets/avisota/core/css/stylesheet.css'
 );
 $GLOBALS['BE_MOD']['avisota']['avisota_config']           = array
 (
-	'icon'          => 'assets/avisota/core/images/avisota_config.png',
-	'stylesheet'    => 'assets/avisota/core/css/stylesheet.css',
-	'nested-config' => array(
-		'headline' => false
-	)
+    'icon'          => 'assets/avisota/core/images/avisota_config.png',
+    'stylesheet'    => 'assets/avisota/core/css/stylesheet.css',
+    'nested-config' => array(
+        'headline' => false
+    )
 );
 $GLOBALS['BE_MOD']['avisota']['avisota_settings']         = array
 (
-	'nested'     => 'avisota_config',
-	'tables'     => array('tl_avisota_settings'),
-	'icon'       => 'assets/avisota/core/images/settings.png',
-	'stylesheet' => 'assets/avisota/core/css/stylesheet.css'
+    'nested'     => 'avisota_config',
+    'tables'     => array('tl_avisota_settings'),
+    'icon'       => 'assets/avisota/core/images/settings.png',
+    'stylesheet' => 'assets/avisota/core/css/stylesheet.css'
 );
 $GLOBALS['BE_MOD']['avisota']['avisota_mailing_list']     = array
 (
-	'nested'     => 'avisota_config:recipient',
-	'tables'     => array('orm_avisota_mailing_list'),
-	'icon'       => 'assets/avisota/core/images/mailing_list.png',
-	'stylesheet' => 'assets/avisota/core/css/stylesheet.css'
+    'nested'     => 'avisota_config:recipient',
+    'tables'     => array('orm_avisota_mailing_list'),
+    'icon'       => 'assets/avisota/core/images/mailing_list.png',
+    'stylesheet' => 'assets/avisota/core/css/stylesheet.css'
 );
 $GLOBALS['BE_MOD']['avisota']['avisota_recipient_source'] = array
 (
-	'nested'     => 'avisota_config:recipient',
-	'tables'     => array('orm_avisota_recipient_source'),
-	'icon'       => 'assets/avisota/core/images/recipient_source.png',
-	'stylesheet' => 'assets/avisota/core/css/stylesheet.css'
+    'nested'     => 'avisota_config:recipient',
+    'tables'     => array('orm_avisota_recipient_source'),
+    'icon'       => 'assets/avisota/core/images/recipient_source.png',
+    'stylesheet' => 'assets/avisota/core/css/stylesheet.css'
 );
 $GLOBALS['BE_MOD']['avisota']['avisota_queue']            = array
 (
-	'nested'     => 'avisota_config:transport',
-	'tables'     => array('orm_avisota_queue'),
-	'icon'       => 'assets/avisota/core/images/queue.png',
-	'stylesheet' => 'assets/avisota/core/css/stylesheet.css'
+    'nested'     => 'avisota_config:transport',
+    'tables'     => array('orm_avisota_queue'),
+    'icon'       => 'assets/avisota/core/images/queue.png',
+    'stylesheet' => 'assets/avisota/core/css/stylesheet.css'
 );
 $GLOBALS['BE_MOD']['avisota']['avisota_transport']        = array
 (
-	'nested'     => 'avisota_config:transport',
-	'tables'     => array('orm_avisota_transport'),
-	'icon'       => 'assets/avisota/core/images/transport.png',
-	'stylesheet' => 'assets/avisota/core/css/stylesheet.css'
+    'nested'     => 'avisota_config:transport',
+    'tables'     => array('orm_avisota_transport'),
+    'icon'       => 'assets/avisota/core/images/transport.png',
+    'stylesheet' => 'assets/avisota/core/css/stylesheet.css'
 );
 $GLOBALS['BE_MOD']['avisota']['avisota_support']          = array
 (
-	'icon'       => 'assets/avisota/core/images/avisota_support.png',
-	'stylesheet' => 'assets/avisota/core/css/stylesheet.css',
-	'callback'   => 'Avisota\Contao\Core\Backend\Support',
+    'icon'       => 'assets/avisota/core/images/avisota_support.png',
+    'stylesheet' => 'assets/avisota/core/css/stylesheet.css',
+    'callback'   => 'Avisota\Contao\Core\Backend\Support',
 );
 
 
@@ -108,8 +108,8 @@ $GLOBALS['AVISOTA_TRANSPORT_RENDERER']['native'] = 'Avisota\Renderer\NativeMessa
 /**
  * Events
  */
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = function() {
-	return $GLOBALS['container']['avisota.core.options-builder'];
+$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = function () {
+    return $GLOBALS['container']['avisota.core.options-builder'];
 };
 $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Avisota\Contao\Core\DataContainer\Queue';
 $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Avisota\Contao\Core\DataContainer\RecipientSource';
@@ -185,20 +185,20 @@ $GLOBALS['AVISOTA_TRANSPORT']['service'] = 'Avisota\Contao\Core\Transport\Servic
 //$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('orm_avisota_message_content', 'myLoadDataContainer');
 
 $GLOBALS['TL_HOOKS']['initializeDependencyContainer']['avisota-core-services'] = array(
-	'Avisota\Contao\Core\ServiceFactory',
-	'init'
+    'Avisota\Contao\Core\ServiceFactory',
+    'init'
 );
-$GLOBALS['TL_HOOKS']['nestedMenuPreContent']['avisota-core-nested-menu']  = array(
-	'Avisota\Contao\Core\Backend\NestedMenu',
-	'hookNestedMenuPreContent'
+$GLOBALS['TL_HOOKS']['nestedMenuPreContent']['avisota-core-nested-menu']       = array(
+    'Avisota\Contao\Core\Backend\NestedMenu',
+    'hookNestedMenuPreContent'
 );
-$GLOBALS['TL_HOOKS']['nestedMenuPostContent']['avisota-core-nested-menu'] = array(
-	'Avisota\Contao\Core\Backend\NestedMenu',
-	'hookNestedMenuPostContent'
+$GLOBALS['TL_HOOKS']['nestedMenuPostContent']['avisota-core-nested-menu']      = array(
+    'Avisota\Contao\Core\Backend\NestedMenu',
+    'hookNestedMenuPostContent'
 );
-$GLOBALS['TL_HOOKS']['getUserNavigation']['avisota-core-custom-menu']     = array(
-	'Avisota\Contao\Core\Backend\CustomMenu',
-	'hookGetUserNavigation'
+$GLOBALS['TL_HOOKS']['getUserNavigation']['avisota-core-custom-menu']          = array(
+    'Avisota\Contao\Core\Backend\CustomMenu',
+    'hookGetUserNavigation'
 );
 
 /**

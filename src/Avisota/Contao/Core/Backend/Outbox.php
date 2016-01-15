@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright (C) 2013 Tristan Lins
+ * Copyright © 2016 Sven Baumann
  *
  * PHP version 5
  *
- * @copyright  bit3 UG 2013
- * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @copyright  way.vision 2016
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -24,101 +24,118 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
+/**
+ * A BackendModule implementation that use Twig as template engine.
+ *
+ * @package ContaoTwig
+ * @author  Tristan Lins <tristan.lins@bit3.de>
+ */
 class Outbox extends \TwigBackendModule
 {
-	static public function isEmpty()
-	{
-		global $container;
+    /**
+     * @return bool
+     */
+    public static function isEmpty()
+    {
+        global $container;
 
-		$length = 0;
+        $length = 0;
 
-		$queueRepository     = EntityHelper::getRepository('Avisota\Contao:Queue');
-		$queueDataCollection = $queueRepository->findAll();
+        $queueRepository     = EntityHelper::getRepository('Avisota\Contao:Queue');
+        $queueDataCollection = $queueRepository->findAll();
 
-		/** @var QueueInterface $queue */
-		foreach ($queueDataCollection as $queueData) {
-			$serviceName = sprintf('avisota.queue.%s', $queueData->getId());
-			if ($container->offsetExists($serviceName)) {
-				$queue = $container[$serviceName];
-				$length += $queue->length();
-			}
-		}
+        /** @var QueueInterface $queue */
+        /** @var Queue $queueData */
+        foreach ($queueDataCollection as $queueData) {
+            $serviceName = sprintf('avisota.queue.%s', $queueData->getId());
+            if ($container->offsetExists($serviceName)) {
+                $queue = $container[$serviceName];
+                $length += $queue->length();
+            }
+        }
 
-		return $length == 0;
-	}
+        return $length == 0;
+    }
 
-	/**
-	 * @var string
-	 */
-	protected $strTemplate = 'avisota/backend/outbox';
+    /**
+     * @var string
+     */
+    protected $strTemplate = 'avisota/backend/outbox';
 
-	/**
-	 * Compile the current element
-	 */
-	protected function compile()
-	{
-		/** @var EventDispatcher $eventDispatcher */
-		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+    /**
+     * Compile the current element
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    protected function compile()
+    {
+        /** @var EventDispatcher $eventDispatcher */
+        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-		$eventDispatcher->dispatch(
-			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-			new LoadLanguageFileEvent('avisota_outbox')
-		);
+        $eventDispatcher->dispatch(
+            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+            new LoadLanguageFileEvent('avisota_outbox')
+        );
 
-		$queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
+        $queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
 
-		$this->executeQueue($queueRepository);
-		$this->addQueuesToTemplate($queueRepository);
-	}
+        $this->executeQueue($queueRepository);
+        $this->addQueuesToTemplate($queueRepository);
+    }
 
-	protected function executeQueue(EntityRepository $queueRepository)
-	{
-		global $container;
+    /**
+     * @param EntityRepository $queueRepository
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    protected function executeQueue(EntityRepository $queueRepository)
+    {
+        global $container;
 
-		$input = \Input::getInstance();
 
-		$executeId = $input->get('execute');
-		if ($executeId) {
-			/** @var Queue $queueData */
-			$queueData = $queueRepository->find($executeId);
+        $executeId = \Input::get('execute');
+        if ($executeId) {
+            /** @var Queue $queueData */
+            $queueData = $queueRepository->find($executeId);
 
-			if (!$queueData->getAllowManualSending()) {
-				return;
-			}
+            if (!$queueData->getAllowManualSending()) {
+                return;
+            }
 
-			$serviceName = sprintf('avisota.queue.%s', $queueData->getId());
-			/** @var QueueInterface $queue */
-			$queue = $container[$serviceName];
+            $serviceName = sprintf('avisota.queue.%s', $queueData->getId());
+            /** @var QueueInterface $queue */
+            $queue = $container[$serviceName];
 
-			$this->Template->setName('avisota/backend/outbox_execute');
-			$this->Template->queue  = $queue;
-			$this->Template->config = $queueData;
+            $this->Template->setName('avisota/backend/outbox_execute');
+            $this->Template->queue  = $queue;
+            $this->Template->config = $queueData;
 
-			$GLOBALS['TL_CSS'][]        = 'assets/avisota/core/css/be_outbox.css';
-			$GLOBALS['TL_JAVASCRIPT'][] = 'assets/avisota/core/js/Number.js';
-			$GLOBALS['TL_JAVASCRIPT'][] = 'assets/avisota/core/js/be_outbox.js';
-		}
-	}
+            $GLOBALS['TL_CSS'][]        = 'assets/avisota/core/css/be_outbox.css';
+            $GLOBALS['TL_JAVASCRIPT'][] = 'assets/avisota/core/js/Number.js';
+            $GLOBALS['TL_JAVASCRIPT'][] = 'assets/avisota/core/js/be_outbox.js';
+        }
+    }
 
-	protected function addQueuesToTemplate(EntityRepository $queueRepository)
-	{
-		global $container;
+    /**
+     * @param EntityRepository $queueRepository
+     */
+    protected function addQueuesToTemplate(EntityRepository $queueRepository)
+    {
+        global $container;
 
-		/** @var Queue[] $queueDataCollection */
-		$queueDataCollection = $queueRepository->findAll();
-		$items               = array();
+        /** @var Queue[] $queueDataCollection */
+        $queueDataCollection = $queueRepository->findAll();
+        $items               = array();
 
-		/** @var QueueInterface $queue */
-		foreach ($queueDataCollection as $queueData) {
-			$serviceName = sprintf('avisota.queue.%s', $queueData->getId());
-			$queue       = $container[$serviceName];
+        /** @var QueueInterface $queue */
+        foreach ($queueDataCollection as $queueData) {
+            $serviceName = sprintf('avisota.queue.%s', $queueData->getId());
+            $queue       = $container[$serviceName];
 
-			$item['meta']  = $queueData;
-			$item['queue'] = $queue;
+            $item['meta']  = $queueData;
+            $item['queue'] = $queue;
 
-			$items[] = $item;
-		}
+            $items[] = $item;
+        }
 
-		$this->Template->items = $items;
-	}
+        $this->Template->items = $items;
+    }
 }

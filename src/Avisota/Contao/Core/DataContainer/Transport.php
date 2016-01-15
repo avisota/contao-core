@@ -2,12 +2,12 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright (C) 2013 Tristan Lins
+ * Copyright © 2016 Sven Baumann
  *
  * PHP version 5
  *
- * @copyright  bit3 UG 2013
- * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @copyright  way.vision 2016
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -15,27 +15,53 @@
 
 namespace Avisota\Contao\Core\DataContainer;
 
+/**
+ * Class Transport
+ *
+ * @package Avisota\Contao\Core\DataContainer
+ * @SuppressWarnings(PHPMD.ShortVariables)
+ */
 class Transport extends \Backend
 {
-	/**
-	 * Import the back end user object
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * Import the back end user object
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 * @param \DataContainer $dc
-	 */
-	public function onload_callback($dc)
-	{
-	}
+    /**
+     * @param \DataContainer $dc
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @deprecated use onLoadCallback instead this
+     */
+    public function onload_callback($dc)
+    {
+        $this->onLoadCallback($dc);
+    }
 
-	/**
-	 * @param \DataContainer $dc
-	 */
-	public function onsubmit_callback($dc)
-	{
-	}
+    /**
+     * @param \DataContainer $dc
+     */
+    public function onLoadCallback($dc)
+    {
+    }
+
+    /**
+     * @param \DataContainer $dc
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @deprecated use onSubmitCallback instead this
+     */
+    public function onsubmit_callback($dc)
+    {
+        $this->onSubmitCallback($dc);
+    }
+
+    /**
+     * @param \DataContainer $dc
+     */
+    public function onSubmitCallback($dc)
+    {
+    }
 }
