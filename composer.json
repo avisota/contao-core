@@ -72,12 +72,6 @@
             "sources": {
                 "module": "system/modules/avisota-core",
                 "assets": "assets/avisota/core"
-            },
-            "transifex": {
-                "project": "avisota-contao",
-                "prefix": "contao-core-",
-                "languages_cto": "module/languages",
-                "languages_tx": ".tx"
             }
         },
         "branch-alias": {
