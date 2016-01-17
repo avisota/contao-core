@@ -63,8 +63,8 @@
         "contao-legacy/avisota2": "*"
     },
     "autoload": {
-        "psr-0": {
-            "Avisota\\Contao\\Core": "src/"
+        "psr-4": {
+            "Avisota\\Contao\\Core\\": "src/"
         }
     },
     "extra": {
