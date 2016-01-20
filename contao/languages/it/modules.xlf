@@ -1,0 +1,127 @@
+<?xml version="1.0" ?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="php" date="2014-05-06T04:02:00+02:00" original="modules" source-language="en" target-language="it">
+    <body>
+      <trans-unit id="MOD.avisota-core.0">
+        <source>Avisota - Core</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota-core.1">
+        <source>Basic integration of Avisota for Contao.</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota.0">
+        <source>Avisota newsletter</source>
+        <target>Newsletter Avisota</target>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_outbox.0">
+        <source>Outbox</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_newsletter.0">
+        <source>Messages</source>
+        <target>Messaggi</target>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_recipients.0">
+        <source>Recipients</source>
+        <target>Destinatari</target>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_config.0">
+        <source>Settings</source>
+        <target>Impostazioni</target>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_settings.0">
+        <source>Avisota system settings</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_settings.1">
+        <source>Manage basic avisota system settings</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_salutation.0">
+        <source>Salutation</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_salutation.1">
+        <source>Manage salutations.</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_config:recipient.0">
+        <source>Recipient config</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_mailing_list.0">
+        <source>Mailing lists</source>
+        <target>Mailing lists</target>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_mailing_list.1">
+        <source>Manage the mailing lists that can be subscribed.</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_recipient_source.0">
+        <source>Recipient sources</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_recipient_source.1">
+        <source>Manager recipient sources.</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_config:newsletter.0">
+        <source>Message config</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_newsletter_draft.0">
+        <source>Message drafts</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_newsletter_draft.1">
+        <source>Manager newsletter drafts to create new newsletters from.</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_theme.0">
+        <source>Theme</source>
+        <target>Tema</target>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_theme.1">
+        <source>Manage themes, including templates, stylesheets and layout settings for newsletters.</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_config:transport.0">
+        <source>Transport config</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_transport.0">
+        <source>Transports</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_transport.1">
+        <source>Manager transport modules.</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_queue.0">
+        <source>Queues</source>
+        <target>Code</target>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_queue.1">
+        <source>Manager transport queues.</source>
+        
+      </trans-unit>
+      <trans-unit id="MOD.avisota_support.0">
+        <source>Support</source>
+        <target>Supporto</target>
+        
+      </trans-unit>
+      <trans-unit id="FMD.avisota">
+        <source>Avisota</source>
+        <target>Avisota</target>
+        
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,66 @@
+<?xml version="1.0" ?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="php" date="2014-05-06T04:02:00+02:00" original="avisota_outbox" source-language="en" target-language="en">
+    <body>
+      <trans-unit id="avisota_outbox.headline">
+        <source>Outbox</source>
+        
+      </trans-unit>
+      <trans-unit id="avisota_outbox.col_name">
+        <source>Queue name</source>
+        
+      </trans-unit>
+      <trans-unit id="avisota_outbox.col_length">
+        <source>Length</source>
+        
+      </trans-unit>
+      <trans-unit id="avisota_outbox.action_execute">
+        <source>Execute queue now</source>
+        
+      </trans-unit>
+      <trans-unit id="avisota_outbox.execute">
+        <source>Execute queue %s</source>
+        
+      </trans-unit>
+      <trans-unit id="avisota_outbox.col_failed">
+        <source>failed</source>
+        
+      </trans-unit>
+      <trans-unit id="avisota_outbox.col_success">
+        <source>success</source>
+        
+      </trans-unit>
+      <trans-unit id="avisota_outbox.col_open">
+        <source>open</source>
+        
+      </trans-unit>
+      <trans-unit id="avisota_outbox.col_timeout">
+        <source>timeout</source>
+        
+      </trans-unit>
+      <trans-unit id="avisota_outbox.col_duration">
+        <source>duration</source>
+        
+      </trans-unit>
+      <trans-unit id="avisota_outbox.progress_initializing">
+        <source>Initializing, please stand by and do not close the window.</source>
+        
+      </trans-unit>
+      <trans-unit id="avisota_outbox.progress_running">
+        <source>Sending messages, please stand by and do not close the window.</source>
+        
+      </trans-unit>
+      <trans-unit id="avisota_outbox.progress_pause">
+        <source>Waiting for next cycle, do not close the window.</source>
+        
+      </trans-unit>
+      <trans-unit id="avisota_outbox.progress_finish">
+        <source>Finished send, you can now close the window.</source>
+        
+      </trans-unit>
+      <trans-unit id="avisota_outbox.progress_error">
+        <source>An error occurred, execution stopped!</source>
+        
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

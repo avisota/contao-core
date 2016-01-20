@@ -1,0 +1,78 @@
+<?xml version="1.0" ?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="php" date="2014-05-06T04:02:00+02:00" original="orm_avisota_mailing_list" source-language="en" target-language="en">
+    <body>
+      <trans-unit id="orm_avisota_mailing_list.title.0">
+        <source>Name</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.title.1">
+        <source>Please enter the name of the mailing list.</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.alias.0">
+        <source>Alias</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.alias.1">
+        <source>The mailing list alias is a unique reference to the article which can be called instead of its ID.</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.list_legend">
+        <source>Mailing list</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.expert_legend">
+        <source>Expert settings</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.new.0">
+        <source>New mailing list</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.new.1">
+        <source>Add a new mailing list</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.show.0">
+        <source>Mailing list details</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.show.1">
+        <source>Show the details of mailing list ID %s</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.copy.0">
+        <source>Duplicate mailing list</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.copy.1">
+        <source>Duplicate mailing list ID %s</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.delete.0">
+        <source>Delete mailing list</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.delete.1">
+        <source>Delete mailing list ID %s</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.edit.0">
+        <source>Edit mailing list</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.edit.1">
+        <source>Edit mailing list ID %s</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.label_recipients">
+        <source>%1$d recipients (&lt;span title=&quot;%2$d active recipients&quot;&gt;%2$d&lt;/span&gt; / &lt;span title=&quot;%3$d inactive recipients&quot;&gt;%3$d&lt;/span&gt;)</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_mailing_list.label_members">
+        <source>%1$d members (&lt;span title=&quot;%2$d active members&quot;&gt;%2$d&lt;/span&gt; / &lt;span title=&quot;%3$d inactive members&quot;&gt;%3$d&lt;/span&gt;)</source>
+        
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,165 @@
+<?xml version="1.0" ?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="php" date="2014-05-22T04:03:29+02:00" original="orm_avisota_queue" source-language="en" target-language="it">
+    <body>
+      <trans-unit id="orm_avisota_queue.type.0">
+        <source>Type</source>
+        <target>Tipo</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.type.1">
+        <source>Please select the type of the queue.</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.title.0">
+        <source>Title</source>
+        <target>Titolo</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.title.1">
+        <source>Please enter the queue title.</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.alias.0">
+        <source>Alias</source>
+        <target>Alias</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.alias.1">
+        <source>The queue alias is a unique reference to the queue which can be used instead of its ID.</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.transport.0">
+        <source>Transport module</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.transport.1">
+        <source>Please chose the transport module.</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.maxSendTime.0">
+        <source>Sending time</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.maxSendTime.1">
+        <source>Please enter the maximum time in seconds for each cycle.</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.maxSendCount.0">
+        <source>Sending count</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.maxSendCount.1">
+        <source>Please enter the maximum number of mails send per cycle.</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.cyclePause.0">
+        <source>Cycle pause</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.cyclePause.1">
+        <source>Please enter the time in seconds between each cycle.</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.simpleDatabaseQueueTable.0">
+        <source>Table name</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.simpleDatabaseQueueTable.1">
+        <source>Please enter a table name for the queue. The table should &lt;strong&gt;not&lt;/strong&gt; start with &lt;em&gt;tl_&lt;/em&gt; or &lt;em&gt;orm_&lt;/em&gt;!</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.allowManualSending.0">
+        <source>Allow manual sending</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.allowManualSending.1">
+        <source>Allow users to manual execute a queue and sending its contents.</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.scheduledSending.0">
+        <source>Scheduled sending</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.scheduledSending.1">
+        <source>Use sheduled sending algorithm for automated execution.</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.sendingTime.0">
+        <source>Sending time chart</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.sendingTime.1">
+        <source>Time chart that define execution times.</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.queue_legend">
+        <source>Queue</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.transport_legend">
+        <source>Transport settings</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.config_legend">
+        <source>Queue settings</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.send_legend">
+        <source>Sending</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.simpleDatabase">
+        <source>Simple database driven queue</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.new.0">
+        <source>New queue</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.new.1">
+        <source>Create a new queue</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.show.0">
+        <source>Queue details</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.show.1">
+        <source>Show the details of queue ID %s</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.edit.0">
+        <source>Edit queue</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.edit.1">
+        <source>Edit queue ID %s</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.delete.0">
+        <source>Delete queue</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.delete.1">
+        <source>Delete queue ID %s</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.clear.0">
+        <source>Clear queue</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.clear.1">
+        <source>Clear queue ID %s</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.clearConfirm">
+        <source>Do you realy want to clear the queue?</source>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_queue.queueCleared">
+        <source>The queue &lt;em&gt;%s&lt;/em&gt; was cleared.</source>
+        
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

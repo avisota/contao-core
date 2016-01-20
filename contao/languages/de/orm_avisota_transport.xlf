@@ -1,0 +1,271 @@
+<?xml version="1.0" ?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="php" date="2014-05-06T04:02:00+02:00" original="orm_avisota_transport" source-language="en" target-language="de">
+    <body>
+      <trans-unit id="orm_avisota_transport.type.0">
+        <source>Transport type</source>
+        <target>Transporttyp</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.type.1">
+        <source>Please chose the transport type.</source>
+        <target>Bitte wählen Sie den Transporttyp aus.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.title.0">
+        <source>Title</source>
+        <target>Titel</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.title.1">
+        <source>Please enter the transport module title.</source>
+        <target>Bitte geben Sie den Titel des Transportmoduls ein.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.alias.0">
+        <source>Alias</source>
+        <target>Alias</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.alias.1">
+        <source>The transport module alias is a unique reference to the transport module which can be used instead of its ID.</source>
+        <target>Der Alias ist eine eindeutige Referenz zum Transportmodul und kann anstelle der ID benutzt werden.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.fromAddress.0">
+        <source>From address</source>
+        <target>Absendeadresse</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.fromAddress.1">
+        <source>Please enter the from address.</source>
+        <target>Bitte geben Sie die Absendeadresse ein,</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.fromName.0">
+        <source>From name</source>
+        <target>Absendername</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.fromName.1">
+        <source>Please enter the from name.</source>
+        <target>Bitte geben Sie den Namen des Absenders ein.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.setSender.0">
+        <source>Set sender address</source>
+        <target>Senderadresse festlegen</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.setSender.1">
+        <source>Set the sender for this newsletter.</source>
+        <target>Legen Sie die technische Senderadresse für diesen Newsletter fest.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.senderAddress.0">
+        <source>Sender address</source>
+        <target>Senderadresse</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.senderAddress.1">
+        <source>Please enter the sender address.</source>
+        <target>Bitte geben Sie die technische Senderadresse an.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.senderName.0">
+        <source>Sender name</source>
+        <target>Sendername</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.senderName.1">
+        <source>Please enter the sender name.</source>
+        <target>Bitte geben Sie den Absendernamen an.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.setReplyTo.0">
+        <source>Set reply address</source>
+        <target>Antwortadresse einstellen</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.setReplyTo.1">
+        <source>Set the reply to for this newsletter.</source>
+        <target>Legen Sie die Antwortadresse fest (als reply-to).</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.replyToAddress.0">
+        <source>Reply address</source>
+        <target>Anwortadresse</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.replyToAddress.1">
+        <source>Please enter the reply address.</source>
+        <target>Bitte geben Sie die Antwortadresse an.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.replyToName.0">
+        <source>Reply name</source>
+        <target>Antwortname</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.replyToName.1">
+        <source>Please enter the reply name.</source>
+        <target>Bitte geben Sie den Antwortnamen ein.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftUseSmtp.0">
+        <source>Send e-mails via SMTP</source>
+        <target>Mails per SMTP senden</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftUseSmtp.1">
+        <source>Use an SMTP server instead of the PHP mail() function to send e-mails.</source>
+        <target>Benutzen Sie einen SMTP-Server anstelle der PHP mail()-Funktion, um die E-Mails zu senden.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftSmtpHost.0">
+        <source>SMTP hostname</source>
+        <target>SMTP-Hostname</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftSmtpHost.1">
+        <source>Please enter the host name of the SMTP server.</source>
+        <target>Bitte geben Sie den Hostnamen des SMTP-Servers an.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftSmtpUser.0">
+        <source>SMTP username</source>
+        <target>SMTP-Benutzername</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftSmtpUser.1">
+        <source>Here you can enter the SMTP username.</source>
+        <target>Hier können Sie den SMTP-Benutzernamen angeben.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftSmtpPass.0">
+        <source>SMTP password</source>
+        <target>SMTP-Passwort</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftSmtpPass.1">
+        <source>Here you can enter the SMTP password.</source>
+        <target>Hier können Sie das SMTP-Passwort angeben.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftSmtpEnc.0">
+        <source>SMTP encryption</source>
+        <target>SMTP-Verschlüsselung</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftSmtpEnc.1">
+        <source>Here you can choose an encryption method (SSL or TLS).</source>
+        <target>Hier können Sie die Verschlüsselungsmethode (SSL oder TLS) auswählen.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftSmtpPort.0">
+        <source>SMTP port number</source>
+        <target>SMTP-Portnummer</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftSmtpPort.1">
+        <source>Please enter the port number of the SMTP server.</source>
+        <target>Bitte geben Sie die SMTP-Portnummer ein.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.serviceName.0">
+        <source>Service name</source>
+        <target>Dienstname</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.serviceName.1">
+        <source>Please enter the service name.</source>
+        <target>Bitte geben Sie den Dienstenamen an.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.transport_legend">
+        <source>Transport module</source>
+        <target>Transportmodul</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.contact_legend">
+        <source>From, Sender and Reply to settings</source>
+        <target>Details für Absende- und Antwortadressen</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swift_legend">
+        <source>Swift PHP Mailer</source>
+        <target>Swift PHP Mailer</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.service_legend">
+        <source>Service</source>
+        <target>Service</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swift">
+        <source>Swift PHP Mailer</source>
+        <target>Swift PHP Mailer</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftSmtpSystemSettings">
+        <source>Use system settings</source>
+        <target>Systemeinstellungen benutzen</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftSmtpOn">
+        <source>Send e-mails via SMTP</source>
+        <target>Mails per SMTP versenden</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.swiftSmtpOff">
+        <source>Send e-mails via PHP</source>
+        <target>Mails per PHP-Funktion versenden</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.service">
+        <source>Custom service</source>
+        <target>Eigener Dienst</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.new.0">
+        <source>New transport module</source>
+        <target>Neues Transportmodul</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.new.1">
+        <source>Create a new transport module</source>
+        <target>Erstellen Sie ein neues Transportmodul.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.show.0">
+        <source>Transport module details</source>
+        <target>Transportmodul-Details</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.show.1">
+        <source>Show the details of transport module ID %s</source>
+        <target>Zeigen Sie die Details des Transportmoduls ID %s an.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.edit.0">
+        <source>Edit transport module</source>
+        <target>Bearbeiten Sie Transportmodule.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.edit.1">
+        <source>Edit transport module ID %s</source>
+        <target>Bearbeiten Sie das Transportmodul ID %s.</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.delete.0">
+        <source>Delete transport module</source>
+        <target>Transportmodul löschen</target>
+        
+      </trans-unit>
+      <trans-unit id="orm_avisota_transport.delete.1">
+        <source>Delete transport module ID %s</source>
+        <target>Löschen Sie das Transportmodul ID %s.</target>
+        
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

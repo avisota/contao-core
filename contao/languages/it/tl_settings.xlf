@@ -1,0 +1,47 @@
+<?xml version="1.0" ?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="php" date="2014-05-06T04:02:00+02:00" original="tl_avisota_settings" source-language="en" target-language="it">
+    <body>
+      <trans-unit id="tl_avisota_settings.avisota_default_transport.0">
+        <source>Default transport module</source>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_default_transport.1">
+        <source>Please choose the default transport module.</source>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_developer_mode.0">
+        <source>Developer mode</source>
+        <target>Modalità svilluppatore</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_developer_mode.1">
+        <source>Enable the developer mode.</source>
+        <target>Abilità la modalità svilluppatore.</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_developer_email.0">
+        <source>Developer email address</source>
+        <target>Indirizzo email svilluppatore</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_developer_email.1">
+        <source>Please enter the email address to use for every email in developer mode.</source>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.edit">
+        <source>Avisota system settings</source>
+        <target>Impostazioni di sistema Avisota</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.transport_legend">
+        <source>Transport</source>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.developer_legend">
+        <source>Developer</source>
+        <target>Svilluppatore</target>
+        
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

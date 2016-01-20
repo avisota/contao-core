@@ -1,0 +1,11 @@
+<?xml version="1.0" ?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="php" date="2014-05-06T04:02:00+02:00" original="avisota_support" source-language="en" target-language="de">
+    <body>
+      <trans-unit id="avisota_support.headline">
+        <source>Get support</source>
+        <target>Hilfe bekommen</target>
+        
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
