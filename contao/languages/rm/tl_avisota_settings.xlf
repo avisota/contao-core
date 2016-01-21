@@ -1,0 +1,51 @@
+<?xml version="1.0" ?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="php" date="2014-05-06T04:02:00+02:00" original="tl_avisota_settings" source-language="en" target-language="rm">
+    <body>
+      <trans-unit id="tl_avisota_settings.avisota_default_transport.0">
+        <source>Default transport module</source>
+        <target>Modul da transport da standard</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_default_transport.1">
+        <source>Please choose the default transport module.</source>
+        <target>Tscherna il modul da transport da standard.</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_developer_mode.0">
+        <source>Developer mode</source>
+        <target>Modus da sviluppaders</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_developer_mode.1">
+        <source>Enable the developer mode.</source>
+        <target>Activar il modus da sviluppaders</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_developer_email.0">
+        <source>Developer email address</source>
+        <target>Adressa dad e-mail dal sviluppader</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_developer_email.1">
+        <source>Please enter the email address to use for every email in developer mode.</source>
+        <target>Endatescha l'adressa dad e-mail che duai vegnir utilisada per mintga e-mail tramess en il modus da sviluppader</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.edit">
+        <source>Avisota system settings</source>
+        <target>Configuraziun dal sistem dad Avisota</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.transport_legend">
+        <source>Transport</source>
+        <target>Transport</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.developer_legend">
+        <source>Developer</source>
+        <target>Sviluppader</target>
+        
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

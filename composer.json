@@ -63,21 +63,15 @@
         "contao-legacy/avisota2": "*"
     },
     "autoload": {
-        "psr-0": {
-            "Avisota\\Contao\\Core": "src/"
+        "psr-4": {
+            "Avisota\\Contao\\Core\\": "src/"
         }
     },
     "extra": {
         "contao": {
             "sources": {
-                "module": "system/modules/avisota-core",
+                "contao": "system/modules/avisota-core",
                 "assets": "assets/avisota/core"
-            },
-            "transifex": {
-                "project": "avisota-contao",
-                "prefix": "contao-core-",
-                "languages_cto": "module/languages",
-                "languages_tx": ".tx"
             }
         },
         "branch-alias": {

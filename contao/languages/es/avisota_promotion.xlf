@@ -1,0 +1,18 @@
+<?xml version="1.0" ?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="php" date="2014-05-06T04:02:00+02:00" original="avisota_promotion" source-language="en" target-language="es">
+    <body>
+      <trans-unit id="avisota_promotion.donate">
+        <source>&lt;img src=&quot;assets/avisota/core/images/donate.svg&quot; alt=&quot;&quot;&gt; Avisota is an Open Source project.&lt;br&gt;&lt;a href=&quot;http://avisota.org&quot; target=&quot;_blank&quot;&gt;Donate&lt;/a&gt; and keep the project alive!</source>
+
+      </trans-unit>
+      <trans-unit id="avisota_promotion.opensource">
+        <source>&lt;img src=&quot;assets/avisota/core/images/opensource.svg&quot; alt=&quot;&quot;&gt; Avisota is an Open Source project.&lt;br&gt;&lt;a href=&quot;https://bitbucket.org/avisota&quot; target=&quot;_blank&quot;&gt;View and validate the source online!&lt;/a&gt;</source>
+
+      </trans-unit>
+      <trans-unit id="avisota_promotion.partners">
+        <source>&lt;img src=&quot;assets/avisota/core/images/partners.svg&quot; alt=&quot;&quot;&gt; &lt;a href=&quot;http://avisota.org/de/netzwerk/partner&quot; target=&quot;_blank&quot;&gt;Avisota is backed by many partners.&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;http://avisota.org/de/netzwerk/partner#partner-werden&quot; target=&quot;_blank&quot;&gt;Fill out application and back the project!&lt;/a&gt;!</source>
+
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

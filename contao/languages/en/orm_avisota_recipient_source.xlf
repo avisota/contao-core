@@ -1,0 +1,446 @@
+<?xml version="1.0" ?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="php" date="2014-08-23T04:00:20+02:00" original="orm_avisota_recipient_source" source-language="en" target-language="en">
+    <body>
+      <trans-unit id="orm_avisota_recipient_source.type.0">
+        <source>Recipient source module</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.type.1">
+        <source>Please choose the module that provide recipient data.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.title.0">
+        <source>Name</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.title.1">
+        <source>Please enter a name for this recipient source.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.alias.0">
+        <source>Alias</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.alias.1">
+        <source>The recipient source alias is a unique reference to the recipient source which can be used instead of its ID.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.filter.0">
+        <source>Enable filters</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.filter.1">
+        <source>Enable filters on this recipient source. The available filters depend on the specific module.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.filterByMailingLists.0">
+        <source>Filter by mailing list subscription</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.filterByMailingLists.1">
+        <source>Enable filter by mailing list subscriptions.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.mailingLists.0">
+        <source>Mailing lists</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.mailingLists.1">
+        <source>Please choose the selected mailing lists.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.disable.0">
+        <source>Disabled</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.disable.1">
+        <source>Temporary disable this recipient source for transport.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberBy.0">
+        <source>Select members&amp;hellip;</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberBy.1">
+        <source>Please choose how members are selected.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberMailingLists.0">
+        <source>Mailing lists</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberMailingLists.1">
+        <source>Please choose the selected mailing lists.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberAllowSingleMailingListSelection.0">
+        <source>Allow single select mailing lists</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberAllowSingleMailingListSelection.1">
+        <source>Allow the writer to single select mailing lists from this recipient source.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberGroups.0">
+        <source>Groups</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberGroups.1">
+        <source>Please choose the selected groups.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberAllowSingleGroupSelection.0">
+        <source>Allow single select groups</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberAllowSingleGroupSelection.1">
+        <source>Allow the writer to single select groups from this recipient source.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberAllowSingleSelection.0">
+        <source>Allow single select members</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberAllowSingleSelection.1">
+        <source>Allow the writer to single select members from this recipient source.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberFilterByColumns.0">
+        <source>Column filter</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberFilterByColumns.1">
+        <source>Filter the recipients by columns.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberFilterByColumnsField.0">
+        <source>Column</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberFilterByColumnsComparator.0">
+        <source>Comparator</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberFilterByColumnsValue.0">
+        <source>Value</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberFilterByColumnsNoEscape.0">
+        <source>SQL</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberFilterByColumnsNoEscape.1">
+        <source>Use value as native SQL (&amp;rarr; the value will not excaped).</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileSrc.0">
+        <source>CSV file</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileSrc.1">
+        <source>Please choose the CSV file.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvColumnAssignment.0">
+        <source>Assign columns</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvColumnAssignment.1">
+        <source>Please assign the columns to internal fields.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvColumnAssignmentColumn.0">
+        <source>Column</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvColumnAssignmentField.0">
+        <source>Field</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.dummyMinCount.0">
+        <source>Min count</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.dummyMinCount.1">
+        <source>Please type in the minimum count of generated recipients.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.dummyMaxCount.0">
+        <source>Max count</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.dummyMaxCount.1">
+        <source>Please type in the maximum count of generated recipients.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.source_legend">
+        <source>Recipient source</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.filter_legend">
+        <source>Filter settings</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.expert_legend">
+        <source>Experts settings</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.integrated_legend">
+        <source>Avisota integrated recipients</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.member_legend">
+        <source>Contao members</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFile_legend">
+        <source>CSV file</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.dummy_legend">
+        <source>Generator settings</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.details_legend">
+        <source>Details settings</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.integrated.0">
+        <source>Avisota integrated recipients</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.integrated_by_mailing_list.0">
+        <source>Avisota integrated recipients selected by mailing list</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.member.0">
+        <source>Contao members</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csv_file.0">
+        <source>CSV file</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csv_file.1">
+        <source>Get recipients from CSV-File.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.dummy.0">
+        <source>Random generator (for testing only!)</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.dummy.1">
+        <source>Randomly generate recipients from a predefined set of forenames, surnames and domains. This recipient source is useful for testing. Please keep in mind that all emails are just generated. They should not exists, but there is no guarantee! This recipient source should only used in combination with a dummy transport or with the developer mode.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.integrated_details">
+        <source>Avisota integrated recipients</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.member_details">
+        <source>Contao members</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.integrated_member_details">
+        <source>Avisota integrated recipients and Contao members</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.integratedByMailingLists">
+        <source>by selected mailing lists</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.integratedByAllMailingLists">
+        <source>by all mailing lists</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.integratedByRecipients">
+        <source>by recipients from selected mailing lists</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.integratedByAllRecipients">
+        <source>by all recipients</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberByMailingLists">
+        <source>by selected mailing lists</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberByAllMailingLists">
+        <source>by all mailing lists</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberByGroups">
+        <source>by selected groups</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberByAllGroups">
+        <source>by all groups</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberByMailingListMembers">
+        <source>by members from selected mailing lists</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberByGroupMembers">
+        <source>by members from selected groups</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.memberByAllMembers">
+        <source>by all members</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.duplicated_column">
+        <source>Columns and fields cannot used twice!</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.missing_email_column">
+        <source>You need to assign &lt;code&gt;email&lt;/code&gt; to one column!</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.new.0">
+        <source>New recipient source</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.new.1">
+        <source>Add a new recipient source</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.show.0">
+        <source>Recipient source details</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.show.1">
+        <source>Show the details of recipient source ID %s</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.toggle.0">
+        <source>Toggle disabled status</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.toggle.1">
+        <source>Toggle the disabled status of recipient source ID %s</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.delete.0">
+        <source>Delete recipient source</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.delete.1">
+        <source>Delete recipient source ID %s</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.edit.0">
+        <source>Edit recipient source</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.edit.1">
+        <source>Edit recipient source ID %s</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.up.0">
+        <source>Increase priority</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.up.1">
+        <source>Increase priority of recipient source ID %s</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.down.0">
+        <source>Decrease priority</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.down.1">
+        <source>Decrease priority of recipient source ID %s</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvColumnAssignmentField.1">
+        <source>Please type in the assigned field name. E.g. &lt;code&gt;forename&lt;/code&gt; or &lt;code&gt;surname&lt;/code&gt;. There must be one column &lt;code&gt;email&lt;/code&gt; at least!</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileDelimiter.0">
+        <source>Delimiter</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileDelimiter.1">
+        <source>Please choose the CSV delimiter.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileDelimiters.comma">
+        <source>Comma</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileDelimiters.semicolon">
+        <source>Semicolon</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileDelimiters.separator">
+        <source>Separator</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileDelimiters.space">
+        <source>Space</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileDelimiters.tabulator">
+        <source>Tabulator</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileDelimiters.linebreak">
+        <source>Line break</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileEnclosure.0">
+        <source>Enclosure</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileEnclosure.1">
+        <source>Please choose the CSV enclosure.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileEnclosures.double">
+        <source>Double quote</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileEnclosures.single">
+        <source>Single quote</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.list.0">
+        <source>List the recipients</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.list.1">
+        <source>List the recipients from recipient source ID %s</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.unionRecipientSources.0">
+        <source>Recipient source</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.unionRecipientSources.1">
+        <source>Please choose the recipient sources to unify.</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.unionClean.0">
+        <source>Clean mode</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.unionClean.1">
+        <source>In clean mode duplicate entries will be filtered out. This mode need much more cpu speed and memory and may be slow on big recipient lists!</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.union_legend">
+        <source>Union</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.union.0">
+        <source>Union</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.union.1">
+        <source>Make union from recipient source.</source>
+
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

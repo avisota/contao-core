@@ -1,0 +1,51 @@
+<?xml version="1.0" ?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="php" date="2014-05-06T04:02:00+02:00" original="tl_avisota_settings" source-language="en" target-language="de">
+    <body>
+      <trans-unit id="tl_avisota_settings.avisota_default_transport.0">
+        <source>Default transport module</source>
+        <target>Standard-Transportmodul.</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_default_transport.1">
+        <source>Please choose the default transport module.</source>
+        <target>Bitte wählen Sie das Standard-Transportmodul aus.</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_developer_mode.0">
+        <source>Developer mode</source>
+        <target>Entwicklermodus</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_developer_mode.1">
+        <source>Enable the developer mode.</source>
+        <target>Aktivieren Sie den Entwicklermodus.</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_developer_email.0">
+        <source>Developer email address</source>
+        <target>Entwickler-Mailadresse.</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.avisota_developer_email.1">
+        <source>Please enter the email address to use for every email in developer mode.</source>
+        <target>Bitte geben Sie die Mailadresse an, die im Entwicklermodus für jegliche Mail benutzt wird.</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.edit">
+        <source>Avisota system settings</source>
+        <target>Avisota-Systemeinstellungen</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.transport_legend">
+        <source>Transport</source>
+        <target>Transport</target>
+        
+      </trans-unit>
+      <trans-unit id="tl_avisota_settings.developer_legend">
+        <source>Developer</source>
+        <target>Entwickler</target>
+        
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
