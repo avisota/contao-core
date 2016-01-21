@@ -4,527 +4,547 @@
       <trans-unit id="orm_avisota_recipient_source.type.0">
         <source>Recipient source module</source>
         <target>Modul da funtauna per desintaturs</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.type.1">
         <source>Please choose the module that provide recipient data.</source>
         <target>Tscherna il modul che porscha las datas dals destinaturs.</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.title.0">
         <source>Name</source>
         <target>Num</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.title.1">
         <source>Please enter a name for this recipient source.</source>
         <target>Endatescha in num per questa funtauna da destinaturs.</target>
-        
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.alias.0">
+        <source>Alias</source>
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.alias.1">
+        <source>The recipient source alias is a unique reference to the recipient source which can be used instead of its ID.</source>
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.filter.0">
         <source>Enable filters</source>
         <target>Activar filters</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.filter.1">
         <source>Enable filters on this recipient source. The available filters depend on the specific module.</source>
         <target>Activar filters sin questa funtauna da destinaturs. Ils filters disponibels dependan dal modul specific.</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.filterByMailingLists.0">
         <source>Filter by mailing list subscription</source>
         <target>Filtrar tenor ils abunaments</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.filterByMailingLists.1">
         <source>Enable filter by mailing list subscriptions.</source>
         <target>Activar la pussaivladad da filtrar tenor ils abunaments da glistas dad e-mail.</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.mailingLists.0">
         <source>Mailing lists</source>
         <target>Glistas da mail</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.mailingLists.1">
         <source>Please choose the selected mailing lists.</source>
         <target>Tscherna las glistas da mail</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.disable.0">
         <source>Disabled</source>
         <target>Deactivà</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.disable.1">
         <source>Temporary disable this recipient source for transport.</source>
         <target>Deactivar temporarmain questa funtauna da destinaturs per il transport.</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberBy.0">
         <source>Select members&amp;hellip;</source>
         <target>Tscherner commembers&amp;hellip;</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberBy.1">
         <source>Please choose how members are selected.</source>
         <target>Tscherna sco che commembers vegnan selecziunads.</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberMailingLists.0">
         <source>Mailing lists</source>
         <target>Glistas da mail</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberMailingLists.1">
         <source>Please choose the selected mailing lists.</source>
         <target>Tscherna las glistas da mail selecziunadas</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberAllowSingleMailingListSelection.0">
         <source>Allow single select mailing lists</source>
         <target>Lubir da tscherner be ina glista da mail</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberAllowSingleMailingListSelection.1">
         <source>Allow the writer to single select mailing lists from this recipient source.</source>
         <target>Lubir a l'autur da tscherner be ina glista da mail da questa funtauna da destinaturs.</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberGroups.0">
         <source>Groups</source>
         <target>Gruppas</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberGroups.1">
         <source>Please choose the selected groups.</source>
         <target>Tscherna las gruppas selecziunadas.</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberAllowSingleGroupSelection.0">
         <source>Allow single select groups</source>
         <target>Lubir da tscherner be ina gruppa</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberAllowSingleGroupSelection.1">
         <source>Allow the writer to single select groups from this recipient source.</source>
         <target>Lubir a l'autur da tscherner be ina gruppa da questa funtauna da destinaturs.</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberAllowSingleSelection.0">
         <source>Allow single select members</source>
         <target>Lubir da tscherner be in commember</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberAllowSingleSelection.1">
         <source>Allow the writer to single select members from this recipient source.</source>
         <target>Lubir a l'autur da tscherner be in commember da questa funtauna da destinaturs.</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberFilterByColumns.0">
         <source>Column filter</source>
         <target>Filter da colonnas</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberFilterByColumns.1">
         <source>Filter the recipients by columns.</source>
         <target>Filtrar ils destinatur tenor colonnas.</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberFilterByColumnsField.0">
         <source>Column</source>
         <target>Colonna</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberFilterByColumnsComparator.0">
         <source>Comparator</source>
         <target>Cumparegliader</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberFilterByColumnsValue.0">
         <source>Value</source>
         <target>Valur</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberFilterByColumnsNoEscape.0">
         <source>SQL</source>
         <target>SQL</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberFilterByColumnsNoEscape.1">
         <source>Use value as native SQL (&amp;rarr; the value will not excaped).</source>
         <target>Utilisar SQL navig (&amp;rarr; la valur navegn betg controllà!).</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvFileSrc.0">
         <source>CSV file</source>
         <target>Datoteca da CSV</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvFileSrc.1">
         <source>Please choose the CSV file.</source>
         <target>Tscherna la datoteca da CSV</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvColumnAssignment.0">
         <source>Assign columns</source>
         <target>Attribuir colonnas</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvColumnAssignment.1">
         <source>Please assign the columns to internal fields.</source>
         <target>Attribuescha las colonnas als champs interns</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvColumnAssignmentColumn.0">
         <source>Column</source>
         <target>Colonnas</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvColumnAssignmentField.0">
         <source>Field</source>
         <target>Champ</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.dummyMinCount.0">
         <source>Min count</source>
         <target>Dumber minimal</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.dummyMinCount.1">
         <source>Please type in the minimum count of generated recipients.</source>
         <target>Endatescha il dumber minimal da destinaturs generads</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.dummyMaxCount.0">
         <source>Max count</source>
         <target>Dumber maximal</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.dummyMaxCount.1">
         <source>Please type in the maximum count of generated recipients.</source>
         <target>Endatescha il dumber maximal da destinaturs generads</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.source_legend">
         <source>Recipient source</source>
         <target>Funtauna da destinaturs</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.filter_legend">
         <source>Filter settings</source>
         <target>Configuraziun dal filter</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.expert_legend">
         <source>Experts settings</source>
         <target>Configuraziun avanzada</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.integrated_legend">
         <source>Avisota integrated recipients</source>
         <target>Destinaturs integrads en Avisota</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.member_legend">
         <source>Contao members</source>
         <target>Commembers da Contao</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvFile_legend">
         <source>CSV file</source>
         <target>Datoteca da CSV</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.dummy_legend">
         <source>Generator settings</source>
         <target>Configuraziun dal generatur</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.details_legend">
         <source>Details settings</source>
         <target>Configuraziun dals detagls</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.integrated.0">
         <source>Avisota integrated recipients</source>
         <target>Destinaturs integrads en Avisota</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.integrated_by_mailing_list.0">
         <source>Avisota integrated recipients selected by mailing list</source>
         <target>Destinaturs integrads en Avisota e selecziunads da la glista da mail</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.member.0">
         <source>Contao members</source>
         <target>Commembers da Contao</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csv_file.0">
         <source>CSV file</source>
         <target>Datoteca da CSV</target>
-        
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csv_file.1">
+        <source>Get recipients from CSV-File.</source>
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.dummy.0">
         <source>Random generator (for testing only!)</source>
         <target>Generatur da casualitad (be per testar!)</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.dummy.1">
         <source>Randomly generate recipients from a predefined set of forenames, surnames and domains. This recipient source is useful for testing. Please keep in mind that all emails are just generated. They should not exists, but there is no guarantee! This recipient source should only used in combination with a dummy transport or with the developer mode.</source>
         <target>Generar caualmain destinatur da in set predefinà da prenums, nums e domains. Questa funtauna da destinaturs è practica per testar. Fa stim che tut las adressas dad e-mail èn be generadas. Ellas na duessan betg esser existentas, ma quai na pudain nus betg garantir! Questa funtauna da destinaturs duess be vegnir utilisada cun in dummy-transport u en il modus da sviluppader.</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.integrated_details">
         <source>Avisota integrated recipients</source>
         <target>Destinaturs integrads en Avisota</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.member_details">
         <source>Contao members</source>
         <target>Commembers da Contao</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.integrated_member_details">
         <source>Avisota integrated recipients and Contao members</source>
         <target>Destinaturs integrads en Avisota e commembers da Contao</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.integratedByMailingLists">
         <source>by selected mailing lists</source>
         <target>tenor las glistas dad e-mail selecziunadas</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.integratedByAllMailingLists">
         <source>by all mailing lists</source>
         <target>tenor tut las glistas dad e-mail</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.integratedByRecipients">
         <source>by recipients from selected mailing lists</source>
         <target>tenor destinaturs da las glistas dad e-mail selecziunadas</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.integratedByAllRecipients">
         <source>by all recipients</source>
         <target>tenor tut ils destinaturs</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberByMailingLists">
         <source>by selected mailing lists</source>
         <target>tenor las glistas dad e-mail selecziunadas</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberByAllMailingLists">
         <source>by all mailing lists</source>
         <target>tenor tut las glistas dad e-mail</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberByGroups">
         <source>by selected groups</source>
         <target>tenor las gruppas tschernidas</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberByAllGroups">
         <source>by all groups</source>
         <target>tenor tut las gruppas</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberByMailingListMembers">
         <source>by members from selected mailing lists</source>
         <target>tenor ils commembers da las glistas dad e-mail selecziunadas</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberByGroupMembers">
         <source>by members from selected groups</source>
         <target>tenor ils commembers da las gruppas selecziunadas</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberByAllMembers">
         <source>by all members</source>
         <target>tenor tut ils commembers</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.duplicated_column">
         <source>Columns and fields cannot used twice!</source>
         <target>Colonnas e champs na pon betg vegnir utilisads duas giadas!</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.missing_email_column">
         <source>You need to assign &lt;code&gt;email&lt;/code&gt; to one column!</source>
         <target>Ti stos attribuir  &lt;code&gt;email&lt;/code&gt; ad ina colonna!</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.new.0">
         <source>New recipient source</source>
         <target>Nova funtauna da destinaturs</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.new.1">
         <source>Add a new recipient source</source>
         <target>Crear ina nova funtauna da destinaturs</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.show.0">
         <source>Recipient source details</source>
         <target>Detagls da la funtauna da destinaturs</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.show.1">
         <source>Show the details of recipient source ID %s</source>
         <target>Detagls da la funtauna da destinaturs cun l'ID %s</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.toggle.0">
         <source>Toggle disabled status</source>
         <target>Activar/deactivar</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.toggle.1">
         <source>Toggle the disabled status of recipient source ID %s</source>
         <target>Activar/deactivar la funtauna cun l'ID %s</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.delete.0">
         <source>Delete recipient source</source>
         <target>Stizzar la funtauna da destinaturs</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.delete.1">
         <source>Delete recipient source ID %s</source>
         <target>Stizzar la funtauna da destinaturs cun l'ID %s</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.edit.0">
         <source>Edit recipient source</source>
         <target>Modifitgar la funtauna da destinaturs</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.edit.1">
         <source>Edit recipient source ID %s</source>
         <target>Modifitgar la funtauna da destinaturs cun l'ID %s</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.up.0">
         <source>Increase priority</source>
         <target>Augmentar la prioritad</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.up.1">
         <source>Increase priority of recipient source ID %s</source>
         <target>Augmentar la prioritad da la funtauna da destinaturs cun l'ID %s</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.down.0">
         <source>Decrease priority</source>
         <target>Sbassar la prioritad</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.down.1">
         <source>Decrease priority of recipient source ID %s</source>
         <target>Sbassar la prioritad da la funtauna da destinaturs cun l'ID %s</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvColumnAssignmentField.1">
         <source>Please type in the assigned field name. E.g. &lt;code&gt;forename&lt;/code&gt; or &lt;code&gt;surname&lt;/code&gt;. There must be one column &lt;code&gt;email&lt;/code&gt; at least!</source>
         <target>Endatescha il num da champ assegnà. P.ex &lt;code&gt;prenum&lt;/code&gt; u &lt;code&gt;num&lt;/code&gt;. Almain ina colonna &lt;code&gt;email&lt;/code&gt; sto exister!</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvFileDelimiter.0">
         <source>Delimiter</source>
         <target>Limitader</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvFileDelimiter.1">
         <source>Please choose the CSV delimiter.</source>
         <target>Tscherna il limitader da CSV.</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvFileDelimiters.comma">
         <source>Comma</source>
         <target>Comma</target>
-        
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.csvFileDelimiters.semicolon">
+        <source>Semicolon</source>
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvFileDelimiters.separator">
         <source>Separator</source>
         <target>Seperatur</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvFileDelimiters.space">
         <source>Space</source>
         <target>Distanza</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvFileDelimiters.tabulator">
         <source>Tabulator</source>
         <target>Tabulatur</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvFileDelimiters.linebreak">
         <source>Line break</source>
         <target>Nova lingia</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvFileEnclosure.0">
         <source>Enclosure</source>
         <target>Brancar</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvFileEnclosure.1">
         <source>Please choose the CSV enclosure.</source>
         <target>Tscherna il tip da brancar da CSV.</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvFileEnclosures.double">
         <source>Double quote</source>
         <target>Virgulettas dublas</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csvFileEnclosures.single">
         <source>Single quote</source>
         <target>Virgulettas simplas</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.list.0">
         <source>List the recipients</source>
         <target>Mussar ils destinaturs</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.list.1">
         <source>List the recipients from recipient source ID %s</source>
         <target>Mussar ils destinaturs da la funtauna da destinaturs cun l'ID %s</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.unionRecipientSources.0">
         <source>Recipient source</source>
         <target>Funtauna da destinaturs</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.unionRecipientSources.1">
         <source>Please choose the recipient sources to unify.</source>
         <target>Tscherna las funtaunas da destinaturs per unifitgar.</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.unionClean.0">
         <source>Clean mode</source>
         <target>Modus schuber</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.unionClean.1">
         <source>In clean mode duplicate entries will be filtered out. This mode need much more cpu speed and memory and may be slow on big recipient lists!</source>
         <target>En il modus schuber vegnan endatazins dublas filtradas. Quest modus dovra bler dapli cpu e memori e pudess esser plaun en per lungas glistas da recipients!</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.union_legend">
         <source>Union</source>
         <target>Union</target>
-        
+
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.union.0">
         <source>Union</source>
         <target>Union</target>
-        
+
+      </trans-unit>
+      <trans-unit id="orm_avisota_recipient_source.union.1">
+        <source>Make union from recipient source.</source>
+
       </trans-unit>
     </body>
   </file>
