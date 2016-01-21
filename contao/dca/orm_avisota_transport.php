@@ -75,6 +75,7 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
                 'href'  => 'act=edit',
                 'icon'  => 'edit.gif'
             ),
+            // TODO alert box description
             'delete' => array
             (
                 'label'      => &$GLOBALS['TL_LANG']['orm_avisota_transport']['delete'],

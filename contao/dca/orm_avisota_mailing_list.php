@@ -83,6 +83,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
                 'icon'       => 'copy.gif',
                 'attributes' => 'onclick="Backend.getScrollOffset();"',
             ),
+            // TODO description for alert box
             'delete' => array
             (
                 'label'      => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['delete'],

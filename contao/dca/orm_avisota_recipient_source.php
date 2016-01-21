@@ -122,13 +122,15 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
         'csv_file' => array(
             'source'  => array('title', 'alias', 'type'),
             'csvFile' => array('csvFileSrc', 'csvColumnAssignment', 'csvFileDelimiter', 'csvFileEnclosure'),
-            'filter'  => array('filter'),
+            // TODO make filter?
+            //'filter'  => array('filter'),
             'expert'  => array('disable'),
         ),
         'dummy'    => array(
             'source' => array('title', 'alias', 'type'),
             'dummy'  => array('dummyMinCount', 'dummyMaxCount'),
-            'filter' => array('filter'),
+            // TODO make filter?
+            //'filter' => array('filter'),
             'expert' => array('disable'),
         ),
     ),

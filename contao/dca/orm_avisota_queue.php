@@ -75,6 +75,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
                 'href'  => 'act=edit',
                 'icon'  => 'edit.gif'
             ),
+            // TODO alert box description
             'delete' => array
             (
                 'label'      => &$GLOBALS['TL_LANG']['orm_avisota_queue']['delete'],
@@ -82,6 +83,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
                 'icon'       => 'delete.gif',
                 'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
             ),
+            // TODO alert box description
             'clear'  => array
             (
                 'label'      => &$GLOBALS['TL_LANG']['orm_avisota_queue']['clear'],
