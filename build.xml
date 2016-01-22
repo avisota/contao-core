@@ -1,25 +1,9 @@
-<project name="Avisota" default="build">
-	<!--
-	    we have no tests at the moment :-\
-	<target name="phpunit">
-		<exec dir="${basedir}" executable="phpunit" failonerror="true">
-			<arg line="--coverage-text
-					   --configuration ${basedir}/phpunit.xml.dist"/>
-		</exec>
-	</target>
-	-->
+<?xml version="1.0"?>
+<!--
+This is an example ant build file to be used in combination with composer.
+-->
 
-	<target name="phpcs">
-		<exec dir="${basedir}" executable="vendor/bin/phpcs" failonerror="true">
-			<arg line="--standard=${basedir}/vendor/bit3/php-coding-standard/phpcs/Bit3/ruleset.xml ${basedir}/src"/>
-		</exec>
-	</target>
 
-	<target name="phpmd">
-		<exec dir="${basedir}" executable="vendor/bin/phpmd" failonerror="true">
-			<arg line="${basedir}/src text ${basedir}/vendor/bit3/php-coding-standard/phpmd/ruleset.xml"/>
-		</exec>
-	</target>
-
-	<target name="build" depends="phpcs,phpmd"/>
+<project name="avisota-contao-core" default="build">
+	<import file="vendor/phpcq/phpcq/phpcq.main.xml"/>
 </project>
