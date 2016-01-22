@@ -1,0 +1,6 @@
+exclude:
+  languages
+
+mapping:
+  "Sven Baumann <baumann.sv@gmail.com>":
+    - "Sven Baumann <baumann.sv@gmail.com>"
