@@ -52,9 +52,7 @@
         "symfony/http-foundation": "~2.7"
     },
     "require-dev": {
-        "phpcq/all-tasks": "~1.1",
-        "squizlabs/php_codesniffer": "1.*",
-        "bit3/php-coding-standard": "~2.2"
+        "phpcq/all-tasks": "~1.1"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
