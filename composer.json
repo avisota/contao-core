@@ -65,6 +65,11 @@
             "Avisota\\Contao\\Core\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Avisota\\Test\\Contao\\Core\\": "tests/Test/"
+        }
+    },
     "extra": {
         "contao": {
             "sources": {
