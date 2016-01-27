@@ -21,12 +21,16 @@ use ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallba
  */
 $GLOBALS['TL_DCA']['tl_user']['palettes']['extend'] = str_replace(
     'formp;',
-    'formp;{avisota_legend},avisota_recipient_lists,avisota_recipient_list_permissions,avisota_recipient_permissions,avisota_newsletter_categories,avisota_newsletter_category_permissions,avisota_newsletter_permissions;',
+    'formp;{avisota_legend},avisota_recipient_lists,avisota_recipient_list_permissions,' .
+    'avisota_recipient_permissions,avisota_newsletter_categories,avisota_newsletter_category_permissions,' .
+    'avisota_newsletter_permissions;',
     $GLOBALS['TL_DCA']['tl_user']['palettes']['extend']
 );
 $GLOBALS['TL_DCA']['tl_user']['palettes']['custom'] = str_replace(
     'formp;',
-    'formp;{avisota_legend},avisota_recipient_lists,avisota_recipient_list_permissions,avisota_recipient_permissions,avisota_newsletter_categories,avisota_newsletter_category_permissions,avisota_newsletter_permissions;',
+    'formp;{avisota_legend},avisota_recipient_lists,avisota_recipient_list_permissions,' .
+    'avisota_recipient_permissions,avisota_newsletter_categories,avisota_newsletter_category_permissions,' .
+    'avisota_newsletter_permissions;',
     $GLOBALS['TL_DCA']['tl_user']['palettes']['custom']
 );
 

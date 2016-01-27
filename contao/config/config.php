@@ -232,7 +232,8 @@ $GLOBALS['URL_KEYWORDS'][] = 'item';
  * Hack: Fix ajax load import source tree.
  */
 /*
-if (($_GET['table'] == 'orm_avisota_recipient_import' || $_GET['table'] == 'orm_avisota_recipient_remove') && ($_GET['isAjax'] || $_POST['isAjax'])) {
+if (($_GET['table'] == 'orm_avisota_recipient_import'
+|| $_GET['table'] == 'orm_avisota_recipient_remove') && ($_GET['isAjax'] || $_POST['isAjax'])) {
 	unset($_GET['table']);
 }
 */
@@ -270,7 +271,8 @@ if (version_compare(
 		&& strpos($environment->requestUri, 'contao/install.php') === false
 	) {
 		header(
-			'Location: ' . $environment->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/system/modules/avisota/AvisotaCompatibilityController.php'
+			'Location: ' . $environment->url . $GLOBALS['TL_CONFIG']['websitePath'] .
+            '/system/modules/avisota/AvisotaCompatibilityController.php'
 		);
 		exit;
 	}
@@ -292,7 +294,8 @@ else if (TL_MODE == 'BE') {
 		// Install Tool
 		&& strpos($objEnvironment->requestUri, 'contao/install.php') === false
 	) {
-		header('Location: ' . $objEnvironment->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/contao/main.php?do=avisota_update');
+		header('Location: ' . $objEnvironment->url . $GLOBALS['TL_CONFIG']['websitePath'] .
+        '/contao/main.php?do=avisota_update');
 		exit;
 	}
 	* /

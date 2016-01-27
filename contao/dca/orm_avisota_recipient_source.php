@@ -80,13 +80,16 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
                 'label'      => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
-                'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+                'attributes' =>
+                    'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; ' .
+                    'Backend.getScrollOffset();"'
             ),
             'toggle' => array
             (
                 'label'          => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['toggle'],
                 'icon'           => 'visible.gif',
-                'attributes'     => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
+                'attributes'     =>
+                    'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
                 'toggleProperty' => 'disable',
                 'toggleInverse'  => true,
             ),
@@ -210,10 +213,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
         (
             'label'            => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['unionRecipientSources'],
             'inputType'        => 'checkboxWizard',
-            'options_callback' => \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory::createCallback(
-                \Avisota\Contao\Core\CoreEvents::CREATE_RECIPIENT_SOURCE_OPTIONS,
-                'Avisota\Contao\Core\Event\CreateOptionsEvent'
-            ),
             'eval'             => array(
                 'mandatory' => true,
                 'multiple'  => true,
@@ -223,6 +222,11 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
                 'length'   => 65532,
                 'nullable' => true,
             ),
+            'options_callback' =>
+                \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory::createCallback(
+                    \Avisota\Contao\Core\CoreEvents::CREATE_RECIPIENT_SOURCE_OPTIONS,
+                    'Avisota\Contao\Core\Event\CreateOptionsEvent'
+                ),
         ),
         'unionClean'            => array
         (
@@ -251,7 +255,8 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
             'eval'      => array(
                 'columnFields' => array(
                     'column' => array(
-                        'label'     => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentColumn'],
+                        'label'     =>
+                            &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['csvColumnAssignmentColumn'],
                         'inputType' => 'select',
                         'options'   => range(1, 30),
                         'eval'      => array(
@@ -363,10 +368,6 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
         (
             'label'            => &$GLOBALS['TL_LANG']['orm_avisota_recipient_source']['mailingLists'],
             'inputType'        => 'checkbox',
-            'options_callback' => \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory::createCallback(
-                \Avisota\Contao\Core\CoreEvents::CREATE_MAILING_LIST_OPTIONS,
-                'Avisota\Contao\Core\Event\CreateOptionsEvent'
-            ),
             'eval'             => array(
                 'mandatory' => true,
                 'multiple'  => true,
@@ -396,6 +397,11 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
             'save_callback'    => array(
                 Contao\Doctrine\ORM\OptionsSaveResolver::create('Avisota\Contao\Entity\MailingList'),
             ),
+            'options_callback' =>
+                \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory::createCallback(
+                    \Avisota\Contao\Core\CoreEvents::CREATE_MAILING_LIST_OPTIONS,
+                    'Avisota\Contao\Core\Event\CreateOptionsEvent'
+                ),
         ),
         // expert settings
         'disable'               => array

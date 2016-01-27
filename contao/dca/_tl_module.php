@@ -103,7 +103,8 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_recipient_fields'] = array
     'exclude'          => true,
     'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_recipient_fields'],
     'inputType'        => 'checkboxWizard',
-    'options_callback' => CreateOptionsEventCallbackFactory::createCallback('avisota.create-editable-recipient-field-options'),
+    'options_callback' =>
+        CreateOptionsEventCallbackFactory::createCallback('avisota.create-editable-recipient-field-options'),
     'eval'             => array('multiple' => true)
 );
 
@@ -149,7 +150,8 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_subscribe_mail'] = array
     'exclude'          => true,
     'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_subscribe_mail'],
     'inputType'        => 'select',
-    'options_callback' => CreateOptionsEventCallbackFactory::createCallback('avisota.create-boilerplate-message-options'),
+    'options_callback' =>
+        CreateOptionsEventCallbackFactory::createCallback('avisota.create-boilerplate-message-options'),
     'eval'             => array(
         'mandatory'          => true,
         'includeBlankOption' => true,
@@ -162,7 +164,8 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_unsubscribe_mail'] = array
     'exclude'          => true,
     'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_unsubscribe_mail'],
     'inputType'        => 'select',
-    'options_callback' => CreateOptionsEventCallbackFactory::createCallback('avisota.create-boilerplate-message-options'),
+    'options_callback' =>
+        CreateOptionsEventCallbackFactory::createCallback('avisota.create-boilerplate-message-options'),
     'eval'             => array(
         'mandatory'          => true,
         'includeBlankOption' => true,
@@ -204,7 +207,8 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_subscribe'] = array
     'exclude'          => true,
     'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_subscribe'],
     'inputType'        => 'select',
-    'options_callback' => CreateOptionsEventCallbackFactory::createCallback('avisota.create-subscribe-module-template-options'),
+    'options_callback' =>
+        CreateOptionsEventCallbackFactory::createCallback('avisota.create-subscribe-module-template-options'),
     'eval'             => array('tl_class' => 'w50')
 );
 
@@ -213,7 +217,8 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_unsubscribe'] = arra
     'exclude'          => true,
     'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_unsubscribe'],
     'inputType'        => 'select',
-    'options_callback' => CreateOptionsEventCallbackFactory::createCallback('avisota.create-unsubscribe-module-template-options'),
+    'options_callback' =>
+        CreateOptionsEventCallbackFactory::createCallback('avisota.create-unsubscribe-module-template-options'),
     'eval'             => array('tl_class' => 'w50')
 );
 
@@ -222,7 +227,8 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_template_subscription'] = arr
     'exclude'          => true,
     'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_template_subscription'],
     'inputType'        => 'select',
-    'options_callback' => CreateOptionsEventCallbackFactory::createCallback('avisota.create-subscription-template-options'),
+    'options_callback' =>
+        CreateOptionsEventCallbackFactory::createCallback('avisota.create-subscription-template-options'),
     'eval'             => array('tl_class' => 'w50')
 );
 
@@ -231,7 +237,8 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_categories'] = array
     'exclude'          => true,
     'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_categories'],
     'inputType'        => 'checkbox',
-    'options_callback' => CreateOptionsEventCallbackFactory::createCallback('avisota.create-message-category-options'),
+    'options_callback' =>
+        CreateOptionsEventCallbackFactory::createCallback('avisota.create-message-category-options'),
     'eval'             => array('mandatory' => true, 'multiple' => true)
 );
 
@@ -240,7 +247,8 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['avisota_reader_template'] = array
     'exclude'          => true,
     'label'            => &$GLOBALS['TL_LANG']['tl_module']['avisota_reader_template'],
     'inputType'        => 'select',
-    'options_callback' => CreateOptionsEventCallbackFactory::createCallback('avisota.create-reader-module-template-options'),
+    'options_callback' =>
+        CreateOptionsEventCallbackFactory::createCallback('avisota.create-reader-module-template-options'),
     'eval'             => array('mandatory' => true, 'tl_class' => 'w50')
 );
 
