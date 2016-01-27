@@ -26,7 +26,7 @@ $GLOBALS['TL_DCA']['tl_avisota_settings'] = array
         'dataContainer'   => 'File',
         'closed'          => true,
         'onload_callback' => array(
-            array('Avisota\Contao\Core\DataContainer\Settings', 'onload_callback')
+            array('Avisota\Contao\Core\DataContainer\Settings', 'onLoadCallback')
         )
     ),
     // Palettes

@@ -24,17 +24,6 @@ class Settings extends \Backend
 {
     /**
      * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     * @noinspection PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-     * @deprecated use onLoadCallback instead this
-     */
-    public function onload_callback()
-    {
-        $this->onLoadCallback();
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function onLoadCallback()
     {

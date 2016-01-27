@@ -33,29 +33,9 @@ class Transport extends \Backend
 
     /**
      * @param \DataContainer $dc
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     * @deprecated use onLoadCallback instead this
-     */
-    public function onload_callback($dc)
-    {
-        $this->onLoadCallback($dc);
-    }
-
-    /**
-     * @param \DataContainer $dc
      */
     public function onLoadCallback($dc)
     {
-    }
-
-    /**
-     * @param \DataContainer $dc
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     * @deprecated use onSubmitCallback instead this
-     */
-    public function onsubmit_callback($dc)
-    {
-        $this->onSubmitCallback($dc);
     }
 
     /**
