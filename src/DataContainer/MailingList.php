@@ -43,6 +43,7 @@ class MailingList extends \Backend
      * @return string
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getLabel($rowData, $label, $dc)
     {

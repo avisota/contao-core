@@ -46,6 +46,7 @@ class Settings extends \Backend
      * @return mixed
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function renderMissingHighstockField($dc, $label)
     {

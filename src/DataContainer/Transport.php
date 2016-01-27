@@ -33,6 +33,7 @@ class Transport extends \Backend
 
     /**
      * @param \DataContainer $dc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function onLoadCallback($dc)
     {
@@ -40,6 +41,7 @@ class Transport extends \Backend
 
     /**
      * @param \DataContainer $dc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function onSubmitCallback($dc)
     {

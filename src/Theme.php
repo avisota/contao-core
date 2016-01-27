@@ -62,6 +62,9 @@ class Theme
      * @return string
      * @throws Exception
      * @deprecated Avisota uses twig templates
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getTemplate($template, $format = 'html5')
     {
