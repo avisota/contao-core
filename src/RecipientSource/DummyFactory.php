@@ -36,13 +36,13 @@ class DummyFactory implements RecipientSourceFactoryInterface
      */
     public function createRecipientSource(RecipientSource $recipientSourceData)
     {
-        $recipientSource =
+        $recipientSourceDummy =
             new Dummy($recipientSourceData->getDummyMinCount(), $recipientSourceData->getDummyMaxCount());
 
         /** @var EventDispatcherInterface $eventDispatcher */
         $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-        $event = new CreateRecipientSourceEvent($recipientSourceData, $recipientSource);
+        $event = new CreateRecipientSourceEvent($recipientSourceData, $recipientSourceDummy);
         $eventDispatcher->dispatch(CoreEvents::CREATE_RECIPIENT_SOURCE, $event);
 
         return $event->getRecipientSource();
