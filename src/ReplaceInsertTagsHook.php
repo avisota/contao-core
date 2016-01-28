@@ -42,6 +42,6 @@ class ReplaceInsertTagsHook extends \Controller
      */
     public function replaceInsertTags($strBuffer, $blnCache = false)
     {
-        return parent::replaceInsertTags($strBuffer, $blnCache);
+        return \Controller::replaceInsertTags($strBuffer, $blnCache);
     }
 }
