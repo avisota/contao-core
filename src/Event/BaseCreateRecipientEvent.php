@@ -16,6 +16,7 @@
 namespace Avisota\Contao\Core\Event;
 
 use Avisota\Contao\Entity\Message;
+use Avisota\Recipient\RecipientInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -32,14 +33,52 @@ use Symfony\Component\EventDispatcher\Event;
  * @author Roman Borschel <roman@code-factory.org>
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class PostSendImmediateEvent extends BaseSendImmediateEvent
+class BaseCreateRecipientEvent extends Event
 {
     /**
-     * @return int
-     * TODO is this in use
+     * @var Message|null
      */
-    public function getCount()
+    protected $message;
+
+    /**
+     * @var RecipientInterface
+     */
+    protected $recipient;
+
+    /**
+     * CreateFakeRecipientEvent constructor.
+     *
+     * @param Message|null $message
+     */
+    public function __construct(Message $message = null)
     {
-        return $this->count;
+        $this->message = $message;
+    }
+
+    /**
+     * @return Message|null
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return RecipientInterface
+     */
+    public function getRecipient()
+    {
+        return $this->recipient;
+    }
+
+    /**
+     * @param RecipientInterface $recipient
+     *
+     * @return $this
+     */
+    public function setRecipient(RecipientInterface $recipient)
+    {
+        $this->recipient = $recipient;
+        return $this;
     }
 }

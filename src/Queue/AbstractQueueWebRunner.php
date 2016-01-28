@@ -38,6 +38,7 @@ abstract class AbstractQueueWebRunner extends \Backend
      * @param Request $request
      *
      * @return JsonResponse|mixed
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function run(Request $request)
     {

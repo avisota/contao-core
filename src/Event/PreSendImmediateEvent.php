@@ -15,75 +15,13 @@
 
 namespace Avisota\Contao\Core\Event;
 
-use Avisota\Contao\Entity\Message;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Event is the base class for classes containing event data.
+ * Class PreSendImmediateEvent
  *
- * This class contains no event data. It is used by events that do not pass
- * state information to an event handler when an event is raised.
- *
- * You can call the method stopPropagation() to abort the execution of
- * further listeners in your event listener.
- *
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Jonathan Wage <jonwage@gmail.com>
- * @author Roman Borschel <roman@code-factory.org>
- * @author Bernhard Schussek <bschussek@gmail.com>
+ * @package Avisota\Contao\Core\Event
  */
-class PreSendImmediateEvent extends Event
+class PreSendImmediateEvent extends BaseSendImmediateEvent
 {
-    /**
-     * @var Message
-     */
-    protected $message;
-
-    /**
-     * @var int
-     */
-    protected $turn;
-
-    /**
-     * @var string
-     */
-    protected $loop;
-
-    /**
-     * PreSendImmediateEvent constructor.
-     *
-     * @param Message $message
-     * @param         $turn
-     * @param         $loop
-     */
-    public function __construct(Message $message, $turn, $loop)
-    {
-        $this->message = $message;
-        $this->turn    = $turn;
-        $this->loop    = $loop;
-    }
-
-    /**
-     * @return Message
-     */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTurn()
-    {
-        return $this->turn;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLoop()
-    {
-        return $this->loop;
-    }
 }

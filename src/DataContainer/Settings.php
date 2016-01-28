@@ -24,24 +24,14 @@ class Settings extends \Backend
 {
     /**
      * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     * @noinspection PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-     * @deprecated use onLoadCallback instead this
-     */
-    public function onload_callback()
-    {
-        $this->onLoadCallback();
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function onLoadCallback()
     {
         if (!is_dir(TL_ROOT . '/system/modules/avisota/highstock')
             || !is_file(TL_ROOT . '/system/modules/avisota/highstock/js/highstock.js')
         ) {
-            $GLOBALS['TL_DCA']['tl_avisota_settings']['fields']['avisota_chart_highstock_confirm']['input_field_callback'] =
+            $GLOBALS['TL_DCA']['tl_avisota_settings']
+            ['fields']['avisota_chart_highstock_confirm']['input_field_callback'] =
                 array(
                     'tl_avisota_settings',
                     'renderMissingHighstockField'
@@ -56,6 +46,7 @@ class Settings extends \Backend
      * @return mixed
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function renderMissingHighstockField($dc, $label)
     {

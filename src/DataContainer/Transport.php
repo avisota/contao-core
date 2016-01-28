@@ -33,16 +33,7 @@ class Transport extends \Backend
 
     /**
      * @param \DataContainer $dc
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     * @deprecated use onLoadCallback instead this
-     */
-    public function onload_callback($dc)
-    {
-        $this->onLoadCallback($dc);
-    }
-
-    /**
-     * @param \DataContainer $dc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function onLoadCallback($dc)
     {
@@ -50,16 +41,7 @@ class Transport extends \Backend
 
     /**
      * @param \DataContainer $dc
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     * @deprecated use onSubmitCallback instead this
-     */
-    public function onsubmit_callback($dc)
-    {
-        $this->onSubmitCallback($dc);
-    }
-
-    /**
-     * @param \DataContainer $dc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function onSubmitCallback($dc)
     {

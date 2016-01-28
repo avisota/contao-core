@@ -42,6 +42,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @author Jonathan Wage <jonwage@gmail.com>
  * @author Roman Borschel <roman@code-factory.org>
  * @author Bernhard Schussek <bschussek@gmail.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RecipientSource implements EventSubscriberInterface
 {

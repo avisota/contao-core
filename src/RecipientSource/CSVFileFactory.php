@@ -70,12 +70,12 @@ class CSVFileFactory implements RecipientSourceFactoryInterface
                 $enclosure = '"';
         }
 
-        $recipientSource = new CSVFile(TL_ROOT . DIRECTORY_SEPARATOR . $file, $columns, $delimiter, $enclosure);
+        $recipientSourceCSV = new CSVFile(TL_ROOT . DIRECTORY_SEPARATOR . $file, $columns, $delimiter, $enclosure);
 
         /** @var EventDispatcherInterface $eventDispatcher */
         $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
 
-        $event = new CreateRecipientSourceEvent($recipientSourceData, $recipientSource);
+        $event = new CreateRecipientSourceEvent($recipientSourceData, $recipientSourceCSV);
         $eventDispatcher->dispatch(CoreEvents::CREATE_RECIPIENT_SOURCE, $event);
 
         return $event->getRecipientSource();

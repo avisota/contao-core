@@ -32,14 +32,58 @@ use Symfony\Component\EventDispatcher\Event;
  * @author Roman Borschel <roman@code-factory.org>
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class PostSendImmediateEvent extends BaseSendImmediateEvent
+class BaseSendImmediateEvent extends Event
 {
     /**
-     * @return int
-     * TODO is this in use
+     * @var Message
      */
-    public function getCount()
+    protected $message;
+
+    /**
+     * @var int
+     */
+    protected $turn;
+
+    /**
+     * @var string
+     */
+    protected $loop;
+
+    /**
+     * BaseSendImmediateEvent constructor.
+     *
+     * @param Message $message
+     * @param         $turn
+     * @param         $loop
+     */
+    public function __construct(Message $message, $turn, $loop)
     {
-        return $this->count;
+        $this->message = $message;
+        $this->turn    = $turn;
+        $this->loop    = $loop;
+    }
+
+    /**
+     * @return Message
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTurn()
+    {
+        return $this->turn;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLoop()
+    {
+        return $this->loop;
     }
 }

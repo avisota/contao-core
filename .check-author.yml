@@ -1,6 +1,5 @@
 exclude:
   languages
 
-mapping:
-  "Sven Baumann <baumann.sv@gmail.com>":
-    - "Sven Baumann <baumann.sv@gmail.com>"
+ignore:
+  - Tristan Lins <tristan.lins@bit3.de>

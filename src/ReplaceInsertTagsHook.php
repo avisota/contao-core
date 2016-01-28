@@ -40,7 +40,7 @@ class ReplaceInsertTagsHook extends \Controller
      *
      * @return string The text with the replaced tags
      */
-    public static function replaceInsertTags($strBuffer, $blnCache = false)
+    public function replaceInsertTags($strBuffer, $blnCache = false)
     {
         return parent::replaceInsertTags($strBuffer, $blnCache);
     }

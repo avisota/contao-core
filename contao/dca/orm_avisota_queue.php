@@ -81,7 +81,9 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
                 'label'      => &$GLOBALS['TL_LANG']['orm_avisota_queue']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
-                'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+                'attributes' =>
+                    'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; ' .
+                    'Backend.getScrollOffset();"'
             ),
             // TODO alert box description
             'clear'  => array
@@ -89,7 +91,9 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
                 'label'      => &$GLOBALS['TL_LANG']['orm_avisota_queue']['clear'],
                 'href'       => 'act=clear',
                 'icon'       => 'assets/avisota/core/images/clear.png',
-                'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['orm_avisota_queue']['clearConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+                'attributes' =>
+                    'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['orm_avisota_queue']['clearConfirm'] . '\')) ' .
+                    'return false; Backend.getScrollOffset();"'
             ),
             'show'   => array
             (
@@ -198,10 +202,6 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
         (
             'label'            => &$GLOBALS['TL_LANG']['orm_avisota_queue']['transport'],
             'inputType'        => 'select',
-            'options_callback' => \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory::createCallback(
-                'avisota.create-transport-options',
-                'Avisota\Contao\Core\Event\CreateOptionsEvent'
-            ),
             'eval'             => array(
                 'mandatory'          => true,
                 'includeBlankOption' => true,
@@ -216,6 +216,11 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
                     ),
                 ),
             ),
+            'options_callback' =>
+                \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory::createCallback(
+                    'avisota.create-transport-options',
+                    'Avisota\Contao\Core\Event\CreateOptionsEvent'
+                ),
         ),
         'maxSendTime'              => array
         (

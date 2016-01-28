@@ -13,16 +13,16 @@
  * @filesource
  */
 
-namespace Avisota\Contao\Core\Event;
-
-use Avisota\Recipient\RecipientInterface;
-use Symfony\Component\EventDispatcher\Event;
+namespace Avisota\Test\Contao\Core;
 
 /**
- * Class CreatePublicEmptyRecipientEvent
+ * Class BackendTest
  *
- * @package Avisota\Contao\Core\Event
+ * @package Avisota\Test\Contao\Core
  */
-class CreatePublicEmptyRecipientEvent extends BaseCreateRecipientEvent
+class BackendTest extends \PHPUnit_Framework_TestCase
 {
+    public function testRegenerateDynamics()
+    {
+    }
 }
