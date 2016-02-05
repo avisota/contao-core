@@ -3,18 +3,22 @@
     <body>
       <trans-unit id="orm_avisota_transport.type.0">
         <source>Transport type</source>
+        <target>Tipo de transporte</target>
         
       </trans-unit>
       <trans-unit id="orm_avisota_transport.type.1">
         <source>Please chose the transport type.</source>
+        <target>Por favor, escolha o tipo de transporte.</target>
         
       </trans-unit>
       <trans-unit id="orm_avisota_transport.title.0">
         <source>Title</source>
+        <target>Título</target>
         
       </trans-unit>
       <trans-unit id="orm_avisota_transport.title.1">
         <source>Please enter the transport module title.</source>
+        <target>Por favor entre com o nome do módulo de transporte.</target>
         
       </trans-unit>
       <trans-unit id="orm_avisota_transport.alias.0">

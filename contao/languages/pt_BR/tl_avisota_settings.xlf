@@ -3,10 +3,12 @@
     <body>
       <trans-unit id="tl_avisota_settings.avisota_default_transport.0">
         <source>Default transport module</source>
+        <target>Módulo de transporte padrão</target>
         
       </trans-unit>
       <trans-unit id="tl_avisota_settings.avisota_default_transport.1">
         <source>Please choose the default transport module.</source>
+        <target>Por favor, escolha o módulo de transporte padrão.</target>
         
       </trans-unit>
       <trans-unit id="tl_avisota_settings.avisota_developer_mode.0">

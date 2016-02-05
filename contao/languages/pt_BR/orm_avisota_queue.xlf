@@ -3,18 +3,22 @@
     <body>
       <trans-unit id="orm_avisota_queue.type.0">
         <source>Type</source>
+        <target>Tipo</target>
         
       </trans-unit>
       <trans-unit id="orm_avisota_queue.type.1">
         <source>Please select the type of the queue.</source>
+        <target>Por favor, selecione o tipo de fila.</target>
         
       </trans-unit>
       <trans-unit id="orm_avisota_queue.title.0">
         <source>Title</source>
+        <target>Título</target>
         
       </trans-unit>
       <trans-unit id="orm_avisota_queue.title.1">
         <source>Please enter the queue title.</source>
+        <target>Por favor entre com o nome da fila.</target>
         
       </trans-unit>
       <trans-unit id="orm_avisota_queue.alias.0">
