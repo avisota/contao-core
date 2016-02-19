@@ -28,9 +28,9 @@
         "source": "https://github.com/avisota/contao-core"
     },
     "require": {
-        "php": ">=5.3",
+        "php": ">=5.4",
         "contao-community-alliance/composer-plugin": "~2.4",
-        "contao/core": ">=2.11.11,<3.6",
+        "contao/core": ">=3.5,<3.6",
         "avisota/core": "~1.2",
         "contao-community-alliance/backports-initialize-system": "~1.0",
         "contao-community-alliance/console": "~1.0",
