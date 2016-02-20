@@ -32,6 +32,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * Class CopyController
  *
  * @package Avisota\Contao\Core\Controller
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CopyController implements EventSubscriberInterface
 {
@@ -116,6 +117,7 @@ class CopyController implements EventSubscriberInterface
      * @param ActionEvent     $event
      * @param                 $name
      * @param EventDispatcher $eventDispatcher
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handleCopyChilds(ActionEvent $event, $name, EventDispatcher $eventDispatcher)
     {
@@ -174,6 +176,7 @@ class CopyController implements EventSubscriberInterface
      * @param EnvironmentInterface $environment
      *
      * @return ModelInterface
+     * @SuppressWarnings(PHPMD.LongVariableName)
      */
     protected function copyParent(ModelIdInterface $modelId, EnvironmentInterface $environment)
     {
@@ -209,6 +212,7 @@ class CopyController implements EventSubscriberInterface
      * @param ModelIdInterface     $modelId
      * @param ModelInterface       $copiedModel
      * @param EnvironmentInterface $environment
+     * @SuppressWarnings(PHPMD.LongVariableName)
      */
     protected function copyEachChilds(
         ModelIdInterface $modelId,
