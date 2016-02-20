@@ -210,8 +210,11 @@ class CopyController implements EventSubscriberInterface
      * @param ModelInterface       $copiedModel
      * @param EnvironmentInterface $environment
      */
-    protected function copyEachChilds(ModelIdInterface $modelId, ModelInterface $copiedModel, EnvironmentInterface $environment)
-    {
+    protected function copyEachChilds(
+        ModelIdInterface $modelId,
+        ModelInterface $copiedModel,
+        EnvironmentInterface $environment
+    ) {
         $childDataProviderName = $environment->getInputProvider()->getParameter('ctable');
         $dataProvider          = $environment->getDataProvider();
         $childDataProvider     = $environment->getDataProvider($childDataProviderName);
