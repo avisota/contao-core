@@ -69,7 +69,10 @@
     "autoload-dev": {
         "psr-4": {
             "Avisota\\Test\\Contao\\Core\\": "tests/Test/"
-        }
+        },
+        "files": [
+            "vendor/phpcq/autoload-validation/hacks/contao-hack.php"
+        ]
     },
     "extra": {
         "contao": {
