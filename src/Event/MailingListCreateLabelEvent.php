@@ -16,6 +16,7 @@
 namespace Avisota\Contao\Core\Event;
 
 use Avisota\Contao\Core\Message\Renderer;
+use Bit3\StringBuilder\StringBuilder;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -42,17 +43,17 @@ class MailingListCreateLabelEvent extends Event
     protected $row;
 
     /**
-     * @var \StringBuilder
+     * @var StringBuilder
      */
     protected $label;
 
     /**
      * MailingListCreateLabelEvent constructor.
      *
-     * @param \ArrayObject   $row
-     * @param \StringBuilder $label
+     * @param \ArrayObject  $row
+     * @param StringBuilder $label
      */
-    public function __construct(\ArrayObject $row, \StringBuilder $label)
+    public function __construct(\ArrayObject $row, StringBuilder $label)
     {
         $this->row   = $row;
         $this->label = $label;
@@ -67,7 +68,7 @@ class MailingListCreateLabelEvent extends Event
     }
 
     /**
-     * @return \StringBuilder
+     * @return StringBuilder
      */
     public function getLabel()
     {
