@@ -162,9 +162,11 @@ class CopyController implements EventSubscriberInterface
         }
 
         if ($doNotCopy) {
-            $redirectUrl
+            // TODO go to the right table
+            /*$redirectUrl
                 ->setQueryParameter('act', 'edit')
-                ->setQueryParameter('id', $environment->getInputProvider()->getParameter('pid'));
+                ->setQueryParameter('table', $environment->getInputProvider()->getParameter('table'))
+                ->setQueryParameter('pid', $environment->getInputProvider()->getParameter('id'));*/
         }
 
         $redirectEvent = new RedirectEvent($redirectUrl->getUrl());
