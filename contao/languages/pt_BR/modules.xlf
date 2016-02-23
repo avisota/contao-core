@@ -3,10 +3,12 @@
     <body>
       <trans-unit id="MOD.avisota-core.0">
         <source>Avisota - Core</source>
+        <target>Avisota - Núcleo</target>
         
       </trans-unit>
       <trans-unit id="MOD.avisota-core.1">
         <source>Basic integration of Avisota for Contao.</source>
+        <target>Integração básica de Avisota para Contao.</target>
         
       </trans-unit>
       <trans-unit id="MOD.avisota.0">
@@ -15,6 +17,7 @@
       </trans-unit>
       <trans-unit id="MOD.avisota_outbox.0">
         <source>Outbox</source>
+        <target>Caixa de saída</target>
         
       </trans-unit>
       <trans-unit id="MOD.avisota_newsletter.0">
@@ -39,6 +42,7 @@
       </trans-unit>
       <trans-unit id="MOD.avisota_salutation.0">
         <source>Salutation</source>
+        <target>Saudação</target>
         
       </trans-unit>
       <trans-unit id="MOD.avisota_salutation.1">

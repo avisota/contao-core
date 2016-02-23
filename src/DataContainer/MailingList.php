@@ -17,6 +17,7 @@ namespace Avisota\Contao\Core\DataContainer;
 
 use Avisota\Contao\Core\Event\MailingListCreateLabelEvent;
 
+use Bit3\StringBuilder\StringBuilder;
 use Doctrine\ORM\Query;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -47,7 +48,7 @@ class MailingList extends \Backend
      */
     public function getLabel($rowData, $label, $dc)
     {
-        $label = new \StringBuilder('<div style="padding: 3px 0;"><strong>' . $label . '</strong></div>');
+        $label = new StringBuilder('<div style="padding: 3px 0;"><strong>' . $label . '</strong></div>');
 
         $event = new MailingListCreateLabelEvent(new \ArrayObject($rowData), $label);
 

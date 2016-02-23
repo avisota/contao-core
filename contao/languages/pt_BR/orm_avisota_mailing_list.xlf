@@ -3,10 +3,12 @@
     <body>
       <trans-unit id="orm_avisota_mailing_list.title.0">
         <source>Name</source>
+        <target>Nome</target>
         
       </trans-unit>
       <trans-unit id="orm_avisota_mailing_list.title.1">
         <source>Please enter the name of the mailing list.</source>
+        <target>Por favor, digite o nome da lista de discussão.</target>
         
       </trans-unit>
       <trans-unit id="orm_avisota_mailing_list.alias.0">

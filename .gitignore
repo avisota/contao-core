@@ -18,3 +18,4 @@ module/.skip
 build
 vendor
 composer.lock
+.todo

@@ -106,16 +106,6 @@ $GLOBALS['DOCTRINE_ENTITIES'][] = 'orm_avisota_transport';
 $GLOBALS['AVISOTA_TRANSPORT_RENDERER']['native'] = 'Avisota\Renderer\NativeMessageRenderer';
 
 /**
- * Events
- */
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = function () {
-    return $GLOBALS['container']['avisota.core.options-builder'];
-};
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Avisota\Contao\Core\DataContainer\Queue';
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Avisota\Contao\Core\DataContainer\RecipientSource';
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Avisota\Contao\Core\EventSubscriber';
-
-/**
  * Settings
  */
 /*

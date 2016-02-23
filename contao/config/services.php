@@ -170,3 +170,12 @@ $container['avisota.recipient.synonymizer'] = $container->share(
         return new \Avisota\Contao\Core\Recipient\SynonymizerService();
     }
 );
+
+/**
+ * Define superglobals service
+ */
+$container['avisota.superglobals'] = $container->share(
+    function () {
+        return new \Avisota\Contao\Core\Service\SuperglobalsService();
+    }
+);

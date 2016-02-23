@@ -3,6 +3,7 @@
     <body>
       <trans-unit id="avisota_support.headline">
         <source>Get support</source>
+        <target>Obter suporte</target>
         
       </trans-unit>
     </body>

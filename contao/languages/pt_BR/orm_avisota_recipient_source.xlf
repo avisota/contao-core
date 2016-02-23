@@ -3,14 +3,17 @@
     <body>
       <trans-unit id="orm_avisota_recipient_source.type.0">
         <source>Recipient source module</source>
+        <target>Módulo fonte de destinatário</target>
 
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.type.1">
         <source>Please choose the module that provide recipient data.</source>
+        <target>Por favor, escolha o módulo que fornecem dados do destinatário.</target>
 
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.title.0">
         <source>Name</source>
+        <target>Nome</target>
 
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.title.1">
