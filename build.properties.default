@@ -10,3 +10,4 @@ phpmd.ruleset=${basedir}/vendor/phpcq/coding-standard/phpmd/ruleset.xml
 
 
 phpcs.execlude-pattern=${basedir}/contao/web/queue_execute.php
+author-validation.execlude-pattern=${basedir}/system_remove
