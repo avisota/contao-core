@@ -18,7 +18,7 @@ matrix:
 sudo: false
 
 before_install:
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then export COMPOSER_ROOT_VERSION=dev-master; else export COMPOSER_ROOT_VERSION="$TRAVIS_BRANCH".x-dev; fi;
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then export COMPOSER_ROOT_VERSION=dev-develop; elif [ "$TRAVIS_BRANCH" = "develop" ]; then export COMPOSER_ROOT_VERSION=dev-develop; else export COMPOSER_ROOT_VERSION="$TRAVIS_BRANCH"; fi;
   - echo COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION}
 
 
