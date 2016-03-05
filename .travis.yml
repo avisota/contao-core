@@ -17,6 +17,11 @@ matrix:
 
 sudo: false
 
+before_install:
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then export COMPOSER_ROOT_VERSION=dev-master; else export COMPOSER_ROOT_VERSION="$TRAVIS_BRANCH".x-dev; fi;
+  - echo COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION}
+
+
 install:
   - if [ -n "GITHUB_TOKEN" ]; then composer config github-oauth.github.com ${GITHUB_TOKEN}; fi;
   - travis_retry composer self-update && composer --version
