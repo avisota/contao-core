@@ -104,7 +104,7 @@ class Queue extends \Backend implements EventSubscriberInterface
      */
     public function rememberAlias($alias, $dc)
     {
-        $avisotaQueueAlias = \Session::getInstance()->get('AVISOTA_QUEUE_ALIAS');
+        $avisotaQueueAlias          = \Session::getInstance()->get('AVISOTA_QUEUE_ALIAS');
         $avisotaQueueAlias[$dc->id] = $alias;
         \Session::getInstance()->set('AVISOTA_QUEUE_ALIAS', $avisotaQueueAlias);
 
