@@ -21,6 +21,7 @@ use Contao\Doctrine\ORM\EntityHelper;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Message\AddMessageEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetSelectModeButtonsEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DC_General;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
@@ -84,6 +85,10 @@ class Queue extends \Backend implements EventSubscriberInterface
     {
         return array(
             DcGeneralEvents::ACTION => 'handleAction',
+
+            GetSelectModeButtonsEvent::NAME => array(
+                array('deactivateSelectButtons'),
+            ),
         );
     }
 
@@ -142,5 +147,26 @@ class Queue extends \Backend implements EventSubscriberInterface
             $redirect = new RedirectEvent('contao/main.php?do=avisota_queue&ref=' . TL_REFERER_ID);
             $eventDispatcher->dispatch(ContaoEvents::CONTROLLER_REDIRECT, $redirect);
         }
+    }
+
+    public function deactivateSelectButtons(GetSelectModeButtonsEvent $event)
+    {
+        if ($event->getEnvironment()->getInputProvider()->getParameter('act') !== 'select'
+            || $event->getEnvironment()->getDataDefinition()->getName() !== 'orm_avisota_queue'
+        ) {
+            return;
+        }
+
+        $buttons = $event->getButtons();
+
+        foreach (
+            array(
+                'cut',
+            ) as $button
+        ) {
+            unset($buttons[$button]);
+        }
+
+        $event->setButtons($buttons);
     }
 }
