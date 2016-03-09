@@ -19,6 +19,7 @@ use Avisota\Contao\Core\Event\CreateFakeRecipientEvent;
 use Avisota\Contao\Core\Event\CreatePublicEmptyRecipientEvent;
 use Avisota\Recipient\Fake\FakeRecipient;
 use Avisota\Recipient\MutableRecipient;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -55,8 +56,13 @@ class EventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            CoreEvents::CREATE_FAKE_RECIPIENT         => 'createFakeRecipient',
-            CoreEvents::CREATE_PUBLIC_EMPTY_RECIPIENT => 'createPublicEmptyRecipient',
+            CoreEvents::CREATE_FAKE_RECIPIENT => array(
+                array('createFakeRecipient'),
+            ),
+
+            CoreEvents::CREATE_PUBLIC_EMPTY_RECIPIENT => array(
+                array('createPublicEmptyRecipient'),
+            ),
         );
     }
 
