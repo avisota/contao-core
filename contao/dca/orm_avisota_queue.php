@@ -178,7 +178,8 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
             'eval'      => array(
                 'mandatory' => true,
                 'maxlength' => 255,
-                'tl_class'  => 'w50'
+                'tl_class'  => 'w50',
+                'doNotCopy' => true,
             )
         ),
         'alias'                    => array
@@ -192,8 +193,10 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
                 'unique'            => true,
                 'spaceToUnderscore' => true,
                 'maxlength'         => 128,
-                'tl_class'          => 'w50'
+                'tl_class'          => 'w50',
+                'doNotCopy'         => true,
             ),
+            //Todo change callback to event
             'load_callback'   => array
             (
                 array('Avisota\Contao\Core\DataContainer\Queue', 'rememberAlias')
@@ -269,7 +272,8 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
             'eval'      => array(
                 'mandatory' => true,
                 'maxlength' => 255,
-                'tl_class'  => 'm12 w50'
+                'tl_class'  => 'm12 w50',
+                'doNotCopy' => true,
             )
         ),
         'allowManualSending'       => array
