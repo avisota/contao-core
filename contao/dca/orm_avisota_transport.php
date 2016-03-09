@@ -316,7 +316,8 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
             'reference' => &$GLOBALS['TL_LANG']['orm_avisota_transport'],
             'eval'      => array(
                 'submitOnChange' => true,
-                'tl_class'       => 'w50'
+                'tl_class'       => 'w50',
+                'doNotCopy'      => true,
             )
         ),
         'swiftSmtpHost'  => array
@@ -329,7 +330,8 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
                 'maxlength' => 64,
                 'nospace'   => true,
                 'doNotShow' => true,
-                'tl_class'  => 'w50'
+                'tl_class'  => 'w50',
+                'doNotCopy' => true,
             ),
             'field'     => array(),
         ),
@@ -342,7 +344,8 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
                 'decodeEntities' => true,
                 'maxlength'      => 128,
                 'doNotShow'      => true,
-                'tl_class'       => 'w50'
+                'tl_class'       => 'w50',
+                'doNotCopy'      => true,
             ),
             'field'     => array(),
         ),
@@ -355,7 +358,8 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
                 'decodeEntities' => true,
                 'maxlength'      => 32,
                 'doNotShow'      => true,
-                'tl_class'       => 'w50'
+                'tl_class'       => 'w50',
+                'doNotCopy'      => true,
             ),
             'field'     => array(),
         ),
@@ -371,7 +375,8 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
             'eval'      => array(
                 'includeBlankOption' => true,
                 'doNotShow'          => true,
-                'tl_class'           => 'w50'
+                'tl_class'           => 'w50',
+                'doNotCopy'          => true,
             ),
             'field'     => array(),
         ),
@@ -386,7 +391,8 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
                 'rgxp'      => 'digit',
                 'nospace'   => true,
                 'doNotShow' => true,
-                'tl_class'  => 'w50'
+                'tl_class'  => 'w50',
+                'doNotCopy' => true,
             )
         ),
         'serviceName'    => array
