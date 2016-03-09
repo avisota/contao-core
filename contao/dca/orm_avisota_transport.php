@@ -74,6 +74,12 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
                 'href'  => 'act=edit',
                 'icon'  => 'edit.gif'
             ),
+            'copy'   => array
+            (
+                'label'      => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['copy'],
+                'icon'       => 'copy.gif',
+                'attributes' => 'onclick="Backend.getScrollOffset();"',
+            ),
             // TODO alert box description
             'delete' => array
             (
