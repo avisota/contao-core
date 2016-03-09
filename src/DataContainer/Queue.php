@@ -84,7 +84,9 @@ class Queue extends \Backend implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            DcGeneralEvents::ACTION => 'handleAction',
+            DcGeneralEvents::ACTION => array(
+                array('handleAction'),
+            ),
 
             GetSelectModeButtonsEvent::NAME => array(
                 array('deactivateSelectButtons'),
