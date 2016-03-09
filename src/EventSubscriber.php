@@ -123,6 +123,17 @@ class EventSubscriber implements EventSubscriberInterface
             unset($buttons[$button]);
         }
 
+        if ($event->getEnvironment()->getDataDefinition()->getName() === 'orm_avisota_mailing_list') {
+
+            foreach (
+                array(
+                    'cut',
+                ) as $button
+            ) {
+                unset($buttons[$button]);
+            }
+        }
+
         $event->setButtons($buttons);
     }
 }
