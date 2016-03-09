@@ -81,6 +81,7 @@ class RecipientSource implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
+            //Todo check who is this
             EncodePropertyValueFromWidgetEvent::NAME . '[orm_avisota_recipient_source][csvColumnAssignment]' => array(
                 array('checkCsvColumnUnique'),
                 array('checkCsvColumnEmail'),

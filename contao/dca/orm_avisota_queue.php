@@ -224,6 +224,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
                     ),
                 ),
             ),
+            //Todo change callback to event
             'options_callback' =>
                 \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory::createCallback(
                     'avisota.create-transport-options',
