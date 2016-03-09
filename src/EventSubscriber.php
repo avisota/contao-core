@@ -19,7 +19,7 @@ use Avisota\Contao\Core\Event\CreateFakeRecipientEvent;
 use Avisota\Contao\Core\Event\CreatePublicEmptyRecipientEvent;
 use Avisota\Recipient\Fake\FakeRecipient;
 use Avisota\Recipient\MutableRecipient;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetSelectModeButtonsEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -63,6 +63,10 @@ class EventSubscriber implements EventSubscriberInterface
             CoreEvents::CREATE_PUBLIC_EMPTY_RECIPIENT => array(
                 array('createPublicEmptyRecipient'),
             ),
+
+            GetSelectModeButtonsEvent::NAME => array(
+                array('deactivateButtonsForEditAll'),
+            ),
         );
     }
 
@@ -95,5 +99,30 @@ class EventSubscriber implements EventSubscriberInterface
         }
 
         $event->setRecipient(new MutableRecipient('noreply@' . \Environment::get('host')));
+    }
+
+    /**
+     * @param GetSelectModeButtonsEvent $event
+     *
+     * Todo remove this if the deactivated buttons correct worked
+     */
+    public function deactivateButtonsForEditAll(GetSelectModeButtonsEvent $event)
+    {
+        if ($event->getEnvironment()->getInputProvider()->getParameter('act') !== 'select') {
+            return;
+        }
+
+        $buttons = $event->getButtons();
+
+        foreach (
+            array(
+                'override',
+                'edit'
+            ) as $button
+        ) {
+            unset($buttons[$button]);
+        }
+
+        $event->setButtons($buttons);
     }
 }
