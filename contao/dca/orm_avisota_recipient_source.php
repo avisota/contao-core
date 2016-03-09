@@ -57,15 +57,14 @@ $GLOBALS['TL_DCA']['orm_avisota_recipient_source'] = array
             'format' => '%s <span style="color:#b3b3b3; padding-left:3px;">[%s]</span>'
         ),
         'global_operations' => array
-        (/*
-			'all' => array
-			(
-				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
-				'href'       => 'act=select',
-				'class'      => 'header_edit_all',
-				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
-			)
-			*/
+        (
+            'all' => array
+            (
+                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
+                'href'       => 'act=select',
+                'class'      => 'header_edit_all',
+                'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
+            )
         ),
         'operations'        => array
         (
