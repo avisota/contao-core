@@ -18,8 +18,8 @@ matrix:
 sudo: false
 
 before_install:
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then export COMPOSER_ROOT_VERSION=dev-develop; elif [ "$TRAVIS_BRANCH" = "develop" ]; then export COMPOSER_ROOT_VERSION=dev-develop; else export COMPOSER_ROOT_VERSION="$TRAVIS_BRANCH"; fi;
-  - echo COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION}
+  - for filename in ./tests/*.sh; do chmod +x ${filename}; done
+  - ./tests/travis_branch.sh
 
 
 install:
