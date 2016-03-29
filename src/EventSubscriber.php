@@ -114,22 +114,12 @@ class EventSubscriber implements EventSubscriberInterface
 
         $buttons = $event->getButtons();
 
-        foreach (
-            array(
-                'override',
-                'edit'
-            ) as $button
-        ) {
+        foreach (array('override', 'edit') as $button) {
             unset($buttons[$button]);
         }
 
         if ($event->getEnvironment()->getDataDefinition()->getName() === 'orm_avisota_mailing_list') {
-
-            foreach (
-                array(
-                    'cut',
-                ) as $button
-            ) {
+            foreach (array('cut',) as $button) {
                 unset($buttons[$button]);
             }
         }

@@ -161,11 +161,7 @@ class Queue extends \Backend implements EventSubscriberInterface
 
         $buttons = $event->getButtons();
 
-        foreach (
-            array(
-                'cut',
-            ) as $button
-        ) {
+        foreach (array('cut',) as $button) {
             unset($buttons[$button]);
         }
 
