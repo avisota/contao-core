@@ -30,6 +30,7 @@ class SuperglobalsService
 
     /**
      * SuperglobalsService constructor.
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function __construct()
     {
