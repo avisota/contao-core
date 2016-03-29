@@ -18,9 +18,6 @@ matrix:
 sudo: false
 
 before_install:
-  - for filename in ./tests/*.sh; do chmod +x ${filename}; done
-  - ./tests/travis_branch.sh
-
 
 install:
   - if [ -n "GITHUB_TOKEN" ]; then composer config github-oauth.github.com ${GITHUB_TOKEN}; fi;

@@ -1,6 +1,7 @@
 {
     "name": "avisota/contao-core",
     "description": "Avisota newslettersystem for contao",
+    "version": "3.1.x-dev",
     "keywords": [
         "avisota",
         "email",
