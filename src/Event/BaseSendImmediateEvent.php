@@ -55,8 +55,9 @@ class BaseSendImmediateEvent extends Event
      * @param Message $message
      * @param         $turn
      * @param         $loop
+     * Fixme who message isn´t instance of Message
      */
-    public function __construct(Message $message, $turn, $loop)
+    public function __construct($message, $turn, $loop)
     {
         $this->message = $message;
         $this->turn    = $turn;
