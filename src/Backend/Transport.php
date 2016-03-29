@@ -18,6 +18,9 @@ namespace Avisota\Contao\Core\Backend;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetSelectModeButtonsEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * {@inheritDoc}
+ */
 class Transport implements EventSubscriberInterface
 {
 
@@ -48,6 +51,9 @@ class Transport implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @param GetSelectModeButtonsEvent $event
+     */
     public function deactivateSelectButtons(GetSelectModeButtonsEvent $event)
     {
         if ($event->getEnvironment()->getInputProvider()->getParameter('act') !== 'select'

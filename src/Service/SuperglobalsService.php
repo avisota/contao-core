@@ -28,6 +28,9 @@ class SuperglobalsService
 
     protected $dataContainer = 'TL_LANG';
 
+    /**
+     * SuperglobalsService constructor.
+     */
     public function __construct()
     {
         global $TL_LANG,
@@ -37,6 +40,11 @@ class SuperglobalsService
         $this->dataContainer = &$TL_DCA;
     }
 
+    /**
+     * @param $path
+     *
+     * @return null|string
+     */
     public function getLanguage($path)
     {
         $chunks = explode('/', $path);
@@ -59,6 +67,11 @@ class SuperglobalsService
         return $languageStorage;
     }
 
+    /**
+     * @param $path
+     *
+     * @return null|string
+     */
     public function getFromDataContainer($path)
     {
         $chunks = explode('/', $path);

@@ -151,6 +151,9 @@ class Queue extends \Backend implements EventSubscriberInterface
         }
     }
 
+    /**
+     * @param GetSelectModeButtonsEvent $event
+     */
     public function deactivateSelectButtons(GetSelectModeButtonsEvent $event)
     {
         if ($event->getEnvironment()->getInputProvider()->getParameter('act') !== 'select'

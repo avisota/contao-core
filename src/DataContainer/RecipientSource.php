@@ -303,6 +303,9 @@ class RecipientSource implements EventSubscriberInterface
         return $options;
     }
 
+    /**
+     * @param GetSelectModeButtonsEvent $event
+     */
     public function deactivateSelectButtons(GetSelectModeButtonsEvent $event)
     {
         if ($event->getEnvironment()->getInputProvider()->getParameter('act') !== 'select'
