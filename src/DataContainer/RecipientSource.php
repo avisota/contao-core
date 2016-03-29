@@ -88,10 +88,6 @@ class RecipientSource implements EventSubscriberInterface
             ),
 
             DcGeneralEvents::ACTION => 'handleAction',
-
-            GetSelectModeButtonsEvent::NAME => array(
-                array('deactivateSelectButtons'),
-            ),
         );
     }
 
@@ -301,25 +297,5 @@ class RecipientSource implements EventSubscriberInterface
         asort($options);
 
         return $options;
-    }
-
-    /**
-     * @param GetSelectModeButtonsEvent $event
-     */
-    public function deactivateSelectButtons(GetSelectModeButtonsEvent $event)
-    {
-        if ($event->getEnvironment()->getInputProvider()->getParameter('act') !== 'select'
-            || $event->getEnvironment()->getDataDefinition()->getName() !== 'orm_avisota_recipient_source'
-        ) {
-            return;
-        }
-
-        $buttons = $event->getButtons();
-
-        foreach (array('cut',) as $button) {
-            unset($buttons[$button]);
-        }
-
-        $event->setButtons($buttons);
     }
 }

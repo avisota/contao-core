@@ -45,29 +45,6 @@ class Transport implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            GetSelectModeButtonsEvent::NAME => array(
-                array('deactivateSelectButtons'),
-            ),
         );
-    }
-
-    /**
-     * @param GetSelectModeButtonsEvent $event
-     */
-    public function deactivateSelectButtons(GetSelectModeButtonsEvent $event)
-    {
-        if ($event->getEnvironment()->getInputProvider()->getParameter('act') !== 'select'
-            || $event->getEnvironment()->getDataDefinition()->getName() !== 'orm_avisota_transport'
-        ) {
-            return;
-        }
-
-        $buttons = $event->getButtons();
-
-        foreach (array('cut',) as $button) {
-            unset($buttons[$button]);
-        }
-
-        $event->setButtons($buttons);
     }
 }

@@ -118,7 +118,15 @@ class EventSubscriber implements EventSubscriberInterface
             unset($buttons[$button]);
         }
 
-        if ($event->getEnvironment()->getDataDefinition()->getName() === 'orm_avisota_mailing_list') {
+        if (in_array(
+            $event->getEnvironment()->getDataDefinition()->getName(),
+            array(
+                'orm_avisota_mailing_list',
+                'orm_avisota_transport',
+                'orm_avisota_queue',
+                'orm_avisota_recipient_source',
+            )
+        )) {
             foreach (array('cut',) as $button) {
                 unset($buttons[$button]);
             }
