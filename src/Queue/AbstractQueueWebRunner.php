@@ -16,6 +16,7 @@
 namespace Avisota\Contao\Core\Queue;
 
 use Avisota\Contao\Entity\Queue;
+use Contao\Doctrine\ORM\EntityHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -42,7 +43,7 @@ abstract class AbstractQueueWebRunner extends \Backend
      */
     public function run(Request $request)
     {
-        $queueRepository = \Contao\Doctrine\ORM\EntityHelper::getRepository('Avisota\Contao:Queue');
+        $queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
 
         $queueId = $request->get('id');
         $queue   = $queueRepository->find($queueId);
