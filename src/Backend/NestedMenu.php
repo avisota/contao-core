@@ -92,7 +92,7 @@ class NestedMenu extends \Controller
             $context = array(
                 'opensource' => $GLOBALS['TL_LANG']['avisota_promotion']['opensource'],
                 'partners'   => $GLOBALS['TL_LANG']['avisota_promotion']['partners'],
-                'copyright'  => 'Avisota newsletter and mailing system &copy; 2013-2014 bit3 UG and all '
+                'copyright'  => 'Avisota newsletter and mailing system &copy; 2013-2016 way.vision and all '
                                 . '<a href="https://github.com/avisota/contao/graphs/contributors" '
                                 . 'target="_blank">contributors</a>',
                 'disclaimer' => <<<HTML
