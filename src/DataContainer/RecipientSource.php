@@ -87,7 +87,9 @@ class RecipientSource implements EventSubscriberInterface
                 array('checkCsvColumnEmail'),
             ),
 
-            DcGeneralEvents::ACTION => 'handleAction',
+            DcGeneralEvents::ACTION => array(
+                array('handleAction'),
+            ),
         );
     }
 
