@@ -1,7 +1,7 @@
 {
     "name": "avisota/contao-core",
     "description": "Avisota newslettersystem for contao",
-    "version": "3.1.x-dev",
+    "version": "3.1.0",
     "keywords": [
         "avisota",
         "email",
@@ -83,8 +83,7 @@
             }
         },
         "branch-alias": {
-            "dev-develop": "3.0.x-dev",
-            "dev-release/3.1.0": "3.1.x-dev"
+            "dev-develop": "3.1.x-dev"
         }
     }
 }
