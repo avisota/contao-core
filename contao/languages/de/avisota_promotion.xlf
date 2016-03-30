@@ -7,8 +7,8 @@
 
       </trans-unit>
       <trans-unit id="avisota_promotion.opensource">
-        <source>&lt;img src=&quot;assets/avisota/core/images/opensource.svg&quot; alt=&quot;&quot;&gt; Avisota is an Open Source project.&lt;br&gt;&lt;a href=&quot;https://bitbucket.org/avisota&quot; target=&quot;_blank&quot;&gt;View and validate the source online!&lt;/a&gt;</source>
-        <target>&lt;img src=&quot;assets/avisota/core/images/opensource.svg&quot; alt=&quot;&quot;&gt;Avisota ist ein Open Source Projekt. &lt;br&gt;&lt;a href=&quot;https://bitbucket.org/avisota&quot; target=&quot;_blank&quot;&gt;Ansicht und Informationen des Projekts online!&lt;/a&gt;</target>
+        <source>&lt;img src=&quot;assets/avisota/core/images/opensource.svg&quot; alt=&quot;&quot;&gt; Avisota is an Open Source project.&lt;br&gt;&lt;a href=&quot;https://github.com/avisota&quot; target=&quot;_blank&quot;&gt;View and validate the source online!&lt;/a&gt;</source>
+        <target>&lt;img src=&quot;assets/avisota/core/images/opensource.svg&quot; alt=&quot;&quot;&gt; Avisota ist ein Open Source-Projekt.&lt;br&gt;&lt;a href=&quot;https://github.com/avisota&quot; target=&quot;_blank&quot;&gt;Hier geht zum Projekt!&lt;/a&gt;</target>
 
       </trans-unit>
       <trans-unit id="avisota_promotion.partners">
