@@ -82,7 +82,7 @@ class RecipientSource implements EventSubscriberInterface
     {
         return array(
             //Todo check who is this
-            EncodePropertyValueFromWidgetEvent::NAME . '[orm_avisota_recipient_source][csvColumnAssignment]' => array(
+            EncodePropertyValueFromWidgetEvent::NAME => array(
                 array('checkCsvColumnUnique'),
                 array('checkCsvColumnEmail'),
             ),
@@ -107,6 +107,13 @@ class RecipientSource implements EventSubscriberInterface
      */
     public function checkCsvColumnUnique(EncodePropertyValueFromWidgetEvent $event)
     {
+        if (($event->getEnvironment()->getDataProvider() !== 'orm_avisota_recipient_source')
+            || ($event->getEnvironment()->getDataProvider() === 'orm_avisota_recipient_source'
+                && $event->getProperty() != 'csvColumnAssignment')
+        ) {
+            return;
+        }
+
         $value = $event->getValue();
 
         if (!is_array($value)) {
@@ -135,6 +142,13 @@ class RecipientSource implements EventSubscriberInterface
      */
     public function checkCsvColumnEmail(EncodePropertyValueFromWidgetEvent $event)
     {
+        if (($event->getEnvironment()->getDataProvider() !== 'orm_avisota_recipient_source')
+            || ($event->getEnvironment()->getDataProvider() === 'orm_avisota_recipient_source'
+                && $event->getProperty() != 'csvColumnAssignment')
+        ) {
+            return;
+        }
+
         $value = $event->getValue();
 
         if (!is_array($value)) {
