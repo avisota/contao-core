@@ -56,7 +56,7 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
         (
             'fields'         => array('title'),
             'format'         => '%s',
-            'label_callback' => array('Avisota\Contao\Core\DataContainer\MailingList', 'getLabel')
+            'label_callback' => array('Avisota\Contao\Core\Backend\MailingList', 'getLabel')
         ),
         'global_operations' => array
         (
