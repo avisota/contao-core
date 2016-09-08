@@ -21,11 +21,12 @@ use Contao\Doctrine\ORM\EntityHelper;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Message\AddMessageEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetSelectModeButtonsEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DC_General;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
+use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -87,6 +88,10 @@ class Queue extends \Backend implements EventSubscriberInterface
             DcGeneralEvents::ACTION => array(
                 array('handleAction'),
             ),
+
+            GetBreadcrumbEvent::NAME => array(
+                array('getBreadCrumb')
+            )
         );
     }
 
@@ -145,5 +150,42 @@ class Queue extends \Backend implements EventSubscriberInterface
             $redirect = new RedirectEvent('contao/main.php?do=avisota_queue&ref=' . TL_REFERER_ID);
             $eventDispatcher->dispatch(ContaoEvents::CONTROLLER_REDIRECT, $redirect);
         }
+    }
+
+    /**
+     * Get the bread crumb elements.
+     *
+     * @param GetBreadcrumbEvent $event This event.
+     *
+     * @return void
+     */
+    public function getBreadCrumb(GetBreadcrumbEvent $event)
+    {
+        $environment   = $event->getEnvironment();
+        $inputProvider = $environment->getInputProvider();
+
+        if (!$inputProvider->hasParameter('id')) {
+            return;
+        }
+
+        $modelId = ModelId::fromSerialized($inputProvider->getParameter('id'));
+        if ($modelId->getDataProviderName() !== 'orm_avisota_queue') {
+            return;
+        }
+
+        $elements = $event->getElements();
+
+        $urlBuilder = new UrlBuilder();
+        $urlBuilder->setPath('contao/main.php')
+            ->setQueryParameter('do', 'avisota_queue')
+            ->setQueryParameter('ref', TL_REFERER_ID);
+
+        $elements[] = array(
+            'icon' => 'assets/avisota/core/images/queue.png',
+            'text' => $GLOBALS['TL_LANG']['MOD']['avisota_queue'][0],
+            'url'  => $urlBuilder->getUrl()
+        );
+
+        $event->setElements($elements);
     }
 }

@@ -21,11 +21,9 @@ use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class MailingList
- *
- * @package Avisota\Contao\Core\DataContainer
+ * The data container transport event subscriber
  */
-class MailingList implements EventSubscriberInterface
+class Transport implements EventSubscriberInterface
 {
 
     /**
@@ -67,14 +65,12 @@ class MailingList implements EventSubscriberInterface
         $environment   = $event->getEnvironment();
         $inputProvider = $environment->getInputProvider();
 
-        $modelParameter = $inputProvider->hasParameter('act') ? 'id' : 'pid';
-
-        if (!$inputProvider->hasParameter($modelParameter)) {
+        if (!$inputProvider->hasParameter('id')) {
             return;
         }
 
-        $modelId = ModelId::fromSerialized($inputProvider->getParameter($modelParameter));
-        if ($modelId->getDataProviderName() !== 'orm_avisota_mailing_list') {
+        $modelId = ModelId::fromSerialized($inputProvider->getParameter('id'));
+        if ($modelId->getDataProviderName() !== 'orm_avisota_transport') {
             return;
         }
 
@@ -82,12 +78,12 @@ class MailingList implements EventSubscriberInterface
 
         $urlBuilder = new UrlBuilder();
         $urlBuilder->setPath('contao/main.php')
-            ->setQueryParameter('do', $inputProvider->getParameter('do'))
+            ->setQueryParameter('do', 'avisota_transport')
             ->setQueryParameter('ref', TL_REFERER_ID);
 
         $elements[] = array(
-            'icon' => 'assets/avisota/core/images/mailing_list.png',
-            'text' => $GLOBALS['TL_LANG']['MOD']['avisota_mailing_list'][0],
+            'icon' => 'assets/avisota/core/images/transport.png',
+            'text' => $GLOBALS['TL_LANG']['MOD']['avisota_transport'][0],
             'url'  => $urlBuilder->getUrl()
         );
 

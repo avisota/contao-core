@@ -16,18 +16,14 @@
 namespace Avisota\Contao\Core\DataContainer;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
-use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class MailingList
- *
- * @package Avisota\Contao\Core\DataContainer
+ * The data container core event subscriber
  */
-class MailingList implements EventSubscriberInterface
+class Core implements EventSubscriberInterface
 {
-
     /**
      * Returns an array of event names this subscriber wants to listen to.
      *
@@ -50,7 +46,7 @@ class MailingList implements EventSubscriberInterface
     {
         return array(
             GetBreadcrumbEvent::NAME => array(
-                array('getBreadCrumb')
+                array('getBreadCrumb', 100)
             )
         );
     }
@@ -67,30 +63,36 @@ class MailingList implements EventSubscriberInterface
         $environment   = $event->getEnvironment();
         $inputProvider = $environment->getInputProvider();
 
-        $modelParameter = $inputProvider->hasParameter('act') ? 'id' : 'pid';
-
-        if (!$inputProvider->hasParameter($modelParameter)) {
+        if (!in_array(
+            $inputProvider->getParameter('do'),
+            array(
+                'avisota_transport',
+                'avisota_queue',
+                'avisota_salutation',
+                'avisota_recipient_source',
+                'avisota_mailing_list',
+                'avisota_theme'
+            ),
+            null
+        )
+        ) {
             return;
         }
 
-        $modelId = ModelId::fromSerialized($inputProvider->getParameter($modelParameter));
-        if ($modelId->getDataProviderName() !== 'orm_avisota_mailing_list') {
-            return;
-        }
-
-        $elements = $event->getElements();
-
-        $urlBuilder = new UrlBuilder();
-        $urlBuilder->setPath('contao/main.php')
-            ->setQueryParameter('do', $inputProvider->getParameter('do'))
+        $baseUrl = new UrlBuilder();
+        $baseUrl->setPath('contao/main.php')
+            ->setQueryParameter('do', 'avisota_config')
             ->setQueryParameter('ref', TL_REFERER_ID);
 
-        $elements[] = array(
-            'icon' => 'assets/avisota/core/images/mailing_list.png',
-            'text' => $GLOBALS['TL_LANG']['MOD']['avisota_mailing_list'][0],
-            'url'  => $urlBuilder->getUrl()
-        );
+        $event->setElements(
+            array(
+                array(
+                    'icon' => 'assets/avisota/core/images/avisota-breadcrumb.png',
+                    'text' => $GLOBALS['TL_LANG']['MOD']['avisota_config'][0],
+                    'url'  => $baseUrl->getUrl()
+                )
+            )
 
-        $event->setElements($elements);
+        );
     }
 }
