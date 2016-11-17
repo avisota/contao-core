@@ -141,8 +141,10 @@ class Queue extends \Backend implements EventSubscriberInterface
 
             $queue->execute(new NullTransport());
 
+            $translator = $environment->getTranslator();
+
             $message = new AddMessageEvent(
-                sprintf($GLOBALS['TL_LANG']['orm_avisota_queue']['queueCleared'], $queueData->getTitle()),
+                sprintf($translator->translate('queueCleared', 'orm_avisota_queue'), $queueData->getTitle()),
                 AddMessageEvent::TYPE_CONFIRM
             );
             $eventDispatcher->dispatch(ContaoEvents::MESSAGE_ADD, $message);
@@ -180,9 +182,11 @@ class Queue extends \Backend implements EventSubscriberInterface
             ->setQueryParameter('do', 'avisota_queue')
             ->setQueryParameter('ref', TL_REFERER_ID);
 
+        $translator = $environment->getTranslator();
+
         $elements[] = array(
             'icon' => 'assets/avisota/core/images/queue.png',
-            'text' => $GLOBALS['TL_LANG']['MOD']['avisota_queue'][0],
+            'text' => $translator->translate('avisota_queue.0', 'MOD'),
             'url'  => $urlBuilder->getUrl()
         );
 

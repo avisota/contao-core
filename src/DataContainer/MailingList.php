@@ -85,9 +85,11 @@ class MailingList implements EventSubscriberInterface
             ->setQueryParameter('do', $inputProvider->getParameter('do'))
             ->setQueryParameter('ref', TL_REFERER_ID);
 
+        $translator = $environment->getTranslator();
+
         $elements[] = array(
             'icon' => 'assets/avisota/core/images/mailing_list.png',
-            'text' => $GLOBALS['TL_LANG']['MOD']['avisota_mailing_list'][0],
+            'text' => $translator->translate('avisota_mailing_list.0', 'MOD'),
             'url'  => $urlBuilder->getUrl()
         );
 

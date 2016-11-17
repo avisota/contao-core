@@ -81,9 +81,11 @@ class Transport implements EventSubscriberInterface
             ->setQueryParameter('do', 'avisota_transport')
             ->setQueryParameter('ref', TL_REFERER_ID);
 
+        $translator = $environment->getTranslator();
+
         $elements[] = array(
             'icon' => 'assets/avisota/core/images/transport.png',
-            'text' => $GLOBALS['TL_LANG']['MOD']['avisota_transport'][0],
+            'text' => $translator->translate('avisota_transport.0', 'MOD'),
             'url'  => $urlBuilder->getUrl()
         );
 

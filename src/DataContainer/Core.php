@@ -84,11 +84,13 @@ class Core implements EventSubscriberInterface
             ->setQueryParameter('do', 'avisota_config')
             ->setQueryParameter('ref', TL_REFERER_ID);
 
+        $translator = $environment->getTranslator();
+
         $event->setElements(
             array(
                 array(
                     'icon' => 'assets/avisota/core/images/avisota-breadcrumb.png',
-                    'text' => $GLOBALS['TL_LANG']['MOD']['avisota_config'][0],
+                    'text' => $translator->translate('avisota_config.0', 'MOD'),
                     'url'  => $baseUrl->getUrl()
                 )
             )

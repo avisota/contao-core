@@ -23,13 +23,10 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerE
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
-
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetSelectModeButtonsEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
-
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -103,16 +100,18 @@ class RecipientSource implements EventSubscriberInterface
 
     /**
      * @param EncodePropertyValueFromWidgetEvent $event
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function checkCsvColumnUnique(EncodePropertyValueFromWidgetEvent $event)
     {
-        if (($event->getEnvironment()->getDataProvider() !== 'orm_avisota_recipient_source')
-            || ($event->getEnvironment()->getDataProvider() === 'orm_avisota_recipient_source'
+        $environment  = $event->getEnvironment();
+        $dataProvider = $environment->getDataProvider();
+
+        if (($dataProvider !== 'orm_avisota_recipient_source')
+            || ($dataProvider === 'orm_avisota_recipient_source'
                 && $event->getProperty() != 'csvColumnAssignment')
         ) {
-            return;
-        }
+        return;
+    }
 
         $value = $event->getValue();
 
@@ -123,11 +122,15 @@ class RecipientSource implements EventSubscriberInterface
         $columns = array();
         $fields  = array();
 
+        $translator = $environment->getTranslator();
+
         foreach ($value as $item) {
             if (in_array($item['column'], $columns)
                 || in_array($item['field'], $fields)
             ) {
-                throw new \RuntimeException($GLOBALS['TL_LANG']['orm_avisota_recipient_source']['duplicated_column']);
+                throw new \RuntimeException(
+                    $translator->translate('duplicated_column', 'orm_avisota_recipient_source')
+                );
             }
 
             $columns[] = $item['column'];
@@ -137,12 +140,14 @@ class RecipientSource implements EventSubscriberInterface
 
     /**
      * @param EncodePropertyValueFromWidgetEvent $event
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function checkCsvColumnEmail(EncodePropertyValueFromWidgetEvent $event)
     {
-        if (($event->getEnvironment()->getDataProvider() !== 'orm_avisota_recipient_source')
-            || ($event->getEnvironment()->getDataProvider() === 'orm_avisota_recipient_source'
+        $environment  = $event->getEnvironment();
+        $dataProvider = $environment->getDataProvider();
+
+        if (($dataProvider !== 'orm_avisota_recipient_source')
+            || ($dataProvider === 'orm_avisota_recipient_source'
                 && $event->getProperty() != 'csvColumnAssignment')
         ) {
             return;
@@ -160,7 +165,11 @@ class RecipientSource implements EventSubscriberInterface
             }
         }
 
-        throw new \RuntimeException($GLOBALS['TL_LANG']['orm_avisota_recipient_source']['missing_email_column']);
+        $translator = $environment->getTranslator();
+
+        throw new \RuntimeException(
+            $translator->translate('missing_email_column', 'orm_avisota_recipient_source')
+        );
     }
 
     /**
