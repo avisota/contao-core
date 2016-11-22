@@ -18,14 +18,14 @@ namespace Avisota\Contao\Core\Queue;
 use Avisota\Contao\Entity\Queue;
 
 /**
- * Interface QueueFactoryInterface
- *
- * @package Avisota\Contao\Core\Queue
+ * The queue factory interface.
  */
 interface QueueFactoryInterface
 {
     /**
-     * @param Queue $queueEntity
+     * Create the queue factory.
+     *
+     * @param Queue $queueEntity The queue entity.
      *
      * @return mixed
      */

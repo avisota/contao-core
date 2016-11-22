@@ -21,9 +21,7 @@ use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class MailingList
- *
- * @package Avisota\Contao\Core\DataContainer
+ * The mailing list data container event subscriber.
  */
 class MailingList implements EventSubscriberInterface
 {

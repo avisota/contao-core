@@ -30,22 +30,21 @@ use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * An EventSubscriber knows himself what events he is interested in.
- * If an EventSubscriber is added to an EventDispatcherInterface, the manager invokes
- * {@link getSubscribedEvents} and registers the subscriber as a listener for all
- * returned events.
- *
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Jonathan Wage <jonwage@gmail.com>
- * @author Roman Borschel <roman@code-factory.org>
- * @author Bernhard Schussek <bschussek@gmail.com>
+ * The queue data container event subscriber.
  */
 class Queue extends \Backend implements EventSubscriberInterface
 {
+    /**
+     * The queue instance.
+     *
+     * @var Queue
+     */
     static protected $instance;
 
     /**
-     * @return mixed
+     * Get the queue instance.
+     *
+     * @return Queue
      */
     public static function getInstance()
     {
@@ -96,10 +95,13 @@ class Queue extends \Backend implements EventSubscriberInterface
     }
 
     /**
-     * @param string     $alias
-     * @param DC_General $dc
+     * Remember the alias.
      *
-     * @return mixed
+     * @param string     $alias The alias.
+     * @param DC_General $dc    The data container.
+     *
+     * @return string
+     *
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
@@ -113,7 +115,12 @@ class Queue extends \Backend implements EventSubscriberInterface
     }
 
     /**
-     * @param ActionEvent $event
+     * Handle action for clear queue.
+     *
+     * @param ActionEvent $event The event.
+     *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.Superglobals)
      */

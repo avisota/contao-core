@@ -16,27 +16,38 @@
 namespace Avisota\Contao\Core\Event;
 
 use Avisota\Contao\Entity\Message;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Event is the base class for classes containing event data.
- *
- * This class contains no event data. It is used by events that do not pass
- * state information to an event handler when an event is raised.
- *
- * You can call the method stopPropagation() to abort the execution of
- * further listeners in your event listener.
- *
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Jonathan Wage <jonwage@gmail.com>
- * @author Roman Borschel <roman@code-factory.org>
- * @author Bernhard Schussek <bschussek@gmail.com>
+ * The post defined immediate event.
  */
 class PostSendImmediateEvent extends BaseSendImmediateEvent
 {
     /**
-     * @return int
-     * TODO is this in use
+     * The count.
+     *
+     * @var string
+     */
+    protected $count;
+
+    /**
+     * PostSendImmediateEvent constructor.
+     *
+     * @param Message $count   The count.
+     * @param Message $message The message.
+     * @param string  $turn    The turn step.
+     * @param string  $loop    The unique loop id.
+     */
+    public function __construct($count, Message $message, $turn, $loop)
+    {
+        parent::__construct($message, $turn, $loop);
+
+        $this->count = $count;
+    }
+
+    /**
+     * Return the count.
+     *
+     * @return string
      */
     public function getCount()
     {

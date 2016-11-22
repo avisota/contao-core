@@ -18,9 +18,7 @@ namespace Avisota\Contao\Core\Event;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class PreSendImmediateEvent
- *
- * @package Avisota\Contao\Core\Event
+ * The pre defined immediate event.
  */
 class PreSendImmediateEvent extends BaseSendImmediateEvent
 {

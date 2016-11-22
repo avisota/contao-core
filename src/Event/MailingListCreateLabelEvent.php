@@ -20,29 +20,22 @@ use Bit3\StringBuilder\StringBuilder;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Event is the base class for classes containing event data.
- *
- * This class contains no event data. It is used by events that do not pass
- * state information to an event handler when an event is raised.
- *
- * You can call the method stopPropagation() to abort the execution of
- * further listeners in your event listener.
- *
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Jonathan Wage <jonwage@gmail.com>
- * @author Roman Borschel <roman@code-factory.org>
- * @author Bernhard Schussek <bschussek@gmail.com>
+ * The mailing list create label event.
  */
 class MailingListCreateLabelEvent extends Event
 {
     const NAME = 'Avisota\Contao\Core\Event\MailingListCreateLabel';
 
     /**
+     * The row date.
+     *
      * @var \ArrayObject
      */
     protected $row;
 
     /**
+     * The label.
+     *
      * @var StringBuilder
      */
     protected $label;
@@ -50,8 +43,8 @@ class MailingListCreateLabelEvent extends Event
     /**
      * MailingListCreateLabelEvent constructor.
      *
-     * @param \ArrayObject  $row
-     * @param StringBuilder $label
+     * @param \ArrayObject  $row   The row data.
+     * @param StringBuilder $label The label.
      */
     public function __construct(\ArrayObject $row, StringBuilder $label)
     {
@@ -60,6 +53,8 @@ class MailingListCreateLabelEvent extends Event
     }
 
     /**
+     * Return the row data.
+     *
      * @return \ArrayObject
      */
     public function getRow()
@@ -68,6 +63,8 @@ class MailingListCreateLabelEvent extends Event
     }
 
     /**
+     * Return the label.
+     *
      * @return StringBuilder
      */
     public function getLabel()

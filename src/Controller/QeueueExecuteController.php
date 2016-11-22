@@ -25,18 +25,19 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class QeueueExecuteController
- *
- * @package Avisota\Contao\Core\Controller
+ * The queue execute controller.
  */
 class QeueueExecuteController extends AbstractQueueWebRunner
 {
     /**
-     * @param Request     $request
-     * @param Queue       $queueData
-     * @param \BackendUser $user
+     * Execute the queue.
+     *
+     * @param Request      $request   The request.
+     * @param Queue        $queueData The queue data.
+     * @param \BackendUser $user      The user.
      *
      * @return JsonResponse
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

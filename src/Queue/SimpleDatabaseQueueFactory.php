@@ -19,13 +19,13 @@ use Avisota\Contao\Entity\Queue;
 use Avisota\Queue\SimpleDatabaseQueue;
 
 /**
- * Class SimpleDatabaseQueueFactory
- *
- * @package Avisota\Contao\Core\Queue
+ * The simple database queue factory.
  */
 class SimpleDatabaseQueueFactory implements QueueFactoryInterface
 {
     /**
+     * Create the simple queue database.
+     *
      * @param Queue $queue
      *
      * @return SimpleDatabaseQueue

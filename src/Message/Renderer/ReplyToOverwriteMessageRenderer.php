@@ -20,7 +20,7 @@ use Avisota\Renderer\DelegateMessageRenderer;
 use Avisota\Renderer\MessageRendererInterface;
 
 /**
- * Class DelegateMessageRenderer
+ * The replay to overwrite message renderer.
  *
  * Implementation of a delegate message renderer.
  * Primary used as base class for custom implementations.
@@ -28,11 +28,15 @@ use Avisota\Renderer\MessageRendererInterface;
 class ReplyToOverwriteMessageRenderer extends DelegateMessageRenderer
 {
     /**
+     * The replay to address.
+     *
      * @var string
      */
     protected $replyTo;
 
     /**
+     * The replay to name.
+     *
      * @var string
      */
     protected $replyToName;
@@ -40,9 +44,9 @@ class ReplyToOverwriteMessageRenderer extends DelegateMessageRenderer
     /**
      * DelegateMessageRenderer constructor.
      *
-     * @param MessageRendererInterface $delegate
-     * @param                          $replyTo
-     * @param                          $replyToName
+     * @param MessageRendererInterface $delegate    The delegate message renderer.
+     * @param string                   $replyTo     The replay to address.
+     * @param string                   $replyToName The replay to name.
      */
     public function __construct(MessageRendererInterface $delegate, $replyTo, $replyToName)
     {
@@ -52,6 +56,8 @@ class ReplyToOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Set the replay to address.
+     *
      * @param string $replyTo
      *
      * @return $this
@@ -63,6 +69,8 @@ class ReplyToOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Get the replay to address.
+     *
      * @return string
      */
     public function getReplyTo()
@@ -71,6 +79,8 @@ class ReplyToOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Set the replay to name.
+     *
      * @param string $replyToName
      *
      * @return $this
@@ -82,6 +92,8 @@ class ReplyToOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Get the replay to name.
+     *
      * @return string
      */
     public function getReplyToName()

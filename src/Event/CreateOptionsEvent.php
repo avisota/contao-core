@@ -16,7 +16,7 @@
 namespace Avisota\Contao\Core\Event;
 
 /**
- *
+ * Create options event.
  */
 class CreateOptionsEvent extends \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEvent
 {

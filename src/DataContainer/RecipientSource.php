@@ -31,23 +31,21 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * An EventSubscriber knows himself what events he is interested in.
- * If an EventSubscriber is added to an EventDispatcherInterface, the manager invokes
- * {@link getSubscribedEvents} and registers the subscriber as a listener for all
- * returned events.
- *
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Jonathan Wage <jonwage@gmail.com>
- * @author Roman Borschel <roman@code-factory.org>
- * @author Bernhard Schussek <bschussek@gmail.com>
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * The recipient source event subscriber.
  */
 class RecipientSource implements EventSubscriberInterface
 {
+    /**
+     * The recipient source instance.
+     *
+     * @var RecipientSource
+     */
     static protected $instance;
 
     /**
-     * @return mixed
+     * Get the recipient source instance.
+     *
+     * @return RecipientSource
      */
     public static function getInstance()
     {
@@ -99,7 +97,11 @@ class RecipientSource implements EventSubscriberInterface
     }
 
     /**
-     * @param EncodePropertyValueFromWidgetEvent $event
+     * Check if all columns in the csv file is unique.
+     *
+     * @param EncodePropertyValueFromWidgetEvent $event The event.
+     *
+     * @return void
      */
     public function checkCsvColumnUnique(EncodePropertyValueFromWidgetEvent $event)
     {
@@ -139,7 +141,11 @@ class RecipientSource implements EventSubscriberInterface
     }
 
     /**
-     * @param EncodePropertyValueFromWidgetEvent $event
+     * Check if column email exists in the csv file.
+     *
+     * @param EncodePropertyValueFromWidgetEvent $event The event.
+     *
+     * @return void
      */
     public function checkCsvColumnEmail(EncodePropertyValueFromWidgetEvent $event)
     {
@@ -173,7 +179,11 @@ class RecipientSource implements EventSubscriberInterface
     }
 
     /**
-     * @param ActionEvent $event
+     * Handle action list recipient source.
+     *
+     * @param ActionEvent $event The event.
+     *
+     * @return void
      */
     public function handleAction(ActionEvent $event)
     {
@@ -192,9 +202,12 @@ class RecipientSource implements EventSubscriberInterface
     }
 
     /**
-     * @param EnvironmentInterface $environment
+     * Parse the mailing list list.
+     *
+     * @param EnvironmentInterface $environment The environment.
      *
      * @return string
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.LongVariable)
@@ -238,7 +251,10 @@ class RecipientSource implements EventSubscriberInterface
     }
 
     /**
+     * Get the recipient source column.
+     *
      * @return array
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function getRecipientColumns()
@@ -268,7 +284,10 @@ class RecipientSource implements EventSubscriberInterface
     }
 
     /**
+     * Get the recipient source columns filter.
+     *
      * @return array
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function getRecipientFilterColumns()
@@ -296,7 +315,10 @@ class RecipientSource implements EventSubscriberInterface
     }
 
     /**
+     * Get the member columns filter.
+     *
      * @return array
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function getMemberFilterColumns()

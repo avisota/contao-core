@@ -21,7 +21,7 @@ use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * The data container transport event subscriber
+ * The data container transport event subscriber.
  */
 class Transport implements EventSubscriberInterface
 {

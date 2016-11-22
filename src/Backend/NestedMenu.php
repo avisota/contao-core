@@ -20,20 +20,21 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\DC_General;
 
 /**
- * Class NestedMenu
- *
- * @package Avisota\Contao\Core\Backend
+ * The avisota core nested menu.
  */
 class NestedMenu extends \Controller
 {
     /**
-     * @var \Backend
+     * The nested menu instance.
+     *
+     * @var NestedMenu
      */
     protected static $instance = null;
 
     /**
-     * @static
-     * @return \Backend
+     * Get singleton instance.
+     *
+     * @return NestedMenu
      */
     public static function getInstance()
     {
@@ -52,9 +53,12 @@ class NestedMenu extends \Controller
     }
 
     /**
-     * @param $do
+     * The hook for nested menu pre defined content.
+     *
+     * @param string $do The do parameter.
      *
      * @return string
+     *
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function hookNestedMenuPreContent($do)
@@ -72,9 +76,12 @@ class NestedMenu extends \Controller
     }
 
     /**
-     * @param $do
+     * The hook for nested menu post defined content.
+     *
+     * @param string $do The do parameter.
      *
      * @return string
+     *
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function hookNestedMenuPostContent($do)

@@ -19,9 +19,7 @@ use Avisota\Recipient\RecipientInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class CreatePublicEmptyRecipientEvent
- *
- * @package Avisota\Contao\Core\Event
+ * Create public empty recipient event.
  */
 class CreatePublicEmptyRecipientEvent extends BaseCreateRecipientEvent
 {

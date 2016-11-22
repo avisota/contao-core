@@ -20,28 +20,21 @@ use Avisota\RecipientSource\RecipientSourceInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Event is the base class for classes containing event data.
- *
- * This class contains no event data. It is used by events that do not pass
- * state information to an event handler when an event is raised.
- *
- * You can call the method stopPropagation() to abort the execution of
- * further listeners in your event listener.
- *
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Jonathan Wage <jonwage@gmail.com>
- * @author Roman Borschel <roman@code-factory.org>
- * @author Bernhard Schussek <bschussek@gmail.com>
+ * Create recipient source event.
  */
 class CreateRecipientSourceEvent extends Event
 {
 
     /**
+     * The recipient source configuration.
+     *
      * @var RecipientSource
      */
     protected $configuration;
 
     /**
+     * The recipient source.
+     *
      * @var RecipientSourceInterface
      */
     protected $recipientSource;
@@ -49,8 +42,8 @@ class CreateRecipientSourceEvent extends Event
     /**
      * CreateRecipientSourceEvent constructor.
      *
-     * @param RecipientSource          $configuration
-     * @param RecipientSourceInterface $recipientSource
+     * @param RecipientSource          $configuration   The recipient source configuration.
+     * @param RecipientSourceInterface $recipientSource The recipient source.
      */
     public function __construct(RecipientSource $configuration, RecipientSourceInterface $recipientSource)
     {
@@ -59,6 +52,8 @@ class CreateRecipientSourceEvent extends Event
     }
 
     /**
+     * Return the recipient source configuration.
+     *
      * @return RecipientSource
      */
     public function getConfiguration()
@@ -67,6 +62,8 @@ class CreateRecipientSourceEvent extends Event
     }
 
     /**
+     * Return the recipient source.
+     *
      * @return RecipientSourceInterface
      */
     public function getRecipientSource()
@@ -75,6 +72,8 @@ class CreateRecipientSourceEvent extends Event
     }
 
     /**
+     * Set the recipient source.
+     *
      * @param RecipientSourceInterface $recipientSource
      *
      * @return $this

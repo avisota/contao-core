@@ -18,13 +18,13 @@ namespace Avisota\Contao\Core\Transport;
 use Avisota\Contao\Entity\Transport;
 
 /**
- * Class ServiceTransportFactory
- *
- * @package Avisota\Contao\Core\Transport
+ * The service transport factory.
  */
 class ServiceTransportFactory implements TransportFactoryInterface
 {
     /**
+     * Create the transport.
+     *
      * @param Transport $transport
      *
      * @return mixed

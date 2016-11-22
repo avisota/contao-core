@@ -21,9 +21,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class AbstractQueueWebRunner
- *
- * @package Avisota\Contao\Core\Queue
+ * The abstract queue web runner.
  */
 abstract class AbstractQueueWebRunner extends \Backend
 {
@@ -36,9 +34,12 @@ abstract class AbstractQueueWebRunner extends \Backend
     }
 
     /**
-     * @param Request $request
+     * Run the queue web runner.
+     *
+     * @param Request $request The request.
      *
      * @return JsonResponse|mixed
+     *
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function run(Request $request)
@@ -79,9 +80,11 @@ abstract class AbstractQueueWebRunner extends \Backend
     }
 
     /**
-     * @param Request      $request
-     * @param Queue        $messageData
-     * @param \BackendUser $user
+     * Execute the queue web runner.
+     *
+     * @param Request      $request     The request.
+     * @param Queue        $messageData The message data.
+     * @param \BackendUser $user        The user.
      *
      * @return mixed
      */

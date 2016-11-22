@@ -22,9 +22,7 @@ use Doctrine\ORM\Query;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class MailingList
- *
- * @package Avisota\Contao\Core\DataContainer
+ * The avisota core mailing list.
  */
 class MailingList extends \Backend
 {
@@ -37,14 +35,18 @@ class MailingList extends \Backend
     }
 
     /**
-     * @param array          $rowData
-     * @param string         $label
-     * @param \DataContainer $dc
+     * Get mailing list label for each row.
+     *
+     * @param array          $rowData The row.
+     * @param string         $label   The label.
+     * @param \DataContainer $dc      The data container.
      *
      * @return string
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
      * todo handle this by event
      */
     public function getLabel($rowData, $label, $dc)
