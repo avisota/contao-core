@@ -112,8 +112,8 @@ class RecipientSource implements EventSubscriberInterface
             || ($dataProvider === 'orm_avisota_recipient_source'
                 && $event->getProperty() != 'csvColumnAssignment')
         ) {
-        return;
-    }
+            return;
+        }
 
         $value = $event->getValue();
 

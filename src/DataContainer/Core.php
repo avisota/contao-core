@@ -94,7 +94,6 @@ class Core implements EventSubscriberInterface
                     'url'  => $baseUrl->getUrl()
                 )
             )
-
         );
     }
 }
