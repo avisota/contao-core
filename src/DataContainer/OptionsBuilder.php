@@ -16,13 +16,9 @@
 namespace Avisota\Contao\Core\DataContainer;
 
 use Avisota\Contao\Core\CoreEvents;
-
 use Contao\Doctrine\ORM\EntityHelper;
-
-
 use ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\DC_General;
-
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

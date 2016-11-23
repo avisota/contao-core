@@ -15,7 +15,6 @@
 
 namespace Avisota\Contao\Core\Event;
 
-use Avisota\Contao\Core\Message\Renderer;
 use Bit3\StringBuilder\StringBuilder;
 use Symfony\Component\EventDispatcher\Event;
 

@@ -16,9 +16,7 @@
 namespace Avisota\Contao\Core\Backend;
 
 use Avisota\Contao\Core\Event\MailingListCreateLabelEvent;
-
 use Bit3\StringBuilder\StringBuilder;
-use Doctrine\ORM\Query;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**

@@ -15,9 +15,9 @@
 
 namespace Avisota\Contao\Core\Controller;
 
-use Avisota\Contao\Entity\Queue;
 use Avisota\Contao\Core\Event\PreQueueExecuteEvent;
 use Avisota\Contao\Core\Queue\AbstractQueueWebRunner;
+use Avisota\Contao\Entity\Queue;
 use Avisota\Queue\ExecutionConfig;
 use Avisota\Queue\QueueInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;

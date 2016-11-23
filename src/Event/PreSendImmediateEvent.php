@@ -15,8 +15,6 @@
 
 namespace Avisota\Contao\Core\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-
 /**
  * The pre defined immediate event.
  */
