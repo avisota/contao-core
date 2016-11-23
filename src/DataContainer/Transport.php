@@ -63,9 +63,12 @@ class Transport implements EventSubscriberInterface
     public function getBreadCrumb(GetBreadcrumbEvent $event)
     {
         $environment   = $event->getEnvironment();
+        $dataDefinition = $environment->getDataDefinition();
         $inputProvider = $environment->getInputProvider();
 
-        if (!$inputProvider->hasParameter('id')) {
+        if ($dataDefinition->getName() !== 'orm_avisota_transport'
+            || !$inputProvider->hasParameter('id')
+        ) {
             return;
         }
 

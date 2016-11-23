@@ -171,9 +171,12 @@ class Queue extends \Backend implements EventSubscriberInterface
     public function getBreadCrumb(GetBreadcrumbEvent $event)
     {
         $environment   = $event->getEnvironment();
+        $dataDefinition = $environment->getDataDefinition();
         $inputProvider = $environment->getInputProvider();
 
-        if (!$inputProvider->hasParameter('id')) {
+        if ($dataDefinition->getName() !== 'orm_avisota_queue'
+            || !$inputProvider->hasParameter('id')
+        ) {
             return;
         }
 
