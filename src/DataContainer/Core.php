@@ -15,6 +15,8 @@
 
 namespace Avisota\Contao\Core\DataContainer;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -47,6 +49,10 @@ class Core implements EventSubscriberInterface
         return array(
             GetBreadcrumbEvent::NAME => array(
                 array('getBreadCrumb', 100)
+            ),
+
+            ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER => array(
+                array('removeHasteOnDeleteCallback')
             )
         );
     }
@@ -95,5 +101,36 @@ class Core implements EventSubscriberInterface
                 )
             )
         );
+    }
+
+    /**
+     * Fix for on delete callback.
+     * Remove haste on delete callback.
+     *
+     * @param LoadDataContainerEvent $event The event.
+     *
+     * @return void
+     *
+     * Todo if pull request 94 for haste merged, can remove this event.
+     * @see https://github.com/codefog/contao-haste/pull/94
+     */
+    public function removeHasteOnDeleteCallback(LoadDataContainerEvent $event)
+    {
+        if (!stristr($event->getName(), 'avisota')
+            || !array_key_exists('ondelete_callback', $GLOBALS['TL_DCA'][$event->getName()]['config'])
+        ) {
+            return;
+        }
+
+        $callbacks = $GLOBALS['TL_DCA'][$event->getName()]['config']['ondelete_callback'];
+        foreach ($callbacks as $index => $callback ) {
+            if (!in_array('Haste\Model\Relations', $callback)
+                || !in_array('cleanRelatedRecords', $callback)
+            ) {
+                continue;
+            }
+
+            unset($GLOBALS['TL_DCA'][$event->getName()]['config']['ondelete_callback'][$index]);
+        }
     }
 }
