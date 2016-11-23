@@ -123,7 +123,7 @@ class Core implements EventSubscriberInterface
         }
 
         $callbacks = $GLOBALS['TL_DCA'][$event->getName()]['config']['ondelete_callback'];
-        foreach ($callbacks as $index => $callback ) {
+        foreach ($callbacks as $index => $callback) {
             if (!in_array('Haste\Model\Relations', $callback)
                 || !in_array('cleanRelatedRecords', $callback)
             ) {
