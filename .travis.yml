@@ -18,6 +18,7 @@ matrix:
 sudo: false
 
 before_install:
+  - phpenv config-add .travis.php.ini
   - if [ -n "GITHUB_TOKEN" ]; then composer config github-oauth.github.com ${GITHUB_TOKEN}; fi;
 
 install:
