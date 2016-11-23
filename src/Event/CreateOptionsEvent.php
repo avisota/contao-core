@@ -23,6 +23,25 @@ class CreateOptionsEvent extends \ContaoCommunityAlliance\Contao\Events\CreateOp
     protected $preventDefault = false;
 
     /**
+     * CreateOptionsEvent constructor.
+     *
+     * @param \DataContainer    $dataContainer
+     * @param \ArrayObject|null $options
+     *
+     * Todo remove create options event
+     */
+    public function __construct($dataContainer, \ArrayObject $options = null)
+    {
+        $this->dataContainer = $dataContainer;
+
+        if ($this->options) {
+            $this->options = $options;
+        } else {
+            $this->options = new \ArrayObject();
+        }
+    }
+
+    /**
      * Prevent default listeners.
      *
      * @return $this
