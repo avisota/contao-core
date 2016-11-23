@@ -39,7 +39,7 @@ class Queue extends \Backend implements EventSubscriberInterface
      *
      * @var Queue
      */
-    static protected $instance;
+    protected static $instance;
 
     /**
      * Get the queue instance.
