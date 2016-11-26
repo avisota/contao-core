@@ -265,8 +265,9 @@ class CopyController implements EventSubscriberInterface
             if ($environment->getDataDefinition()->getName() !== $copyModelId->getDataProviderName()) {
                 $copiedChildModel = $this->copyParent($copyModelId, $environment);
             }
-
-            if ($environment->getDataDefinition()->getName() === $copyModelId->getDataProviderName()) {
+            if ($environment->getDataDefinition()->getName() === $copyModelId->getDataProviderName()
+                && !$copiedChildModel
+            ) {
                 $copiedChildModel = $this->copyHandler($copyModelId, $environment);
             }
 

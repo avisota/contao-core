@@ -24,6 +24,7 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetSelectModeButtonsEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
@@ -80,12 +81,15 @@ class RecipientSource implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            EncodePropertyValueFromWidgetEvent::NAME . '[orm_avisota_recipient_source][csvColumnAssignment]' => array(
+            //Todo check who is this
+            EncodePropertyValueFromWidgetEvent::NAME => array(
                 array('checkCsvColumnUnique'),
                 array('checkCsvColumnEmail'),
             ),
 
-            DcGeneralEvents::ACTION => 'handleAction',
+            DcGeneralEvents::ACTION => array(
+                array('handleAction'),
+            ),
         );
     }
 
@@ -103,6 +107,13 @@ class RecipientSource implements EventSubscriberInterface
      */
     public function checkCsvColumnUnique(EncodePropertyValueFromWidgetEvent $event)
     {
+        if (($event->getEnvironment()->getDataProvider() !== 'orm_avisota_recipient_source')
+            || ($event->getEnvironment()->getDataProvider() === 'orm_avisota_recipient_source'
+                && $event->getProperty() != 'csvColumnAssignment')
+        ) {
+            return;
+        }
+
         $value = $event->getValue();
 
         if (!is_array($value)) {
@@ -122,7 +133,6 @@ class RecipientSource implements EventSubscriberInterface
             $columns[] = $item['column'];
             $fields[]  = $item['field'];
         }
-
     }
 
     /**
@@ -131,6 +141,13 @@ class RecipientSource implements EventSubscriberInterface
      */
     public function checkCsvColumnEmail(EncodePropertyValueFromWidgetEvent $event)
     {
+        if (($event->getEnvironment()->getDataProvider() !== 'orm_avisota_recipient_source')
+            || ($event->getEnvironment()->getDataProvider() === 'orm_avisota_recipient_source'
+                && $event->getProperty() != 'csvColumnAssignment')
+        ) {
+            return;
+        }
+
         $value = $event->getValue();
 
         if (!is_array($value)) {

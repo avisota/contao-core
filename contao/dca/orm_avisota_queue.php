@@ -57,15 +57,14 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
             'format' => '%s <span style="color:#b3b3b3; padding-left:3px;">(%s)</span><br>'
         ),
         'global_operations' => array
-        (/*
-			'all' => array
-			(
-				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
-				'href'       => 'act=select',
-				'class'      => 'header_edit_all',
-				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
-			)
-			*/
+        (
+            'all' => array
+            (
+                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
+                'href'       => 'act=select',
+                'class'      => 'header_edit_all',
+                'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
+            )
         ),
         'operations'        => array
         (
@@ -74,6 +73,12 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
                 'label' => &$GLOBALS['TL_LANG']['orm_avisota_queue']['edit'],
                 'href'  => 'act=edit',
                 'icon'  => 'edit.gif'
+            ),
+            'copy'   => array
+            (
+                'label'      => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['copy'],
+                'icon'       => 'copy.gif',
+                'attributes' => 'onclick="Backend.getScrollOffset();"',
             ),
             // TODO alert box description
             'delete' => array
@@ -173,7 +178,8 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
             'eval'      => array(
                 'mandatory' => true,
                 'maxlength' => 255,
-                'tl_class'  => 'w50'
+                'tl_class'  => 'w50',
+                'doNotCopy' => true,
             )
         ),
         'alias'                    => array
@@ -187,8 +193,10 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
                 'unique'            => true,
                 'spaceToUnderscore' => true,
                 'maxlength'         => 128,
-                'tl_class'          => 'w50'
+                'tl_class'          => 'w50',
+                'doNotCopy'         => true,
             ),
+            //Todo change callback to event
             'load_callback'   => array
             (
                 array('Avisota\Contao\Core\DataContainer\Queue', 'rememberAlias')
@@ -216,6 +224,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
                     ),
                 ),
             ),
+            //Todo change callback to event
             'options_callback' =>
                 \ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEventCallbackFactory::createCallback(
                     'avisota.create-transport-options',
@@ -264,7 +273,8 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
             'eval'      => array(
                 'mandatory' => true,
                 'maxlength' => 255,
-                'tl_class'  => 'm12 w50'
+                'tl_class'  => 'm12 w50',
+                'doNotCopy' => true,
             )
         ),
         'allowManualSending'       => array

@@ -21,6 +21,7 @@ use Contao\Doctrine\ORM\EntityHelper;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Message\AddMessageEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetSelectModeButtonsEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DC_General;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
@@ -83,7 +84,9 @@ class Queue extends \Backend implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            DcGeneralEvents::ACTION => 'handleAction',
+            DcGeneralEvents::ACTION => array(
+                array('handleAction'),
+            ),
         );
     }
 
@@ -97,7 +100,7 @@ class Queue extends \Backend implements EventSubscriberInterface
      */
     public function rememberAlias($alias, $dc)
     {
-        $avisotaQueueAlias = \Session::getInstance()->get('AVISOTA_QUEUE_ALIAS');
+        $avisotaQueueAlias          = \Session::getInstance()->get('AVISOTA_QUEUE_ALIAS');
         $avisotaQueueAlias[$dc->id] = $alias;
         \Session::getInstance()->set('AVISOTA_QUEUE_ALIAS', $avisotaQueueAlias);
 

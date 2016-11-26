@@ -59,15 +59,14 @@ $GLOBALS['TL_DCA']['orm_avisota_mailing_list'] = array
             'label_callback' => array('Avisota\Contao\Core\DataContainer\MailingList', 'getLabel')
         ),
         'global_operations' => array
-        (/*
-			'all' => array
-			(
-				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
-				'href'       => 'act=select',
-				'class'      => 'header_edit_all',
-				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
-			)
-			*/
+        (
+            'all' => array
+            (
+                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
+                'href'       => 'act=select',
+                'class'      => 'header_edit_all',
+                'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
+            )
         ),
         'operations'        => array
         (
