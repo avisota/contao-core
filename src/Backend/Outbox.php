@@ -26,13 +26,12 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * A BackendModule implementation that use Twig as template engine.
- *
- * @package ContaoTwig
- * @author  Tristan Lins <tristan.lins@bit3.de>
  */
 class Outbox extends \TwigBackendModule
 {
     /**
+     * Is outbox empty.
+     *
      * @return bool
      */
     public static function isEmpty()
@@ -58,12 +57,17 @@ class Outbox extends \TwigBackendModule
     }
 
     /**
+     * The template.
+     *
      * @var string
      */
     protected $strTemplate = 'avisota/backend/outbox';
 
     /**
-     * Compile the current element
+     * Compile the current element.
+     *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function compile()
@@ -83,7 +87,12 @@ class Outbox extends \TwigBackendModule
     }
 
     /**
-     * @param EntityRepository $queueRepository
+     * Execute the queue.
+     *
+     * @param EntityRepository $queueRepository The queue repository.
+     *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function executeQueue(EntityRepository $queueRepository)
@@ -115,7 +124,11 @@ class Outbox extends \TwigBackendModule
     }
 
     /**
-     * @param EntityRepository $queueRepository
+     * Add queues to the template.
+     *
+     * @param EntityRepository $queueRepository The queue repository.
+     *
+     * @return void
      */
     protected function addQueuesToTemplate(EntityRepository $queueRepository)
     {

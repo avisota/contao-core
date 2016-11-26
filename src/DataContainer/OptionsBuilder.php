@@ -16,23 +16,13 @@
 namespace Avisota\Contao\Core\DataContainer;
 
 use Avisota\Contao\Core\CoreEvents;
-
 use Contao\Doctrine\ORM\EntityHelper;
-
-
 use ContaoCommunityAlliance\Contao\Events\CreateOptions\CreateOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\DC_General;
-
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * {@inheritDoc}
- */
-
-/**
- * Class OptionsBuilder
- *
- * @package Avisota\Contao\Core\DataContainer
+ * The options build event subscriber.
  */
 class OptionsBuilder implements EventSubscriberInterface
 {
@@ -67,7 +57,11 @@ class OptionsBuilder implements EventSubscriberInterface
     }
 
     /**
-     * @param CreateOptionsEvent $event
+     * Create the mailing list options.
+     *
+     * @param CreateOptionsEvent $event The event.
+     *
+     * @return void
      */
     public function createMailingListOptions(CreateOptionsEvent $event)
     {
@@ -75,9 +69,12 @@ class OptionsBuilder implements EventSubscriberInterface
     }
 
     /**
-     * @param array $options
+     * Get the mailing list options.
      *
-     * @return array|\ArrayAccess
+     * @param array $options The options.
+     *
+     * @return array
+     *
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function getMailingListOptions($options = array())
@@ -95,7 +92,11 @@ class OptionsBuilder implements EventSubscriberInterface
     }
 
     /**
-     * @param CreateOptionsEvent $event
+     * Create the recipient source options.
+     *
+     * @param CreateOptionsEvent $event The event.
+     *
+     * @return void
      */
     public function createRecipientSourceOptions(CreateOptionsEvent $event)
     {
@@ -103,9 +104,12 @@ class OptionsBuilder implements EventSubscriberInterface
     }
 
     /**
-     * @param array $options
+     * Get the recipient source options.
      *
-     * @return array|\ArrayAccess
+     * @param array $options The options.
+     *
+     * @return array
+     *
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function getRecipientSourceOptions($options = array())
@@ -123,7 +127,11 @@ class OptionsBuilder implements EventSubscriberInterface
     }
 
     /**
-     * @param CreateOptionsEvent $event
+     * Create the queue options.
+     *
+     * @param CreateOptionsEvent $event The event.
+     *
+     * @return void
      */
     public function createQueueOptions(CreateOptionsEvent $event)
     {
@@ -131,9 +139,11 @@ class OptionsBuilder implements EventSubscriberInterface
     }
 
     /**
-     * @param array $options
+     * Get the queue options.
      *
-     * @return array|\ArrayAccess
+     * @param array $options The options.
+     *
+     * @return array
      */
     public function getQueueOptions($options = array())
     {
@@ -154,7 +164,11 @@ class OptionsBuilder implements EventSubscriberInterface
     }
 
     /**
-     * @param CreateOptionsEvent $event
+     * Create the transport options.
+     *
+     * @param CreateOptionsEvent $event The event.
+     *
+     * @return void
      */
     public function createTransportOptions(CreateOptionsEvent $event)
     {
@@ -162,9 +176,11 @@ class OptionsBuilder implements EventSubscriberInterface
     }
 
     /**
-     * @param array $options
+     * Get the transport options.
      *
-     * @return array|\ArrayAccess
+     * @param array $options The options.
+     *
+     * @return array
      */
     public function getTransportOptions($options = array())
     {
@@ -181,7 +197,12 @@ class OptionsBuilder implements EventSubscriberInterface
     }
 
     /**
-     * @param CreateOptionsEvent $event
+     * Create the gallery template options.
+     *
+     * @param CreateOptionsEvent $event The event.
+     *
+     * @return void
+     * Todo if this not in use (template engine contao => twig)
      */
     public function createGalleryTemplateOptions(CreateOptionsEvent $event)
     {
@@ -239,7 +260,11 @@ class OptionsBuilder implements EventSubscriberInterface
     }
 
     /**
-     * @param CreateOptionsEvent $event
+     * Create the render module template options.
+     *
+     * @param CreateOptionsEvent $event The event.
+     *
+     * @return void
      */
     public function createReaderModuleTemplateOptions(CreateOptionsEvent $event)
     {

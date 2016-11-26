@@ -23,15 +23,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetSe
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * An EventSubscriber knows himself what events he is interested in.
- * If an EventSubscriber is added to an EventDispatcherInterface, the manager invokes
- * {@link getSubscribedEvents} and registers the subscriber as a listener for all
- * returned events.
- *
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Jonathan Wage <jonwage@gmail.com>
- * @author Roman Borschel <roman@code-factory.org>
- * @author Bernhard Schussek <bschussek@gmail.com>
+ *  The avisota core event subscriber.
  */
 class EventSubscriber implements EventSubscriberInterface
 {
@@ -73,7 +65,9 @@ class EventSubscriber implements EventSubscriberInterface
     /**
      * Create a new fake recipient, if no one is created yet.
      *
-     * @param CreateFakeRecipientEvent $event
+     * @param CreateFakeRecipientEvent $event The event.
+     *
+     * @return void
      */
     public function createFakeRecipient(CreateFakeRecipientEvent $event)
     {
@@ -90,7 +84,11 @@ class EventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param CreatePublicEmptyRecipientEvent $event
+     * Create public empty recipient, if no one is created yet.
+     *
+     * @param CreatePublicEmptyRecipientEvent $event The event.
+     *
+     * @return void
      */
     public function createPublicEmptyRecipient(CreatePublicEmptyRecipientEvent $event)
     {
@@ -102,7 +100,11 @@ class EventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param GetSelectModeButtonsEvent $event
+     * Deactivate some buttons for edit all mode.
+     *
+     * @param GetSelectModeButtonsEvent $event The event.
+     *
+     * @return void
      *
      * Todo remove this if the deactivated buttons correct worked
      */

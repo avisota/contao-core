@@ -18,13 +18,13 @@ namespace Avisota\Contao\Core\RecipientSource;
 use Avisota\Contao\Entity\RecipientSource;
 
 /**
- * Interface RecipientSourceFactoryInterface
- *
- * @package Avisota\Contao\Core\RecipientSource
+ * The recipient source factory interface.
  */
 interface RecipientSourceFactoryInterface
 {
     /**
+     * Create the recipient source.
+     *
      * @param RecipientSource $recipientSource
      *
      * @return mixed

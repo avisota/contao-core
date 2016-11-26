@@ -18,9 +18,7 @@ namespace Avisota\Contao\Core\Recipient;
 use Avisota\Recipient\RecipientInterface;
 
 /**
- * Class SynonymizerService
- *
- * @package Avisota\Contao\Core\Recipient
+ * The synonymizer service.
  */
 class SynonymizerService
 {
@@ -32,6 +30,7 @@ class SynonymizerService
      *                                         original $fieldName will be returned.
      *
      * @return array|false Return an array of synonyms or false if no synonyms where found.
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.LongVariable)
      */

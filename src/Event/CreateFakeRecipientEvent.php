@@ -15,13 +15,8 @@
 
 namespace Avisota\Contao\Core\Event;
 
-use Avisota\Recipient\RecipientInterface;
-use Symfony\Component\EventDispatcher\Event;
-
 /**
- * Class CreateFakeRecipientEvent
- *
- * @package Avisota\Contao\Core\Event
+ * Create fake recipient event.
  */
 class CreateFakeRecipientEvent extends BaseCreateRecipientEvent
 {

@@ -21,34 +21,29 @@ use Avisota\Transport\TransportInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Event is the base class for classes containing event data.
- *
- * This class contains no event data. It is used by events that do not pass
- * state information to an event handler when an event is raised.
- *
- * You can call the method stopPropagation() to abort the execution of
- * further listeners in your event listener.
- *
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Jonathan Wage <jonwage@gmail.com>
- * @author Roman Borschel <roman@code-factory.org>
- * @author Bernhard Schussek <bschussek@gmail.com>
+ * The pre defined queue execute event.
  */
 class PreQueueExecuteEvent extends Event
 {
     const NAME = 'Avisota\Contao\Core\Event\PreQueueExecute';
 
     /**
+     * The queue.
+     *
      * @var QueueInterface
      */
     protected $queue;
 
     /**
+     * The transport.
+     *
      * @var TransportInterface
      */
     protected $transport;
 
     /**
+     * The execution configuration.
+     *
      * @var ExecutionConfig
      */
     protected $config;
@@ -56,9 +51,9 @@ class PreQueueExecuteEvent extends Event
     /**
      * PreQueueExecuteEvent constructor.
      *
-     * @param QueueInterface     $queue
-     * @param TransportInterface $transport
-     * @param ExecutionConfig    $config
+     * @param QueueInterface     $queue     The queue.
+     * @param TransportInterface $transport The transport.
+     * @param ExecutionConfig    $config    The execution configuration.
      */
     public function __construct(QueueInterface $queue, TransportInterface $transport, ExecutionConfig $config)
     {
@@ -68,7 +63,9 @@ class PreQueueExecuteEvent extends Event
     }
 
     /**
-     * @param \Avisota\Queue\QueueInterface $queue
+     * Set the queue.
+     *
+     * @param QueueInterface $queue The queue.
      *
      * @return $this
      */
@@ -79,7 +76,9 @@ class PreQueueExecuteEvent extends Event
     }
 
     /**
-     * @return \Avisota\Queue\QueueInterface
+     * Get the queue
+     *
+     * @return QueueInterface
      */
     public function getQueue()
     {
@@ -87,7 +86,9 @@ class PreQueueExecuteEvent extends Event
     }
 
     /**
-     * @param \Avisota\Transport\TransportInterface $transport
+     * Set the transport.
+     *
+     * @param TransportInterface $transport The transport.
      *
      * @return $this
      */
@@ -98,7 +99,9 @@ class PreQueueExecuteEvent extends Event
     }
 
     /**
-     * @return \Avisota\Transport\TransportInterface
+     * Get the transport.
+     *
+     * @return TransportInterface
      */
     public function getTransport()
     {
@@ -106,7 +109,9 @@ class PreQueueExecuteEvent extends Event
     }
 
     /**
-     * @param \Avisota\Queue\ExecutionConfig $config
+     * Set the execution configuration.
+     *
+     * @param ExecutionConfig $config The execution configuration.
      *
      * @return $this
      */
@@ -117,7 +122,9 @@ class PreQueueExecuteEvent extends Event
     }
 
     /**
-     * @return \Avisota\Queue\ExecutionConfig
+     * Get the execution configuration.
+     *
+     * @return ExecutionConfig
      */
     public function getConfig()
     {

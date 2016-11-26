@@ -4,142 +4,146 @@
       <trans-unit id="MOD.avisota-core.0">
         <source>Avisota - Core</source>
         <target>Avisota - Core</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota-core.1">
         <source>Basic integration of Avisota for Contao.</source>
         <target>Integraziun da basa dad Avisota per Contao.</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota.0">
         <source>Avisota newsletter</source>
         <target>Newsletter Avisota</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_outbox.0">
         <source>Outbox</source>
         <target>Posta sortida</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_newsletter.0">
         <source>Messages</source>
         <target>Messadis</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_recipients.0">
         <source>Recipients</source>
         <target>Destinaturs</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_config.0">
         <source>Settings</source>
         <target>Configuraziun</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_settings.0">
         <source>Avisota system settings</source>
         <target>Configuraziun da sistem dad Avisota</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_settings.1">
         <source>Manage basic avisota system settings</source>
         <target>Administrar la configuraziun da basa dad Avisota</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_salutation.0">
         <source>Salutation</source>
         <target>Salids</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_salutation.1">
         <source>Manage salutations.</source>
         <target>Administrar ils salids.</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_config:recipient.0">
         <source>Recipient config</source>
         <target>Configuraziun dals destinaturs</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_mailing_list.0">
         <source>Mailing lists</source>
         <target>Glistas da mail</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_mailing_list.1">
         <source>Manage the mailing lists that can be subscribed.</source>
         <target>Administrar las glistas da mail ch'ins po abunar.</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_recipient_source.0">
         <source>Recipient sources</source>
         <target>Funtaunas da destinaturs</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_recipient_source.1">
         <source>Manager recipient sources.</source>
         <target>Administrar las funtaunas da destinaturs.</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_config:newsletter.0">
         <source>Message config</source>
         <target>Configurar ils messadis</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_newsletter_draft.0">
         <source>Message drafts</source>
         <target>Sboz da messadis</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_newsletter_draft.1">
         <source>Manager newsletter drafts to create new newsletters from.</source>
         <target>Administrar ils sboz per crear ordlunder novs newsletters.</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_theme.0">
-        <source>Theme</source>
-        <target>Theme</target>
-        
+        <source>Themes</source>
+
       </trans-unit>
       <trans-unit id="MOD.avisota_theme.1">
         <source>Manage themes, including templates, stylesheets and layout settings for newsletters.</source>
         <target>Administrar ils themes, inclusivamain ils templates, stylesheets e la configuraziun dal layout da newsletters.</target>
-        
+
+      </trans-unit>
+
+      <trans-unit id="MOD.avisota_layout.0">
+        <source>Layout</source>
+
       </trans-unit>
       <trans-unit id="MOD.avisota_config:transport.0">
         <source>Transport config</source>
         <target>Configuraziun da transport</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_transport.0">
         <source>Transports</source>
         <target>Transports</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_transport.1">
         <source>Manager transport modules.</source>
         <target>Administrar ils moduls da transportar.</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_queue.0">
         <source>Queues</source>
         <target>Colonnas da spetga</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_queue.1">
         <source>Manager transport queues.</source>
         <target>Adminstrar las colonnas da spetga.</target>
-        
+
       </trans-unit>
       <trans-unit id="MOD.avisota_support.0">
         <source>Support</source>
         <target>Agid</target>
-        
+
       </trans-unit>
       <trans-unit id="FMD.avisota">
         <source>Avisota</source>
         <target>Avisota</target>
-        
+
       </trans-unit>
     </body>
   </file>

@@ -23,16 +23,17 @@ use Avisota\Contao\Core\Message\Renderer\ToOverwriteMessageRenderer;
 use Avisota\Transport\SwiftTransport;
 
 /**
- * Class SwiftTransportFactory
- *
- * @package Avisota\Contao\Core\Transport
+ * The swift transport factory.
  */
 class SwiftTransportFactory implements TransportFactoryInterface
 {
     /**
-     * @param Transport $transport
+     * Create the transport.
+     *
+     * @param Transport $transport The transport.
      *
      * @return SwiftTransport
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function createTransport(Transport $transport)
@@ -92,7 +93,12 @@ class SwiftTransportFactory implements TransportFactoryInterface
     }
 
     /**
-     * @param $swiftTransport
+     * Set swift smtp from system settings.
+     *
+     * @param \Swift_Transport $swiftTransport The swift transport.
+     *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function setSwiftSMTPFromSystemSettings(&$swiftTransport)
@@ -121,7 +127,11 @@ class SwiftTransportFactory implements TransportFactoryInterface
     }
 
     /**
-     * @param $swiftTransport
+     * Set swift smtp off.
+     *
+     * @param \Swift_Transport $swiftTransport The swift transport.
+     *
+     * @return void
      */
     protected function setSwiftSMTPOff(&$swiftTransport)
     {
@@ -129,8 +139,12 @@ class SwiftTransportFactory implements TransportFactoryInterface
     }
 
     /**
-     * @param           $swiftTransport
-     * @param Transport $transport
+     * Set swift smtp on.
+     *
+     * @param \Swift_Transport $swiftTransport The swift transport.
+     * @param Transport        $transport      The transport.
+     *
+     * @return void
      */
     protected function setSwiftSMTPOn(&$swiftTransport, Transport $transport)
     {

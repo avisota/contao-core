@@ -20,8 +20,6 @@ use Avisota\Recipient\RecipientInterface;
 
 /**
  * A native swift message with additional data.
- *
- * @package    avisota/contao-core
  */
 class ContaoAwareNativeMessage extends NativeMessage
 {
@@ -40,9 +38,9 @@ class ContaoAwareNativeMessage extends NativeMessage
     protected $internalRecipients;
 
     /**
-     * @param \Swift_Message $message
-     * @param Message        $contaoMessage
-     * @param array          $internalRecipients
+     * @param \Swift_Message $message            The message.
+     * @param Message        $contaoMessage      The contao message.
+     * @param array          $internalRecipients The internal recipients.
      *
      * @internal param array|\Avisota\Recipient\RecipientInterface[] $recipients
      */
@@ -55,6 +53,8 @@ class ContaoAwareNativeMessage extends NativeMessage
     }
 
     /**
+     * Get the contao message.
+     *
      * @return \Avisota\Contao\Entity\Message
      */
     public function getContaoMessage()
@@ -63,6 +63,8 @@ class ContaoAwareNativeMessage extends NativeMessage
     }
 
     /**
+     * Get internal recipients.
+     *
      * @return array|\Avisota\Recipient\RecipientInterface[]
      */
     public function getInternalRecipients()

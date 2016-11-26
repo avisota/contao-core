@@ -25,7 +25,7 @@ use Avisota\Contao\Entity\Transport;
 interface TransportFactoryInterface
 {
     /**
-     * @param Transport $transport
+     * @param Transport $transport The transport.
      *
      * @return mixed
      */

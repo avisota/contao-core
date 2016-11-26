@@ -24,14 +24,17 @@ use Avisota\Contao\Entity\Transport;
 use Contao\Doctrine\ORM\EntityHelper;
 
 /**
- * Class ServiceFactory
- *
- * @package Avisota\Contao\Core
+ * The avisota core service factory.
  */
 class ServiceFactory
 {
     /**
-     * @param \Pimple $container
+     * Initialize the service factory.
+     *
+     * @param \Pimple $container The container.
+     *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.LongVariable)
      */
@@ -63,7 +66,10 @@ class ServiceFactory
     }
 
     /**
-     * create the recipient source service
+     * Create the recipient source service.
+     *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     protected function createRecipientSourceService()
@@ -113,7 +119,9 @@ class ServiceFactory
     }
 
     /**
-     * create the queue service
+     * Create the queue service.
+     *
+     * @return void
      */
     protected function createQueueService()
     {
@@ -161,7 +169,10 @@ class ServiceFactory
     }
 
     /**
-     * Create the transport service
+     * Create the transport service.
+     *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function createTransportService()
@@ -213,9 +224,12 @@ class ServiceFactory
     }
 
     /**
-     * @param RecipientSource $recipientSource
+     * Create the recipient source.
+     *
+     * @param RecipientSource $recipientSource The recipient source.
      *
      * @return mixed
+     *
      * @SuppressWarnings(PHPMD.LongVariable)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
@@ -230,9 +244,12 @@ class ServiceFactory
     }
 
     /**
-     * @param Queue $queue
+     * Create queue.
+     *
+     * @param Queue $queue The queue.
      *
      * @return mixed
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function createQueue(Queue $queue)
@@ -245,9 +262,12 @@ class ServiceFactory
     }
 
     /**
-     * @param Transport $transport
+     * Create transport.
+     *
+     * @param Transport $transport The transport.
      *
      * @return mixed
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.LongVariable)
      */

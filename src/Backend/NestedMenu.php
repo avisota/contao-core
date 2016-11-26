@@ -17,23 +17,24 @@ namespace Avisota\Contao\Core\Backend;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use ContaoCommunityAlliance\DcGeneral\DC_General;
 
 /**
- * Class NestedMenu
- *
- * @package Avisota\Contao\Core\Backend
+ * The avisota core nested menu.
  */
 class NestedMenu extends \Controller
 {
     /**
-     * @var \Backend
+     * The nested menu instance.
+     *
+     * @var NestedMenu
      */
     protected static $instance = null;
 
     /**
-     * @static
-     * @return \Backend
+     * Get singleton instance.
+     *
+     * @return NestedMenu
      */
     public static function getInstance()
     {
@@ -52,9 +53,12 @@ class NestedMenu extends \Controller
     }
 
     /**
-     * @param $do
+     * The hook for nested menu pre defined content.
+     *
+     * @param string $do The do parameter.
      *
      * @return string
+     *
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function hookNestedMenuPreContent($do)
@@ -72,17 +76,21 @@ class NestedMenu extends \Controller
     }
 
     /**
-     * @param $do
+     * The hook for nested menu post defined content.
+     *
+     * @param string $do The do parameter.
      *
      * @return string
-     * @SuppressWarnings(PHPMD.Superglobals)
+     *
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function hookNestedMenuPostContent($do)
     {
         if ($do == 'avisota_config') {
-            /** @var EventDispatcher $eventDispatcher */
-            $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+            $general         = new DC_General('orm_avisota_transport');
+            $environment     = $general->getEnvironment();
+            $eventDispatcher = $environment->getEventDispatcher();
+            $translator      = $environment->getTranslator();
 
             $eventDispatcher->dispatch(
                 ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
@@ -90,8 +98,8 @@ class NestedMenu extends \Controller
             );
 
             $context = array(
-                'opensource' => $GLOBALS['TL_LANG']['avisota_promotion']['opensource'],
-                'partners'   => $GLOBALS['TL_LANG']['avisota_promotion']['partners'],
+                'opensource' => $translator->translate('opensource', 'avisota_promotion'),
+                'partners'   => $translator->translate('partners', 'avisota_promotion'),
                 'copyright'  => 'Avisota newsletter and mailing system &copy; 2013-2016 way.vision and all '
                                 . '<a href="https://github.com/avisota/contao/graphs/contributors" '
                                 . 'target="_blank">contributors</a>',

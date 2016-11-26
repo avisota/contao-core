@@ -16,9 +16,7 @@
 namespace Avisota\Contao\Core;
 
 /**
- * Class CoreEvents
- *
- * @package Avisota\Contao\Core
+ * The avisota core events.
  */
 class CoreEvents
 {
