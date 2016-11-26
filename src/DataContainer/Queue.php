@@ -21,30 +21,30 @@ use Contao\Doctrine\ORM\EntityHelper;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Message\AddMessageEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetSelectModeButtonsEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DC_General;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
+use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * An EventSubscriber knows himself what events he is interested in.
- * If an EventSubscriber is added to an EventDispatcherInterface, the manager invokes
- * {@link getSubscribedEvents} and registers the subscriber as a listener for all
- * returned events.
- *
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Jonathan Wage <jonwage@gmail.com>
- * @author Roman Borschel <roman@code-factory.org>
- * @author Bernhard Schussek <bschussek@gmail.com>
+ * The queue data container event subscriber.
  */
 class Queue extends \Backend implements EventSubscriberInterface
 {
-    static protected $instance;
+    /**
+     * The queue instance.
+     *
+     * @var Queue
+     */
+    protected static $instance;
 
     /**
-     * @return mixed
+     * Get the queue instance.
+     *
+     * @return Queue
      */
     public static function getInstance()
     {
@@ -87,14 +87,21 @@ class Queue extends \Backend implements EventSubscriberInterface
             DcGeneralEvents::ACTION => array(
                 array('handleAction'),
             ),
+
+            GetBreadcrumbEvent::NAME => array(
+                array('getBreadCrumb')
+            )
         );
     }
 
     /**
-     * @param string     $alias
-     * @param DC_General $dc
+     * Remember the alias.
      *
-     * @return mixed
+     * @param string     $alias The alias.
+     * @param DC_General $dc    The data container.
+     *
+     * @return string
+     *
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
@@ -108,7 +115,12 @@ class Queue extends \Backend implements EventSubscriberInterface
     }
 
     /**
-     * @param ActionEvent $event
+     * Handle action for clear queue.
+     *
+     * @param ActionEvent $event The event.
+     *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
@@ -136,8 +148,10 @@ class Queue extends \Backend implements EventSubscriberInterface
 
             $queue->execute(new NullTransport());
 
+            $translator = $environment->getTranslator();
+
             $message = new AddMessageEvent(
-                sprintf($GLOBALS['TL_LANG']['orm_avisota_queue']['queueCleared'], $queueData->getTitle()),
+                sprintf($translator->translate('queueCleared', 'orm_avisota_queue'), $queueData->getTitle()),
                 AddMessageEvent::TYPE_CONFIRM
             );
             $eventDispatcher->dispatch(ContaoEvents::MESSAGE_ADD, $message);
@@ -145,5 +159,47 @@ class Queue extends \Backend implements EventSubscriberInterface
             $redirect = new RedirectEvent('contao/main.php?do=avisota_queue&ref=' . TL_REFERER_ID);
             $eventDispatcher->dispatch(ContaoEvents::CONTROLLER_REDIRECT, $redirect);
         }
+    }
+
+    /**
+     * Get the bread crumb elements.
+     *
+     * @param GetBreadcrumbEvent $event This event.
+     *
+     * @return void
+     */
+    public function getBreadCrumb(GetBreadcrumbEvent $event)
+    {
+        $environment    = $event->getEnvironment();
+        $dataDefinition = $environment->getDataDefinition();
+        $inputProvider  = $environment->getInputProvider();
+
+        if ($dataDefinition->getName() !== 'orm_avisota_queue'
+            || !$inputProvider->hasParameter('id')
+        ) {
+            return;
+        }
+
+        $modelId = ModelId::fromSerialized($inputProvider->getParameter('id'));
+        if ($modelId->getDataProviderName() !== 'orm_avisota_queue') {
+            return;
+        }
+
+        $elements = $event->getElements();
+
+        $urlBuilder = new UrlBuilder();
+        $urlBuilder->setPath('contao/main.php')
+            ->setQueryParameter('do', 'avisota_queue')
+            ->setQueryParameter('ref', TL_REFERER_ID);
+
+        $translator = $environment->getTranslator();
+
+        $elements[] = array(
+            'icon' => 'assets/avisota/core/images/queue.png',
+            'text' => $translator->translate('avisota_queue.0', 'MOD'),
+            'url'  => $urlBuilder->getUrl()
+        );
+
+        $event->setElements($elements);
     }
 }

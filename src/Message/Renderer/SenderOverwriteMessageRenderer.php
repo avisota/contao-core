@@ -20,7 +20,7 @@ use Avisota\Renderer\DelegateMessageRenderer;
 use Avisota\Renderer\MessageRendererInterface;
 
 /**
- * Class DelegateMessageRenderer
+ * The sender overwrite message renderer.
  *
  * Implementation of a delegate message renderer.
  * Primary used as base class for custom implementations.
@@ -28,11 +28,15 @@ use Avisota\Renderer\MessageRendererInterface;
 class SenderOverwriteMessageRenderer extends DelegateMessageRenderer
 {
     /**
+     * The sender address.
+     *
      * @var string
      */
     protected $sender;
 
     /**
+     * The sender name.
+     *
      * @var string
      */
     protected $senderName;
@@ -40,9 +44,9 @@ class SenderOverwriteMessageRenderer extends DelegateMessageRenderer
     /**
      * DelegateMessageRenderer constructor.
      *
-     * @param MessageRendererInterface $delegate
-     * @param                          $sender
-     * @param                          $senderName
+     * @param MessageRendererInterface $delegate   The delegate message renderer.
+     * @param string                   $sender     The sender address.
+     * @param string                   $senderName The sender name.
      */
     public function __construct(MessageRendererInterface $delegate, $sender, $senderName)
     {
@@ -52,6 +56,8 @@ class SenderOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Set the sender address.
+     *
      * @param string $sender
      *
      * @return $this
@@ -63,6 +69,8 @@ class SenderOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Get tehe sender address.
+     *
      * @return string
      */
     public function getSender()
@@ -71,6 +79,8 @@ class SenderOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Set the sender name.
+     *
      * @param string $senderName
      *
      * @return $this
@@ -82,6 +92,8 @@ class SenderOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Get the sender name.
+     *
      * @return string
      */
     public function getSenderName()

@@ -16,17 +16,18 @@
 namespace Avisota\Contao\Core\Backend;
 
 /**
- * Class CustomMenu
- *
- * @package Avisota\Contao\Core\Backend
+ * The avisota core custom menu.
  */
 class CustomMenu
 {
     /**
-     * @param array $navigation
-     * @param       $showAll
+     * The hook for get user navigation.
+     *
+     * @param array   $navigation The navigation.
+     * @param boolean $showAll    The state of show all.
      *
      * @return array
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

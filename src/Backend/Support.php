@@ -21,21 +21,21 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * A BackendModule implementation that use Twig as template engine.
- *
- * @package ContaoTwig
- * @author  Tristan Lins <tristan.lins@bit3.de>
  */
 class Support extends \TwigBackendModule
 {
     /**
-     * Template
+     * The template.
      *
      * @var string
      */
     protected $strTemplate = 'avisota/backend/support';
 
     /**
-     * Compile the current element
+     * Compile the current element.
+     *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function compile()

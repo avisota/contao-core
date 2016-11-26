@@ -20,27 +20,20 @@ use Avisota\Recipient\RecipientInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Event is the base class for classes containing event data.
- *
- * This class contains no event data. It is used by events that do not pass
- * state information to an event handler when an event is raised.
- *
- * You can call the method stopPropagation() to abort the execution of
- * further listeners in your event listener.
- *
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Jonathan Wage <jonwage@gmail.com>
- * @author Roman Borschel <roman@code-factory.org>
- * @author Bernhard Schussek <bschussek@gmail.com>
+ * The base create recipient event.
  */
 class BaseCreateRecipientEvent extends Event
 {
     /**
+     * The message.
+     *
      * @var Message|null
      */
     protected $message;
 
     /**
+     * The recipient.
+     *
      * @var RecipientInterface
      */
     protected $recipient;
@@ -56,6 +49,8 @@ class BaseCreateRecipientEvent extends Event
     }
 
     /**
+     * Get the message.
+     *
      * @return Message|null
      */
     public function getMessage()
@@ -64,6 +59,8 @@ class BaseCreateRecipientEvent extends Event
     }
 
     /**
+     * Get the recipient.
+     *
      * @return RecipientInterface
      */
     public function getRecipient()
@@ -72,6 +69,8 @@ class BaseCreateRecipientEvent extends Event
     }
 
     /**
+     * Set the recipient.
+     *
      * @param RecipientInterface $recipient
      *
      * @return $this

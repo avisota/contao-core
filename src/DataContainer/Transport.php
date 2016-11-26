@@ -15,37 +15,83 @@
 
 namespace Avisota\Contao\Core\DataContainer;
 
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
+use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 /**
- * Class Transport
- *
- * @package Avisota\Contao\Core\DataContainer
- * @SuppressWarnings(PHPMD.ShortVariables)
+ * The data container transport event subscriber.
  */
-class Transport extends \Backend
+class Transport implements EventSubscriberInterface
 {
+
     /**
-     * Import the back end user object
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
+     *
+     * @return array The event names to listen to
      */
-    public function __construct()
+    public static function getSubscribedEvents()
     {
-        parent::__construct();
+        return array(
+            GetBreadcrumbEvent::NAME => array(
+                array('getBreadCrumb')
+            )
+        );
     }
 
     /**
-     * @param \DataContainer $dc
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.ShortVariableName)
+     * Get the bread crumb elements.
+     *
+     * @param GetBreadcrumbEvent $event This event.
+     *
+     * @return void
      */
-    public function onLoadCallback($dc)
+    public function getBreadCrumb(GetBreadcrumbEvent $event)
     {
-    }
+        $environment    = $event->getEnvironment();
+        $dataDefinition = $environment->getDataDefinition();
+        $inputProvider  = $environment->getInputProvider();
 
-    /**
-     * @param \DataContainer $dc
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.ShortVariableName)
-     */
-    public function onSubmitCallback($dc)
-    {
+        if ($dataDefinition->getName() !== 'orm_avisota_transport'
+            || !$inputProvider->hasParameter('id')
+        ) {
+            return;
+        }
+
+        $modelId = ModelId::fromSerialized($inputProvider->getParameter('id'));
+        if ($modelId->getDataProviderName() !== 'orm_avisota_transport') {
+            return;
+        }
+
+        $elements = $event->getElements();
+
+        $urlBuilder = new UrlBuilder();
+        $urlBuilder->setPath('contao/main.php')
+            ->setQueryParameter('do', 'avisota_transport')
+            ->setQueryParameter('ref', TL_REFERER_ID);
+
+        $translator = $environment->getTranslator();
+
+        $elements[] = array(
+            'icon' => 'assets/avisota/core/images/transport.png',
+            'text' => $translator->translate('avisota_transport.0', 'MOD'),
+            'url'  => $urlBuilder->getUrl()
+        );
+
+        $event->setElements($elements);
     }
 }

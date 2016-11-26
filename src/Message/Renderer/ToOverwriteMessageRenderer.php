@@ -20,7 +20,7 @@ use Avisota\Renderer\DelegateMessageRenderer;
 use Avisota\Renderer\MessageRendererInterface;
 
 /**
- * Class DelegateMessageRenderer
+ * The to overwrite message renderer.
  *
  * Implementation of a delegate message renderer.
  * Primary used as base class for custom implementations.
@@ -29,11 +29,15 @@ use Avisota\Renderer\MessageRendererInterface;
 class ToOverwriteMessageRenderer extends DelegateMessageRenderer
 {
     /**
+     * The to address.
+     *
      * @var string
      */
     protected $to;
 
     /**
+     * The to name.
+     *
      * @var string
      */
     protected $toName;
@@ -41,9 +45,9 @@ class ToOverwriteMessageRenderer extends DelegateMessageRenderer
     /**
      * DelegateMessageRenderer constructor.
      *
-     * @param MessageRendererInterface $delegate
-     * @param                          $to
-     * @param                          $toName
+     * @param MessageRendererInterface $delegate The delegate message renderer.
+     * @param string                   $to       The to address.
+     * @param string                   $toName   The to name.
      */
     public function __construct(MessageRendererInterface $delegate, $to, $toName)
     {
@@ -53,6 +57,8 @@ class ToOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Set the to address.
+     *
      * @param string $replyTo
      *
      * @return $this
@@ -64,6 +70,8 @@ class ToOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Get the to address.
+     *
      * @return string
      */
     public function getTo()
@@ -72,6 +80,8 @@ class ToOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Set the to name.
+     *
      * @param string $replyToName
      *
      * @return $this
@@ -83,6 +93,8 @@ class ToOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Get the to name.
+     *
      * @return string
      */
     public function getToName()

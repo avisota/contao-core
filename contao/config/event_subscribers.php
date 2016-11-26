@@ -13,10 +13,12 @@
  * @filesource
  */
 
-use Avisota\Contao\Core\Backend\Transport;
 use Avisota\Contao\Core\Controller\CopyController;
+use Avisota\Contao\Core\DataContainer\MailingList;
 use Avisota\Contao\Core\DataContainer\Queue;
 use Avisota\Contao\Core\DataContainer\RecipientSource;
+use Avisota\Contao\Core\DataContainer\Core;
+use Avisota\Contao\Core\DataContainer\Transport;
 use Avisota\Contao\Core\EventSubscriber;
 
 return array(
@@ -27,5 +29,7 @@ return array(
         return $GLOBALS['container']['avisota.core.options-builder'];
     },
     new CopyController(),
+    new Core(),
     new Transport(),
+    new MailingList()
 );

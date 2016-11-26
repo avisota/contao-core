@@ -19,32 +19,27 @@ use Avisota\Contao\Entity\Message;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Event is the base class for classes containing event data.
- *
- * This class contains no event data. It is used by events that do not pass
- * state information to an event handler when an event is raised.
- *
- * You can call the method stopPropagation() to abort the execution of
- * further listeners in your event listener.
- *
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Jonathan Wage <jonwage@gmail.com>
- * @author Roman Borschel <roman@code-factory.org>
- * @author Bernhard Schussek <bschussek@gmail.com>
+ * The base send immediate event.
  */
 class BaseSendImmediateEvent extends Event
 {
     /**
+     * The message.
+     *
      * @var Message
      */
     protected $message;
 
     /**
-     * @var int
+     * The turn step.
+     *
+     * @var integer
      */
     protected $turn;
 
     /**
+     * The unique loop id.
+     *
      * @var string
      */
     protected $loop;
@@ -52,9 +47,10 @@ class BaseSendImmediateEvent extends Event
     /**
      * BaseSendImmediateEvent constructor.
      *
-     * @param Message $message
-     * @param         $turn
-     * @param         $loop
+     * @param Message $message The message.
+     * @param integer $turn    The turn step.
+     * @param string  $loop    The unique loop id.
+     *
      * Fixme who message isn´t instance of Message
      */
     public function __construct($message, $turn, $loop)
@@ -65,6 +61,8 @@ class BaseSendImmediateEvent extends Event
     }
 
     /**
+     * Get the message.
+     *
      * @return Message
      */
     public function getMessage()
@@ -73,7 +71,9 @@ class BaseSendImmediateEvent extends Event
     }
 
     /**
-     * @return int
+     * Get the turn step.
+     *
+     * @return integer
      */
     public function getTurn()
     {
@@ -81,7 +81,9 @@ class BaseSendImmediateEvent extends Event
     }
 
     /**
-     * @return mixed
+     * Get the loop unique id.
+     *
+     * @return string
      */
     public function getLoop()
     {

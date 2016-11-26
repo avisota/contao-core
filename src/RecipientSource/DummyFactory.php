@@ -22,16 +22,17 @@ use Avisota\RecipientSource\Dummy;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class DummyFactory
- *
- * @package Avisota\Contao\Core\RecipientSource
+ * The dummy factory.
  */
 class DummyFactory implements RecipientSourceFactoryInterface
 {
     /**
-     * @param RecipientSource $recipientSourceData
+     * Create the recipient source.
+     *
+     * @param RecipientSource $recipientSourceData The recipient source data.
      *
      * @return \Avisota\RecipientSource\RecipientSourceInterface
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function createRecipientSource(RecipientSource $recipientSourceData)

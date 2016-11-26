@@ -15,9 +15,9 @@
 
 namespace Avisota\Contao\Core\Controller;
 
-use Avisota\Contao\Entity\Queue;
 use Avisota\Contao\Core\Event\PreQueueExecuteEvent;
 use Avisota\Contao\Core\Queue\AbstractQueueWebRunner;
+use Avisota\Contao\Entity\Queue;
 use Avisota\Queue\ExecutionConfig;
 use Avisota\Queue\QueueInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -25,18 +25,19 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class QeueueExecuteController
- *
- * @package Avisota\Contao\Core\Controller
+ * The queue execute controller.
  */
 class QeueueExecuteController extends AbstractQueueWebRunner
 {
     /**
-     * @param Request     $request
-     * @param Queue       $queueData
-     * @param \BackendUser $user
+     * Execute the queue.
+     *
+     * @param Request      $request   The request.
+     * @param Queue        $queueData The queue data.
+     * @param \BackendUser $user      The user.
      *
      * @return JsonResponse
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

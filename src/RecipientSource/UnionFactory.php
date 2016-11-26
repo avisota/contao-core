@@ -22,16 +22,17 @@ use Avisota\RecipientSource\Union;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class UnionFactory
- *
- * @package Avisota\Contao\Core\RecipientSource
+ * The union factory.
  */
 class UnionFactory implements RecipientSourceFactoryInterface
 {
     /**
+     * Create the recipient source.
+     *
      * @param RecipientSource $recipientSourceData
      *
      * @return \Avisota\RecipientSource\RecipientSourceInterface
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function createRecipientSource(RecipientSource $recipientSourceData)

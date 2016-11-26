@@ -22,16 +22,17 @@ use Avisota\RecipientSource\CSVFile;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class CSVFileFactory
- *
- * @package Avisota\Contao\Core\RecipientSource
+ * The cs file factory.
  */
 class CSVFileFactory implements RecipientSourceFactoryInterface
 {
     /**
-     * @param RecipientSource $recipientSourceData
+     * Create the recipient source.
+     *
+     * @param RecipientSource $recipientSourceData The recipient source data.
      *
      * @return \Avisota\RecipientSource\RecipientSourceInterface
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function createRecipientSource(RecipientSource $recipientSourceData)

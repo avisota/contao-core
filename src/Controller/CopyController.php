@@ -29,9 +29,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class CopyController
+ * The avisota core copy controller.
  *
- * @package Avisota\Contao\Core\Controller
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CopyController implements EventSubscriberInterface
@@ -66,9 +65,14 @@ class CopyController implements EventSubscriberInterface
     }
 
     /**
-     * @param ActionEvent     $event
-     * @param                 $name
-     * @param EventDispatcher $eventDispatcher
+     * Handle action edit.
+     *
+     * @param ActionEvent     $event           The event.
+     * @param string          $name            The event name.
+     * @param EventDispatcher $eventDispatcher The event dispatcher.
+     *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.LongVariables)
      */
@@ -114,9 +118,14 @@ class CopyController implements EventSubscriberInterface
     }
 
     /**
-     * @param ActionEvent     $event
-     * @param                 $name
-     * @param EventDispatcher $eventDispatcher
+     * Handle copy each children.
+     *
+     * @param ActionEvent     $event           The event.
+     * @param string          $name            The event name.
+     * @param EventDispatcher $eventDispatcher The event dispatcher.
+     *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handleCopyChilds(ActionEvent $event, $name, EventDispatcher $eventDispatcher)
@@ -142,8 +151,12 @@ class CopyController implements EventSubscriberInterface
     }
 
     /**
-     * @param EnvironmentInterface $environment
-     * @param bool                 $doNotCopy
+     * Redirect to the child table.
+     *
+     * @param EnvironmentInterface $environment The environment.
+     * @param boolean              $doNotCopy   The boolean do not copy.
+     *
+     * @return void
      */
     protected function redirectToChildTable(EnvironmentInterface $environment, $doNotCopy = false)
     {
@@ -174,10 +187,13 @@ class CopyController implements EventSubscriberInterface
     }
 
     /**
-     * @param ModelIdInterface     $modelId
-     * @param EnvironmentInterface $environment
+     * Copy parent model.
+     *
+     * @param ModelIdInterface     $modelId     The model id.
+     * @param EnvironmentInterface $environment The environment.
      *
      * @return ModelInterface
+     *
      * @SuppressWarnings(PHPMD.LongVariableName)
      */
     protected function copyParent(ModelIdInterface $modelId, EnvironmentInterface $environment)
@@ -197,8 +213,10 @@ class CopyController implements EventSubscriberInterface
     }
 
     /**
-     * @param ModelIdInterface     $modelId
-     * @param EnvironmentInterface $environment
+     * The copy handler.
+     *
+     * @param ModelIdInterface     $modelId     The model id.
+     * @param EnvironmentInterface $environment The environment.
      *
      * @return ModelInterface
      */
@@ -211,9 +229,14 @@ class CopyController implements EventSubscriberInterface
     }
 
     /**
-     * @param ModelIdInterface     $modelId
-     * @param ModelInterface       $copiedModel
-     * @param EnvironmentInterface $environment
+     * Copy each children.
+     *
+     * @param ModelIdInterface     $modelId     The model id.
+     * @param ModelInterface       $copiedModel The copied model.
+     * @param EnvironmentInterface $environment The environment.
+     *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.LongVariableName)
      */
     protected function copyEachChilds(

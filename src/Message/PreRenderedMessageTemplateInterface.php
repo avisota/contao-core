@@ -19,9 +19,7 @@ use Avisota\Recipient\RecipientInterface;
 use Avisota\Templating\MessageTemplateInterface;
 
 /**
- * A template to generate a message from.
- *
- * @package avisota-core
+ * The pre defined renderer message template interface.
  */
 interface PreRenderedMessageTemplateInterface extends MessageTemplateInterface
 {
@@ -57,9 +55,9 @@ interface PreRenderedMessageTemplateInterface extends MessageTemplateInterface
     /**
      * Render a preview.
      *
-     * @param RecipientInterface $recipient
+     * @param RecipientInterface $recipient      The recipient.
      *
-     * @param array              $additionalData
+     * @param array              $additionalData The additional data.
      *
      * @return mixed The content only, not a message.
      */

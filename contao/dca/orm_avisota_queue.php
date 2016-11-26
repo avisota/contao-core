@@ -269,6 +269,7 @@ $GLOBALS['TL_DCA']['orm_avisota_queue'] = array
         'simpleDatabaseQueueTable' => array
         (
             'label'     => &$GLOBALS['TL_LANG']['orm_avisota_queue']['simpleDatabaseQueueTable'],
+            'default'   => 'avisota_queue',
             'inputType' => 'text',
             'eval'      => array(
                 'mandatory' => true,

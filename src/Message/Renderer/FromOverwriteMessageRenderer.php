@@ -20,18 +20,20 @@ use Avisota\Renderer\DelegateMessageRenderer;
 use Avisota\Renderer\MessageRendererInterface;
 
 /**
- * Class FromOverwriteMessageRenderer
- *
- * @package Avisota\Contao\Core\Message\Renderer
+ * The from overwrite message render.
  */
 class FromOverwriteMessageRenderer extends DelegateMessageRenderer
 {
     /**
+     * The from address.
+     *
      * @var string
      */
     protected $from;
 
     /**
+     * The from name.
+     *
      * @var string
      */
     protected $fromName;
@@ -39,9 +41,9 @@ class FromOverwriteMessageRenderer extends DelegateMessageRenderer
     /**
      * FromOverwriteMessageRenderer constructor.
      *
-     * @param MessageRendererInterface $delegate
-     * @param                          $from
-     * @param                          $fromName
+     * @param MessageRendererInterface $delegate The delegate message renderer.
+     * @param string                   $from     The from address.
+     * @param string                   $fromName The from name.
      */
     public function __construct(MessageRendererInterface $delegate, $from, $fromName)
     {
@@ -51,6 +53,8 @@ class FromOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Set the from address.
+     *
      * @param string $from
      *
      * @return $this
@@ -62,6 +66,8 @@ class FromOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Get the from address.
+     *
      * @return string
      */
     public function getFrom()
@@ -70,6 +76,8 @@ class FromOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Set the from name.
+     *
      * @param string $fromName
      *
      * @return $this
@@ -81,6 +89,8 @@ class FromOverwriteMessageRenderer extends DelegateMessageRenderer
     }
 
     /**
+     * Get the from name.
+     *
      * @return string
      */
     public function getFromName()
@@ -91,7 +101,7 @@ class FromOverwriteMessageRenderer extends DelegateMessageRenderer
     /**
      * Render a message and create a Swift_Message.
      *
-     * @param MessageInterface $message
+     * @param MessageInterface $message The message.
      *
      * @return \Swift_Message
      */

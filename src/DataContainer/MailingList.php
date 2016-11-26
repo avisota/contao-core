@@ -15,47 +15,85 @@
 
 namespace Avisota\Contao\Core\DataContainer;
 
-use Avisota\Contao\Core\Event\MailingListCreateLabelEvent;
-
-use Bit3\StringBuilder\StringBuilder;
-use Doctrine\ORM\Query;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
+use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class MailingList
- *
- * @package Avisota\Contao\Core\DataContainer
+ * The mailing list data container event subscriber.
  */
-class MailingList extends \Backend
+class MailingList implements EventSubscriberInterface
 {
+
     /**
-     * Import the back end user object
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
+     *
+     * @return array The event names to listen to
      */
-    public function __construct()
+    public static function getSubscribedEvents()
     {
-        parent::__construct();
+        return array(
+            GetBreadcrumbEvent::NAME => array(
+                array('getBreadCrumb')
+            )
+        );
     }
 
     /**
-     * @param array          $rowData
-     * @param string         $label
-     * @param \DataContainer $dc
+     * Get the bread crumb elements.
      *
-     * @return string
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.ShortVariable)
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param GetBreadcrumbEvent $event This event.
+     *
+     * @return void
      */
-    public function getLabel($rowData, $label, $dc)
+    public function getBreadCrumb(GetBreadcrumbEvent $event)
     {
-        $label = new StringBuilder('<div style="padding: 3px 0;"><strong>' . $label . '</strong></div>');
+        $environment   = $event->getEnvironment();
+        $dataDefinition = $environment->getDataDefinition();
+        $inputProvider = $environment->getInputProvider();
 
-        $event = new MailingListCreateLabelEvent(new \ArrayObject($rowData), $label);
+        $modelParameter = $inputProvider->hasParameter('act') ? 'id' : 'pid';
 
-        /** @var EventDispatcherInterface $eventDispatcher */
-        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-        $eventDispatcher->dispatch(MailingListCreateLabelEvent::NAME, $event);
+        if ($dataDefinition->getName() !== 'orm_avisota_mailing_list'
+            || !$inputProvider->hasParameter($modelParameter)
+        ) {
+            return;
+        }
 
-        return (string) $label;
+        $modelId = ModelId::fromSerialized($inputProvider->getParameter($modelParameter));
+        if ($modelId->getDataProviderName() !== 'orm_avisota_mailing_list') {
+            return;
+        }
+
+        $elements = $event->getElements();
+
+        $urlBuilder = new UrlBuilder();
+        $urlBuilder->setPath('contao/main.php')
+            ->setQueryParameter('do', $inputProvider->getParameter('do'))
+            ->setQueryParameter('ref', TL_REFERER_ID);
+
+        $translator = $environment->getTranslator();
+
+        $elements[] = array(
+            'icon' => 'assets/avisota/core/images/mailing_list.png',
+            'text' => $translator->translate('avisota_mailing_list.0', 'MOD'),
+            'url'  => $urlBuilder->getUrl()
+        );
+
+        $event->setElements($elements);
     }
 }
