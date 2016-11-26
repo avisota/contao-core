@@ -133,7 +133,6 @@ class RecipientSource implements EventSubscriberInterface
             $columns[] = $item['column'];
             $fields[]  = $item['field'];
         }
-
     }
 
     /**
