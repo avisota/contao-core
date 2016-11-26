@@ -13,6 +13,7 @@
  * @filesource
  */
 
+use Avisota\Contao\Core\Backend\Transport;
 use Avisota\Contao\Core\Controller\CopyController;
 use Avisota\Contao\Core\DataContainer\Queue;
 use Avisota\Contao\Core\DataContainer\RecipientSource;
@@ -26,4 +27,5 @@ return array(
         return $GLOBALS['container']['avisota.core.options-builder'];
     },
     new CopyController(),
+    new Transport(),
 );

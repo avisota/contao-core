@@ -57,15 +57,14 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
             'format' => '%s <span style="color:#b3b3b3; padding-left:3px;">(%s)</span>'
         ),
         'global_operations' => array
-        (/*
-			'all' => array
-			(
-				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
-				'href'       => 'act=select',
-				'class'      => 'header_edit_all',
-				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
-			)
-			*/
+        (
+            'all' => array
+            (
+                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
+                'href'       => 'act=select',
+                'class'      => 'header_edit_all',
+                'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"'
+            )
         ),
         'operations'        => array
         (
@@ -74,6 +73,12 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
                 'label' => &$GLOBALS['TL_LANG']['orm_avisota_transport']['edit'],
                 'href'  => 'act=edit',
                 'icon'  => 'edit.gif'
+            ),
+            'copy'   => array
+            (
+                'label'      => &$GLOBALS['TL_LANG']['orm_avisota_mailing_list']['copy'],
+                'icon'       => 'copy.gif',
+                'attributes' => 'onclick="Backend.getScrollOffset();"',
             ),
             // TODO alert box description
             'delete' => array
@@ -311,7 +316,8 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
             'reference' => &$GLOBALS['TL_LANG']['orm_avisota_transport'],
             'eval'      => array(
                 'submitOnChange' => true,
-                'tl_class'       => 'w50'
+                'tl_class'       => 'w50',
+                'doNotCopy'      => true,
             )
         ),
         'swiftSmtpHost'  => array
@@ -324,7 +330,8 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
                 'maxlength' => 64,
                 'nospace'   => true,
                 'doNotShow' => true,
-                'tl_class'  => 'w50'
+                'tl_class'  => 'w50',
+                'doNotCopy' => true,
             ),
             'field'     => array(),
         ),
@@ -337,7 +344,8 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
                 'decodeEntities' => true,
                 'maxlength'      => 128,
                 'doNotShow'      => true,
-                'tl_class'       => 'w50'
+                'tl_class'       => 'w50',
+                'doNotCopy'      => true,
             ),
             'field'     => array(),
         ),
@@ -350,7 +358,8 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
                 'decodeEntities' => true,
                 'maxlength'      => 32,
                 'doNotShow'      => true,
-                'tl_class'       => 'w50'
+                'tl_class'       => 'w50',
+                'doNotCopy'      => true,
             ),
             'field'     => array(),
         ),
@@ -366,7 +375,8 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
             'eval'      => array(
                 'includeBlankOption' => true,
                 'doNotShow'          => true,
-                'tl_class'           => 'w50'
+                'tl_class'           => 'w50',
+                'doNotCopy'          => true,
             ),
             'field'     => array(),
         ),
@@ -381,7 +391,8 @@ $GLOBALS['TL_DCA']['orm_avisota_transport'] = array
                 'rgxp'      => 'digit',
                 'nospace'   => true,
                 'doNotShow' => true,
-                'tl_class'  => 'w50'
+                'tl_class'  => 'w50',
+                'doNotCopy' => true,
             )
         ),
         'serviceName'    => array

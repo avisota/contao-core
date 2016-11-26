@@ -18,12 +18,10 @@ matrix:
 sudo: false
 
 before_install:
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then export COMPOSER_ROOT_VERSION=dev-develop; elif [ "$TRAVIS_BRANCH" = "develop" ]; then export COMPOSER_ROOT_VERSION=dev-develop; else export COMPOSER_ROOT_VERSION="$TRAVIS_BRANCH"; fi;
-  - echo COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION}
-
+  - phpenv config-add travis.php.ini
+  - if [ -n "GITHUB_TOKEN" ]; then composer config github-oauth.github.com ${GITHUB_TOKEN}; fi;
 
 install:
-  - if [ -n "GITHUB_TOKEN" ]; then composer config github-oauth.github.com ${GITHUB_TOKEN}; fi;
   - travis_retry composer self-update && composer --version
   - travis_retry composer require contao/core $CONTAO_VERSION --no-update
   - travis_retry composer update --prefer-dist --no-interaction

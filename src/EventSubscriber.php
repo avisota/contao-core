@@ -19,6 +19,7 @@ use Avisota\Contao\Core\Event\CreateFakeRecipientEvent;
 use Avisota\Contao\Core\Event\CreatePublicEmptyRecipientEvent;
 use Avisota\Recipient\Fake\FakeRecipient;
 use Avisota\Recipient\MutableRecipient;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetSelectModeButtonsEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -55,8 +56,17 @@ class EventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            CoreEvents::CREATE_FAKE_RECIPIENT         => 'createFakeRecipient',
-            CoreEvents::CREATE_PUBLIC_EMPTY_RECIPIENT => 'createPublicEmptyRecipient',
+            CoreEvents::CREATE_FAKE_RECIPIENT => array(
+                array('createFakeRecipient'),
+            ),
+
+            CoreEvents::CREATE_PUBLIC_EMPTY_RECIPIENT => array(
+                array('createPublicEmptyRecipient'),
+            ),
+
+            GetSelectModeButtonsEvent::NAME => array(
+                array('deactivateButtonsForEditAll'),
+            ),
         );
     }
 
@@ -89,5 +99,39 @@ class EventSubscriber implements EventSubscriberInterface
         }
 
         $event->setRecipient(new MutableRecipient('noreply@' . \Environment::get('host')));
+    }
+
+    /**
+     * @param GetSelectModeButtonsEvent $event
+     *
+     * Todo remove this if the deactivated buttons correct worked
+     */
+    public function deactivateButtonsForEditAll(GetSelectModeButtonsEvent $event)
+    {
+        if ($event->getEnvironment()->getInputProvider()->getParameter('act') !== 'select') {
+            return;
+        }
+
+        $buttons = $event->getButtons();
+
+        foreach (array('override', 'edit') as $button) {
+            unset($buttons[$button]);
+        }
+
+        if (in_array(
+            $event->getEnvironment()->getDataDefinition()->getName(),
+            array(
+                'orm_avisota_mailing_list',
+                'orm_avisota_transport',
+                'orm_avisota_queue',
+                'orm_avisota_recipient_source',
+            )
+        )) {
+            foreach (array('cut',) as $button) {
+                unset($buttons[$button]);
+            }
+        }
+
+        $event->setButtons($buttons);
     }
 }

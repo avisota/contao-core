@@ -51,7 +51,6 @@ class ServiceFactory
             $this->createRecipientSourceService();
             $this->createQueueService();
             $this->createTransportService();
-
         } catch (\Exception $e) {
             $message = 'Could not create avisota services: ' . $e->getMessage();
 
