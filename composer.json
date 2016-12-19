@@ -28,12 +28,9 @@
         "source": "https://github.com/avisota/contao-core"
     },
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.4,<7",
         "contao/core": ">=3.5,<3.6",
         "contao-community-alliance/composer-plugin": "~2.4",
-        "contao-community-alliance/dependency-container": "~1.8",
-        "contao-community-alliance/event-dispatcher": "~1.3",
-        "contao-community-alliance/events-contao-bindings": "~3.5",
         "contao-community-alliance/events-create-options": "~1.0",
         "contao-community-alliance/events-cron": "~1.0",
         "contao-community-alliance/dc-general": "~2.0",
@@ -42,9 +39,7 @@
         "contao-community-alliance/contao-twig": "~1.12",
         "contao-community-alliance/console": "~1.0",
         "contao-community-alliance/backports-initialize-system": "~1.0",
-        "contao-community-alliance/url-builder": "~1.1",
         "menatwork/contao-multicolumnwizard": "~3.3",
-        "contaoblackforest/contao-compat": "~1.3",
         "contaoblackforest/contao-logger": "~2.0",
         "contaoblackforest/contao-doctrine-orm": "~2.3",
         "contaoblackforest/contao-doctrine-orm-timestampable": "~2.0",
