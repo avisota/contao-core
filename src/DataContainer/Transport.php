@@ -2,11 +2,11 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright © 2016 Sven Baumann
+ * Copyright © 2017 Sven Baumann
  *
  * PHP version 5
  *
- * @copyright  way.vision 2016
+ * @copyright  way.vision 2017
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
@@ -25,7 +25,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class Transport implements EventSubscriberInterface
 {
-
     /**
      * Returns an array of event names this subscriber wants to listen to.
      *
@@ -66,22 +65,15 @@ class Transport implements EventSubscriberInterface
         $dataDefinition = $environment->getDataDefinition();
         $inputProvider  = $environment->getInputProvider();
 
-        if ($dataDefinition->getName() !== 'orm_avisota_transport'
-            || !$inputProvider->hasParameter('id')
-        ) {
-            return;
-        }
-
-        $modelId = ModelId::fromSerialized($inputProvider->getParameter('id'));
-        if ($modelId->getDataProviderName() !== 'orm_avisota_transport') {
+        if ('orm_avisota_transport' !== $dataDefinition->getName()) {
             return;
         }
 
         $elements = $event->getElements();
 
-        $urlBuilder = new UrlBuilder();
-        $urlBuilder->setPath('contao/main.php')
-            ->setQueryParameter('do', 'avisota_transport')
+        $rootUrlBuilder = new UrlBuilder();
+        $rootUrlBuilder->setPath('contao/main.php')
+            ->setQueryParameter('do', $inputProvider->getParameter('do'))
             ->setQueryParameter('ref', TL_REFERER_ID);
 
         $translator = $environment->getTranslator();
@@ -89,7 +81,33 @@ class Transport implements EventSubscriberInterface
         $elements[] = array(
             'icon' => 'assets/avisota/core/images/transport.png',
             'text' => $translator->translate('avisota_transport.0', 'MOD'),
-            'url'  => $urlBuilder->getUrl()
+            'url'  => $rootUrlBuilder->getUrl()
+        );
+
+        if (false === $inputProvider->hasParameter('id')) {
+            $event->setElements($elements);
+
+            return;
+        }
+
+        $modelId = ModelId::fromSerialized($inputProvider->getParameter('id'));
+
+        $dataProvider = $environment->getDataProvider($modelId->getDataProviderName());
+        $repository   = $dataProvider->getEntityRepository();
+
+        $entity = $repository->findOneBy(array('id' => $modelId->getId()));
+
+        $entityUrlBuilder = new UrlBuilder();
+        $entityUrlBuilder->setPath('contao/main.php')
+            ->setQueryParameter('do', $inputProvider->getParameter('do'))
+            ->setQueryParameter('act', $inputProvider->getParameter('act'))
+            ->setQueryParameter('id', $inputProvider->getParameter('id'))
+            ->setQueryParameter('ref', TL_REFERER_ID);
+
+        $elements[] = array(
+            'icon' => 'assets/avisota/core/images/transport.png',
+            'text' => $entity->getTitle(),
+            'url'  => $entityUrlBuilder->getUrl()
         );
 
         $event->setElements($elements);

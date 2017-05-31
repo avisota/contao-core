@@ -2,11 +2,11 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright © 2016 Sven Baumann
+ * Copyright © 2017 Sven Baumann
  *
  * PHP version 5
  *
- * @copyright  way.vision 2016
+ * @copyright  way.vision 2017
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
@@ -23,10 +23,12 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerE
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
+use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -85,6 +87,10 @@ class RecipientSource implements EventSubscriberInterface
             DcGeneralEvents::ACTION => array(
                 array('handleAction'),
             ),
+
+            GetBreadcrumbEvent::NAME => array(
+                array('getBreadCrumb')
+            )
         );
     }
 
@@ -343,5 +349,66 @@ class RecipientSource implements EventSubscriberInterface
         asort($options);
 
         return $options;
+    }
+
+    /**
+     * Get the bread crumb elements.
+     *
+     * @param GetBreadcrumbEvent $event This event.
+     *
+     * @return void
+     */
+    public function getBreadCrumb(GetBreadcrumbEvent $event)
+    {
+        $environment    = $event->getEnvironment();
+        $dataDefinition = $environment->getDataDefinition();
+        $inputProvider  = $environment->getInputProvider();
+
+        if ('orm_avisota_recipient_source' !== $dataDefinition->getName()) {
+            return;
+        }
+
+        $elements = $event->getElements();
+
+        $rootUrlBuilder = new UrlBuilder();
+        $rootUrlBuilder->setPath('contao/main.php')
+            ->setQueryParameter('do', $inputProvider->getParameter('do'))
+            ->setQueryParameter('ref', TL_REFERER_ID);
+
+        $translator = $environment->getTranslator();
+
+        $elements[] = array(
+            'icon' => 'assets/avisota/core/images/recipient_source.png',
+            'text' => $translator->translate('avisota_recipient_source.0', 'MOD'),
+            'url'  => $rootUrlBuilder->getUrl()
+        );
+
+        if (false === $inputProvider->hasParameter('id')) {
+            $event->setElements($elements);
+
+            return;
+        }
+
+        $modelId = ModelId::fromSerialized($inputProvider->getParameter('id'));
+
+        $dataProvider = $environment->getDataProvider($modelId->getDataProviderName());
+        $repository   = $dataProvider->getEntityRepository();
+
+        $entity = $repository->findOneBy(array('id' => $modelId->getId()));
+
+        $entityUrlBuilder = new UrlBuilder();
+        $entityUrlBuilder->setPath('contao/main.php')
+            ->setQueryParameter('do', $inputProvider->getParameter('do'))
+            ->setQueryParameter('act', $inputProvider->getParameter('act'))
+            ->setQueryParameter('id', $inputProvider->getParameter('id'))
+            ->setQueryParameter('ref', TL_REFERER_ID);
+
+        $elements[] = array(
+            'icon' => 'assets/avisota/core/images/recipient_source.png',
+            'text' => $entity->getTitle(),
+            'url'  => $entityUrlBuilder->getUrl()
+        );
+
+        $event->setElements($elements);
     }
 }

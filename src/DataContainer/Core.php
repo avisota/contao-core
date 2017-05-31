@@ -2,11 +2,11 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright © 2016 Sven Baumann
+ * Copyright © 2017 Sven Baumann
  *
  * PHP version 5
  *
- * @copyright  way.vision 2016
+ * @copyright  way.vision 2017
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
@@ -17,7 +17,9 @@ namespace Avisota\Contao\Core\DataContainer;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
+use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -69,6 +71,18 @@ class Core implements EventSubscriberInterface
         $environment   = $event->getEnvironment();
         $inputProvider = $environment->getInputProvider();
 
+        if (false === strpos($inputProvider->getParameter('do'), 'avisota_')) {
+            return;
+        }
+
+        $elements = array(
+            array(
+                'icon' => 'assets/avisota/core/images/avisota-breadcrumb.png',
+                'text' => 'Avisota',
+                'url'  => $inputProvider->getRequestUrl()
+            )
+        );
+
         if (!in_array(
             $inputProvider->getParameter('do'),
             array(
@@ -82,6 +96,8 @@ class Core implements EventSubscriberInterface
             null
         )
         ) {
+            $event->setElements($elements);
+
             return;
         }
 
@@ -92,15 +108,13 @@ class Core implements EventSubscriberInterface
 
         $translator = $environment->getTranslator();
 
-        $event->setElements(
-            array(
-                array(
-                    'icon' => 'assets/avisota/core/images/avisota-breadcrumb.png',
-                    'text' => $translator->translate('avisota_config.0', 'MOD'),
-                    'url'  => $baseUrl->getUrl()
-                )
-            )
+        $elements[] = array(
+            'icon' => 'assets/avisota/core/images/settings.png',
+            'text' => $translator->translate('avisota_config.0', 'MOD'),
+            'url'  => $baseUrl->getUrl()
         );
+
+        $event->setElements($elements);
     }
 
     /**
