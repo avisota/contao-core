@@ -49,6 +49,10 @@ class Core implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
+            BuildDataDefinitionEvent::NAME => array(
+                array('parseModelCommands')
+            ),
+
             GetBreadcrumbEvent::NAME => array(
                 array('getBreadCrumb', 100)
             ),
@@ -57,6 +61,38 @@ class Core implements EventSubscriberInterface
                 array('removeHasteOnDeleteCallback')
             )
         );
+    }
+
+    /**
+     * Parse model commands for edit and editheader.
+     * Give in parent list view the header edit button the right action edit.
+     *
+     * @param BuildDataDefinitionEvent $event The event.
+     *
+     * @return void
+     *
+     * TODO remove this if dc general handle it.
+     */
+    public function parseModelCommands(BuildDataDefinitionEvent $event)
+    {
+        $container = $event->getContainer();
+
+        if (false === strpos($container->getName(), 'orm_avisota_')) {
+            return;
+        }
+
+        $backendView = $container->getDefinition(Contao2BackendViewDefinitionInterface::NAME);
+
+        $modelCommands = $backendView->getModelCommands();
+        if (false === $modelCommands->hasCommandNamed('editheader')) {
+            return;
+        }
+
+        $editChildes = $modelCommands->getCommandNamed('edit');
+        $editChildes->setName('editChildes');
+
+        $editChildes = $modelCommands->getCommandNamed('editheader');
+        $editChildes->setName('edit');
     }
 
     /**
