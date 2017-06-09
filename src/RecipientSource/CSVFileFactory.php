@@ -19,6 +19,8 @@ use Avisota\Contao\Core\CoreEvents;
 use Avisota\Contao\Core\Event\CreateRecipientSourceEvent;
 use Avisota\Contao\Entity\RecipientSource;
 use Avisota\RecipientSource\CSVFile;
+use Contao\File;
+use Contao\FilesModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -37,7 +39,13 @@ class CSVFileFactory implements RecipientSourceFactoryInterface
      */
     public function createRecipientSource(RecipientSource $recipientSourceData)
     {
-        $file      = \Compat::resolveFile($recipientSourceData->getCsvFileSrc());
+        $filePath = FilesModel::findByUuid($recipientSourceData->getCsvFileSrc())->path;
+        $file     = new File($filePath, true);
+        if (!$file->exists()) {
+            return null;
+        }
+
+
         $columns   = array();
         $delimiter = $recipientSourceData->getCsvFileDelimiter();
         $enclosure = $recipientSourceData->getCsvFileEnclosure();
@@ -71,7 +79,7 @@ class CSVFileFactory implements RecipientSourceFactoryInterface
                 $enclosure = '"';
         }
 
-        $recipientSourceCSV = new CSVFile(TL_ROOT . DIRECTORY_SEPARATOR . $file, $columns, $delimiter, $enclosure);
+        $recipientSourceCSV = new CSVFile(TL_ROOT . DIRECTORY_SEPARATOR . $filePath, $columns, $delimiter, $enclosure);
 
         /** @var EventDispatcherInterface $eventDispatcher */
         $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
