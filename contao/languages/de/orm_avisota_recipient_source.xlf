@@ -28,7 +28,7 @@
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.alias.1">
         <source>The recipient source alias is a unique reference to the recipient source which can be used instead of its ID.</source>
-        <target>Der Empfänger Quelle Alias ist ein eindeutiger Verweis auf die Empfänger Quelle, dieser kann anstelle der ID verwendet werden.</target>
+        <target>Der Empfängerquelle-Alias ist ein eindeutiger Verweis auf die Empfängerquelle, dieser kann anstelle der ID verwendet werden.</target>
 
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.filter.0">
@@ -38,7 +38,7 @@
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.filter.1">
         <source>Enable filters on this recipient source. The available filters depend on the specific module.</source>
-        <target>Aktivieren Sie Filter für diese Empfänger-Quelle. Die verfügbaren Filter hängen vom jeweiligen Modul ab.</target>
+        <target>Aktivieren Sie Filter für diese Empfängerquelle. Die verfügbaren Filter hängen vom jeweiligen Modul ab.</target>
 
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.filterByMailingLists.0">
@@ -68,7 +68,7 @@
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.disable.1">
         <source>Temporary disable this recipient source for transport.</source>
-        <target>Deaktivieren Sie temporär diese Empfänger-Quelle für den Versand.</target>
+        <target>Deaktivieren Sie temporär diese Empfängerquelle für den Versand.</target>
 
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberBy.0">
@@ -118,7 +118,7 @@
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberAllowSingleGroupSelection.1">
         <source>Allow the writer to single select groups from this recipient source.</source>
-        <target>Gewähren sie dem Verfasser eine Einzelauswahl der Gruppen aus den Empfänger Quellen</target>
+        <target>Gewähren sie dem Verfasser eine Einzelauswahl der Gruppen aus den Empfängerquellen</target>
 
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberAllowSingleSelection.0">
@@ -128,7 +128,7 @@
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberAllowSingleSelection.1">
         <source>Allow the writer to single select members from this recipient source.</source>
-        <target>Gewähren sie dem Verfasser die Einzelauswahl der Mitglieder aus der Empfänger Quelle</target>
+        <target>Gewähren sie dem Verfasser die Einzelauswahl der Mitglieder aus der Empfängerquelle</target>
 
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.memberFilterByColumns.0">
@@ -278,7 +278,7 @@
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.csv_file.1">
         <source>Get recipients from CSV-File.</source>
-        <target>Empfänger von einer CSV-Datei benutzen.</target>
+        <target>Empfänger aus einer CSV-Datei benutzen.</target>
 
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.dummy.0">
@@ -288,7 +288,7 @@
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.dummy.1">
         <source>Randomly generate recipients from a predefined set of forenames, surnames and domains. This recipient source is useful for testing. Please keep in mind that all emails are just generated. They should not exists, but there is no guarantee! This recipient source should only used in combination with a dummy transport or with the developer mode.</source>
-        <target>Zufällig generierte Empfänger aus einer vorgegebenen Menge von Vornamen, Familiennamen und Domänen. Diese Empfänger Quelle eignet sich zum Testen. Bitte beachten Sie, dass alle E-Mails nur generiert werden. Diese sollten nicht existieren, aber es gibt keine Garantie! Diese Empfänger Quelle sollte nur in Kombination mit einem Dummy-Transport oder mit dem Entwickler-Modus verwendet.</target>
+        <target>Zufällig generierte Empfänger aus einer vorgegebenen Menge von Vornamen, Familiennamen und Domänen. Empfängerquelle eignet sich zum Testen. Bitte beachten Sie, dass alle E-Mails nur generiert werden. Diese sollten nicht existieren, aber es gibt keine Garantie! Diese Empfängerquelle sollte nur in Kombination mit einem Dummy-Transport oder mit dem Entwickler-Modus verwendet werden.</target>
 
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.integrated_details">
@@ -373,7 +373,7 @@
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.new.0">
         <source>New recipient source</source>
-        <target>Neuer Empfängerquelle</target>
+        <target>Neue Empfängerquelle</target>
 
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.new.1">
@@ -398,7 +398,7 @@
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.toggle.1">
         <source>Toggle the disabled status of recipient source ID %s</source>
-        <target>Schaltet den Aktivierungsstatus der Empfänger-Quelle ID %s um.</target>
+        <target>Schaltet den Aktivierungsstatus der Empfängerquelle ID %s um.</target>
 
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.delete.0">
@@ -548,7 +548,7 @@
       </trans-unit>
       <trans-unit id="orm_avisota_recipient_source.union.1">
         <source>Make union from recipient source.</source>
-        <target>Empfänger Quellen Vereinigen.</target>
+        <target>Empfängerquellen vereinigen.</target>
 
       </trans-unit>
     </body>

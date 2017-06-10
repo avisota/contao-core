@@ -4,77 +4,81 @@
       <trans-unit id="avisota_outbox.headline">
         <source>Outbox</source>
         <target>Skrzynka nadawcza</target>
-        
+
       </trans-unit>
       <trans-unit id="avisota_outbox.col_name">
         <source>Queue name</source>
         <target>Nazwa kolejki</target>
-        
+
       </trans-unit>
       <trans-unit id="avisota_outbox.col_length">
         <source>Length</source>
         <target>Długość</target>
-        
+
       </trans-unit>
       <trans-unit id="avisota_outbox.action_execute">
         <source>Execute queue now</source>
         <target>Wykonaj kolejkę</target>
-        
+
       </trans-unit>
       <trans-unit id="avisota_outbox.execute">
         <source>Execute queue %s</source>
         <target>Wykonaj kolejkę %s</target>
-        
+
       </trans-unit>
       <trans-unit id="avisota_outbox.col_failed">
         <source>failed</source>
         <target>niepowodzenie</target>
-        
+
       </trans-unit>
       <trans-unit id="avisota_outbox.col_success">
         <source>success</source>
         <target>sukces</target>
-        
+
       </trans-unit>
       <trans-unit id="avisota_outbox.col_open">
         <source>open</source>
         <target>otwarty</target>
-        
+
       </trans-unit>
       <trans-unit id="avisota_outbox.col_timeout">
         <source>timeout</source>
         <target>czas minął</target>
-        
+
       </trans-unit>
       <trans-unit id="avisota_outbox.col_duration">
         <source>duration</source>
         <target>czas trwania</target>
-        
+
       </trans-unit>
       <trans-unit id="avisota_outbox.progress_initializing">
         <source>Initializing, please stand by and do not close the window.</source>
         <target>Inicjalizacja, proszę czekać i nie zamykać okna.</target>
-        
+
       </trans-unit>
       <trans-unit id="avisota_outbox.progress_running">
         <source>Sending messages, please stand by and do not close the window.</source>
         <target>Wysyłanie wiadomości, proszę czekać i nie zamykać okna.</target>
-        
+
       </trans-unit>
       <trans-unit id="avisota_outbox.progress_pause">
         <source>Waiting for next cycle, do not close the window.</source>
         <target>Czekanie na następny cykl, proszę nie zamykać okna.</target>
-        
+
       </trans-unit>
       <trans-unit id="avisota_outbox.progress_finish">
         <source>Finished send, you can now close the window.</source>
         <target>Wysyłanie zakończone, teraz możesz zamknąć okno.</target>
-        
+
       </trans-unit>
       <trans-unit id="avisota_outbox.progress_error">
         <source>An error occurred, execution stopped!</source>
         <target>Wystąpił błąd, proces wstrzymany!</target>
-        
+
+      </trans-unit>
+      <trans-unit id="avisota_outbox.newsletter.prepared.shipping">
+        <source>There were %s of %s Newsletter prepared for shipping.</source>
+
       </trans-unit>
     </body>
   </file>
