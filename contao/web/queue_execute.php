@@ -32,7 +32,7 @@ function ifInitializeExist()
     }
 
     /** @noinspection PhpIncludeInspection */
-    define('TL_MODE', 'BE');
+    define('TL_MODE', 'FE');
     require($dir . '/system/initialize.php');
 
     \BackendUser::getInstance();

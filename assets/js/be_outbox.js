@@ -123,6 +123,20 @@ var Outbox = function (totalCount, queueId, cycleTime, cyclePause) {
             setProgress(100, 0, 0);
             $('avisota_outbox_exception').setStyle('display', 'block');
             $('avisota_outbox_exception_text').set('html', text);
+        },
+        // Caching exception thanks richardhj #224
+        onFailure: function (xhr) {
+            window.clearTimeout(timerTrigger);
+            containerElement
+                .removeClass('initializing')
+                .removeClass('running')
+                .removeClass('waiting')
+                .removeClass('finished')
+                .addClass('errored');
+            setProgress(100, 0, 0);
+            $('epost_outbox_exception').setStyle('display', 'block');
+            var response = JSON.decode(xhr.response);
+            $('epost_outbox_exception_text').set('html', response.error);
         }
     });
 
