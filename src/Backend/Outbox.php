@@ -2,11 +2,11 @@
 
 /**
  * Avisota newsletter and mailing system
- * Copyright © 2016 Sven Baumann
+ * Copyright © 2017 Sven Baumann
  *
  * PHP version 5
  *
- * @copyright  way.vision 2016
+ * @copyright  way.vision 2017
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
@@ -16,11 +16,15 @@
 namespace Avisota\Contao\Core\Backend;
 
 use Avisota\Contao\Entity\Queue;
-use Avisota\Contao\Core\Message\Renderer;
 use Avisota\Queue\QueueInterface;
 use Contao\Doctrine\ORM\EntityHelper;
+use Contao\Environment;
+use Contao\Request;
+use Contao\RequestToken;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\InputProvider;
+use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -48,7 +52,7 @@ class Outbox extends \TwigBackendModule
         foreach ($queueDataCollection as $queueData) {
             $serviceName = sprintf('avisota.queue.%s', $queueData->getId());
             if ($container->offsetExists($serviceName)) {
-                $queue = $container[$serviceName];
+                $queue  = $container[$serviceName];
                 $length += $queue->length();
             }
         }
@@ -82,8 +86,74 @@ class Outbox extends \TwigBackendModule
 
         $queueRepository = EntityHelper::getRepository('Avisota\Contao:Queue');
 
+        $this->sendImmediate();
         $this->executeQueue($queueRepository);
         $this->addQueuesToTemplate($queueRepository);
+    }
+
+    protected function sendImmediate()
+    {
+        $translator = $GLOBALS['container']['translator'];
+        $inputProvider = new InputProvider();
+
+        if ((false === $inputProvider->hasParameter('send'))
+            || ('immediate' !== $inputProvider->getParameter('send'))
+        ) {
+            return;
+        }
+
+        $requestUrlBuilder = new UrlBuilder();
+        $requestUrlBuilder->setHost(Environment::get('requestScheme') . '://' . Environment::get('host'))
+            ->setPath('system/modules/avisota-message/web/send_immediate.php')
+            ->setQueryParameter('id', $inputProvider->getParameter('id'))
+            ->setQueryParameter('ref', RequestToken::get());
+        foreach (array('action', 'turn', 'loop') as $requestParameter) {
+            if (false === $inputProvider->hasParameter($requestParameter)) {
+                continue;
+            }
+
+            $requestUrlBuilder->setQueryParameter($requestParameter, $inputProvider->getParameter($requestParameter));
+        }
+
+        $request = new Request();
+        $request->send($requestUrlBuilder->getUrl());
+
+        $redirectParameters = json_decode($request->response);
+
+        $redirectUrlBuilder = new UrlBuilder();
+        $redirectUrlBuilder->setPath('contao/main.php')
+            ->setQueryParameter('do', $inputProvider->getParameter('do'))
+            ->setQueryParameter('rf', RequestToken::get());
+
+        foreach ($redirectParameters as $redirectParameter => $redirectValue) {
+            if (in_array($redirectParameter, array('turnCount', 'maxCount'))) {
+                continue;
+            }
+
+            $redirectUrlBuilder->setQueryParameter($redirectParameter, $redirectValue);
+        }
+
+        if (null === $redirectParameters->execute) {
+            $redirectUrlBuilder->setQueryParameter('send', $inputProvider->getParameter('send'));
+
+            $GLOBALS['TL_MOOTOOLS'][] = sprintf(
+                '<script type="text/javascript">AjaxRequest.displayBox("%s")</script>',
+                sprintf(
+                    $translator->translate('avisota_outbox.newsletter.prepared.shipping'),
+                    $redirectParameters->turnCount,
+                    $redirectParameters->maxCount
+                )
+            );
+        }
+
+        $GLOBALS['TL_MOOTOOLS'][] = sprintf(
+            '<script type="text/javascript">
+                setTimeout(function() {
+                    location.href = "%s"
+                }, 600)
+            </script>',
+            $redirectUrlBuilder->getUrl()
+        );
     }
 
     /**

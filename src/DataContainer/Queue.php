@@ -207,6 +207,11 @@ class Queue extends \Backend implements EventSubscriberInterface
         $repository   = $dataProvider->getEntityRepository();
 
         $entity = $repository->findOneBy(array('id' => $modelId->getId()));
+        if (null === $entity->getTitle()) {
+            $event->setElements($elements);
+
+            return;
+        }
 
         $entityUrlBuilder = new UrlBuilder();
         $entityUrlBuilder->setPath('contao/main.php')
