@@ -8,6 +8,7 @@
  *
  * @copyright  way.vision 2017
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author	   Oliver Willmes <info@oliverwillmes.de>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
@@ -17,6 +18,7 @@ namespace Avisota\Contao\Core\Backend;
 
 use Avisota\Contao\Entity\Queue;
 use Avisota\Queue\QueueInterface;
+use Contao\Config;
 use Contao\Doctrine\ORM\EntityHelper;
 use Contao\Environment;
 use Contao\Request;
@@ -103,8 +105,9 @@ class Outbox extends \TwigBackendModule
         }
 
         $requestUrlBuilder = new UrlBuilder();
-        $requestUrlBuilder->setHost(Environment::get('requestScheme') . '://' . Environment::get('host'))
-            ->setPath('system/modules/avisota-message/web/send_immediate.php')
+        $websitePath = Config::get('websitePath') ? Config::get('websitePath') . '/': '';
+        $requestUrlBuilder->setHost(Environment::get('url'))
+            ->setPath($websitePath . 'system/modules/avisota-message/web/send_immediate.php')
             ->setQueryParameter('id', $inputProvider->getParameter('id'))
             ->setQueryParameter('ref', RequestToken::get());
         foreach (array('action', 'turn', 'loop') as $requestParameter) {
