@@ -50,8 +50,6 @@
     "require-dev": {
         "phpcq/all-tasks": "^1.2"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "conflict": {
         "contao-legacy/avisota": "*",
         "contao-legacy/avisota2": "*"
