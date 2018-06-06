@@ -8,7 +8,7 @@
  *
  * @copyright  way.vision 2017
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @author	   Oliver Willmes <info@oliverwillmes.de>
+ * @author     Oliver Willmes <info@oliverwillmes.de>
  * @package    avisota/contao-core
  * @license    LGPL-3.0+
  * @filesource
