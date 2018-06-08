@@ -136,7 +136,7 @@ var Outbox = function (totalCount, queueId, cycleTime, cyclePause) {
             setProgress(100, 0, 0);
             $('epost_outbox_exception').setStyle('display', 'block');
             var response = JSON.decode(xhr.response);
-            $('epost_outbox_exception_text').set('html', response.error);
+            $('avisota_outbox_exception_text').set('html', response.error);
         }
     });
 
